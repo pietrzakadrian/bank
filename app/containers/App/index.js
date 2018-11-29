@@ -8,7 +8,13 @@
  */
 
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link,
+  Redirect,
+} from 'react-router-dom';
 
 import SettingsPage from 'containers/SettingsPage';
 import PaymentPage from 'containers/PaymentPage';
@@ -16,22 +22,29 @@ import RegisterPage from 'containers/RegisterPage';
 import LoginPage from 'containers/LoginPage';
 import HomePage from 'containers/HomePage';
 import DashboardPage from 'containers/DashboardPage';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import NotFoundPage from 'containers/NotFoundPage';
 
 import GlobalStyle from '../../global-styles';
+import Header from '../../components/Header';
 
-export default function App() {
+export default function App(props) {
   return (
     <div>
       <Router>
         <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/register" component={RegisterPage} />
-          <Route exact path="/dashboard" component={DashboardPage} />
-          <Route exact path="/payment" component={PaymentPage} />
-          <Route exact path="/settings" component={SettingsPage} />
-          <Route component={NotFoundPage} />
+          <Route exact path="/" component={Header} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/register" component={RegisterPage} />
+
+          <Header>
+            <Switch>
+              <Route path="/dashboard" component={DashboardPage} />
+              <Route path="/payment" component={PaymentPage} />
+              <Route path="/settings" component={SettingsPage} />
+              <Route exact path="/404" component={NotFoundPage} />
+              <Route render={() => <Redirect to="/404" />} />
+            </Switch>
+          </Header>
         </Switch>
       </Router>
       <GlobalStyle />
