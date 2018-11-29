@@ -32,16 +32,16 @@ export default function App(props) {
     <div>
       <Router>
         <Switch>
-          <Route exact path="/" component={Header} />
+          <Route exact path="/" component={HomePage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
+          <Route path="/404" component={NotFoundPage} />
 
           <Header>
             <Switch>
               <Route path="/dashboard" component={DashboardPage} />
               <Route path="/payment" component={PaymentPage} />
               <Route path="/settings" component={SettingsPage} />
-              <Route exact path="/404" component={NotFoundPage} />
               <Route render={() => <Redirect to="/404" />} />
             </Switch>
           </Header>
