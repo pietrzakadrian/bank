@@ -25,6 +25,9 @@ const styles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
+  toolBar: {
+    padding: 0,
+  },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
@@ -35,7 +38,7 @@ const styles = theme => ({
   },
   menuButton: {
     marginLeft: 12,
-    marginRight: 20,
+    marginRight: 12,
   },
   hide: {
     display: 'none',
@@ -85,7 +88,7 @@ class Header extends React.Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes, theme, location } = this.props;
     const { open } = this.state;
     const headerTitle = {
       '/dashboard': 'Dashboard',
@@ -102,7 +105,7 @@ class Header extends React.Component {
             [classes.appBarShift]: open,
           })}
         >
-          <Toolbar disableGutters={!open}>
+          <Toolbar className={classes.toolBar} disableGutters={!open}>
             <IconButton
               color="inherit"
               aria-label="Open drawer"
@@ -112,7 +115,7 @@ class Header extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap>
-              {headerTitle[this.props.location.pathname]}
+              {headerTitle[location.pathname]}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -133,7 +136,7 @@ class Header extends React.Component {
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  // props: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(Header);

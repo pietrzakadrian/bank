@@ -9,17 +9,21 @@
  * the linting exception.
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
+import Helmet from 'react-helmet';
 import messages from './messages';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class SettingsPage extends React.PureComponent {
   render() {
     return (
-      <h1>
-        <FormattedMessage {...messages.header} />
-      </h1>
+      <Fragment>
+        <Helmet title="Settings" />
+        <h1>
+          <FormattedMessage {...messages.header} />
+        </h1>
+      </Fragment>
     );
   }
 }

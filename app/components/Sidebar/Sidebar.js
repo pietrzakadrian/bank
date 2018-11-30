@@ -46,9 +46,9 @@ const styles = theme => ({
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: '0 8px',
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    fontSize: 18,
   },
   content: {
     flexGrow: 1,
@@ -73,13 +73,12 @@ function Sidebar({ open, classes }) {
     <Drawer
       className={classes.drawer}
       variant="persistent"
-      anchor="left"
       open={open}
       classes={{
         paper: classes.drawerPaper,
       }}
     >
-      <div className={classes.drawerHeader}>Bank Application v0.1</div>
+      <div className={classes.drawerHeader}>Bank Application v0.2</div>
       <Divider />
       <Navigation />
       <Footer />

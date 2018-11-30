@@ -9,7 +9,8 @@
  * the linting exception.
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
+import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
@@ -17,9 +18,12 @@ import messages from './messages';
 export default class DashboardPage extends React.PureComponent {
   render() {
     return (
-      <h1>
-        <FormattedMessage {...messages.header} />
-      </h1>
+      <Fragment>
+        <Helmet title="Dashboard" />
+        <h1>
+          <FormattedMessage {...messages.header} />
+        </h1>
+      </Fragment>
     );
   }
 }
