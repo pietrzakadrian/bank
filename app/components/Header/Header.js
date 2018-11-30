@@ -40,13 +40,6 @@ const styles = theme => ({
     marginLeft: 12,
     marginRight: 12,
   },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
   drawerPaper: {
     width: drawerWidth,
   },
