@@ -37,6 +37,10 @@ const styles = theme => ({
     width: '100%',
     margin: '-12px auto',
   },
+  container: {
+    margin: '10px auto',
+    width: '1100px',
+  },
 });
 
 class DashboardPage extends Component {
@@ -47,24 +51,25 @@ class DashboardPage extends Component {
     return (
       <Fragment>
         <Helmet title="Dashboard" />
-        <Grid container spacing={24} className={classes.grid}>
-          <Grid item xs={4}>
-            <AvailableFunds />
-          </Grid>
-          <Grid item xs={4}>
-            <AvailableFunds />
-          </Grid>
-          <Grid item xs={4}>
-            <BankInformation />
-          </Grid>
-          <Grid item xs={8}>
-            <AccountBills />
-          </Grid>
-          <Grid item xs={4}>
-            <RecentTransactions />
-          </Grid>
+        <div className={classes.container}>
+          <Grid container spacing={24} className={classes.grid}>
+            <Grid item xs={4}>
+              <AvailableFunds />
+            </Grid>
+            <Grid item xs={4}>
+              <BankInformation />
+            </Grid>
+            <Grid item xs={4}>
+              <BankInformation />
+            </Grid>
+            <Grid item xs={8}>
+              <AccountBills />
+            </Grid>
+            <Grid item xs={4}>
+              <RecentTransactions />
+            </Grid>
 
-          {/* <Grid item xs={4}>
+            {/* <Grid item xs={4}>
             <AccountBills />
           </Grid>
           <Grid item xs={4}>
@@ -73,7 +78,8 @@ class DashboardPage extends Component {
           <Grid item xs={4}>
             <AccountBills />
           </Grid> */}
-        </Grid>
+          </Grid>
+        </div>
       </Fragment>
     );
   }

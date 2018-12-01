@@ -11,6 +11,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
+import LoadingCircular from 'components/LoadingCircular';
+
 // Import Styles
 const styles = theme => ({
   root: {
@@ -29,6 +31,11 @@ const styles = theme => ({
   tableCell: {
     padding: '4px 0px 4px 28px',
   },
+  loadingCircular: {
+    display: 'flex',
+    height: 193,
+    flexDirection: 'row',
+  },
 });
 let id = 0;
 function createData(name, calories, fat, protein) {
@@ -37,25 +44,25 @@ function createData(name, calories, fat, protein) {
 }
 const rows = [
   createData(
-    '59 2000 1100 2231 3002 0000 1312',
+    '59 2000 1100 2231 2231...',
     'crehler',
     '11.12.2018',
     '3200.00 PLN',
   ),
   createData(
-    '59 2000 1100 2231...',
+    '59 2000 1100 2231 2231...',
     'przelew za wczoraj',
     '10.02.2018',
     '40.00 PLN',
   ),
   createData(
-    '59 2000 1100 2231...',
+    '59 2000 1100 2231 2231...',
     'przelew za wczoraj',
     '10.02.2018',
     '40.00 PLN',
   ),
   createData(
-    '59 2000 1100 2231...',
+    '59 2000 1100 2231 2231...',
     'przelew za wczoraj',
     '10.02.2018',
     '40.00 PLN',
@@ -63,10 +70,20 @@ const rows = [
 ];
 
 class RecentTransactions extends Component {
-  state = {};
+  state = {
+    recentTransactions: null,
+  };
+
+  // test
+  componentDidMount() {
+    fetch('https://randomuser.me/api/?format=json&results=1')
+      .then(res => res.json())
+      .then(json => this.setState({ recentTransactions: json.results }));
+  }
 
   render() {
     const { classes } = this.props;
+    const { recentTransactions } = this.state;
     return (
       <Card className={classes.card}>
         <CardContent className={classes.root}>
@@ -78,7 +95,7 @@ class RecentTransactions extends Component {
             Ostatnie transakcje
           </Typography>
 
-          <Typography className={classes.pos} color="textSecondary">
+          {recentTransactions ? (
             <Table className={classes.table}>
               <TableBody>
                 {rows.map(row => (
@@ -101,7 +118,11 @@ class RecentTransactions extends Component {
                 ))}
               </TableBody>
             </Table>
-          </Typography>
+          ) : (
+            <div className={classes.loadingCircular}>
+              <LoadingCircular />
+            </div>
+          )}
         </CardContent>
       </Card>
     );

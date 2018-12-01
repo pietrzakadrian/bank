@@ -28,6 +28,7 @@ const styles = theme => ({
   },
   toolBar: {
     padding: 0,
+    height: 65,
     color: 'black', // color dla header
     backgroundColor: 'white', // background color dla header
     borderBottom: '1px solid rgba(0, 0, 0, 0.12)', // border bottom dla header
@@ -88,9 +89,9 @@ class Header extends React.Component {
     const { classes, theme, location } = this.props;
     const { open } = this.state;
     const headerTitle = {
-      '/dashboard': 'Dashboard',
-      '/payment': 'Payment',
-      '/settings': 'Settings',
+      '/dashboard': 'Strona główna',
+      '/payment': 'Moje płatności',
+      '/settings': 'Ustawienia',
     };
 
     return (
