@@ -24,9 +24,13 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    'box-shadow': 'none', // box-shadow dla header
   },
   toolBar: {
     padding: 0,
+    color: 'black', // color dla header
+    backgroundColor: 'white', // background color dla header
+    borderBottom: '1px solid rgba(0, 0, 0, 0.12)', // border bottom dla header
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,

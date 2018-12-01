@@ -15,18 +15,22 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import SettingsPage from 'containers/SettingsPage';
-import PaymentPage from 'containers/PaymentPage';
-import RegisterPage from 'containers/RegisterPage';
-import LoginPage from 'containers/LoginPage';
-import HomePage from 'containers/HomePage';
-import DashboardPage from 'containers/DashboardPage';
-import NotFoundPage from 'containers/NotFoundPage';
+// Import Containers
+import SettingsPage from 'containers/SettingsPage/Loadable';
+import PaymentPage from 'containers/PaymentPage/Loadable';
+import RegisterPage from 'containers/RegisterPage/Loadable';
+import LoginPage from 'containers/LoginPage/Loadable';
+import HomePage from 'containers/HomePage/Loadable';
+import DashboardPage from 'containers/DashboardPage/Loadable';
+import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
-import GlobalStyle from '../../global-styles';
+// Import Components
 import Header from '../../components/Header';
 
-export default function App(props) {
+// Import Styles
+import GlobalStyle from '../../global-styles';
+
+export default function App() {
   return (
     <div>
       <Router>
@@ -35,7 +39,6 @@ export default function App(props) {
           <Route path="/login" component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
           <Route path="/404" component={NotFoundPage} />
-
           <Header>
             <Switch>
               <Route path="/dashboard" component={DashboardPage} />
