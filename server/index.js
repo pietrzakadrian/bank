@@ -15,7 +15,36 @@ const { resolve } = require('path');
 const app = express();
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
-// app.use('/api', myApi);
+
+const bodyParser = require('body-parser');
+const mysql = require('mysql');
+// connection configurations
+const pool = require('./config/db.js');
+
+exports.executeQuery = function(query, callback) {
+  pool.getConnection((err, connection) => {
+    if (err) {
+      connection.release();
+      throw err;
+    }
+    connection.query(query, (err, rows) => {
+      connection.release();
+      if (!err) {
+        callback(null, { rows });
+      }
+    });
+    connection.on('error', err => {
+      throw err;
+    });
+  });
+};
+console.log(`API server started on: ${port}`);
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+const routes = require('./routes/appRoutes');
+routes(app); // register the route
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {

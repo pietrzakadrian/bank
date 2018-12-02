@@ -20,7 +20,7 @@ import 'sanitize.css/sanitize.css';
 import App from 'containers/App';
 
 // Import Language Provider
-import LanguageProvider from 'containers/LanguageProvider';
+import LanguageProvider from 'modules/LanguageProvider';
 
 // Import Material-UI
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
