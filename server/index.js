@@ -2,6 +2,8 @@
 
 const express = require('express');
 const logger = require('./logger');
+const mysql = require('mysql');
+const bodyParser = require('body-parser');
 
 const argv = require('./argv');
 const port = require('./port');
@@ -14,13 +16,10 @@ const ngrok =
 const { resolve } = require('path');
 const app = express();
 
-// If you need a backend, e.g. an API, add your custom backend-specific middleware here
-
-const bodyParser = require('body-parser');
-const mysql = require('mysql');
 // connection configurations
 const pool = require('./config/db.js');
 
+// eslint-disable-next-line func-names
 exports.executeQuery = function(query, callback) {
   pool.getConnection((err, connection) => {
     if (err) {
@@ -38,13 +37,14 @@ exports.executeQuery = function(query, callback) {
     });
   });
 };
-console.log(`API server started on: ${port}`);
+
+const userRoutes = require('./routes/user.route');
+const billRoutes = require('./routes/bill.route');
+app.use('/users', userRoutes);
+app.use('/bills', billRoutes);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-const routes = require('./routes/appRoutes');
-routes(app); // register the route
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {
