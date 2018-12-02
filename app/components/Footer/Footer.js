@@ -1,11 +1,13 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Import Material-UI
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+
+// Import Internationalize
+import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 const drawerWidth = 260;
@@ -26,7 +28,7 @@ export function Footer({ classes }) {
     <footer className={classes.footerComponent}>
       <Divider />
       <Typography className={classes.footerText}>
-        <FormattedMessage {...messages.header} />
+        <FormattedMessage {...messages.footer} />
       </Typography>
     </footer>
   );

@@ -11,6 +11,11 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
+// Import Internationalize
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
+import LocaleToggle from '../../modules/LocaleToggle';
+
 // Import Components
 import Sidebar from '../Sidebar';
 
@@ -71,6 +76,14 @@ const styles = theme => ({
     }),
     marginLeft: 0,
   },
+  headerItemTitle: {
+    flexGrow: 1,
+  },
+  localeToggle: {
+    marginLeft: 12,
+    marginRight: 12,
+    padding: 12,
+  },
 });
 
 class Header extends React.Component {
@@ -89,9 +102,9 @@ class Header extends React.Component {
     const { classes, theme, location } = this.props;
     const { open } = this.state;
     const headerTitle = {
-      '/dashboard': 'Strona główna',
-      '/payment': 'Moje płatności',
-      '/settings': 'Ustawienia',
+      '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
+      '/payment': <FormattedMessage {...messages.paymentTitle} />,
+      '/settings': <FormattedMessage {...messages.settingsTitle} />,
     };
 
     return (
@@ -112,12 +125,22 @@ class Header extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
+            <Typography
+              className={classes.headerItemTitle}
+              variant="h6"
+              color="inherit"
+              noWrap
+            >
               {headerTitle[location.pathname]}
             </Typography>
+            <div className={classes.localeToggle}>
+              <LocaleToggle />
+            </div>
           </Toolbar>
         </AppBar>
+
         <Sidebar open={open} />
+
         <main
           className={classNames(classes.content, {
             [classes.contentShift]: open,

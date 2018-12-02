@@ -9,6 +9,11 @@ import { withStyles } from '@material-ui/core';
 // Import Components
 import LoadingCircular from 'components/LoadingCircular';
 
+// Import Internationalize
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
+
+// Import Styles
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
@@ -49,7 +54,9 @@ class AvailableFunds extends Component {
       <Paper className={classes.root} elevation={1}>
         {availableFunds ? (
           <Fragment>
-            <Typography variant="subtitle1">Dostępne środki</Typography>
+            <Typography variant="subtitle1">
+              <FormattedMessage {...messages.availableFunds} />
+            </Typography>
             <Typography variant="h5">
               10.00&nbsp;
               <Typography

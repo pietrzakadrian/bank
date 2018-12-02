@@ -13,6 +13,11 @@ import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Divider from '@material-ui/core/Divider/Divider';
 
+// Import Internationalize
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
+
+// Import Styles
 const styles = {
   menuItem: {},
   primary: {},
@@ -33,7 +38,7 @@ function Navigation({ classes }) {
             <ListItemText
               classes={{ primary: classes.primary }}
               inset
-              primary="Strona główna"
+              primary={<FormattedMessage {...messages.dashboardItem} />}
             />
           </MenuItem>
         </NavLink>
@@ -45,7 +50,7 @@ function Navigation({ classes }) {
             <ListItemText
               classes={{ primary: classes.primary }}
               inset
-              primary="Moje płatności"
+              primary={<FormattedMessage {...messages.paymentItem} />}
             />
           </MenuItem>
         </NavLink>
@@ -61,7 +66,7 @@ function Navigation({ classes }) {
             <ListItemText
               classes={{ primary: classes.primary }}
               inset
-              primary="Ustawienia"
+              primary={<FormattedMessage {...messages.settingsItem} />}
             />
           </MenuItem>
         </NavLink>

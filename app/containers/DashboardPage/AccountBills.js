@@ -16,6 +16,10 @@ import TableRow from '@material-ui/core/TableRow';
 // Import Components
 import LoadingCircular from 'components/LoadingCircular';
 
+// Import Internationalize
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
+
 // Import Styles
 const styles = theme => ({
   root: {
@@ -81,9 +85,11 @@ class AccountBills extends Component {
             component="h2"
             className={classes.typographyTitle}
           >
-            Rachunki
+            <FormattedMessage {...messages.bills} />
             <CardActions className={classes.cardAction}>
-              <Button size="small">Zrób przelew</Button>
+              <Button size="small">
+                <FormattedMessage {...messages.makeTransferBtn} />
+              </Button>
             </CardActions>
           </Typography>
 

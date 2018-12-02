@@ -11,7 +11,12 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
+// Import Components
 import LoadingCircular from 'components/LoadingCircular';
+
+// Import Internationalize
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
 
 // Import Styles
 const styles = theme => ({
@@ -92,7 +97,7 @@ class RecentTransactions extends Component {
             component="h2"
             className={classes.typographyTitle}
           >
-            Ostatnie transakcje
+            <FormattedMessage {...messages.recentTransactions} />
           </Typography>
 
           {recentTransactions ? (

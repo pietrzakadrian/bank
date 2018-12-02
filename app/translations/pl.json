@@ -1,0 +1,20 @@
+{
+  "app.components.Header.dashboard": "Strona główna",
+  "app.components.Header.payment": "Moje płatności",
+  "app.components.Header.settings": "Ustawienia",
+  "app.components.Navigation.dashboard": "Strona główna",
+  "app.components.Navigation.payment": "Moje płatności",
+  "app.components.Navigation.settings": "Ustawienia",
+  "app.containers.DashboardPage.availableFunds": "Dostępne środki",
+  "app.containers.DashboardPage.bankInformation": "Informacja o banku",
+  "app.containers.DashboardPage.bills": "Rachunki",
+  "app.containers.DashboardPage.makeTransferBtn": "Zrób przelew",
+  "app.containers.DashboardPage.recentTransactions": "Ostatnie transakcje",
+  "app.containers.Footer.footer": "Bank Application v0.2 | 01.12.2018",
+  "app.containers.HomePage.header": "HomePage",
+  "app.containers.LoginPage.header": "LoginPage",
+  "app.containers.NotFoundPage.header": "NotFoundPage",
+  "app.containers.PaymentPage.header": "PaymentPage",
+  "app.containers.RegisterPage.header": "RegisterPage",
+  "app.containers.SettingsPage.header": "SettingsPage"
+}

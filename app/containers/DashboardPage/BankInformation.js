@@ -6,6 +6,10 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core';
 
+// Import Internationalize
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
+
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
@@ -23,7 +27,7 @@ function BankInformation({ classes }) {
   return (
     <Paper className={classes.root} elevation={1}>
       <Typography variant="subtitle2">
-        Informacja o naszym wspaniałym banku
+        <FormattedMessage {...messages.bankInformation} />
       </Typography>
     </Paper>
   );

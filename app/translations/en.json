@@ -1,1 +1,20 @@
-[]
+{
+  "app.components.Header.dashboard": "Dashboard",
+  "app.components.Header.payment": "Payment",
+  "app.components.Header.settings": "Settings",
+  "app.components.Navigation.dashboard": "Dashboard",
+  "app.components.Navigation.payment": "Payment",
+  "app.components.Navigation.settings": "Settings",
+  "app.containers.DashboardPage.availableFunds": "Available Funds",
+  "app.containers.DashboardPage.bankInformation": "Information about our wonderful bank",
+  "app.containers.DashboardPage.bills": "Account Bills",
+  "app.containers.DashboardPage.makeTransferBtn": "Make a transfer",
+  "app.containers.DashboardPage.recentTransactions": "Recent Transactions",
+  "app.containers.Footer.footer": "Bank Application v0.2 | 01.12.2018",
+  "app.containers.HomePage.header": "This is the HomePage container!",
+  "app.containers.LoginPage.header": "This is the LoginPage!",
+  "app.containers.NotFoundPage.header": "This is the NotFoundPage container!",
+  "app.containers.PaymentPage.header": "This is the PaymentPage!",
+  "app.containers.RegisterPage.header": "This is the RegisterPage!",
+  "app.containers.SettingsPage.header": "This is the SettingsPage!"
+}
