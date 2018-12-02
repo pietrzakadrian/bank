@@ -19,7 +19,7 @@ export default class RegisterPage extends React.PureComponent {
   render() {
     return (
       <Fragment>
-        <Helmet title="Register" />
+        <Helmet title="Register - Bank Application" />
         <h1>
           <FormattedMessage {...messages.header} />
         </h1>

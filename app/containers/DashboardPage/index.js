@@ -41,6 +41,18 @@ const styles = theme => ({
     margin: '10px auto',
     width: '1100px',
   },
+  informationHeader: {
+    display: 'flex',
+    fontSize: 13.5,
+    paddingBottom: 5,
+    marginTop: '-10px',
+  },
+  informationHeaderFirst: {
+    flex: 1,
+  },
+  informationHeaderLast: {
+    textAlign: 'right',
+  },
 });
 
 class DashboardPage extends Component {
@@ -50,7 +62,15 @@ class DashboardPage extends Component {
     const { classes } = this.props;
     return (
       <Fragment>
-        <Helmet title="Dashboard" />
+        <Helmet title="Dashboard - Bank Application" />
+        <div id="test" className={classes.informationHeader}>
+          <div className={classes.informationHeaderFirst} />
+          <div className={classes.informationHeaderLast}>
+            Dzień dobry, Adrian Pietrzak
+            <br />
+            Ostatnie logowanie: 19.12.2018 20:00
+          </div>
+        </div>
         <div className={classes.container}>
           <Grid container spacing={24} className={classes.grid}>
             <Grid item xs={4}>
@@ -70,14 +90,14 @@ class DashboardPage extends Component {
             </Grid>
 
             {/* <Grid item xs={4}>
-            <AccountBills />
-          </Grid>
-          <Grid item xs={4}>
-            <AccountBills />
-          </Grid>
-          <Grid item xs={4}>
-            <AccountBills />
-          </Grid> */}
+              <AccountBills />
+            </Grid>
+            <Grid item xs={4}>
+              <AccountBills />
+            </Grid>
+            <Grid item xs={4}>
+              <AccountBills />
+            </Grid> */}
           </Grid>
         </div>
       </Fragment>

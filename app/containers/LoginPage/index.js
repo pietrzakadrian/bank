@@ -19,7 +19,7 @@ export default class LoginPage extends React.PureComponent {
   render() {
     return (
       <Fragment>
-        <Helmet title="Login" />
+        <Helmet title="Login - Bank Application" />
         <h1>
           <FormattedMessage {...messages.header} />
         </h1>

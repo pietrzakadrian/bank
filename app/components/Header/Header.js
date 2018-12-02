@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -86,7 +86,7 @@ const styles = theme => ({
   },
 });
 
-class Header extends React.Component {
+class Header extends Component {
   state = {
     open: true,
   };
@@ -138,9 +138,7 @@ class Header extends React.Component {
             </div>
           </Toolbar>
         </AppBar>
-
         <Sidebar open={open} />
-
         <main
           className={classNames(classes.content, {
             [classes.contentShift]: open,

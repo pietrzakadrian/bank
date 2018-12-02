@@ -19,7 +19,7 @@ export default class SettingsPage extends React.PureComponent {
   render() {
     return (
       <Fragment>
-        <Helmet title="Settings" />
+        <Helmet title="Settings - Bank Application" />
         <h1>
           <FormattedMessage {...messages.header} />
         </h1>
