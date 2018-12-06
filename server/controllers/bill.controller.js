@@ -14,7 +14,7 @@ exports.create = (req, res) => {
   });
 };
 
-// FETCH all Customers
+// // FETCH all Customers
 exports.findAll = (req, res) => {
   Bill.findAll().then(bills => {
     // Send all customers to Client
@@ -22,9 +22,16 @@ exports.findAll = (req, res) => {
   });
 };
 
+// // Find a Customer by Id
+// exports.findById = (req, res) => {
+//   Bill.findById(req.params.billId).then(bill => {
+//     res.send(bill);
+//   });
+// };
+
 // Find a Customer by Id
-exports.findById = (req, res) => {
-  Bill.findById(req.params.billId).then(bill => {
+exports.findAllByIdOwner = (req, res) => {
+  Bill.findAll({ where: { id_owner: req.params.billOwnerId } }).then(bill => {
     res.send(bill);
   });
 };

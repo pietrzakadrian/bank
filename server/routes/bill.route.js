@@ -7,8 +7,11 @@ module.exports = function(app) {
   // Retrieve all User
   app.get('/api/bills', bills.findAll);
 
+  // // Retrieve a single User by Id
+  // app.get('/api/bills/:billId', bills.findById);
+
   // Retrieve a single User by Id
-  app.get('/api/bills/:billId', bills.findById);
+  app.get('/api/bills/:billOwnerId', bills.findAllByIdOwner);
 
   // Update a User with Id
   app.put('/api/bills/:billId', bills.update);
