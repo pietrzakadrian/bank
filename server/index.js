@@ -2,7 +2,6 @@
 
 const express = require('express');
 const logger = require('./logger');
-const mysql = require('mysql');
 const bodyParser = require('body-parser');
 
 const argv = require('./argv');
@@ -16,35 +15,17 @@ const ngrok =
 const { resolve } = require('path');
 const app = express();
 
-// connection configurations
-const pool = require('./config/db.js');
-
-// eslint-disable-next-line func-names
-exports.executeQuery = function(query, callback) {
-  pool.getConnection((err, connection) => {
-    if (err) {
-      connection.release();
-      throw err;
-    }
-    connection.query(query, (err, rows) => {
-      connection.release();
-      if (!err) {
-        callback(null, { rows });
-      }
-    });
-    connection.on('error', err => {
-      throw err;
-    });
-  });
-};
-
-const userRoutes = require('./routes/user.route');
-const billRoutes = require('./routes/bill.route');
-app.use('/users', userRoutes);
-app.use('/bills', billRoutes);
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+const db = require('./config/db.config.js');
+
+// force: true will drop the table if it already exists
+db.sequelize.sync({ force: false }).then(() => {
+  console.log('Drop and Resync with { force: false }');
+});
+
+require('./routes/user.route.js')(app);
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {

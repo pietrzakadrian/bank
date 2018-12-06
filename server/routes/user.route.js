@@ -1,42 +1,18 @@
-const express = require('express');
-const router = express.Router();
+module.exports = function(app) {
+  const users = require('../controllers/user.controller.js');
 
-router.get('/', (req, res, next) => {
-  res.status(200).json({
-    message: 'Handling GET requests to /users',
-  });
-});
+  // Create a new User
+  app.post('/api/users', users.create);
 
-router.post('/', (req, res, net) => {
-  res.status(201).json({
-    message: 'Handling POST requests to /users',
-  });
-});
+  // Retrieve all User
+  app.get('/api/users', users.findAll);
 
-router.get('/:id', (req, res, net) => {
-  const id = req.params.id;
-  if (id === 'special') {
-    res.status(200).json({
-      message: 'You discovered the special ID',
-      id,
-    });
-  } else {
-    res.status(200).json({
-      message: 'You passed an ID',
-    });
-  }
-});
+  // Retrieve a single User by Id
+  app.get('/api/customers/:userId', users.findById);
 
-router.patch('/:id', (req, res, net) => {
-  res.status(200).json({
-    message: 'Updated user!',
-  });
-});
+  // Update a User with Id
+  app.put('/api/customers/:userId', users.update);
 
-router.delete('/:id', (req, res, net) => {
-  res.status(200).json({
-    message: 'Delected user!',
-  });
-});
-
-module.exports = router;
+  // Delete a User with Id
+  app.delete('/api/customers/:userId', users.delete);
+};
