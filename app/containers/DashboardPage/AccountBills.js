@@ -63,20 +63,28 @@ const rows = [
 ];
 
 class AccountBills extends Component {
-  state = {
-    accountBills: null,
-  };
+  constructor() {
+    super();
+    this.state = {
+      accountBills: null,
+      availableFunds: null,
+    };
+  }
 
-  // test
   componentDidMount() {
-    fetch('https://randomuser.me/api/?format=json&results=1')
-      .then(res => res.json())
-      .then(json => this.setState({ accountBills: json.results }));
+    fetch('http://localhost:3000/api/bills/1')
+      .then(response => response.json())
+      .then(json =>
+        this.setState({
+          availableFunds: json.available_funds,
+          accountBills: json.account_bill,
+        }),
+      );
   }
 
   render() {
     const { classes } = this.props;
-    const { accountBills } = this.state;
+    const { accountBills, availableFunds } = this.state;
     return (
       <Card className={classes.card}>
         <CardContent className={classes.root}>
@@ -93,7 +101,7 @@ class AccountBills extends Component {
             </CardActions>
           </Typography>
 
-          {accountBills ? (
+          {accountBills || availableFunds ? (
             <Table>
               <TableBody>
                 {rows.map(row => (
@@ -103,10 +111,10 @@ class AccountBills extends Component {
                       component="th"
                       scope="row"
                     >
-                      {row.name}
+                      {accountBills}
                     </TableCell>
                     <TableCell className={classes.tableCell} numeric>
-                      {row.protein}
+                      {availableFunds}
                     </TableCell>
                   </TableRow>
                 ))}

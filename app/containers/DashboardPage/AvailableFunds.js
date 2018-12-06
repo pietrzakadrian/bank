@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 // Import Material-UI
 import Paper from '@material-ui/core/Paper';
@@ -36,20 +37,23 @@ const styles = theme => ({
 });
 
 class AvailableFunds extends Component {
-  state = {
-    availableFunds: null,
-  };
+  constructor() {
+    super();
+    this.state = {
+      availableFunds: null,
+    };
+  }
 
-  // test
   componentDidMount() {
-    fetch('https://randomuser.me/api/?format=json&results=1')
-      .then(res => res.json())
-      .then(json => this.setState({ availableFunds: json.results }));
+    fetch('http://localhost:3000/api/bills/1')
+      .then(response => response.json())
+      .then(json => this.setState({ availableFunds: json.available_funds }));
   }
 
   render() {
     const { classes } = this.props;
     const { availableFunds } = this.state;
+
     return (
       <Paper className={classes.root} elevation={1}>
         {availableFunds ? (
@@ -58,7 +62,8 @@ class AvailableFunds extends Component {
               <FormattedMessage {...messages.availableFunds} />
             </Typography>
             <Typography variant="h5">
-              10.00&nbsp;
+              {availableFunds}
+              &nbsp;
               <Typography
                 variant="subtitle1"
                 className={classes.typographyMain}
