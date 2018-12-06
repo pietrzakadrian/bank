@@ -7,7 +7,7 @@
  *
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -32,7 +32,7 @@ import GlobalStyle from '../../global-styles';
 
 export default function App() {
   return (
-    <div>
+    <Fragment>
       <Router>
         <Switch>
           <Route exact path="/" component={HomePage} />
@@ -50,6 +50,6 @@ export default function App() {
         </Switch>
       </Router>
       <GlobalStyle />
-    </div>
+    </Fragment>
   );
 }

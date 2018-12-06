@@ -9,17 +9,42 @@
  * the linting exception.
  */
 
-import React from 'react';
+import React, { Component, Fragment } from 'react';
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
+// Import Components
+import LoadingCircual from '../../components/LoadingCircular';
+
 /* eslint-disable react/prefer-stateless-function */
-export default class HomePage extends React.PureComponent {
+class HomePage extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { loading: true };
+  }
+
+  componentDidMount() {
+    setTimeout(() => this.setState({ loading: false }), 1000);
+  }
+
   render() {
+    const { loading } = this.state;
+
     return (
-      <h1>
-        <FormattedMessage {...messages.header} />
-      </h1>
+      <Fragment>
+        {loading ? (
+          <div className="loadingHomePage">
+            <LoadingCircual className="loadingHomePageComponent" />
+          </div>
+        ) : (
+          <FormattedMessage {...messages.header} />
+        )}
+      </Fragment>
     );
   }
 }
+
+export default withRouter(HomePage);
