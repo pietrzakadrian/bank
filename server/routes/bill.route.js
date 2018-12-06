@@ -1,30 +1,18 @@
-const express = require('express');
-const router = express.Router();
+module.exports = function(app) {
+  const bills = require('../controllers/bill.controller.js');
 
-router.get('/', (req, res, next) => {
-  res.status(200).json({
-    message: 'Orders were fetched',
-  });
-});
+  // Create a new User
+  app.post('/api/bills', bills.create);
 
-router.post('/', (req, res, next) => {
-  res.status(201).json({
-    message: 'Bill was created',
-  });
-});
+  // Retrieve all User
+  app.get('/api/bills', bills.findAll);
 
-router.post('/:billId', (req, res, next) => {
-  res.status(200).json({
-    message: 'bill details',
-    billId: req.params.billId,
-  });
-});
+  // Retrieve a single User by Id
+  app.get('/api/bills/:billId', bills.findById);
 
-router.delete('/:billId', (req, res, next) => {
-  res.status(200).json({
-    message: 'bill delete',
-    billId: req.params.billId,
-  });
-});
+  // Update a User with Id
+  app.put('/api/bills/:billId', bills.update);
 
-module.exports = router;
+  // Delete a User with Id
+  app.delete('/api/bills/:billId', bills.delete);
+};
