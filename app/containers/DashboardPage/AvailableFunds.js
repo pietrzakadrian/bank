@@ -48,7 +48,6 @@ class AvailableFunds extends Component {
     axios
       .get('http://localhost:3000/api/bills/1')
       .then(({ data }) => {
-        console.log(data);
         this.setState({
           availableFunds: data.reduce(
             (accumulator, currentValue) =>

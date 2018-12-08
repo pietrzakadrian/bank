@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 // Import Material-UI
 import Typography from '@material-ui/core/Typography';
@@ -50,41 +51,31 @@ const styles = theme => ({
   },
 });
 
-let id = 0;
-function createData(name, protein) {
-  id += 1;
-  return { id, name, protein };
-}
-const rows = [
-  createData('59 2000 1100 2231 3002 0000 1312 2131', `${140.12} PLN`),
-  // createData('59 4141 3123 5555 3242 0000 4433 4333', `${1200.12} PLN`),
-  // createData('59 4141 3123 5555 3242 0000 4433 4333', `${1200.12} PLN`),
-  // createData('59 4141 3123 5555 3242 0000 4433 4333', `${1200.12} PLN`),
-];
-
 class AccountBills extends Component {
   constructor() {
     super();
     this.state = {
-      accountBills: null,
-      availableFunds: null,
+      accountBills: [],
+      isLoading: true,
     };
   }
 
   componentDidMount() {
-    fetch('http://localhost:3000/api/bills/1')
-      .then(response => response.json())
-      .then(json =>
+    axios
+      .get('http://localhost:3000/api/bills/1')
+      .then(({ data }) => {
         this.setState({
-          availableFunds: json.available_funds,
-          accountBills: json.account_bill,
-        }),
-      );
+          accountBills: data,
+          isLoading: false,
+        });
+      })
+      .catch(err => {});
   }
 
   render() {
     const { classes } = this.props;
-    const { accountBills, availableFunds } = this.state;
+    const { accountBills, isLoading } = this.state;
+
     return (
       <Card className={classes.card}>
         <CardContent className={classes.root}>
@@ -100,31 +91,26 @@ class AccountBills extends Component {
               </Button>
             </CardActions>
           </Typography>
-
-          {accountBills || availableFunds ? (
-            <Table>
-              <TableBody>
-                {rows.map(row => (
-                  <TableRow key={row.id}>
-                    <TableCell
-                      className={classes.tableCell}
-                      component="th"
-                      scope="row"
-                    >
-                      {accountBills}
+          <Table>
+            <TableBody>
+              {!isLoading ? (
+                accountBills.map(accountBill => (
+                  <TableRow key={accountBill.id}>
+                    <TableCell component="th" scope="row">
+                      {accountBill.account_bill}
                     </TableCell>
-                    <TableCell className={classes.tableCell} numeric>
-                      {availableFunds}
+                    <TableCell numeric>
+                      {accountBill.available_funds} PLN
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <div className={classes.loadingCircular}>
-              <LoadingCircular />
-            </div>
-          )}
+                ))
+              ) : (
+                <div className={classes.loadingCircular}>
+                  <LoadingCircular />
+                </div>
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     );
