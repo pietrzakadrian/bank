@@ -10,7 +10,7 @@
     "npm": ">=5",
     "node": ">=8.10.0"
   },
-  "author": "Max Stoiber",
+  "author": "Adrian Pietrzak",
   "homepage": "https://pietrzakadrian.github.io/bank",
   "license": "MIT",
   "scripts": {
@@ -45,7 +45,8 @@
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "prettify": "prettier --write"
+    "prettify": "prettier --write",
+    "start": "nodemon server/index.js"
   },
   "lint-staged": {
     "*.js": [
@@ -83,8 +84,10 @@
     "loadable-components": "2.2.3",
     "lodash": "4.17.11",
     "minimist": "1.2.0",
+    "morgan": "^1.9.1",
     "mysql": "^2.16.0",
     "mysql2": "^1.6.4",
+    "nodemon": "^1.18.7",
     "prop-types": "15.6.2",
     "react": "16.6.0",
     "react-dom": "16.6.0",

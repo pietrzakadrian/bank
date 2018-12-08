@@ -38,7 +38,7 @@ function Sidebar({ open, classes }) {
         paper: classes.drawerPaper,
       }}
     >
-      <div className={classes.drawerHeader}>Bank Application v0.2</div>
+      <div className={classes.drawerHeader}>Bank Application v0.4</div>
       <Divider />
       <Navigation />
       <Footer />

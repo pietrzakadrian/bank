@@ -3,6 +3,7 @@
 const express = require('express');
 const logger = require('./logger');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
 const argv = require('./argv');
 const port = require('./port');
@@ -28,6 +29,8 @@ db.sequelize.sync({ force: false }).then(() => {
 require('./routes/user.route.js')(app);
 require('./routes/transaction.route.js')(app);
 require('./routes/bill.route.js')(app);
+
+app.use(morgan('dev'));
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {

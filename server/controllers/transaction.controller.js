@@ -23,6 +23,26 @@ exports.findAll = (req, res) => {
   });
 };
 
+exports.findAllByIdRecipient = (req, res) => {
+  Transaction.findAll({
+    where: {
+      id_recipient: req.params.transactionRecipientId,
+    },
+  }).then(transaction => {
+    res.send(transaction);
+  });
+};
+
+exports.findAllByIdSender = (req, res) => {
+  Transaction.findAll({
+    where: {
+      id_sender: req.params.transactionSenderId,
+    },
+  }).then(transaction => {
+    res.send(transaction);
+  });
+};
+
 // Find a Customer by Id
 exports.findById = (req, res) => {
   Transaction.findById(req.params.transactionId).then(user => {

@@ -7,8 +7,15 @@ module.exports = function(app) {
   // Retrieve all User
   app.get('/api/transactions', transactions.findAll);
 
-  // Retrieve a single User by Id
-  app.get('/api/transactions/:transactionId', transactions.findById);
+  app.get(
+    '/api/transactions/recipient/:transactionRecipientId',
+    transactions.findAllByIdRecipient,
+  );
+
+  app.get(
+    '/api/transactions/sender/:transactionSenderId',
+    transactions.findAllByIdSender,
+  );
 
   // Update a User with Id
   app.put('/api/transactions/:transactionId', transactions.update);
