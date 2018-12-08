@@ -40,14 +40,24 @@ class AvailableFunds extends Component {
   constructor() {
     super();
     this.state = {
-      availableFunds: null,
+      availableFunds: '',
     };
   }
 
   componentDidMount() {
-    fetch('http://localhost:3000/api/bills/1')
-      .then(response => response.json())
-      .then(json => this.setState({ availableFunds: json.available_funds }));
+    axios
+      .get('http://localhost:3000/api/bills/1')
+      .then(({ data }) => {
+        console.log(data);
+        this.setState({
+          availableFunds: data.reduce(
+            (accumulator, currentValue) =>
+              accumulator + currentValue.available_funds,
+            0,
+          ),
+        });
+      })
+      .catch(err => {});
   }
 
   render() {
