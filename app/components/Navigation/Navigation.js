@@ -54,6 +54,18 @@ function Navigation({ classes }) {
             />
           </MenuItem>
         </NavLink>
+        {/* <NavLink> */}
+        <MenuItem disabled className={classes.menuItem}>
+          <ListItemIcon className={classes.icon}>
+            <CardIcon />
+          </ListItemIcon>
+          <ListItemText
+            classes={{ primary: classes.primary }}
+            inset
+            primary={<FormattedMessage {...messages.historyItem} />}
+          />
+        </MenuItem>
+        {/* </NavLink> */}
       </MenuList>
       <Divider />
 

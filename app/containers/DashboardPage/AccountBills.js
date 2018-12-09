@@ -42,7 +42,7 @@ const styles = theme => ({
     top: 0,
   },
   tableCell: {
-    fontSize: theme.spacing.unit * 1.7,
+    fontSize: theme.spacing.unit * 1.8,
   },
   loadingCircular: {
     display: 'flex',
@@ -95,11 +95,15 @@ class AccountBills extends Component {
             <TableBody>
               {!isLoading ? (
                 accountBills.map(accountBill => (
-                  <TableRow key={accountBill.id}>
-                    <TableCell component="th" scope="row">
+                  <TableRow>
+                    <TableCell
+                      className={classes.tableCell}
+                      component="th"
+                      scope="row"
+                    >
                       {accountBill.account_bill}
                     </TableCell>
-                    <TableCell numeric>
+                    <TableCell className={classes.tableCell} numeric>
                       {accountBill.available_funds} PLN
                     </TableCell>
                   </TableRow>

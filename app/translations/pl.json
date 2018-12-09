@@ -4,6 +4,7 @@
   "app.components.Header.settings": "Ustawienia",
   "app.components.Navigation.dashboard": "Strona główna",
   "app.components.Navigation.payment": "Moje płatności",
+  "app.components.Navigation.history": "Historia przelewów",
   "app.components.Navigation.settings": "Ustawienia",
   "app.containers.DashboardPage.availableFunds": "Dostępne środki",
   "app.containers.DashboardPage.bankInformation": "Informacja o banku",

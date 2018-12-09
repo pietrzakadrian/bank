@@ -16,6 +16,10 @@ export default defineMessages({
     id: `${scope}.payment`,
     defaultMessage: 'Payment',
   },
+  historyItem: {
+    id: `${scope}.history`,
+    defaultMessage: 'Transfer history',
+  },
   settingsItem: {
     id: `${scope}.settings`,
     defaultMessage: 'Settings',

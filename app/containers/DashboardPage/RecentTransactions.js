@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 // Import Material-UI
 import Typography from '@material-ui/core/Typography';
@@ -74,21 +75,56 @@ const rows = [
   ),
 ];
 
+const sortingData = data =>
+  data.sort((a, b) => Date.parse(b.data_time) - Date.parse(a.data_time));
+
 class RecentTransactions extends Component {
-  state = {
-    recentTransactions: null,
-  };
+  constructor() {
+    super();
+
+    this.state = {
+      recentTransactionsSender: [],
+      recentTransactionsRecipient: [],
+      isLoading: true,
+    };
+  }
 
   // test
   componentDidMount() {
-    fetch('https://randomuser.me/api/?format=json&results=1')
-      .then(res => res.json())
-      .then(json => this.setState({ recentTransactions: json.results }));
+    axios
+      .all([
+        axios.get('http://localhost:3000/api/transactions/recipient/1'),
+        axios.get('http://localhost:3000/api/transactions/sender/1'),
+      ])
+      .then(
+        axios.spread(
+          (recentTransactionsRecipient, recentTransactionsSender) => {
+            this.setState({
+              recentTransactionsRecipient: recentTransactionsRecipient.data,
+              recentTransactionsSender: recentTransactionsSender.data,
+              isLoading: false,
+            });
+          },
+        ),
+      )
+      .catch(err => {});
   }
 
   render() {
     const { classes } = this.props;
-    const { recentTransactions } = this.state;
+    const {
+      recentTransactionsRecipient,
+      recentTransactionsSender,
+      isLoading,
+    } = this.state;
+
+    const combinedData = [
+      ...recentTransactionsRecipient,
+      ...recentTransactionsSender,
+    ];
+
+    console.log(sortingData(combinedData));
+
     return (
       <Card className={classes.card}>
         <CardContent className={classes.root}>
@@ -100,24 +136,24 @@ class RecentTransactions extends Component {
             <FormattedMessage {...messages.recentTransactions} />
           </Typography>
 
-          {recentTransactions ? (
+          {!isLoading ? (
             <Table className={classes.table}>
               <TableBody>
-                {rows.map(row => (
+                {sortingData(combinedData).map(row => (
                   <TableRow key={row.id}>
                     <TableCell
                       className={classes.tableCell}
                       component="th"
                       scope="row"
                     >
-                      {row.name}
+                      Od {row.id_sender}
                       <br />
-                      {row.calories}
+                      {row.transfer_title}
                     </TableCell>
                     <TableCell className={classes.tableCell} numeric>
-                      {row.fat}
+                      {row.data_time}
                       <br />
-                      {row.protein}
+                      {row.amount_money} PLN
                     </TableCell>
                   </TableRow>
                 ))}
