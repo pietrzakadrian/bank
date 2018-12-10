@@ -146,9 +146,12 @@ class RecentTransactions extends Component {
                       component="th"
                       scope="row"
                     >
-                      Od {row.id_sender}
+                      {row.id_sender == 1 ? (
+                        <span>Dla {row.id_recipient}</span>
+                      ) : (
+                        <span>Od {row.id_sender}</span>
+                      )}
                       <br />
-                      {row.transfer_title}
                     </TableCell>
                     <TableCell className={classes.tableCell} numeric>
                       {row.data_time}
