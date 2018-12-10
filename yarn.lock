@@ -1731,6 +1731,14 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+bcrypt@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-3.0.2.tgz#3c575c49ccbfdf0875eb42aa1453f5654092a33d"
+  integrity sha512-kE1IaaRchCgdrmzQX/eBQKcsuL4jRHZ+O11sMvEUrI/HgFTQYAGvxlj9z7kb3zfFuwljQ5y8/NrbnXtgx5oJLg==
+  dependencies:
+    nan "2.11.1"
+    node-pre-gyp "0.11.0"
+
 beeper@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/beeper/-/beeper-1.1.1.tgz#e6d5ea8c5dad001304a70b22638447f69cb2f809"
@@ -8244,7 +8252,7 @@ named-placeholders@1.1.1:
   dependencies:
     lru-cache "2.5.0"
 
-nan@^2.9.2:
+nan@2.11.1, nan@^2.9.2:
   version "2.11.1"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.11.1.tgz#90e22bccb8ca57ea4cd37cc83d3819b52eea6766"
   integrity sha512-iji6k87OSXa0CcrLl9z+ZiYSuR2o+c0bGuNmXdrhTQTakxytAFsC56SArGYoiHlJlFoHSnvmhpceZJaXkVuOtA==
@@ -8399,6 +8407,22 @@ node-plop@0.16.0, node-plop@=0.16.0:
     mkdirp "^0.5.1"
     pify "^3.0.0"
     resolve "^1.2.0"
+
+node-pre-gyp@0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.11.0.tgz#db1f33215272f692cd38f03238e3e9b47c5dd054"
+  integrity sha512-TwWAOZb0j7e9eGaf9esRx3ZcLaE5tQ2lvYy1pb5IAaG1a2e2Kv5Lms1Y4hpj+ciXJRofIxxlt5haeQ/2ANeE0Q==
+  dependencies:
+    detect-libc "^1.0.2"
+    mkdirp "^0.5.1"
+    needle "^2.2.1"
+    nopt "^4.0.1"
+    npm-packlist "^1.1.6"
+    npmlog "^4.0.2"
+    rc "^1.2.7"
+    rimraf "^2.6.1"
+    semver "^5.3.0"
+    tar "^4"
 
 node-pre-gyp@^0.10.0:
   version "0.10.3"

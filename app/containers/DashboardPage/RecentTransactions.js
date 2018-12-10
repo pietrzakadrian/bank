@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -42,38 +42,10 @@ const styles = theme => ({
     height: 193,
     flexDirection: 'row',
   },
+  outgoingTransfer: {
+    color: '#ea0000',
+  },
 });
-let id = 0;
-function createData(name, calories, fat, protein) {
-  id += 1;
-  return { id, name, calories, fat, protein };
-}
-const rows = [
-  createData(
-    '59 2000 1100 2231 2231...',
-    'crehler',
-    '11.12.2018',
-    '3200.00 PLN',
-  ),
-  createData(
-    '59 2000 1100 2231 2231...',
-    'przelew za wczoraj',
-    '10.02.2018',
-    '40.00 PLN',
-  ),
-  createData(
-    '59 2000 1100 2231 2231...',
-    'przelew za wczoraj',
-    '10.02.2018',
-    '40.00 PLN',
-  ),
-  createData(
-    '59 2000 1100 2231 2231...',
-    'przelew za wczoraj',
-    '10.02.2018',
-    '40.00 PLN',
-  ),
-];
 
 const sortingData = data =>
   data.sort((a, b) => Date.parse(b.data_time) - Date.parse(a.data_time));
@@ -141,23 +113,43 @@ class RecentTransactions extends Component {
               <TableBody>
                 {sortingData(combinedData).map(row => (
                   <TableRow key={row.id}>
-                    <TableCell
-                      className={classes.tableCell}
-                      component="th"
-                      scope="row"
-                    >
-                      {row.id_sender == 1 ? (
-                        <span>Dla {row.id_recipient}</span>
-                      ) : (
-                        <span>Od {row.id_sender}</span>
-                      )}
-                      <br />
-                    </TableCell>
-                    <TableCell className={classes.tableCell} numeric>
-                      {row.data_time}
-                      <br />
-                      {row.amount_money} PLN
-                    </TableCell>
+                    {row.id_sender === 1 ? (
+                      <Fragment>
+                        <TableCell
+                          className={classes.tableCell}
+                          component="th"
+                          scope="row"
+                        >
+                          Dla {row.id_recipient}
+                          <br />
+                          {row.transfer_title}
+                        </TableCell>
+                        <TableCell className={classes.tableCell} numeric>
+                          {row.data_time}
+                          <br />
+                          <span className={classes.outgoingTransfer}>
+                            -{row.amount_money} PLN
+                          </span>
+                        </TableCell>
+                      </Fragment>
+                    ) : (
+                      <Fragment>
+                        <TableCell
+                          className={classes.tableCell}
+                          component="th"
+                          scope="row"
+                        >
+                          Od {row.id_sender}
+                          <br />
+                          {row.transfer_title}
+                        </TableCell>
+                        <TableCell className={classes.tableCell} numeric>
+                          {row.data_time}
+                          <br />
+                          {row.amount_money} PLN
+                        </TableCell>
+                      </Fragment>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>

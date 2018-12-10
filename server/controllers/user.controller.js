@@ -1,18 +1,39 @@
 const db = require('../config/db.config.js');
 const User = db.users;
+const bcrypt = require('bcrypt');
 
 // Post a Customer
 exports.create = (req, res) => {
   // Save to MySQL database
-  User.create({
-    login: req.body.login,
-    password: req.body.password,
-    name: req.body.name,
-    surname: req.body.surname,
-    address: req.body.address,
+  const today = new Date();
+
+  User.findOne({
+    where: { login: req.body.login },
   }).then(user => {
-    // Send created customer to client
-    res.send(user);
+    if (!user) {
+      bcrypt.hash(req.body.password, 10, (err, hash) => {
+        req.body.password = hash;
+
+        User.create({
+          login: req.body.login,
+          password: req.body.password,
+          name: req.body.name,
+          surname: req.body.surname,
+          address: req.body.address,
+          date_registration: today,
+          last_logged: today,
+        })
+          .then(user => {
+            // Send created customer to client
+            res.json({ status: `${user.login} registered` });
+          })
+          .catch(err => {
+            res.send(`error: ${err}`);
+          });
+      });
+    } else {
+      res.json({ error: 'User already exists' });
+    }
   });
 };
 

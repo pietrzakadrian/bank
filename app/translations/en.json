@@ -6,7 +6,7 @@
   "app.components.Navigation.payment": "Payment",
   "app.components.Navigation.settings": "Settings",
   "app.containers.DashboardPage.availableFunds": "Available Funds",
-  "app.containers.DashboardPage.bankInformation": "Information about our wonderful bank",
+  "app.containers.DashboardPage.bankInformation": "Did you know that transfers in our bank are coming in fast?",
   "app.containers.DashboardPage.bills": "Account Bills",
   "app.containers.DashboardPage.makeTransferBtn": "Make a transfer",
   "app.containers.DashboardPage.recentTransactions": "Recent Transactions",

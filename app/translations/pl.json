@@ -7,7 +7,7 @@
   "app.components.Navigation.history": "Historia przelewów",
   "app.components.Navigation.settings": "Ustawienia",
   "app.containers.DashboardPage.availableFunds": "Dostępne środki",
-  "app.containers.DashboardPage.bankInformation": "Informacja o banku",
+  "app.containers.DashboardPage.bankInformation": "Czy wiedziałeś że przelewy w naszym banku dochodzą błyskawicznie?",
   "app.containers.DashboardPage.bills": "Rachunki",
   "app.containers.DashboardPage.makeTransferBtn": "Zrób przelew",
   "app.containers.DashboardPage.recentTransactions": "Ostatnie transakcje",

@@ -22,7 +22,8 @@ export default defineMessages({
   },
   bankInformation: {
     id: `${scope}.bankInformation`,
-    defaultMessage: 'Information about our wonderful bank',
+    defaultMessage:
+      'Did you know that transfers in our bank are coming in fast?',
   },
   recentTransactions: {
     id: `${scope}.recentTransactions`,
