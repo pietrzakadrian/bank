@@ -9,19 +9,53 @@ module.exports = (sequelize, Sequelize) => {
       },
       id_sender: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: '',
+        validate: {
+          notEmpty: {
+            msg: 'The id_sender is required.',
+          },
+        },
       },
       id_recipient: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: '',
+        validate: {
+          notEmpty: {
+            msg: 'The id_recipient is required.',
+          },
+        },
       },
       data_time: {
-        type: Sequelize.DATEONLY,
-        defaultValue: Sequelize.NOW,
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: '',
+        validate: {
+          notEmpty: {
+            msg: 'The data_time is required.',
+          },
+        },
       },
       amount_money: {
         type: Sequelize.DOUBLE,
+        allowNull: false,
+        defaultValue: '',
+        validate: {
+          notEmpty: {
+            msg: 'The amount_money is required.',
+          },
+        },
       },
       transfer_title: {
         type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: '',
+        validate: {
+          notEmpty: {
+            msg: 'The transfer_title is required.',
+          },
+        },
       },
     },
     {

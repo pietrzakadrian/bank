@@ -4,9 +4,11 @@ const Transaction = db.transactions;
 // Post a Customer
 exports.create = (req, res) => {
   // Save to MySQL database
+  const today = new Date();
   Transaction.create({
     id_sender: req.body.id_sender,
     id_recipient: req.body.id_recipient,
+    data_time: today,
     amount_money: req.body.amount_money,
     transfer_title: req.body.transfer_title,
   }).then(transaction => {
