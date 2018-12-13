@@ -7,7 +7,7 @@ const morgan = require('morgan');
 
 const argv = require('./argv');
 const port = require('./port');
-const setup = require('./middlewares/frontendMiddleware');
+const setup = require('./middlewares/frontend.middleware.js');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok =
   (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel
@@ -24,6 +24,19 @@ const db = require('./config/db.config.js');
 // force: true will drop the table if it already exists
 db.sequelize.sync({ force: false }).then(() => {
   console.log('Drop and Resync with { force: false }');
+});
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+  );
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+    return res.status(200).json({});
+  }
+  next();
 });
 
 require('./routes/user.route.js')(app);

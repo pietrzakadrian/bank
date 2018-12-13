@@ -1,11 +1,12 @@
 module.exports = function(app) {
   const transactions = require('../controllers/transaction.controller.js');
+  const checkAuth = require('../middlewares/checkAuth.middleware.js');
 
   // Create a new User
   app.post('/api/transactions', transactions.create);
 
   // Retrieve all User
-  app.get('/api/transactions', transactions.findAll);
+  app.get('/api/transactions', checkAuth, transactions.findAll);
 
   app.get(
     '/api/transactions/recipient/:transactionRecipientId',

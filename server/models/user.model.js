@@ -11,7 +11,6 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         allowNull: false,
         isNumeric: true,
-        defaultValue: '',
         validate: {
           notEmpty: {
             msg: 'The login is required.',

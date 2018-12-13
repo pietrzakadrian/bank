@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       id_sender: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: '',
+        isNumeric: true,
         validate: {
           notEmpty: {
             msg: 'The id_sender is required.',
@@ -20,7 +20,7 @@ module.exports = (sequelize, Sequelize) => {
       id_recipient: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: '',
+        isNumeric: true,
         validate: {
           notEmpty: {
             msg: 'The id_recipient is required.',
@@ -30,7 +30,6 @@ module.exports = (sequelize, Sequelize) => {
       data_time: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: '',
         validate: {
           notEmpty: {
             msg: 'The data_time is required.',
@@ -40,7 +39,7 @@ module.exports = (sequelize, Sequelize) => {
       amount_money: {
         type: Sequelize.DOUBLE,
         allowNull: false,
-        defaultValue: '',
+        isNumeric: true,
         validate: {
           notEmpty: {
             msg: 'The amount_money is required.',

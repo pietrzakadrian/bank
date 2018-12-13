@@ -12,6 +12,27 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
     acquire: env.pool.acquire,
     idle: env.pool.idle,
   },
+
+  retry: {
+    match: [
+      /ETIMEDOUT/,
+      /EHOSTUNREACH/,
+      /ECONNRESET/,
+      /ECONNREFUSED/,
+      /ETIMEDOUT/,
+      /ESOCKETTIMEDOUT/,
+      /EHOSTUNREACH/,
+      /EPIPE/,
+      /EAI_AGAIN/,
+      /SequelizeConnectionError/,
+      /SequelizeConnectionRefusedError/,
+      /SequelizeHostNotFoundError/,
+      /SequelizeHostNotReachableError/,
+      /SequelizeInvalidConnectionError/,
+      /SequelizeConnectionTimedOutError/,
+    ],
+    max: 5,
+  },
 });
 
 const db = {};

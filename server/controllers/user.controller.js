@@ -1,12 +1,12 @@
-const db = require('../config/db.config.js');
-const User = db.users;
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const db = require('../config/db.config.js');
+const env = require('../config/env.config.js');
+const User = db.users;
 
-// Post a Customer
+// Register Action
 exports.create = (req, res) => {
-  // Save to MySQL database
   const today = new Date();
-
   User.findOne({
     where: { login: req.body.login },
   }).then(user => {
@@ -37,22 +37,53 @@ exports.create = (req, res) => {
   });
 };
 
-// FETCH all Customers
-exports.findAll = (req, res) => {
-  User.findAll().then(users => {
-    // Send all customers to Client
-    res.send(users);
-  });
+// Login Action
+exports.findOne = (req, res) => {
+  User.findOne({
+    where: {
+      login: req.body.login,
+    },
+  })
+    .then(user => {
+      if (user) {
+        if (bcrypt.compareSync(req.body.password, user.password)) {
+          const token = jwt.sign(
+            {
+              id: user.id,
+              login: user.login,
+              name: user.name,
+              surname: user.surname,
+              address: user.address,
+              last_logged: user.last_logged,
+            },
+            env.SECRET_KEY,
+            {
+              expiresIn: 1440,
+            },
+          );
+          return res.status(200).json({
+            message: 'Auth successful',
+            token,
+          });
+        }
+        res.status(400).json({ error: 'Auth failed. Using PASSWORD=YES' });
+      } else {
+        res.status(400).json({ error: 'Auth failed. User does not exist' });
+      }
+    })
+    .catch(err => {
+      res.status(400).json({ error: err });
+    });
 };
 
-// Find a Customer by Id
+// Find a User by Id
 exports.findById = (req, res) => {
   User.findById(req.params.userId).then(user => {
     res.send(user);
   });
 };
 
-// Update a Customer
+// Update a User
 exports.update = (req, res) => {
   const id = req.params.userId;
   User.update(
@@ -69,12 +100,22 @@ exports.update = (req, res) => {
   });
 };
 
-// Delete a Customer by Id
+// Delete a User by Id
 exports.delete = (req, res) => {
-  const id = req.params.userId;
+  const login = req.params.userLogin;
   User.destroy({
-    where: { id },
+    where: { login: req.body.login },
   }).then(() => {
-    res.status(200).send(`deleted successfully a customer with id = ${id}`);
+    res
+      .status(200)
+      .send(`deleted successfully a customer with login = ${login}`);
   });
 };
+
+// // Display all Users
+// exports.findAll = (req, res) => {
+//   User.findAll().then(users => {
+//     // Send all customers to Client
+//     res.send(users);
+//   });
+// };

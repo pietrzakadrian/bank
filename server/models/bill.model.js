@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       id_owner: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: '',
+        isNumeric: true,
         validate: {
           notEmpty: {
             msg: 'The id_owner is required.',
@@ -20,7 +20,7 @@ module.exports = (sequelize, Sequelize) => {
       account_bill: {
         type: Sequelize.DOUBLE,
         allowNull: false,
-        defaultValue: '',
+        isNumeric: true,
         validate: {
           notEmpty: {
             msg: 'The account_bill is required.',
@@ -30,7 +30,7 @@ module.exports = (sequelize, Sequelize) => {
       available_funds: {
         type: Sequelize.DOUBLE,
         allowNull: false,
-        defaultValue: '',
+        isNumeric: true,
         validate: {
           notEmpty: {
             msg: 'The available_funds is required.',

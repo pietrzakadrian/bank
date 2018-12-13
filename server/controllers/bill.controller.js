@@ -8,18 +8,26 @@ exports.create = (req, res) => {
     id_owner: req.body.id_owner,
     account_bill: req.body.account_bill,
     available_funds: req.body.available_funds,
-  }).then(transaction => {
-    // Send created customer to client
-    res.send(transaction);
-  });
+  })
+    .then(bill => {
+      // Send created customer to client
+      res.send(bill);
+    })
+    .catch(err => {
+      res.status(400).json({ error: err });
+    });
 };
 
 // // FETCH all Customers
 exports.findAll = (req, res) => {
-  Bill.findAll().then(bills => {
-    // Send all customers to Client
-    res.send(bills);
-  });
+  Bill.findAll()
+    .then(bills => {
+      // Send all customers to Client
+      res.send(bills);
+    })
+    .catch(err => {
+      res.status(400).json({ error: err });
+    });
 };
 
 // // Find a Customer by Id
@@ -31,9 +39,13 @@ exports.findAll = (req, res) => {
 
 // Find a Customer by Id
 exports.findAllByIdOwner = (req, res) => {
-  Bill.findAll({ where: { id_owner: req.params.billOwnerId } }).then(bill => {
-    res.send(bill);
-  });
+  Bill.findAll({ where: { id_owner: req.params.billOwnerId } })
+    .then(bill => {
+      res.send(bill);
+    })
+    .catch(err => {
+      res.status(400).json({ error: err });
+    });
 };
 
 // Update a Customer
@@ -47,9 +59,13 @@ exports.update = (req, res) => {
       available_funds: req.body.available_funds,
     },
     { where: { id: req.params.billId } },
-  ).then(() => {
-    res.status(200).send(`updated successfully a customer with id = ${id}`);
-  });
+  )
+    .then(() => {
+      res.status(200).send(`updated successfully a customer with id = ${id}`);
+    })
+    .catch(err => {
+      res.status(400).json({ error: err });
+    });
 };
 
 // Delete a Customer by Id
@@ -57,7 +73,11 @@ exports.delete = (req, res) => {
   const id = req.params.billId;
   Bill.destroy({
     where: { id },
-  }).then(() => {
-    res.status(200).send(`deleted successfully a customer with id = ${id}`);
-  });
+  })
+    .then(() => {
+      res.status(200).send(`deleted successfully a customer with id = ${id}`);
+    })
+    .catch(err => {
+      res.status(400).json({ error: err });
+    });
 };
