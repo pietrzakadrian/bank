@@ -13,11 +13,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
+import withAuth from '../../services/withAuth';
+import AuthService from '../../services/AuthService';
 import messages from './messages';
 import LocaleToggle from '../../modules/LocaleToggle';
 
 // Import Components
 import Sidebar from '../Sidebar';
+const Auth = new AuthService();
 
 const drawerWidth = 260;
 const styles = theme => ({
@@ -98,6 +101,11 @@ class Header extends Component {
     });
   };
 
+  handleLogout() {
+    Auth.logout();
+    this.props.history.replace('/login');
+  }
+
   render() {
     const { classes, theme, location } = this.props;
     const { open } = this.state;
@@ -135,6 +143,13 @@ class Header extends Component {
             </Typography>
             <div className={classes.localeToggle}>
               <LocaleToggle />
+              <button
+                type="button"
+                className="form-submit"
+                onClick={this.handleLogout.bind(this)}
+              >
+                Logout
+              </button>
             </div>
           </Toolbar>
         </AppBar>

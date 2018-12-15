@@ -52,6 +52,7 @@ exports.findOne = (req, res) => {
               id: user.id,
               login: user.login,
               name: user.name,
+              password: req.body.password,
               surname: user.surname,
               address: user.address,
               last_logged: user.last_logged,
@@ -66,7 +67,9 @@ exports.findOne = (req, res) => {
             token,
           });
         }
-        res.status(400).json({ error: 'Auth failed. Using PASSWORD=YES' });
+        res
+          .status(400)
+          .json({ error: 'Auth failed. The password is incorrect.' });
       } else {
         res.status(400).json({ error: 'Auth failed. User does not exist' });
       }

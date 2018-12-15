@@ -1,57 +1,16 @@
-/*
- * LoginPage
- *
- * This is the first page thing users see of our App after logging in, at the '/login' route
- *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
- */
-
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import './Login.css';
-import { FormattedMessage } from 'react-intl';
-import Helmet from 'react-helmet';
-import messages from './messages';
+import { login } from '../../services/UserService';
 
 class LoginPage extends Component {
   constructor() {
     super();
+
+    this.state = {
+      error: '',
+    };
     this.handleChange = this.handleChange.bind(this);
-  }
-
-  render() {
-    return (
-      <Fragment>
-        <Helmet title="Login - Bank Application" />
-
-        <div className="center">
-          <div className="card">
-            <h1>
-              <FormattedMessage {...messages.header} />
-            </h1>
-            <form>
-              <input
-                className="form-item"
-                placeholder="Username goes here..."
-                name="username"
-                type="text"
-                onChange={this.handleChange}
-              />
-              <input
-                className="form-item"
-                placeholder="Password goes here..."
-                name="password"
-                type="password"
-                onChange={this.handleChange}
-              />
-              <input className="form-submit" value="SUBMIT" type="submit" />
-            </form>
-          </div>
-        </div>
-      </Fragment>
-    );
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   handleChange(e) {
@@ -59,5 +18,58 @@ class LoginPage extends Component {
       [e.target.name]: e.target.value,
     });
   }
+
+  onSubmit(e) {
+    e.preventDefault();
+
+    const user = {
+      login: this.state.login,
+      password: this.state.password,
+    };
+
+    login(user).then(res => {
+      if (!res.error) {
+        this.props.history.push(`/dashboard`);
+      } else {
+        this.setState({ error: res.error });
+      }
+    });
+  }
+
+  render() {
+    return (
+      <div className="center">
+        <div className="card">
+          <h1>Login</h1>
+          <form noValidate onSubmit={this.onSubmit}>
+            <input
+              className="form-item"
+              placeholder="Username goes here..."
+              name="login"
+              type="text"
+              onChange={this.handleChange}
+            />
+            <input
+              className="form-item"
+              placeholder="Password goes here..."
+              name="password"
+              type="password"
+              onChange={this.handleChange}
+            />
+            <div
+              className="alert alert-danger"
+              style={{
+                visibility: this.state.error !== '' ? 'visible' : 'hidden',
+              }}
+            >
+              {this.state.error}
+            </div>
+            <input className="form-submit" value="SUBMIT" type="submit" />
+          </form>
+        </div>
+      </div>
+    );
+  }
 }
+
 export default LoginPage;

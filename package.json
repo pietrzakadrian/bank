@@ -82,6 +82,7 @@
     "invariant": "2.2.4",
     "ip": "1.1.5",
     "jsonwebtoken": "^8.4.0",
+    "jwt-decode": "^2.2.0",
     "loadable-components": "2.2.3",
     "lodash": "4.17.11",
     "minimist": "1.2.0",
