@@ -32,7 +32,7 @@ class LoginPage extends Component {
       if (res) {
         this.props.history.push(`/dashboard`);
       } else {
-        alert('not ok');
+        this.setState({ error: 'Error' });
       }
     });
   }

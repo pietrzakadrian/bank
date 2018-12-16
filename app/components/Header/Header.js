@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { withRouter } from 'react-router-dom';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
@@ -13,14 +14,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
-import withAuth from '../../services/withAuth';
-import AuthService from '../../services/AuthService';
 import messages from './messages';
 import LocaleToggle from '../../modules/LocaleToggle';
 
 // Import Components
 import Sidebar from '../Sidebar';
-const Auth = new AuthService();
 
 const drawerWidth = 260;
 const styles = theme => ({
@@ -101,9 +99,10 @@ class Header extends Component {
     });
   };
 
-  handleLogout() {
-    Auth.logout();
-    this.props.history.replace('/login');
+  logOut(e) {
+    e.preventDefault();
+    localStorage.removeItem('userToken');
+    this.props.history.push(`/`);
   }
 
   render() {
@@ -143,11 +142,7 @@ class Header extends Component {
             </Typography>
             <div className={classes.localeToggle}>
               <LocaleToggle />
-              <button
-                type="button"
-                className="form-submit"
-                onClick={this.handleLogout.bind(this)}
-              >
+              <button type="button" onClick={this.logOut.bind(this)}>
                 Logout
               </button>
             </div>
@@ -173,4 +168,4 @@ Header.propTypes = {
   location: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(Header);
+export default withStyles(styles, { withTheme: true })(withRouter(Header));
