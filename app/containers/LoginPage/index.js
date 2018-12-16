@@ -9,6 +9,7 @@ class LoginPage extends Component {
     this.state = {
       error: '',
     };
+
     this.handleChange = this.handleChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -28,10 +29,10 @@ class LoginPage extends Component {
     };
 
     login(user).then(res => {
-      if (!res.error) {
+      if (res) {
         this.props.history.push(`/dashboard`);
       } else {
-        this.setState({ error: res.error });
+        alert('not ok');
       }
     });
   }
@@ -56,14 +57,7 @@ class LoginPage extends Component {
               type="password"
               onChange={this.handleChange}
             />
-            <div
-              className="alert alert-danger"
-              style={{
-                visibility: this.state.error !== '' ? 'visible' : 'hidden',
-              }}
-            >
-              {this.state.error}
-            </div>
+            {this.state.error}
             <input className="form-submit" value="SUBMIT" type="submit" />
           </form>
         </div>
