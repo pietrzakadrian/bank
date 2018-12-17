@@ -1,16 +1,21 @@
 import axios from 'axios';
 
-// export const register = newUser =>
-//   axios
-//     .post('users/register', {
-//       first_name: newUser.first_name,
-//       last_name: newUser.last_name,
-//       email: newUser.email,
-//       password: newUser.password,
-//     })
-//     .then(res => {
-//       console.log('Registered');
-//     });
+export const register = newUser =>
+  axios
+    .post('http://localhost:3000/api/users/register', {
+      login: newUser.login,
+      password: newUser.password,
+      name: newUser.name,
+      surname: newUser.surname,
+      address: newUser.address,
+    })
+    .then(res => {
+      console.log('Registered');
+      return 1;
+    })
+    .catch(err => {
+      console.log(err);
+    });
 
 export const login = user =>
   axios

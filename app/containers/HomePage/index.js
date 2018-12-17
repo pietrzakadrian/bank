@@ -26,8 +26,12 @@ class HomePage extends Component {
     this.state = { loading: true };
   }
 
-  componentDidMount() {
-    setTimeout(() => this.setState({ loading: false }), 1000);
+  componentWillMount() {
+    if (localStorage.getItem('userToken')) {
+      this.props.history.replace('/dashboard');
+    } else {
+      this.props.history.replace('/login');
+    }
   }
 
   render() {

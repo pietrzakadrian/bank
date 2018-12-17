@@ -28,11 +28,11 @@ exports.create = (req, res) => {
             res.json({ status: `${user.login} registered` });
           })
           .catch(err => {
-            res.send(`error: ${err}`);
+            res.status(400).json({ error: 'Register failed.' });
           });
       });
     } else {
-      res.json({ error: 'User already exists' });
+      res.status(400).json({ error: 'User already exists.' });
     }
   });
 };

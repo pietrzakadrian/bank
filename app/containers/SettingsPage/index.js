@@ -1,5 +1,5 @@
 /*
- * Dashboard
+ * SettingsPage
  *
  * This is the first page thing users see of our App after logging in, at the '/login' route
  *
@@ -9,13 +9,12 @@
  * the linting exception.
  */
 
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Helmet from 'react-helmet';
 import messages from './messages';
 
-/* eslint-disable react/prefer-stateless-function */
-export default class SettingsPage extends React.PureComponent {
+class SettingsPage extends Component {
   render() {
     return (
       <Fragment>
@@ -27,3 +26,5 @@ export default class SettingsPage extends React.PureComponent {
     );
   }
 }
+
+export default SettingsPage;

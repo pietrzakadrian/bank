@@ -13,6 +13,7 @@ import React, { Component, Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
@@ -109,4 +110,4 @@ DashboardPage.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(DashboardPage);
+export default withStyles(styles)(withRouter(DashboardPage));

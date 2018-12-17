@@ -7,6 +7,8 @@ class LoginPage extends Component {
     super();
 
     this.state = {
+      login: '',
+      password: '',
       error: '',
     };
 
