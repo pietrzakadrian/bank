@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './Register.css';
-import { register } from '../../services/UserService';
+import AuthService from '../../services/AuthService';
 
-class LoginPage extends Component {
+class RegisterPage extends Component {
   constructor() {
     super();
 
@@ -12,10 +12,12 @@ class LoginPage extends Component {
       name: '',
       surname: '',
       address: '',
+      error: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.Auth = new AuthService();
   }
 
   handleChange(e) {
@@ -24,22 +26,30 @@ class LoginPage extends Component {
     });
   }
 
-  onSubmit(e) {
+  handleFormSubmit(e) {
     e.preventDefault();
 
-    const user = {
-      login: this.state.login,
-      password: this.state.password,
-      name: this.state.name,
-      surname: this.state.surname,
-      address: this.state.address,
-    };
-
-    register(user).then(res => {
-      if (res) {
-        this.props.history.push(`/login`);
-      }
-    });
+    this.Auth.register(
+      this.state.login,
+      this.state.password,
+      this.state.name,
+      this.state.surname,
+      this.state.address,
+    )
+      .then(res => {
+        if (res) {
+          this.props.history.replace('/login');
+        } else {
+          this.setState({
+            error: 'Error',
+          });
+        }
+      })
+      .catch(err => {
+        this.setState({
+          error: 'Error catch',
+        });
+      });
   }
 
   render() {
@@ -47,7 +57,7 @@ class LoginPage extends Component {
       <div className="center">
         <div className="card">
           <h1>Register</h1>
-          <form noValidate onSubmit={this.onSubmit}>
+          <form noValidate onSubmit={this.handleFormSubmit}>
             <input
               className="form-item"
               placeholder="Username goes here..."
@@ -83,6 +93,7 @@ class LoginPage extends Component {
               type="text"
               onChange={this.handleChange}
             />
+            {this.state.error}
             <input className="form-submit" value="SUBMIT" type="submit" />
           </form>
         </div>
@@ -91,4 +102,4 @@ class LoginPage extends Component {
   }
 }
 
-export default LoginPage;
+export default RegisterPage;

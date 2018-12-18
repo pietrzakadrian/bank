@@ -39,7 +39,11 @@ export default class AuthService {
         address,
       }),
     })
-      .then(res => 1)
+      .then(res => {
+        if (!res.error) {
+          return 1;
+        }
+      })
       .catch(err => {
         console.log(err);
       });
