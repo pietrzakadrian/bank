@@ -56,7 +56,7 @@ exports.findOne = (req, res) => {
             },
             env.SECRET_KEY,
             {
-              expiresIn: 1440,
+              expiresIn: 129600,
             },
           );
           return res.status(200).json({

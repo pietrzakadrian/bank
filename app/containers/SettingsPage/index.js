@@ -13,6 +13,7 @@ import React, { Fragment, Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Helmet from 'react-helmet';
 import messages from './messages';
+import withAuth from '../../services/withAuth';
 
 class SettingsPage extends Component {
   render() {
@@ -27,4 +28,5 @@ class SettingsPage extends Component {
   }
 }
 
-export default SettingsPage;
+// TODO: add withAuth HoC
+export default withAuth(SettingsPage);

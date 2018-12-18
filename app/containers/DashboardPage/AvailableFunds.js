@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import decode from 'jwt-decode';
 
 // Import Material-UI
 import Paper from '@material-ui/core/Paper';
@@ -13,8 +12,10 @@ import LoadingCircular from 'components/LoadingCircular';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
-import { userdata } from '../../services/UserService';
 import messages from './messages';
+import AuthService from '../../services/AuthService';
+import withAuth from '../../services/withAuth';
+const Auth = new AuthService();
 
 // Import Styles
 const styles = theme => ({
@@ -42,31 +43,12 @@ class AvailableFunds extends Component {
   constructor() {
     super();
     this.state = {
-      id: '',
-      token: '',
-      available_funds: '',
+      availableFunds: '',
       isLoading: true,
     };
   }
 
   componentDidMount() {
-    // const token = localStorage.getItem('userToken');
-    // const decoded = decode(token);
-
-    // this.setState({
-    //   id: decoded.id,
-    //   token: localStorage.getItem('userToken'),
-    // });
-
-    // userdata(this.state.token, this.state.id).then(res => {
-    //   if (res) {
-    //     this.setState({
-    //       isLoading: false,
-    //       available_funds: res.data.available_funds,
-    //     });
-    //   }
-    // });
-
     axios
       .get('http://localhost:3000/api/bills/1')
       .then(({ data }) => {
@@ -83,7 +65,7 @@ class AvailableFunds extends Component {
 
   render() {
     const { classes } = this.props;
-    const { isLoading, available_funds } = this.state;
+    const { isLoading, availableFunds } = this.state;
 
     return (
       <Paper className={classes.root} elevation={1}>
@@ -93,7 +75,7 @@ class AvailableFunds extends Component {
               <FormattedMessage {...messages.availableFunds} />
             </Typography>
             <Typography variant="h5">
-              {available_funds}
+              {availableFunds}
               &nbsp;
               <Typography
                 variant="subtitle1"

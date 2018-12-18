@@ -23,6 +23,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 
 import { FormattedMessage } from 'react-intl';
+import withAuth from '../../services/withAuth';
 import messages from './messages';
 
 const styles = theme => ({
@@ -206,4 +207,4 @@ PaymentPage.propTypes = {
   classes: PropTypes.object,
 };
 
-export default withStyles(styles)(PaymentPage);
+export default withAuth(withStyles(styles)(PaymentPage));

@@ -13,13 +13,13 @@ import React, { Component, Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+import withAuth from '../../services/withAuth';
 
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
 // Import Material-UI
-import Grid from '@material-ui/core/Grid';
 
 // Import Components
 import AvailableFunds from './AvailableFunds';
@@ -110,4 +110,4 @@ DashboardPage.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(withRouter(DashboardPage));
+export default withAuth(withStyles(styles)(DashboardPage));

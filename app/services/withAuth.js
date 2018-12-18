@@ -16,9 +16,10 @@ export default function withAuth(AuthComponent) {
         this.props.history.replace('/login');
       } else {
         try {
-          const profile = Auth.getProfile();
+          const userData = Auth.getUserdata();
+          console.log('userData', userData);
           this.setState({
-            user: profile,
+            user: userData,
           });
         } catch (err) {
           Auth.logout();
@@ -27,21 +28,10 @@ export default function withAuth(AuthComponent) {
       }
     }
 
-    handleLogout() {
-      Auth.logout();
-      this.props.history.replace('/login');
-    }
-
     render() {
       if (this.state.user) {
         return (
-          <button
-            type="button"
-            className="form-submit"
-            onClick={this.handleLogout.bind(this)}
-          >
-            Logout
-          </button>
+          <AuthComponent history={this.props.history} user={this.state.user} />
         );
       }
       return null;

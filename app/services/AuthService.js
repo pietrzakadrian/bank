@@ -5,11 +5,11 @@ export default class AuthService {
     this.domain = domain || 'http://localhost:3000/api';
     this.fetch = this.fetch.bind(this);
     this.login = this.login.bind(this);
-    this.getProfile = this.getProfile.bind(this);
+    this.getUserdata = this.getUserdata.bind(this);
   }
 
+  // Login Action
   login(login, password) {
-    // Get a token
     return this.fetch(`${this.domain}/users/login`, {
       method: 'POST',
       body: JSON.stringify({
@@ -28,6 +28,7 @@ export default class AuthService {
       });
   }
 
+  // Register Action
   register(login, password, name, surname, address) {
     return this.fetch(`${this.domain}/users/register`, {
       method: 'POST',
@@ -37,6 +38,25 @@ export default class AuthService {
         name,
         surname,
         address,
+      }),
+    })
+      .then(res => {
+        if (!res.error) {
+          return 1;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  // AvailableFunds Action
+  availableFunds(id) {
+    return this.fetch(`${this.domain}/bills/${id}`, {
+      method: 'GET',
+      header: `Bearer ${this.getToken()}`,
+      body: JSON.stringify({
+        id,
       }),
     })
       .then(res => {
@@ -82,7 +102,7 @@ export default class AuthService {
     localStorage.removeItem('id_token');
   }
 
-  getProfile() {
+  getUserdata() {
     return decode(this.getToken());
   }
 
@@ -101,12 +121,11 @@ export default class AuthService {
       headers,
       ...options,
     })
-      .then(this._heckStatus)
+      .then(this.checkStatus)
       .then(response => response.json());
   }
 
   checkStatus(response) {
-    // raises an error in case response status is not a success
     if (response.status >= 200 && response.status < 300) {
       return response;
     }

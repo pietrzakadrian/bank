@@ -14,24 +14,22 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
+import AuthService from '../../services/AuthService';
 
 // Import Components
 import LoadingCircual from '../../components/LoadingCircular';
 
-/* eslint-disable react/prefer-stateless-function */
 class HomePage extends Component {
   constructor(props) {
     super(props);
 
+    this.Auth = new AuthService();
     this.state = { loading: true };
   }
 
   componentWillMount() {
-    if (localStorage.getItem('userToken')) {
-      this.props.history.replace('/dashboard');
-    } else {
-      this.props.history.replace('/login');
-    }
+    if (this.Auth.loggedIn()) this.props.history.replace('/dashboard');
+    else this.props.history.replace('/login');
   }
 
   render() {
