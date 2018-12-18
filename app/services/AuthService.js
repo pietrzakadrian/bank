@@ -18,10 +18,31 @@ export default class AuthService {
       }),
     })
       .then(res => {
-        this.setToken(res.token);
-        return Promise.resolve(res);
+        if (res.token) {
+          this.setToken(res.token);
+          return 1;
+        }
       })
-      .catch(err);
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  register(login, password, name, surname, address) {
+    return this.fetch(`${this.domain}/users/register`, {
+      method: 'POST',
+      body: JSON.stringify({
+        login,
+        password,
+        name,
+        surname,
+        address,
+      }),
+    })
+      .then(res => 1)
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   loggedIn() {
@@ -76,11 +97,11 @@ export default class AuthService {
       headers,
       ...options,
     })
-      .then(this._checkStatus)
+      .then(this._heckStatus)
       .then(response => response.json());
   }
 
-  _checkStatus(response) {
+  checkStatus(response) {
     // raises an error in case response status is not a success
     if (response.status >= 200 && response.status < 300) {
       return response;

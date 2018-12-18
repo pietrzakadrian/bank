@@ -95,8 +95,6 @@ class RecentTransactions extends Component {
       ...recentTransactionsSender,
     ];
 
-    console.log(sortingData(combinedData));
-
     return (
       <Card className={classes.card}>
         <CardContent className={classes.root}>

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import decode from 'jwt-decode';
 
 // Import Material-UI
 import Paper from '@material-ui/core/Paper';
@@ -12,6 +13,7 @@ import LoadingCircular from 'components/LoadingCircular';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
+import { userdata } from '../../services/UserService';
 import messages from './messages';
 
 // Import Styles
@@ -40,11 +42,31 @@ class AvailableFunds extends Component {
   constructor() {
     super();
     this.state = {
-      availableFunds: '',
+      id: '',
+      token: '',
+      available_funds: '',
+      isLoading: true,
     };
   }
 
   componentDidMount() {
+    // const token = localStorage.getItem('userToken');
+    // const decoded = decode(token);
+
+    // this.setState({
+    //   id: decoded.id,
+    //   token: localStorage.getItem('userToken'),
+    // });
+
+    // userdata(this.state.token, this.state.id).then(res => {
+    //   if (res) {
+    //     this.setState({
+    //       isLoading: false,
+    //       available_funds: res.data.available_funds,
+    //     });
+    //   }
+    // });
+
     axios
       .get('http://localhost:3000/api/bills/1')
       .then(({ data }) => {
@@ -61,17 +83,17 @@ class AvailableFunds extends Component {
 
   render() {
     const { classes } = this.props;
-    const { availableFunds } = this.state;
+    const { isLoading, available_funds } = this.state;
 
     return (
       <Paper className={classes.root} elevation={1}>
-        {availableFunds ? (
+        {!isLoading ? (
           <Fragment>
             <Typography variant="subtitle1">
               <FormattedMessage {...messages.availableFunds} />
             </Typography>
             <Typography variant="h5">
-              {availableFunds}
+              {available_funds}
               &nbsp;
               <Typography
                 variant="subtitle1"

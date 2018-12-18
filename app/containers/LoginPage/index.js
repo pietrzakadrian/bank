@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Login.css';
-import { login } from '../../services/UserService';
+import AuthService from '../../services/AuthService';
 
 class LoginPage extends Component {
   constructor() {
@@ -13,7 +13,12 @@ class LoginPage extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.Auth = new AuthService();
+  }
+
+  componentWillMount() {
+    if (this.Auth.loggedIn()) this.props.history.replace('/dashboard');
   }
 
   handleChange(e) {
@@ -22,21 +27,24 @@ class LoginPage extends Component {
     });
   }
 
-  onSubmit(e) {
+  handleFormSubmit(e) {
     e.preventDefault();
 
-    const user = {
-      login: this.state.login,
-      password: this.state.password,
-    };
-
-    login(user).then(res => {
-      if (res) {
-        this.props.history.push(`/dashboard`);
-      } else {
-        this.setState({ error: 'Error' });
-      }
-    });
+    this.Auth.login(this.state.login, this.state.password)
+      .then(res => {
+        if (res) {
+          this.props.history.replace('/dashboard');
+        } else {
+          this.setState({
+            error: 'Error',
+          });
+        }
+      })
+      .catch(err => {
+        this.setState({
+          error: 'Error catch',
+        });
+      });
   }
 
   render() {
@@ -44,7 +52,7 @@ class LoginPage extends Component {
       <div className="center">
         <div className="card">
           <h1>Login</h1>
-          <form noValidate onSubmit={this.onSubmit}>
+          <form noValidate onSubmit={this.handleFormSubmit}>
             <input
               className="form-item"
               placeholder="Username goes here..."

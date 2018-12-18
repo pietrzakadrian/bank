@@ -9,10 +9,7 @@ export const register = newUser =>
       surname: newUser.surname,
       address: newUser.address,
     })
-    .then(res => {
-      console.log('Registered');
-      return 1;
-    })
+    .then(res => 1)
     .catch(err => {
       console.log(err);
     });
