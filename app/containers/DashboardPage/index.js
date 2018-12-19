@@ -67,15 +67,15 @@ class DashboardPage extends Component {
         <div id="test" className={classes.informationHeader}>
           <div className={classes.informationHeaderFirst} />
           <div className={classes.informationHeaderLast}>
-            Dzień dobry, Adrian Pietrzak
+            Dzień dobry, {this.props.user.name} {this.props.user.surname}
             <br />
-            Ostatnie logowanie: 19.12.2018 20:00
+            Ostatnie logowanie: {this.props.user.last_logged}
           </div>
         </div>
         <div className={classes.container}>
           <Grid container spacing={24} className={classes.grid}>
             <Grid item xs={4}>
-              <AvailableFunds />
+              <AvailableFunds id={this.props.user.id} />
             </Grid>
             <Grid item xs={4}>
               <BankInformation />
@@ -84,10 +84,10 @@ class DashboardPage extends Component {
               <BankInformation />
             </Grid>
             <Grid item xs={8}>
-              <AccountBills />
+              <AccountBills id={this.props.user.id} />
             </Grid>
             <Grid item xs={4}>
-              <RecentTransactions />
+              <RecentTransactions id={this.props.user.id} />
             </Grid>
 
             {/* <Grid item xs={4}>

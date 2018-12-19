@@ -61,15 +61,15 @@ class AccountBills extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get('http://localhost:3000/api/bills/1')
-      .then(({ data }) => {
-        this.setState({
-          accountBills: data,
-          isLoading: false,
-        });
-      })
-      .catch(err => {});
+    // axios
+    //   .get('http://localhost:3000/api/bills/1')
+    //   .then(({ data }) => {
+    //     this.setState({
+    //       accountBills: data,
+    //       isLoading: false,
+    //     });
+    //   })
+    //   .catch(err => {});
   }
 
   render() {

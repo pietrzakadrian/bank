@@ -43,29 +43,43 @@ class AvailableFunds extends Component {
   constructor() {
     super();
     this.state = {
-      availableFunds: '',
+      dataCustomer: null,
       isLoading: true,
     };
+    this.Auth = new AuthService();
   }
 
   componentDidMount() {
-    axios
-      .get('http://localhost:3000/api/bills/1')
-      .then(({ data }) => {
-        this.setState({
-          availableFunds: data.reduce(
-            (accumulator, currentValue) =>
-              accumulator + currentValue.available_funds,
-            0,
-          ),
-        });
+    this.Auth.availableFunds(this.props.id)
+      .then(res => {
+        if (res) {
+          // TODO: save res to state
+          this.setState({
+            dataCustomer: res.available_funds,
+          });
+        }
       })
-      .catch(err => {});
+      .catch(err => {
+        console.log(err);
+      });
+
+    //   axios
+    //     .get('http://localhost:3000/api/bills/1')
+    //     .then(({ data }) => {
+    //       this.setState({
+    //         availableFunds: data.reduce(
+    //           (accumulator, currentValue) =>
+    //             accumulator + currentValue.available_funds,
+    //           0,
+    //         ),
+    //       });
+    //     })
+    //     .catch(err => {});
   }
 
   render() {
     const { classes } = this.props;
-    const { isLoading, availableFunds } = this.state;
+    const { isLoading, dataCustomer } = this.state;
 
     return (
       <Paper className={classes.root} elevation={1}>
@@ -75,7 +89,7 @@ class AvailableFunds extends Component {
               <FormattedMessage {...messages.availableFunds} />
             </Typography>
             <Typography variant="h5">
-              {availableFunds}
+              {dataCustomer}
               &nbsp;
               <Typography
                 variant="subtitle1"

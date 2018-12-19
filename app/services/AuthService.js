@@ -54,14 +54,11 @@ export default class AuthService {
   availableFunds(id) {
     return this.fetch(`${this.domain}/bills/${id}`, {
       method: 'GET',
-      header: `Bearer ${this.getToken()}`,
-      body: JSON.stringify({
-        id,
-      }),
+      header: { Authentication: `Bearer ${this.getToken()}` },
     })
       .then(res => {
         if (!res.error) {
-          return 1;
+          return res;
         }
       })
       .catch(err => {
