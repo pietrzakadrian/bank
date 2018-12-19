@@ -42,9 +42,10 @@ const styles = theme => ({
 class AvailableFunds extends Component {
   constructor() {
     super();
+
     this.state = {
-      dataCustomer: null,
-      isLoading: true,
+      isLoading: false,
+      availableFunds: '',
     };
     this.Auth = new AuthService();
   }
@@ -53,9 +54,10 @@ class AvailableFunds extends Component {
     this.Auth.availableFunds(this.props.id)
       .then(res => {
         if (res) {
-          // TODO: save res to state
+          // TODO: data.reduce
           this.setState({
-            dataCustomer: res.available_funds,
+            isLoading: true,
+            availableFunds: res,
           });
         }
       })
@@ -79,17 +81,21 @@ class AvailableFunds extends Component {
 
   render() {
     const { classes } = this.props;
-    const { isLoading, dataCustomer } = this.state;
+    const { isLoading, availableFunds } = this.state;
+
+    console.log('availableFunds', availableFunds);
 
     return (
       <Paper className={classes.root} elevation={1}>
-        {!isLoading ? (
+        {isLoading ? (
           <Fragment>
             <Typography variant="subtitle1">
               <FormattedMessage {...messages.availableFunds} />
             </Typography>
             <Typography variant="h5">
-              {dataCustomer}
+              {availableFunds.map(aF => (
+                <span key={aF.available_funds}>{aF.available_funds}</span>
+              ))}
               &nbsp;
               <Typography
                 variant="subtitle1"

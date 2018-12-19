@@ -21,6 +21,10 @@ import LoadingCircular from 'components/LoadingCircular';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
+import withAuth from '../../services/withAuth';
+import AuthService from '../../services/AuthService';
+const Auth = new AuthService();
+
 // Import Styles
 const styles = theme => ({
   root: {
@@ -55,21 +59,25 @@ class AccountBills extends Component {
   constructor() {
     super();
     this.state = {
-      accountBills: [],
-      isLoading: true,
+      accountBills: '',
+      isLoading: false,
     };
+    this.Auth = new AuthService();
   }
 
   componentDidMount() {
-    // axios
-    //   .get('http://localhost:3000/api/bills/1')
-    //   .then(({ data }) => {
-    //     this.setState({
-    //       accountBills: data,
-    //       isLoading: false,
-    //     });
-    //   })
-    //   .catch(err => {});
+    this.Auth.accountBills(this.props.id)
+      .then(res => {
+        if (res) {
+          this.setState({
+            isLoading: true,
+            accountBills: res,
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -93,7 +101,7 @@ class AccountBills extends Component {
           </Typography>
           <Table>
             <TableBody>
-              {!isLoading ? (
+              {isLoading ? (
                 accountBills.map(accountBill => (
                   <TableRow>
                     <TableCell

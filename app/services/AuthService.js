@@ -66,6 +66,39 @@ export default class AuthService {
       });
   }
 
+  // AccountBills Action
+  accountBills(id) {
+    return this.fetch(`${this.domain}/bills/${id}`, {
+      method: 'GET',
+      header: { Authentication: `Bearer ${this.getToken()}` },
+    })
+      .then(res => {
+        if (!res.error) {
+          return res;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  // TODO: RecentTransactions Action
+  // RecentTransactions Action
+  // recentTransactions(id) {
+  //   return this.fetch(`${this.domain}/bills/${id}`, {
+  //     method: 'GET',
+  //     header: { Authentication: `Bearer ${this.getToken()}` },
+  //   })
+  //     .then(res => {
+  //       if (!res.error) {
+  //         return res;
+  //       }
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // }
+
   loggedIn() {
     // Checks if there is a saved token and it's still valid
     const token = this.getToken();

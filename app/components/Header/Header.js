@@ -94,7 +94,7 @@ const styles = theme => ({
 
 class Header extends Component {
   state = {
-    open: true,
+    open: false,
   };
 
   handleDrawerToggle = () => {
