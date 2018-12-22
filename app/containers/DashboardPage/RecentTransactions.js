@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 
 // Import Material-UI
 import Typography from '@material-ui/core/Typography';
@@ -65,6 +64,7 @@ class RecentTransactions extends Component {
 
   // test
   componentDidMount() {
+    // TODO: Convert Data.obj to Data.string
     this.Auth.recentTransactionsRecipient(this.props.id)
       .then(res => {
         if (res) {

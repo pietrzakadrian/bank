@@ -20,7 +20,7 @@ exports.create = (req, res) => {
           res.status(400).json({ error: err });
         });
     } else {
-      res.status(400).json({ error: 'The user already has his own bill' });
+      res.status(200).json({ error: 'The user already has his own bill' });
     }
   });
 };
