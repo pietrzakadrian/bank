@@ -3,7 +3,7 @@ module.exports = function(app) {
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
 
   // Create a new User
-  app.post('/api/bills', bills.create);
+  app.post('/api/bills', checkAuth, bills.create);
 
   // Retrieve all User
   // app.get('/api/bills', checkAuth, bills.findAll);

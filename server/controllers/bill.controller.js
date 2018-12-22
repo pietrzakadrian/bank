@@ -1,21 +1,28 @@
 const db = require('../config/db.config.js');
 const Bill = db.bills;
 
-// Post a Customer
+// Create Bill Action
 exports.create = (req, res) => {
-  // Save to MySQL database
-  Bill.create({
-    id_owner: req.body.id_owner,
-    account_bill: req.body.account_bill,
-    available_funds: req.body.available_funds,
-  })
-    .then(bill => {
-      // Send created customer to client
-      res.send(bill);
-    })
-    .catch(err => {
-      res.status(400).json({ error: err });
-    });
+  Bill.findOne({
+    where: { id_owner: req.body.id_owner },
+  }).then(bill => {
+    if (!bill) {
+      Bill.create({
+        id_owner: req.body.id_owner,
+        account_bill: req.body.account_bill,
+        available_funds: req.body.available_funds,
+      })
+        .then(bill => {
+          // Send created customer to client
+          res.send(bill);
+        })
+        .catch(err => {
+          res.status(400).json({ error: err });
+        });
+    } else {
+      res.status(400).json({ error: 'The user already has his own bill' });
+    }
+  });
 };
 
 // // FETCH all Customers

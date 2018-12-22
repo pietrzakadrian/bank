@@ -17,6 +17,7 @@ import LoadingCircular from 'components/LoadingCircular';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
+import AuthService from '../../services/AuthService';
 import messages from './messages';
 
 // Import Styles
@@ -59,27 +60,36 @@ class RecentTransactions extends Component {
       recentTransactionsRecipient: [],
       isLoading: true,
     };
+    this.Auth = new AuthService();
   }
 
   // test
   componentDidMount() {
-    axios
-      .all([
-        axios.get('http://localhost:3000/api/transactions/recipient/1'),
-        axios.get('http://localhost:3000/api/transactions/sender/1'),
-      ])
-      .then(
-        axios.spread(
-          (recentTransactionsRecipient, recentTransactionsSender) => {
-            this.setState({
-              recentTransactionsRecipient: recentTransactionsRecipient.data,
-              recentTransactionsSender: recentTransactionsSender.data,
-              isLoading: false,
-            });
-          },
-        ),
-      )
-      .catch(err => {});
+    this.Auth.recentTransactionsRecipient(this.props.id)
+      .then(res => {
+        if (res) {
+          this.setState({
+            isLoading: true,
+            recentTransactionsRecipient: res,
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    this.Auth.recentTransactionsSender(this.props.id)
+      .then(res => {
+        if (res) {
+          this.setState({
+            isLoading: true,
+            recentTransactionsSender: res,
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -106,7 +116,7 @@ class RecentTransactions extends Component {
             <FormattedMessage {...messages.recentTransactions} />
           </Typography>
 
-          {!isLoading ? (
+          {isLoading ? (
             <Table className={classes.table}>
               <TableBody>
                 {sortingData(combinedData).map(row => (

@@ -50,6 +50,19 @@ export default class AuthService {
       });
   }
 
+  // Create Bill Action
+  createBill(id_owner, account_bill, available_funds) {
+    return this.fetch(`${this.domain}/bills`, {
+      method: 'POST',
+      header: { Authentication: `Bearer ${this.getToken()}` },
+      body: JSON.stringify({
+        id_owner,
+        account_bill,
+        available_funds,
+      }),
+    });
+  }
+
   // AvailableFunds Action
   availableFunds(id) {
     return this.fetch(`${this.domain}/bills/${id}`, {
@@ -82,22 +95,50 @@ export default class AuthService {
       });
   }
 
-  // TODO: RecentTransactions Action
   // RecentTransactions Action
-  // recentTransactions(id) {
-  //   return this.fetch(`${this.domain}/bills/${id}`, {
-  //     method: 'GET',
-  //     header: { Authentication: `Bearer ${this.getToken()}` },
-  //   })
-  //     .then(res => {
-  //       if (!res.error) {
-  //         return res;
-  //       }
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // }
+  recentTransactionsRecipient(id) {
+    return this.fetch(`${this.domain}/transactions/recipient/${id}`, {
+      method: 'GET',
+      header: { Authentication: `Bearer ${this.getToken()}` },
+    })
+      .then(res => {
+        if (!res.error) {
+          return res;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  recentTransactionsSender(id) {
+    return this.fetch(`${this.domain}/transactions/sender/${id}`, {
+      method: 'GET',
+      header: { Authentication: `Bearer ${this.getToken()}` },
+    })
+      .then(res => {
+        if (!res.error) {
+          return res;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  // Payment Action
+  makePayment(id_sender, id_recipient, amount_money, transfer_title) {
+    return this.fetch(`${this.domain}/transactions`, {
+      method: 'POST',
+      header: { Authentication: `Bearer ${this.getToken()}` },
+      body: JSON.stringify({
+        id_sender,
+        id_recipient,
+        amount_money,
+        transfer_title,
+      }),
+    });
+  }
 
   loggedIn() {
     // Checks if there is a saved token and it's still valid

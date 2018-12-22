@@ -146,11 +146,7 @@ class Header extends Component {
             </Typography>
             <div className={classes.localeToggle}>
               <LocaleToggle />
-              <button
-                type="button"
-                className="form-submit"
-                onClick={this.handleLogout.bind(this)}
-              >
+              <button type="button" onClick={this.handleLogout.bind(this)}>
                 Logout
               </button>
             </div>

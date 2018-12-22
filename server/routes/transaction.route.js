@@ -10,11 +10,13 @@ module.exports = function(app) {
 
   app.get(
     '/api/transactions/recipient/:transactionRecipientId',
+    checkAuth,
     transactions.findAllByIdRecipient,
   );
 
   app.get(
     '/api/transactions/sender/:transactionSenderId',
+    checkAuth,
     transactions.findAllByIdSender,
   );
 

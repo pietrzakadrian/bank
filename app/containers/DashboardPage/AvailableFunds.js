@@ -45,7 +45,7 @@ class AvailableFunds extends Component {
 
     this.state = {
       isLoading: false,
-      availableFunds: '',
+      availableFunds: [],
     };
     this.Auth = new AuthService();
   }
@@ -54,36 +54,24 @@ class AvailableFunds extends Component {
     this.Auth.availableFunds(this.props.id)
       .then(res => {
         if (res) {
-          // TODO: data.reduce
           this.setState({
             isLoading: true,
-            availableFunds: res,
+            availableFunds: res.reduce(
+              (accumulator, currentValue) =>
+                accumulator + currentValue.available_funds,
+              0,
+            ),
           });
         }
       })
       .catch(err => {
         console.log(err);
       });
-
-    //   axios
-    //     .get('http://localhost:3000/api/bills/1')
-    //     .then(({ data }) => {
-    //       this.setState({
-    //         availableFunds: data.reduce(
-    //           (accumulator, currentValue) =>
-    //             accumulator + currentValue.available_funds,
-    //           0,
-    //         ),
-    //       });
-    //     })
-    //     .catch(err => {});
   }
 
   render() {
     const { classes } = this.props;
     const { isLoading, availableFunds } = this.state;
-
-    console.log('availableFunds', availableFunds);
 
     return (
       <Paper className={classes.root} elevation={1}>
@@ -93,9 +81,7 @@ class AvailableFunds extends Component {
               <FormattedMessage {...messages.availableFunds} />
             </Typography>
             <Typography variant="h5">
-              {availableFunds.map(aF => (
-                <span key={aF.available_funds}>{aF.available_funds}</span>
-              ))}
+              {availableFunds}
               &nbsp;
               <Typography
                 variant="subtitle1"

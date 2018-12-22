@@ -26,6 +26,7 @@ import AvailableFunds from './AvailableFunds';
 import BankInformation from './BankInformation';
 import AccountBills from './AccountBills';
 import RecentTransactions from './RecentTransactions';
+import AuthService from '../../services/AuthService';
 
 // Import Styles
 const styles = theme => ({
@@ -57,7 +58,32 @@ const styles = theme => ({
 });
 
 class DashboardPage extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      id_owner: this.props.user.id,
+      account_bill: Math.floor(10000000000 + Math.random() * 90000000000),
+      available_funds: 0,
+    };
+    this.Auth = new AuthService();
+  }
+
+  componentWillMount() {
+    this.Auth.createBill(
+      this.state.id_owner,
+      this.state.account_bill,
+      this.state.available_funds,
+    )
+      .then(res => {
+        if (res) {
+          return 1;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 
   render() {
     const { classes } = this.props;

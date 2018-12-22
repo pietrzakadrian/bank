@@ -1,9 +1,9 @@
 const db = require('../config/db.config.js');
 const Transaction = db.transactions;
 
-// Post a Customer
+// ! TODO: Validation
+// Create new transaction Action
 exports.create = (req, res) => {
-  // Save to MySQL database
   const today = new Date();
   Transaction.create({
     id_sender: req.body.id_sender,
