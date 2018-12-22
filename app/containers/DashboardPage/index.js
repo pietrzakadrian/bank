@@ -97,7 +97,7 @@ class DashboardPage extends Component {
           <div className={classes.informationHeaderLast}>
             Dzień dobry, {this.props.user.name} {this.props.user.surname}
             <br />
-            Ostatnie logowanie: {this.props.user.last_logged}
+            {/* Ostatnie logowanie: {this.props.user.last_logged} */}
           </div>
         </div>
         <div className={classes.container}>

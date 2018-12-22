@@ -123,7 +123,7 @@ class RecentTransactions extends Component {
               <TableBody>
                 {sortingData(combinedData).map(row => (
                   <TableRow key={row.id}>
-                    {row.id_sender === 1 ? (
+                    {row.id_sender === this.props.id ? (
                       <Fragment>
                         <TableCell
                           className={classes.tableCell}

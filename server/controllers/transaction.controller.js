@@ -2,6 +2,13 @@ const db = require('../config/db.config.js');
 const Transaction = db.transactions;
 
 // ! TODO: Validation
+
+// exports.findOne = (req, res) => {
+//   where: {
+//     id_recipient: req.params.id_recipient,
+//   },
+// }
+
 // Create new transaction Action
 exports.create = (req, res) => {
   const today = new Date();

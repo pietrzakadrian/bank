@@ -12,6 +12,7 @@ class LoginPage extends Component {
       error: '',
     };
 
+    this.goToRegister = this.goToRegister.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.Auth = new AuthService();
@@ -19,6 +20,10 @@ class LoginPage extends Component {
 
   componentWillMount() {
     if (this.Auth.loggedIn()) this.props.history.replace('/dashboard');
+  }
+
+  goToRegister() {
+    this.props.history.replace('/register');
   }
 
   handleChange(e) {
@@ -70,6 +75,7 @@ class LoginPage extends Component {
             {this.state.error}
             <input className="form-submit" value="SUBMIT" type="submit" />
           </form>
+          <div onClick={this.goToRegister}>Register</div>
         </div>
       </div>
     );
