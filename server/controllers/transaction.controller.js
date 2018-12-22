@@ -1,13 +1,82 @@
 const db = require('../config/db.config.js');
 const Transaction = db.transactions;
+const Bill = db.bills;
 
 // ! TODO: Validation
+exports.makePayment = (req, res) => {
+  // sprawdź, czy istnieje numer konta, na który ma dojść przelew
+  Bill.findOne({
+    where: {
+      account_bill: req.body.account_bill,
+    },
+  }).then(accountBill => {
+    // jeśli istnieje taki numer konta, to daj mi ID właściela-odbiorcy przelewu
+    if (accountBill) {
+      console.log('accountBill.id_owner', accountBill.id_owner);
 
-// exports.findOne = (req, res) => {
-//   where: {
-//     id_recipient: req.params.id_recipient,
-//   },
-// }
+      // sprawdź czy nadawca posiada wystarczającą ilość gotówki, aby zrealizować przelew
+      Bill.findOne({
+        where: {
+          id_owner: req.body.id_sender,
+        },
+      }).then(ownerId => {
+        if (ownerId) {
+          console.log('ownerId.available_funds', ownerId.available_funds);
+
+          const availableFunds = ownerId.available_funds;
+          const amountMoney = req.body.amount_money;
+          if (availableFunds >= amountMoney && amountMoney > 0) {
+            console.log('prawidlowa suma pieniedzy');
+
+            // zaaktualizuj dostępne środki nadawcy przelewu (-)
+            Bill.update(
+              {
+                available_funds: (
+                  parseFloat(ownerId.available_funds) - parseFloat(amountMoney)
+                ).toFixed(2),
+              },
+              { where: { id_owner: req.body.id_sender } },
+            ).then(() => {
+              console.log('odebrano środki nadawcy');
+            });
+
+            // zaaktualizuj dostępne środki odbiorcy przelewu (+)
+            Bill.update(
+              {
+                available_funds: (
+                  parseFloat(accountBill.available_funds) +
+                  parseFloat(amountMoney)
+                ).toFixed(2),
+              },
+              { where: { id_owner: accountBill.id_owner } },
+            ).then(() => {
+              console.log('dodano środki nadawcy');
+            });
+
+            const today = new Date();
+            // zaaktualizuj historię płatności sender
+            Transaction.create({
+              id_sender: req.body.id_sender,
+              id_recipient: accountBill.id_owner,
+              data_time: today,
+              amount_money: req.body.amount_money,
+              transfer_title: req.body.transfer_title,
+            }).then(() => {
+              console.log('utworzono historie');
+            });
+          } else {
+            res.status(404).send(`Id sender doesn't have enough money`);
+          }
+        } else {
+          res.status(404).send(`Id sender doesn't exist`);
+        }
+      });
+    } else {
+      res.status(404).send(`Account bill doesn't exist`);
+    }
+  });
+  res.status(200).send(`Payment ok`);
+};
 
 // Create new transaction Action
 exports.create = (req, res) => {

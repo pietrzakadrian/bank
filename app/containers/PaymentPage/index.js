@@ -49,7 +49,7 @@ class PaymentPage extends Component {
 
     this.state = {
       id_sender: this.props.user.id,
-      id_recipient: '',
+      account_bill: '',
       amount_money: '',
       transfer_title: '',
       error: '',
@@ -71,7 +71,7 @@ class PaymentPage extends Component {
 
     this.Auth.makePayment(
       this.state.id_sender,
-      this.state.id_recipient,
+      this.state.account_bill,
       this.state.amount_money,
       this.state.transfer_title,
     )
@@ -100,8 +100,8 @@ class PaymentPage extends Component {
           <input
             className="form-item"
             // TODO: change id to account_bill
-            placeholder="Recipient id..."
-            name="id_recipient"
+            placeholder="account_bill..."
+            name="account_bill"
             type="text"
             onChange={this.handleChange}
           />

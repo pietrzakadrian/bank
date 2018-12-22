@@ -50,9 +50,6 @@ exports.findOne = (req, res) => {
           const token = jwt.sign(
             {
               id: user.id,
-              name: user.name,
-              surname: user.surname,
-              last_logged: user.last_logged,
             },
             env.SECRET_KEY,
             {

@@ -127,13 +127,13 @@ export default class AuthService {
   }
 
   // Payment Action
-  makePayment(id_sender, id_recipient, amount_money, transfer_title) {
+  makePayment(id_sender, account_bill, amount_money, transfer_title) {
     return this.fetch(`${this.domain}/transactions`, {
       method: 'POST',
       header: { Authentication: `Bearer ${this.getToken()}` },
       body: JSON.stringify({
         id_sender,
-        id_recipient,
+        account_bill,
         amount_money,
         transfer_title,
       }),
