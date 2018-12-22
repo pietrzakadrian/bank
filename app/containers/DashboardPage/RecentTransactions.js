@@ -57,7 +57,7 @@ class RecentTransactions extends Component {
     this.state = {
       recentTransactionsSender: [],
       recentTransactionsRecipient: [],
-      isLoading: true,
+      isLoading: false,
     };
     this.Auth = new AuthService();
   }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -103,18 +103,30 @@ class AccountBills extends Component {
             <TableBody>
               {isLoading ? (
                 accountBills.map(accountBill => (
-                  <TableRow>
-                    <TableCell
-                      className={classes.tableCell}
-                      component="th"
-                      scope="row"
-                    >
-                      {accountBill.account_bill}
-                    </TableCell>
-                    <TableCell className={classes.tableCell} numeric>
-                      {accountBill.available_funds} PLN
-                    </TableCell>
-                  </TableRow>
+                  <Fragment>
+                    {console.log(
+                      'account_bill',
+                      accountBill.account_bill
+                        .toString()
+                        .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+                        .trim(),
+                    )}
+                    <TableRow>
+                      <TableCell
+                        className={classes.tableCell}
+                        component="th"
+                        scope="row"
+                      >
+                        {accountBill.account_bill
+                          .toString()
+                          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+                          .trim()}
+                      </TableCell>
+                      <TableCell className={classes.tableCell} numeric>
+                        {accountBill.available_funds} PLN
+                      </TableCell>
+                    </TableRow>
+                  </Fragment>
                 ))
               ) : (
                 <div className={classes.loadingCircular}>

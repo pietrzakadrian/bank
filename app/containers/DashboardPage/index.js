@@ -63,14 +63,15 @@ class DashboardPage extends Component {
 
     this.state = {
       id_owner: this.props.user.id,
-      account_bill: Math.floor(10000000000 + Math.random() * 90000000000),
+      account_bill: `022232${Math.floor(Math.random() * 90000000000000000000) +
+        10000000000000000000}`,
       available_funds: 0,
     };
     this.Auth = new AuthService();
   }
 
   componentWillMount() {
-    this.Auth.createBill(
+    this.Auth.checkBillExist(
       this.state.id_owner,
       this.state.account_bill,
       this.state.available_funds,
@@ -87,6 +88,7 @@ class DashboardPage extends Component {
 
   render() {
     const { classes } = this.props;
+    const { account_bill } = this.state;
     return (
       <Fragment>
         <Helmet title="Dashboard - Bank Application" />

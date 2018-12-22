@@ -50,8 +50,8 @@ export default class AuthService {
       });
   }
 
-  // Create Bill Action
-  createBill(id_owner, account_bill, available_funds) {
+  // Check Bill Exist Action
+  checkBillExist(id_owner, account_bill, available_funds) {
     return this.fetch(`${this.domain}/bills`, {
       method: 'POST',
       header: { Authentication: `Bearer ${this.getToken()}` },

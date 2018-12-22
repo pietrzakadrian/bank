@@ -89,8 +89,6 @@ class PaymentPage extends Component {
           error: 'Error catch',
         });
       });
-
-    // TODO: Handle form
   }
 
   render() {
