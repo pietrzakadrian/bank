@@ -70,6 +70,7 @@ class DashboardPage extends Component {
     this.Auth = new AuthService();
   }
 
+  // ! TODO don't repair account bill
   componentWillMount() {
     this.Auth.checkBillExist(
       this.state.id_owner,
@@ -88,7 +89,6 @@ class DashboardPage extends Component {
 
   render() {
     const { classes } = this.props;
-    const { account_bill } = this.state;
     return (
       <Fragment>
         <Helmet title="Dashboard - Bank Application" />

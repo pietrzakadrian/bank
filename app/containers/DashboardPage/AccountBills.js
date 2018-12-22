@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 
 // Import Material-UI
 import Typography from '@material-ui/core/Typography';
@@ -20,10 +19,7 @@ import LoadingCircular from 'components/LoadingCircular';
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-
-import withAuth from '../../services/withAuth';
 import AuthService from '../../services/AuthService';
-const Auth = new AuthService();
 
 // Import Styles
 const styles = theme => ({
@@ -103,30 +99,21 @@ class AccountBills extends Component {
             <TableBody>
               {isLoading ? (
                 accountBills.map(accountBill => (
-                  <Fragment>
-                    {console.log(
-                      'account_bill',
-                      accountBill.account_bill
+                  <TableRow>
+                    <TableCell
+                      className={classes.tableCell}
+                      component="th"
+                      scope="row"
+                    >
+                      {accountBill.account_bill
                         .toString()
                         .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-                        .trim(),
-                    )}
-                    <TableRow>
-                      <TableCell
-                        className={classes.tableCell}
-                        component="th"
-                        scope="row"
-                      >
-                        {accountBill.account_bill
-                          .toString()
-                          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-                          .trim()}
-                      </TableCell>
-                      <TableCell className={classes.tableCell} numeric>
-                        {accountBill.available_funds} PLN
-                      </TableCell>
-                    </TableRow>
-                  </Fragment>
+                        .trim()}
+                    </TableCell>
+                    <TableCell className={classes.tableCell} numeric>
+                      {accountBill.available_funds} PLN
+                    </TableCell>
+                  </TableRow>
                 ))
               ) : (
                 <div className={classes.loadingCircular}>

@@ -16,6 +16,7 @@ import LoadingCircular from 'components/LoadingCircular';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 import AuthService from '../../services/AuthService';
 import messages from './messages';
 
@@ -64,7 +65,8 @@ class RecentTransactions extends Component {
 
   // test
   componentDidMount() {
-    // TODO: Convert Data.obj to Data.string
+    // ! TODO: add i18n http://momentjs.com/docs/#/i18n/
+    // TODO: check sortingData
     this.Auth.recentTransactionsRecipient(this.props.id)
       .then(res => {
         if (res) {
@@ -133,7 +135,7 @@ class RecentTransactions extends Component {
                           {row.transfer_title}
                         </TableCell>
                         <TableCell className={classes.tableCell} numeric>
-                          {row.data_time}
+                          {moment(row.data_time).format('LT l')}
                           <br />
                           <span className={classes.outgoingTransfer}>
                             -{row.amount_money} PLN
@@ -152,7 +154,7 @@ class RecentTransactions extends Component {
                           {row.transfer_title}
                         </TableCell>
                         <TableCell className={classes.tableCell} numeric>
-                          {row.data_time}
+                          {moment(row.data_time).format('LT l')}
                           <br />
                           {row.amount_money} PLN
                         </TableCell>
