@@ -2,7 +2,6 @@ const db = require('../config/db.config.js');
 const Transaction = db.transactions;
 const Bill = db.bills;
 
-// ! TODO: Validation
 exports.makePayment = (req, res) => {
   // sprawdź, czy istnieje numer konta, na który ma dojść przelew
   Bill.findOne({

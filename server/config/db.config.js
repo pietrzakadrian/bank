@@ -48,4 +48,25 @@ db.transactions = require('../models/transaction.model.js')(
   Sequelize,
 );
 
+db.bills.belongsTo(db.users, {
+  foreignKey: 'id_owner',
+  targetKey: 'id',
+});
+db.users.hasOne(db.bills, { foreignKey: 'id_owner', targetKey: 'id' });
+
+db.transactions.belongsTo(db.users, {
+  foreignKey: 'id_sender',
+  targetKey: 'id',
+});
+db.users.hasOne(db.transactions, { foreignKey: 'id_sender', targetKey: 'id' });
+
+db.transactions.belongsTo(db.users, {
+  foreignKey: 'id_recipient',
+  targetKey: 'id',
+});
+db.users.hasOne(db.transactions, {
+  foreignKey: 'id_recipient',
+  targetKey: 'id',
+});
+
 module.exports = db;
