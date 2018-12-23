@@ -11,13 +11,13 @@ const styles = theme => ({
   },
 });
 
-function LoadingCircular(props) {
+function Loading(props) {
   const { classes } = props;
   return <CircularProgress className={classes.progress} />;
 }
 
-LoadingCircular.propTypes = {
+Loading.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(LoadingCircular);
+export default withStyles(styles)(Loading);

@@ -14,12 +14,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 // Import Services
 import { FormattedMessage } from 'react-intl';
-import AuthService from '../../services/AuthService';
-import withAuth from '../../services/withAuth';
+import AuthService from '../../../services/AuthService';
 
 // Import Internationalize
 import messages from './messages';
-import LocaleToggle from '../../modules/LocaleToggle';
+import LocaleToggle from '../../../modules/LocaleToggle';
 
 // Import Components
 import Sidebar from '../Sidebar';

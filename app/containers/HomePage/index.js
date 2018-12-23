@@ -16,9 +16,6 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import AuthService from '../../services/AuthService';
 
-// Import Components
-import LoadingCircual from '../../components/LoadingCircular';
-
 class HomePage extends Component {
   constructor(props) {
     super(props);
@@ -35,17 +32,7 @@ class HomePage extends Component {
   render() {
     const { loading } = this.state;
 
-    return (
-      <Fragment>
-        {loading ? (
-          <div className="loadingHomePage">
-            <LoadingCircual className="loadingHomePageComponent" />
-          </div>
-        ) : (
-          <FormattedMessage {...messages.header} />
-        )}
-      </Fragment>
-    );
+    return <Fragment />;
   }
 }
 

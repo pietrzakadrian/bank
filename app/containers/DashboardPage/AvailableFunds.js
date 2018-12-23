@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 
 // Import Material-UI
 import Paper from '@material-ui/core/Paper';
@@ -8,14 +7,12 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core';
 
 // Import Components
-import LoadingCircular from 'components/LoadingCircular';
+import Loading from 'components/App/Loading/Loading';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import AuthService from '../../services/AuthService';
-import withAuth from '../../services/withAuth';
-const Auth = new AuthService();
 
 // Import Styles
 const styles = theme => ({
@@ -93,7 +90,7 @@ class AvailableFunds extends Component {
           </Fragment>
         ) : (
           <div className={classes.loadingCircular}>
-            <LoadingCircular />
+            <Loading />
           </div>
         )}
       </Paper>

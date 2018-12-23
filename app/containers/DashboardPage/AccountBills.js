@@ -14,7 +14,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
 // Import Components
-import LoadingCircular from 'components/LoadingCircular';
+import Loading from 'components/App/Loading/';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
@@ -117,7 +117,7 @@ class AccountBills extends Component {
                 ))
               ) : (
                 <div className={classes.loadingCircular}>
-                  <LoadingCircular />
+                  <Loading />
                 </div>
               )}
             </TableBody>

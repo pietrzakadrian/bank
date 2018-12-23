@@ -36,7 +36,6 @@ exports.create = (req, res) => {
               res.status(200).send('User register OK');
             }),
           )
-
           .catch(err => {
             res.status(400).json({ error: 'Register failed.' });
           });

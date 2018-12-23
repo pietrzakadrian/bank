@@ -25,7 +25,7 @@ import DashboardPage from 'containers/DashboardPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 // Import Components
-import Header from '../../components/Header';
+import Header from '../../components/App/Header';
 
 // Import Styles
 import GlobalStyle from '../../global-styles';
