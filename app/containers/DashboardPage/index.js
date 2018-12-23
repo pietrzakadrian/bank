@@ -61,30 +61,7 @@ class DashboardPage extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      id_owner: this.props.user.id,
-      account_bill: `022232${Math.floor(Math.random() * 90000000000000000000) +
-        10000000000000000000}`,
-      available_funds: 0,
-    };
     this.Auth = new AuthService();
-  }
-
-  // ! TODO don't repair account bill
-  componentWillMount() {
-    this.Auth.checkBillExist(
-      this.state.id_owner,
-      this.state.account_bill,
-      this.state.available_funds,
-    )
-      .then(res => {
-        if (res) {
-          return 1;
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
   }
 
   render() {
@@ -92,14 +69,6 @@ class DashboardPage extends Component {
     return (
       <Fragment>
         <Helmet title="Dashboard - Bank Application" />
-        <div id="test" className={classes.informationHeader}>
-          <div className={classes.informationHeaderFirst} />
-          <div className={classes.informationHeaderLast}>
-            Dzień dobry, {this.props.user.name} {this.props.user.surname}
-            <br />
-            {/* Ostatnie logowanie: {this.props.user.last_logged} */}
-          </div>
-        </div>
         <div className={classes.container}>
           <Grid container spacing={24} className={classes.grid}>
             <Grid item xs={4}>

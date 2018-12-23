@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
 const User = db.users;
+const Bill = db.bills;
 
 // Register Action
 exports.create = (req, res) => {
@@ -23,10 +24,19 @@ exports.create = (req, res) => {
           date_registration: today,
           last_logged: today,
         })
-          .then(user => {
-            // Send created customer to client
-            res.json({ status: `${user.login} registered` });
-          })
+          .then(user =>
+            // ! TODO: If account_bill exist
+            Bill.create({
+              id_owner: user.id,
+              account_bill: `022232${Math.floor(
+                Math.random() * 90000000000000000000,
+              ) + 10000000000000000000}`,
+              available_funds: 0,
+            }).then(account => {
+              res.status(200).send('User register OK');
+            }),
+          )
+
           .catch(err => {
             res.status(400).json({ error: 'Register failed.' });
           });
