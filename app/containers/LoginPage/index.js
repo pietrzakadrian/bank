@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './Login.css';
 import AuthService from '../../services/AuthService';
+
+import Header from '../../components/Header';
 
 class LoginPage extends Component {
   constructor() {
@@ -54,30 +56,33 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <div className="center">
-        <div className="card">
-          <h1>Login</h1>
-          <form noValidate onSubmit={this.handleFormSubmit}>
-            <input
-              className="form-item"
-              placeholder="Username goes here..."
-              name="login"
-              type="text"
-              onChange={this.handleChange}
-            />
-            <input
-              className="form-item"
-              placeholder="Password goes here..."
-              name="password"
-              type="password"
-              onChange={this.handleChange}
-            />
-            {this.state.error}
-            <input className="form-submit" value="SUBMIT" type="submit" />
-          </form>
-          <div onClick={this.goToRegister}>Register</div>
+      <Fragment>
+        <Header />
+        <div className="center">
+          <div className="card">
+            <h1>Login</h1>
+            <form noValidate onSubmit={this.handleFormSubmit}>
+              <input
+                className="form-item"
+                placeholder="Username goes here..."
+                name="login"
+                type="text"
+                onChange={this.handleChange}
+              />
+              <input
+                className="form-item"
+                placeholder="Password goes here..."
+                name="password"
+                type="password"
+                onChange={this.handleChange}
+              />
+              {this.state.error}
+              <input className="form-submit" value="SUBMIT" type="submit" />
+            </form>
+            <div onClick={this.goToRegister}>Register</div>
+          </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }
