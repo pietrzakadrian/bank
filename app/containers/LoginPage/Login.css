@@ -12,6 +12,7 @@
 }
 
 .card {
+  border: 2px solid black;
   background-color: #fff;
   border-radius: 15px;
   padding: 0.8rem;

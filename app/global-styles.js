@@ -54,6 +54,11 @@ const GlobalStyle = createGlobalStyle`
   .loadingHomePageComponent {
    width: auto;
   }
+
+  textarea:focus, input:focus, button:focus{
+    outline: none;
+}
+
 `;
 
 export default GlobalStyle;

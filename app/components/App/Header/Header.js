@@ -145,10 +145,10 @@ class Header extends Component {
             </Typography>
             <div className={classes.localeToggle}>
               <LocaleToggle />
-              <button type="button" onClick={this.handleLogout.bind(this)}>
-                Logout
-              </button>
             </div>
+            <button type="button" onClick={this.handleLogout.bind(this)}>
+              Logout
+            </button>
           </Toolbar>
         </AppBar>
         <Sidebar open={open} />
