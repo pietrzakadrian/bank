@@ -26,6 +26,11 @@ const styles = theme => ({
     justifyContent: 'center',
     fontSize: 18,
   },
+  headerSubheading: {
+    fontSize: '12.8px',
+    marginTop: '-4px',
+    color: '#15a0dd',
+  },
 });
 
 function Sidebar({ open, classes }) {
@@ -38,7 +43,10 @@ function Sidebar({ open, classes }) {
         paper: classes.drawerPaper,
       }}
     >
-      <div className={classes.drawerHeader}>Bank Application v0.4</div>
+      <div className={classes.drawerHeader}>
+        Bank Application
+        <br />
+      </div>
       <Divider />
       <Navigation />
       <Footer />

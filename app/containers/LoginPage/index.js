@@ -3,10 +3,11 @@ import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
-import ArrowForwardIosOutlined from '@material-ui/icons/ArrowForwardIosOutlined';
+import NavigateNext from '@material-ui/icons/NavigateNext';
 import AuthService from '../../services/AuthService';
 
 import Header from '../../components/Header';
+import HeaderSubheading from '../../components/HeaderSubheading';
 
 const styles = {
   formItem: {
@@ -22,49 +23,53 @@ const styles = {
   },
   formSubmit: {
     width: '16rem',
-    border: '1px solid grey',
     display: 'block',
     margin: '0 auto',
     padding: 5,
     height: 36,
-    backgroundColor: 'white',
+    backgroundColor: '#0098db',
     borderRadius: 2,
+    color: 'white',
   },
   formContainer: {
     textAlign: 'center',
     margin: '10px 0',
     width: '100%',
     backgroundColor: '#f2f4f7',
-    padding: '30px 0',
+    padding: '15px 0',
   },
   pageContainer: {
     textAlign: 'center',
   },
   alertContainer: {
-    border: '1px solid black',
     maxWidth: '1024px',
     padding: '10px 3%',
     margin: '10px auto 0',
     borderRadius: 2,
+    backgroundColor: '#0098db',
+    color: 'white',
   },
   messageContainer: {
     textAlign: 'left',
     padding: '0 150px',
   },
   footerContainer: {
-    border: '1px solid green',
-    width: 550,
+    maxWidth: 550,
     margin: '0 auto',
-    borderRadius: 2,
   },
   textField: {
     margin: '10px auto 0',
     width: '16rem',
     textAlign: 'left',
+    fontSize: '17px',
   },
   footerText: {
     textAlign: 'left',
     padding: '0 30px',
+  },
+  buttonText: {
+    position: 'relative',
+    top: 2,
   },
 };
 class LoginPage extends Component {
@@ -121,16 +126,15 @@ class LoginPage extends Component {
     const { classes } = this.props;
     return (
       <Fragment>
-        <Header headerText="Bank Application" />
-        <Header headerText="Logowanie" />
-        {/* // TODO: make information */}
+        <Header />
+        <HeaderSubheading headerText="Logowanie" />
+
         <div className={classes.pageContainer}>
           <div className={classes.alertContainer}>
             <div className={classes.messageContainer}>
               Jeśli skorzystasz z naszej promocji i zarejestrujesz swoje konto
-              do końca stycznia w naszym banku, otrzymasz bonus w postaci 10
-              PLN.
-              <br />
+              do końca stycznia w naszym banku,{' '}
+              <b>otrzymasz bonus w postaci 10 PLN</b>.<br />
               <br />
               Utworzone konta równie podlegają dla tej promocji.
             </div>
@@ -156,7 +160,8 @@ class LoginPage extends Component {
               {this.state.error}
               <br />
               <button className={classes.formSubmit} type="submit">
-                Dalej <ArrowForwardIosOutlined />
+                <span className={classes.buttonText}>Dalej</span>
+                <NavigateNext />
               </button>
             </form>
           </div>
@@ -165,6 +170,13 @@ class LoginPage extends Component {
               Jeśli nie posiadasz jeszcze konta w naszym wspaniałym banku,
               mozesz je utworzyć klikając na{' '}
               <span onClick={this.goToRegister}>Rejestracja</span>.
+            </div>
+          </div>
+          <br />
+
+          <div className={classes.footerContainer}>
+            <div className={classes.footerText}>
+              Pamiętaj o podstawowych zasadach bezpieczeństwa.
             </div>
           </div>
         </div>
