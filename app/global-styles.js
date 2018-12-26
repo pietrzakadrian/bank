@@ -59,6 +59,11 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
 }
 
+  ul {
+    margin: 5px;
+    padding-left: 25px;
+  }
+
 `;
 
 export default GlobalStyle;

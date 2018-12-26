@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
+import ErrorOutline from '@material-ui/icons/ErrorOutline';
 import AuthService from '../../services/AuthService';
 
 import Header from '../../components/Header';
@@ -14,7 +15,7 @@ const styles = {
   formItem: {
     padding: 10,
     height: 36,
-    width: '16rem',
+    width: '17rem',
     border: '1px solid grey',
     display: 'block',
     margin: '0 auto',
@@ -23,7 +24,7 @@ const styles = {
     borderRadius: 2,
   },
   formSubmit: {
-    width: '16rem',
+    width: '17rem',
     display: 'block',
     margin: '20px auto 0',
     padding: 5,
@@ -34,10 +35,14 @@ const styles = {
   },
   formContainer: {
     textAlign: 'center',
-    margin: '10px 0',
+    margin: '15px 0',
     width: '100%',
     backgroundColor: '#f2f4f7',
     padding: '15px 0',
+  },
+  formError: {
+    border: '1px solid red',
+    borderRadius: 2,
   },
   pageContainer: {
     textAlign: 'center',
@@ -52,23 +57,42 @@ const styles = {
   },
   messageContainer: {
     textAlign: 'left',
-    padding: '0 150px',
+    padding: '0 130px',
   },
   footerContainer: {
     maxWidth: 550,
-    margin: '0 auto',
+    margin: '15px auto',
   },
   textField: {
     margin: '10px auto 0',
-    width: '16rem',
+    width: '17rem',
     textAlign: 'left',
     fontSize: '18px',
     letterSpacing: 0.3,
   },
+  textError: {
+    color: 'red',
+    textAlign: 'left',
+    width: '17rem',
+    margin: '0 auto',
+    fontSize: 14.5,
+  },
   footerText: {
     textAlign: 'left',
-    padding: '0 30px',
-    fontSize: 16,
+    padding: '0 15px',
+    margin: '10px -4px',
+  },
+  footerInfoText: {
+    position: 'relative',
+    top: 1,
+    fontSize: 13,
+  },
+  footerAlertText: {
+    color: 'red',
+    fontSize: 13,
+  },
+  errorIcon: {
+    fontSize: 35,
   },
   footerLink: {
     color: '#0098db',
@@ -85,8 +109,9 @@ class LoginPage extends Component {
     this.state = {
       login: '',
       password: '',
-      error: '',
       loginExist: false,
+      loginError: '',
+      passwordError: '',
     };
 
     this.goToRegister = this.goToRegister.bind(this);
@@ -118,14 +143,17 @@ class LoginPage extends Component {
         if (res) {
           this.setState({
             loginExist: true,
+            loginError: null,
           });
         } else {
-          console.log('nie istnieje taki numer loginu');
+          this.setState({
+            loginError: 'Proszę podać prawidłowy identyfikator',
+          });
         }
       })
       .catch(err => {
         this.setState({
-          error: 'Error catch',
+          loginError: 'Error catch',
         });
       });
   }
@@ -134,6 +162,8 @@ class LoginPage extends Component {
     const { loginExist } = this.state;
     this.setState({
       loginExist: !loginExist,
+      login: '',
+      password: '',
     });
   };
 
@@ -146,20 +176,20 @@ class LoginPage extends Component {
           this.props.history.replace('/dashboard');
         } else {
           this.setState({
-            error: 'Error',
+            passwordError: 'Error',
           });
         }
       })
       .catch(err => {
         this.setState({
-          error: 'Error catch',
+          passwordError: 'Error catch',
         });
       });
   }
 
   render() {
     const { classes } = this.props;
-    const { loginExist } = this.state;
+    const { loginExist, loginError, passwordError } = this.state;
     return (
       <Fragment>
         <Header />
@@ -178,23 +208,53 @@ class LoginPage extends Component {
           <div className={classes.formContainer}>
             <form noValidate onSubmit={this.handleFormSubmit}>
               {!loginExist ? (
-                <Fragment>
-                  <div className={classes.textField}>Numer identyfikacyjny</div>
-                  <input
-                    className={classes.formItem}
-                    placeholder="Wpisz numer"
-                    name="login"
-                    type="text"
-                    onChange={this.handleChange}
-                  />
-                  <button
-                    className={classes.formSubmit}
-                    onClick={this.handleFormSubmitLogin}
-                  >
-                    <span className={classes.buttonText}>Dalej</span>
-                    <NavigateNext />
-                  </button>
-                </Fragment>
+                [
+                  loginError ? (
+                    <Fragment>
+                      <div className={classes.textField}>
+                        Numer identyfikacyjny
+                      </div>
+                      <input
+                        className={classNames(
+                          classes.formItem,
+                          classes.formError,
+                        )}
+                        placeholder="Wpisz numer"
+                        name="login"
+                        type="text"
+                        onChange={this.handleChange}
+                      />
+                      <div className={classes.textError}>{loginError}</div>
+                      <button
+                        className={classes.formSubmit}
+                        onClick={this.handleFormSubmitLogin}
+                      >
+                        <span className={classes.buttonText}>Dalej</span>
+                        <NavigateNext />
+                      </button>
+                    </Fragment>
+                  ) : (
+                    <Fragment>
+                      <div className={classes.textField}>
+                        Numer identyfikacyjny
+                      </div>
+                      <input
+                        className={classes.formItem}
+                        placeholder="Wpisz numer"
+                        name="login"
+                        type="text"
+                        onChange={this.handleChange}
+                      />
+                      <button
+                        className={classes.formSubmit}
+                        onClick={this.handleFormSubmitLogin}
+                      >
+                        <span className={classes.buttonText}>Dalej</span>
+                        <NavigateNext />
+                      </button>
+                    </Fragment>
+                  ),
+                ]
               ) : (
                 <Fragment>
                   <div className={classes.textField}>Hasło dostępu</div>
@@ -216,16 +276,14 @@ class LoginPage extends Component {
                   </button>
                 </Fragment>
               )}
-
-              {this.state.error}
               <br />
             </form>
           </div>
           <div className={classes.footerContainer}>
             <div className={classes.footerText}>
               <b>
-                Jeśli nie posiadasz jeszcze konta w naszym wspaniałym banku,
-                mozesz je utworzyć klikając na{' '}
+                Jeśli nie posiadasz jeszcze konta w naszym banku, mozesz je
+                utworzyć teraz, klikając na{' '}
                 <span
                   className={classes.footerLink}
                   onClick={this.goToRegister}
@@ -236,11 +294,46 @@ class LoginPage extends Component {
               </b>
             </div>
           </div>
-          <br />
 
           <div className={classes.footerContainer}>
             <div className={classes.footerText}>
-              Pamiętaj o podstawowych zasadach bezpieczeństwa.
+              <ErrorOutline className={classes.errorIcon} />{' '}
+              <span className={classes.footerInfoText}>
+                Pamiętaj o podstawowych zasadach bezpieczeństwa.
+              </span>
+            </div>
+
+            <div className={classes.footerText}>
+              <span className={classes.footerInfoText}>
+                Zanim wprowadzisz na stronie swój numer identyfikacyjny i hasło
+                dostępu, upewnij się, ze:
+                <ul>
+                  <li>
+                    twoje hasło jest bezpieczne. Zawiera conajmniej 8 znaków
+                    oraz składa się z wielkich i małych liter
+                  </li>
+                  <li>
+                    w pasku adresu lub na pasku stanu w dolnej części ekranu
+                    przeglądarki widoczna jest zamknięta kłódka
+                  </li>
+                </ul>
+              </span>
+            </div>
+
+            <div className={classes.footerText}>
+              <span className={classes.footerAlertText}>
+                Pamiętaj: Bank nie wymaga potwierdzania żadnych danych,
+                poprawnego logowania bądź odczytania komunikatów Banku za pomocą
+                kodu SMS, TAN i/lub mailem, ani też instalacji jakichkolwiek
+                aplikacji na telefonach bądź komputerach użytkowników.
+              </span>
+            </div>
+
+            <div className={classes.footerText}>
+              <span className={classes.footerInfoText}>
+                Więcej informacji na temat bezpieczeństwa znajdziesz na stronie:
+                Zasady bezpieczeństwa
+              </span>
             </div>
           </div>
         </div>
