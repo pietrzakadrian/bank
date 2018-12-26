@@ -8,6 +8,21 @@ export default class AuthService {
     this.getUserdata = this.getUserdata.bind(this);
   }
 
+  // Check Login Exist Action
+  checkLoginExist(id) {
+    return this.fetch(`${this.domain}/users/${id}`, {
+      method: 'GET',
+    })
+      .then(res => {
+        if (res) {
+          return 1;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   // Login Action
   login(login, password) {
     return this.fetch(`${this.domain}/users/login`, {
@@ -50,24 +65,10 @@ export default class AuthService {
       });
   }
 
-  // Check Bill Exist Action
-  checkBillExist(id_owner, account_bill, available_funds) {
-    return this.fetch(`${this.domain}/bills`, {
-      method: 'POST',
-      header: { Authentication: `Bearer ${this.getToken()}` },
-      body: JSON.stringify({
-        id_owner,
-        account_bill,
-        available_funds,
-      }),
-    });
-  }
-
   // AvailableFunds Action
   availableFunds(id) {
     return this.fetch(`${this.domain}/bills/${id}`, {
       method: 'GET',
-      header: { Authentication: `Bearer ${this.getToken()}` },
     })
       .then(res => {
         if (!res.error) {
@@ -83,7 +84,6 @@ export default class AuthService {
   accountBills(id) {
     return this.fetch(`${this.domain}/bills/${id}`, {
       method: 'GET',
-      header: { Authentication: `Bearer ${this.getToken()}` },
     })
       .then(res => {
         if (!res.error) {
@@ -99,7 +99,6 @@ export default class AuthService {
   recentTransactionsRecipient(id) {
     return this.fetch(`${this.domain}/transactions/recipient/${id}`, {
       method: 'GET',
-      header: { Authentication: `Bearer ${this.getToken()}` },
     })
       .then(res => {
         if (!res.error) {
@@ -130,7 +129,6 @@ export default class AuthService {
   makePayment(id_sender, account_bill, amount_money, transfer_title) {
     return this.fetch(`${this.domain}/transactions`, {
       method: 'POST',
-      header: { Authentication: `Bearer ${this.getToken()}` },
       body: JSON.stringify({
         id_sender,
         account_bill,

@@ -82,11 +82,23 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Find a User by Id
-exports.findById = (req, res) => {
-  User.findById(req.params.userId).then(user => {
-    res.send(user);
-  });
+// Find a User by Login Action
+exports.findByLogin = (req, res) => {
+  User.findOne({
+    where: {
+      login: req.params.userLogin,
+    },
+  })
+    .then(login => {
+      if (login) {
+        res.status(200).json({ error: 'User exist' });
+      } else {
+        res.status(400).json({ error: 'not exist' });
+      }
+    })
+    .catch(err => {
+      res.status(400).json({ error: err });
+    });
 };
 
 // Update a User

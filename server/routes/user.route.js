@@ -6,8 +6,8 @@ module.exports = function(app) {
 
   app.post('/api/users/login', users.findOne);
 
-  // Retrieve a single User by Id
-  app.get('/api/users/:userId', users.findById);
+  // Retrieve a single User by Login
+  app.get('/api/users/:userLogin', users.findByLogin);
 
   // Update a User with Id
   app.put('/api/users/:userId', users.update);

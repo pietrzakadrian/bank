@@ -21,6 +21,7 @@ const styles = {
     color: 'black', // color dla header
     backgroundColor: 'white', // background color dla header
     borderBottom: '1px solid rgba(0, 0, 0, 0.12)', // border bottom dla header
+    minHeight: '55px!important',
   },
   headerSubheading: {
     fontSize: '12.8px',

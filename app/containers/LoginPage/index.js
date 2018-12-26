@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 import NavigateNext from '@material-ui/icons/NavigateNext';
+import NavigateBefore from '@material-ui/icons/NavigateBefore';
 import AuthService from '../../services/AuthService';
 
 import Header from '../../components/Header';
@@ -24,7 +25,7 @@ const styles = {
   formSubmit: {
     width: '16rem',
     display: 'block',
-    margin: '0 auto',
+    margin: '20px auto 0',
     padding: 5,
     height: 36,
     backgroundColor: '#0098db',
@@ -61,11 +62,16 @@ const styles = {
     margin: '10px auto 0',
     width: '16rem',
     textAlign: 'left',
-    fontSize: '17px',
+    fontSize: '18px',
+    letterSpacing: 0.3,
   },
   footerText: {
     textAlign: 'left',
     padding: '0 30px',
+    fontSize: 16,
+  },
+  footerLink: {
+    color: '#0098db',
   },
   buttonText: {
     position: 'relative',
@@ -80,10 +86,12 @@ class LoginPage extends Component {
       login: '',
       password: '',
       error: '',
+      loginExist: false,
     };
 
     this.goToRegister = this.goToRegister.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleFormSubmitLogin = this.handleFormSubmitLogin.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.Auth = new AuthService();
   }
@@ -101,6 +109,33 @@ class LoginPage extends Component {
       [e.target.name]: e.target.value,
     });
   }
+
+  handleFormSubmitLogin(e) {
+    e.preventDefault();
+
+    this.Auth.checkLoginExist(this.state.login)
+      .then(res => {
+        if (res) {
+          this.setState({
+            loginExist: true,
+          });
+        } else {
+          console.log('nie istnieje taki numer loginu');
+        }
+      })
+      .catch(err => {
+        this.setState({
+          error: 'Error catch',
+        });
+      });
+  }
+
+  handleFormBack = () => {
+    const { loginExist } = this.state;
+    this.setState({
+      loginExist: !loginExist,
+    });
+  };
 
   handleFormSubmit(e) {
     e.preventDefault();
@@ -124,6 +159,7 @@ class LoginPage extends Component {
 
   render() {
     const { classes } = this.props;
+    const { loginExist } = this.state;
     return (
       <Fragment>
         <Header />
@@ -141,35 +177,63 @@ class LoginPage extends Component {
           </div>
           <div className={classes.formContainer}>
             <form noValidate onSubmit={this.handleFormSubmit}>
-              <div className={classes.textField}>Numer identyfikacyjny</div>
-              <input
-                className={classes.formItem}
-                placeholder="Wpisz numer"
-                name="login"
-                type="text"
-                onChange={this.handleChange}
-              />
-              <div className={classes.textField}>Hasło dostępu</div>
-              <input
-                className={classes.formItem}
-                placeholder="Wpisz hasło"
-                name="password"
-                type="password"
-                onChange={this.handleChange}
-              />
+              {!loginExist ? (
+                <Fragment>
+                  <div className={classes.textField}>Numer identyfikacyjny</div>
+                  <input
+                    className={classes.formItem}
+                    placeholder="Wpisz numer"
+                    name="login"
+                    type="text"
+                    onChange={this.handleChange}
+                  />
+                  <button
+                    className={classes.formSubmit}
+                    onClick={this.handleFormSubmitLogin}
+                  >
+                    <span className={classes.buttonText}>Dalej</span>
+                    <NavigateNext />
+                  </button>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <div className={classes.textField}>Hasło dostępu</div>
+                  <input
+                    className={classes.formItem}
+                    placeholder="Wpisz hasło"
+                    name="password"
+                    type="password"
+                    onChange={this.handleChange}
+                  />
+
+                  <button className={classes.formSubmit} type="submit">
+                    <span className={classes.buttonText}>Zaloguj</span>
+                  </button>
+
+                  <button onClick={this.handleFormBack}>
+                    <NavigateBefore />
+                    <span className={classes.buttonText}>Powrót</span>
+                  </button>
+                </Fragment>
+              )}
+
               {this.state.error}
               <br />
-              <button className={classes.formSubmit} type="submit">
-                <span className={classes.buttonText}>Dalej</span>
-                <NavigateNext />
-              </button>
             </form>
           </div>
           <div className={classes.footerContainer}>
             <div className={classes.footerText}>
-              Jeśli nie posiadasz jeszcze konta w naszym wspaniałym banku,
-              mozesz je utworzyć klikając na{' '}
-              <span onClick={this.goToRegister}>Rejestracja</span>.
+              <b>
+                Jeśli nie posiadasz jeszcze konta w naszym wspaniałym banku,
+                mozesz je utworzyć klikając na{' '}
+                <span
+                  className={classes.footerLink}
+                  onClick={this.goToRegister}
+                >
+                  Rejestracja
+                </span>
+                .
+              </b>
             </div>
           </div>
           <br />
