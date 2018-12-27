@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-// import './Login.css';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
@@ -292,7 +291,6 @@ class LoginPage extends Component {
                 >
                   Rejestracja
                 </span>
-                .
               </b>
             </div>
           </div>

@@ -91,9 +91,9 @@ exports.findByLogin = (req, res) => {
   })
     .then(login => {
       if (login) {
-        res.status(200).json({ error: 'User exist' });
+        res.status(200).json({ user_exist: true });
       } else {
-        res.status(400).json({ error: 'not exist' });
+        res.status(400).json({ user_exist: false });
       }
     })
     .catch(err => {
