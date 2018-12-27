@@ -1,16 +1,29 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 import NavigateNext from '@material-ui/icons/NavigateNext';
-import NavigateBefore from '@material-ui/icons/NavigateBefore';
 import ErrorOutline from '@material-ui/icons/ErrorOutline';
+import Button from '@material-ui/core/Button';
+
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import Typography from '@material-ui/core/Typography';
 import AuthService from '../../services/AuthService';
 
 import Header from '../../components/Header';
 import HeaderSubheading from '../../components/HeaderSubheading';
 
 const styles = {
+  stepperRoot: {
+    width: '80%',
+    margin: '0 auto',
+  },
+  stepperContainer: {
+    background: '#f2f4f7',
+  },
   formItem: {
     padding: 10,
     height: 36,
@@ -100,6 +113,47 @@ const styles = {
     position: 'relative',
   },
 };
+
+function getSteps() {
+  return [
+    'Numer identyfikacyjny ',
+    'Hasło dostępu',
+    'Imię',
+    'Nazwisko',
+    'Adres',
+  ];
+}
+
+// ? TODO: classes textfield not defined
+// const getStepContent = (step, classes) => {
+//   switch (step) {
+//     case 0:
+//       return (
+//         <Fragment>
+//           <div className={classes.textField}>Numer identyfikacyjny</div>
+//           <input
+//             className={classNames(classes.formItem, {
+//               [classes.formError]: 'test',
+//             })}
+//             placeholder="Wpisz numer"
+//             name="login"
+//             type="text"
+//             onChange={this.handleChange}
+//           />
+//           {this.state.loginError ? (
+//             <div className={classes.textError}>test</div>
+//           ) : null}
+//         </Fragment>
+//       );
+//     case 1:
+//       return 'What is an ad group anyways?';
+//     case 2:
+//       return 'This is the bit I really care about!';
+//     default:
+//       return 'Unknown step';
+//   }
+// };
+
 class RegisterPage extends Component {
   constructor() {
     super();
@@ -113,6 +167,8 @@ class RegisterPage extends Component {
       loginExist: false,
       loginError: '',
       error: '',
+      activeStep: 0,
+      skipped: new Set(),
     };
 
     this.goToLogin = this.goToLogin.bind(this);
@@ -125,6 +181,85 @@ class RegisterPage extends Component {
   componentWillMount() {
     if (this.Auth.loggedIn()) this.props.history.replace('/dashboard');
   }
+
+  getStepContent = step => {
+    const { classes } = this.props;
+    const { loginError } = this.state;
+    switch (step) {
+      case 0:
+        return (
+          <Fragment>
+            <div className={classes.textField}>Numer identyfikacyjny</div>
+            <input
+              className={classNames(classes.formItem, {
+                [classes.formError]: loginError,
+              })}
+              placeholder="Wpisz numer"
+              name="login"
+              type="text"
+              onChange={this.handleChange}
+            />
+            {loginError ? (
+              <div className={classes.textError}>loginError</div>
+            ) : null}
+          </Fragment>
+        );
+      case 1:
+        return (
+          <Fragment>
+            <div className={classes.textField}>Hasło dostępu</div>
+            <input
+              className={classes.formItem}
+              placeholder="Wpisz hasło"
+              name="password"
+              type="password"
+              onChange={this.handleChange}
+            />
+          </Fragment>
+        );
+      case 2:
+        return (
+          <Fragment>
+            <div className={classes.textField}>Imię</div>
+            <input
+              className={classes.formItem}
+              placeholder="Wpisz imię"
+              name="name"
+              type="text"
+              onChange={this.handleChange}
+            />
+          </Fragment>
+        );
+      case 3:
+        return (
+          <Fragment>
+            <div className={classes.textField}>Nazwisko</div>
+            <input
+              className={classes.formItem}
+              placeholder="Wpisz nazwisko"
+              name="surname"
+              type="text"
+              onChange={this.handleChange}
+            />
+          </Fragment>
+        );
+      case 4:
+        return (
+          <Fragment>
+            <div className={classes.textField}>Adres</div>
+            <input
+              className={classes.formItem}
+              placeholder="Wpisz adres"
+              name="address"
+              type="text"
+              onChange={this.handleChange}
+            />
+          </Fragment>
+        );
+      default:
+        return 'Unknown step';
+    }
+  };
 
   goToLogin() {
     this.props.history.replace('/login');
@@ -149,6 +284,10 @@ class RegisterPage extends Component {
     this.Auth.checkLoginExist(this.state.login)
       .then(res => {
         if (!res) {
+          this.setState(state => ({
+            activeStep: state.activeStep + 1,
+          }));
+
           this.setState({
             loginExist: true,
             loginError: '',
@@ -195,9 +334,25 @@ class RegisterPage extends Component {
       });
   }
 
+  handleNext = () => {
+    const { activeStep } = this.state;
+    const { skipped } = this.state;
+    this.setState({
+      activeStep: activeStep + 1,
+      skipped,
+    });
+  };
+
+  handleBack = () => {
+    this.setState(state => ({
+      activeStep: state.activeStep - 1,
+    }));
+  };
+
   render() {
     const { classes } = this.props;
-    const { loginError } = this.state;
+    const steps = getSteps();
+    const { loginError, activeStep } = this.state;
     return (
       <Fragment>
         <Header />
@@ -214,6 +369,59 @@ class RegisterPage extends Component {
             </div>
           </div>
           <div className={classes.formContainer}>
+            {/*  */}
+
+            <div className={classes.stepperRoot}>
+              <Stepper
+                className={classes.stepperContainer}
+                activeStep={activeStep}
+              >
+                {steps.map((label, index) => {
+                  const props = {};
+                  const labelProps = {};
+                  return (
+                    <Step key={label} {...props}>
+                      <StepLabel {...labelProps}>{label}</StepLabel>
+                    </Step>
+                  );
+                })}
+              </Stepper>
+              <div>
+                {activeStep === steps.length ? (
+                  <div>
+                    <Typography className={classes.instructions}>
+                      All steps completed - you&apos;re finished
+                    </Typography>
+                  </div>
+                ) : (
+                  <div>
+                    <Typography className={classes.instructions}>
+                      {this.getStepContent(activeStep)}
+                    </Typography>
+                    <div>
+                      <Button
+                        disabled={activeStep === 0}
+                        onClick={this.handleBack}
+                        className={classes.button}
+                      >
+                        Back
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={this.handleNext}
+                        className={classes.button}
+                      >
+                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/*  */}
+
             <form noValidate onSubmit={this.handleFormSubmit}>
               <div className={classes.textField}>Numer identyfikacyjny</div>
               <input
@@ -232,6 +440,7 @@ class RegisterPage extends Component {
               <button
                 className={classes.formSubmit}
                 onClick={this.handleFormSubmitLogin}
+                disabled={this.state.activeStep === 4}
               >
                 <span className={classes.buttonText}>Dalej</span>
                 <NavigateNext />
@@ -301,4 +510,11 @@ class RegisterPage extends Component {
   }
 }
 
-export default withStyles(styles)(withRouter(RegisterPage));
+RegisterPage.propTypes = {
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles, { withTheme: true })(
+  withRouter(RegisterPage),
+);
