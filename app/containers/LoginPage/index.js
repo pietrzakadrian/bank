@@ -132,6 +132,8 @@ class LoginPage extends Component {
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
+      passwordError: '',
+      loginError: '',
     });
   }
 
@@ -143,10 +145,15 @@ class LoginPage extends Component {
         if (res) {
           this.setState({
             loginExist: true,
-            loginError: null,
+            loginError: '',
+            password: '',
           });
+          document.getElementsByTagName('input').password.value = '';
         } else {
+          document.getElementsByTagName('input').login.value = '';
+
           this.setState({
+            login: '',
             loginError: 'Proszę podać prawidłowy identyfikator',
           });
         }
@@ -159,12 +166,13 @@ class LoginPage extends Component {
   }
 
   handleFormBack = () => {
-    const { loginExist } = this.state;
     this.setState({
-      loginExist: !loginExist,
+      loginExist: false,
       login: '',
       password: '',
+      passwordError: '',
     });
+    document.getElementsByTagName('input').login.value = '';
   };
 
   handleFormSubmit(e) {
@@ -174,9 +182,17 @@ class LoginPage extends Component {
       .then(res => {
         if (res) {
           this.props.history.replace('/dashboard');
-        } else {
           this.setState({
-            passwordError: 'Error',
+            login: '',
+            password: '',
+            loginError: '',
+            passwordError: '',
+          });
+        } else {
+          document.getElementsByTagName('input').password.value = '';
+          this.setState({
+            passwordError: 'Proszę podać prawidłowy kod dostępu',
+            password: '',
           });
         }
       })
@@ -199,7 +215,7 @@ class LoginPage extends Component {
           <div className={classes.alertContainer}>
             <div className={classes.messageContainer}>
               Jeśli skorzystasz z naszej promocji i zarejestrujesz swoje konto
-              do końca stycznia w naszym banku,{' '}
+              do końca stycznia w naszym banku,
               <b>otrzymasz bonus w postaci 10 PLN</b>.<br />
               <br />
               Utworzone konta równie podlegają dla tej promocji.
@@ -208,68 +224,54 @@ class LoginPage extends Component {
           <div className={classes.formContainer}>
             <form noValidate onSubmit={this.handleFormSubmit}>
               {!loginExist ? (
-                [
-                  loginError ? (
+                <Fragment>
+                  <div className={classes.textField}>Numer identyfikacyjny</div>
+                  {[
                     <Fragment>
-                      <div className={classes.textField}>
-                        Numer identyfikacyjny
-                      </div>
                       <input
-                        className={classNames(
-                          classes.formItem,
-                          classes.formError,
-                        )}
+                        className={classNames(classes.formItem, {
+                          [classes.formError]: loginError,
+                        })}
                         placeholder="Wpisz numer"
                         name="login"
                         type="text"
                         onChange={this.handleChange}
                       />
-                      <div className={classes.textError}>{loginError}</div>
-                      <button
-                        className={classes.formSubmit}
-                        onClick={this.handleFormSubmitLogin}
-                      >
-                        <span className={classes.buttonText}>Dalej</span>
-                        <NavigateNext />
-                      </button>
-                    </Fragment>
-                  ) : (
-                    <Fragment>
-                      <div className={classes.textField}>
-                        Numer identyfikacyjny
-                      </div>
-                      <input
-                        className={classes.formItem}
-                        placeholder="Wpisz numer"
-                        name="login"
-                        type="text"
-                        onChange={this.handleChange}
-                      />
-                      <button
-                        className={classes.formSubmit}
-                        onClick={this.handleFormSubmitLogin}
-                      >
-                        <span className={classes.buttonText}>Dalej</span>
-                        <NavigateNext />
-                      </button>
-                    </Fragment>
-                  ),
-                ]
+                      {loginError ? (
+                        <div className={classes.textError}>{loginError}</div>
+                      ) : null}
+                    </Fragment>,
+                  ]}
+                  <button
+                    className={classes.formSubmit}
+                    onClick={this.handleFormSubmitLogin}
+                  >
+                    <span className={classes.buttonText}>Dalej</span>
+                    <NavigateNext />
+                  </button>
+                </Fragment>
               ) : (
                 <Fragment>
                   <div className={classes.textField}>Hasło dostępu</div>
-                  <input
-                    className={classes.formItem}
-                    placeholder="Wpisz hasło"
-                    name="password"
-                    type="password"
-                    onChange={this.handleChange}
-                  />
-
+                  {[
+                    <Fragment>
+                      <input
+                        className={classNames(classes.formItem, {
+                          [classes.formError]: passwordError,
+                        })}
+                        placeholder="Wpisz hasło"
+                        name="password"
+                        type="password"
+                        onChange={this.handleChange}
+                      />
+                      {passwordError ? (
+                        <div className={classes.textError}>{passwordError}</div>
+                      ) : null}
+                    </Fragment>,
+                  ]}
                   <button className={classes.formSubmit} type="submit">
                     <span className={classes.buttonText}>Zaloguj</span>
                   </button>
-
                   <button onClick={this.handleFormBack}>
                     <NavigateBefore />
                     <span className={classes.buttonText}>Powrót</span>
