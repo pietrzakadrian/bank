@@ -233,7 +233,7 @@ class LoginPage extends Component {
                         })}
                         placeholder="Wpisz numer"
                         name="login"
-                        type="text"
+                        type="number"
                         onChange={this.handleChange}
                       />
                       {loginError ? (

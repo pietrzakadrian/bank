@@ -1,6 +1,4 @@
 module.exports = (sequelize, Sequelize) => {
-  // ! TODO: make relation
-
   const User = sequelize.define(
     'user',
     {

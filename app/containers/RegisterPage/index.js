@@ -113,6 +113,9 @@ const styles = {
   buttonText: {
     position: 'relative',
   },
+  registerCompleted: {
+    padding: 10,
+  },
 };
 
 function getSteps() {
@@ -124,36 +127,6 @@ function getSteps() {
     'Adres',
   ];
 }
-
-// ? TODO: classes textfield not defined
-// const getStepContent = (step, classes) => {
-//   switch (step) {
-//     case 0:
-//       return (
-//         <Fragment>
-//           <div className={classes.textField}>Numer identyfikacyjny</div>
-//           <input
-//             className={classNames(classes.formItem, {
-//               [classes.formError]: 'test',
-//             })}
-//             placeholder="Wpisz numer"
-//             name="login"
-//             type="text"
-//             onChange={this.handleChange}
-//           />
-//           {this.state.loginError ? (
-//             <div className={classes.textError}>test</div>
-//           ) : null}
-//         </Fragment>
-//       );
-//     case 1:
-//       return 'What is an ad group anyways?';
-//     case 2:
-//       return 'This is the bit I really care about!';
-//     default:
-//       return 'Unknown step';
-//   }
-// };
 
 class RegisterPage extends Component {
   constructor() {
@@ -182,7 +155,6 @@ class RegisterPage extends Component {
     if (this.Auth.loggedIn()) this.props.history.replace('/dashboard');
   }
 
-  // TODO: add validation
   getStepContent = step => {
     const { classes } = this.props;
     const { loginError, error } = this.state;
@@ -197,7 +169,7 @@ class RegisterPage extends Component {
               })}
               placeholder="Wpisz numer"
               name="login"
-              type="text"
+              type="number"
               onChange={this.handleChange}
             />
             {loginError ? (
@@ -316,13 +288,22 @@ class RegisterPage extends Component {
       })
       .catch(err => {
         this.setState({
-          loginError: 'Error catch ',
+          loginError: 'Error catchą',
         });
       });
   }
 
   handleFormSubmit(e) {
     e.preventDefault();
+
+    const { activeStep, address } = this.state;
+    if (activeStep === 4 && address === '') {
+      document.getElementsByTagName('input').address.value = '';
+      this.setState({
+        error: 'Proszę podać adres',
+      });
+      return;
+    }
 
     this.Auth.register(
       this.state.login,
@@ -332,13 +313,9 @@ class RegisterPage extends Component {
       this.state.address,
     )
       .then(res => {
-        if (res) {
-          alert('ok');
-          const { activeStep } = this.state;
-          this.setState({
-            activeStep: activeStep + 1,
-          });
-        }
+        this.setState({
+          activeStep: activeStep + 1,
+        });
       })
       .catch(err => {
         this.setState({
@@ -389,9 +366,13 @@ class RegisterPage extends Component {
   };
 
   handleBack = () => {
-    const { activeStep, password, name, surname, address } = this.state;
+    const { activeStep, login, password, name, surname, address } = this.state;
 
-    if (activeStep === 2 && password !== '') {
+    if (activeStep === 1 && login !== '') {
+      this.setState({
+        login: '',
+      });
+    } else if (activeStep === 2 && password !== '') {
       this.setState({
         password: '',
       });
@@ -454,10 +435,14 @@ class RegisterPage extends Component {
               </Stepper>
               <div>
                 {activeStep === steps.length ? (
-                  <div>
-                    <Typography className={classes.instructions}>
-                      All steps completed - you&apos;re finished
-                    </Typography>
+                  <div className={classes.registerCompleted}>
+                    Konto zostało utworzone. Mozesz przejdź do{' '}
+                    <span
+                      onClick={this.goToLogin}
+                      className={classes.footerLink}
+                    >
+                      Logowania
+                    </span>
                   </div>
                 ) : (
                   <div>
