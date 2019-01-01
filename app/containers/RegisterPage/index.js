@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 import NavigateNext from '@material-ui/icons/NavigateNext';
+import NavigateBefore from '@material-ui/icons/NavigateBefore';
 import ErrorOutline from '@material-ui/icons/ErrorOutline';
 import Button from '@material-ui/core/Button';
 
@@ -168,7 +169,6 @@ class RegisterPage extends Component {
       loginError: '',
       error: '',
       activeStep: 0,
-      skipped: new Set(),
     };
 
     this.goToLogin = this.goToLogin.bind(this);
@@ -182,9 +182,10 @@ class RegisterPage extends Component {
     if (this.Auth.loggedIn()) this.props.history.replace('/dashboard');
   }
 
+  // TODO: add validation
   getStepContent = step => {
     const { classes } = this.props;
-    const { loginError } = this.state;
+    const { loginError, error } = this.state;
     switch (step) {
       case 0:
         return (
@@ -200,7 +201,7 @@ class RegisterPage extends Component {
               onChange={this.handleChange}
             />
             {loginError ? (
-              <div className={classes.textError}>loginError</div>
+              <div className={classes.textError}>{loginError}</div>
             ) : null}
           </Fragment>
         );
@@ -209,12 +210,15 @@ class RegisterPage extends Component {
           <Fragment>
             <div className={classes.textField}>Hasło dostępu</div>
             <input
-              className={classes.formItem}
+              className={classNames(classes.formItem, {
+                [classes.formError]: error,
+              })}
               placeholder="Wpisz hasło"
               name="password"
               type="password"
               onChange={this.handleChange}
             />
+            {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
       case 2:
@@ -222,12 +226,15 @@ class RegisterPage extends Component {
           <Fragment>
             <div className={classes.textField}>Imię</div>
             <input
-              className={classes.formItem}
+              className={classNames(classes.formItem, {
+                [classes.formError]: error,
+              })}
               placeholder="Wpisz imię"
               name="name"
               type="text"
               onChange={this.handleChange}
             />
+            {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
       case 3:
@@ -235,12 +242,15 @@ class RegisterPage extends Component {
           <Fragment>
             <div className={classes.textField}>Nazwisko</div>
             <input
-              className={classes.formItem}
+              className={classNames(classes.formItem, {
+                [classes.formError]: error,
+              })}
               placeholder="Wpisz nazwisko"
               name="surname"
               type="text"
               onChange={this.handleChange}
             />
+            {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
       case 4:
@@ -248,12 +258,15 @@ class RegisterPage extends Component {
           <Fragment>
             <div className={classes.textField}>Adres</div>
             <input
-              className={classes.formItem}
+              className={classNames(classes.formItem, {
+                [classes.formError]: error,
+              })}
               placeholder="Wpisz adres"
               name="address"
               type="text"
               onChange={this.handleChange}
             />
+            {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
       default:
@@ -291,19 +304,19 @@ class RegisterPage extends Component {
           this.setState({
             loginExist: true,
             loginError: '',
-            password: '',
           });
+
+          document.getElementsByTagName('input').password.value = '';
         } else {
-          document.getElementsByTagName('input').login.value = '';
           this.setState({
-            login: '',
-            loginError: 'Istnieje juz taki identyfikator',
+            loginExist: false,
+            loginError: 'Istnieje juz taki numer',
           });
         }
       })
       .catch(err => {
         this.setState({
-          loginError: 'Error catch',
+          loginError: 'Error catch ',
         });
       });
   }
@@ -320,39 +333,92 @@ class RegisterPage extends Component {
     )
       .then(res => {
         if (res) {
-          this.props.history.replace('/login');
-        } else {
+          alert('ok');
+          const { activeStep } = this.state;
           this.setState({
-            error: 'Error',
+            activeStep: activeStep + 1,
           });
         }
       })
       .catch(err => {
         this.setState({
-          error: 'Error catch',
+          error: 'Error catch handleFormSubmit',
         });
       });
   }
 
   handleNext = () => {
-    const { activeStep } = this.state;
-    const { skipped } = this.state;
-    this.setState({
-      activeStep: activeStep + 1,
-      skipped,
-    });
+    const { activeStep, password, name, surname, address } = this.state;
+
+    if (activeStep === 1 && password === '') {
+      document.getElementsByTagName('input').password.value = '';
+      this.setState({
+        error: 'Proszę podać hasło',
+      });
+    } else if (activeStep === 2 && name === '') {
+      document.getElementsByTagName('input').name.value = '';
+      this.setState({
+        error: 'Proszę podać imię',
+      });
+    } else if (activeStep === 3 && surname === '') {
+      document.getElementsByTagName('input').surname.value = '';
+      this.setState({
+        error: 'Proszę podać nazwisko',
+      });
+    } else if (activeStep === 4 && address === '') {
+      document.getElementsByTagName('input').address.value = '';
+      this.setState({
+        error: 'Proszę podać adres',
+      });
+    } else {
+      this.setState({
+        activeStep: activeStep + 1,
+        error: '',
+      });
+
+      if (activeStep === 1) {
+        document.getElementsByTagName('input').password.value = '';
+      } else if (activeStep === 2) {
+        document.getElementsByTagName('input').name.value = '';
+      } else if (activeStep === 3) {
+        document.getElementsByTagName('input').surname.value = '';
+      } else if (activeStep === 4) {
+        document.getElementsByTagName('input').address.value = '';
+      }
+    }
   };
 
   handleBack = () => {
-    this.setState(state => ({
-      activeStep: state.activeStep - 1,
-    }));
+    const { activeStep, password, name, surname, address } = this.state;
+
+    if (activeStep === 2 && password !== '') {
+      this.setState({
+        password: '',
+      });
+    } else if (activeStep === 3 && name !== '') {
+      this.setState({
+        name: '',
+      });
+    } else if (activeStep === 4 && surname !== '') {
+      this.setState({
+        surname: '',
+      });
+    } else if (activeStep === 5 && address !== '') {
+      this.setState({
+        address: '',
+      });
+    }
+
+    this.setState({
+      activeStep: activeStep - 1,
+      error: '',
+    });
   };
 
   render() {
     const { classes } = this.props;
     const steps = getSteps();
-    const { loginError, activeStep } = this.state;
+    const { activeStep } = this.state;
     return (
       <Fragment>
         <Header />
@@ -396,60 +462,60 @@ class RegisterPage extends Component {
                 ) : (
                   <div>
                     <Typography className={classes.instructions}>
-                      {this.getStepContent(activeStep)}
+                      <form noValidate onSubmit={this.handleFormSubmit}>
+                        {this.getStepContent(activeStep)}
+                      </form>
                     </Typography>
-                    <div>
-                      <Button
-                        disabled={activeStep === 0}
+
+                    {activeStep === steps.length - 1 ? (
+                      <button
+                        className={classes.formSubmit}
+                        onClick={this.handleFormSubmit}
+                        type="submit"
+                      >
+                        <span className={classes.buttonText}>Utwórz konto</span>
+                      </button>
+                    ) : (
+                      [
+                        activeStep === 0 ? (
+                          <button
+                            className={classes.formSubmit}
+                            onClick={this.handleFormSubmitLogin}
+                            disabled={this.state.activeStep === 4}
+                          >
+                            <span className={classes.buttonText}>
+                              Dalej (przed loginem)
+                            </span>
+                            <NavigateNext />
+                          </button>
+                        ) : (
+                          <button
+                            className={classes.formSubmit}
+                            onClick={this.handleNext}
+                            disabled={this.state.activeStep === 4}
+                          >
+                            <span className={classes.buttonText}>
+                              Dalej (po loginie)
+                            </span>
+                            <NavigateNext />
+                          </button>
+                        ),
+                      ]
+                    )}
+
+                    {activeStep !== 0 ? (
+                      <button
+                        disabled={this.state.activeStep === 0}
                         onClick={this.handleBack}
-                        className={classes.button}
                       >
-                        Back
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={this.handleNext}
-                        className={classes.button}
-                      >
-                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                      </Button>
-                    </div>
+                        <NavigateBefore />
+                        <span className={classes.buttonText}>Powrót</span>
+                      </button>
+                    ) : null}
                   </div>
                 )}
               </div>
             </div>
-
-            {/*  */}
-
-            <form noValidate onSubmit={this.handleFormSubmit}>
-              <div className={classes.textField}>Numer identyfikacyjny</div>
-              <input
-                className={classNames(classes.formItem, {
-                  [classes.formError]: loginError,
-                })}
-                placeholder="Wpisz numer"
-                name="login"
-                type="text"
-                onChange={this.handleChange}
-              />
-              {loginError ? (
-                <div className={classes.textError}>{loginError}</div>
-              ) : null}
-
-              <button
-                className={classes.formSubmit}
-                onClick={this.handleFormSubmitLogin}
-                disabled={this.state.activeStep === 4}
-              >
-                <span className={classes.buttonText}>Dalej</span>
-                <NavigateNext />
-              </button>
-
-              {/* <button className={classes.formSubmit} type="submit">
-                <span className={classes.buttonText}>Zarejestruj</span>
-              </button> */}
-            </form>
           </div>
           <div className={classes.footerContainer}>
             <div className={classes.footerText}>
