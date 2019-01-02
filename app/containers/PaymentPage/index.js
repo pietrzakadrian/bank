@@ -93,36 +93,39 @@ class PaymentPage extends Component {
     const { classes } = this.props;
 
     return (
-      <div className={classes.center}>
-        <form noValidate onSubmit={this.handleFormSubmit}>
-          <input
-            className="form-item"
-            placeholder="account_bill..."
-            name="account_bill"
-            type="text"
-            onChange={this.handleChange}
-          />
-          <br />
-          <input
-            className="form-item"
-            placeholder="Amount money"
-            name="amount_money"
-            type="text"
-            onChange={this.handleChange}
-          />
-          <br />
-          <input
-            className="form-item"
-            placeholder="Transfer title"
-            name="transfer_title"
-            type="text"
-            onChange={this.handleChange}
-          />
-          {this.state.error}
-          <br />
-          <input value="SUBMIT" type="submit" />
-        </form>
-      </div>
+      <Fragment>
+        <Helmet title="Payment - Bank Application" />
+        <div className={classes.center}>
+          <form noValidate onSubmit={this.handleFormSubmit}>
+            <input
+              className="form-item"
+              placeholder="account_bill..."
+              name="account_bill"
+              type="text"
+              onChange={this.handleChange}
+            />
+            <br />
+            <input
+              className="form-item"
+              placeholder="Amount money"
+              name="amount_money"
+              type="text"
+              onChange={this.handleChange}
+            />
+            <br />
+            <input
+              className="form-item"
+              placeholder="Transfer title"
+              name="transfer_title"
+              type="text"
+              onChange={this.handleChange}
+            />
+            {this.state.error}
+            <br />
+            <input value="SUBMIT" type="submit" />
+          </form>
+        </div>
+      </Fragment>
     );
   }
 }

@@ -46,6 +46,11 @@ const styles = {
     backgroundColor: '#0098db',
     borderRadius: 2,
     color: 'white',
+
+    '&:hover': {
+      backgroundColor: '#15a0dd',
+      cursor: 'pointer',
+    },
   },
   formContainer: {
     textAlign: 'center',
@@ -112,7 +117,9 @@ const styles = {
     color: '#0098db',
   },
   buttonText: {
-    position: 'relative',
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
   registerCompleted: {
     padding: 10,

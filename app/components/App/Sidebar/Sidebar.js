@@ -10,7 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import Navigation from '../Navigation';
 import Footer from '../Footer';
 
-const drawerWidth = 260;
+const drawerWidth = 261;
 const styles = theme => ({
   drawer: {
     width: drawerWidth,
@@ -18,6 +18,7 @@ const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    boxShadow: '4px 0px 8px -3px rgba(17, 17, 17, .06)',
   },
   drawerHeader: {
     display: 'flex',
@@ -25,6 +26,14 @@ const styles = theme => ({
     ...theme.mixins.toolbar,
     justifyContent: 'center',
     fontSize: 18,
+  },
+  headerText: {
+    fontSize: 20.5,
+    marginTop: -5,
+    color: '#0029ab',
+    position: 'relative',
+    top: 1,
+    fontWeight: 500,
   },
   headerSubheading: {
     fontSize: '12.8px',
@@ -44,9 +53,14 @@ function Sidebar({ open, classes }) {
       }}
     >
       <div className={classes.drawerHeader}>
-        Bank Application
-        <br />
+        <div className={classes.headerText}>
+          Bank Application
+          <div className={classes.headerSubheading}>
+            Electronic Payment System
+          </div>
+        </div>
       </div>
+
       <Divider />
       <Navigation />
       <Footer />

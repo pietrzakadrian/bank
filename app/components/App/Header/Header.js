@@ -34,7 +34,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    'box-shadow': 'none', // box-shadow dla header
+    'box-shadow': '0px 4px 8px -3px rgba(17, 17, 17, .06)', // box-shadow dla header
   },
   toolBar: {
     padding: 0,
@@ -84,7 +84,7 @@ const styles = theme => ({
   headerItemTitle: {
     flexGrow: 1,
   },
-  localeToggle: {
+  logoutButton: {
     marginLeft: 12,
     marginRight: 12,
     padding: 12,
@@ -93,7 +93,7 @@ const styles = theme => ({
 
 class Header extends Component {
   state = {
-    open: false,
+    open: true,
   };
 
   handleDrawerToggle = () => {
@@ -146,7 +146,11 @@ class Header extends Component {
             <div className={classes.localeToggle}>
               <LocaleToggle />
             </div>
-            <button type="button" onClick={this.handleLogout.bind(this)}>
+            <button
+              type="button"
+              onClick={this.handleLogout.bind(this)}
+              className={classes.logoutButton}
+            >
               Logout
             </button>
           </Toolbar>

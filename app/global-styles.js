@@ -23,7 +23,7 @@ const GlobalStyle = createGlobalStyle`
 }
 
   #app {
-    background-color: #ffffff;
+    background-color: #fefefe;
     min-height: 100%;
     min-width: 100%;
   }
@@ -57,7 +57,7 @@ const GlobalStyle = createGlobalStyle`
 
   textarea:focus, input:focus, button:focus{
     outline: none;
-}
+  }
 
   ul {
     margin: 5px;

@@ -32,7 +32,13 @@ const styles = {
     backgroundColor: '#0098db',
     borderRadius: 2,
     color: 'white',
+
+    '&:hover': {
+      backgroundColor: '#15a0dd',
+      cursor: 'pointer',
+    },
   },
+
   formContainer: {
     textAlign: 'center',
     margin: '15px 0',
@@ -98,8 +104,9 @@ const styles = {
     color: '#0098db',
   },
   buttonText: {
-    position: 'relative',
-    top: 2,
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
 };
 class LoginPage extends Component {

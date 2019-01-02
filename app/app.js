@@ -49,6 +49,10 @@ const theme = createMuiTheme({
     primary: {
       main: '#0098db',
     },
+    action: {
+      selected: '#f3f3f3',
+      hover: '#f7f7f7',
+    },
   },
 });
 const MOUNT_NODE = document.getElementById('app');

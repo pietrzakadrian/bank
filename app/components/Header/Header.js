@@ -14,6 +14,9 @@ const styles = {
     fontSize: 20.5,
     marginTop: -5,
     color: '#0029ab',
+    position: 'relative',
+    top: 1,
+    fontWeight: 500,
   },
   appBar: {
     'box-shadow': 'none', // box-shadow dla header
