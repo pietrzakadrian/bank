@@ -21,19 +21,18 @@ import messages from './messages';
 // Import Styles
 const styles = theme => ({
   root: {},
-  menuItem: {
-    // backgroundColor: '#f3f3f3',
-  },
+  menuItem: {},
   primary: {},
+  primaryActive: {
+    fontWeight: 700,
+  },
   icon: {
     paddingLeft: 10,
   },
   iconActive: {
     color: '#0029ab',
   },
-  selected: {
-    fontWeight: 600,
-  },
+  selected: {},
 });
 
 class Navigation extends Component {
@@ -41,6 +40,7 @@ class Navigation extends Component {
 
   render() {
     const { classes, location } = this.props;
+
     return (
       <Fragment>
         <MenuList className={classes.root}>
@@ -49,11 +49,14 @@ class Navigation extends Component {
               className={classes.menuItem}
               selected={location.pathname === '/dashboard'}
             >
-              <ListItemIcon className={classes.icon}>
+              <ListItemIcon
+                className={classNames(classes.icon, {
+                  [classes.iconActive]: location.pathname === '/dashboard',
+                })}
+              >
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText
-                classes={{ primary: classes.primary }}
                 inset
                 primary={<FormattedMessage {...messages.dashboardItem} />}
               />
@@ -64,11 +67,14 @@ class Navigation extends Component {
               className={classes.menuItem}
               selected={location.pathname === '/payment'}
             >
-              <ListItemIcon className={classes.icon}>
+              <ListItemIcon
+                className={classNames(classes.icon, {
+                  [classes.iconActive]: location.pathname === '/payment',
+                })}
+              >
                 <CardIcon />
               </ListItemIcon>
               <ListItemText
-                classes={{ primary: classes.primary }}
                 inset
                 primary={<FormattedMessage {...messages.paymentItem} />}
               />
@@ -80,7 +86,6 @@ class Navigation extends Component {
               <CardIcon />
             </ListItemIcon>
             <ListItemText
-              classes={{ primary: classes.primary }}
               inset
               primary={<FormattedMessage {...messages.historyItem} />}
             />
@@ -95,7 +100,11 @@ class Navigation extends Component {
               className={classes.menuItem}
               selected={location.pathname === '/settings'}
             >
-              <ListItemIcon className={classes.icon}>
+              <ListItemIcon
+                className={classNames(classes.icon, {
+                  [classes.iconActive]: location.pathname === '/settings',
+                })}
+              >
                 <SettingsIcon />
               </ListItemIcon>
               <ListItemText
