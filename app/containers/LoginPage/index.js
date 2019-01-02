@@ -125,6 +125,13 @@ class LoginPage extends Component {
     if (this.Auth.loggedIn()) this.props.history.replace('/dashboard');
   }
 
+  validateNumber(e) {
+    const re = /[0-9]+/g;
+    if (!re.test(e.key)) {
+      e.preventDefault();
+    }
+  }
+
   goToRegister() {
     this.props.history.replace('/register');
   }
@@ -230,6 +237,7 @@ class LoginPage extends Component {
                   {[
                     <Fragment>
                       <input
+                        onKeyPress={e => this.validateNumber(e)}
                         className={classNames(classes.formItem, {
                           [classes.formError]: loginError,
                         })}
