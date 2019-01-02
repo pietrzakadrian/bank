@@ -11,9 +11,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 // Import Services
 import { FormattedMessage } from 'react-intl';
+import Logo from '../../../images/logo.png';
 import AuthService from '../../../services/AuthService';
 
 // Import Internationalize
@@ -54,6 +56,7 @@ const styles = theme => ({
   menuButton: {
     marginLeft: 12,
     marginRight: 12,
+    color: '#0029ab',
   },
   drawerPaper: {
     width: drawerWidth,
@@ -86,8 +89,25 @@ const styles = theme => ({
   },
   logoutButton: {
     marginLeft: 12,
-    marginRight: 12,
-    padding: 12,
+    paddingLeft: 12,
+
+    '&:hover': {
+      cursor: 'pointer',
+      color: 'rgba(0, 0, 0, 0.54)',
+      transition: '0.3s',
+    },
+  },
+  imgStyles: {
+    width: 45,
+    marginLeft: 24,
+    marginRight: 24,
+  },
+  exitToAppClass: {
+    color: '#15a0dd',
+    fontSize: 28,
+    position: 'relative',
+    top: -1,
+    marginLeft: 4,
   },
 });
 
@@ -143,16 +163,24 @@ class Header extends Component {
             >
               {headerTitle[location.pathname]}
             </Typography>
-            <div className={classes.localeToggle}>
+            {/* <div className={classes.localeToggle}>
               <LocaleToggle />
-            </div>
+            </div> */}
             <button
               type="button"
               onClick={this.handleLogout.bind(this)}
               className={classes.logoutButton}
             >
-              Logout
+              <ExitToAppIcon className={classes.exitToAppClass} />
+              Wyloguj
             </button>
+            <div>
+              <img
+                src={Logo}
+                className={classes.imgStyles}
+                alt="Bank Application"
+              />
+            </div>
           </Toolbar>
         </AppBar>
         <Sidebar open={open} />

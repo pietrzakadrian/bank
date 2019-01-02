@@ -49,6 +49,9 @@ const styles = theme => ({
     height: 193,
     flexDirection: 'row',
   },
+  availabeFundsContainer: {
+    fontWeight: 600,
+  },
 });
 
 class AccountBills extends Component {
@@ -111,7 +114,10 @@ class AccountBills extends Component {
                         .trim()}
                     </TableCell>
                     <TableCell className={classes.tableCell} numeric>
-                      {accountBill.available_funds} PLN
+                      <span className={classes.availabeFundsContainer}>
+                        {accountBill.available_funds}
+                      </span>{' '}
+                      PLN
                     </TableCell>
                   </TableRow>
                 ))

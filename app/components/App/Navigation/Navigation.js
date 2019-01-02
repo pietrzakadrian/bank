@@ -11,6 +11,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import CardIcon from '@material-ui/icons/CreditCard';
 import HomeIcon from '@material-ui/icons/Home';
+import HistoryIcon from '@material-ui/icons/History';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import SwapVertIcon from '@material-ui/icons/SwapVert';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Divider from '@material-ui/core/Divider/Divider';
 
@@ -28,6 +33,7 @@ const styles = theme => ({
   },
   icon: {
     paddingLeft: 10,
+    marginRight: 10,
   },
   iconActive: {
     color: '#0029ab',
@@ -72,7 +78,7 @@ class Navigation extends Component {
                   [classes.iconActive]: location.pathname === '/payment',
                 })}
               >
-                <CardIcon />
+                <SwapVertIcon />
               </ListItemIcon>
               <ListItemText
                 inset
@@ -83,12 +89,43 @@ class Navigation extends Component {
           {/* <NavLink> */}
           <MenuItem disabled className={classes.menuItem}>
             <ListItemIcon className={classes.icon}>
-              <CardIcon />
+              <AccountBalanceWalletIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Rachunki" />
+          </MenuItem>
+          {/* </NavLink> */}
+          {/* <NavLink> */}
+          <MenuItem disabled className={classes.menuItem}>
+            <ListItemIcon className={classes.icon}>
+              <HistoryIcon />
             </ListItemIcon>
             <ListItemText
               inset
               primary={<FormattedMessage {...messages.historyItem} />}
             />
+          </MenuItem>
+          {/* </NavLink> */}
+          {/* <NavLink> */}
+          <MenuItem disabled className={classes.menuItem}>
+            <ListItemIcon className={classes.icon}>
+              <AccountBalanceIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Kredyty" />
+          </MenuItem>
+          {/* </NavLink> */}
+          {/* <NavLink> */}
+          <MenuItem disabled className={classes.menuItem}>
+            <ListItemIcon className={classes.icon}>
+              <TrendingUpIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Lokaty" />
+          </MenuItem>
+          {/* </NavLink> */}
+          <MenuItem disabled className={classes.menuItem}>
+            <ListItemIcon className={classes.icon}>
+              <CardIcon />
+            </ListItemIcon>
+            <ListItemText inset primary="Karty" />
           </MenuItem>
           {/* </NavLink> */}
         </MenuList>
