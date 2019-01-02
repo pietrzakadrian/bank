@@ -29,11 +29,12 @@ const styles = theme => ({
   menuItem: {},
   primary: {},
   primaryActive: {
-    fontWeight: 700,
+    color: 'white',
   },
   icon: {
     paddingLeft: 10,
     marginRight: 10,
+    color: '#15a0dd',
   },
   iconActive: {
     color: '#0029ab',
@@ -81,6 +82,9 @@ class Navigation extends Component {
                 <SwapVertIcon />
               </ListItemIcon>
               <ListItemText
+                className={classNames(classes.primary, {
+                  [classes.primaryActive]: location.pathname === '/payment',
+                })}
                 inset
                 primary={<FormattedMessage {...messages.paymentItem} />}
               />

@@ -107,7 +107,7 @@ const styles = theme => ({
     fontSize: 28,
     position: 'relative',
     top: -1,
-    marginLeft: 4,
+    marginRight: 4,
   },
 });
 
