@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
+import classNames from 'classnames';
 
 // Import Material-UI
 import MenuList from '@material-ui/core/MenuList';
@@ -25,8 +26,10 @@ const styles = theme => ({
   },
   primary: {},
   icon: {
-    // color: '#0029ab',
     paddingLeft: 10,
+  },
+  iconActive: {
+    color: '#0029ab',
   },
   selected: {
     fontWeight: 600,
@@ -37,13 +40,15 @@ class Navigation extends Component {
   state = {};
 
   render() {
-    const { classes } = this.props;
-
+    const { classes, location } = this.props;
     return (
       <Fragment>
         <MenuList className={classes.root}>
           <NavLink to="/dashboard">
-            <MenuItem className={classes.menuItem} selected>
+            <MenuItem
+              className={classes.menuItem}
+              selected={location.pathname === '/dashboard'}
+            >
               <ListItemIcon className={classes.icon}>
                 <HomeIcon />
               </ListItemIcon>
@@ -55,7 +60,10 @@ class Navigation extends Component {
             </MenuItem>
           </NavLink>
           <NavLink to="/payment">
-            <MenuItem className={classes.menuItem}>
+            <MenuItem
+              className={classes.menuItem}
+              selected={location.pathname === '/payment'}
+            >
               <ListItemIcon className={classes.icon}>
                 <CardIcon />
               </ListItemIcon>
@@ -83,7 +91,10 @@ class Navigation extends Component {
 
         <MenuList>
           <NavLink to="/settings">
-            <MenuItem className={classes.menuItem}>
+            <MenuItem
+              className={classes.menuItem}
+              selected={location.pathname === '/settings'}
+            >
               <ListItemIcon className={classes.icon}>
                 <SettingsIcon />
               </ListItemIcon>
@@ -104,4 +115,4 @@ Navigation.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Navigation);
+export default withStyles(styles)(withRouter(Navigation));

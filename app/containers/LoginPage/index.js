@@ -222,7 +222,7 @@ class LoginPage extends Component {
     const { loginExist, loginError, passwordError } = this.state;
     return (
       <Fragment>
-        <Helmet title="Login - Bank Application" />
+        <Helmet title="Login · Bank Application" />
         <Header />
         <HeaderSubheading headerText="Logowanie" />
 

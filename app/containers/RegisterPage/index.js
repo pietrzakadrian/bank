@@ -433,7 +433,7 @@ class RegisterPage extends Component {
     const { activeStep } = this.state;
     return (
       <Fragment>
-        <Helmet title="Register - Bank Application" />
+        <Helmet title="Register · Bank Application" />
         <Header />
         <HeaderSubheading headerText="Rejestracja" />
 

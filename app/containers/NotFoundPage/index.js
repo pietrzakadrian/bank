@@ -20,7 +20,7 @@ export default class NotFoundPage extends React.PureComponent {
   render() {
     return (
       <Fragment>
-        <Helmet title="Not Found Page" />
+        <Helmet title="Not Found Page · Bank Application" />
         <h1>
           <FormattedMessage {...messages.header} />
         </h1>

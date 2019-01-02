@@ -68,7 +68,7 @@ class DashboardPage extends Component {
     const { classes } = this.props;
     return (
       <Fragment>
-        <Helmet title="Dashboard - Bank Application" />
+        <Helmet title="Dashboard · Bank Application" />
         <div className={classes.container}>
           <Grid container spacing={24} className={classes.grid}>
             <Grid item xs={4}>

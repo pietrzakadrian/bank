@@ -19,7 +19,7 @@ class SettingsPage extends Component {
   render() {
     return (
       <Fragment>
-        <Helmet title="Settings - Bank Application" />
+        <Helmet title="Settings · Bank Application" />
         <h1>
           <FormattedMessage {...messages.header} />
         </h1>

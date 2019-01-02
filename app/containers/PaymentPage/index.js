@@ -94,7 +94,7 @@ class PaymentPage extends Component {
 
     return (
       <Fragment>
-        <Helmet title="Payment - Bank Application" />
+        <Helmet title="Payment · Bank Application" />
         <div className={classes.center}>
           <form noValidate onSubmit={this.handleFormSubmit}>
             <input
