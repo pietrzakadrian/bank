@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
+import Helmet from 'react-helmet';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
 import ErrorOutline from '@material-ui/icons/ErrorOutline';
-import Button from '@material-ui/core/Button';
+import { withSnackbar } from 'notistack';
 
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -51,7 +52,7 @@ const styles = {
     margin: '15px 0',
     width: '100%',
     backgroundColor: '#f2f4f7',
-    padding: '15px 0',
+    padding: '15px 0 35px',
   },
   formError: {
     border: '1px solid red',
@@ -253,7 +254,10 @@ class RegisterPage extends Component {
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
+      error: '',
+      loginError: '',
     });
+    
   }
 
   handleFormSubmitLogin(e) {
@@ -293,7 +297,7 @@ class RegisterPage extends Component {
       });
   }
 
-  handleFormSubmit(e) {
+  handleFormSubmit = variant => e => {
     e.preventDefault();
 
     const { activeStep, address } = this.state;
@@ -316,13 +320,16 @@ class RegisterPage extends Component {
         this.setState({
           activeStep: activeStep + 1,
         });
+
+        this.props.enqueueSnackbar('Konto zostało utworzone.', { variant });
+        this.props.history.replace('/login');
       })
       .catch(err => {
         this.setState({
           error: 'Error catch handleFormSubmit',
         });
       });
-  }
+  };
 
   handleNext = () => {
     const { activeStep, password, name, surname, address } = this.state;
@@ -402,6 +409,7 @@ class RegisterPage extends Component {
     const { activeStep } = this.state;
     return (
       <Fragment>
+        <Helmet title="Register - Bank Application" />
         <Header />
         <HeaderSubheading headerText="Rejestracja" />
 
@@ -434,17 +442,7 @@ class RegisterPage extends Component {
                 })}
               </Stepper>
               <div>
-                {activeStep === steps.length ? (
-                  <div className={classes.registerCompleted}>
-                    Konto zostało utworzone. Mozesz przejdź do{' '}
-                    <span
-                      onClick={this.goToLogin}
-                      className={classes.footerLink}
-                    >
-                      Logowania
-                    </span>
-                  </div>
-                ) : (
+                {activeStep === steps.length ? null : (
                   <div>
                     <Typography className={classes.instructions}>
                       <form noValidate onSubmit={this.handleFormSubmit}>
@@ -455,7 +453,7 @@ class RegisterPage extends Component {
                     {activeStep === steps.length - 1 ? (
                       <button
                         className={classes.formSubmit}
-                        onClick={this.handleFormSubmit}
+                        onClick={this.handleFormSubmit('success')}
                         type="submit"
                       >
                         <span className={classes.buttonText}>Utwórz konto</span>
@@ -468,9 +466,7 @@ class RegisterPage extends Component {
                             onClick={this.handleFormSubmitLogin}
                             disabled={this.state.activeStep === 4}
                           >
-                            <span className={classes.buttonText}>
-                              Dalej (przed loginem)
-                            </span>
+                            <span className={classes.buttonText}>Dalej</span>
                             <NavigateNext />
                           </button>
                         ) : (
@@ -479,9 +475,7 @@ class RegisterPage extends Component {
                             onClick={this.handleNext}
                             disabled={this.state.activeStep === 4}
                           >
-                            <span className={classes.buttonText}>
-                              Dalej (po loginie)
-                            </span>
+                            <span className={classes.buttonText}>Dalej</span>
                             <NavigateNext />
                           </button>
                         ),
@@ -502,6 +496,7 @@ class RegisterPage extends Component {
               </div>
             </div>
           </div>
+
           <div className={classes.footerContainer}>
             <div className={classes.footerText}>
               <b>
@@ -564,8 +559,9 @@ class RegisterPage extends Component {
 RegisterPage.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  enqueueSnackbar: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(
-  withRouter(RegisterPage),
+  withRouter(withSnackbar(RegisterPage)),
 );

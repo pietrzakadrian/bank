@@ -91,6 +91,7 @@
     "mysql": "^2.16.0",
     "mysql2": "^1.6.4",
     "nodemon": "^1.18.7",
+    "notistack": "^0.4.1",
     "prop-types": "15.6.2",
     "react": "16.6.0",
     "react-dom": "16.6.0",

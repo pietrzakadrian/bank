@@ -12,8 +12,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import '../LoginPage/Login.css';
-
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
 
@@ -99,7 +97,6 @@ class PaymentPage extends Component {
         <form noValidate onSubmit={this.handleFormSubmit}>
           <input
             className="form-item"
-            // TODO: change id to account_bill
             placeholder="account_bill..."
             name="account_bill"
             type="text"

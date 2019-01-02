@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import Helmet from 'react-helmet';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 import NavigateNext from '@material-ui/icons/NavigateNext';
@@ -207,6 +208,7 @@ class LoginPage extends Component {
     const { loginExist, loginError, passwordError } = this.state;
     return (
       <Fragment>
+        <Helmet title="Login - Bank Application" />
         <Header />
         <HeaderSubheading headerText="Logowanie" />
 

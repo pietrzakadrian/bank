@@ -28,5 +28,4 @@ class SettingsPage extends Component {
   }
 }
 
-// TODO: add withAuth HoC
 export default withAuth(SettingsPage);

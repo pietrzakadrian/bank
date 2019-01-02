@@ -24,6 +24,7 @@ import LanguageProvider from 'modules/LanguageProvider';
 
 // Import Material-UI
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { SnackbarProvider } from 'notistack';
 
 // Load the favicon and the .htaccess file
 /* eslint-disable import/no-unresolved, import/extensions */
@@ -44,6 +45,11 @@ const theme = createMuiTheme({
     useNextVariants: true,
     suppressDeprecationWarnings: true,
   },
+  palette: {
+    primary: {
+      main: '#0098db',
+    },
+  },
 });
 const MOUNT_NODE = document.getElementById('app');
 
@@ -52,15 +58,19 @@ const render = messages => {
     <Provider store={store}>
       <MuiThemeProvider theme={theme}>
         <LanguageProvider messages={messages}>
-          <ConnectedRouter history={history}>
-            <App />
-          </ConnectedRouter>
+          <SnackbarProvider maxSnack={3}>
+            <ConnectedRouter history={history}>
+              <App />
+            </ConnectedRouter>
+          </SnackbarProvider>
         </LanguageProvider>
       </MuiThemeProvider>
     </Provider>,
     MOUNT_NODE,
   );
 };
+
+console.log(theme);
 
 if (module.hot) {
   // Hot reloadable React components and translation json files
