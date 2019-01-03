@@ -93,8 +93,6 @@ const styles = theme => ({
 
     '&:hover': {
       cursor: 'pointer',
-      color: 'rgba(0, 0, 0, 0.54)',
-      transition: '0.3s',
     },
   },
   imgStyles: {

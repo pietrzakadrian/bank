@@ -25,19 +25,16 @@ import messages from './messages';
 
 // Import Styles
 const styles = theme => ({
-  root: {},
-  menuItem: {},
-  primary: {},
   primaryActive: {
     color: 'white',
   },
   icon: {
     paddingLeft: 10,
-    marginRight: 10,
+    marginRight: 18,
     color: '#15a0dd',
   },
   iconActive: {
-    color: '#0029ab',
+    color: 'white',
   },
   selected: {},
 });
@@ -50,7 +47,7 @@ class Navigation extends Component {
 
     return (
       <Fragment>
-        <MenuList className={classes.root}>
+        <MenuList className={classes.root} disablePadding>
           <NavLink to="/dashboard">
             <MenuItem
               className={classes.menuItem}
@@ -64,6 +61,11 @@ class Navigation extends Component {
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText
+                classes={
+                  location.pathname === '/dashboard'
+                    ? { primary: classes.primaryActive }
+                    : { primary: classes.primary }
+                }
                 inset
                 primary={<FormattedMessage {...messages.dashboardItem} />}
               />
@@ -82,9 +84,11 @@ class Navigation extends Component {
                 <SwapVertIcon />
               </ListItemIcon>
               <ListItemText
-                className={classNames(classes.primary, {
-                  [classes.primaryActive]: location.pathname === '/payment',
-                })}
+                classes={
+                  location.pathname === '/payment'
+                    ? { primary: classes.primaryActive }
+                    : { primary: classes.primary }
+                }
                 inset
                 primary={<FormattedMessage {...messages.paymentItem} />}
               />
@@ -135,7 +139,7 @@ class Navigation extends Component {
         </MenuList>
         <Divider />
 
-        <MenuList>
+        <MenuList disablePadding>
           <NavLink to="/settings">
             <MenuItem
               className={classes.menuItem}
@@ -149,7 +153,11 @@ class Navigation extends Component {
                 <SettingsIcon />
               </ListItemIcon>
               <ListItemText
-                classes={{ primary: classes.primary }}
+                classes={
+                  location.pathname === '/settings'
+                    ? { primary: classes.primaryActive }
+                    : { primary: classes.primary }
+                }
                 inset
                 primary={<FormattedMessage {...messages.settingsItem} />}
               />

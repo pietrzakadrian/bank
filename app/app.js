@@ -50,7 +50,7 @@ const theme = createMuiTheme({
       main: '#0098db',
     },
     action: {
-      selected: '#f3f3f3',
+      selected: '#15a0dd',
       hover: '#f7f7f7',
     },
   },
