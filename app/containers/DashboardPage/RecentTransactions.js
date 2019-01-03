@@ -135,7 +135,7 @@ class RecentTransactions extends Component {
                           {row.transfer_title}
                         </TableCell>
                         <TableCell className={classes.tableCell} numeric>
-                          {moment(row.data_time).format('LT l')}
+                          {moment(row.data_time).format('D.MM.YYYY')}
                           <br />
                           <span className={classes.outgoingTransfer}>
                             -{row.amount_money} PLN

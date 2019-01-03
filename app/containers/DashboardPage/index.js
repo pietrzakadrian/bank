@@ -27,6 +27,7 @@ import BankInformation from './BankInformation';
 import AccountBills from './AccountBills';
 import RecentTransactions from './RecentTransactions';
 import AuthService from '../../services/AuthService';
+import GreetingHeadline from './GreetingHeadline';
 
 // Import Styles
 const styles = theme => ({
@@ -69,6 +70,7 @@ class DashboardPage extends Component {
     return (
       <Fragment>
         <Helmet title="Dashboard · Bank Application" />
+        <GreetingHeadline id={this.props.user.id} />
         <div className={classes.container}>
           <Grid container spacing={24} className={classes.grid}>
             <Grid item xs={4}>

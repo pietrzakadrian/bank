@@ -80,6 +80,21 @@ export default class AuthService {
       });
   }
 
+  // GreetingHeadline Action
+  GreetingHeadline(id) {
+    return this.fetch(`${this.domain}/user/${id}`, {
+      method: 'GET',
+    })
+      .then(res => {
+        if (!res.error) {
+          return res;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   // AccountBills Action
   accountBills(id) {
     return this.fetch(`${this.domain}/bills/${id}`, {

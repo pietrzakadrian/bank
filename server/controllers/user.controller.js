@@ -47,7 +47,7 @@ exports.create = (req, res) => {
 };
 
 // Login Action
-exports.findOne = (req, res) => {
+exports.login = (req, res) => {
   User.findOne({
     where: {
       login: req.body.login,
@@ -82,7 +82,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Find a User by Login Action
+// Find a User by Login for Register Action
 exports.findByLogin = (req, res) => {
   User.findOne({
     where: {
@@ -94,6 +94,27 @@ exports.findByLogin = (req, res) => {
         res.status(200).json({ user_exist: true });
       } else {
         res.status(400).json({ user_exist: false });
+      }
+    })
+    .catch(err => {
+      res.status(400).json({ error: err });
+    });
+};
+
+// Find a User by Id Action
+exports.findById = (req, res) => {
+  User.findOne({
+    where: {
+      id: req.params.userId,
+    },
+  })
+    .then(user => {
+      if (user) {
+        res.status(200).json({
+          name: user.name,
+          surname: user.surname,
+          last_logged: user.last_logged,
+        });
       }
     })
     .catch(err => {

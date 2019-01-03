@@ -4,7 +4,11 @@ module.exports = function(app) {
   // Create a new User
   app.post('/api/users/register', users.create);
 
-  app.post('/api/users/login', users.findOne);
+  // Login User
+  app.post('/api/users/login', users.login);
+
+  // Data
+  app.get('/api/user/:userId', users.findById);
 
   // Retrieve a single User by Login
   app.get('/api/users/:userLogin', users.findByLogin);
