@@ -81,7 +81,7 @@ export default class AuthService {
   }
 
   // GreetingHeadline Action
-  GreetingHeadline(id) {
+  greetingHeadline(id) {
     return this.fetch(`${this.domain}/user/${id}`, {
       method: 'GET',
     })
@@ -128,7 +128,6 @@ export default class AuthService {
   recentTransactionsSender(id) {
     return this.fetch(`${this.domain}/transactions/sender/${id}`, {
       method: 'GET',
-      header: { Authentication: `Bearer ${this.getToken()}` },
     })
       .then(res => {
         if (!res.error) {

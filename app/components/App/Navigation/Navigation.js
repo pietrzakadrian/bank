@@ -29,7 +29,7 @@ const styles = theme => ({
     color: 'white',
   },
   icon: {
-    paddingLeft: 10,
+    paddingLeft: 15,
     marginRight: 18,
     color: '#15a0dd',
   },

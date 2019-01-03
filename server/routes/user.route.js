@@ -1,5 +1,6 @@
 module.exports = function(app) {
   const users = require('../controllers/user.controller.js');
+  const checkAuth = require('../middlewares/checkAuth.middleware.js');
 
   // Create a new User
   app.post('/api/users/register', users.create);
@@ -7,8 +8,11 @@ module.exports = function(app) {
   // Login User
   app.post('/api/users/login', users.login);
 
-  // Data
-  app.get('/api/user/:userId', users.findById);
+  // GreetingHeadline User
+  app.get('/api/user/:userId', checkAuth, users.findById);
+
+  // // Update Last Logged Data
+  // app.put('/api/users/logout/:userId', checkAuth, users.updateLastLoggedDate);
 
   // Retrieve a single User by Login
   app.get('/api/users/:userLogin', users.findByLogin);

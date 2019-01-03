@@ -60,7 +60,10 @@ module.exports = (sequelize, Sequelize) => {
       date_registration: {
         type: Sequelize.DATE,
       },
-      last_logged: {
+      last_successful_logged: {
+        type: Sequelize.DATE,
+      },
+      last_present_logged: {
         type: Sequelize.DATE,
       },
     },

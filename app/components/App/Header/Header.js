@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
+import moment from 'moment';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
@@ -110,9 +111,32 @@ const styles = theme => ({
 });
 
 class Header extends Component {
-  state = {
-    open: true,
-  };
+  constructor(props) {
+    super(props);
+    this.Auth = new AuthService();
+
+    this.state = {
+      datatime: new Date(),
+      user_id: null,
+      open: true,
+    };
+  }
+
+  componentWillMount() {
+    if (!Auth.loggedIn()) {
+      this.props.history.replace('/login');
+    } else {
+      try {
+        const userData = Auth.getUserdata();
+        this.setState({
+          user_id: userData.id,
+        });
+      } catch (err) {
+        Auth.logout();
+        this.props.history.replace('/login');
+      }
+    }
+  }
 
   handleDrawerToggle = () => {
     const { open } = this.state;
@@ -122,6 +146,16 @@ class Header extends Component {
   };
 
   handleLogout() {
+    // this.Auth.updateLastLoggedDate(this.state.user_id, this.state.data)
+    //   .then(res => {
+    //     if (res) {
+
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
+
     Auth.logout();
     this.props.history.replace('/login');
   }
@@ -129,6 +163,7 @@ class Header extends Component {
   render() {
     const { classes, theme, location } = this.props;
     const { open } = this.state;
+    console.log(this.state.datatime);
     const headerTitle = {
       '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
       '/payment': <FormattedMessage {...messages.paymentTitle} />,

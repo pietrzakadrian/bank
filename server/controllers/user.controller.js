@@ -1,3 +1,4 @@
+const moment = require('moment');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db.config.js');
@@ -7,13 +8,20 @@ const Bill = db.bills;
 
 // Register Action
 exports.create = (req, res) => {
-  const today = new Date();
+  const x = new Date().getTimezoneOffset() * 60000;
+  const localISOTime = `${new Date(Date.now() - x)
+    .toISOString()
+    .slice(0, -1)}Z`;
+
   User.findOne({
     where: { login: req.body.login },
   }).then(user => {
     if (!user) {
+      console.log(new Date(Date.now() - x).toISOString().slice(0, -1));
       bcrypt.hash(req.body.password, 10, (err, hash) => {
         req.body.password = hash;
+
+        console.log(localISOTime);
 
         User.create({
           login: req.body.login,
@@ -21,8 +29,7 @@ exports.create = (req, res) => {
           name: req.body.name,
           surname: req.body.surname,
           address: req.body.address,
-          date_registration: today,
-          last_logged: today,
+          date_registration: localISOTime,
         })
           .then(user =>
             // ! TODO: If account_bill exist
@@ -113,7 +120,7 @@ exports.findById = (req, res) => {
         res.status(200).json({
           name: user.name,
           surname: user.surname,
-          last_logged: user.last_logged,
+          date_registration: user.date_registration,
         });
       }
     })
@@ -121,6 +128,18 @@ exports.findById = (req, res) => {
       res.status(400).json({ error: err });
     });
 };
+
+// Update Last Logged after Logout by Id Action
+// exports.updateLastLoggedDate = (req, res) => {
+//   User.update(
+//     {
+//       last_logged: req.body.last_logged,
+//     },
+//     { where: { id: req.params.userId } },
+//   ).then(() => {
+//     res.status(200).send('logout correct');
+//   });
+// };
 
 // Update a User
 exports.update = (req, res) => {

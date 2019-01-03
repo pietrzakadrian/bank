@@ -17,7 +17,6 @@ export default function withAuth(AuthComponent) {
       } else {
         try {
           const userData = Auth.getUserdata();
-          console.log('userData', userData);
           this.setState({
             user: userData,
           });
