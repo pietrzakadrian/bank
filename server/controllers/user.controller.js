@@ -8,20 +8,16 @@ const Bill = db.bills;
 
 // Register Action
 exports.create = (req, res) => {
-  const x = new Date().getTimezoneOffset() * 60000;
-  const localISOTime = `${new Date(Date.now() - x)
-    .toISOString()
-    .slice(0, -1)}Z`;
+  const today = new Date();
 
   User.findOne({
     where: { login: req.body.login },
   }).then(user => {
     if (!user) {
-      console.log(new Date(Date.now() - x).toISOString().slice(0, -1));
       bcrypt.hash(req.body.password, 10, (err, hash) => {
         req.body.password = hash;
 
-        console.log(localISOTime);
+        console.log(today);
 
         User.create({
           login: req.body.login,
@@ -29,7 +25,7 @@ exports.create = (req, res) => {
           name: req.body.name,
           surname: req.body.surname,
           address: req.body.address,
-          date_registration: localISOTime,
+          date_registration: today,
         })
           .then(user =>
             // ! TODO: If account_bill exist
@@ -120,7 +116,7 @@ exports.findById = (req, res) => {
         res.status(200).json({
           name: user.name,
           surname: user.surname,
-          date_registration: user.date_registration,
+          data_registration: user.data_registration,
         });
       }
     })

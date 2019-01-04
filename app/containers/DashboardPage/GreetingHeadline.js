@@ -57,7 +57,7 @@ class GreetingHeadline extends Component {
             <br />
             <span>
               Ostatnie logowanie:{' '}
-              {moment(date_registration).format('DD.MM.YYYY, H:mm')}
+              {moment(date_registration).format('DD.MM.YYYY, HH:mm')}
             </span>
           </div>
         </div>
