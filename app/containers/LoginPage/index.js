@@ -195,6 +195,8 @@ class LoginPage extends Component {
     this.Auth.login(this.state.login, this.state.password)
       .then(res => {
         if (res) {
+          // TODO: set last_successful_logged
+
           this.props.history.replace('/dashboard');
           this.setState({
             login: '',

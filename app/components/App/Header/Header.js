@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
-import moment from 'moment';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
@@ -116,6 +115,8 @@ class Header extends Component {
     this.Auth = new AuthService();
 
     this.state = {
+      user_id: null,
+      data_successfull_logged: '',
       open: true,
     };
   }
@@ -144,7 +145,9 @@ class Header extends Component {
   };
 
   handleLogout() {
-    // this.Auth.updateLastLoggedDate(this.state.user_id, this.state.data)
+    // this.Auth.updateLastLoggedDate(
+    //   this.state.user_id,
+    // )
     //   .then(res => {
     //     if (res) {
 

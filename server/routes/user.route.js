@@ -11,7 +11,7 @@ module.exports = function(app) {
   // GreetingHeadline User
   app.get('/api/user/:userId', checkAuth, users.findById);
 
-  // // Update Last Logged Data
+  // Update Last Logged Data
   // app.put('/api/users/logout/:userId', checkAuth, users.updateLastLoggedDate);
 
   // Retrieve a single User by Login

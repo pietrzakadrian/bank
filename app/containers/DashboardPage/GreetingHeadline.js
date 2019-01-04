@@ -12,6 +12,7 @@ const styles = {
   },
   GreetingHeadlineName: {
     fontWeight: 500,
+    color: '#0029ab',
   },
 };
 
@@ -22,7 +23,7 @@ class GreetingHeadline extends Component {
     this.state = {
       name: '',
       surname: '',
-      date_registration: '',
+      last_present_logged: '',
     };
     this.Auth = new AuthService();
   }
@@ -34,7 +35,7 @@ class GreetingHeadline extends Component {
           this.setState({
             name: res.name,
             surname: res.surname,
-            date_registration: res.date_registration,
+            last_present_logged: res.last_present_logged,
           });
         }
       })
@@ -45,19 +46,19 @@ class GreetingHeadline extends Component {
 
   render() {
     const { classes } = this.props;
-    const { name, surname, date_registration } = this.state;
+    const { name, surname, last_present_logged } = this.state;
     return (
       <Fragment>
         <div className={classes.GreetingHeadlineContainer}>
           <div>
-            Dzień dobry{' '}
+            Dzień dobry,{' '}
             <span className={classes.GreetingHeadlineName}>
               {name} {surname}
             </span>
             <br />
             <span>
-              Ostatnie logowanie:{' '}
-              {moment(date_registration).format('DD.MM.YYYY, HH:mm')}
+              Ostatnie udane logowanie:{' '}
+              {moment(last_present_logged).format('DD.MM.YYYY, HH:mm')}
             </span>
           </div>
         </div>

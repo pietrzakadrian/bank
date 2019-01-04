@@ -58,6 +58,7 @@ exports.login = (req, res) => {
   })
     .then(user => {
       if (user) {
+        const today = new Date();
         if (bcrypt.compareSync(req.body.password, user.password)) {
           const token = jwt.sign(
             {
@@ -68,6 +69,14 @@ exports.login = (req, res) => {
               expiresIn: 129600,
             },
           );
+
+          User.update(
+            {
+              last_present_logged: today,
+            },
+            { where: { login: req.body.login } },
+          ).then(() => {});
+
           return res.status(200).json({
             message: 'Auth successful',
             token,
@@ -76,6 +85,13 @@ exports.login = (req, res) => {
         res
           .status(400)
           .json({ error: 'Auth failed. The password is incorrect.' });
+
+        User.update(
+          {
+            last_failed_logged: today,
+          },
+          { where: { login: req.body.login } },
+        ).then(() => {});
       } else {
         res.status(400).json({ error: 'Auth failed. User does not exist' });
       }
@@ -116,7 +132,9 @@ exports.findById = (req, res) => {
         res.status(200).json({
           name: user.name,
           surname: user.surname,
-          data_registration: user.data_registration,
+          last_successul_logged: user.last_successul_logged,
+          last_failed_logged: user.last_failed_logged,
+          last_present_logged: user.last_present_logged,
         });
       }
     })
@@ -126,16 +144,16 @@ exports.findById = (req, res) => {
 };
 
 // Update Last Logged after Logout by Id Action
-// exports.updateLastLoggedDate = (req, res) => {
-//   User.update(
-//     {
-//       last_logged: req.body.last_logged,
-//     },
-//     { where: { id: req.params.userId } },
-//   ).then(() => {
-//     res.status(200).send('logout correct');
-//   });
-// };
+exports.updateLastLoggedDate = (req, res) => {
+  User.update(
+    {
+      last_successfull_logged: req.body.last_successfull_logged,
+    },
+    { where: { id: req.params.userId } },
+  ).then(() => {
+    res.status(200).send('logout correct');
+  });
+};
 
 // Update a User
 exports.update = (req, res) => {
