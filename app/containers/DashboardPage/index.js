@@ -70,6 +70,7 @@ class DashboardPage extends Component {
     return (
       <Fragment>
         <Helmet title="Dashboard · Bank Application" />
+
         <GreetingHeadline id={this.props.user.id} />
         <div className={classes.container}>
           <Grid container spacing={24} className={classes.grid}>

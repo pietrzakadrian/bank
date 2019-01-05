@@ -48,6 +48,7 @@ const styles = {
     color: 'white',
 
     '&:hover': {
+      transition: '0.150s',
       backgroundColor: '#15a0dd',
       cursor: 'pointer',
     },

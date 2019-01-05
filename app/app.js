@@ -41,6 +41,12 @@ import { translationMessages } from './i18n';
 const initialState = {};
 const store = configureStore(initialState, history);
 const theme = createMuiTheme({
+  breakpoints: {
+    values: {
+      sm: 480,
+      md: 768,
+    },
+  },
   typography: {
     useNextVariants: true,
     suppressDeprecationWarnings: true,
@@ -56,6 +62,8 @@ const theme = createMuiTheme({
   },
 });
 const MOUNT_NODE = document.getElementById('app');
+
+console.log(theme);
 
 const render = messages => {
   ReactDOM.render(
@@ -73,8 +81,6 @@ const render = messages => {
     MOUNT_NODE,
   );
 };
-
-console.log(theme);
 
 if (module.hot) {
   // Hot reloadable React components and translation json files

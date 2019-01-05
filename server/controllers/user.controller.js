@@ -64,7 +64,7 @@ exports.login = (req, res) => {
             },
             env.SECRET_KEY,
             {
-              expiresIn: 129600,
+              expiresIn: '15m',
             },
           );
 

@@ -11,20 +11,25 @@ import AuthService from '../../services/AuthService';
 import Header from '../../components/Header';
 import HeaderSubheading from '../../components/HeaderSubheading';
 
-const styles = {
+const styles = theme => ({
   formItem: {
     padding: 10,
     height: 36,
-    width: '17rem',
+
     border: '1px solid grey',
     display: 'block',
     margin: '0 auto',
     backgroundColor: 'white',
     fontSize: 14,
     borderRadius: 2,
+    [theme.breakpoints.down('sm')]: {
+      width: '90%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '17rem',
+    },
   },
   formSubmit: {
-    width: '17rem',
     display: 'block',
     margin: '20px auto 0',
     padding: 5,
@@ -32,10 +37,17 @@ const styles = {
     backgroundColor: '#0098db',
     borderRadius: 2,
     color: 'white',
+    [theme.breakpoints.down('sm')]: {
+      width: '90%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '17rem',
+    },
 
     '&:hover': {
       backgroundColor: '#15a0dd',
       cursor: 'pointer',
+      transition: '0.150s',
     },
   },
 
@@ -63,7 +75,12 @@ const styles = {
   },
   messageContainer: {
     textAlign: 'left',
-    padding: '0 130px',
+    [theme.breakpoints.down('md')]: {
+      padding: 0,
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: '0 130px',
+    },
   },
   footerContainer: {
     maxWidth: 550,
@@ -71,7 +88,12 @@ const styles = {
   },
   textField: {
     margin: '10px auto 0',
-    width: '17rem',
+    [theme.breakpoints.down('sm')]: {
+      width: '90%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '17rem',
+    },
     textAlign: 'left',
     fontSize: '18px',
     letterSpacing: 0.3,
@@ -108,7 +130,8 @@ const styles = {
       cursor: 'pointer',
     },
   },
-};
+});
+
 class LoginPage extends Component {
   constructor() {
     super();
