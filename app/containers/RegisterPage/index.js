@@ -8,7 +8,7 @@ import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
 import ErrorOutline from '@material-ui/icons/ErrorOutline';
 import { withSnackbar } from 'notistack';
-
+import MobileStepper from '@material-ui/core/MobileStepper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -18,18 +18,26 @@ import AuthService from '../../services/AuthService';
 import Header from '../../components/Header';
 import HeaderSubheading from '../../components/HeaderSubheading';
 
-const styles = {
+const styles = theme => ({
   stepperRoot: {
     width: '80%',
     margin: '0 auto',
   },
   stepperContainer: {
     background: '#f2f4f7',
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   },
   formItem: {
     padding: 10,
     height: 36,
-    width: '17rem',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '17rem',
+    },
     border: '1px solid grey',
     display: 'block',
     margin: '0 auto',
@@ -38,7 +46,12 @@ const styles = {
     borderRadius: 2,
   },
   formSubmit: {
-    width: '17rem',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '17rem',
+    },
     display: 'block',
     margin: '20px auto 0',
     padding: 5,
@@ -77,7 +90,12 @@ const styles = {
   },
   messageContainer: {
     textAlign: 'left',
-    padding: '0 130px',
+    [theme.breakpoints.down('md')]: {
+      padding: 0,
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: '0 130px',
+    },
   },
   footerContainer: {
     maxWidth: 550,
@@ -85,7 +103,12 @@ const styles = {
   },
   textField: {
     margin: '10px auto 0',
-    width: '17rem',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '17rem',
+    },
     textAlign: 'left',
     fontSize: '18px',
     letterSpacing: 0.3,
@@ -93,7 +116,12 @@ const styles = {
   textError: {
     color: 'red',
     textAlign: 'left',
-    width: '17rem',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '17rem',
+    },
     margin: '0 auto',
     fontSize: 14.5,
   },
@@ -122,10 +150,16 @@ const styles = {
       cursor: 'pointer',
     },
   },
-  registerCompleted: {
-    padding: 10,
+  mobileStepper: {
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+    background: '#f2f4f7',
   },
-};
+  mobileStepperDots: {
+    margin: '0 auto',
+  },
+});
 
 function getSteps() {
   return [
@@ -452,6 +486,17 @@ class RegisterPage extends Component {
             {/*  */}
 
             <div className={classes.stepperRoot}>
+              <MobileStepper
+                variant="dots"
+                steps={5}
+                position="static"
+                activeStep={this.state.activeStep}
+                classes={{
+                  root: classes.mobileStepper,
+                  dots: classes.mobileStepperDots,
+                }}
+              />
+
               <Stepper
                 className={classes.stepperContainer}
                 activeStep={activeStep}

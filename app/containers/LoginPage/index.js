@@ -101,7 +101,12 @@ const styles = theme => ({
   textError: {
     color: 'red',
     textAlign: 'left',
-    width: '17rem',
+    [theme.breakpoints.down('sm')]: {
+      width: '90%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '17rem',
+    },
     margin: '0 auto',
     fontSize: 14.5,
   },
