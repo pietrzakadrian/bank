@@ -17,8 +17,6 @@ exports.create = (req, res) => {
       bcrypt.hash(req.body.password, 10, (err, hash) => {
         req.body.password = hash;
 
-        console.log(today);
-
         User.create({
           login: req.body.login,
           password: req.body.password,
@@ -132,7 +130,7 @@ exports.findById = (req, res) => {
         res.status(200).json({
           name: user.name,
           surname: user.surname,
-          last_successul_logged: user.last_successul_logged,
+          last_successful_logged: user.last_successful_logged,
           last_failed_logged: user.last_failed_logged,
           last_present_logged: user.last_present_logged,
         });
@@ -145,13 +143,22 @@ exports.findById = (req, res) => {
 
 // Update Last Logged after Logout by Id Action
 exports.updateLastLoggedDate = (req, res) => {
-  User.update(
-    {
-      last_successfull_logged: req.body.last_successfull_logged,
+  const id = req.params.userId;
+  User.findOne({
+    where: {
+      id,
     },
-    { where: { id: req.params.userId } },
-  ).then(() => {
-    res.status(200).send('logout correct');
+  }).then(user => {
+    if (user) {
+      User.update(
+        {
+          last_successful_logged: user.last_present_logged,
+        },
+        { where: { id } },
+      ).then(() => {
+        res.status(200).send('logged successful');
+      });
+    }
   });
 };
 

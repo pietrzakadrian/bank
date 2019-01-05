@@ -12,7 +12,7 @@ module.exports = function(app) {
   app.get('/api/user/:userId', checkAuth, users.findById);
 
   // Update Last Logged Data
-  // app.put('/api/users/logout/:userId', checkAuth, users.updateLastLoggedDate);
+  app.put('/api/users/logout/:userId', checkAuth, users.updateLastLoggedDate);
 
   // Retrieve a single User by Login
   app.get('/api/users/:userLogin', users.findByLogin);

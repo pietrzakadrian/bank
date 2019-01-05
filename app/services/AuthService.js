@@ -65,6 +65,24 @@ export default class AuthService {
       });
   }
 
+  updateLastSuccessfulLoggedDate(id) {
+    return this.fetch(`${this.domain}/users/logout/${id}`, {
+      method: 'PUT',
+    })
+      .then(res => {
+        if (!res.error) {
+          return 1;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  logout() {
+    localStorage.removeItem('id_token');
+  }
+
   // AvailableFunds Action
   availableFunds(id) {
     return this.fetch(`${this.domain}/bills/${id}`, {
@@ -178,11 +196,6 @@ export default class AuthService {
   getToken() {
     // Retrieves the user token from localStorage
     return localStorage.getItem('id_token');
-  }
-
-  logout() {
-    // Clear user token and profile data from localStorage
-    localStorage.removeItem('id_token');
   }
 
   getUserdata() {

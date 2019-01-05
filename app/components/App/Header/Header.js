@@ -116,26 +116,25 @@ class Header extends Component {
 
     this.state = {
       user_id: null,
-      data_successfull_logged: '',
       open: true,
     };
   }
 
-  // componentWillMount() {
-  //   if (!Auth.loggedIn()) {
-  //     this.props.history.replace('/login');
-  //   } else {
-  //     try {
-  //       const userData = Auth.getUserdata();
-  //       this.setState({
-  //         user_id: userData.id,
-  //       });
-  //     } catch (err) {
-  //       Auth.logout();
-  //       this.props.history.replace('/login');
-  //     }
-  //   }
-  // }
+  componentWillMount() {
+    if (!Auth.loggedIn()) {
+      this.props.history.replace('/login');
+    } else {
+      try {
+        const userData = Auth.getUserdata();
+        this.setState({
+          user_id: userData.id,
+        });
+      } catch (err) {
+        Auth.logout();
+        this.props.history.replace('/login');
+      }
+    }
+  }
 
   handleDrawerToggle = () => {
     const { open } = this.state;
@@ -145,20 +144,14 @@ class Header extends Component {
   };
 
   handleLogout() {
-    // this.Auth.updateLastLoggedDate(
-    //   this.state.user_id,
-    // )
-    //   .then(res => {
-    //     if (res) {
-
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
-
-    Auth.logout();
-    this.props.history.replace('/login');
+    this.Auth.updateLastSuccessfulLoggedDate(this.state.user_id)
+      .then(res => {
+        Auth.logout();
+        this.props.history.replace('/login');
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {

@@ -24,6 +24,7 @@ class GreetingHeadline extends Component {
       name: '',
       surname: '',
       last_present_logged: '',
+      last_successful_logged: '',
     };
     this.Auth = new AuthService();
   }
@@ -36,6 +37,7 @@ class GreetingHeadline extends Component {
             name: res.name,
             surname: res.surname,
             last_present_logged: res.last_present_logged,
+            last_successful_logged: res.last_successful_logged,
           });
         }
       })
@@ -46,7 +48,12 @@ class GreetingHeadline extends Component {
 
   render() {
     const { classes } = this.props;
-    const { name, surname, last_present_logged } = this.state;
+    const {
+      name,
+      surname,
+      last_successful_logged,
+      last_present_logged,
+    } = this.state;
     return (
       <Fragment>
         <div className={classes.GreetingHeadlineContainer}>
@@ -58,7 +65,9 @@ class GreetingHeadline extends Component {
             <br />
             <span>
               Ostatnie udane logowanie:{' '}
-              {moment(last_present_logged).format('DD.MM.YYYY, HH:mm')}
+              {last_successful_logged
+                ? [moment(last_successful_logged).format('DD.MM.YYYY, HH:mm')]
+                : [moment(last_present_logged).format('DD.MM.YYYY, HH:mm')]}
             </span>
           </div>
         </div>
