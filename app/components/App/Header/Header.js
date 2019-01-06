@@ -76,6 +76,7 @@ const styles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: -drawerWidth,
+    position: 'relative',
   },
   contentShift: {
     transition: theme.transitions.create('margin', {
@@ -83,6 +84,7 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     marginLeft: 0,
+    position: 'relative',
   },
   headerItemTitle: {
     flexGrow: 1,

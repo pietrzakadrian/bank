@@ -13,7 +13,7 @@ import React, { Component, Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import GridLayout from 'react-grid-layout';
+import RGL, { Responsive, WidthProvider } from 'react-grid-layout';
 import withAuth from '../../services/withAuth';
 import './styles.css';
 
@@ -30,7 +30,6 @@ import RecentTransactions from './RecentTransactions';
 import AuthService from '../../services/AuthService';
 import GreetingHeadline from './GreetingHeadline';
 import Copyright from './Copyright';
-const ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
 
 // Import Styles
 const styles = theme => ({
@@ -45,7 +44,12 @@ const styles = theme => ({
   },
   container: {
     margin: '10px auto',
-    width: 1100,
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: 1100,
+    },
   },
   informationHeader: {
     display: 'flex',
@@ -64,11 +68,34 @@ const styles = theme => ({
   },
 });
 
+const ResponsiveGridLayout = WidthProvider(Responsive);
+const originalLayouts = getFromLS('layouts') || {};
+
 class DashboardPage extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      layouts: JSON.parse(JSON.stringify(originalLayouts)),
+    };
 
     this.Auth = new AuthService();
+  }
+
+  static get defaultProps() {
+    return {
+      className: 'layout',
+      cols: { lg: 3, md: 3, sm: 2, xs: 1, xxs: 1 },
+      rowHeight: 9,
+    };
+  }
+
+  resetLayout() {
+    this.setState({ layouts: {} });
+  }
+
+  onLayoutChange(layout, layouts) {
+    saveToLS('layouts', layouts);
+    this.setState({ layouts });
   }
 
   render() {
@@ -79,29 +106,33 @@ class DashboardPage extends Component {
         <Helmet title="Dashboard · Bank Application" />
         <GreetingHeadline id={this.props.user.id} />
         <div className={classes.container}>
-          <ResponsiveReactGridLayout
-            className="layout"
+          <ResponsiveGridLayout
+            layouts={this.state.layouts}
+            {...this.props}
+            onLayoutChange={(layout, layouts) =>
+              this.onLayoutChange(layout, layouts)
+            }
             breakpoints={{ lg: 1100, md: 996, sm: 768, xs: 480, xxs: 0 }}
-            cols={{ lg: 3, md: 3, sm: 3, xs: 1, xxs: 1 }}
+            cols={{ lg: 3, md: 3, sm: 2, xs: 1, xxs: 1 }}
             rowHeight={9}
             width={1100}
             margin={[20, 10]}
             isResizable={false}
           >
-            <div key="a" data-grid={{ x: 0, y: 0, w: 1, h: 6, static: true }}>
+            <div key="1" data-grid={{ x: 0, y: 0, w: 1, h: 6, static: true }}>
               <AvailableFunds id={this.props.user.id} />
             </div>
-            <div key="b" data-grid={{ x: 1, y: 0, w: 1, h: 6, static: true }}>
+            <div key="2" data-grid={{ x: 1, y: 0, w: 1, h: 6, static: true }}>
               <BankInformation />
             </div>
-            <div key="c" data-grid={{ x: 2, y: 0, w: 1, h: 6, static: true }}>
+            <div key="3" data-grid={{ x: 2, y: 0, w: 1, h: 6, static: true }}>
               <BankInformation />
             </div>
 
             {/* 2 belka */}
 
             <div
-              key="d"
+              key="4"
               data-grid={{
                 x: 0,
                 y: 2,
@@ -113,7 +144,7 @@ class DashboardPage extends Component {
               <AccountBills id={this.props.user.id} />
             </div>
             <div
-              key="e"
+              key="5"
               data-grid={{
                 x: 2,
                 y: 2,
@@ -128,7 +159,7 @@ class DashboardPage extends Component {
             {/* 2 belka */}
 
             <div
-              key="f"
+              key="6"
               data-grid={{
                 x: 0,
                 y: 3,
@@ -141,7 +172,7 @@ class DashboardPage extends Component {
             </div>
 
             <div
-              key="g"
+              key="7"
               data-grid={{
                 x: 1,
                 y: 3,
@@ -153,7 +184,7 @@ class DashboardPage extends Component {
             </div>
 
             <div
-              key="h"
+              key="8"
               data-grid={{
                 x: 2,
                 y: 2,
@@ -164,7 +195,7 @@ class DashboardPage extends Component {
             >
               <AccountBills id={this.props.user.id} />
             </div>
-          </ResponsiveReactGridLayout>
+          </ResponsiveGridLayout>
 
           {/* <Grid container spacing={24} className={classes.grid}>
             <Grid item xs={4}>
@@ -196,6 +227,29 @@ class DashboardPage extends Component {
         </div>
         <Copyright />
       </Fragment>
+    );
+  }
+}
+
+function getFromLS(key) {
+  let ls = {};
+  if (global.localStorage) {
+    try {
+      ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
+    } catch (e) {
+      /* Ignore */
+    }
+  }
+  return ls[key];
+}
+
+function saveToLS(key, value) {
+  if (global.localStorage) {
+    global.localStorage.setItem(
+      'rgl-8',
+      JSON.stringify({
+        [key]: value,
+      }),
     );
   }
 }

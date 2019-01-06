@@ -6,9 +6,12 @@ const styles = {
   copyrightContainer: {
     textAlign: 'right',
     fontSize: 14,
-    marginBottom: -20,
     fontWeight: 500,
     color: '#cacaca',
+    position: 'absolute',
+    bottom: 5,
+    right: 24,
+    marginBottom: -15,
   },
 };
 

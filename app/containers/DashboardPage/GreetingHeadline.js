@@ -5,12 +5,11 @@ import { withStyles } from '@material-ui/core';
 import AuthService from '../../services/AuthService';
 
 const styles = {
-  GreetingHeadlineContainer: {
+  greetingHeadlineContainer: {
     textAlign: 'right',
     fontSize: 14,
-    paddingBottom: 10,
   },
-  GreetingHeadlineName: {
+  greetingHeadlineName: {
     fontWeight: 500,
     color: '#0029ab',
   },
@@ -61,11 +60,11 @@ class GreetingHeadline extends Component {
       <Fragment>
         <div
           style={{ opacity: isLoading ? 1 : 0 }}
-          className={classes.GreetingHeadlineContainer}
+          className={classes.greetingHeadlineContainer}
         >
           <div>
             Dzień dobry,{' '}
-            <span className={classes.GreetingHeadlineName}>
+            <span className={classes.greetingHeadlineName}>
               {name} {surname}
             </span>
             <br />
