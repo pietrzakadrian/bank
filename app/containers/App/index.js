@@ -29,6 +29,7 @@ import Header from '../../components/App/Header';
 
 // Import Styles
 import GlobalStyle from '../../global-styles';
+import PersistentDrawerLeft from '../../components/tests/PersistentDrawerLeft';
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/login" component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
           <Route path="/404" component={NotFoundPage} />
+          <Route path="/tests" component={PersistentDrawerLeft} />
           <Header>
             <Switch>
               <Route path="/dashboard" component={DashboardPage} />

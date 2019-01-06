@@ -29,6 +29,8 @@ import AccountBills from './AccountBills';
 import RecentTransactions from './RecentTransactions';
 import AuthService from '../../services/AuthService';
 import GreetingHeadline from './GreetingHeadline';
+import Copyright from './Copyright';
+const ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
 
 // Import Styles
 const styles = theme => ({
@@ -43,7 +45,7 @@ const styles = theme => ({
   },
   container: {
     margin: '10px auto',
-    width: '1100px',
+    width: 1100,
   },
   informationHeader: {
     display: 'flex',
@@ -75,12 +77,12 @@ class DashboardPage extends Component {
     return (
       <Fragment>
         <Helmet title="Dashboard · Bank Application" />
-
         <GreetingHeadline id={this.props.user.id} />
         <div className={classes.container}>
-          <GridLayout
+          <ResponsiveReactGridLayout
             className="layout"
-            cols={3}
+            breakpoints={{ lg: 1100, md: 996, sm: 768, xs: 480, xxs: 0 }}
+            cols={{ lg: 3, md: 3, sm: 3, xs: 1, xxs: 1 }}
             rowHeight={9}
             width={1100}
             margin={[20, 10]}
@@ -162,7 +164,7 @@ class DashboardPage extends Component {
             >
               <AccountBills id={this.props.user.id} />
             </div>
-          </GridLayout>
+          </ResponsiveReactGridLayout>
 
           {/* <Grid container spacing={24} className={classes.grid}>
             <Grid item xs={4}>
@@ -192,6 +194,7 @@ class DashboardPage extends Component {
             </Grid> */}
           {/* </Grid> */}
         </div>
+        <Copyright />
       </Fragment>
     );
   }

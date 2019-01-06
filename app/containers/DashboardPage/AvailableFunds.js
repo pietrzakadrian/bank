@@ -71,22 +71,25 @@ class AvailableFunds extends Component {
     const { isLoading, availableFunds } = this.state;
 
     return (
+      // TODO: add graph component
       <Paper className={classes.root} elevation={1}>
         {isLoading ? (
           <Fragment>
-            <Typography variant="subtitle1">
-              <FormattedMessage {...messages.availableFunds} />
-            </Typography>
-            <Typography variant="h5">
-              {availableFunds}
-              &nbsp;
-              <Typography
-                variant="subtitle1"
-                className={classes.typographyMain}
-              >
-                PLN
+            <div>
+              <Typography variant="subtitle1">
+                <FormattedMessage {...messages.availableFunds} />
               </Typography>
-            </Typography>
+              <Typography variant="h5">
+                {availableFunds}
+                &nbsp;
+                <Typography
+                  variant="subtitle1"
+                  className={classes.typographyMain}
+                >
+                  PLN
+                </Typography>
+              </Typography>
+            </div>
           </Fragment>
         ) : (
           <div className={classes.loadingCircular}>

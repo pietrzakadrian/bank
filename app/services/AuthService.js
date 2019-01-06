@@ -2,7 +2,7 @@ import decode from 'jwt-decode';
 
 export default class AuthService {
   constructor(domain) {
-    this.domain = domain || 'http://localhost:3000/api';
+    this.domain = domain || 'http://192.168.1.2:3000/api';
     this.fetch = this.fetch.bind(this);
     this.login = this.login.bind(this);
     this.getUserdata = this.getUserdata.bind(this);

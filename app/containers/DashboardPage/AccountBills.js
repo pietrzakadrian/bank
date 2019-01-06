@@ -108,10 +108,12 @@ class AccountBills extends Component {
                       component="th"
                       scope="row"
                     >
-                      {accountBill.account_bill
-                        .toString()
-                        .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-                        .trim()}
+                      <span>
+                        {accountBill.account_bill
+                          .toString()
+                          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+                          .trim()}
+                      </span>
                     </TableCell>
                     <TableCell className={classes.tableCell} numeric>
                       <span className={classes.availabeFundsContainer}>
