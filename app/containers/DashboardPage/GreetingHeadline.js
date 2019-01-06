@@ -25,6 +25,7 @@ class GreetingHeadline extends Component {
       surname: '',
       last_present_logged: '',
       last_successful_logged: '',
+      isLoading: false,
     };
     this.Auth = new AuthService();
   }
@@ -38,6 +39,7 @@ class GreetingHeadline extends Component {
             surname: res.surname,
             last_present_logged: res.last_present_logged,
             last_successful_logged: res.last_successful_logged,
+            isLoading: true,
           });
         }
       })
@@ -53,10 +55,14 @@ class GreetingHeadline extends Component {
       surname,
       last_successful_logged,
       last_present_logged,
+      isLoading,
     } = this.state;
     return (
       <Fragment>
-        <div className={classes.GreetingHeadlineContainer}>
+        <div
+          style={{ opacity: isLoading ? 1 : 0 }}
+          className={classes.GreetingHeadlineContainer}
+        >
           <div>
             Dzień dobry,{' '}
             <span className={classes.GreetingHeadlineName}>

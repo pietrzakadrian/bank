@@ -11,7 +11,7 @@
   "app.containers.DashboardPage.bills": "Rachunki",
   "app.containers.DashboardPage.makeTransferBtn": "Zrób przelew",
   "app.containers.DashboardPage.recentTransactions": "Ostatnie transakcje",
-  "app.containers.Footer.footer": "Bank Application v0.2 | 01.12.2018",
+  "app.containers.Footer.footer": "Bank Application v0.9 | 05.01.2019",
   "app.containers.HomePage.header": "HomePage",
   "app.containers.LoginPage.header": "LoginPage",
   "app.containers.NotFoundPage.header": "NotFoundPage",
