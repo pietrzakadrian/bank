@@ -118,6 +118,7 @@ class DashboardPage extends Component {
             width={1100}
             margin={[20, 10]}
             isResizable={false}
+            isDraggable={window.matchMedia('(min-width: 480px)').matches}
           >
             <div key="1" data-grid={{ x: 0, y: 0, w: 1, h: 6, static: true }}>
               <AvailableFunds id={this.props.user.id} />
