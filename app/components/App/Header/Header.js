@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Hidden from '@material-ui/core/Hidden';
 
 // Import Services
 import { FormattedMessage } from 'react-intl';
@@ -32,6 +33,7 @@ const styles = theme => ({
     display: 'flex',
   },
   appBar: {
+    marginLeft: drawerWidth,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -46,17 +48,30 @@ const styles = theme => ({
     borderBottom: '1px solid rgba(0, 0, 0, 0.12)', // border bottom dla header
   },
   appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+    },
     marginLeft: drawerWidth,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  menuButton: {
+  menuButtonMobile: {
     marginLeft: 12,
     marginRight: 12,
     color: '#0029ab',
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  menuButtonDesktop: {
+    marginLeft: 12,
+    marginRight: 12,
+    color: '#0029ab',
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
   },
   drawerPaper: {
     width: drawerWidth,
@@ -71,11 +86,19 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
+    [theme.breakpoints.up('sm')]: {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      marginLeft: -drawerWidth,
+      position: 'relative',
+    },
     transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: -drawerWidth,
+    marginLeft: 0,
     position: 'relative',
   },
   contentShift: {
@@ -118,7 +141,8 @@ class Header extends Component {
 
     this.state = {
       user_id: null,
-      open: true,
+      mobileOpen: false,
+      desktopOpen: true,
     };
   }
 
@@ -138,11 +162,12 @@ class Header extends Component {
     }
   }
 
-  handleDrawerToggle = () => {
-    const { open } = this.state;
-    this.setState({
-      open: !open,
-    });
+  handleDrawerToggleMobile = () => {
+    this.setState(state => ({ mobileOpen: !state.mobileOpen }));
+  };
+
+  handleDrawerToggleDesktop = () => {
+    this.setState(state => ({ desktopOpen: !state.desktopOpen }));
   };
 
   handleLogout() {
@@ -158,7 +183,6 @@ class Header extends Component {
 
   render() {
     const { classes, theme, location } = this.props;
-    const { open } = this.state;
     const headerTitle = {
       '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
       '/payment': <FormattedMessage {...messages.paymentTitle} />,
@@ -171,15 +195,23 @@ class Header extends Component {
         <AppBar
           position="fixed"
           className={classNames(classes.appBar, {
-            [classes.appBarShift]: open,
+            [classes.appBarShift]: this.state.desktopOpen,
           })}
         >
-          <Toolbar className={classes.toolBar} disableGutters={!open}>
+          <Toolbar className={classes.toolBar}>
             <IconButton
               color="inherit"
               aria-label="Open drawer"
-              onClick={this.handleDrawerToggle}
-              className={classNames(classes.menuButton, open)}
+              onClick={this.handleDrawerToggleMobile}
+              className={classes.menuButtonMobile}
+            >
+              <MenuIcon />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={this.handleDrawerToggleDesktop}
+              className={classes.menuButtonDesktop}
             >
               <MenuIcon />
             </IconButton>
@@ -211,10 +243,25 @@ class Header extends Component {
             </div>
           </Toolbar>
         </AppBar>
-        <Sidebar open={open} />
+        <nav className={classes.drawer}>
+          <Hidden smUp implementation="css">
+            <Sidebar
+              open={this.state.mobileOpen}
+              variant="temporary"
+              onClose={this.handleDrawerToggleMobile}
+            />
+          </Hidden>
+          <Hidden xsDown implementation="css">
+            <Sidebar
+              open={this.state.desktopOpen}
+              variant="persistent"
+              onClose={this.handleDrawerToggleDesktop}
+            />
+          </Hidden>
+        </nav>
         <main
           className={classNames(classes.content, {
-            [classes.contentShift]: open,
+            [classes.contentShift]: this.state.desktopOpen,
           })}
         >
           <div className={classes.drawerHeader} />

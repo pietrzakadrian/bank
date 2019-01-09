@@ -46,125 +46,119 @@ class Navigation extends Component {
     const { classes, location } = this.props;
 
     return (
-      <Fragment>
-        <MenuList className={classes.root} disablePadding>
-          <NavLink to="/dashboard">
-            <MenuItem
-              className={classes.menuItem}
-              selected={location.pathname === '/dashboard'}
+      <MenuList className={classes.root} disablePadding>
+        <NavLink to="/dashboard">
+          <MenuItem
+            className={classes.menuItem}
+            selected={location.pathname === '/dashboard'}
+          >
+            <ListItemIcon
+              className={classNames(classes.icon, {
+                [classes.iconActive]: location.pathname === '/dashboard',
+              })}
             >
-              <ListItemIcon
-                className={classNames(classes.icon, {
-                  [classes.iconActive]: location.pathname === '/dashboard',
-                })}
-              >
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText
-                classes={
-                  location.pathname === '/dashboard'
-                    ? { primary: classes.primaryActive }
-                    : { primary: classes.primary }
-                }
-                inset
-                primary={<FormattedMessage {...messages.dashboardItem} />}
-              />
-            </MenuItem>
-          </NavLink>
-          <NavLink to="/payment">
-            <MenuItem
-              className={classes.menuItem}
-              selected={location.pathname === '/payment'}
-            >
-              <ListItemIcon
-                className={classNames(classes.icon, {
-                  [classes.iconActive]: location.pathname === '/payment',
-                })}
-              >
-                <SwapVertIcon />
-              </ListItemIcon>
-              <ListItemText
-                classes={
-                  location.pathname === '/payment'
-                    ? { primary: classes.primaryActive }
-                    : { primary: classes.primary }
-                }
-                inset
-                primary={<FormattedMessage {...messages.paymentItem} />}
-              />
-            </MenuItem>
-          </NavLink>
-          {/* <NavLink> */}
-          <MenuItem disabled className={classes.menuItem}>
-            <ListItemIcon className={classes.icon}>
-              <AccountBalanceWalletIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Rachunki" />
-          </MenuItem>
-          {/* </NavLink> */}
-          {/* <NavLink> */}
-          <MenuItem disabled className={classes.menuItem}>
-            <ListItemIcon className={classes.icon}>
-              <HistoryIcon />
+              <HomeIcon />
             </ListItemIcon>
             <ListItemText
+              classes={
+                location.pathname === '/dashboard'
+                  ? { primary: classes.primaryActive }
+                  : { primary: classes.primary }
+              }
               inset
-              primary={<FormattedMessage {...messages.historyItem} />}
+              primary={<FormattedMessage {...messages.dashboardItem} />}
             />
           </MenuItem>
-          {/* </NavLink> */}
-          {/* <NavLink> */}
-          <MenuItem disabled className={classes.menuItem}>
-            <ListItemIcon className={classes.icon}>
-              <AccountBalanceIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Kredyty" />
-          </MenuItem>
-          {/* </NavLink> */}
-          {/* <NavLink> */}
-          <MenuItem disabled className={classes.menuItem}>
-            <ListItemIcon className={classes.icon}>
-              <TrendingUpIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Lokaty" />
-          </MenuItem>
-          {/* </NavLink> */}
-          <MenuItem disabled className={classes.menuItem}>
-            <ListItemIcon className={classes.icon}>
-              <CardIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Karty" />
-          </MenuItem>
-          {/* </NavLink> */}
-        </MenuList>
-        <Divider />
-
-        <MenuList disablePadding>
-          <NavLink to="/settings">
-            <MenuItem
-              className={classes.menuItem}
-              selected={location.pathname === '/settings'}
+        </NavLink>
+        <NavLink to="/payment">
+          <MenuItem
+            className={classes.menuItem}
+            selected={location.pathname === '/payment'}
+          >
+            <ListItemIcon
+              className={classNames(classes.icon, {
+                [classes.iconActive]: location.pathname === '/payment',
+              })}
             >
-              <ListItemIcon
-                className={classNames(classes.icon, {
-                  [classes.iconActive]: location.pathname === '/settings',
-                })}
-              >
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText
-                classes={
-                  location.pathname === '/settings'
-                    ? { primary: classes.primaryActive }
-                    : { primary: classes.primary }
-                }
-                inset
-                primary={<FormattedMessage {...messages.settingsItem} />}
-              />
-            </MenuItem>
-          </NavLink>
-        </MenuList>
-      </Fragment>
+              <SwapVertIcon />
+            </ListItemIcon>
+            <ListItemText
+              classes={
+                location.pathname === '/payment'
+                  ? { primary: classes.primaryActive }
+                  : { primary: classes.primary }
+              }
+              inset
+              primary={<FormattedMessage {...messages.paymentItem} />}
+            />
+          </MenuItem>
+        </NavLink>
+        {/* <NavLink> */}
+        <MenuItem disabled className={classes.menuItem}>
+          <ListItemIcon className={classes.icon}>
+            <AccountBalanceWalletIcon />
+          </ListItemIcon>
+          <ListItemText inset primary="Rachunki" />
+        </MenuItem>
+        {/* </NavLink> */}
+        {/* <NavLink> */}
+        <MenuItem disabled className={classes.menuItem}>
+          <ListItemIcon className={classes.icon}>
+            <HistoryIcon />
+          </ListItemIcon>
+          <ListItemText
+            inset
+            primary={<FormattedMessage {...messages.historyItem} />}
+          />
+        </MenuItem>
+        {/* </NavLink> */}
+        {/* <NavLink> */}
+        <MenuItem disabled className={classes.menuItem}>
+          <ListItemIcon className={classes.icon}>
+            <AccountBalanceIcon />
+          </ListItemIcon>
+          <ListItemText inset primary="Kredyty" />
+        </MenuItem>
+        {/* </NavLink> */}
+        {/* <NavLink> */}
+        <MenuItem disabled className={classes.menuItem}>
+          <ListItemIcon className={classes.icon}>
+            <TrendingUpIcon />
+          </ListItemIcon>
+          <ListItemText inset primary="Lokaty" />
+        </MenuItem>
+        {/* </NavLink> */}
+        <MenuItem disabled className={classes.menuItem}>
+          <ListItemIcon className={classes.icon}>
+            <CardIcon />
+          </ListItemIcon>
+          <ListItemText inset primary="Karty" />
+        </MenuItem>
+        {/* </NavLink> */}
+        <NavLink to="/settings">
+          <MenuItem
+            className={classes.menuItem}
+            selected={location.pathname === '/settings'}
+          >
+            <ListItemIcon
+              className={classNames(classes.icon, {
+                [classes.iconActive]: location.pathname === '/settings',
+              })}
+            >
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText
+              classes={
+                location.pathname === '/settings'
+                  ? { primary: classes.primaryActive }
+                  : { primary: classes.primary }
+              }
+              inset
+              primary={<FormattedMessage {...messages.settingsItem} />}
+            />
+          </MenuItem>
+        </NavLink>
+      </MenuList>
     );
   }
 }

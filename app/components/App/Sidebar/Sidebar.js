@@ -13,19 +13,21 @@ import Footer from '../Footer';
 const drawerWidth = 261;
 const styles = theme => ({
   drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
   },
   drawerPaper: {
     width: drawerWidth,
-    boxShadow: '4px 0px 8px -3px rgba(17, 17, 17, .06)',
+    // boxShadow: '4px 0px 8px -3px rgba(17, 17, 17, .06)',
   },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    ...theme.mixins.toolbar,
     justifyContent: 'center',
     fontSize: 18,
+    minHeight: 64,
   },
   headerText: {
     fontSize: 20.5,
@@ -42,15 +44,16 @@ const styles = theme => ({
   },
 });
 
-function Sidebar({ open, classes }) {
+function Sidebar({ open, classes, variant, onClose }) {
   return (
     <Drawer
       className={classes.drawer}
-      variant="persistent"
+      variant={variant}
       open={open}
       classes={{
         paper: classes.drawerPaper,
       }}
+      onClose={onClose}
     >
       <div className={classes.drawerHeader}>
         <div className={classes.headerText}>
@@ -60,8 +63,8 @@ function Sidebar({ open, classes }) {
           </div>
         </div>
       </div>
-
       <Divider />
+      {/* // TODO: Sidebar off mobile when select navigation item */}
       <Navigation />
       <Footer />
     </Drawer>

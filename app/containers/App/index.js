@@ -30,7 +30,6 @@ import Header from '../../components/App/Header';
 // Import Styles
 import GlobalStyle from '../../global-styles';
 import PersistentDrawerLeft from '../../components/tests/PersistentDrawerLeft';
-
 export default function App() {
   return (
     <Fragment>
