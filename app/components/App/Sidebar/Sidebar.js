@@ -44,7 +44,7 @@ const styles = theme => ({
   },
 });
 
-function Sidebar({ open, classes, variant, onClose }) {
+function Sidebar({ open, classes, variant, onClose, onMenuItemClicked }) {
   return (
     <Drawer
       className={classes.drawer}
@@ -65,7 +65,7 @@ function Sidebar({ open, classes, variant, onClose }) {
       </div>
       <Divider />
       {/* // TODO: Sidebar off mobile when select navigation item */}
-      <Navigation />
+      <Navigation open={open} onMenuItemClicked={onMenuItemClicked} />
       <Footer />
     </Drawer>
   );

@@ -43,13 +43,14 @@ class Navigation extends Component {
   state = {};
 
   render() {
-    const { classes, location } = this.props;
+    const { classes, location, open } = this.props;
 
     return (
       <MenuList className={classes.root} disablePadding>
         <NavLink to="/dashboard">
           <MenuItem
             className={classes.menuItem}
+            onClick={() => this.props.onMenuItemClicked()}
             selected={location.pathname === '/dashboard'}
           >
             <ListItemIcon
@@ -73,6 +74,7 @@ class Navigation extends Component {
         <NavLink to="/payment">
           <MenuItem
             className={classes.menuItem}
+            onClick={() => this.props.onMenuItemClicked()}
             selected={location.pathname === '/payment'}
           >
             <ListItemIcon
@@ -138,6 +140,7 @@ class Navigation extends Component {
         <NavLink to="/settings">
           <MenuItem
             className={classes.menuItem}
+            onClick={() => this.props.onMenuItemClicked()}
             selected={location.pathname === '/settings'}
           >
             <ListItemIcon

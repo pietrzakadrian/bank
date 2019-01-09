@@ -247,6 +247,7 @@ class Header extends Component {
           <Hidden smUp implementation="css">
             <Sidebar
               open={this.state.mobileOpen}
+              onMenuItemClicked={() => this.setState({ mobileOpen: false })}
               variant="temporary"
               onClose={this.handleDrawerToggleMobile}
             />
@@ -254,6 +255,7 @@ class Header extends Component {
           <Hidden xsDown implementation="css">
             <Sidebar
               open={this.state.desktopOpen}
+              onMenuItemClicked={() => this.setState({ mobileOpen: false })}
               variant="persistent"
               onClose={this.handleDrawerToggleDesktop}
             />
