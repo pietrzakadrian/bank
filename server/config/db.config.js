@@ -5,9 +5,13 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
   host: env.host,
   dialect: env.dialect,
   operatorsAliases: false,
+  dialectOptions: {
+    useUTC: true,
+  },
+  timezone: '+01:00',
 
   pool: {
-    max: env.max,
+    max: env.poolmax,
     min: env.pool.min,
     acquire: env.pool.acquire,
     idle: env.pool.idle,

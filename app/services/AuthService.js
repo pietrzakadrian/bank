@@ -19,7 +19,7 @@ export default class AuthService {
         }
       })
       .catch(err => {
-        console.log(err);
+        /* just ignore */
       });
   }
 
@@ -39,12 +39,12 @@ export default class AuthService {
         }
       })
       .catch(err => {
-        console.log(err);
+        /* just ignore */
       });
   }
 
   // Register Action
-  register(login, password, name, surname, address) {
+  register(login, password, name, surname, email) {
     return this.fetch(`${this.domain}/users/register`, {
       method: 'POST',
       body: JSON.stringify({
@@ -52,7 +52,7 @@ export default class AuthService {
         password,
         name,
         surname,
-        address,
+        email,
       }),
     })
       .then(res => {
@@ -61,7 +61,7 @@ export default class AuthService {
         }
       })
       .catch(err => {
-        console.log(err);
+        /* just ignore */
       });
   }
 
@@ -75,7 +75,7 @@ export default class AuthService {
         }
       })
       .catch(err => {
-        console.log(err);
+        /* just ignore */
       });
   }
 
@@ -94,7 +94,7 @@ export default class AuthService {
         }
       })
       .catch(err => {
-        console.log(err);
+        /* just ignore */
       });
   }
 
@@ -109,7 +109,7 @@ export default class AuthService {
         }
       })
       .catch(err => {
-        console.log(err);
+        /* just ignore */
       });
   }
 
@@ -124,7 +124,7 @@ export default class AuthService {
         }
       })
       .catch(err => {
-        console.log(err);
+        /* just ignore */
       });
   }
 
@@ -139,7 +139,7 @@ export default class AuthService {
         }
       })
       .catch(err => {
-        console.log(err);
+        /* just ignore */
       });
   }
 
@@ -153,7 +153,7 @@ export default class AuthService {
         }
       })
       .catch(err => {
-        console.log(err);
+        /* just ignore */
       });
   }
 

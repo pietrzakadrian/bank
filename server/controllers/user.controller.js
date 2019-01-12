@@ -22,7 +22,7 @@ exports.create = (req, res) => {
           password: req.body.password,
           name: req.body.name,
           surname: req.body.surname,
-          address: req.body.address,
+          email: req.body.email,
           date_registration: today,
         })
           .then(user =>
@@ -34,7 +34,7 @@ exports.create = (req, res) => {
               ) + 10000000000000000000}`,
               available_funds: 0,
             }).then(account => {
-              res.status(200).send('User register OK');
+              res.status(200).json({ register: true });
             }),
           )
           .catch(err => {

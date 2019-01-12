@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core';
+import Trend from 'react-trend';
 
 // Import Components
 import Loading from 'components/App/Loading/Loading';
@@ -25,6 +26,7 @@ const styles = theme => ({
     border: '1.3px solid rgba(0, 0, 0, 0.12)',
     borderRadius: 0,
     backgroundColor: '#f3f3f3',
+    position: 'relative',
   },
   typographyMain: {
     display: 'inline-block',
@@ -33,6 +35,11 @@ const styles = theme => ({
     display: 'flex',
     height: '100%',
     flexDirection: 'row',
+  },
+  trendContainer: {
+    position: 'absolute',
+    right: 20,
+    top: 23.5,
   },
 });
 
@@ -43,6 +50,7 @@ class AvailableFunds extends Component {
     this.state = {
       isLoading: false,
       availableFunds: [],
+      availableFundsArray: [],
     };
     this.Auth = new AuthService();
   }
@@ -51,14 +59,17 @@ class AvailableFunds extends Component {
     this.Auth.availableFunds(this.props.id)
       .then(res => {
         if (res) {
-          this.setState({
+          const amount = res.reduce(
+            (accumulator, currentValue) =>
+              accumulator + currentValue.available_funds,
+            0,
+          );
+
+          this.setState(prevState => ({
             isLoading: true,
-            availableFunds: res.reduce(
-              (accumulator, currentValue) =>
-                accumulator + currentValue.available_funds,
-              0,
-            ),
-          });
+            availableFunds: amount,
+            availableFundsArray: [...prevState.availableFundsArray, amount],
+          }));
         }
       })
       .catch(err => {
@@ -89,6 +100,20 @@ class AvailableFunds extends Component {
                   PLN
                 </Typography>
               </Typography>
+              <Trend
+                className={classes.trendContainer}
+                width={115}
+                height={40}
+                smooth
+                autoDraw
+                autoDrawDuration={2000}
+                autoDrawEasing="ease-out"
+                data={[0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0]}
+                gradient={['#15a0dd']}
+                radius={0}
+                strokeWidth={2.5}
+                strokeLinecap="square"
+              />
             </div>
           </Fragment>
         ) : (

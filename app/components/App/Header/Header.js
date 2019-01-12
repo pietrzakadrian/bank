@@ -121,7 +121,7 @@ const styles = theme => ({
     },
   },
   imgStyles: {
-    width: 45,
+    width: 40,
     marginLeft: 24,
     marginRight: 24,
   },

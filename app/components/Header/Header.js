@@ -34,7 +34,7 @@ const styles = {
     color: '#15a0dd',
   },
   imgStyles: {
-    width: 45,
+    width: 40,
     float: 'right',
   },
 };

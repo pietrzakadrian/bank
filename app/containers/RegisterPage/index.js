@@ -159,6 +159,9 @@ const styles = theme => ({
   mobileStepperDots: {
     margin: '0 auto',
   },
+  success: {
+    backgroundColor: '#0098db',
+  },
 });
 
 function getSteps() {
@@ -167,7 +170,7 @@ function getSteps() {
     'Hasło dostępu',
     'Imię',
     'Nazwisko',
-    'Adres',
+    'Adres E-Mail',
   ];
 }
 
@@ -180,7 +183,7 @@ class RegisterPage extends Component {
       password: '',
       name: '',
       surname: '',
-      address: '',
+      email: '',
       loginExist: false,
       loginError: '',
       error: '',
@@ -275,13 +278,13 @@ class RegisterPage extends Component {
       case 4:
         return (
           <Fragment>
-            <div className={classes.textField}>Adres</div>
+            <div className={classes.textField}>Adres E-Mail</div>
             <input
               className={classNames(classes.formItem, {
                 [classes.formError]: error,
               })}
-              placeholder="Wpisz adres"
-              name="address"
+              placeholder="Wpisz adres E-Mail"
+              name="email"
               type="text"
               onChange={this.handleChange}
             />
@@ -363,7 +366,7 @@ class RegisterPage extends Component {
     if (activeStep === 4 && address === '') {
       document.getElementsByTagName('input').address.value = '';
       this.setState({
-        error: 'Proszę podać adres',
+        error: 'Proszę podać adres E-Mail',
       });
       return;
     }
@@ -373,20 +376,28 @@ class RegisterPage extends Component {
       this.state.password,
       this.state.name,
       this.state.surname,
-      this.state.address,
+      this.state.email,
     )
       .then(res => {
-        this.setState({
-          activeStep: activeStep + 1,
-        });
+        console.log(res);
+        if (res) {
+          alert('jest polaczenie');
 
-        this.props.enqueueSnackbar('Konto zostało utworzone.', { variant });
-        this.props.history.replace('/login');
+          this.setState({
+            activeStep: activeStep + 1,
+          });
+
+          this.props.enqueueSnackbar('Konto zostało utworzone.', { variant });
+          this.props.history.replace('/login');
+        } else {
+          alert('nie ma polaczenia');
+          this.setState({
+            error: 'Proszę podać adres E-Mail',
+          });
+        }
       })
       .catch(err => {
-        this.setState({
-          error: 'Error catch handleFormSubmit',
-        });
+        /* just ignore */
       });
   };
 

@@ -70,7 +70,7 @@ const render = messages => {
     <Provider store={store}>
       <MuiThemeProvider theme={theme}>
         <LanguageProvider messages={messages}>
-          <SnackbarProvider maxSnack={3}>
+          <SnackbarProvider maxSnack={1}>
             <ConnectedRouter history={history}>
               <App />
             </ConnectedRouter>

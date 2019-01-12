@@ -47,13 +47,14 @@ module.exports = (sequelize, Sequelize) => {
           },
         },
       },
-      address: {
+      email: {
         type: Sequelize.STRING,
         allowNull: false,
         defaultValue: '',
         validate: {
+          isEmail: true,
           notEmpty: {
-            msg: 'The address is required.',
+            msg: 'The email is required.',
           },
         },
       },
