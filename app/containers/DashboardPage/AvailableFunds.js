@@ -50,7 +50,6 @@ class AvailableFunds extends Component {
     this.state = {
       isLoading: false,
       availableFunds: [],
-      availableFundsArray: [],
     };
     this.Auth = new AuthService();
   }
@@ -68,7 +67,6 @@ class AvailableFunds extends Component {
           this.setState(prevState => ({
             isLoading: true,
             availableFunds: amount,
-            availableFundsArray: [...prevState.availableFundsArray, amount],
           }));
         }
       })

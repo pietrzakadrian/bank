@@ -381,8 +381,6 @@ class RegisterPage extends Component {
       .then(res => {
         console.log(res);
         if (res) {
-          alert('jest polaczenie');
-
           this.setState({
             activeStep: activeStep + 1,
           });
@@ -390,7 +388,6 @@ class RegisterPage extends Component {
           this.props.enqueueSnackbar('Konto zostało utworzone.', { variant });
           this.props.history.replace('/login');
         } else {
-          alert('nie ma polaczenia');
           this.setState({
             error: 'Proszę podać adres E-Mail',
           });

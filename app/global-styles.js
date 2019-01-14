@@ -101,6 +101,10 @@ html {
     font-size: 16px;
   }
 
+  [class*="SnackbarItem-variantSuccess"] {
+    background-color: #0098db!important;
+  }
+
 `;
 
 export default GlobalStyle;
