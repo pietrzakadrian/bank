@@ -30,6 +30,9 @@ import RecentTransactions from './RecentTransactions';
 import AuthService from '../../services/AuthService';
 import GreetingHeadline from './GreetingHeadline';
 import Copyright from './Copyright';
+import BankCards from './BankCards';
+import BankDeposits from './BankDeposits';
+import BankCredits from './BankCredits';
 
 // Import Styles
 const styles = theme => ({
@@ -169,7 +172,7 @@ class DashboardPage extends Component {
               }}
               className={classes.gridItem}
             >
-              <AccountBills id={this.props.user.id} />
+              <BankCards />
             </div>
 
             <div
@@ -181,7 +184,7 @@ class DashboardPage extends Component {
                 h: 14,
               }}
             >
-              <AccountBills id={this.props.user.id} />
+              <BankDeposits />
             </div>
 
             <div
@@ -194,7 +197,7 @@ class DashboardPage extends Component {
               }}
               className={classes.gridItem}
             >
-              <AccountBills id={this.props.user.id} />
+              <BankCredits />
             </div>
           </ResponsiveGridLayout>
 

@@ -29,4 +29,16 @@ export default defineMessages({
     id: `${scope}.recentTransactions`,
     defaultMessage: 'Recent Transactions',
   },
+  bankCards: {
+    id: `${scope}.bankCards`,
+    defaultMessage: 'Cards',
+  },
+  bankDeposits: {
+    id: `${scope}.bankDeposits`,
+    defaultMessage: 'Bank deposits',
+  },
+  bankCredits: {
+    id: `${scope}.bankCredits`,
+    defaultMessage: 'Bank credits',
+  },
 });
