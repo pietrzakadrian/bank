@@ -11,7 +11,7 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
   timezone: '+01:00',
 
   pool: {
-    max: env.poolmax,
+    max: env.pool.max,
     min: env.pool.min,
     acquire: env.pool.acquire,
     idle: env.pool.idle,
@@ -51,6 +51,7 @@ db.transactions = require('../models/transaction.model.js')(
   sequelize,
   Sequelize,
 );
+db.additionals = require('../models/additional.model.js')(sequelize, Sequelize);
 
 db.bills.belongsTo(db.users, {
   foreignKey: 'id_owner',
@@ -71,6 +72,15 @@ db.transactions.belongsTo(db.users, {
 db.users.hasOne(db.transactions, {
   foreignKey: 'id_recipient',
   targetKey: 'id',
+});
+
+db.additionals.belongsTo(db.bills, {
+  foreignKey: 'id_owner',
+  targetKey: 'id_owner',
+});
+db.bills.hasOne(db.additionals, {
+  foreignKey: 'id_owner',
+  targetKey: 'id_owner',
 });
 
 module.exports = db;

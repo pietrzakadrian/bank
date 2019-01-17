@@ -45,11 +45,6 @@ function BankCredits({ classes }) {
           className={classes.typographyTitle}
         >
           <FormattedMessage {...messages.bankCredits} />
-          <CardActions className={classes.cardAction}>
-            <Button size="small">
-              <FormattedMessage {...messages.makeTransferBtn} />
-            </Button>
-          </CardActions>
         </Typography>
         <p>tekst</p>
       </CardContent>

@@ -5,6 +5,7 @@ const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
 const User = db.users;
 const Bill = db.bills;
+const Additional = db.additionals;
 
 // Register Action
 exports.create = (req, res) => {
@@ -22,6 +23,7 @@ exports.create = (req, res) => {
           password: req.body.password,
           name: req.body.name,
           surname: req.body.surname,
+          // todo: NIE MOZE SIE POWTARZAC MAIL!
           email: req.body.email,
           date_registration: today,
         })
@@ -34,7 +36,12 @@ exports.create = (req, res) => {
               ) + 10000000000000000000}`,
               available_funds: 0,
             }).then(account => {
-              res.status(200).json({ register: true });
+              Additional.create({
+                id_owner: user.id,
+                account_balance_history: '0,0',
+              }).then(additional => {
+                res.status(200).json({ register: true });
+              });
             }),
           )
           .catch(err => {

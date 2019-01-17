@@ -17,5 +17,8 @@
   "app.containers.NotFoundPage.header": "NotFoundPage",
   "app.containers.PaymentPage.header": "PaymentPage",
   "app.containers.RegisterPage.header": "RegisterPage",
-  "app.containers.SettingsPage.header": "SettingsPage"
+  "app.containers.SettingsPage.header": "SettingsPage",
+  "app.containers.DashboardPage.bankCards": "Karty",
+  "app.containers.DashboardPage.bankCredits": "Kredyty",
+  "app.containers.DashboardPage.bankDeposits": "Lokaty"
 }

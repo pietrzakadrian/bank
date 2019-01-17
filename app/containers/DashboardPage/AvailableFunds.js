@@ -50,6 +50,7 @@ class AvailableFunds extends Component {
     this.state = {
       isLoading: false,
       availableFunds: [],
+      accountBalanceHistory: [],
     };
     this.Auth = new AuthService();
   }
@@ -64,10 +65,11 @@ class AvailableFunds extends Component {
             0,
           );
 
-          this.setState(prevState => ({
+          this.setState({
             isLoading: true,
+            accountBalanceHistory: res[0].additional.account_balance_history,
             availableFunds: amount,
-          }));
+          });
         }
       })
       .catch(err => {
@@ -77,10 +79,11 @@ class AvailableFunds extends Component {
 
   render() {
     const { classes } = this.props;
-    const { isLoading, availableFunds } = this.state;
+    const { isLoading, availableFunds, accountBalanceHistory } = this.state;
+
+    const accountBalanceHistoryArray = JSON.parse(`[${accountBalanceHistory}]`);
 
     return (
-      // TODO: add graph component
       <Paper className={classes.root} elevation={1}>
         {isLoading ? (
           <Fragment>
@@ -104,9 +107,9 @@ class AvailableFunds extends Component {
                 height={40}
                 smooth
                 autoDraw
-                autoDrawDuration={2000}
+                autoDrawDuration={1500}
                 autoDrawEasing="ease-out"
-                data={[0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0]}
+                data={accountBalanceHistoryArray}
                 gradient={['#15a0dd']}
                 radius={0}
                 strokeWidth={2.5}

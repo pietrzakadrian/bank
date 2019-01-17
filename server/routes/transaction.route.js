@@ -24,5 +24,5 @@ module.exports = function(app) {
   app.put('/api/transactions/:transactionId', transactions.update);
 
   // Delete a User with Id
-  app.delete('/api/transactions/:transactionId', transactions.delete);
+  app.post('/api/transactions/new/', transactions.create);
 };
