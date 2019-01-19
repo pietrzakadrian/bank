@@ -14,7 +14,7 @@ export default class AuthService {
       method: 'GET',
     })
       .then(res => {
-        if (res) {
+        if (!res.error) {
           return 1;
         }
       })
@@ -29,7 +29,7 @@ export default class AuthService {
       method: 'GET',
     })
       .then(res => {
-        if (res) {
+        if (!res.error) {
           return 1;
         }
       })

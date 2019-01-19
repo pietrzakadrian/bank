@@ -362,8 +362,8 @@ class RegisterPage extends Component {
       return;
     }
 
-    this.Auth.isEmail(this.state.email).then(res => {
-      if (!res) {
+    this.Auth.isEmail(this.state.email).then(isEmail => {
+      if (!isEmail) {
         this.Auth.register(
           this.state.login,
           this.state.password,
@@ -372,7 +372,7 @@ class RegisterPage extends Component {
           this.state.email,
         )
           .then(res => {
-            if (res) {
+            if (!res.error) {
               this.setState({
                 activeStep: activeStep + 1,
               });
@@ -384,18 +384,20 @@ class RegisterPage extends Component {
             }
           })
           .catch(err => {
-            /* just ignore */
+            this.setState({
+              error: 'Nieprawidłowy E-Mail',
+            });
           });
       } else {
         this.setState({
-          error: 'Istnieje juz taki E-Mail',
+          error: 'Istnieje konto o takim adresie E-Mail',
         });
       }
     });
   };
 
   handleNext = () => {
-    const { activeStep, password, name, surname, email } = this.state;
+    const { activeStep, password, name, surname } = this.state;
 
     if (activeStep === 1 && password === '') {
       document.getElementsByTagName('input').password.value = '';
