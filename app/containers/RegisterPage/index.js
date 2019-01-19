@@ -184,8 +184,6 @@ class RegisterPage extends Component {
       name: '',
       surname: '',
       email: '',
-      loginExist: false,
-      loginError: '',
       error: '',
       activeStep: 0,
     };
@@ -193,7 +191,7 @@ class RegisterPage extends Component {
     this.goToLogin = this.goToLogin.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleFormSubmitLogin = this.handleFormSubmitLogin.bind(this);
+    this.isLogin = this.isLogin.bind(this);
     this.Auth = new AuthService();
   }
 
@@ -203,7 +201,7 @@ class RegisterPage extends Component {
 
   getStepContent = step => {
     const { classes } = this.props;
-    const { loginError, error } = this.state;
+    const { emailError, loginError, error } = this.state;
     switch (step) {
       case 0:
         return (
@@ -211,7 +209,7 @@ class RegisterPage extends Component {
             <div className={classes.textField}>Numer identyfikacyjny</div>
             <input
               className={classNames(classes.formItem, {
-                [classes.formError]: loginError,
+                [classes.formError]: error,
               })}
               placeholder="Wpisz numer"
               name="login"
@@ -219,9 +217,7 @@ class RegisterPage extends Component {
               onChange={this.handleChange}
               onKeyPress={e => this.validateNumber(e)}
             />
-            {loginError ? (
-              <div className={classes.textError}>{loginError}</div>
-            ) : null}
+            {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
       case 1:
@@ -281,7 +277,7 @@ class RegisterPage extends Component {
             <div className={classes.textField}>Adres E-Mail</div>
             <input
               className={classNames(classes.formItem, {
-                [classes.formError]: error,
+                [classes.formError]: emailError,
               })}
               placeholder="Wpisz adres E-Mail"
               name="email"
@@ -318,21 +314,20 @@ class RegisterPage extends Component {
     this.setState({
       [e.target.name]: e.target.value,
       error: '',
-      loginError: '',
     });
   }
 
-  handleFormSubmitLogin(e) {
+  isLogin(e) {
     e.preventDefault();
 
     if (this.state.login === '') {
       this.setState({
-        loginError: 'Proszę wprowadzić identyfikator',
+        error: 'Proszę wprowadzić identyfikator',
       });
       return;
     }
 
-    this.Auth.checkLoginExist(this.state.login)
+    this.Auth.isLogin(this.state.login)
       .then(res => {
         if (!res) {
           this.setState(state => ({
@@ -340,66 +335,67 @@ class RegisterPage extends Component {
           }));
 
           this.setState({
-            loginExist: true,
-            loginError: '',
+            error: '',
           });
 
           document.getElementsByTagName('input').password.value = '';
         } else {
           this.setState({
-            loginExist: false,
-            loginError: 'Istnieje juz taki numer',
-          });
-        }
-      })
-      .catch(err => {
-        this.setState({
-          loginError: 'Error catchą',
-        });
-      });
-  }
-
-  handleFormSubmit = variant => e => {
-    e.preventDefault();
-
-    const { activeStep, address } = this.state;
-    if (activeStep === 4 && address === '') {
-      document.getElementsByTagName('input').address.value = '';
-      this.setState({
-        error: 'Proszę podać adres E-Mail',
-      });
-      return;
-    }
-
-    this.Auth.register(
-      this.state.login,
-      this.state.password,
-      this.state.name,
-      this.state.surname,
-      this.state.email,
-    )
-      .then(res => {
-        console.log(res);
-        if (res) {
-          this.setState({
-            activeStep: activeStep + 1,
-          });
-
-          this.props.enqueueSnackbar('Konto zostało utworzone.', { variant });
-          this.props.history.replace('/login');
-        } else {
-          this.setState({
-            error: 'Proszę podać adres E-Mail',
+            error: 'Istnieje juz taki numer',
           });
         }
       })
       .catch(err => {
         /* just ignore */
       });
+  }
+
+  handleFormSubmit = variant => e => {
+    e.preventDefault();
+
+    const { activeStep, email } = this.state;
+    if (activeStep === 4 && email === '') {
+      document.getElementsByTagName('input').email.value = '';
+      this.setState({
+        error: 'Proszę podać adres E-Mail',
+      });
+      return;
+    }
+
+    this.Auth.isEmail(this.state.email).then(res => {
+      if (!res) {
+        this.Auth.register(
+          this.state.login,
+          this.state.password,
+          this.state.name,
+          this.state.surname,
+          this.state.email,
+        )
+          .then(res => {
+            if (res) {
+              this.setState({
+                activeStep: activeStep + 1,
+              });
+
+              this.props.enqueueSnackbar('Konto zostało utworzone.', {
+                variant,
+              });
+              this.props.history.replace('/login');
+            }
+          })
+          .catch(err => {
+            /* just ignore */
+          });
+      } else {
+        this.setState({
+          error: 'Istnieje juz taki E-Mail',
+        });
+      }
+    });
   };
 
   handleNext = () => {
-    const { activeStep, password, name, surname, address } = this.state;
+    const { activeStep, password, name, surname, email } = this.state;
 
     if (activeStep === 1 && password === '') {
       document.getElementsByTagName('input').password.value = '';
@@ -416,11 +412,6 @@ class RegisterPage extends Component {
       this.setState({
         error: 'Proszę podać nazwisko',
       });
-    } else if (activeStep === 4 && address === '') {
-      document.getElementsByTagName('input').address.value = '';
-      this.setState({
-        error: 'Proszę podać adres',
-      });
     } else {
       this.setState({
         activeStep: activeStep + 1,
@@ -433,14 +424,12 @@ class RegisterPage extends Component {
         document.getElementsByTagName('input').name.value = '';
       } else if (activeStep === 3) {
         document.getElementsByTagName('input').surname.value = '';
-      } else if (activeStep === 4) {
-        document.getElementsByTagName('input').address.value = '';
       }
     }
   };
 
   handleBack = () => {
-    const { activeStep, login, password, name, surname, address } = this.state;
+    const { activeStep, login, password, name, surname, email } = this.state;
 
     if (activeStep === 1 && login !== '') {
       this.setState({
@@ -458,9 +447,9 @@ class RegisterPage extends Component {
       this.setState({
         surname: '',
       });
-    } else if (activeStep === 5 && address !== '') {
+    } else if (activeStep === 5 && email !== '') {
       this.setState({
-        address: '',
+        email: '',
       });
     }
 
@@ -485,6 +474,7 @@ class RegisterPage extends Component {
             <div className={classes.messageContainer}>
               Jeśli skorzystasz z naszej promocji i zarejestrujesz swoje konto
               do końca stycznia w naszym banku,
+              {''}
               <b>otrzymasz bonus w postaci 10 PLN</b>.<br />
               <br />
               Utworzone konta równie podlegają dla tej promocji.
@@ -541,7 +531,7 @@ class RegisterPage extends Component {
                         activeStep === 0 ? (
                           <button
                             className={classes.formSubmit}
-                            onClick={this.handleFormSubmitLogin}
+                            onClick={this.isLogin}
                             disabled={this.state.activeStep === 4}
                           >
                             <span className={classes.buttonText}>Dalej</span>

@@ -74,6 +74,7 @@ db.users.hasOne(db.transactions, {
   targetKey: 'id',
 });
 
+// todo: relation with id, not id_owner
 db.additionals.belongsTo(db.bills, {
   foreignKey: 'id_owner',
   targetKey: 'id_owner',

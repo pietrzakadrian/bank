@@ -1,4 +1,3 @@
-const moment = require('moment');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db.config.js');
@@ -8,44 +7,86 @@ const Bill = db.bills;
 const Additional = db.additionals;
 
 // Register Action
-exports.create = (req, res) => {
-  const today = new Date();
+exports.register = (req, res) => {
+  function getAvailableFunds() {
+    const availableFunds = 0;
+    return availableFunds;
+  }
+
+  function getAccountBill() {
+    const accountBill = `2222${Math.floor(
+      Math.random() * 90000000000000000000,
+    ) + 10000000000000000000}`;
+
+    Bill.findOne({
+      where: {
+        account_bill: accountBill,
+      },
+    })
+      .then(isAccountBill => {
+        if (isAccountBill) {
+          getAccountBill();
+        }
+        return accountBill;
+      })
+      .catch(err => {
+        /* just ignore */
+      });
+  }
+
+  function getAccountBalanceHistory() {
+    const accountBalanceHistory = '0,0';
+    return accountBalanceHistory;
+  }
+
+  function getTodayDate() {
+    const today = new Date();
+    return today;
+  }
 
   User.findOne({
     where: { login: req.body.login },
-  }).then(user => {
-    if (!user) {
+  }).then(isUser => {
+    if (!isUser) {
       bcrypt.hash(req.body.password, 10, (err, hash) => {
         req.body.password = hash;
+
+        console.log(getAccountBill());
 
         User.create({
           login: req.body.login,
           password: req.body.password,
           name: req.body.name,
           surname: req.body.surname,
-          // todo: NIE MOZE SIE POWTARZAC MAIL!
           email: req.body.email,
-          date_registration: today,
+          date_registration: getTodayDate(),
         })
           .then(user =>
-            // ! TODO: If account_bill exist
             Bill.create({
               id_owner: user.id,
-              account_bill: `022232${Math.floor(
+              account_bill: `2222${Math.floor(
                 Math.random() * 90000000000000000000,
               ) + 10000000000000000000}`,
-              available_funds: 0,
-            }).then(account => {
-              Additional.create({
-                id_owner: user.id,
-                account_balance_history: '0,0',
-              }).then(additional => {
-                res.status(200).json({ register: true });
-              });
-            }),
+              available_funds: getAvailableFunds(),
+            })
+              .then(bill => {
+                Additional.create({
+                  id_owner: user.id,
+                  account_balance_history: getAccountBalanceHistory(),
+                })
+                  .then(() => {
+                    res.status(200).json({ register: true });
+                  })
+                  .catch(err => {
+                    res.status(400).json({ error: err });
+                  });
+              })
+              .catch(err => {
+                res.status(400).json({ error: err });
+              }),
           )
           .catch(err => {
-            res.status(400).json({ error: 'Register failed.' });
+            res.status(400).json({ error: err });
           });
       });
     } else {
@@ -56,80 +97,137 @@ exports.create = (req, res) => {
 
 // Login Action
 exports.login = (req, res) => {
+  function getTodayDate() {
+    const today = new Date();
+    return today;
+  }
+
+  function getToken(userId) {
+    const token = jwt.sign(
+      {
+        id: userId,
+      },
+      env.SECRET_KEY,
+      {
+        expiresIn: '15m',
+      },
+    );
+    return token;
+  }
+
   User.findOne({
     where: {
       login: req.body.login,
     },
   })
-    .then(user => {
-      if (user) {
-        const today = new Date();
-        if (bcrypt.compareSync(req.body.password, user.password)) {
-          const token = jwt.sign(
-            {
-              id: user.id,
-            },
-            env.SECRET_KEY,
-            {
-              expiresIn: '15m',
-            },
-          );
-
+    .then(isUser => {
+      if (isUser) {
+        if (bcrypt.compareSync(req.body.password, isUser.password)) {
           User.update(
             {
-              last_present_logged: today,
+              last_present_logged: getTodayDate(),
             },
             { where: { login: req.body.login } },
-          ).then(() => {});
-
-          return res.status(200).json({
-            message: 'Auth successful',
-            token,
+          ).then(() => {
+            res.status(200).json({
+              message: 'Auth successful',
+              token: getToken(isUser.id),
+            });
+          });
+        } else {
+          User.update(
+            {
+              last_failed_logged: getTodayDate(),
+            },
+            { where: { login: req.body.login } },
+          ).then(() => {
+            res
+              .status(400)
+              .json({ error: 'Auth failed. The password is incorrect.' });
           });
         }
-        res
-          .status(400)
-          .json({ error: 'Auth failed. The password is incorrect.' });
-
-        User.update(
-          {
-            last_failed_logged: today,
-          },
-          { where: { login: req.body.login } },
-        ).then(() => {});
       } else {
         res.status(400).json({ error: 'Auth failed. User does not exist' });
       }
     })
     .catch(err => {
-      res.status(400).json({ error: err });
+      /* just ignore */
     });
 };
 
-// Find a User by Login for Register Action
-exports.findByLogin = (req, res) => {
+// Update the Last Successful Logged date
+exports.logout = (req, res) => {
+  const id = req.params.userId;
   User.findOne({
     where: {
-      login: req.params.userLogin,
+      id,
+    },
+  }).then(isUser => {
+    if (isUser) {
+      User.update(
+        {
+          last_successful_logged: isUser.last_present_logged,
+        },
+        { where: { id } },
+      )
+        .then(() => {
+          res.status(200).json({
+            message: 'Logout successful',
+          });
+        })
+        .catch(err => {
+          /* just ignore */
+        });
+    }
+  });
+};
+
+// Check if the User's Login already exists
+exports.isLogin = (req, res) => {
+  const login = req.params.userLogin;
+  User.findOne({
+    where: {
+      login,
     },
   })
-    .then(login => {
-      if (login) {
-        res.status(200).json({ user_exist: true });
+    .then(isLogin => {
+      if (isLogin) {
+        res.status(200).json({ isLogin: true });
       } else {
-        res.status(400).json({ user_exist: false });
+        res.status(400).json({ isLogin: false });
       }
     })
     .catch(err => {
-      res.status(400).json({ error: err });
+      /* just ignore */
     });
 };
 
-// Find a User by Id Action
-exports.findById = (req, res) => {
+// Check if the User's Email already exists
+exports.isEmail = (req, res) => {
+  const email = req.params.userEmail;
   User.findOne({
     where: {
-      id: req.params.userId,
+      email,
+    },
+  })
+    .then(isEmail => {
+      if (isEmail) {
+        res.status(200).json({ isEmail: true });
+      } else {
+        res.status(400).json({ isEmail: false });
+      }
+    })
+    .catch(err => {
+      /* just ignore */
+    });
+};
+
+// Return basic User's Data
+exports.getUserdata = (req, res) => {
+  const id = req.params.userId;
+  User.findOne({
+    where: {
+      id,
     },
   })
     .then(user => {
@@ -144,33 +242,12 @@ exports.findById = (req, res) => {
       }
     })
     .catch(err => {
-      res.status(400).json({ error: err });
+      /* just ignore */
     });
 };
 
-// Update Last Logged after Logout by Id Action
-exports.updateLastLoggedDate = (req, res) => {
-  const id = req.params.userId;
-  User.findOne({
-    where: {
-      id,
-    },
-  }).then(user => {
-    if (user) {
-      User.update(
-        {
-          last_successful_logged: user.last_present_logged,
-        },
-        { where: { id } },
-      ).then(() => {
-        res.status(200).send('logged successful');
-      });
-    }
-  });
-};
-
-// Update a User
-exports.update = (req, res) => {
+// Update basic User's Data
+exports.setUserdata = (req, res) => {
   const id = req.params.userId;
   User.update(
     {
@@ -180,28 +257,12 @@ exports.update = (req, res) => {
       surname: req.body.surname,
       address: req.body.address,
     },
-    { where: { id: req.params.userId } },
-  ).then(() => {
-    res.status(200).send(`updated successfully a customer with id = ${id}`);
-  });
+    { where: { id } },
+  )
+    .then(() => {
+      res.status(200).json({ update: true });
+    })
+    .catch(err => {
+      /* just ignore */
+    });
 };
-
-// Delete a User by Id
-exports.delete = (req, res) => {
-  const login = req.params.userLogin;
-  User.destroy({
-    where: { login: req.body.login },
-  }).then(() => {
-    res
-      .status(200)
-      .send(`deleted successfully a customer with login = ${login}`);
-  });
-};
-
-// // Display all Users
-// exports.findAll = (req, res) => {
-//   User.findAll().then(users => {
-//     // Send all customers to Client
-//     res.send(users);
-//   });
-// };

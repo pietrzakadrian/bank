@@ -16,7 +16,7 @@ export default function withAuth(AuthComponent) {
         this.props.history.replace('/login');
       } else {
         try {
-          const userData = Auth.getUserdata();
+          const userData = Auth.getUserId();
           this.setState({
             user: userData,
           });

@@ -30,7 +30,7 @@ class GreetingHeadline extends Component {
   }
 
   componentDidMount() {
-    this.Auth.greetingHeadline(this.props.id)
+    this.Auth.getUserdata(this.props.id)
       .then(res => {
         if (res) {
           this.setState({

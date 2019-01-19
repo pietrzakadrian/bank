@@ -151,12 +151,12 @@ class Header extends Component {
       this.props.history.replace('/login');
     } else {
       try {
-        const userData = Auth.getUserdata();
+        const userData = Auth.getUserId();
         this.setState({
           user_id: userData.id,
         });
       } catch (err) {
-        Auth.logout();
+        localStorage.removeItem('id_token');
         this.props.history.replace('/login');
       }
     }
@@ -171,13 +171,12 @@ class Header extends Component {
   };
 
   handleLogout() {
-    this.Auth.updateLastSuccessfulLoggedDate(this.state.user_id)
+    this.Auth.logout(this.state.user_id)
       .then(res => {
-        Auth.logout();
         this.props.history.replace('/login');
       })
       .catch(err => {
-        console.log(err);
+        /* just ignore */
       });
   }
 

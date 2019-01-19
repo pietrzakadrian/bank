@@ -5,12 +5,27 @@ export default class AuthService {
     this.domain = domain || 'http://localhost:3000/api';
     this.fetch = this.fetch.bind(this);
     this.login = this.login.bind(this);
-    this.getUserdata = this.getUserdata.bind(this);
+    this.register = this.register.bind(this);
   }
 
   // Check Login Exist Action
-  checkLoginExist(id) {
-    return this.fetch(`${this.domain}/users/${id}`, {
+  isLogin(id) {
+    return this.fetch(`${this.domain}/users/isLogin/${id}`, {
+      method: 'GET',
+    })
+      .then(res => {
+        if (res) {
+          return 1;
+        }
+      })
+      .catch(err => {
+        /* just ignore */
+      });
+  }
+
+  // Check Email Exist Action
+  isEmail(email) {
+    return this.fetch(`${this.domain}/users/isEmail/${email}`, {
       method: 'GET',
     })
       .then(res => {
@@ -65,27 +80,25 @@ export default class AuthService {
       });
   }
 
-  updateLastSuccessfulLoggedDate(id) {
+  // Logout Action
+  logout(id) {
     return this.fetch(`${this.domain}/users/logout/${id}`, {
       method: 'PUT',
     })
       .then(res => {
         if (!res.error) {
+          localStorage.removeItem('id_token');
           return 1;
         }
       })
       .catch(err => {
-        /* just ignore */
+        localStorage.removeItem('id_token');
       });
   }
 
-  logout() {
-    localStorage.removeItem('id_token');
-  }
-
-  // AvailableFunds Action
-  availableFunds(id) {
-    return this.fetch(`${this.domain}/bills/${id}`, {
+  // GreetingHeadline Action
+  getUserdata(id) {
+    return this.fetch(`${this.domain}/users/${id}`, {
       method: 'GET',
     })
       .then(res => {
@@ -98,9 +111,9 @@ export default class AuthService {
       });
   }
 
-  // GreetingHeadline Action
-  greetingHeadline(id) {
-    return this.fetch(`${this.domain}/user/${id}`, {
+  // AvailableFunds Action
+  availableFunds(id) {
+    return this.fetch(`${this.domain}/bills/${id}`, {
       method: 'GET',
     })
       .then(res => {
@@ -199,7 +212,7 @@ export default class AuthService {
     return localStorage.getItem('id_token');
   }
 
-  getUserdata() {
+  getUserId() {
     return decode(this.getToken());
   }
 

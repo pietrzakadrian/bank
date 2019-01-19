@@ -20,6 +20,11 @@ module.exports = (sequelize, Sequelize) => {
       account_balance_history: {
         type: Sequelize.TEXT,
         allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: 'The id_owner is required.',
+          },
+        },
       },
     },
     {

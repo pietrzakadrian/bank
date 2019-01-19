@@ -2,27 +2,24 @@ module.exports = function(app) {
   const users = require('../controllers/user.controller.js');
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
 
-  // Create a new User
-  app.post('/api/users/register', users.create);
+  // Register Action
+  app.post('/api/users/register', users.register);
 
-  // Login User
+  // Login Action
   app.post('/api/users/login', users.login);
 
-  // GreetingHeadline User
-  app.get('/api/user/:userId', checkAuth, users.findById);
-
   // Update Last Logged Data
-  app.put('/api/users/logout/:userId', checkAuth, users.updateLastLoggedDate);
+  app.put('/api/users/logout/:userId', checkAuth, users.logout);
 
-  // Retrieve a single User by Login
-  app.get('/api/users/:userLogin', users.findByLogin);
+  // Check Login User Exist
+  app.get('/api/users/isLogin/:userLogin', users.isLogin);
 
-  // Update a User with Id
-  app.put('/api/users/:userId', users.update);
+  // Check Email User Exist
+  app.get('/api/users/isEmail/:userEmail', users.isEmail);
 
-  // Delete a User with Id
-  app.delete('/api/users/:userLogin', users.delete);
+  // Return basic User's Data
+  app.get('/api/users/:userId', checkAuth, users.getUserdata);
 
-  // // Retrieve all User
-  // app.get('/api/users', users.findAll);
+  // Update basic User's Data
+  app.put('/api/users/:userId', checkAuth, users.setUserdata);
 };

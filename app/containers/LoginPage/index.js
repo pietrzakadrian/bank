@@ -182,7 +182,7 @@ class LoginPage extends Component {
   handleFormSubmitLogin(e) {
     e.preventDefault();
 
-    this.Auth.checkLoginExist(this.state.login)
+    this.Auth.isLogin(this.state.login)
       .then(res => {
         if (res) {
           this.setState({
