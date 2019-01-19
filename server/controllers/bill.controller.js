@@ -4,8 +4,9 @@ const Additional = db.additionals;
 
 // Find a Customer by Id
 exports.getUserdata = (req, res) => {
+  const id_owner = req.params.userId;
   Bill.findAll({
-    where: { id_owner: req.params.userId },
+    where: { id_owner },
     attributes: ['account_bill', 'available_funds'],
     include: [
       {

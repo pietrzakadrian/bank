@@ -51,8 +51,6 @@ exports.register = (req, res) => {
       bcrypt.hash(req.body.password, 10, (err, hash) => {
         req.body.password = hash;
 
-        console.log(getAccountBill());
-
         User.create({
           login: req.body.login,
           password: req.body.password,

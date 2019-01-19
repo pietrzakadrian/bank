@@ -61,7 +61,9 @@ exports.create = (req, res) => {
       amount_money: amountMoney,
       transfer_title: transferTitle,
     }).then(() => {
-      console.log('utworzono historie');
+      // zaaktualizuj widget
+      setWidgetStatus(senderId);
+      setWidgetStatus(recipientId);
     });
   }
 
@@ -148,10 +150,6 @@ exports.create = (req, res) => {
               amountMoney,
               transferTitle,
             );
-
-            // zaaktualizuj widget
-            setWidgetStatus(senderId);
-            setWidgetStatus(recipientId);
             return res.status(200).json({ message: 'Payment ok' });
           }
           return res
