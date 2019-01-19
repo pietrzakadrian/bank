@@ -201,7 +201,7 @@ class RegisterPage extends Component {
 
   getStepContent = step => {
     const { classes } = this.props;
-    const { emailError, loginError, error } = this.state;
+    const { error } = this.state;
     switch (step) {
       case 0:
         return (
@@ -277,7 +277,7 @@ class RegisterPage extends Component {
             <div className={classes.textField}>Adres E-Mail</div>
             <input
               className={classNames(classes.formItem, {
-                [classes.formError]: emailError,
+                [classes.formError]: error,
               })}
               placeholder="Wpisz adres E-Mail"
               name="email"
