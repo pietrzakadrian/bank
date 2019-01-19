@@ -12,6 +12,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { withSnackbar } from 'notistack';
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
 
@@ -64,7 +65,7 @@ class PaymentPage extends Component {
     });
   }
 
-  handleFormSubmit(e) {
+  handleFormSubmit = variant => e => {
     e.preventDefault();
 
     this.Auth.makePayment(
@@ -75,6 +76,9 @@ class PaymentPage extends Component {
     )
       .then(res => {
         if (res) {
+          this.props.enqueueSnackbar('Przelew został wykonany.', {
+            variant,
+          });
           this.props.history.replace('/dashboard');
         } else {
           this.setState({
@@ -87,7 +91,7 @@ class PaymentPage extends Component {
           error: 'Error catch',
         });
       });
-  }
+  };
 
   render() {
     const { classes } = this.props;
@@ -96,7 +100,7 @@ class PaymentPage extends Component {
       <Fragment>
         <Helmet title="Payment · Bank Application" />
         <div className={classes.center}>
-          <form noValidate onSubmit={this.handleFormSubmit}>
+          <form noValidate onSubmit={this.handleFormSubmit('success')}>
             <input
               className="form-item"
               placeholder="account_bill..."
@@ -132,6 +136,7 @@ class PaymentPage extends Component {
 
 PaymentPage.propTypes = {
   classes: PropTypes.object,
+  enqueueSnackbar: PropTypes.func.isRequired,
 };
 
-export default withAuth(withStyles(styles)(PaymentPage));
+export default withAuth(withStyles(styles)(withSnackbar(PaymentPage)));

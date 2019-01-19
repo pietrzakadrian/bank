@@ -20,7 +20,7 @@ const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    // boxShadow: '4px 0px 8px -3px rgba(17, 17, 17, .06)',
+    boxShadow: '4px 0px 8px -3px rgba(17, 17, 17, .06)',
   },
   drawerHeader: {
     display: 'flex',
