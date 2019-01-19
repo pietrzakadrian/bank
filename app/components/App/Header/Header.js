@@ -156,7 +156,7 @@ class Header extends Component {
           user_id: userData.id,
         });
       } catch (err) {
-        localStorage.removeItem('id_token');
+        Auth.unsetToken();
         this.props.history.replace('/login');
       }
     }
@@ -173,10 +173,12 @@ class Header extends Component {
   handleLogout() {
     this.Auth.logout(this.state.user_id)
       .then(res => {
+        Auth.unsetToken();
         this.props.history.replace('/login');
       })
       .catch(err => {
-        /* just ignore */
+        Auth.unsetToken();
+        this.props.history.replace('/login');
       });
   }
 

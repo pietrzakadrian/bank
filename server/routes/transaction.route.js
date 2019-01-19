@@ -2,27 +2,18 @@ module.exports = function(app) {
   const transactions = require('../controllers/transaction.controller.js');
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
 
-  // Create a new User
-  app.post('/api/transactions', checkAuth, transactions.makePayment);
-
-  // Retrieve all User
-  app.get('/api/transactions', checkAuth, transactions.findAll);
+  // Create a new Transactions
+  app.post('/api/transactions', checkAuth, transactions.create);
 
   app.get(
-    '/api/transactions/recipient/:transactionRecipientId',
+    '/api/transactions/recipient/:recipientId',
     checkAuth,
-    transactions.findAllByIdRecipient,
+    transactions.getRecipientdata,
   );
 
   app.get(
-    '/api/transactions/sender/:transactionSenderId',
+    '/api/transactions/sender/:senderId',
     checkAuth,
-    transactions.findAllByIdSender,
+    transactions.getSenderdata,
   );
-
-  // Update a User with Id
-  app.put('/api/transactions/:transactionId', transactions.update);
-
-  // Delete a User with Id
-  app.post('/api/transactions/new/', transactions.create);
 };

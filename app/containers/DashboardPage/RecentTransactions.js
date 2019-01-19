@@ -49,7 +49,7 @@ const styles = theme => ({
 });
 
 const sortingData = data =>
-  data.sort((a, b) => Date.parse(b.data_time) - Date.parse(a.data_time));
+  data.sort((a, b) => Date.parse(b.date_time) - Date.parse(a.date_time));
 
 class RecentTransactions extends Component {
   constructor() {
@@ -135,7 +135,7 @@ class RecentTransactions extends Component {
                           {row.transfer_title}
                         </TableCell>
                         <TableCell className={classes.tableCell} numeric>
-                          {moment(row.data_time).format('DD.MM.YYYY')}
+                          {moment(row.date_time).format('DD.MM.YYYY')}
                           <br />
                           <span className={classes.outgoingTransfer}>
                             -{row.amount_money} PLN
@@ -154,7 +154,7 @@ class RecentTransactions extends Component {
                           {row.transfer_title}
                         </TableCell>
                         <TableCell className={classes.tableCell} numeric>
-                          {moment(row.data_time).format('DD.MM.YYYY')}
+                          {moment(row.date_time).format('DD.MM.YYYY')}
                           <br />
                           {row.amount_money} PLN
                         </TableCell>

@@ -92,7 +92,7 @@ export default class AuthService {
         }
       })
       .catch(err => {
-        localStorage.removeItem('id_token');
+        /* just ignore */
       });
   }
 
@@ -205,6 +205,11 @@ export default class AuthService {
   setToken(idToken) {
     // Saves user token to localStorage
     localStorage.setItem('id_token', idToken);
+  }
+
+  unsetToken() {
+    // Delete the user token from localStorage
+    return localStorage.removeItem('id_token');
   }
 
   getToken() {

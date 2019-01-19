@@ -27,12 +27,12 @@ module.exports = (sequelize, Sequelize) => {
           },
         },
       },
-      data_time: {
+      date_time: {
         type: Sequelize.DATE,
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: 'The data_time is required.',
+            msg: 'The date_time is required.',
           },
         },
       },
