@@ -117,7 +117,11 @@ class AccountBills extends Component {
                     </TableCell>
                     <TableCell className={classes.tableCell} numeric>
                       <span className={classes.availabeFundsContainer}>
-                        {accountBill.available_funds}
+                        {accountBill.available_funds
+                          .toFixed(2)
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                          .replace('.', ',')}
                       </span>{' '}
                       PLN
                     </TableCell>

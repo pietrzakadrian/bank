@@ -13,25 +13,21 @@ exports.register = (req, res) => {
     return availableFunds;
   }
 
-  function getAccountBill() {
+  async function getAccountBill() {
     const accountBill = `2222${Math.floor(
       Math.random() * 90000000000000000000,
     ) + 10000000000000000000}`;
 
-    Bill.findOne({
-      where: {
-        account_bill: accountBill,
-      },
-    })
-      .then(isAccountBill => {
-        if (isAccountBill) {
-          getAccountBill();
-        }
-        return accountBill;
-      })
-      .catch(err => {
-        /* just ignore */
+    try {
+      const isAccountBill = await Bill.findOne({
+        where: {
+          account_bill: accountBill,
+        },
       });
+      return isAccountBill ? await getAccountBill() : accountBill;
+    } catch (e) {
+      /* just ignore */
+    }
   }
 
   function getAccountBalanceHistory() {
@@ -48,44 +44,31 @@ exports.register = (req, res) => {
     where: { login: req.body.login },
   }).then(isUser => {
     if (!isUser) {
-      bcrypt.hash(req.body.password, 10, (err, hash) => {
+      bcrypt.hash(req.body.password, 10, async (err, hash) => {
         req.body.password = hash;
 
-        User.create({
-          login: req.body.login,
-          password: req.body.password,
-          name: req.body.name,
-          surname: req.body.surname,
-          email: req.body.email,
-          date_registration: getTodayDate(),
-        })
-          .then(user =>
-            Bill.create({
-              id_owner: user.id,
-              account_bill: `2222${Math.floor(
-                Math.random() * 90000000000000000000,
-              ) + 10000000000000000000}`,
-              available_funds: getAvailableFunds(),
-            })
-              .then(bill => {
-                Additional.create({
-                  id_owner: user.id,
-                  account_balance_history: getAccountBalanceHistory(),
-                })
-                  .then(() => {
-                    res.status(200).json({ register: true });
-                  })
-                  .catch(err => {
-                    res.status(400).json({ error: err });
-                  });
-              })
-              .catch(err => {
-                res.status(400).json({ error: err });
-              }),
-          )
-          .catch(err => {
-            res.status(400).json({ error: err });
+        try {
+          const user = await User.create({
+            login: req.body.login,
+            password: req.body.password,
+            name: req.body.name,
+            surname: req.body.surname,
+            email: req.body.email,
+            date_registration: getTodayDate(),
           });
+          const bill = await Bill.create({
+            id_owner: user.id,
+            account_bill: await getAccountBill(),
+            available_funds: getAvailableFunds(),
+          });
+          await Additional.create({
+            id_owner: bill.id,
+            account_balance_history: getAccountBalanceHistory(),
+          });
+          res.status(200).json({ register: true });
+        } catch (e) {
+          res.status(400).json({ error: 'invalid email' });
+        }
       });
     } else {
       res.status(400).json({ error: 'User already exists.' });
@@ -227,15 +210,18 @@ exports.getUserdata = (req, res) => {
     where: {
       id,
     },
+    attributes: [
+      'name',
+      'surname',
+      'last_successful_logged',
+      'last_failed_logged',
+      'last_present_logged',
+    ],
   })
     .then(user => {
       if (user) {
         res.status(200).json({
-          name: user.name,
-          surname: user.surname,
-          last_successful_logged: user.last_successful_logged,
-          last_failed_logged: user.last_failed_logged,
-          last_present_logged: user.last_present_logged,
+          user,
         });
       }
     })

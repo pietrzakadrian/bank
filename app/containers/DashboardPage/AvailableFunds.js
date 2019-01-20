@@ -59,11 +59,16 @@ class AvailableFunds extends Component {
     this.Auth.availableFunds(this.props.id)
       .then(res => {
         if (res) {
-          const amount = res.reduce(
-            (accumulator, currentValue) =>
-              accumulator + currentValue.available_funds,
-            0,
-          );
+          const amount = res
+            .reduce(
+              (accumulator, currentValue) =>
+                accumulator + currentValue.available_funds,
+              0,
+            )
+            .toFixed(2)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+            .replace('.', ',');
 
           this.setState({
             isLoading: true,
@@ -80,7 +85,6 @@ class AvailableFunds extends Component {
   render() {
     const { classes } = this.props;
     const { isLoading, availableFunds, accountBalanceHistory } = this.state;
-
     const accountBalanceHistoryArray = JSON.parse(`[${accountBalanceHistory}]`);
 
     return (

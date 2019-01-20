@@ -34,10 +34,10 @@ class GreetingHeadline extends Component {
       .then(res => {
         if (res) {
           this.setState({
-            name: res.name,
-            surname: res.surname,
-            last_present_logged: res.last_present_logged,
-            last_successful_logged: res.last_successful_logged,
+            name: res.user.name,
+            surname: res.user.surname,
+            last_present_logged: res.user.last_present_logged,
+            last_successful_logged: res.user.last_successful_logged,
             isLoading: true,
           });
         }

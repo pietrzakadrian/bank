@@ -3,6 +3,7 @@ const Op = db.Sequelize.Op;
 const Transaction = db.transactions;
 const Bill = db.bills;
 const Additional = db.additionals;
+const User = db.users;
 
 exports.create = (req, res) => {
   function getTodayDate() {
@@ -23,7 +24,6 @@ exports.create = (req, res) => {
     recipientAvailableFunds,
     amountMoney,
   ) {
-    // zaaktualizuj dostępne środki nadawcy przelewu (-)
     Bill.update(
       {
         available_funds: (
@@ -31,11 +31,8 @@ exports.create = (req, res) => {
         ).toFixed(2),
       },
       { where: { id_owner: senderId } },
-    ).then(() => {
-      console.log('odebrano środki nadawcy');
-    });
+    );
 
-    // zaaktualizuj dostępne środki odbiorcy przelewu (+)
     Bill.update(
       {
         available_funds: (
@@ -43,9 +40,7 @@ exports.create = (req, res) => {
         ).toFixed(2),
       },
       { where: { id_owner: recipientId } },
-    ).then(() => {
-      console.log('dodano środki nadawcy');
-    });
+    );
   }
 
   function setTransferHistory(
@@ -54,16 +49,12 @@ exports.create = (req, res) => {
     amountMoney,
     transferTitle,
   ) {
-    Transaction.create({
+    return Transaction.create({
       id_sender: senderId,
       id_recipient: recipientId,
       date_time: getTodayDate(),
       amount_money: amountMoney,
       transfer_title: transferTitle,
-    }).then(() => {
-      // zaaktualizuj widget
-      setWidgetStatus(senderId);
-      setWidgetStatus(recipientId);
     });
   }
 
@@ -103,28 +94,24 @@ exports.create = (req, res) => {
             account_balance_history: accountBalanceHistory,
           },
           { where: { id_owner: userId } },
-        ).then(() => {
-          console.log('historia została zaaktualizowana dla sender');
-        });
+        );
       }
     });
   }
 
-  // sprawdź, czy istnieje numer konta, na który ma dojść przelew
   Bill.findOne({
     where: {
       account_bill: req.body.account_bill,
     },
   }).then(isAccountBill => {
     const recipientId = isAccountBill.id_owner;
-    // jeśli istnieje taki numer konta i czy nie wysylasz do siebie przelewu, to daj mi ID właściela-odbiorcy przelewu
+
     if (isAccountBill && recipientId !== req.body.id_sender) {
       const senderId = req.body.id_sender;
       const recipientAvailableFunds = isAccountBill.available_funds;
       const amountMoney = req.body.amount_money;
       const transferTitle = req.body.transfer_title;
 
-      // sprawdź czy nadawca posiada wystarczającą ilość gotówki, aby zrealizować przelew
       Bill.findOne({
         where: {
           id_owner: senderId,
@@ -134,7 +121,6 @@ exports.create = (req, res) => {
           const senderAvailableFunds = isAvailableFunds.available_funds;
 
           if (senderAvailableFunds >= amountMoney && amountMoney > 0) {
-            // zaaktualizuj dostępne środki
             setAvailableFunds(
               senderId,
               recipientId,
@@ -143,13 +129,16 @@ exports.create = (req, res) => {
               amountMoney,
             );
 
-            // zaaktualizuj historię płatności
             setTransferHistory(
               senderId,
               recipientId,
               amountMoney,
               transferTitle,
-            );
+            ).then(() => {
+              setWidgetStatus(senderId);
+              setWidgetStatus(recipientId);
+            });
+
             return res.status(200).json({ message: 'Payment ok' });
           }
           return res
@@ -168,6 +157,13 @@ exports.getRecipientdata = (req, res) => {
     where: {
       id_recipient: userId,
     },
+    attributes: [
+      'amount_money',
+      'date_time',
+      'transfer_title',
+      'id_recipient',
+      'id_sender',
+    ],
   }).then(transactions => {
     res.send(transactions);
   });
@@ -179,6 +175,13 @@ exports.getSenderdata = (req, res) => {
     where: {
       id_sender: userId,
     },
+    attributes: [
+      'amount_money',
+      'date_time',
+      'transfer_title',
+      'id_recipient',
+      'id_sender',
+    ],
   }).then(transactions => {
     res.send(transactions);
   });

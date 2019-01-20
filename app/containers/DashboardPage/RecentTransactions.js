@@ -66,7 +66,6 @@ class RecentTransactions extends Component {
   // test
   componentDidMount() {
     // ! TODO: add i18n http://momentjs.com/docs/#/i18n/
-    // TODO: check sortingData
     this.Auth.recentTransactionsRecipient(this.props.id)
       .then(res => {
         if (res) {
@@ -138,7 +137,13 @@ class RecentTransactions extends Component {
                           {moment(row.date_time).format('DD.MM.YYYY')}
                           <br />
                           <span className={classes.outgoingTransfer}>
-                            -{row.amount_money} PLN
+                            -
+                            {row.amount_money
+                              .toFixed(2)
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                              .replace('.', ',')}{' '}
+                            PLN
                           </span>
                         </TableCell>
                       </Fragment>
@@ -156,7 +161,12 @@ class RecentTransactions extends Component {
                         <TableCell className={classes.tableCell} numeric>
                           {moment(row.date_time).format('DD.MM.YYYY')}
                           <br />
-                          {row.amount_money} PLN
+                          {row.amount_money
+                            .toFixed(2)
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                            .replace('.', ',')}{' '}
+                          PLN
                         </TableCell>
                       </Fragment>
                     )}
