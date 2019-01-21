@@ -72,7 +72,8 @@ class AvailableFunds extends Component {
 
           this.setState({
             isLoading: true,
-            accountBalanceHistory: res[0].additional.account_balance_history,
+            accountBalanceHistory:
+              res[0].additionals[0].account_balance_history,
             availableFunds: amount,
           });
         }

@@ -53,35 +53,39 @@ db.transactions = require('../models/transaction.model.js')(
 );
 db.additionals = require('../models/additional.model.js')(sequelize, Sequelize);
 
-db.bills.belongsTo(db.users, {
+// Associations
+// Bill
+db.users.hasMany(db.bills, { foreignKey: 'id_owner', sourceKey: 'id' });
+db.bills.belongsTo(db.users, { foreignKey: 'id_owner', targetKey: 'id' });
+
+// Additional
+db.bills.hasMany(db.additionals, {
   foreignKey: 'id_owner',
-  targetKey: 'id',
+  sourceKey: 'id_owner',
 });
-db.users.hasOne(db.bills, { foreignKey: 'id_owner', targetKey: 'id' });
-
-db.transactions.belongsTo(db.users, {
-  foreignKey: 'id_sender',
-  targetKey: 'id',
-});
-db.users.hasOne(db.transactions, { foreignKey: 'id_sender', targetKey: 'id' });
-
-db.transactions.belongsTo(db.users, {
-  foreignKey: 'id_recipient',
-  targetKey: 'id',
-});
-db.users.hasOne(db.transactions, {
-  foreignKey: 'id_recipient',
-  targetKey: 'id',
-});
-
-// todo: relation with id, not id_owner
 db.additionals.belongsTo(db.bills, {
   foreignKey: 'id_owner',
   targetKey: 'id_owner',
 });
-db.bills.hasOne(db.additionals, {
-  foreignKey: 'id_owner',
-  targetKey: 'id_owner',
+
+// Transaction
+db.users.hasMany(db.transactions, {
+  foreignKey: 'id_sender',
+  sourceKey: 'id',
+});
+db.transactions.belongsTo(db.users, {
+  as: 'getSenderdata',
+  foreignKey: 'id_sender',
+  targetKey: 'id',
+});
+db.users.hasMany(db.transactions, {
+  foreignKey: 'id_recipient',
+  sourceKey: 'id',
+});
+db.transactions.belongsTo(db.users, {
+  as: 'getRecipientdata',
+  foreignKey: 'id_recipient',
+  targetKey: 'id',
 });
 
 module.exports = db;

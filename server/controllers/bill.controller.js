@@ -6,20 +6,23 @@ const Additional = db.additionals;
 exports.getUserdata = (req, res) => {
   const id_owner = req.params.userId;
   Bill.findAll({
-    where: { id_owner },
-    attributes: ['account_bill', 'available_funds'],
     include: [
       {
         model: Additional,
-        where: { id_owner: db.Sequelize.col('bill.id_owner') },
+        where: {
+          id_owner: db.Sequelize.col('bill.id_owner'),
+        },
         attributes: ['account_balance_history'],
       },
     ],
+    where: { id_owner },
+    attributes: ['account_bill', 'available_funds'],
   })
     .then(bill => {
       res.send(bill);
     })
     .catch(err => {
-      /* just ignore */
+      res.send(err);
+      console.log(err);
     });
 };

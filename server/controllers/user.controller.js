@@ -62,12 +62,12 @@ exports.register = (req, res) => {
             available_funds: getAvailableFunds(),
           });
           await Additional.create({
-            id_owner: bill.id,
+            id_owner: bill.id_owner,
             account_balance_history: getAccountBalanceHistory(),
           });
           res.status(200).json({ register: true });
         } catch (e) {
-          res.status(400).json({ error: 'invalid email' });
+          res.status(400).json({ error: 'Invalid E-Mail' });
         }
       });
     } else {

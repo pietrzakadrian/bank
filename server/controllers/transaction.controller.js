@@ -151,72 +151,6 @@ exports.create = (req, res) => {
   });
 };
 
-// exports.getRecipientdata = (req, res) => {
-//   const userId = req.params.recipientId;
-//   Transaction.findAll({
-//     where: {
-//       id_recipient: userId,
-//     },
-//   }).then(() => {
-//     Transaction.findAll({
-//       where: { id_sender: userId },
-//       attributes: [
-//         'amount_money',
-//         'date_time',
-//         'transfer_title',
-//         'id_recipient',
-//         'id_sender',
-//       ],
-//       include: [
-//         {
-//           model: User,
-//           where: { id: db.Sequelize.col('user.id') },
-//           attributes: ['name', 'surname'],
-//         },
-//       ],
-//     })
-//       .then(transactionsWithName => {
-//         res.send(transactionsWithName);
-//       })
-//       .catch(err => {
-//         console.log(err);
-//       });
-//   });
-// };
-
-// exports.getSenderdata = (req, res) => {
-//   const userId = req.params.senderId;
-//   Transaction.findAll({
-//     where: {
-//       id_sender: userId,
-//     },
-//   }).then(sender => {
-//     Transaction.findAll({
-//       where: { id_recipient: db.Sequelize.col('user.id') },
-//       attributes: [
-//         'amount_money',
-//         'date_time',
-//         'transfer_title',
-//         'id_recipient',
-//         'id_sender',
-//       ],
-//       include: [
-//         {
-//           model: User,
-//           where: { id: db.Sequelize.col('user.id') },
-//           attributes: ['name', 'surname'],
-//         },
-//       ],
-//     })
-//       .then(transactionsWithName => {
-//         res.send(transactionsWithName);
-//       })
-//       .catch(err => {
-//         console.log(err);
-//       });
-//   });
-// };
-
 exports.getRecipientdata = (req, res) => {
   const userId = req.params.recipientId;
   Transaction.findAll({
@@ -226,16 +160,16 @@ exports.getRecipientdata = (req, res) => {
     attributes: [
       'amount_money',
       'date_time',
-      'transfer_title',
       'id_recipient',
       'id_sender',
+      'transfer_title',
     ],
     include: [
       {
         model: User,
-        as: 'user2',
-        where: { id: db.Sequelize.col('user2.id') },
-        attributes: ['id', 'name', 'surname'],
+        as: 'getSenderdata',
+        where: { id: db.Sequelize.col('transaction.id_sender') },
+        attributes: ['name', 'surname'],
       },
     ],
   }).then(transactions => {
@@ -252,16 +186,16 @@ exports.getSenderdata = (req, res) => {
     attributes: [
       'amount_money',
       'date_time',
-      'transfer_title',
       'id_recipient',
       'id_sender',
+      'transfer_title',
     ],
     include: [
       {
         model: User,
-        as: 'user3',
-        where: { id: db.Sequelize.col('user3.id') },
-        attributes: ['id', 'name', 'surname'],
+        as: 'getRecipientdata',
+        where: { id: db.Sequelize.col('transaction.id_sender') },
+        attributes: ['name', 'surname'],
       },
     ],
   }).then(transactions => {
