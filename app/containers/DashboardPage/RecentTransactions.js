@@ -129,7 +129,7 @@ class RecentTransactions extends Component {
                           component="th"
                           scope="row"
                         >
-                          Dla {row.getRecipientdata.name} {row.getRecipientdata.surname}
+                          Do {row.getRecipientdata.name} {row.getRecipientdata.surname}
                           <br />
                           {row.transfer_title}
                         </TableCell>

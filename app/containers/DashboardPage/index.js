@@ -46,12 +46,14 @@ const styles = theme => ({
     margin: '-12px auto',
   },
   container: {
+    position: 'relative',
     margin: '10px auto',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
     },
     [theme.breakpoints.up('sm')]: {
-      width: 1100,
+      maxWidth: 1100,
+      width: 'calc(100% - 70px)',
     },
   },
   informationHeader: {
@@ -118,7 +120,6 @@ class DashboardPage extends Component {
             breakpoints={{ lg: 1100, md: 996, sm: 768, xs: 480, xxs: 0 }}
             cols={{ lg: 3, md: 3, sm: 2, xs: 1, xxs: 1 }}
             rowHeight={9}
-            width={1100}
             margin={[20, 10]}
             isResizable={false}
             isDraggable={window.matchMedia('(min-width: 480px)').matches}
@@ -200,34 +201,6 @@ class DashboardPage extends Component {
               <BankCredits />
             </div>
           </ResponsiveGridLayout>
-
-          {/* <Grid container spacing={24} className={classes.grid}>
-            <Grid item xs={4}>
-              <AvailableFunds id={this.props.user.id} />
-            </Grid>
-            <Grid item xs={4}>
-              <BankInformation />
-            </Grid>
-            <Grid item xs={4}>
-              <BankInformation />
-            </Grid>
-            <Grid item xs={8}>
-              <AccountBills id={this.props.user.id} />
-            </Grid>
-            <Grid item xs={4}>
-              <RecentTransactions id={this.props.user.id} />
-            </Grid> */}
-
-          {/* <Grid item xs={4}>
-              <AccountBills />
-            </Grid>
-            <Grid item xs={4}>
-              <AccountBills />
-            </Grid>
-            <Grid item xs={4}>
-              <AccountBills />
-            </Grid> */}
-          {/* </Grid> */}
         </div>
         <Copyright />
       </Fragment>

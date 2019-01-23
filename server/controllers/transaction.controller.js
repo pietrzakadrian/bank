@@ -152,10 +152,10 @@ exports.create = (req, res) => {
 };
 
 exports.getRecipientdata = (req, res) => {
-  const userId = req.params.recipientId;
+  const id_recipient = req.params.recipientId;
   Transaction.findAll({
     where: {
-      id_recipient: userId,
+      id_recipient,
     },
     attributes: [
       'amount_money',
@@ -178,10 +178,10 @@ exports.getRecipientdata = (req, res) => {
 };
 
 exports.getSenderdata = (req, res) => {
-  const userId = req.params.senderId;
+  const id_sender = req.params.senderId;
   Transaction.findAll({
     where: {
-      id_sender: userId,
+      id_sender,
     },
     attributes: [
       'amount_money',

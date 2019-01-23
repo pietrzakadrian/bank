@@ -105,6 +105,10 @@ html {
     background-color: #0098db!important;
   }
 
+  [class*="SnackbarItem-root"] {
+    bottom: 0!important;
+  }
+
 `;
 
 export default GlobalStyle;

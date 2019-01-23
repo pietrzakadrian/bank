@@ -13,7 +13,6 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Hidden from '@material-ui/core/Hidden';
-
 // Import Services
 import { FormattedMessage } from 'react-intl';
 import Logo from '../../../images/logo.png';
@@ -142,7 +141,7 @@ class Header extends Component {
     this.state = {
       user_id: null,
       mobileOpen: false,
-      desktopOpen: true,
+      desktopOpen: false,
     };
   }
 
@@ -180,6 +179,12 @@ class Header extends Component {
         Auth.unsetToken();
         this.props.history.replace('/login');
       });
+  }
+
+  handleResize() {
+    const evt = window.document.createEvent('UIEvents');
+    evt.initUIEvent('resize', true, false, window, 0);
+    window.dispatchEvent(evt);
   }
 
   render() {

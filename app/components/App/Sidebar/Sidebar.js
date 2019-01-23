@@ -64,7 +64,6 @@ function Sidebar({ open, classes, variant, onClose, onMenuItemClicked }) {
         </div>
       </div>
       <Divider />
-      {/* // TODO: Sidebar off mobile when select navigation item */}
       <Navigation open={open} onMenuItemClicked={onMenuItemClicked} />
       <Footer />
     </Drawer>
