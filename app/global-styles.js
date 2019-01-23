@@ -105,8 +105,10 @@ html {
     background-color: #0098db!important;
   }
 
-  [class*="SnackbarItem-root"] {
-    bottom: 0!important;
+  @media screen and (max-width: 767px) {
+    [class*="SnackbarItem-root"] {
+      bottom: 0!important;
+    }
   }
 
 `;

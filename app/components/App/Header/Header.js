@@ -143,7 +143,7 @@ class Header extends Component {
     this.state = {
       user_id: null,
       mobileOpen: false,
-      desktopOpen: false,
+      desktopOpen: true,
     };
   }
 
