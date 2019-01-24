@@ -33,6 +33,15 @@ const styles = theme => ({
     bottom: 0,
     top: 0,
   },
+  widgetText: {
+    height: 193,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  typographyText: {
+    color: 'rgba(0, 0, 0, 0.34)',
+  },
 });
 
 function BankCredits({ classes }) {
@@ -46,7 +55,15 @@ function BankCredits({ classes }) {
         >
           <FormattedMessage {...messages.bankCredits} />
         </Typography>
-        <p>tekst</p>
+        <div className={classes.widgetText}>
+          <Typography
+            variant="body1"
+            component="h2"
+            className={classes.typographyText}
+          >
+            Funkcja Kredyty jest wyłączona.
+          </Typography>
+        </div>
       </CardContent>
     </Card>
   );
