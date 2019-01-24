@@ -263,7 +263,7 @@ class Header extends Component {
           <Hidden xsDown implementation="css">
             <Sidebar
               open={this.state.desktopOpen}
-              onMenuItemClicked={() => this.setState({ mobileOpen: false })}
+              onMenuItemClicked={() => this.setState({ desktopOpen: false })}
               variant="persistent"
               onClose={this.handleDrawerToggleDesktop}
             />
