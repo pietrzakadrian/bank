@@ -48,17 +48,17 @@ exports.create = (req, res) => {
     const authorizationKey = getAuthorizationKey();
     await nodemailer.createTestAccount();
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
+      host: env.nodemailer.host,
+      port: env.nodemailer.port,
       secure: false,
       auth: {
-        user: env.email.username,
-        pass: env.email.password,
+        user: env.nodemailer.username,
+        pass: env.nodemailer.password,
       },
     });
 
     const mailOptions = {
-      from: '"Bank Application" <contact.pietrzakadrian@gmail.com>',
+      from: `"Bank Application" <${env.nodemailer.email}>`,
       to: `${await getSenderEmail(senderId)}`,
       subject: 'Autoryzacja płatności',
       text: `Drogi kliencie! Zarejestrowaliśmy próbę wykonania płatności na kwotę: ${amountMoney
