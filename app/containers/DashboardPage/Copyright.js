@@ -11,7 +11,6 @@ const styles = {
     position: 'absolute',
     bottom: 5,
     right: 24,
-    marginBottom: -15,
   },
 };
 

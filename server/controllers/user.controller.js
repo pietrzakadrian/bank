@@ -139,7 +139,7 @@ exports.login = (req, res) => {
 // Update the Last Successful Logged date
 exports.logout = (req, res) => {
   const id = req.params.userId;
-  if (req.userData.id === id) {
+  if (req.userData.id == id) {
     User.findOne({
       where: {
         id,
