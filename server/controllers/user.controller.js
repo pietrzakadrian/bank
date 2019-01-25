@@ -139,28 +139,34 @@ exports.login = (req, res) => {
 // Update the Last Successful Logged date
 exports.logout = (req, res) => {
   const id = req.params.userId;
-  User.findOne({
-    where: {
-      id,
-    },
-  }).then(isUser => {
-    if (isUser) {
-      User.update(
-        {
-          last_successful_logged: isUser.last_present_logged,
-        },
-        { where: { id } },
-      )
-        .then(() => {
-          res.status(200).json({
-            message: 'Logout successful',
+  if (req.userData.id === id) {
+    User.findOne({
+      where: {
+        id,
+      },
+    }).then(isUser => {
+      if (isUser) {
+        User.update(
+          {
+            last_successful_logged: isUser.last_present_logged,
+          },
+          { where: { id } },
+        )
+          .then(() => {
+            res.status(200).json({
+              message: 'Logout successful',
+            });
+          })
+          .catch(err => {
+            /* just ignore */
           });
-        })
-        .catch(err => {
-          /* just ignore */
-        });
-    }
-  });
+      }
+    });
+  } else {
+    res.status(400).json({
+      error: 'no access',
+    });
+  }
 };
 
 // Check if the User's Login already exists
@@ -206,47 +212,59 @@ exports.isEmail = (req, res) => {
 // Return basic User's Data
 exports.getUserdata = (req, res) => {
   const id = req.params.userId;
-  User.findOne({
-    where: {
-      id,
-    },
-    attributes: [
-      'name',
-      'surname',
-      'last_successful_logged',
-      'last_failed_logged',
-      'last_present_logged',
-    ],
-  })
-    .then(user => {
-      if (user) {
-        res.status(200).json({
-          user,
-        });
-      }
+  if (req.userData.id == id) {
+    User.findOne({
+      where: {
+        id,
+      },
+      attributes: [
+        'name',
+        'surname',
+        'last_successful_logged',
+        'last_failed_logged',
+        'last_present_logged',
+      ],
     })
-    .catch(err => {
-      /* just ignore */
+      .then(user => {
+        if (user) {
+          res.status(200).json({
+            user,
+          });
+        }
+      })
+      .catch(err => {
+        /* just ignore */
+      });
+  } else {
+    res.status(400).json({
+      error: 'no access',
     });
+  }
 };
 
 // Update basic User's Data
 exports.setUserdata = (req, res) => {
   const id = req.params.userId;
-  User.update(
-    {
-      login: req.body.login,
-      password: req.body.password,
-      name: req.body.name,
-      surname: req.body.surname,
-      address: req.body.address,
-    },
-    { where: { id } },
-  )
-    .then(() => {
-      res.status(200).json({ update: true });
-    })
-    .catch(err => {
-      /* just ignore */
+  if (req.userData.id == id) {
+    User.update(
+      {
+        login: req.body.login,
+        password: req.body.password,
+        name: req.body.name,
+        surname: req.body.surname,
+        address: req.body.address,
+      },
+      { where: { id } },
+    )
+      .then(() => {
+        res.status(200).json({ update: true });
+      })
+      .catch(err => {
+        /* just ignore */
+      });
+  } else {
+    res.status(400).json({
+      error: 'no access',
     });
+  }
 };

@@ -5,9 +5,6 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
   host: env.host,
   dialect: env.dialect,
   operatorsAliases: false,
-  dialectOptions: {
-    useUTC: true,
-  },
   timezone: '+01:00',
 
   pool: {

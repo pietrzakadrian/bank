@@ -34,6 +34,7 @@ const styles = theme => ({
     display: 'flex',
   },
   appBar: {
+    paddingRight: '0!important',
     marginLeft: drawerWidth,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -49,6 +50,7 @@ const styles = theme => ({
     borderBottom: '1px solid rgba(0, 0, 0, 0.12)', // border bottom dla header
   },
   appBarShift: {
+    paddingRight: '0!important',
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,
     },
@@ -275,8 +277,7 @@ class Header extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          {this.props.children}
-
+          {this.props.children}​
           <ResizeObserver
             onResize={rect => {
               const evt = window.document.createEvent('UIEvents');

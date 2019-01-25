@@ -1,4 +1,6 @@
+const nodemailer = require('nodemailer');
 const db = require('../config/db.config.js');
+const env = require('../config/env.config.js');
 const Op = db.Sequelize.Op;
 const Transaction = db.transactions;
 const Bill = db.bills;
@@ -15,6 +17,72 @@ exports.create = (req, res) => {
     const previousMonth = new Date();
     previousMonth.setMonth(today.getMonth() - 1);
     return previousMonth;
+  }
+
+  function getAuthorizationKey() {
+    let authorizationKey = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+    for (let i = 0; i < 5; i++)
+      authorizationKey += possible.charAt(
+        Math.floor(Math.random() * possible.length),
+      );
+
+    return authorizationKey;
+  }
+
+  async function getSenderEmail(id) {
+    try {
+      const isUser = await User.findOne({
+        where: {
+          id,
+        },
+      });
+      return isUser.email;
+    } catch (e) {
+      /* just ignore */
+    }
+  }
+
+  async function sendAuthorizationKey(senderId, amountMoney) {
+    const authorizationKey = getAuthorizationKey();
+    await nodemailer.createTestAccount();
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: env.email.username,
+        pass: env.email.password,
+      },
+    });
+
+    const mailOptions = {
+      from: '"Bank Application" <contact.pietrzakadrian@gmail.com>',
+      to: `${await getSenderEmail(senderId)}`,
+      subject: 'Autoryzacja płatności',
+      text: `Drogi kliencie! Zarejestrowaliśmy próbę wykonania płatności na kwotę: ${amountMoney
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+        .replace(
+          '.',
+          ',',
+        )}. Potwierdź płatność, wpisując klucz autoryzacyjny: ${authorizationKey}`,
+      html: `Drogi kliencie!<br>Zarejestrowaliśmy próbę wykonania płatności na kwotę: ${amountMoney
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+        .replace(
+          '.',
+          ',',
+        )} PLN.<br><br>Potwierdź płatność, wpisując klucz autoryzacyjny: <b>${authorizationKey}</b>`,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+
+    console.log('Message sent: %s', info.messageId);
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
   }
 
   function setAvailableFunds(
@@ -99,106 +167,121 @@ exports.create = (req, res) => {
     });
   }
 
-  Bill.findOne({
-    where: {
-      account_bill: req.body.account_bill,
-    },
-  }).then(isAccountBill => {
-    const recipientId = isAccountBill.id_owner;
+  const senderId = req.body.id_sender;
+  if (req.userData.id == senderId) {
+    Bill.findOne({
+      where: {
+        account_bill: req.body.account_bill,
+      },
+    }).then(isAccountBill => {
+      const recipientId = isAccountBill.id_owner;
 
-    if (isAccountBill && recipientId !== req.body.id_sender) {
-      const senderId = req.body.id_sender;
-      const recipientAvailableFunds = isAccountBill.available_funds;
-      const amountMoney = req.body.amount_money;
-      const transferTitle = req.body.transfer_title;
+      if (isAccountBill && recipientId !== req.body.id_sender) {
+        const recipientAvailableFunds = isAccountBill.available_funds;
+        const amountMoney = req.body.amount_money;
+        const transferTitle = req.body.transfer_title;
 
-      Bill.findOne({
-        where: {
-          id_owner: senderId,
-        },
-      }).then(isAvailableFunds => {
-        if (isAvailableFunds) {
-          const senderAvailableFunds = isAvailableFunds.available_funds;
+        Bill.findOne({
+          where: {
+            id_owner: senderId,
+          },
+        }).then(isAvailableFunds => {
+          if (isAvailableFunds) {
+            const senderAvailableFunds = isAvailableFunds.available_funds;
 
-          if (senderAvailableFunds >= amountMoney && amountMoney > 0) {
-            setAvailableFunds(
-              senderId,
-              recipientId,
-              senderAvailableFunds,
-              recipientAvailableFunds,
-              amountMoney,
-            );
+            if (senderAvailableFunds >= amountMoney && amountMoney > 0) {
+              setAvailableFunds(
+                senderId,
+                recipientId,
+                senderAvailableFunds,
+                recipientAvailableFunds,
+                amountMoney,
+              );
 
-            setTransferHistory(
-              senderId,
-              recipientId,
-              amountMoney,
-              transferTitle,
-            ).then(() => {
-              setWidgetStatus(senderId);
-              setWidgetStatus(recipientId);
-            });
+              setTransferHistory(
+                senderId,
+                recipientId,
+                amountMoney,
+                transferTitle,
+              ).then(() => {
+                setWidgetStatus(senderId);
+                setWidgetStatus(recipientId);
+                sendAuthorizationKey(senderId, amountMoney).catch(
+                  console.error,
+                );
+              });
 
-            return res.status(200).json({ message: 'Payment ok' });
+              return res.status(200).json({ message: 'Payment ok' });
+            }
+            return res
+              .status(400)
+              .json({ error: 'Id sender doesnt have enough money' });
           }
-          return res
-            .status(400)
-            .json({ error: 'Id sender doesnt have enough money' });
-        }
-        return res.status(400).json({ error: 'Id sender doesnt exist' });
-      });
-    }
-  });
+          return res.status(400).json({ error: 'Id sender doesnt exist' });
+        });
+      }
+    });
+  } else {
+    res.status(400).json({ error: 'no access' });
+  }
 };
 
 exports.getRecipientdata = (req, res) => {
   const id_recipient = req.params.recipientId;
-  Transaction.findAll({
-    where: {
-      id_recipient,
-    },
-    attributes: [
-      'amount_money',
-      'date_time',
-      'id_recipient',
-      'id_sender',
-      'transfer_title',
-    ],
-    include: [
-      {
-        model: User,
-        as: 'getSenderdata',
-        where: { id: db.Sequelize.col('transaction.id_sender') },
-        attributes: ['name', 'surname'],
+  if (req.userData.id == id_recipient) {
+    Transaction.findAll({
+      where: {
+        id_recipient,
       },
-    ],
-  }).then(transactions => {
-    res.send(transactions);
-  });
+      attributes: [
+        'amount_money',
+        'date_time',
+        'id_recipient',
+        'id_sender',
+        'transfer_title',
+      ],
+      include: [
+        {
+          model: User,
+          as: 'getSenderdata',
+          where: { id: db.Sequelize.col('transaction.id_sender') },
+          attributes: ['name', 'surname'],
+        },
+      ],
+    }).then(transactions => {
+      res.send(transactions);
+    });
+  } else {
+    res.status(400).json({ error: 'no access' });
+  }
 };
 
 exports.getSenderdata = (req, res) => {
   const id_sender = req.params.senderId;
-  Transaction.findAll({
-    where: {
-      id_sender,
-    },
-    attributes: [
-      'amount_money',
-      'date_time',
-      'id_recipient',
-      'id_sender',
-      'transfer_title',
-    ],
-    include: [
-      {
-        model: User,
-        as: 'getRecipientdata',
-        where: { id: db.Sequelize.col('transaction.id_sender') },
-        attributes: ['name', 'surname'],
+  if (req.userData.id == id_sender) {
+    Transaction.findAll({
+      where: {
+        id_sender,
       },
-    ],
-  }).then(transactions => {
-    res.send(transactions);
-  });
+      attributes: [
+        'amount_money',
+        'date_time',
+        'id_recipient',
+        'id_sender',
+        'transfer_title',
+      ],
+      include: [
+        {
+          model: User,
+          as: 'getRecipientdata',
+          where: { id: db.Sequelize.col('transaction.id_sender') },
+          attributes: ['name', 'surname'],
+        },
+      ],
+    }).then(transactions => {
+      res.send(transactions);
+    });
+  } else {
+    res.status(400).json({ error: 'no access' });
+  }
 };
