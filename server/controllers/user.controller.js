@@ -252,7 +252,7 @@ exports.setUserdata = (req, res) => {
         password: req.body.password,
         name: req.body.name,
         surname: req.body.surname,
-        address: req.body.address,
+        email: req.body.email,
       },
       { where: { id } },
     )

@@ -44,7 +44,20 @@ exports.create = (req, res) => {
     }
   }
 
-  async function sendAuthorizationKey(senderId, amountMoney) {
+  async function getRecipientName(id) {
+    try {
+      const isUser = await User.findOne({
+        where: {
+          id,
+        },
+      });
+      return `${isUser.name} ${isUser.surname}`;
+    } catch (e) {
+      /* just ignore */
+    }
+  }
+
+  async function sendAuthorizationKey(senderId, recipientId, amountMoney) {
     const authorizationKey = getAuthorizationKey();
     await nodemailer.createTestAccount();
     const transporter = nodemailer.createTransport({
@@ -65,18 +78,16 @@ exports.create = (req, res) => {
         .toFixed(2)
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-        .replace(
-          '.',
-          ',',
-        )}. Potwierdź płatność, wpisując klucz autoryzacyjny: ${authorizationKey}`,
+        .replace('.', ',')} PLN do ${await getRecipientName(
+        recipientId,
+      )}. Potwierdź płatność, wpisując klucz autoryzacyjny: ${authorizationKey}`,
       html: `Drogi kliencie!<br>Zarejestrowaliśmy próbę wykonania płatności na kwotę: ${amountMoney
         .toFixed(2)
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-        .replace(
-          '.',
-          ',',
-        )} PLN.<br><br>Potwierdź płatność, wpisując klucz autoryzacyjny: <b>${authorizationKey}</b>`,
+        .replace('.', ',')} PLN do ${await getRecipientName(
+        recipientId,
+      )}.<br><br>Potwierdź płatność, wpisując klucz autoryzacyjny: <b>${authorizationKey}</b>`,
     };
 
     const info = await transporter.sendMail(mailOptions);
@@ -206,7 +217,7 @@ exports.create = (req, res) => {
               ).then(() => {
                 setWidgetStatus(senderId);
                 setWidgetStatus(recipientId);
-                sendAuthorizationKey(senderId, amountMoney).catch(
+                sendAuthorizationKey(senderId, recipientId, amountMoney).catch(
                   console.error,
                 );
               });
