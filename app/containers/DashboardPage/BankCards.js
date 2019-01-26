@@ -8,6 +8,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import CardIcon from '@material-ui/icons/CreditCard';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
@@ -42,6 +43,17 @@ const styles = theme => ({
   typographyText: {
     color: 'rgba(0, 0, 0, 0.34)',
   },
+  buttonText: {
+    color: '#15a0dd',
+  },
+  button: {
+    textTransform: 'none',
+    lineHeight: 2,
+  },
+  cardIcon: {
+    position: 'relative',
+    top: -1,
+  },
 });
 
 function BankCards({ classes }) {
@@ -55,8 +67,15 @@ function BankCards({ classes }) {
         >
           <FormattedMessage {...messages.bankCards} />
           <CardActions className={classes.cardAction}>
-            <Button size="small">
-              <FormattedMessage {...messages.makeTransferBtn} />
+            <Button
+              size="small"
+              classes={{
+                root: classes.button,
+              }}
+            >
+              <span className={classes.buttonText}>
+                <CardIcon className={classes.cardIcon} /> Nowa karta
+              </span>
             </Button>
           </CardActions>
         </Typography>

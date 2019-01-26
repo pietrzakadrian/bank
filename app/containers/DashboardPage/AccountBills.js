@@ -12,6 +12,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import SwapVertIcon from '@material-ui/icons/SwapVert';
 
 // Import Components
 import Loading from 'components/App/Loading/';
@@ -51,6 +52,17 @@ const styles = theme => ({
   },
   availabeFundsContainer: {
     fontWeight: 600,
+  },
+  swapVertIcon: {
+    position: 'relative',
+    top: -1,
+  },
+  buttonText: {
+    color: '#15a0dd',
+  },
+  button: {
+    textTransform: 'none',
+    lineHeight: 2,
   },
 });
 
@@ -93,8 +105,16 @@ class AccountBills extends Component {
           >
             <FormattedMessage {...messages.bills} />
             <CardActions className={classes.cardAction}>
-              <Button size="small">
-                <FormattedMessage {...messages.makeTransferBtn} />
+              <Button
+                size="small"
+                classes={{
+                  root: classes.button,
+                }}
+              >
+                <span className={classes.buttonText}>
+                  <SwapVertIcon className={classes.swapVertIcon} /> Nowa
+                  płatność
+                </span>
               </Button>
             </CardActions>
           </Typography>

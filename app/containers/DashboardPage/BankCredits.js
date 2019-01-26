@@ -8,6 +8,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
@@ -42,6 +43,17 @@ const styles = theme => ({
   typographyText: {
     color: 'rgba(0, 0, 0, 0.34)',
   },
+  accountBalanceIcon: {
+    position: 'relative',
+    top: -1,
+  },
+  buttonText: {
+    color: '#15a0dd',
+  },
+  button: {
+    textTransform: 'none',
+    lineHeight: 2,
+  },
 });
 
 function BankCredits({ classes }) {
@@ -54,6 +66,19 @@ function BankCredits({ classes }) {
           className={classes.typographyTitle}
         >
           <FormattedMessage {...messages.bankCredits} />
+          <CardActions className={classes.cardAction}>
+            <Button
+              size="small"
+              classes={{
+                root: classes.button,
+              }}
+            >
+              <span className={classes.buttonText}>
+                <AccountBalanceIcon className={classes.accountBalanceIcon} />{' '}
+                Nowy kredyt
+              </span>
+            </Button>
+          </CardActions>
         </Typography>
         <div className={classes.widgetText}>
           <Typography
