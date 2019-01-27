@@ -18,7 +18,7 @@ module.exports = (sequelize, Sequelize) => {
         },
       },
       account_bill: {
-        type: Sequelize.TEXT,
+        type: Sequelize.DECIMAL(26),
         allowNull: false,
         isNumeric: true,
         validate: {

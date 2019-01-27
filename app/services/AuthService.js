@@ -5,7 +5,21 @@ export default class AuthService {
     this.domain = domain || 'http://localhost:3000/api';
     this.fetch = this.fetch.bind(this);
     this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
     this.register = this.register.bind(this);
+    this.isLogin = this.isLogin.bind(this);
+    this.isEmail = this.isEmail.bind(this);
+    this.isAccountBill = this.isAccountBill.bind(this);
+    this.isAmountMoney = this.isAmountMoney.bind(this);
+    this.getUserdata = this.getUserdata.bind(this);
+    this.availableFunds = this.availableFunds.bind(this);
+    this.accountBills = this.accountBills.bind(this);
+    this.createPayment = this.createPayment.bind(this);
+    this.getUsersData = this.getUsersData.bind(this);
+    this.recentTransactionsSender = this.recentTransactionsSender.bind(this);
+    this.recentTransactionsRecipient = this.recentTransactionsRecipient.bind(
+      this,
+    );
   }
 
   // Check Login Exist Action
@@ -170,8 +184,40 @@ export default class AuthService {
       });
   }
 
+  isAccountBill(account_bill) {
+    return this.fetch(`${this.domain}/bills/isAccountBill/${account_bill}`, {
+      method: 'GET',
+    })
+      .then(res => {
+        if (!res.error) {
+          return 1;
+        }
+      })
+      .catch(err => {
+        /* just ignore */
+      });
+  }
+
+  isAmountMoney(id_sender, amount_money) {
+    return this.fetch(`${this.domain}/bills/isAmountMoney`, {
+      method: 'POST',
+      body: JSON.stringify({
+        id_sender,
+        amount_money,
+      }),
+    })
+      .then(res => {
+        if (!res.error) {
+          return 1;
+        }
+      })
+      .catch(err => {
+        /* just ignore */
+      });
+  }
+
   // Payment Action
-  makePayment(id_sender, account_bill, amount_money, transfer_title) {
+  createPayment(id_sender, account_bill, amount_money, transfer_title) {
     return this.fetch(`${this.domain}/transactions`, {
       method: 'POST',
       body: JSON.stringify({
@@ -181,6 +227,20 @@ export default class AuthService {
         transfer_title,
       }),
     });
+  }
+
+  getUsersData() {
+    return this.fetch(`${this.domain}/bills/`, {
+      method: 'GET',
+    })
+      .then(res => {
+        if (!res.error) {
+          return res;
+        }
+      })
+      .catch(err => {
+        /* just ignore */
+      });
   }
 
   // TODO: updateLastSuccessfulLoggedDate(id) when isTokenExpired

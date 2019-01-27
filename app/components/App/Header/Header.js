@@ -14,9 +14,10 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Hidden from '@material-ui/core/Hidden';
+import { FormattedMessage } from 'react-intl';
+import LoadingLinear from '../../LoadingLinear';
 
 // Import Services
-import { FormattedMessage } from 'react-intl';
 import Logo from '../../../images/logo.png';
 import AuthService from '../../../services/AuthService';
 

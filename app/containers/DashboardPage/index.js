@@ -130,11 +130,19 @@ class DashboardPage extends Component {
             <div key="2" data-grid={{ x: 1, y: 0, w: 1, h: 6, static: true }}>
               <BankInformation />
             </div>
-            <div key="3" data-grid={{ x: 2, y: 0, w: 1, h: 6, static: true }}>
+
+            <div
+              key="3"
+              data-grid={{
+                x: 2,
+                y: 0,
+                w: 1,
+                h: 6,
+                static: true,
+              }}
+            >
               <BankInformation />
             </div>
-
-            {/* 2 belka */}
 
             <div
               key="4"
@@ -160,8 +168,6 @@ class DashboardPage extends Component {
             >
               <RecentTransactions id={this.props.user.id} />
             </div>
-
-            {/* 2 belka */}
 
             <div
               key="6"

@@ -14,7 +14,7 @@ exports.register = (req, res) => {
   }
 
   async function getAccountBill() {
-    const accountBill = `002222${Math.floor(
+    const accountBill = `220097${Math.floor(
       Math.random() * 90000000000000000000,
     ) + 10000000000000000000}`;
 

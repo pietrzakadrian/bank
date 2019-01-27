@@ -10,25 +10,57 @@
  */
 
 import React, { Component, Fragment } from 'react';
+import './style.css';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Helmet from 'react-helmet';
-import NavigateNext from '@material-ui/icons/NavigateNext';
-import NavigateBefore from '@material-ui/icons/NavigateBefore';
 import { withSnackbar } from 'notistack';
+import Autosuggest from 'react-autosuggest';
+
+// Import Material-UI
+import { withStyles } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
+import NavigateNext from '@material-ui/icons/NavigateNext';
+import NavigateBefore from '@material-ui/icons/NavigateBefore';
 import Typography from '@material-ui/core/Typography';
 
-// Import Material-UI
-import { withStyles } from '@material-ui/core/styles';
-
 import { FormattedMessage } from 'react-intl';
+import messages from './messages';
+
 import AuthService from '../../services/AuthService';
 import withAuth from '../../services/withAuth';
-import messages from './messages';
+
+
+
+/* ----------- */
+/*    Utils    */
+/* ----------- */
+
+// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
+function escapeRegexCharacters(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/* --------------- */
+/*    Component    */
+/* --------------- */
+
+function getSuggestionValue(suggestion) {
+  return suggestion.account_bill;
+}
+
+function renderSuggestion(suggestion) {
+  return (
+    <span>{suggestion.account_bill}<br/>
+    {suggestion.user.name} {suggestion.user.surname} 
+    </span>
+  );
+}
+
+// ---
 
 const styles = theme => ({
   button: {
@@ -174,6 +206,7 @@ const styles = theme => ({
     },
   },
   mobileStepper: {
+    background: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'none',
     },
@@ -200,38 +233,131 @@ class PaymentPage extends Component {
     super(props);
 
     this.state = {
-      id_sender: this.props.user.id,
-      account_bill: '',
-      amount_money: '',
-      transfer_title: '',
+      senderId: this.props.user.id,
+      accountBill: '',
+      recipientName: '',
+      recipientSurname: '',
+      amountMoney: '',
+      transferTitle: '',
       error: '',
       activeStep: 0,
+      accountBills: [],
+      value: '',
+      suggestions: [],
+      isLoading: false
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.Auth = new AuthService();
+    this.lastRequestId = null;
   }
+
+  componentWillMount() {
+    this.Auth.getUsersData()
+      .then(res => {
+        if (res) {
+          this.setState({
+            accountBills: res,
+          });
+        }
+      })
+      .catch(err => {
+        /* just ignore */
+      });
+  }
+
+  getMatchingLanguages(value) {
+    const escapedValue = escapeRegexCharacters(value.trim());
+    
+    if (escapedValue === '') {
+      return [];
+    }
+  
+    const regex = new RegExp('^' + escapedValue, 'i');
+  
+    return this.state.accountBills.filter(language => regex.test(language.account_bill));
+  }
+
+  loadSuggestions(value) {
+    // Cancel the previous request
+    if (this.lastRequestId !== null) {
+      clearTimeout(this.lastRequestId);
+    }
+    
+    this.setState({
+      isLoading: true
+    });
+    
+    // Fake request
+    this.lastRequestId = setTimeout(() => {
+      this.setState({
+        isLoading: false,
+        suggestions: this.getMatchingLanguages(value)
+      });
+    }, 300);
+  }
+
+  onChange = (event, { newValue }) => {
+    this.setState({
+      value: newValue
+    });
+  };
+    
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.loadSuggestions(value);
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
+    });
+  };
 
   getStepContent = step => {
     const { classes } = this.props;
     const { error } = this.state;
 
+    const { value, suggestions, isLoading } = this.state;
+    const inputProps = {
+      placeholder: "Wprowadź numer",
+      value,
+      onChange: this.onChange
+    };
+    const status = (isLoading ? 'Loading...' : 'Type to load suggestions');
+
     switch (step) {
       case 0:
         return (
           <Fragment>
-            <div className={classes.textField}>Numer rachunku</div>
-            <input
+          <div>
+        <div className="status">
+          <strong>Status:</strong> {status}
+        </div>
+        <div className={classes.textField}>Numer rachunku</div>
+        <Autosuggest 
+          suggestions={suggestions}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
+          inputProps={inputProps}
+          onKeyPress={e => this.validateNumber(e)}
+          onChange={this.handleChange}
+          />
+      </div>
+
+            
+            {/* <input
               className={classNames(classes.formItem, {
                 [classes.formError]: error,
               })}
               placeholder="Wpisz numer"
-              name="account_bill"
+              name="accountBill"
               type="number"
-              onChange={this.handleChange}
-              onKeyPress={e => this.validateNumber(e)}
-            />
+              
+              
+            /> */}
             {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
@@ -244,7 +370,7 @@ class PaymentPage extends Component {
                 [classes.formError]: error,
               })}
               placeholder="Wpisz ilość"
-              name="amount_money"
+              name="amountMoney"
               type="number"
               onChange={this.handleChange}
             />
@@ -260,7 +386,7 @@ class PaymentPage extends Component {
                 [classes.formError]: error,
               })}
               placeholder="Wpisz tytuł"
-              name="transfer_title"
+              name="transferTitle"
               type="text"
               onChange={this.handleChange}
             />
@@ -272,9 +398,6 @@ class PaymentPage extends Component {
         return (
           <Fragment>
             <div className={classes.textField}>Potwierdź dane</div>
-
-            <p>potwierdzam dane</p>
-
             <input
               className={classNames(classes.formItem, {
                 [classes.formError]: error,
@@ -303,14 +426,78 @@ class PaymentPage extends Component {
     });
   }
 
+  isAccountBill = e => {
+    e.preventDefault();
+
+    if (this.state.value === '') {
+      this.setState({
+        error: 'Proszę wprowadzić numer rachunku',
+      });
+      return;
+    }
+
+    this.Auth.isAccountBill(this.state.value)
+      .then(res => {
+        if (res) {
+          this.setState(state => ({
+            activeStep: state.activeStep + 1,
+          }));
+
+          this.setState({
+            error: '',
+          });
+          document.getElementsByTagName('input').amountMoney.value = '';
+        } else {
+          this.setState({
+            error: 'Proszę wprowadzić prawidlowy numer rachunku',
+          });
+        }
+      })
+      .catch(err => {
+        /* just ignore */
+      });
+  };
+
+  isAmountMoney = e => {
+    e.preventDefault();
+
+    if (this.state.amountMoney === '') {
+      this.setState({
+        error: 'Proszę wprowadzić kwotę',
+      });
+      return;
+    }
+
+    this.Auth.isAmountMoney(this.state.senderId, this.state.amountMoney)
+      .then(res => {
+        if (res) {
+          this.setState(state => ({
+            activeStep: state.activeStep + 1,
+          }));
+
+          this.setState({
+            error: '',
+          });
+          document.getElementsByTagName('input').transferTitle.value = '';
+        } else {
+          this.setState({
+            error: 'Proszę wprowadzić prawidłową kwotę',
+          });
+        }
+      })
+      .catch(err => {
+        /* just ignore */
+      });
+  };
+
   handleFormSubmit = variant => e => {
     e.preventDefault();
 
-    this.Auth.makePayment(
-      this.state.id_sender,
-      this.state.account_bill,
-      this.state.amount_money,
-      this.state.transfer_title,
+    this.Auth.createPayment(
+      this.state.senderId,
+      this.state.value,
+      this.state.amountMoney,
+      this.state.transferTitle,
     )
       .then(res => {
         if (res) {
@@ -326,30 +513,52 @@ class PaymentPage extends Component {
       })
       .catch(err => {
         this.setState({
-          error: 'Error catch',
+          error: 'Błąd',
         });
       });
   };
 
-  handleBack = () => {
-    const {
-      activeStep,
-      account_bill,
-      amount_money,
-      transfer_title,
-    } = this.state;
+  handleNext = () => {
+    const { activeStep, amountMoney, transferTitle } = this.state;
 
-    if (activeStep === 1 && account_bill !== '') {
+    if (activeStep === 1 && amountMoney === '') {
+      document.getElementsByTagName('input').amountMoney.value = '';
       this.setState({
-        account_bill: '',
+        error: 'Proszę podać hasło',
       });
-    } else if (activeStep === 2 && amount_money !== '') {
+    } else if (activeStep === 2 && transferTitle === '') {
+      document.getElementsByTagName('input').transferTitle.value = '';
       this.setState({
-        amount_money: '',
+        error: 'Proszę podać imię',
       });
-    } else if (activeStep === 3 && transfer_title !== '') {
+    } else {
       this.setState({
-        transfer_title: '',
+        activeStep: activeStep + 1,
+        error: '',
+      });
+
+      if (activeStep === 1) {
+        document.getElementsByTagName('input').amountMoney.value = '';
+      } else if (activeStep === 2) {
+        document.getElementsByTagName('input').transferTitle.value = '';
+      }
+    }
+  };
+
+  handleBack = () => {
+    const { activeStep, accountBill, amountMoney, transferTitle } = this.state;
+
+    if (activeStep === 1 && accountBill !== '') {
+      this.setState({
+        accountBill: '',
+      });
+    } else if (activeStep === 2 && amountMoney !== '') {
+      this.setState({
+        amountMoney: '',
+      });
+    } else if (activeStep === 3 && transferTitle !== '') {
+      this.setState({
+        transferTitle: '',
       });
     }
 
@@ -402,17 +611,26 @@ class PaymentPage extends Component {
                 {activeStep === steps.length - 1 ? (
                   <button
                     className={classes.formSubmit}
-                    onClick={this.handleFormSubmit('success')}
                     type="submit"
+                    onClick={this.handleFormSubmit('success')}
                   >
-                    <span className={classes.buttonText}>Utwórz konto</span>
+                    <span className={classes.buttonText}>Wykonaj płatność</span>
                   </button>
                 ) : (
                   [
                     activeStep === 0 ? (
                       <button
                         className={classes.formSubmit}
-                        onClick={this.isLogin}
+                        onClick={this.isAccountBill}
+                        disabled={this.state.activeStep === 4}
+                      >
+                        <span className={classes.buttonText}>Dalej</span>
+                        <NavigateNext />
+                      </button>
+                    ) : activeStep === 1 ? (
+                      <button
+                        className={classes.formSubmit}
+                        onClick={this.isAmountMoney}
                         disabled={this.state.activeStep === 4}
                       >
                         <span className={classes.buttonText}>Dalej</span>

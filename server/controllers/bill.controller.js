@@ -1,8 +1,38 @@
 const db = require('../config/db.config.js');
 const Bill = db.bills;
 const Additional = db.additionals;
+const User = db.users;
+const Op = db.Sequelize.Op;
 
-// Find a Customer by Id
+// Return All User's Bill Data
+exports.getUsersdata = (req, res) => {
+  Bill.findAll({
+    include: [
+      {
+        model: User,
+        where: {
+          id: db.Sequelize.col('bill.id_owner'),
+        },
+        attributes: ['name', 'surname'],
+      },
+    ],
+    attributes: ['account_bill'],
+    where: {
+      id_owner: {
+        [Op.notIn]: [req.userData.id],
+      },
+    },
+  })
+    .then(bill => {
+      res.send(bill);
+    })
+    .catch(err => {
+      res.send(err);
+      console.log(err);
+    });
+};
+
+// Return basic User's Bill Data
 exports.getUserdata = (req, res) => {
   const id_owner = req.params.userId;
   if (req.userData.id == id_owner) {
@@ -28,5 +58,52 @@ exports.getUserdata = (req, res) => {
       });
   } else {
     res.status(400).json({ error: 'no access' });
+  }
+};
+
+// Check if the User's Account Bill already exists
+exports.isAccountBill = (req, res) => {
+  const account_bill = req.params.accountBill;
+  Bill.findOne({
+    where: {
+      account_bill,
+    },
+  })
+    .then(isAccountBill => {
+      if (isAccountBill && isAccountBill.id !== req.userData.id) {
+        res.status(200).json({ isAccountBill: true });
+      } else {
+        res.status(404).json({ isAccountBill: false });
+      }
+    })
+    .catch(err => {
+      /* just ignore */
+    });
+};
+
+// Check if the User's Amount Money correctly
+exports.isAmountMoney = (req, res) => {
+  const senderId = req.body.id_sender;
+  if (req.userData.id == senderId) {
+    const amountMoney = req.body.amount_money;
+    Bill.findOne({
+      where: {
+        id_owner: senderId,
+      },
+    })
+      .then(isSender => {
+        if (isSender.available_funds >= amountMoney && amountMoney > 0) {
+          res.status(200).json({ isAmountMoney: true });
+        } else {
+          res.status(400).json({ isAmountMoney: false });
+        }
+      })
+      .catch(err => {
+        res.status(400).json({ err });
+      });
+  } else {
+    res.status(400).json({
+      error: 'no access',
+    });
   }
 };
