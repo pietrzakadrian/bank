@@ -13,6 +13,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 import AuthService from '../../services/AuthService';
 
 import Header from '../../components/Header';
@@ -275,15 +276,34 @@ class RegisterPage extends Component {
         return (
           <Fragment>
             <div className={classes.textField}>Adres E-Mail</div>
-            <input
-              className={classNames(classes.formItem, {
-                [classes.formError]: error,
-              })}
-              placeholder="Wpisz adres E-Mail"
-              name="email"
-              type="text"
-              onChange={this.handleChange}
-            />
+
+            {window.matchMedia('(min-width: 940px)').matches ? (
+              <Tooltip
+                title="System nie wymaga potwierdzenia rejestracji mailowo, lecz wymaga potwierdzenia płatności kodem, który przyjdzie na ten adres E-Mail"
+                placement="right-start"
+              >
+                <input
+                  className={classNames(classes.formItem, {
+                    [classes.formError]: error,
+                  })}
+                  placeholder="Wpisz adres E-Mail"
+                  name="email"
+                  type="text"
+                  onChange={this.handleChange}
+                />
+              </Tooltip>
+            ) : (
+              <input
+                className={classNames(classes.formItem, {
+                  [classes.formError]: error,
+                })}
+                placeholder="Wpisz adres E-Mail"
+                name="email"
+                type="text"
+                onChange={this.handleChange}
+              />
+            )}
+
             {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );

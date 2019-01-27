@@ -324,18 +324,17 @@ class PaymentPage extends Component {
       value,
       onChange: this.onChange
     };
-    const status = (isLoading ? 'Loading...' : 'Type to load suggestions');
 
     switch (step) {
       case 0:
         return (
           <Fragment>
-          <div>
-        <div className="status">
-          <strong>Status:</strong> {status}
-        </div>
+          
         <div className={classes.textField}>Numer rachunku</div>
         <Autosuggest 
+        className={classNames(classes.formItem, {
+                [classes.formError]: error,
+              })}
           suggestions={suggestions}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
@@ -345,19 +344,10 @@ class PaymentPage extends Component {
           onKeyPress={e => this.validateNumber(e)}
           onChange={this.handleChange}
           />
-      </div>
+    
 
             
-            {/* <input
-              className={classNames(classes.formItem, {
-                [classes.formError]: error,
-              })}
-              placeholder="Wpisz numer"
-              name="accountBill"
-              type="number"
-              
-              
-            /> */}
+
             {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
