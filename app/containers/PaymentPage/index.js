@@ -254,7 +254,7 @@ class PaymentPage extends Component {
   }
 
   componentWillMount() {
-    this.Auth.getUsersData()
+    this.Auth.getUsersData(partOfAccountBill)
       .then(res => {
         if (res) {
           this.setState({

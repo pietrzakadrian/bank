@@ -278,20 +278,22 @@ class RegisterPage extends Component {
             <div className={classes.textField}>Adres E-Mail</div>
 
             {window.matchMedia('(min-width: 940px)').matches ? (
-              <Tooltip
-                title="System nie wymaga potwierdzenia rejestracji mailowo, lecz wymaga potwierdzenia płatności kodem, który przyjdzie na ten adres E-Mail"
-                placement="right-start"
-              >
-                <input
-                  className={classNames(classes.formItem, {
-                    [classes.formError]: error,
-                  })}
-                  placeholder="Wpisz adres E-Mail"
-                  name="email"
-                  type="text"
-                  onChange={this.handleChange}
-                />
-              </Tooltip>
+              <Fragment>
+                <Tooltip
+                  title="System nie wymaga potwierdzenia rejestracji mailowo, lecz wymaga potwierdzenia płatności kodem, który przyjdzie na ten adres E-Mail"
+                  placement="right-start"
+                >
+                  <input
+                    className={classNames(classes.formItem, {
+                      [classes.formError]: error,
+                    })}
+                    placeholder="Wpisz adres E-Mail"
+                    name="email"
+                    type="text"
+                    onChange={this.handleChange}
+                  />
+                </Tooltip>
+              </Fragment>
             ) : (
               <input
                 className={classNames(classes.formItem, {

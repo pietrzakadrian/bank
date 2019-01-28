@@ -2,11 +2,11 @@ module.exports = function(app) {
   const bills = require('../controllers/bill.controller.js');
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
 
-  // Return All User's Bill Data
-  app.get('/api/bills', checkAuth, bills.getUsersdata);
-
   // Return User's Bill Data
   app.get('/api/bills/:userId', checkAuth, bills.getUserdata);
+
+  // Return All User's Bill Data
+  app.get('/api/bills/search/:accountBill', checkAuth, bills.getUsersdata);
 
   // Check User's Bill Exist
   app.get(

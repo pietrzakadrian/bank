@@ -6,6 +6,7 @@ const Op = db.Sequelize.Op;
 
 // Return All User's Bill Data
 exports.getUsersdata = (req, res) => {
+  const partOfAccountBill = req.params.accountBill;
   Bill.findAll({
     include: [
       {
@@ -19,7 +20,10 @@ exports.getUsersdata = (req, res) => {
     attributes: ['account_bill'],
     where: {
       id_owner: {
-        [Op.notIn]: [req.userData.id],
+        [Op.ne]: [req.userData.id],
+      },
+      account_bill: {
+        [Op.like]: `${partOfAccountBill}%`,
       },
     },
   })

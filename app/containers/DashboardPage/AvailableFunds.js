@@ -59,12 +59,7 @@ class AvailableFunds extends Component {
     this.Auth.availableFunds(this.props.id)
       .then(res => {
         if (res) {
-          const amount = res
-            .reduce(
-              (accumulator, currentValue) =>
-                accumulator + currentValue.available_funds,
-              0,
-            )
+          const amount = res[0].available_funds
             .toFixed(2)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')

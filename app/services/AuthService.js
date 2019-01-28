@@ -229,8 +229,8 @@ export default class AuthService {
     });
   }
 
-  getUsersData() {
-    return this.fetch(`${this.domain}/bills/`, {
+  getUsersData(partOfAccountBill) {
+    return this.fetch(`${this.domain}/bills/${partOfAccountBill}`, {
       method: 'GET',
     })
       .then(res => {
