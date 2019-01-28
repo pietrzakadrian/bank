@@ -179,120 +179,112 @@ exports.create = (req, res) => {
   }
 
   const senderId = req.body.id_sender;
-  if (req.userData.id == senderId) {
-    Bill.findOne({
-      where: {
-        account_bill: req.body.account_bill,
-      },
-    }).then(isAccountBill => {
-      const recipientId = isAccountBill.id_owner;
+  Bill.findOne({
+    where: {
+      account_bill: req.body.account_bill,
+    },
+  }).then(isAccountBill => {
+    const recipientId = isAccountBill.id_owner;
 
-      if (isAccountBill && recipientId !== req.body.id_sender) {
-        const recipientAvailableFunds = isAccountBill.available_funds;
-        const amountMoney = req.body.amount_money;
-        const transferTitle = req.body.transfer_title;
+    if (isAccountBill && recipientId !== req.body.id_sender) {
+      const recipientAvailableFunds = isAccountBill.available_funds;
+      const amountMoney = req.body.amount_money;
+      const transferTitle = req.body.transfer_title;
 
-        Bill.findOne({
-          where: {
-            id_owner: senderId,
-          },
-        }).then(isAvailableFunds => {
-          if (isAvailableFunds) {
-            const senderAvailableFunds = isAvailableFunds.available_funds;
+      Bill.findOne({
+        where: {
+          id_owner: senderId,
+        },
+      }).then(isAvailableFunds => {
+        if (isAvailableFunds) {
+          const senderAvailableFunds = isAvailableFunds.available_funds;
 
-            if (senderAvailableFunds >= amountMoney && amountMoney > 0) {
-              setAvailableFunds(
-                senderId,
-                recipientId,
-                senderAvailableFunds,
-                recipientAvailableFunds,
-                amountMoney,
+          if (senderAvailableFunds >= amountMoney && amountMoney > 0) {
+            setAvailableFunds(
+              senderId,
+              recipientId,
+              senderAvailableFunds,
+              recipientAvailableFunds,
+              amountMoney,
+            );
+
+            setTransferHistory(
+              senderId,
+              recipientId,
+              amountMoney,
+              transferTitle,
+            ).then(() => {
+              setWidgetStatus(senderId);
+              setWidgetStatus(recipientId);
+              sendAuthorizationKey(senderId, recipientId, amountMoney).catch(
+                console.error,
               );
+            });
 
-              setTransferHistory(
-                senderId,
-                recipientId,
-                amountMoney,
-                transferTitle,
-              ).then(() => {
-                setWidgetStatus(senderId);
-                setWidgetStatus(recipientId);
-                sendAuthorizationKey(senderId, recipientId, amountMoney).catch(
-                  console.error,
-                );
-              });
-
-              return res.status(200).json({ message: 'Payment ok' });
-            }
-            return res
-              .status(400)
-              .json({ error: 'Id sender doesnt have enough money' });
+            return res.status(200).json({ message: 'Payment ok' });
           }
-          return res.status(400).json({ error: 'Id sender doesnt exist' });
-        });
-      }
-    });
-  } else {
-    res.status(400).json({ error: 'no access' });
-  }
+          return res
+            .status(400)
+            .json({ error: 'Id sender doesnt have enough money' });
+        }
+        return res.status(400).json({ error: 'Id sender doesnt exist' });
+      });
+    }
+  });
 };
 
 exports.getRecipientdata = (req, res) => {
   const id_recipient = req.params.recipientId;
-  if (req.userData.id == id_recipient) {
-    Transaction.findAll({
-      where: {
-        id_recipient,
+  Transaction.findAll({
+    limit: 4,
+    where: {
+      id_recipient,
+    },
+    attributes: [
+      'amount_money',
+      'date_time',
+      'id_recipient',
+      'id_sender',
+      'transfer_title',
+    ],
+    order: [['date_time', 'DESC']],
+    include: [
+      {
+        model: User,
+        as: 'getSenderdata',
+        where: { id: db.Sequelize.col('transaction.id_sender') },
+        attributes: ['name', 'surname'],
       },
-      attributes: [
-        'amount_money',
-        'date_time',
-        'id_recipient',
-        'id_sender',
-        'transfer_title',
-      ],
-      include: [
-        {
-          model: User,
-          as: 'getSenderdata',
-          where: { id: db.Sequelize.col('transaction.id_sender') },
-          attributes: ['name', 'surname'],
-        },
-      ],
-    }).then(transactions => {
-      res.send(transactions);
-    });
-  } else {
-    res.status(400).json({ error: 'no access' });
-  }
+    ],
+  }).then(transactions => {
+    res.send(transactions);
+  });
 };
 
 exports.getSenderdata = (req, res) => {
   const id_sender = req.params.senderId;
-  if (req.userData.id == id_sender) {
-    Transaction.findAll({
-      where: {
-        id_sender,
+  Transaction.findAll({
+    limit: 4,
+    where: {
+      id_sender,
+    },
+    attributes: [
+      'amount_money',
+      'date_time',
+      'id_recipient',
+      'id_sender',
+      'transfer_title',
+    ],
+    order: [['date_time', 'DESC']],
+    include: [
+      {
+        model: User,
+        as: 'getRecipientdata',
+        where: { id: db.Sequelize.col('transaction.id_sender') },
+        attributes: ['name', 'surname'],
       },
-      attributes: [
-        'amount_money',
-        'date_time',
-        'id_recipient',
-        'id_sender',
-        'transfer_title',
-      ],
-      include: [
-        {
-          model: User,
-          as: 'getRecipientdata',
-          where: { id: db.Sequelize.col('transaction.id_sender') },
-          attributes: ['name', 'surname'],
-        },
-      ],
-    }).then(transactions => {
-      res.send(transactions);
-    });
-  } else {
-    res.status(400).json({ error: 'no access' });
-  }
+    ],
+  }).then(transactions => {
+    res.send(transactions);
+  });
 };

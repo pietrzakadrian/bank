@@ -1,9 +1,10 @@
 module.exports = function(app) {
   const bills = require('../controllers/bill.controller.js');
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
+  const checkToken = require('../middlewares/checkToken.middleware.js');
 
   // Return User's Bill Data
-  app.get('/api/bills/:userId', checkAuth, bills.getUserdata);
+  app.get('/api/bills/:userId', checkAuth, checkToken, bills.getUserdata);
 
   // Return All User's Bill Data
   app.get('/api/bills/search/:accountBill', checkAuth, bills.getUsersdata);
@@ -16,5 +17,10 @@ module.exports = function(app) {
   );
 
   // Check User's Amount Money currently
-  app.post('/api/bills/isAmountMoney', checkAuth, bills.isAmountMoney);
+  app.post(
+    '/api/bills/isAmountMoney',
+    checkAuth,
+    checkToken,
+    bills.isAmountMoney,
+  );
 };

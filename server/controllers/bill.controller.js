@@ -8,15 +8,6 @@ const Op = db.Sequelize.Op;
 exports.getUsersdata = (req, res) => {
   const partOfAccountBill = req.params.accountBill;
   Bill.findAll({
-    include: [
-      {
-        model: User,
-        where: {
-          id: db.Sequelize.col('bill.id_owner'),
-        },
-        attributes: ['name', 'surname'],
-      },
-    ],
     attributes: ['account_bill'],
     where: {
       id_owner: {
@@ -25,6 +16,15 @@ exports.getUsersdata = (req, res) => {
       account_bill: {
         [Op.like]: `${partOfAccountBill}%`,
       },
+      include: [
+        {
+          model: User,
+          where: {
+            id: db.Sequelize.col('bill.id_owner'),
+          },
+          attributes: ['name', 'surname'],
+        },
+      ],
     },
   })
     .then(bill => {
@@ -39,30 +39,26 @@ exports.getUsersdata = (req, res) => {
 // Return basic User's Bill Data
 exports.getUserdata = (req, res) => {
   const id_owner = req.params.userId;
-  if (req.userData.id == id_owner) {
-    Bill.findAll({
-      include: [
-        {
-          model: Additional,
-          where: {
-            id_owner: db.Sequelize.col('bill.id_owner'),
-          },
-          attributes: ['account_balance_history'],
+  Bill.findAll({
+    include: [
+      {
+        model: Additional,
+        where: {
+          id_owner: db.Sequelize.col('bill.id_owner'),
         },
-      ],
-      where: { id_owner },
-      attributes: ['account_bill', 'available_funds'],
+        attributes: ['account_balance_history'],
+      },
+    ],
+    where: { id_owner },
+    attributes: ['account_bill', 'available_funds'],
+  })
+    .then(bill => {
+      res.send(bill);
     })
-      .then(bill => {
-        res.send(bill);
-      })
-      .catch(err => {
-        res.send(err);
-        console.log(err);
-      });
-  } else {
-    res.status(400).json({ error: 'no access' });
-  }
+    .catch(err => {
+      res.send(err);
+      console.log(err);
+    });
 };
 
 // Check if the User's Account Bill already exists
@@ -88,26 +84,20 @@ exports.isAccountBill = (req, res) => {
 // Check if the User's Amount Money correctly
 exports.isAmountMoney = (req, res) => {
   const senderId = req.body.id_sender;
-  if (req.userData.id == senderId) {
-    const amountMoney = req.body.amount_money;
-    Bill.findOne({
-      where: {
-        id_owner: senderId,
-      },
+  const amountMoney = req.body.amount_money;
+  Bill.findOne({
+    where: {
+      id_owner: senderId,
+    },
+  })
+    .then(isSender => {
+      if (isSender.available_funds >= amountMoney && amountMoney > 0) {
+        res.status(200).json({ isAmountMoney: true });
+      } else {
+        res.status(400).json({ isAmountMoney: false });
+      }
     })
-      .then(isSender => {
-        if (isSender.available_funds >= amountMoney && amountMoney > 0) {
-          res.status(200).json({ isAmountMoney: true });
-        } else {
-          res.status(400).json({ isAmountMoney: false });
-        }
-      })
-      .catch(err => {
-        res.status(400).json({ err });
-      });
-  } else {
-    res.status(400).json({
-      error: 'no access',
+    .catch(err => {
+      res.status(400).json({ err });
     });
-  }
 };
