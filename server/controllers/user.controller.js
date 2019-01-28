@@ -14,9 +14,8 @@ exports.register = (req, res) => {
   }
 
   async function getAccountBill() {
-    const accountBill = `220097${Math.floor(
-      Math.random() * 90000000000000000000,
-    ) + 10000000000000000000}`;
+    const accountBill = `${Math.floor(Math.random() * 90000000000000000000) +
+      10000000000000000000}220097`;
 
     try {
       const isAccountBill = await Bill.findOne({
@@ -90,7 +89,7 @@ exports.login = (req, res) => {
       },
       env.SECRET_KEY,
       {
-        expiresIn: '15m',
+        expiresIn: '60min',
       },
     );
     return token;

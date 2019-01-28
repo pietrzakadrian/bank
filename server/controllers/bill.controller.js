@@ -7,6 +7,7 @@ const Op = db.Sequelize.Op;
 // Return All User's Bill Data
 exports.getUsersdata = (req, res) => {
   const partOfAccountBill = req.params.accountBill;
+
   Bill.findAll({
     attributes: ['account_bill'],
     where: {
@@ -31,8 +32,7 @@ exports.getUsersdata = (req, res) => {
       res.send(bill);
     })
     .catch(err => {
-      res.send(err);
-      console.log(err);
+      /* just ignore */
     });
 };
 

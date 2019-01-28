@@ -230,7 +230,7 @@ export default class AuthService {
   }
 
   getUsersData(partOfAccountBill) {
-    return this.fetch(`${this.domain}/bills/${partOfAccountBill}`, {
+    return this.fetch(`${this.domain}/bills/search/${partOfAccountBill}`, {
       method: 'GET',
     })
       .then(res => {

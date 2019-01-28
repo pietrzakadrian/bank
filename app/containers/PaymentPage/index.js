@@ -17,6 +17,7 @@ import Helmet from 'react-helmet';
 import { withSnackbar } from 'notistack';
 import Autosuggest from 'react-autosuggest';
 
+
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
@@ -26,6 +27,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
@@ -33,32 +35,20 @@ import messages from './messages';
 import AuthService from '../../services/AuthService';
 import withAuth from '../../services/withAuth';
 
+// ---
 
+// When suggestion is clicked, Autosuggest needs to populate the input
+// based on the clicked suggestion. Teach Autosuggest how to calculate the
+// input value for every given suggestion.
+const getSuggestionValue = suggestion => suggestion.account_bill;
 
-/* ----------- */
-/*    Utils    */
-/* ----------- */
-
-// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
-function escapeRegexCharacters(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-/* --------------- */
-/*    Component    */
-/* --------------- */
-
-function getSuggestionValue(suggestion) {
-  return suggestion.account_bill;
-}
-
-function renderSuggestion(suggestion) {
-  return (
-    <span>{suggestion.account_bill}<br/>
-    {suggestion.user.name} {suggestion.user.surname} 
-    </span>
-  );
-}
+// Use your imagination to render suggestions.
+const renderSuggestion = suggestion => (
+  <div>
+    {suggestion.account_bill} <br/>
+    {suggestion.user.name} {suggestion.user.surname}
+  </div>
+);
 
 // ---
 
@@ -235,8 +225,6 @@ class PaymentPage extends Component {
     this.state = {
       senderId: this.props.user.id,
       accountBill: '',
-      recipientName: '',
-      recipientSurname: '',
       amountMoney: '',
       transferTitle: '',
       error: '',
@@ -244,107 +232,88 @@ class PaymentPage extends Component {
       accountBills: [],
       value: '',
       suggestions: [],
-      isLoading: false
     };
 
+    this.handleSearchAccountBill = this.handleSearchAccountBill.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.Auth = new AuthService();
-    this.lastRequestId = null;
   }
 
-  componentWillMount() {
-    this.Auth.getUsersData(partOfAccountBill)
-      .then(res => {
-        if (res) {
-          this.setState({
-            accountBills: res,
-          });
-        }
-      })
-      .catch(err => {
-        /* just ignore */
-      });
-  }
+  // ----
 
-  getMatchingLanguages(value) {
-    const escapedValue = escapeRegexCharacters(value.trim());
-    
-    if (escapedValue === '') {
-      return [];
-    }
+  getSuggestions = value => {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
   
-    const regex = new RegExp('^' + escapedValue, 'i');
-  
-    return this.state.accountBills.filter(language => regex.test(language.account_bill));
-  }
-
-  loadSuggestions(value) {
-    // Cancel the previous request
-    if (this.lastRequestId !== null) {
-      clearTimeout(this.lastRequestId);
-    }
-    
-    this.setState({
-      isLoading: true
-    });
-    
-    // Fake request
-    this.lastRequestId = setTimeout(() => {
-      this.setState({
-        isLoading: false,
-        suggestions: this.getMatchingLanguages(value)
-      });
-    }, 300);
-  }
+    return inputLength === 0 ? [] : this.state.accountBills.filter(accountBill =>
+      accountBill.account_bill.toLowerCase().slice(0, inputLength) === inputValue
+    );
+  };
 
   onChange = (event, { newValue }) => {
     this.setState({
-      value: newValue
+      value: newValue,
     });
-  };
-    
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.loadSuggestions(value);
+
+    this.Auth.getUsersData(newValue).then(res => {
+      if (res) {
+        this.setState({
+          accountBills: res,
+        });
+      }
+    });
   };
 
-  onSuggestionsClearRequested = () => {
+  // Autosuggest will call this function every time you need to update suggestions.
+  // You already implemented this logic above, so just use it.
+  onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      suggestions: []
+      suggestions: this.getSuggestions(value),
     });
   };
+
+  // Autosuggest will call this function every time you need to clear suggestions.
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: [],
+    });
+  };
+
+  // ----
 
   getStepContent = step => {
     const { classes } = this.props;
-    const { error } = this.state;
+    const { error, accountBills } = this.state;
+    const { value, suggestions } = this.state;
 
-    const { value, suggestions, isLoading } = this.state;
+    // Autosuggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: "Wprowadź numer",
+      placeholder: 'Wprowadź numer',
       value,
-      onChange: this.onChange
+      onChange: this.onChange,
+      
     };
 
     switch (step) {
       case 0:
         return (
           <Fragment>
-          
-        <div className={classes.textField}>Numer rachunku</div>
-        <Autosuggest 
-        className={classNames(classes.formItem, {
-                [classes.formError]: error,
-              })}
-          suggestions={suggestions}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={getSuggestionValue}
-          renderSuggestion={renderSuggestion}
-          inputProps={inputProps}
-          onKeyPress={e => this.validateNumber(e)}
-          onChange={this.handleChange}
-          />
-    
+            <div className={classes.textField}>Numer rachunku</div>
+
+            <Tooltip title="Add" placement="right-start">
+                <Autosuggest
+                className={classNames(classes.formItem, {
+                    [classes.formError]: error,
+                  })}
+                  suggestions={suggestions}
+                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={inputProps}
+                />
+            </Tooltip>
 
             
 
@@ -413,6 +382,20 @@ class PaymentPage extends Component {
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
+    });
+  }
+
+  handleSearchAccountBill(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+
+    this.Auth.getUsersData(e.target.value).then(res => {
+      if (res) {
+        this.setState({
+          accountBills: res,
+        });
+      }
     });
   }
 
