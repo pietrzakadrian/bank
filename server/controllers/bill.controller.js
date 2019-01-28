@@ -16,16 +16,16 @@ exports.getUsersdata = (req, res) => {
       account_bill: {
         [Op.like]: `${partOfAccountBill}%`,
       },
-      include: [
-        {
-          model: User,
-          where: {
-            id: db.Sequelize.col('bill.id_owner'),
-          },
-          attributes: ['name', 'surname'],
-        },
-      ],
     },
+    include: [
+      {
+        model: User,
+        where: {
+          id: db.Sequelize.col('bill.id_owner'),
+        },
+        attributes: ['name', 'surname'],
+      },
+    ],
   })
     .then(bill => {
       res.send(bill);
