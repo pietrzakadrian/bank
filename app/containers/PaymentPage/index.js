@@ -16,6 +16,8 @@ import classNames from 'classnames';
 import Helmet from 'react-helmet';
 import { withSnackbar } from 'notistack';
 import Autosuggest from 'react-autosuggest';
+import {debounce} from 'lodash';
+
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
@@ -222,6 +224,8 @@ class PaymentPage extends Component {
 
     this.state = {
       senderId: this.props.user.id,
+      recipientName: '',
+      recipientSurname: '',
       amountMoney: '',
       transferTitle: '',
       error: '',
@@ -247,18 +251,18 @@ class PaymentPage extends Component {
     );
   };
 
+  getUserData = debounce(newValue => this.Auth.getUsersData(newValue)
+  .then(res => {
+    if (res) { this.setState({ accountBills: res }) }
+   })
+, 400);
+
   onChange = (event, { newValue }) => {
     this.setState({
       value: newValue,
     }, () => {
       if (this.state.value.length !== 26) {
-        this.Auth.getUsersData(newValue).then(res => {
-          if (res) {
-            this.setState({
-              accountBills: res,
-            });
-          }
-        });
+        this.getUserData(newValue);
   };
     });
 }
@@ -266,6 +270,7 @@ class PaymentPage extends Component {
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       accountBills: this.getSuggestions(value),
+
     });
   };
 
