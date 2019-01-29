@@ -34,6 +34,16 @@ exports.register = (req, res) => {
     return accountBalanceHistory;
   }
 
+  function getIncomingTransfersSum() {
+    const incomingTransfersSum = '0';
+    return incomingTransfersSum;
+  }
+
+  function getOutgoingTransfersSum() {
+    const outgoingTransfersSum = '0';
+    return outgoingTransfersSum;
+  }
+
   function getTodayDate() {
     const today = new Date();
     return today;
@@ -63,6 +73,8 @@ exports.register = (req, res) => {
           await Additional.create({
             id_owner: bill.id_owner,
             account_balance_history: getAccountBalanceHistory(),
+            incoming_transfers_sum: getIncomingTransfersSum(),
+            outgoing_transfers_sum: getOutgoingTransfersSum(),
           });
           res.status(200).json({ register: true });
         } catch (e) {

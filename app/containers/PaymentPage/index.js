@@ -17,7 +17,6 @@ import Helmet from 'react-helmet';
 import { withSnackbar } from 'notistack';
 import Autosuggest from 'react-autosuggest';
 
-
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
@@ -27,7 +26,6 @@ import StepLabel from '@material-ui/core/StepLabel';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
 import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
@@ -224,14 +222,12 @@ class PaymentPage extends Component {
 
     this.state = {
       senderId: this.props.user.id,
-      accountBill: '',
       amountMoney: '',
       transferTitle: '',
       error: '',
       activeStep: 0,
       accountBills: [],
       value: '',
-      suggestions: [],
     };
 
     this.handleSearchAccountBill = this.handleSearchAccountBill.bind(this);
@@ -240,13 +236,13 @@ class PaymentPage extends Component {
     this.Auth = new AuthService();
   }
 
-  // ----
-
   getSuggestions = value => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
   
-    return inputLength === 0 ? [] : this.state.accountBills.filter(accountBill =>
+    return inputLength === 0 
+    ? []
+    : this.state.accountBills.filter(accountBill =>
       accountBill.account_bill.toLowerCase().slice(0, inputLength) === inputValue
     );
   };
@@ -254,29 +250,28 @@ class PaymentPage extends Component {
   onChange = (event, { newValue }) => {
     this.setState({
       value: newValue,
-    });
-
-    this.Auth.getUsersData(newValue).then(res => {
-      if (res) {
-        this.setState({
-          accountBills: res,
+    }, () => {
+      if (this.state.value.length !== 26) {
+        this.Auth.getUsersData(newValue).then(res => {
+          if (res) {
+            this.setState({
+              accountBills: res,
+            });
+          }
         });
-      }
-    });
   };
+    });
+}
 
-  // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      suggestions: this.getSuggestions(value),
+      accountBills: this.getSuggestions(value),
     });
   };
 
-  // Autosuggest will call this function every time you need to clear suggestions.
   onSuggestionsClearRequested = () => {
     this.setState({
-      suggestions: [],
+      accountBills: [],
     });
   };
 
@@ -285,14 +280,14 @@ class PaymentPage extends Component {
   getStepContent = step => {
     const { classes } = this.props;
     const { error, accountBills } = this.state;
-    const { value, suggestions } = this.state;
+    const { value } = this.state;
 
     // Autosuggest will pass through all these props to the input.
     const inputProps = {
       placeholder: 'Wprowadź numer',
       value,
       onChange: this.onChange,
-      
+      maxLength: 26,
     };
 
     switch (step) {
@@ -300,23 +295,17 @@ class PaymentPage extends Component {
         return (
           <Fragment>
             <div className={classes.textField}>Numer rachunku</div>
-
-            <Tooltip title="Add" placement="right-start">
                 <Autosuggest
                 className={classNames(classes.formItem, {
                     [classes.formError]: error,
                   })}
-                  suggestions={suggestions}
+                  suggestions={accountBills}
                   onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                   onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                   getSuggestionValue={getSuggestionValue}
                   renderSuggestion={renderSuggestion}
                   inputProps={inputProps}
                 />
-            </Tooltip>
-
-            
-
             {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
@@ -349,7 +338,6 @@ class PaymentPage extends Component {
               type="text"
               onChange={this.handleChange}
             />
-
             {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
@@ -519,11 +507,11 @@ class PaymentPage extends Component {
   };
 
   handleBack = () => {
-    const { activeStep, accountBill, amountMoney, transferTitle } = this.state;
+    const { activeStep, value, amountMoney, transferTitle } = this.state;
 
-    if (activeStep === 1 && accountBill !== '') {
+    if (activeStep === 1 && value !== '') {
       this.setState({
-        accountBill: '',
+        value: '',
       });
     } else if (activeStep === 2 && amountMoney !== '') {
       this.setState({
@@ -560,7 +548,6 @@ class PaymentPage extends Component {
               dots: classes.mobileStepperDots,
             }}
           />
-
           <Stepper className={classes.stepperContainer} activeStep={activeStep}>
             {steps.map((label, index) => {
               const props = {};
@@ -580,7 +567,6 @@ class PaymentPage extends Component {
                     {this.getStepContent(activeStep)}
                   </form>
                 </Typography>
-
                 {activeStep === steps.length - 1 ? (
                   <button
                     className={classes.formSubmit}
@@ -621,7 +607,7 @@ class PaymentPage extends Component {
                     ),
                   ]
                 )}
-
+​
                 {activeStep !== 0 ? (
                   <button
                     disabled={this.state.activeStep === 0}

@@ -26,6 +26,26 @@ module.exports = (sequelize, Sequelize) => {
           },
         },
       },
+      incoming_transfers_sum: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
+        isNumeric: true,
+        validate: {
+          notEmpty: {
+            msg: 'The incoming_transfers_sum is required.',
+          },
+        },
+      },
+      outgoing_transfers_sum: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
+        isNumeric: true,
+        validate: {
+          notEmpty: {
+            msg: 'The outgoing_transfers_sum is required.',
+          },
+        },
+      },
     },
     {
       timestamps: false,
