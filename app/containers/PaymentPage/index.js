@@ -17,6 +17,7 @@ import Helmet from 'react-helmet';
 import { withSnackbar } from 'notistack';
 import Autosuggest from 'react-autosuggest';
 import {debounce} from 'lodash';
+import Loading from '../../components/App/Loading'
 
 
 // Import Material-UI
@@ -228,10 +229,12 @@ class PaymentPage extends Component {
       recipientSurname: '',
       amountMoney: '',
       transferTitle: '',
+      authorizationCode: '',
       error: '',
       activeStep: 0,
       accountBills: [],
       value: '',
+      isLoading: true
     };
 
     this.handleSearchAccountBill = this.handleSearchAccountBill.bind(this);
@@ -243,17 +246,18 @@ class PaymentPage extends Component {
   getSuggestions = value => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
+    const recipientName = value.trim().toLowerCase();
   
     return inputLength === 0 
     ? []
     : this.state.accountBills.filter(accountBill =>
-      accountBill.account_bill.toLowerCase().slice(0, inputLength) === inputValue
+      accountBill.account_bill.toLowerCase().slice(0, inputLength) === inputValue,
     );
   };
 
   getUserData = debounce(newValue => this.Auth.getUsersData(newValue)
   .then(res => {
-    if (res) { this.setState({ accountBills: res }) }
+    if (res) { this.setState({ accountBills: res, isLoading: true }) }
    })
 , 400);
 
@@ -261,10 +265,14 @@ class PaymentPage extends Component {
     this.setState({
       value: newValue,
     }, () => {
-      if (this.state.value.length !== 26) {
-        this.getUserData(newValue);
-  };
-    });
+
+      this.state.value.length !== 0 && this.state.value.length !== 26
+      ? (this.setState({
+        isLoading: false,
+      }),
+      this.getUserData(newValue))
+      : (null)
+  })
 }
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -300,6 +308,9 @@ class PaymentPage extends Component {
         return (
           <Fragment>
             <div className={classes.textField}>Numer rachunku</div>
+
+            {!this.state.isLoading ? (<Loading/>) : (null)}
+
                 <Autosuggest
                 className={classNames(classes.formItem, {
                     [classes.formError]: error,
@@ -354,7 +365,8 @@ class PaymentPage extends Component {
               className={classNames(classes.formItem, {
                 [classes.formError]: error,
               })}
-              placeholder="test"
+              name="authorizationCode"
+              placeholder="Wpisz klucz autoryzacji"
               type="text"
             />
             {error ? <div className={classes.textError}>{error}</div> : null}

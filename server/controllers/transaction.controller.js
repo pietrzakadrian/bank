@@ -127,6 +127,8 @@ exports.create = (req, res) => {
     recipientId,
     amountMoney,
     transferTitle,
+    authorizationKey,
+    authorizationStatus,
   ) {
     return Transaction.create({
       id_sender: senderId,
@@ -134,6 +136,8 @@ exports.create = (req, res) => {
       date_time: getTodayDate(),
       amount_money: amountMoney,
       transfer_title: transferTitle,
+      authorization_key: authorizationKey,
+      authorization_status: authorizationStatus,
     });
   }
 
@@ -178,7 +182,6 @@ exports.create = (req, res) => {
     });
   }
 
-  const senderId = req.body.id_sender;
   Bill.findOne({
     where: {
       account_bill: req.body.account_bill,
@@ -190,6 +193,7 @@ exports.create = (req, res) => {
       const recipientAvailableFunds = isAccountBill.available_funds;
       const amountMoney = req.body.amount_money;
       const transferTitle = req.body.transfer_title;
+      const senderId = req.body.id_sender;
 
       Bill.findOne({
         where: {
