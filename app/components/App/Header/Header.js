@@ -117,13 +117,20 @@ const styles = theme => ({
   },
   headerItemTitle: {
     flexGrow: 1,
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
   },
   logoutButton: {
-    marginLeft: 12,
-    paddingLeft: 12,
+    margin: '0 6px',
+    padding: '0 6px',
 
     '&:hover': {
       cursor: 'pointer',
+    },
+    [theme.breakpoints.down('xs')]: {
+      padding: '0 1.5vh',
+      margin: 0,
     },
   },
   imgStyles: {
@@ -137,6 +144,22 @@ const styles = theme => ({
     position: 'relative',
     top: -1,
     marginRight: 4,
+  },
+  headerMenuItem: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  imgContainer: {
+    [theme.breakpoints.down('xs')]: {
+      // right: 0,
+    },
+  },
+  headerTopItems: {
+    [theme.breakpoints.down('xs')]: {
+      margin: '0 auto',
+    },
+    display: 'inherit',
   },
 });
 
@@ -239,25 +262,27 @@ class Header extends Component {
             {/* <div className={classes.localeToggle}>
               <LocaleToggle />
             </div> */}
-            <button type="button" className={classes.logoutButton}>
-              <MailOutlineIcon className={classes.exitToAppClass} />
-              Wiadomości
-            </button>
+            <span className={classes.headerTopItems}>
+              <button type="button" className={classes.logoutButton}>
+                <MailOutlineIcon className={classes.exitToAppClass} />
+                <span className={classes.headerMenuItem}>Wiadomości</span>
+              </button>
 
-            <button type="button" className={classes.logoutButton}>
-              <NotificationsNoneIcon className={classes.exitToAppClass} />
-              Powiadomienia
-            </button>
+              <button type="button" className={classes.logoutButton}>
+                <NotificationsNoneIcon className={classes.exitToAppClass} />
+                <span className={classes.headerMenuItem}>Powiadomienia</span>
+              </button>
 
-            <button
-              type="button"
-              onClick={this.handleLogout.bind(this)}
-              className={classes.logoutButton}
-            >
-              <ExitToAppIcon className={classes.exitToAppClass} />
-              Wyloguj
-            </button>
-            <div>
+              <button
+                type="button"
+                onClick={this.handleLogout.bind(this)}
+                className={classes.logoutButton}
+              >
+                <ExitToAppIcon className={classes.exitToAppClass} />
+                <span className={classes.headerMenuItem}>Wyloguj</span>
+              </button>
+            </span>
+            <div className={classes.imgContainer}>
               <img
                 src={Logo}
                 className={classes.imgStyles}

@@ -118,7 +118,7 @@ class DashboardPage extends Component {
             onLayoutChange={(layout, layouts) =>
               this.onLayoutChange(layout, layouts)
             }
-            breakpoints={{ lg: 1100, md: 996, sm: 610, xs: 480, xxs: 0 }}
+            breakpoints={{ lg: 1100, md: 900, sm: 610, xs: 480, xxs: 0 }}
             cols={{ lg: 3, md: 3, sm: 2, xs: 1, xxs: 1 }}
             rowHeight={9}
             margin={[20, 10]}

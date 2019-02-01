@@ -116,6 +116,12 @@ html {
     height: 75px!important;
   }
 
+  @media screen and (max-width: 319px) {
+    [class*="logoutButton"] {
+      padding: 0 0.5vh!important;
+    }
+  }
+
 `;
 
 export default GlobalStyle;
