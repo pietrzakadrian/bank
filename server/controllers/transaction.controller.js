@@ -177,14 +177,15 @@ exports.confirm = (req, res) => {
                   ).then(() => {
                     setWidgetStatus(senderId);
                     setWidgetStatus(recipientId);
+                    return res.status(200).json({ success: true });
                   });
-                  return res.status(200).json({ success: true });
+                } else {
+                  return res.status(404).json({
+                    message:
+                      'Incorrect authorization key or unregistered payment',
+                    success: false,
+                  });
                 }
-                return res.status(404).json({
-                  message:
-                    'Incorrect authorization key or unregistered payment',
-                  success: false,
-                });
               });
             } else {
               return res.status(400).json({
