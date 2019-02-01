@@ -383,11 +383,13 @@ class PaymentPage extends Component {
               name="authorizationCode"
               placeholder="Wpisz klucz autoryzacji"
               type="text"
+              onChange={this.handleChange}
             />
             {error ? <div className={classes.textError}>{error}</div> : null}
 
             <button
                     className={classNames(classes.formSubmit, classes.setAuthorizationCodeBtn)}
+                    onClick={this.handleFormCheckout}
                   >
                     <span className={classes.buttonText}>Wyślij kod</span>
                   </button>
@@ -478,14 +480,42 @@ class PaymentPage extends Component {
       });
   };
 
-  handleFormSubmit = variant => e => {
+  handleFormCheckout = e => {
     e.preventDefault();
 
-    this.Auth.createPayment(
+    this.Auth.registerTransaction(
       this.state.senderId,
       this.state.value,
       this.state.amountMoney,
       this.state.transferTitle,
+    )
+      .then(res => {
+        if (res) {
+          this.setState({
+            error: 'Klucz został wysłany',
+          });
+        } else {
+          this.setState({
+            error: 'Error',
+          });
+        }
+      })
+      .catch(err => {
+        this.setState({
+          error: 'Błąd',
+        });
+      });
+  }
+
+  handleFormSubmit = variant => e => {
+    e.preventDefault();
+
+    this.Auth.confirmTransaction(
+      this.state.senderId,
+      this.state.value,
+      this.state.amountMoney,
+      this.state.transferTitle,
+      this.state.authorizationCode,
     )
       .then(res => {
         if (res) {

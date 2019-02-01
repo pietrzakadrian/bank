@@ -14,7 +14,8 @@ export default class AuthService {
     this.getUserdata = this.getUserdata.bind(this);
     this.availableFunds = this.availableFunds.bind(this);
     this.accountBills = this.accountBills.bind(this);
-    this.createPayment = this.createPayment.bind(this);
+    this.registerTransaction = this.registerTransaction.bind(this);
+    this.confirmTransaction = this.confirmTransaction.bind(this);
     this.getUsersData = this.getUsersData.bind(this);
     this.recentTransactionsSender = this.recentTransactionsSender.bind(this);
     this.recentTransactionsRecipient = this.recentTransactionsRecipient.bind(
@@ -217,7 +218,7 @@ export default class AuthService {
   }
 
   // Payment Action
-  register(id_sender, account_bill, amount_money, transfer_title) {
+  registerTransaction(id_sender, account_bill, amount_money, transfer_title) {
     return this.fetch(`${this.domain}/transactions/register`, {
       method: 'POST',
       body: JSON.stringify({
@@ -229,7 +230,7 @@ export default class AuthService {
     });
   }
 
-  confirm(
+  confirmTransaction(
     id_sender,
     account_bill,
     amount_money,

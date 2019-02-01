@@ -254,12 +254,23 @@ exports.register = (req, res) => {
     return authorizationKey;
   }
 
+  // function getAmountMoney(amountMoney) {
+  //   const formattedAmountMoney = amountMoney
+  //     .toFixed(2)
+  //     .toString()
+  //     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+  //     .replace('.', ',');
+
+  //   return formattedAmountMoney;
+  // }
+
   async function sendAuthorizationKey(
     senderId,
     recipientId,
     amountMoney,
     authorizationKey,
   ) {
+
     await nodemailer.createTestAccount();
     const transporter = nodemailer.createTransport({
       host: env.nodemailer.host,
@@ -275,18 +286,10 @@ exports.register = (req, res) => {
       from: `"Bank Application" <${env.nodemailer.email}>`,
       to: `${await getSenderEmail(senderId)}`,
       subject: 'Autoryzacja płatności',
-      text: `Drogi kliencie! Zarejestrowaliśmy próbę wykonania płatności na kwotę: ${amountMoney
-        .toFixed(2)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-        .replace('.', ',')} PLN do ${await getRecipientName(
+      text: `Drogi kliencie! Zarejestrowaliśmy próbę wykonania płatności na kwotę: ${amountMoney} PLN do ${await getRecipientName(
         recipientId,
       )}. Potwierdź płatność, wpisując klucz autoryzacyjny: ${authorizationKey}`,
-      html: `Drogi kliencie!<br>Zarejestrowaliśmy próbę wykonania płatności na kwotę: ${amountMoney
-        .toFixed(2)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-        .replace('.', ',')} PLN do ${await getRecipientName(
+      html: `Drogi kliencie!<br>Zarejestrowaliśmy próbę wykonania płatności na kwotę: ${amountMoney} PLN do ${await getRecipientName(
         recipientId,
       )}.<br><br>Potwierdź płatność, wpisując klucz autoryzacyjny: <b>${authorizationKey}</b>`,
     };
@@ -359,7 +362,7 @@ exports.register = (req, res) => {
                     recipientId,
                     amountMoney,
                     authorizationKey,
-                  );
+                  ).catch(console.error);
 
                   return res.status(200).json({ success: true });
                 } else {
