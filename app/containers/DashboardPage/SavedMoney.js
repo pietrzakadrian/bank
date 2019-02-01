@@ -65,7 +65,8 @@ class SavedMoney extends Component {
         if (res) {
           const procentd =
             (res[0].additionals[0].incoming_transfers_sum * 100) /
-            res[0].additionals[0].outgoing_transfers_sum;
+            (res[0].additionals[0].incoming_transfers_sum +
+              res[0].additionals[0].outgoing_transfers_sum);
 
           this.setState({
             isLoading: true,

@@ -37,6 +37,11 @@ const styles = {
     width: 40,
     float: 'right',
   },
+  logoContainer: {
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
 };
 
 function Header(props) {
@@ -46,9 +51,11 @@ function Header(props) {
       <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolBar}>
           <div className={classes.grow}>
-            Bank Application
-            <div className={classes.headerSubheading}>
-              Electronic Payment System
+            <div className={classes.logoContainer}>
+              Bank Application
+              <div className={classes.headerSubheading}>
+                Electronic Payment System
+              </div>
             </div>
           </div>
           <div>

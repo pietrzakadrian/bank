@@ -11,16 +11,15 @@
 
 import React, { Component, Fragment } from 'react';
 import Helmet from 'react-helmet';
-import { withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import RGL, { Responsive, WidthProvider } from 'react-grid-layout';
-import withAuth from '../../services/withAuth';
+import { Responsive, WidthProvider } from 'react-grid-layout';
 import './styles.css';
 
 // import { FormattedMessage } from 'react-intl';
 // import messages from './messages';
 
 // Import Material-UI
+import { withStyles } from '@material-ui/core';
 
 // Import Components
 import AvailableFunds from './AvailableFunds';
@@ -34,6 +33,8 @@ import BankCards from './BankCards';
 import BankDeposits from './BankDeposits';
 import BankCredits from './BankCredits';
 import SavedMoney from './SavedMoney';
+
+import withAuth from '../../services/withAuth';
 
 // Import Styles
 const styles = theme => ({
