@@ -84,20 +84,16 @@ class SavedMoney extends Component {
     const { classes } = this.props;
     const {
       isLoading,
-      availableFunds,
       outgoingTransfersSum,
       incomingTransfersSum,
       procent,
     } = this.state;
-
-    console.log(procent);
 
     const data = [
       { name: 'Group A', value: incomingTransfersSum },
       { name: 'Group B', value: outgoingTransfersSum },
     ];
     const COLORS = ['#15a0dd', '#ea0000'];
-    const RADIAN = Math.PI / 180;
 
     return (
       <Paper className={classes.root} elevation={1}>
