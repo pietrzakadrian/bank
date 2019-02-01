@@ -54,7 +54,7 @@ const styles = theme => ({
   },
   appBarShift: {
     paddingRight: '0!important',
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
     },
     marginLeft: drawerWidth,
@@ -67,7 +67,7 @@ const styles = theme => ({
     marginLeft: 12,
     marginRight: 12,
     color: '#0029ab',
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       display: 'none',
     },
   },
@@ -75,7 +75,7 @@ const styles = theme => ({
     marginLeft: 12,
     marginRight: 12,
     color: '#0029ab',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       display: 'none',
     },
   },
@@ -92,7 +92,7 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -267,7 +267,7 @@ class Header extends Component {
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>
-          <Hidden smUp implementation="css">
+          <Hidden mdUp implementation="css">
             <Sidebar
               open={this.state.mobileOpen}
               onMenuItemClicked={() => this.setState({ mobileOpen: false })}
@@ -275,7 +275,7 @@ class Header extends Component {
               onClose={this.handleDrawerToggleMobile}
             />
           </Hidden>
-          <Hidden xsDown implementation="css">
+          <Hidden smDown implementation="css">
             <Sidebar
               open={this.state.desktopOpen}
               onMenuItemClicked={() => this.setState({ mobileOpen: false })}

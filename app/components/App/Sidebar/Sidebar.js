@@ -13,7 +13,7 @@ import Footer from '../Footer';
 const drawerWidth = 261;
 const styles = theme => ({
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: drawerWidth,
       flexShrink: 0,
     },
