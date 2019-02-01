@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import Hidden from '@material-ui/core/Hidden';
 import { FormattedMessage } from 'react-intl';
 import LoadingLinear from '../../LoadingLinear';
@@ -237,6 +239,16 @@ class Header extends Component {
             {/* <div className={classes.localeToggle}>
               <LocaleToggle />
             </div> */}
+            <button type="button" className={classes.logoutButton}>
+              <MailOutlineIcon className={classes.exitToAppClass} />
+              Wiadomości
+            </button>
+
+            <button type="button" className={classes.logoutButton}>
+              <NotificationsNoneIcon className={classes.exitToAppClass} />
+              Powiadomienia
+            </button>
+
             <button
               type="button"
               onClick={this.handleLogout.bind(this)}

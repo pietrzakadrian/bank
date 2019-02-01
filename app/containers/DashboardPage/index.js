@@ -33,6 +33,7 @@ import Copyright from './Copyright';
 import BankCards from './BankCards';
 import BankDeposits from './BankDeposits';
 import BankCredits from './BankCredits';
+import SavedMoney from './SavedMoney';
 
 // Import Styles
 const styles = theme => ({
@@ -128,7 +129,7 @@ class DashboardPage extends Component {
               <AvailableFunds id={this.props.user.id} />
             </div>
             <div key="2" data-grid={{ x: 1, y: 0, w: 1, h: 6, static: true }}>
-              <BankInformation />
+              <SavedMoney id={this.props.user.id} />
             </div>
 
             <div

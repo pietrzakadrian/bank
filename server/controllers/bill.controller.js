@@ -46,7 +46,11 @@ exports.getUserdata = (req, res) => {
         where: {
           id_owner: db.Sequelize.col('bill.id_owner'),
         },
-        attributes: ['account_balance_history'],
+        attributes: [
+          'account_balance_history',
+          'incoming_transfers_sum',
+          'outgoing_transfers_sum',
+        ],
       },
     ],
     where: { id_owner },

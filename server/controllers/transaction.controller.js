@@ -78,6 +78,8 @@ exports.confirm = (req, res) => {
   function setWidgetStatus(userId) {
     let availableFunds = null;
     let accountBalanceHistory = 0; // TODO: always prepend 0, but balance history is only from the last month
+    let incomingTransfersSum = 0; // *
+    let outgoingTransfersSum = 0; // *
 
     Transaction.findAll({
       where: db.Sequelize.and(
@@ -97,11 +99,13 @@ exports.confirm = (req, res) => {
       if (transactionsHistory) {
         for (let i = 0; i < transactionsHistory.length; i++) {
           if (transactionsHistory[i].id_sender === userId) {
+            outgoingTransfersSum += transactionsHistory[i].amount_money;
             availableFunds -= transactionsHistory[i].amount_money;
             accountBalanceHistory += `,${availableFunds}`;
           }
 
           if (transactionsHistory[i].id_recipient === userId) {
+            incomingTransfersSum += transactionsHistory[i].amount_money;
             availableFunds += transactionsHistory[i].amount_money;
             accountBalanceHistory += `,${availableFunds}`;
           }
@@ -110,6 +114,8 @@ exports.confirm = (req, res) => {
         Additional.update(
           {
             account_balance_history: accountBalanceHistory,
+            outgoing_transfers_sum: outgoingTransfersSum,
+            incoming_transfers_sum: incomingTransfersSum,
           },
           { where: { id_owner: userId } },
         );
@@ -173,12 +179,12 @@ exports.confirm = (req, res) => {
                     setWidgetStatus(recipientId);
                   });
                   return res.status(200).json({ success: true });
-                } else {
-                  return res.status(404).json({
-                    message: 'Incorrect authorization key or unregistered payment',
-                    success: false,
-                    });
-                  } 
+                }
+                return res.status(404).json({
+                  message:
+                    'Incorrect authorization key or unregistered payment',
+                  success: false,
+                });
               });
             } else {
               return res.status(400).json({
@@ -270,7 +276,6 @@ exports.register = (req, res) => {
     amountMoney,
     authorizationKey,
   ) {
-
     await nodemailer.createTestAccount();
     const transporter = nodemailer.createTransport({
       host: env.nodemailer.host,
@@ -365,12 +370,11 @@ exports.register = (req, res) => {
                   ).catch(console.error);
 
                   return res.status(200).json({ success: true });
-                } else {
-                  return res.status(400).json({
-                    error: 'Authorization key has been sent',
-                    success: false,
-                  });
                 }
+                return res.status(400).json({
+                  error: 'Authorization key has been sent',
+                  success: false,
+                });
               });
             } else {
               return res.status(400).json({

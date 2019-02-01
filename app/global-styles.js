@@ -111,6 +111,11 @@ html {
     }
   }
 
+  .recharts-surface {
+    width: 75px!important;
+    height: 75px!important;
+  }
+
 `;
 
 export default GlobalStyle;
