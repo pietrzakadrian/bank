@@ -217,7 +217,25 @@ export default class AuthService {
   }
 
   // Payment Action
-  createPayment(id_sender, account_bill, amount_money, transfer_title) {
+  register(id_sender, account_bill, amount_money, transfer_title) {
+    return this.fetch(`${this.domain}/transactions/register`, {
+      method: 'POST',
+      body: JSON.stringify({
+        id_sender,
+        account_bill,
+        amount_money,
+        transfer_title,
+      }),
+    });
+  }
+
+  confirm(
+    id_sender,
+    account_bill,
+    amount_money,
+    transfer_title,
+    authorization_key,
+  ) {
     return this.fetch(`${this.domain}/transactions`, {
       method: 'POST',
       body: JSON.stringify({
@@ -225,6 +243,7 @@ export default class AuthService {
         account_bill,
         amount_money,
         transfer_title,
+        authorization_key,
       }),
     });
   }

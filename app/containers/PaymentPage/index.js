@@ -208,6 +208,21 @@ const styles = theme => ({
   success: {
     backgroundColor: '#0098db',
   },
+  // setAuthorizationCodeBtn: {
+  //   display: 'inline-block',
+  //   width: 90,
+  //   position: 'absolute',
+  //   [theme.breakpoints.up('924px')]: {
+  //     display: 'none',
+  //   },
+  //   top: 197,
+  //   marginLeft: 20,
+  //   marginTop: 0,
+  // },
+  // formSubmitContainer: {
+  //   width: '100%',
+  //   textAlign: 'center',
+  // },
 });
 
 function getSteps() {
@@ -237,7 +252,6 @@ class PaymentPage extends Component {
       isLoading: true
     };
 
-    this.handleSearchAccountBill = this.handleSearchAccountBill.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.Auth = new AuthService();
@@ -246,7 +260,6 @@ class PaymentPage extends Component {
   getSuggestions = value => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
-    const recipientName = value.trim().toLowerCase();
   
     return inputLength === 0 
     ? []
@@ -278,7 +291,6 @@ class PaymentPage extends Component {
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       accountBills: this.getSuggestions(value),
-
     });
   };
 
@@ -307,10 +319,9 @@ class PaymentPage extends Component {
       case 0:
         return (
           <Fragment>
+          {!this.state.isLoading ? (<Loading/>) : (null)}
+
             <div className={classes.textField}>Numer rachunku</div>
-
-            {!this.state.isLoading ? (<Loading/>) : (null)}
-
                 <Autosuggest
                 className={classNames(classes.formItem, {
                     [classes.formError]: error,
@@ -323,6 +334,8 @@ class PaymentPage extends Component {
                   inputProps={inputProps}
                 />
             {error ? <div className={classes.textError}>{error}</div> : null}
+
+        
           </Fragment>
         );
       case 1:
@@ -360,9 +373,11 @@ class PaymentPage extends Component {
       case 3:
         return (
           <Fragment>
+          <div className={classes.formSubmitContainer}>
             <div className={classes.textField}>Potwierdź dane</div>
+            
             <input
-              className={classNames(classes.formItem, {
+              className={classNames(classes.formItem, classes.formSpecial, {
                 [classes.formError]: error,
               })}
               name="authorizationCode"
@@ -370,6 +385,15 @@ class PaymentPage extends Component {
               type="text"
             />
             {error ? <div className={classes.textError}>{error}</div> : null}
+
+            <button
+                    className={classNames(classes.formSubmit, classes.setAuthorizationCodeBtn)}
+                  >
+                    <span className={classes.buttonText}>Wyślij kod</span>
+                  </button>
+
+
+            </div>
           </Fragment>
         );
       default:
@@ -387,20 +411,6 @@ class PaymentPage extends Component {
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
-    });
-  }
-
-  handleSearchAccountBill(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-
-    this.Auth.getUsersData(e.target.value).then(res => {
-      if (res) {
-        this.setState({
-          accountBills: res,
-        });
-      }
     });
   }
 

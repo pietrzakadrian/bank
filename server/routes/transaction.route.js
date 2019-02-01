@@ -3,10 +3,18 @@ module.exports = function(app) {
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
   const checkToken = require('../middlewares/checkToken.middleware.js');
 
-  // Create a new Transactions
-  app.post('/api/transactions', checkAuth, checkToken, transactions.create);
+  // Confirm a new Transactions
+  app.post('/api/transactions', checkAuth, checkToken, transactions.confirm);
 
-  // Return Recipient's Transaction Data
+  // Register a new Transactions Action
+  app.post(
+    '/api/transactions/register',
+    checkAuth,
+    checkToken,
+    transactions.register,
+  );
+
+  // Return Recipient's Transaction Data Action
   app.get(
     '/api/transactions/recipient/:recipientId',
     checkAuth,
@@ -14,7 +22,7 @@ module.exports = function(app) {
     transactions.getRecipientdata,
   );
 
-  // Return Sender's Transaction Data
+  // Return Sender's Transaction Data Action
   app.get(
     '/api/transactions/sender/:senderId',
     checkAuth,

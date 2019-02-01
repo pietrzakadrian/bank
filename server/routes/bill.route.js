@@ -3,20 +3,20 @@ module.exports = function(app) {
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
   const checkToken = require('../middlewares/checkToken.middleware.js');
 
-  // Return User's Bill Data
+  // Return User's Bill Data Action
   app.get('/api/bills/:userId', checkAuth, checkToken, bills.getUserdata);
 
-  // Return All User's Bill Data
-  app.get('/api/bills/search/:accountBill', checkAuth, bills.getUsersdata);
+  // Return All User's Bill Data Action
+  app.get('/api/bills/search/:accountBill?', checkAuth, bills.getUsersdata);
 
-  // Check User's Bill Exist
+  // Check User's Bill Exist Action
   app.get(
     '/api/bills/isAccountBill/:accountBill',
     checkAuth,
     bills.isAccountBill,
   );
 
-  // Check User's Amount Money currently
+  // Check User's Amount Money currently Action
   app.post(
     '/api/bills/isAmountMoney',
     checkAuth,
