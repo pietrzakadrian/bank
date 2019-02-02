@@ -43,6 +43,11 @@ const styles = theme => ({
     width: '75px!important',
     height: '75px!important',
   },
+  typographyText: {
+    fontSize: '1.5rem',
+    fontWeight: 400,
+    lineHeight: 1.33,
+  },
 });
 
 class SavedMoney extends Component {
@@ -92,6 +97,7 @@ class SavedMoney extends Component {
       procent,
     } = this.state;
 
+    let id = 0;
     let data;
     let COLORS;
 
@@ -112,7 +118,7 @@ class SavedMoney extends Component {
           <Fragment>
             <div>
               <Typography variant="subtitle1">Zaoszczędzone środki</Typography>
-              <Typography variant="h5">
+              <span className={classes.typographyText}>
                 {procent.toFixed(1).replace('.', ',')}
                 &nbsp;
                 <Typography
@@ -121,7 +127,7 @@ class SavedMoney extends Component {
                 >
                   %
                 </Typography>
-              </Typography>
+              </span>
               <PieChart
                 width={200}
                 height={200}
@@ -129,6 +135,7 @@ class SavedMoney extends Component {
               >
                 <Pie
                   data={data}
+                  dataKey="value"
                   cx={100}
                   cy={100}
                   innerRadius={70}
@@ -137,7 +144,8 @@ class SavedMoney extends Component {
                   paddingAngle={0}
                 >
                   {data.map((entry, index) => (
-                    <Cell fill={COLORS[index % COLORS.length]} />
+                    (id += 1),
+                    <Cell key={id} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
               </PieChart>

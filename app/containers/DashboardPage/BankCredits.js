@@ -61,8 +61,8 @@ function BankCredits({ classes }) {
     <Card className={classes.card}>
       <CardContent className={classes.root}>
         <Typography
-          variant="h6"
           component="h2"
+          variant="h6"
           className={classes.typographyTitle}
         >
           <FormattedMessage {...messages.bankCredits} />

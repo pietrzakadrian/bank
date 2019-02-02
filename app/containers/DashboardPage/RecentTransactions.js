@@ -38,6 +38,9 @@ const styles = theme => ({
   tableCell: {
     padding: '4px 0px 4px 28px',
   },
+  tableCellRight: {
+    textAlign: 'right',
+  },
   loadingCircular: {
     display: 'flex',
     height: 193,
@@ -106,12 +109,14 @@ class RecentTransactions extends Component {
       ...recentTransactionsSender,
     ];
 
+    let id = 0;
+
     return (
       <Card className={classes.card}>
         <CardContent className={classes.root}>
           <Typography
-            variant="h6"
             component="h2"
+            variant="h6"
             className={classes.typographyTitle}
           >
             <FormattedMessage {...messages.recentTransactions} />
@@ -120,58 +125,63 @@ class RecentTransactions extends Component {
           {isLoading ? (
             <Table className={classes.table}>
               <TableBody>
-                {sortingData(combinedData).map(row => (
-                  <TableRow key={row.id}>
-                    {row.id_sender === this.props.id ? (
-                      <Fragment>
-                        <TableCell
-                          className={classes.tableCell}
-                          component="th"
-                          scope="row"
-                        >
-                          Do {row.getRecipientdata.name} {row.getRecipientdata.surname}
-                          <br />
-                          {row.transfer_title}
-                        </TableCell>
-                        <TableCell className={classes.tableCell} numeric>
-                          {moment(row.date_time).format('DD.MM.YYYY')}
-                          <br />
-                          <span className={classes.outgoingTransfer}>
-                            -
-                            {row.amount_money
-                              .toFixed(2)
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                              .replace('.', ',')}{' '}
-                            PLN
-                          </span>
-                        </TableCell>
-                      </Fragment>
-                    ) : (
-                      <Fragment>
-                        <TableCell
-                          className={classes.tableCell}
-                          component="th"
-                          scope="row"
-                        >
-                          Od {row.getSenderdata.name} {row.getSenderdata.surname}
-                          <br />
-                          {row.transfer_title}
-                        </TableCell>
-                        <TableCell className={classes.tableCell} numeric>
-                          {moment(row.date_time).format('DD.MM.YYYY')}
-                          <br />
-                          {row.amount_money
-                            .toFixed(2)
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                            .replace('.', ',')}{' '}
-                          PLN
-                        </TableCell>
-                      </Fragment>
-                    )}
-                  </TableRow>
-                ))}
+                {sortingData(combinedData).map(
+                  row => (
+                    (id += 1),
+                    (
+                      <TableRow key={id}>
+                        {row.id_sender === this.props.id ? (
+                          <Fragment>
+                            <TableCell
+                              className={classes.tableCell}
+                              scope="row"
+                            >
+                              Do {row.getRecipientdata.name}{' '}
+                              {row.getRecipientdata.surname}
+                              <br />
+                              {row.transfer_title}
+                            </TableCell>
+                            <TableCell className={classes.tableCellRight}>
+                              {moment(row.date_time).format('DD.MM.YYYY')}
+                              <br />
+                              <span className={classes.outgoingTransfer}>
+                                -
+                                {row.amount_money
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                                  .replace('.', ',')}{' '}
+                                PLN
+                              </span>
+                            </TableCell>
+                          </Fragment>
+                        ) : (
+                          <Fragment>
+                            <TableCell
+                              className={classes.tableCell}
+                              scope="row"
+                            >
+                              Od {row.getSenderdata.name}{' '}
+                              {row.getSenderdata.surname}
+                              <br />
+                              {row.transfer_title}
+                            </TableCell>
+                            <TableCell className={classes.tableCellRight}>
+                              {moment(row.date_time).format('DD.MM.YYYY')}
+                              <br />
+                              {row.amount_money
+                                .toFixed(2)
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                                .replace('.', ',')}{' '}
+                              PLN
+                            </TableCell>
+                          </Fragment>
+                        )}
+                      </TableRow>
+                    )
+                  ),
+                )}
               </TableBody>
             </Table>
           ) : (

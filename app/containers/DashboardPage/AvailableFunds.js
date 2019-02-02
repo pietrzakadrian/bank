@@ -41,6 +41,11 @@ const styles = theme => ({
     right: 20,
     top: 23.5,
   },
+  typographyText: {
+    fontSize: '1.5rem',
+    fontWeight: 400,
+    lineHeight: 1.33,
+  },
 });
 
 class AvailableFunds extends Component {
@@ -91,7 +96,7 @@ class AvailableFunds extends Component {
               <Typography variant="subtitle1">
                 <FormattedMessage {...messages.availableFunds} />
               </Typography>
-              <Typography variant="h5">
+              <span className={classes.typographyText}>
                 {availableFunds}
                 &nbsp;
                 <Typography
@@ -100,7 +105,7 @@ class AvailableFunds extends Component {
                 >
                   PLN
                 </Typography>
-              </Typography>
+              </span>
               <Trend
                 className={classes.trendContainer}
                 width={115}

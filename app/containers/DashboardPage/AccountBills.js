@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 // Import Material-UI
@@ -44,6 +44,10 @@ const styles = theme => ({
   },
   tableCell: {
     fontSize: theme.spacing.unit * 1.8,
+  },
+  tableCellRight: {
+    fontSize: theme.spacing.unit * 1.8,
+    textAlign: 'right',
   },
   loadingCircular: {
     display: 'flex',
@@ -94,13 +98,14 @@ class AccountBills extends Component {
   render() {
     const { classes } = this.props;
     const { accountBills, isLoading } = this.state;
+    let id = 0;
 
     return (
       <Card className={classes.card}>
         <CardContent className={classes.root}>
           <Typography
-            variant="h6"
             component="h2"
+            variant="h6"
             className={classes.typographyTitle}
           >
             <FormattedMessage {...messages.bills} />
@@ -121,36 +126,41 @@ class AccountBills extends Component {
           <Table>
             <TableBody>
               {isLoading ? (
-                accountBills.map(accountBill => (
-                  <TableRow>
-                    <TableCell
-                      className={classes.tableCell}
-                      component="th"
-                      scope="row"
-                    >
-                      <span>
-                        {accountBill.account_bill
-                          .toString()
-                          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-                          .trim()}
-                      </span>
-                    </TableCell>
-                    <TableCell className={classes.tableCell} numeric>
-                      <span className={classes.availabeFundsContainer}>
-                        {accountBill.available_funds
-                          .toFixed(2)
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                          .replace('.', ',')}
-                      </span>{' '}
-                      PLN
-                    </TableCell>
-                  </TableRow>
-                ))
+                accountBills.map(
+                  accountBill => (
+                    (id += 1),
+                    (
+                      <TableRow key={id}>
+                        <TableCell className={classes.tableCell} scope="row">
+                          <span>
+                            {accountBill.account_bill
+                              .toString()
+                              .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+                              .trim()}
+                          </span>
+                        </TableCell>
+                        <TableCell className={classes.tableCellRight}>
+                          <span className={classes.availabeFundsContainer}>
+                            {accountBill.available_funds
+                              .toFixed(2)
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                              .replace('.', ',')}
+                          </span>{' '}
+                          PLN
+                        </TableCell>
+                      </TableRow>
+                    )
+                  ),
+                )
               ) : (
-                <div className={classes.loadingCircular}>
-                  <Loading />
-                </div>
+                <TableRow>
+                  <TableCell>
+                    <div className={classes.loadingCircular}>
+                      <Loading />
+                    </div>
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>
