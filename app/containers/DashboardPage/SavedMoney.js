@@ -55,6 +55,7 @@ class SavedMoney extends Component {
       outgoingTransfersSum: [],
       incomingTransfersSum: [],
       procent: null,
+      isNothingTransfersSum: 1
     };
     this.Auth = new AuthService();
   }
@@ -65,8 +66,8 @@ class SavedMoney extends Component {
         if (res) {
           const procentd =
             (res[0].additionals[0].incoming_transfers_sum * 100) /
-            (res[0].additionals[0].incoming_transfers_sum +
-              res[0].additionals[0].outgoing_transfers_sum);
+              (res[0].additionals[0].incoming_transfers_sum +
+                res[0].additionals[0].outgoing_transfers_sum) || 0;
 
           this.setState({
             isLoading: true,
@@ -87,14 +88,29 @@ class SavedMoney extends Component {
       isLoading,
       outgoingTransfersSum,
       incomingTransfersSum,
+      isNothingTransfersSum,
       procent,
     } = this.state;
 
-    const data = [
+    let data;
+    let COLORS;
+
+    outgoingTransfersSum == 0 && incomingTransfersSum == 0 ? (
+      data = [{ name: 'Group A', value: isNothingTransfersSum },
+      ],
+      COLORS = ['rgba(0, 0, 0, 0.12)']
+    ) : (
+      data = [
       { name: 'Group A', value: incomingTransfersSum },
       { name: 'Group B', value: outgoingTransfersSum },
-    ];
-    const COLORS = ['#15a0dd', '#ea0000'];
+    ],
+    COLORS = ['#15a0dd', '#ea0000'])
+
+    // const data = [
+    //   { name: 'Group A', value: incomingTransfersSum },
+    //   { name: 'Group B', value: outgoingTransfersSum },
+    // ];
+    // const COLORS = ['#15a0dd', '#ea0000'];
 
     return (
       <Paper className={classes.root} elevation={1}>
