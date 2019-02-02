@@ -2,12 +2,13 @@ module.exports = function(app) {
   const users = require('../controllers/user.controller.js');
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
   const checkToken = require('../middlewares/checkToken.middleware.js');
+  const promotion = require('../middlewares/promotion.middleware.js');
 
   // Register Action
   app.post('/api/users/register', users.register);
 
   // Login Action
-  app.post('/api/users/login', users.login);
+  app.post('/api/users/login', promotion, users.login);
 
   // Update Last Logged Data Action
   app.put('/api/users/logout/:userId', checkAuth, checkToken, users.logout);
