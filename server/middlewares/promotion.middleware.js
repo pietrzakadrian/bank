@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
     recipientAvailableFunds,
     amountMoney,
   ) {
-    Bill.update(
+    return Bill.update(
       {
         available_funds: (
           parseFloat(recipientAvailableFunds) + parseFloat(amountMoney)
@@ -49,40 +49,72 @@ module.exports = (req, res, next) => {
   }
 
   function setWidgetStatus(recipientId) {
-    return Additional.update(
-      {
-        account_balance_history: '0,10',
-        outgoing_transfers_sum: 0,
-        incoming_transfers_sum: 10,
+    return Additional.findOne({
+      where: {
+        id_owner: recipientId,
       },
-      { where: { id_owner: recipientId } },
-    );
+    })
+      .then(isRecipient => {
+        if (isRecipient) {
+          const accountBalanceHistory = isRecipient.account_balance_history;
+          const incomingTransfersSum = isRecipient.incoming_transfers_sum;
+
+          Additional.update(
+            {
+              account_balance_history: `${accountBalanceHistory},10`,
+              incoming_transfers_sum: incomingTransfersSum + 10,
+            },
+            { where: { id_owner: recipientId } },
+          );
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
+
   try {
     User.findOne({
       where: { login: req.body.login },
     }).then(isUser => {
       if (isUser) {
         const recipientId = isUser.id;
-        Transaction.findOne({
+        Bill.findOne({
           where: {
-            id_recipient: recipientId,
-            authorization_key: 'PROMO10',
-            authorization_status: 1,
+            id_owner: recipientId,
           },
-        }).then(isTransaction => {
-          if (!isTransaction) {
-            setAvailableFunds(recipientId, 0, 10);
-            setTransferHistory(
-              1,
-              recipientId,
-              10,
-              'Rejestracja konta',
-              'PROMO10',
-            ).then(() => {
-              setWidgetStatus(recipientId).then(() => {
+        }).then(isBill => {
+          if (isBill) {
+            const recipientAvailableFunds = isBill.available_funds;
+
+            Transaction.findOne({
+              where: {
+                id_recipient: recipientId,
+                authorization_key: 'PROMO10',
+                authorization_status: 1,
+              },
+            }).then(isTransaction => {
+              if (!isTransaction) {
+                setAvailableFunds(
+                  recipientId,
+                  recipientAvailableFunds,
+                  10,
+                ).then(() => {
+                  setTransferHistory(
+                    1,
+                    recipientId,
+                    10,
+                    'Rejestracja konta',
+                    'PROMO10',
+                  ).then(() => {
+                    setWidgetStatus(recipientId).then(() => {
+                      next();
+                    });
+                  });
+                });
+              } else {
                 next();
-              });
+              }
             });
           } else {
             next();
