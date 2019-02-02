@@ -122,6 +122,11 @@ html {
     }
   }
 
+  @media screen and (max-width: 357px) {
+    [class*="AvailableFunds-trendContainer"], .recharts-wrapper {
+      display: none!important;
+    }
+  }
 `;
 
 export default GlobalStyle;

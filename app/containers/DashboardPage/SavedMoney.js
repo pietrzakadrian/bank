@@ -106,12 +106,6 @@ class SavedMoney extends Component {
     ],
     COLORS = ['#15a0dd', '#ea0000'])
 
-    // const data = [
-    //   { name: 'Group A', value: incomingTransfersSum },
-    //   { name: 'Group B', value: outgoingTransfersSum },
-    // ];
-    // const COLORS = ['#15a0dd', '#ea0000'];
-
     return (
       <Paper className={classes.root} elevation={1}>
         {isLoading ? (
