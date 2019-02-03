@@ -76,13 +76,13 @@ exports.register = (req, res) => {
             incoming_transfers_sum: getIncomingTransfersSum(),
             outgoing_transfers_sum: getOutgoingTransfersSum(),
           });
-          res.status(200).json({ register: true });
+          res.status(200).json({ success: true });
         } catch (e) {
-          res.status(400).json({ error: 'Invalid E-Mail' });
+          res.status(200).json({ error: 'Invalid E-Mail', success: false });
         }
       });
     } else {
-      res.status(400).json({ error: 'User already exists.' });
+      res.status(200).json({ error: 'User already exists.', success: false });
     }
   });
 };
@@ -122,7 +122,7 @@ exports.login = (req, res) => {
             { where: { login: req.body.login } },
           ).then(() => {
             res.status(200).json({
-              message: 'Auth successful',
+              success: true,
               token: getToken(isUser.id),
             });
           });
@@ -133,13 +133,16 @@ exports.login = (req, res) => {
             },
             { where: { login: req.body.login } },
           ).then(() => {
-            res
-              .status(400)
-              .json({ error: 'Auth failed. The password is incorrect.' });
+            res.status(200).json({
+              error: 'Auth failed. The password is incorrect.',
+              success: false,
+            });
           });
         }
       } else {
-        res.status(400).json({ error: 'Auth failed. User does not exist' });
+        res
+          .status(200)
+          .json({ error: 'Auth failed. User does not exist', success: false });
       }
     })
     .catch(err => {
@@ -165,6 +168,7 @@ exports.logout = (req, res) => {
         .then(() => {
           res.status(200).json({
             message: 'Logout successful',
+            success: true,
           });
         })
         .catch(err => {
@@ -186,7 +190,7 @@ exports.isLogin = (req, res) => {
       if (isLogin) {
         res.status(200).json({ isLogin: true });
       } else {
-        res.status(400).json({ isLogin: false });
+        res.status(200).json({ isLogin: false });
       }
     })
     .catch(err => {
@@ -206,7 +210,7 @@ exports.isEmail = (req, res) => {
       if (isEmail) {
         res.status(200).json({ isEmail: true });
       } else {
-        res.status(400).json({ isEmail: false });
+        res.status(200).json({ isEmail: false });
       }
     })
     .catch(err => {
@@ -255,7 +259,7 @@ exports.setUserdata = (req, res) => {
     { where: { id } },
   )
     .then(() => {
-      res.status(200).json({ update: true });
+      res.status(200).json({ success: true });
     })
     .catch(err => {
       /* just ignore */

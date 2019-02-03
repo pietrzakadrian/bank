@@ -184,7 +184,7 @@ class LoginPage extends Component {
 
     this.Auth.isLogin(this.state.login)
       .then(res => {
-        if (res) {
+        if (res.isLogin) {
           this.setState({
             loginExist: true,
             loginError: '',
@@ -202,7 +202,7 @@ class LoginPage extends Component {
       })
       .catch(err => {
         this.setState({
-          loginError: 'Error catch',
+          loginError: 'Proszę podać prawidłowy identyfikator',
         });
       });
   }
@@ -222,7 +222,7 @@ class LoginPage extends Component {
 
     this.Auth.login(this.state.login, this.state.password)
       .then(res => {
-        if (res) {
+        if (!res.error) {
           this.props.history.replace('/dashboard');
           this.setState({
             login: '',

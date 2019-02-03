@@ -11,7 +11,7 @@ module.exports = function(app) {
 
   // Check User's Bill Exist Action
   app.get(
-    '/api/bills/isAccountBill/:accountBill',
+    '/api/bills/isAccountBill/:accountBill?',
     checkAuth,
     bills.isAccountBill,
   );

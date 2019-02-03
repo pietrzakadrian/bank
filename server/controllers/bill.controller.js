@@ -60,8 +60,7 @@ exports.getUserdata = (req, res) => {
       res.send(bill);
     })
     .catch(err => {
-      res.send(err);
-      console.log(err);
+      /* just ignore */
     });
 };
 
@@ -77,7 +76,7 @@ exports.isAccountBill = (req, res) => {
       if (isAccountBill && isAccountBill.id !== req.userData.id) {
         res.status(200).json({ isAccountBill: true });
       } else {
-        res.status(404).json({ isAccountBill: false });
+        res.status(200).json({ isAccountBill: false });
       }
     })
     .catch(err => {
@@ -98,7 +97,7 @@ exports.isAmountMoney = (req, res) => {
       if (isSender.available_funds >= amountMoney && amountMoney > 0) {
         res.status(200).json({ isAmountMoney: true });
       } else {
-        res.status(400).json({ isAmountMoney: false });
+        res.status(200).json({ isAmountMoney: false });
       }
     })
     .catch(err => {

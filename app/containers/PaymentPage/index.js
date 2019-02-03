@@ -428,7 +428,7 @@ class PaymentPage extends Component {
 
     this.Auth.isAccountBill(this.state.value)
       .then(res => {
-        if (res) {
+        if (res.isAccountBill) {
           this.setState(state => ({
             activeStep: state.activeStep + 1,
           }));
@@ -460,7 +460,7 @@ class PaymentPage extends Component {
 
     this.Auth.isAmountMoney(this.state.senderId, this.state.amountMoney)
       .then(res => {
-        if (res) {
+        if (res.isAmountMoney) {
           this.setState(state => ({
             activeStep: state.activeStep + 1,
           }));
@@ -496,13 +496,13 @@ class PaymentPage extends Component {
           });
         } else {
           this.setState({
-            error: 'Error',
+            error: 'Przerwa techniczna. Spróbuj za chwilę.',
           });
         }
       })
       .catch(err => {
         this.setState({
-          error: 'Błąd',
+          error: 'Przerwa techniczna. Spróbuj za chwilę.',
         });
       });
   }
@@ -525,13 +525,13 @@ class PaymentPage extends Component {
           this.props.history.replace('/dashboard');
         } else {
           this.setState({
-            error: 'Error',
+            error: 'Przerwa techniczna. Spróbuj za chwilę.',
           });
         }
       })
       .catch(err => {
         this.setState({
-          error: 'Błąd',
+          error: 'Przerwa techniczna. Spróbuj za chwilę.',
         });
       });
   };

@@ -351,7 +351,7 @@ class RegisterPage extends Component {
 
     this.Auth.isLogin(this.state.login)
       .then(res => {
-        if (!res) {
+        if (!res.isLogin) {
           this.setState(state => ({
             activeStep: state.activeStep + 1,
           }));
@@ -384,8 +384,8 @@ class RegisterPage extends Component {
       return;
     }
 
-    this.Auth.isEmail(this.state.email).then(isEmail => {
-      if (!isEmail) {
+    this.Auth.isEmail(this.state.email).then(res => {
+      if (!res.isEmail) {
         this.Auth.register(
           this.state.login,
           this.state.password,
@@ -393,8 +393,8 @@ class RegisterPage extends Component {
           this.state.surname,
           this.state.email,
         )
-          .then(res => {
-            if (!res.error) {
+          .then(register => {
+            if (!register.error) {
               this.setState({
                 activeStep: activeStep + 1,
               });
@@ -403,11 +403,15 @@ class RegisterPage extends Component {
                 variant,
               });
               this.props.history.replace('/login');
+            } else {
+              this.setState({
+                error: 'Nieprawidłowy E-Mail',
+              });
             }
           })
           .catch(err => {
             this.setState({
-              error: 'Nieprawidłowy E-Mail',
+              error: 'Przerwa techniczna. Spróbuj za chwilę.',
             });
           });
       } else {

@@ -14,10 +14,10 @@ module.exports = function(app) {
   app.put('/api/users/logout/:userId', checkAuth, checkToken, users.logout);
 
   // Check Login User Exist Action
-  app.get('/api/users/isLogin/:userLogin', users.isLogin);
+  app.get('/api/users/isLogin/:userLogin?', users.isLogin);
 
   // Check Email User Exist Action
-  app.get('/api/users/isEmail/:userEmail', users.isEmail);
+  app.get('/api/users/isEmail/:userEmail?', users.isEmail);
 
   // Return basic User's Data Action
   app.get('/api/users/:userId', checkAuth, checkToken, users.getUserdata);

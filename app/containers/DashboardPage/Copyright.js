@@ -12,12 +12,25 @@ const styles = {
     bottom: 5,
     right: 24,
   },
+  copyrightHref: {
+    textDecoration: 'none',
+    color: '#cacaca',
+    fontWeight: 550,
+  },
 };
 
 function Copyright({ classes }) {
   return (
     <div className={classes.copyrightContainer}>
-      &copy; 2019 Adrian Pietrzak.
+      &copy; 2019{' '}
+      <a
+        href="https://www.linkedin.com/in/pietrzakadrian/"
+        target="_blank"
+        className={classes.copyrightHref}
+      >
+        Adrian Pietrzak
+      </a>
+      .
     </div>
   );
 }

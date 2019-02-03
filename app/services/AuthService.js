@@ -27,30 +27,14 @@ export default class AuthService {
   isLogin(id) {
     return this.fetch(`${this.domain}/users/isLogin/${id}`, {
       method: 'GET',
-    })
-      .then(res => {
-        if (!res.error) {
-          return 1;
-        }
-      })
-      .catch(err => {
-        /* just ignore */
-      });
+    });
   }
 
   // Check Email Exist Action
   isEmail(email) {
     return this.fetch(`${this.domain}/users/isEmail/${email}`, {
       method: 'GET',
-    })
-      .then(res => {
-        if (!res.error) {
-          return 1;
-        }
-      })
-      .catch(err => {
-        /* just ignore */
-      });
+    });
   }
 
   // Login Action
@@ -84,15 +68,7 @@ export default class AuthService {
         surname,
         email,
       }),
-    })
-      .then(res => {
-        if (!res.error) {
-          return 1;
-        }
-      })
-      .catch(err => {
-        /* just ignore */
-      });
+    });
   }
 
   // Logout Action
@@ -188,15 +164,7 @@ export default class AuthService {
   isAccountBill(account_bill) {
     return this.fetch(`${this.domain}/bills/isAccountBill/${account_bill}`, {
       method: 'GET',
-    })
-      .then(res => {
-        if (!res.error) {
-          return 1;
-        }
-      })
-      .catch(err => {
-        /* just ignore */
-      });
+    });
   }
 
   isAmountMoney(id_sender, amount_money) {
@@ -206,15 +174,7 @@ export default class AuthService {
         id_sender,
         amount_money,
       }),
-    })
-      .then(res => {
-        if (!res.error) {
-          return 1;
-        }
-      })
-      .catch(err => {
-        /* just ignore */
-      });
+    });
   }
 
   // Payment Action
