@@ -190,10 +190,7 @@ class LoginPage extends Component {
             loginError: '',
             password: '',
           });
-          document.getElementsByTagName('input').password.value = '';
         } else {
-          document.getElementsByTagName('input').login.value = '';
-
           this.setState({
             login: '',
             loginError: 'Proszę podać prawidłowy identyfikator',
@@ -214,7 +211,6 @@ class LoginPage extends Component {
       password: '',
       passwordError: '',
     });
-    document.getElementsByTagName('input').login.value = '';
   };
 
   handleFormSubmit(e) {
@@ -222,16 +218,9 @@ class LoginPage extends Component {
 
     this.Auth.login(this.state.login, this.state.password)
       .then(res => {
-        if (!res.error) {
+        if (res) {
           this.props.history.replace('/dashboard');
-          this.setState({
-            login: '',
-            password: '',
-            loginError: '',
-            passwordError: '',
-          });
         } else {
-          document.getElementsByTagName('input').password.value = '';
           this.setState({
             passwordError: 'Proszę podać prawidłowy kod dostępu',
             password: '',
@@ -240,7 +229,7 @@ class LoginPage extends Component {
       })
       .catch(err => {
         this.setState({
-          passwordError: 'Error catch',
+          passwordError: 'Przerwa techniczna. Spróbuj za chwilę.',
         });
       });
   }
@@ -270,7 +259,7 @@ class LoginPage extends Component {
                 <Fragment>
                   <div className={classes.textField}>Numer identyfikacyjny</div>
                   {[
-                    <Fragment>
+                    <Fragment key={1}>
                       <input
                         onKeyPress={e => this.validateNumber(e)}
                         className={classNames(classes.formItem, {
@@ -298,7 +287,7 @@ class LoginPage extends Component {
                 <Fragment>
                   <div className={classes.textField}>Hasło dostępu</div>
                   {[
-                    <Fragment>
+                    <Fragment key={2}>
                       <input
                         className={classNames(classes.formItem, {
                           [classes.formError]: passwordError,

@@ -558,6 +558,7 @@ class RegisterPage extends Component {
                       [
                         activeStep === 0 ? (
                           <button
+                          key={1}
                             className={classes.formSubmit}
                             onClick={this.isLogin}
                             disabled={this.state.activeStep === 4}
@@ -566,7 +567,7 @@ class RegisterPage extends Component {
                             <NavigateNext />
                           </button>
                         ) : (
-                          <button
+                          <button key={1}
                             className={classes.formSubmit}
                             onClick={this.handleNext}
                             disabled={this.state.activeStep === 4}
