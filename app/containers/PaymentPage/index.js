@@ -16,9 +16,8 @@ import classNames from 'classnames';
 import Helmet from 'react-helmet';
 import { withSnackbar } from 'notistack';
 import Autosuggest from 'react-autosuggest';
-import {debounce} from 'lodash';
-import Loading from '../../components/App/Loading'
-
+import { debounce } from 'lodash';
+import Loading from '../../components/App/Loading';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
@@ -36,22 +35,14 @@ import messages from './messages';
 import AuthService from '../../services/AuthService';
 import withAuth from '../../services/withAuth';
 
-// ---
-
-// When suggestion is clicked, Autosuggest needs to populate the input
-// based on the clicked suggestion. Teach Autosuggest how to calculate the
-// input value for every given suggestion.
 const getSuggestionValue = suggestion => suggestion.account_bill;
 
-// Use your imagination to render suggestions.
 const renderSuggestion = suggestion => (
   <div>
     {suggestion.account_bill} <br/>
     {suggestion.user.name} {suggestion.user.surname}
   </div>
 );
-
-// ---
 
 const styles = theme => ({
   button: {
@@ -171,6 +162,17 @@ const styles = theme => ({
     margin: '0 auto',
     fontSize: 14.5,
   },
+  textMessage: {
+    textAlign: 'left',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '17rem',
+    },
+    margin: '0 auto',
+    fontSize: 14.5,
+  },
   footerText: {
     textAlign: 'left',
     padding: '0 15px',
@@ -246,10 +248,11 @@ class PaymentPage extends Component {
       transferTitle: '',
       authorizationCode: '',
       error: '',
+      message: '',
       activeStep: 0,
       accountBills: [],
       value: '',
-      isLoading: true
+      isLoading: true,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -275,14 +278,14 @@ class PaymentPage extends Component {
 , 400);
 
   onChange = (event, { newValue }) => {
-    this.setState({
-      value: newValue,
-    }, () => {
-
-      this.state.value.length !== 0 && this.state.value.length !== 26
-      ? (this.setState({
-        isLoading: false,
-      }),
+    this.setState(
+      {
+        value: newValue,
+      },
+      () => {
+        this.state.value.length !== 0 && this.state.value.length !== 26 ? (this.setState({
+          isLoading: false,
+        }),
       this.getUserData(newValue))
       : (null)
   })
@@ -300,14 +303,12 @@ class PaymentPage extends Component {
     });
   };
 
-  // ----
 
   getStepContent = step => {
     const { classes } = this.props;
-    const { error, accountBills } = this.state;
+    const { error, accountBills, message } = this.state;
     const { value } = this.state;
 
-    // Autosuggest will pass through all these props to the input.
     const inputProps = {
       placeholder: 'Wprowadź numer',
       value,
@@ -319,23 +320,20 @@ class PaymentPage extends Component {
       case 0:
         return (
           <Fragment>
-          {!this.state.isLoading ? (<Loading/>) : (null)}
-
+            {!this.state.isLoading ? (<Fragment><Loading/><br/></Fragment>) : (null)}
             <div className={classes.textField}>Numer rachunku</div>
-                <Autosuggest
-                className={classNames(classes.formItem, {
-                    [classes.formError]: error,
-                  })}
-                  suggestions={accountBills}
-                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                  onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                  getSuggestionValue={getSuggestionValue}
-                  renderSuggestion={renderSuggestion}
-                  inputProps={inputProps}
-                />
+            <Autosuggest
+              className={classNames(classes.formItem, {
+                [classes.formError]: error,
+              })}
+              suggestions={accountBills}
+              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+              getSuggestionValue={getSuggestionValue}
+              renderSuggestion={renderSuggestion}
+              inputProps={inputProps}
+            />
             {error ? <div className={classes.textError}>{error}</div> : null}
-
-        
           </Fragment>
         );
       case 1:
@@ -373,28 +371,26 @@ class PaymentPage extends Component {
       case 3:
         return (
           <Fragment>
-          <div className={classes.formSubmitContainer}>
-            <div className={classes.textField}>Potwierdź dane</div>
-            
-            <input
-              className={classNames(classes.formItem, classes.formSpecial, {
-                [classes.formError]: error,
-              })}
-              name="authorizationCode"
-              placeholder="Wpisz klucz autoryzacji"
-              type="text"
-              onChange={this.handleChange}
-            />
-            {error ? <div className={classes.textError}>{error}</div> : null}
+            <div className={classes.formSubmitContainer}>
+              <div className={classes.textField}>Potwierdź dane</div>
+              <input
+                className={classNames(classes.formItem, classes.formSpecial, {
+                  [classes.formError]: error,
+                })}
+                name="authorizationCode"
+                placeholder="Wpisz klucz autoryzacji"
+                type="text"
+                onChange={this.handleChange}
+              />
+              {error ? <div className={classes.textError}>{error}</div> : null}
+              {message ? <div className={classes.textMessage}>{message}</div> : null}
 
-            <button
-                    className={classNames(classes.formSubmit, classes.setAuthorizationCodeBtn)}
-                    onClick={this.handleFormCheckout}
-                  >
-                    <span className={classes.buttonText}>Wyślij kod</span>
-                  </button>
-
-
+              <button
+                className={classNames(classes.formSubmit, classes.setAuthorizationCodeBtn)}
+                onClick={this.handleFormCheckout}
+              >
+              <span className={classes.buttonText}>Wyślij kod</span>
+              </button>
             </div>
           </Fragment>
         );
@@ -490,13 +486,14 @@ class PaymentPage extends Component {
       this.state.transferTitle,
     )
       .then(res => {
-        if (res) {
+        if (!res.error) {
           this.setState({
-            error: 'Klucz został wysłany',
+            message: 'Klucz został wysłany',
+            error: '',
           });
         } else {
           this.setState({
-            error: 'Przerwa techniczna. Spróbuj za chwilę.',
+            message: 'Przerwa techniczna. Spróbuj za chwilę.',
           });
         }
       })
@@ -505,7 +502,7 @@ class PaymentPage extends Component {
           error: 'Przerwa techniczna. Spróbuj za chwilę.',
         });
       });
-  }
+  };
 
   handleFormSubmit = variant => e => {
     e.preventDefault();
@@ -518,14 +515,15 @@ class PaymentPage extends Component {
       this.state.authorizationCode,
     )
       .then(res => {
-        if (res) {
+        if (!res.error) {
           this.props.enqueueSnackbar('Przelew został wykonany.', {
             variant,
           });
           this.props.history.replace('/dashboard');
         } else {
           this.setState({
-            error: 'Przerwa techniczna. Spróbuj za chwilę.',
+            error: 'Niepoprawny klucz autoryzacji.',
+            message: '',
           });
         }
       })
@@ -619,11 +617,11 @@ class PaymentPage extends Component {
           <div>
             {activeStep === steps.length ? null : (
               <div>
-                <Typography className={classes.instructions}>
+                <div className={classes.instructions}>
                   <form noValidate onSubmit={this.handleFormSubmit('success')}>
                     {this.getStepContent(activeStep)}
                   </form>
-                </Typography>
+                </div>
                 {activeStep === steps.length - 1 ? (
                   <button
                     className={classes.formSubmit}
@@ -636,6 +634,7 @@ class PaymentPage extends Component {
                   [
                     activeStep === 0 ? (
                       <button
+                      key={1}
                         className={classes.formSubmit}
                         onClick={this.isAccountBill}
                         disabled={this.state.activeStep === 4}
@@ -645,6 +644,7 @@ class PaymentPage extends Component {
                       </button>
                     ) : activeStep === 1 ? (
                       <button
+                      key={2}
                         className={classes.formSubmit}
                         onClick={this.isAmountMoney}
                         disabled={this.state.activeStep === 4}
@@ -654,6 +654,7 @@ class PaymentPage extends Component {
                       </button>
                     ) : (
                       <button
+                      key={3}
                         className={classes.formSubmit}
                         onClick={this.handleNext}
                         disabled={this.state.activeStep === 4}

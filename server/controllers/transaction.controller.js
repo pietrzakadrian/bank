@@ -180,33 +180,33 @@ exports.confirm = (req, res) => {
                     return res.status(200).json({ success: true });
                   });
                 } else {
-                  return res.status(404).json({
-                    message:
+                  return res.status(200).json({
+                    error:
                       'Incorrect authorization key or unregistered payment',
                     success: false,
                   });
                 }
               });
             } else {
-              return res.status(400).json({
+              return res.status(200).json({
                 error: 'Sender does not have enough money',
                 success: false,
               });
             }
           } else {
             return res
-              .status(404)
+              .status(200)
               .json({ error: 'Sender does not exist', success: false });
           }
         });
       } else {
         return res
-          .status(404)
+          .status(200)
           .json({ error: 'Attempt payment to myself', success: false });
       }
     } else {
       return res
-        .status(404)
+        .status(200)
         .json({ error: 'Recipient does not exist', success: false });
     }
   });
@@ -354,6 +354,7 @@ exports.register = (req, res) => {
                 },
                 order: [['date_time', 'DESC']],
               }).then(isAuthorizationKey => {
+                console.log(isAuthorizationKey);
                 if (!isAuthorizationKey) {
                   setTransferHistory(
                     senderId,
@@ -372,31 +373,31 @@ exports.register = (req, res) => {
 
                   return res.status(200).json({ success: true });
                 }
-                return res.status(400).json({
+                return res.status(200).json({
                   error: 'Authorization key has been sent',
                   success: false,
                 });
               });
             } else {
-              return res.status(400).json({
+              return res.status(200).json({
                 error: 'Sender does not have enough money',
                 success: false,
               });
             }
           } else {
             return res
-              .status(404)
+              .status(200)
               .json({ error: 'Id sender doesnt exist', success: false });
           }
         });
       } else {
         return res
-          .status(404)
+          .status(200)
           .json({ error: 'Attempt payment to myself', success: false });
       }
     } else {
       return res
-        .status(404)
+        .status(200)
         .json({ error: 'Recipient does not exist', success: false });
     }
   });
