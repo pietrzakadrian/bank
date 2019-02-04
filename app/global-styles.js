@@ -127,6 +127,14 @@ html {
       display: none!important;
     }
   }
+
+  @media screen and (max-height: 478px) {
+    [class*="footerComponent"] {
+      position: relative!important;
+    }
+  }
+
+
 `;
 
 export default GlobalStyle;
