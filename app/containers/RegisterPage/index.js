@@ -540,11 +540,11 @@ class RegisterPage extends Component {
               <div>
                 {activeStep === steps.length ? null : (
                   <div>
-                    <Typography className={classes.instructions}>
+                    <span className={classes.instructions}>
                       <form noValidate onSubmit={this.handleFormSubmit}>
                         {this.getStepContent(activeStep)}
                       </form>
-                    </Typography>
+                    </span>
 
                     {activeStep === steps.length - 1 ? (
                       <button
