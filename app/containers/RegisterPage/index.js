@@ -12,7 +12,6 @@ import MobileStepper from '@material-ui/core/MobileStepper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import AuthService from '../../services/AuthService';
 
@@ -367,7 +366,7 @@ class RegisterPage extends Component {
           });
         }
       })
-      .catch(err => {
+      .catch(() => {
         /* just ignore */
       });
   }
@@ -409,7 +408,7 @@ class RegisterPage extends Component {
               });
             }
           })
-          .catch(err => {
+          .catch(() => {
             this.setState({
               error: 'Przerwa techniczna. Spróbuj za chwilę.',
             });
@@ -558,7 +557,8 @@ class RegisterPage extends Component {
                       [
                         activeStep === 0 ? (
                           <button
-                          key={1}
+                            type="button"
+                            key={1}
                             className={classes.formSubmit}
                             onClick={this.isLogin}
                             disabled={this.state.activeStep === 4}
@@ -567,7 +567,9 @@ class RegisterPage extends Component {
                             <NavigateNext />
                           </button>
                         ) : (
-                          <button key={1}
+                          <button
+                            key={1}
+                            type="button"
                             className={classes.formSubmit}
                             onClick={this.handleNext}
                             disabled={this.state.activeStep === 4}
@@ -581,6 +583,7 @@ class RegisterPage extends Component {
 
                     {activeStep !== 0 ? (
                       <button
+                        type="button"
                         disabled={this.state.activeStep === 0}
                         onClick={this.handleBack}
                       >

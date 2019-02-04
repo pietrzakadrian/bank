@@ -17,7 +17,6 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import Hidden from '@material-ui/core/Hidden';
 import { FormattedMessage } from 'react-intl';
-import LoadingLinear from '../../LoadingLinear';
 
 // Import Services
 import Logo from '../../../images/logo.png';
@@ -25,7 +24,6 @@ import AuthService from '../../../services/AuthService';
 
 // Import Internationalize
 import messages from './messages';
-import LocaleToggle from '../../../modules/LocaleToggle';
 
 // Import Components
 import Sidebar from '../Sidebar';
@@ -201,11 +199,11 @@ class Header extends Component {
 
   handleLogout() {
     this.Auth.logout(this.state.user_id)
-      .then(res => {
+      .then(() => {
         Auth.unsetToken();
         this.props.history.replace('/login');
       })
-      .catch(err => {
+      .catch(() => {
         Auth.unsetToken();
         this.props.history.replace('/login');
       });
@@ -218,7 +216,7 @@ class Header extends Component {
   }
 
   render() {
-    const { classes, theme, location } = this.props;
+    const { classes, location } = this.props;
     const headerTitle = {
       '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
       '/payment': <FormattedMessage {...messages.paymentTitle} />,
@@ -259,9 +257,6 @@ class Header extends Component {
             >
               {headerTitle[location.pathname]}
             </Typography>
-            {/* <div className={classes.localeToggle}>
-              <LocaleToggle />
-            </div> */}
             <span className={classes.headerTopItems}>
               <button type="button" className={classes.logoutButton}>
                 <MailOutlineIcon className={classes.exitToAppClass} />
@@ -317,7 +312,7 @@ class Header extends Component {
           <div className={classes.drawerHeader} />
           {this.props.children}​
           <ResizeObserver
-            onResize={rect => {
+            onResize={() => {
               const evt = window.document.createEvent('UIEvents');
               evt.initUIEvent('resize', true, false, window, 0);
               window.dispatchEvent(evt);

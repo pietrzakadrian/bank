@@ -21,7 +21,7 @@ import AuthService from '../../services/AuthService';
 import messages from './messages';
 
 // Import Styles
-const styles = theme => ({
+const styles = () => ({
   root: {
     padding: 0,
   },
@@ -78,8 +78,8 @@ class RecentTransactions extends Component {
           });
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        /* just ignore */
       });
 
     this.Auth.recentTransactionsSender(this.props.id)

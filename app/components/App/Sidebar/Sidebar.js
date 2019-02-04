@@ -72,6 +72,10 @@ function Sidebar({ open, classes, variant, onClose, onMenuItemClicked }) {
 
 Sidebar.propTypes = {
   classes: PropTypes.object.isRequired,
+  open: PropTypes.bool.isRequired,
+  variant: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onMenuItemClicked: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Sidebar);

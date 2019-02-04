@@ -11,8 +11,8 @@ import { PieChart, Pie, Cell } from 'recharts';
 import Loading from 'components/App/Loading/Loading';
 
 // Import Internationalize
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+// import { FormattedMessage } from 'react-intl';
+// import messages from './messages';
 import AuthService from '../../services/AuthService';
 
 // Import Styles
@@ -56,11 +56,10 @@ class SavedMoney extends Component {
 
     this.state = {
       isLoading: false,
-      availableFunds: [],
       outgoingTransfersSum: [],
       incomingTransfersSum: [],
       procent: null,
-      isNothingTransfersSum: 1
+      isNothingTransfersSum: 1,
     };
     this.Auth = new AuthService();
   }
@@ -82,8 +81,8 @@ class SavedMoney extends Component {
           });
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        /* just ignore */
       });
   }
 
@@ -163,6 +162,7 @@ class SavedMoney extends Component {
 
 SavedMoney.propTypes = {
   classes: PropTypes.object.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 export default withStyles(styles)(SavedMoney);

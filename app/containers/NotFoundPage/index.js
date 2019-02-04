@@ -10,17 +10,17 @@
  */
 
 import React, { Fragment, Component } from 'react';
-import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+// import { FormattedMessage } from 'react-intl';
 import Helmet from 'react-helmet';
 import { withStyles } from '@material-ui/core/styles';
 import ErrorOutline from '@material-ui/icons/ErrorOutline';
 import { withRouter } from 'react-router-dom';
-import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Header from '../../components/Header';
 import HeaderSubheading from '../../components/HeaderSubheading';
 
-import messages from './messages';
+// import messages from './messages';
 
 const styles = theme => ({
   formItem: {

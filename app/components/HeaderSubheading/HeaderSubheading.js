@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import LocaleToggle from '../../modules/LocaleToggle';
 
 const styles = {
   root: {
@@ -37,7 +38,9 @@ function headerSubheading(props) {
       <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolBar}>
           <div className={classes.grow}>{headerText}</div>
-          <div>PL / EN / DE</div>
+          <div className={classes.localeToggle}>
+            <LocaleToggle />
+          </div>
         </Toolbar>
       </AppBar>
     </div>
@@ -46,6 +49,7 @@ function headerSubheading(props) {
 
 headerSubheading.propTypes = {
   classes: PropTypes.object.isRequired,
+  headerText: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(headerSubheading);

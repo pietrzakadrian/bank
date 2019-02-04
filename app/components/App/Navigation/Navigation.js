@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
 import classNames from 'classnames';
@@ -17,14 +17,13 @@ import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import SettingsIcon from '@material-ui/icons/Settings';
-import Divider from '@material-ui/core/Divider/Divider';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 // Import Styles
-const styles = theme => ({
+const styles = () => ({
   primaryActive: {
     color: 'white',
   },
@@ -43,7 +42,7 @@ class Navigation extends Component {
   state = {};
 
   render() {
-    const { classes, location, open } = this.props;
+    const { classes, location } = this.props;
 
     return (
       <MenuList className={classes.root} disablePadding>

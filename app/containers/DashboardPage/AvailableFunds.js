@@ -78,8 +78,8 @@ class AvailableFunds extends Component {
           });
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        /* just ignore */
       });
   }
 

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Helmet from 'react-helmet';
 import classNames from 'classnames';
@@ -197,7 +198,7 @@ class LoginPage extends Component {
           });
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({
           loginError: 'Proszę podać prawidłowy identyfikator',
         });
@@ -227,7 +228,7 @@ class LoginPage extends Component {
           });
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({
           passwordError: 'Przerwa techniczna. Spróbuj za chwilę.',
         });
@@ -276,6 +277,7 @@ class LoginPage extends Component {
                     </Fragment>,
                   ]}
                   <button
+                    type="button"
                     className={classes.formSubmit}
                     onClick={this.handleFormSubmitLogin}
                   >
@@ -305,7 +307,7 @@ class LoginPage extends Component {
                   <button className={classes.formSubmit} type="submit">
                     <span className={classes.buttonText}>Zaloguj</span>
                   </button>
-                  <button onClick={this.handleFormBack}>
+                  <button type="button" onClick={this.handleFormBack}>
                     <NavigateBefore />
                     <span className={classes.buttonText}>Powrót</span>
                   </button>
@@ -375,5 +377,10 @@ class LoginPage extends Component {
     );
   }
 }
+
+LoginPage.propTypes = {
+  classes: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+};
 
 export default withStyles(styles)(withRouter(LoginPage));

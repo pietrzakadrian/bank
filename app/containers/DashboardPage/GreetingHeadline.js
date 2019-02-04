@@ -22,8 +22,8 @@ class GreetingHeadline extends Component {
     this.state = {
       name: '',
       surname: '',
-      last_present_logged: '',
-      last_successful_logged: '',
+      lastPresentLogged: '',
+      lastSuccessfulLogged: '',
       isLoading: false,
     };
     this.Auth = new AuthService();
@@ -36,14 +36,14 @@ class GreetingHeadline extends Component {
           this.setState({
             name: res.user.name,
             surname: res.user.surname,
-            last_present_logged: res.user.last_present_logged,
-            last_successful_logged: res.user.last_successful_logged,
+            lastPresentLogged: res.user.last_present_logged,
+            lastSuccessfulLogged: res.user.last_successful_logged,
             isLoading: true,
           });
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        /* just ignore */
       });
   }
 
@@ -52,8 +52,8 @@ class GreetingHeadline extends Component {
     const {
       name,
       surname,
-      last_successful_logged,
-      last_present_logged,
+      lastSuccessfulLogged,
+      lastPresentLogged,
       isLoading,
     } = this.state;
     return (
@@ -70,9 +70,9 @@ class GreetingHeadline extends Component {
             <br />
             <span>
               Ostatnie udane logowanie:{' '}
-              {last_successful_logged
-                ? [moment(last_successful_logged).format('DD.MM.YYYY, HH:mm')]
-                : [moment(last_present_logged).format('DD.MM.YYYY, HH:mm')]}
+              {lastSuccessfulLogged
+                ? [moment(lastSuccessfulLogged).format('DD.MM.YYYY, HH:mm')]
+                : [moment(lastPresentLogged).format('DD.MM.YYYY, HH:mm')]}
             </span>
           </div>
         </div>
@@ -83,6 +83,7 @@ class GreetingHeadline extends Component {
 
 GreetingHeadline.propTypes = {
   classes: PropTypes.object.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 export default withStyles(styles)(GreetingHeadline);

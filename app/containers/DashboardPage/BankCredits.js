@@ -15,7 +15,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 // Import Styles
-const styles = theme => ({
+const styles = () => ({
   root: {
     padding: 0,
   },

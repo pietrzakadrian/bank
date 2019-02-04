@@ -17,7 +17,6 @@ import Helmet from 'react-helmet';
 import { withSnackbar } from 'notistack';
 import Autosuggest from 'react-autosuggest';
 import { debounce } from 'lodash';
-import Loading from '../../components/App/Loading';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
@@ -27,9 +26,8 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
-import Typography from '@material-ui/core/Typography';
-
 import { FormattedMessage } from 'react-intl';
+import Loading from '../../components/App/Loading';
 import messages from './messages';
 
 import AuthService from '../../services/AuthService';
@@ -39,7 +37,7 @@ const getSuggestionValue = suggestion => suggestion.account_bill;
 
 const renderSuggestion = suggestion => (
   <div>
-    {suggestion.account_bill} <br/>
+    {suggestion.account_bill} <br />
     {suggestion.user.name} {suggestion.user.surname}
   </div>
 );
@@ -242,11 +240,6 @@ class PaymentPage extends Component {
 
     this.state = {
       senderId: this.props.user.id,
-      recipientName: '',
-      recipientSurname: '',
-      amountMoney: '',
-      transferTitle: '',
-      authorizationCode: '',
       error: '',
       message: '',
       activeStep: 0,
@@ -263,19 +256,25 @@ class PaymentPage extends Component {
   getSuggestions = value => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
-  
-    return inputLength === 0 
-    ? []
-    : this.state.accountBills.filter(accountBill =>
-      accountBill.account_bill.toLowerCase().slice(0, inputLength) === inputValue,
-    );
+
+    return inputLength === 0
+      ? []
+      : this.state.accountBills.filter(
+        accountBill =>
+          accountBill.account_bill.toLowerCase().slice(0, inputLength) ===
+            inputValue,
+      );
   };
 
-  getUserData = debounce(newValue => this.Auth.getUsersData(newValue)
-  .then(res => {
-    if (res) { this.setState({ accountBills: res, isLoading: true }) }
-   })
-, 400);
+  getUserData = debounce(
+    newValue =>
+      this.Auth.getUsersData(newValue).then(res => {
+        if (res) {
+          this.setState({ accountBills: res, isLoading: true });
+        }
+      }),
+    400,
+  );
 
   onChange = (event, { newValue }) => {
     this.setState(
@@ -283,13 +282,15 @@ class PaymentPage extends Component {
         value: newValue,
       },
       () => {
-        this.state.value.length !== 0 && this.state.value.length !== 26 ? (this.setState({
-          isLoading: false,
-        }),
-      this.getUserData(newValue))
-      : (null)
-  })
-}
+        this.state.value.length !== 0 && this.state.value.length !== 26
+          ? (this.setState({
+            isLoading: false,
+          }),
+          this.getUserData(newValue))
+          : null;
+      },
+    );
+  };
 
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
@@ -302,7 +303,6 @@ class PaymentPage extends Component {
       accountBills: [],
     });
   };
-
 
   getStepContent = step => {
     const { classes } = this.props;
@@ -320,7 +320,12 @@ class PaymentPage extends Component {
       case 0:
         return (
           <Fragment>
-            {!this.state.isLoading ? (<Fragment><Loading/><br/></Fragment>) : (null)}
+            {!this.state.isLoading ? (
+              <Fragment>
+                <Loading />
+                <br />
+              </Fragment>
+            ) : null}
             <div className={classes.textField}>Numer rachunku</div>
             <Autosuggest
               className={classNames(classes.formItem, {
@@ -383,13 +388,19 @@ class PaymentPage extends Component {
                 onChange={this.handleChange}
               />
               {error ? <div className={classes.textError}>{error}</div> : null}
-              {message ? <div className={classes.textMessage}>{message}</div> : null}
+              {message ? (
+                <div className={classes.textMessage}>{message}</div>
+              ) : null}
 
               <button
-                className={classNames(classes.formSubmit, classes.setAuthorizationCodeBtn)}
+                type="button"
+                className={classNames(
+                  classes.formSubmit,
+                  classes.setAuthorizationCodeBtn,
+                )}
                 onClick={this.handleFormCheckout}
               >
-              <span className={classes.buttonText}>Wyślij kod</span>
+                <span className={classes.buttonText}>Wyślij kod</span>
               </button>
             </div>
           </Fragment>
@@ -439,7 +450,7 @@ class PaymentPage extends Component {
           });
         }
       })
-      .catch(err => {
+      .catch(() => {
         /* just ignore */
       });
   };
@@ -471,7 +482,7 @@ class PaymentPage extends Component {
           });
         }
       })
-      .catch(err => {
+      .catch(() => {
         /* just ignore */
       });
   };
@@ -497,7 +508,7 @@ class PaymentPage extends Component {
           });
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({
           error: 'Przerwa techniczna. Spróbuj za chwilę.',
         });
@@ -527,7 +538,7 @@ class PaymentPage extends Component {
           });
         }
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({
           error: 'Przerwa techniczna. Spróbuj za chwilę.',
         });
@@ -634,7 +645,8 @@ class PaymentPage extends Component {
                   [
                     activeStep === 0 ? (
                       <button
-                      key={1}
+                        key={1}
+                        type="button"
                         className={classes.formSubmit}
                         onClick={this.isAccountBill}
                         disabled={this.state.activeStep === 4}
@@ -644,7 +656,8 @@ class PaymentPage extends Component {
                       </button>
                     ) : activeStep === 1 ? (
                       <button
-                      key={2}
+                        type="button"
+                        key={2}
                         className={classes.formSubmit}
                         onClick={this.isAmountMoney}
                         disabled={this.state.activeStep === 4}
@@ -654,7 +667,8 @@ class PaymentPage extends Component {
                       </button>
                     ) : (
                       <button
-                      key={3}
+                        type="button"
+                        key={3}
                         className={classes.formSubmit}
                         onClick={this.handleNext}
                         disabled={this.state.activeStep === 4}
@@ -665,9 +679,10 @@ class PaymentPage extends Component {
                     ),
                   ]
                 )}
-​
+                ​
                 {activeStep !== 0 ? (
                   <button
+                    type="button"
                     disabled={this.state.activeStep === 0}
                     onClick={this.handleBack}
                   >

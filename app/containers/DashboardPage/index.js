@@ -241,6 +241,9 @@ function saveToLS(key, value) {
 
 DashboardPage.propTypes = {
   classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
+  cols: PropTypes.object,
+  rowHeight: PropTypes.number,
 };
 
 export default withAuth(withStyles(styles)(DashboardPage));
