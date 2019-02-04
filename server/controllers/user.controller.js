@@ -145,7 +145,7 @@ exports.login = (req, res) => {
           .json({ error: 'Auth failed. User does not exist', success: false });
       }
     })
-    .catch(err => {
+    .catch(() => {
       /* just ignore */
     });
 };
@@ -171,7 +171,7 @@ exports.logout = (req, res) => {
             success: true,
           });
         })
-        .catch(err => {
+        .catch(() => {
           /* just ignore */
         });
     }
@@ -193,7 +193,7 @@ exports.isLogin = (req, res) => {
         res.status(200).json({ isLogin: false });
       }
     })
-    .catch(err => {
+    .catch(() => {
       /* just ignore */
     });
 };
@@ -213,7 +213,7 @@ exports.isEmail = (req, res) => {
         res.status(200).json({ isEmail: false });
       }
     })
-    .catch(err => {
+    .catch(() => {
       /* just ignore */
     });
 };
@@ -240,7 +240,7 @@ exports.getUserdata = (req, res) => {
         });
       }
     })
-    .catch(err => {
+    .catch(() => {
       /* just ignore */
     });
 };
@@ -261,7 +261,7 @@ exports.setUserdata = (req, res) => {
     .then(() => {
       res.status(200).json({ success: true });
     })
-    .catch(err => {
+    .catch(() => {
       /* just ignore */
     });
 };
