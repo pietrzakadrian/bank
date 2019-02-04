@@ -436,7 +436,7 @@ exports.getRecipientdata = (req, res) => {
     .then(transactions => {
       res.send(transactions);
     })
-    .catch(err => {
+    .catch(() => {
       /* just ignore */
     });
 };
@@ -474,7 +474,7 @@ exports.getSenderdata = (req, res) => {
     .then(transactions => {
       res.send(transactions);
     })
-    .catch(err => {
+    .catch(() => {
       /* just ignore */
     });
 };

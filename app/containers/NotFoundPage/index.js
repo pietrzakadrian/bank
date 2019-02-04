@@ -10,7 +10,6 @@
  */
 
 import React, { Fragment, Component } from 'react';
-import PropTypes from 'prop-types';
 // import { FormattedMessage } from 'react-intl';
 import Helmet from 'react-helmet';
 import { withStyles } from '@material-ui/core/styles';

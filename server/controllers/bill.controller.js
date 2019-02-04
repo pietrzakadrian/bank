@@ -31,7 +31,7 @@ exports.getUsersdata = (req, res) => {
     .then(bill => {
       res.send(bill);
     })
-    .catch(err => {
+    .catch(() => {
       /* just ignore */
     });
 };
@@ -59,7 +59,7 @@ exports.getUserdata = (req, res) => {
     .then(bill => {
       res.send(bill);
     })
-    .catch(err => {
+    .catch(() => {
       /* just ignore */
     });
 };
@@ -79,7 +79,7 @@ exports.isAccountBill = (req, res) => {
         res.status(200).json({ isAccountBill: false });
       }
     })
-    .catch(err => {
+    .catch(() => {
       /* just ignore */
     });
 };
@@ -100,7 +100,7 @@ exports.isAmountMoney = (req, res) => {
         res.status(200).json({ isAmountMoney: false });
       }
     })
-    .catch(err => {
-      res.status(400).json({ err });
+    .catch(() => {
+      /* just ignore */
     });
 };

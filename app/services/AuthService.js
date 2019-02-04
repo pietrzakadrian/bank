@@ -52,7 +52,7 @@ export default class AuthService {
           return 1;
         }
       })
-      .catch(err => {
+      .catch(() => {
         /* just ignore */
       });
   }
@@ -82,7 +82,7 @@ export default class AuthService {
           return 1;
         }
       })
-      .catch(err => {
+      .catch(() => {
         /* just ignore */
       });
   }
@@ -97,7 +97,7 @@ export default class AuthService {
           return res;
         }
       })
-      .catch(err => {
+      .catch(() => {
         /* just ignore */
       });
   }
@@ -112,7 +112,7 @@ export default class AuthService {
           return res;
         }
       })
-      .catch(err => {
+      .catch(() => {
         /* just ignore */
       });
   }
@@ -127,7 +127,7 @@ export default class AuthService {
           return res;
         }
       })
-      .catch(err => {
+      .catch(() => {
         /* just ignore */
       });
   }
@@ -142,7 +142,7 @@ export default class AuthService {
           return res;
         }
       })
-      .catch(err => {
+      .catch(() => {
         /* just ignore */
       });
   }
@@ -156,7 +156,7 @@ export default class AuthService {
           return res;
         }
       })
-      .catch(err => {
+      .catch(() => {
         /* just ignore */
       });
   }
@@ -218,7 +218,7 @@ export default class AuthService {
           return res;
         }
       })
-      .catch(err => {
+      .catch(() => {
         /* just ignore */
       });
   }

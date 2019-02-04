@@ -49,7 +49,7 @@ function headerSubheading(props) {
 
 headerSubheading.propTypes = {
   classes: PropTypes.object.isRequired,
-  headerText: PropTypes.object.isRequired,
+  headerText: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(headerSubheading);
