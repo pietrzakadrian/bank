@@ -13,6 +13,7 @@ export default function withAuth(AuthComponent) {
 
     componentWillMount() {
       if (!Auth.loggedIn()) {
+        // eslint-disable-next-line react/prop-types
         this.props.history.replace('/login');
       } else {
         try {

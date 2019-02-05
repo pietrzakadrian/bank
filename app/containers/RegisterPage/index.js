@@ -526,7 +526,7 @@ class RegisterPage extends Component {
                 className={classes.stepperContainer}
                 activeStep={activeStep}
               >
-                {steps.map((label, index) => {
+                {steps.map(label => {
                   const props = {};
                   const labelProps = {};
                   return (
