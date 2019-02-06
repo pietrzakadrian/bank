@@ -63,7 +63,7 @@ const theme = createMuiTheme({
 });
 const MOUNT_NODE = document.getElementById('app');
 
-console.log(theme);
+// console.log(theme);
 
 const render = messages => {
   ReactDOM.render(

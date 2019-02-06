@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
@@ -8,7 +10,7 @@ import { withStyles } from '@material-ui/core';
 import { PieChart, Pie, Cell } from 'recharts';
 
 // Import Components
-import Loading from 'components/App/Loading/Loading';
+import Loading from '../../components/App/Loading/Loading';
 
 // Import Internationalize
 // import { FormattedMessage } from 'react-intl';
@@ -96,20 +98,19 @@ class SavedMoney extends Component {
       procent,
     } = this.state;
 
-    let id = 0;
     let data;
     let COLORS;
 
-    outgoingTransfersSum == 0 && incomingTransfersSum == 0 ? (
-      data = [{ name: 'Group A', value: isNothingTransfersSum },
-      ],
-      COLORS = ['rgba(0, 0, 0, 0.12)']
-    ) : (
+    if (outgoingTransfersSum === 0 && incomingTransfersSum === 0) {
+      data = [{ name: 'Group A', value: isNothingTransfersSum }];
+      COLORS = ['rgba(0, 0, 0, 0.12)'];
+    } else {
       data = [
-      { name: 'Group A', value: incomingTransfersSum },
-      { name: 'Group B', value: outgoingTransfersSum },
-    ],
-    COLORS = ['#15a0dd', '#ea0000'])
+        { name: 'Group A', value: incomingTransfersSum },
+        { name: 'Group B', value: outgoingTransfersSum },
+      ];
+      COLORS = ['#15a0dd', '#ea0000'];
+    }
 
     return (
       <Paper className={classes.root} elevation={1}>
@@ -142,9 +143,8 @@ class SavedMoney extends Component {
                   fill="#8884d8"
                   paddingAngle={0}
                 >
-                  {data.map((entry, index) => (
-                    (id += 1),
-                    <Cell key={id} fill={COLORS[index % COLORS.length]} />
+                  {data.map((entry, index, id) => (
+                    <Cell key={id++} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
               </PieChart>

@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -15,10 +17,10 @@ import TableRow from '@material-ui/core/TableRow';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 
 // Import Components
-import Loading from 'components/App/Loading/';
+import { FormattedMessage } from 'react-intl';
+import Loading from '../../components/App/Loading';
 
 // Import Internationalize
-import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 import AuthService from '../../services/AuthService';
 
@@ -98,7 +100,6 @@ class AccountBills extends Component {
   render() {
     const { classes } = this.props;
     const { accountBills, isLoading } = this.state;
-    let id = 0;
 
     return (
       <Card className={classes.card}>
@@ -126,33 +127,28 @@ class AccountBills extends Component {
           <Table>
             <TableBody>
               {isLoading ? (
-                accountBills.map(
-                  accountBill => (
-                    (id += 1),
-                    (
-                      <TableRow key={id}>
-                        <TableCell className={classes.tableCell} scope="row">
-                          <span>
-                            {accountBill.account_bill
-                              .toString()
-                              .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-                              .trim()}
-                          </span>
-                        </TableCell>
-                        <TableCell className={classes.tableCellRight}>
-                          <span className={classes.availabeFundsContainer}>
-                            {accountBill.available_funds
-                              .toFixed(2)
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                              .replace('.', ',')}
-                          </span>{' '}
-                          PLN
-                        </TableCell>
-                      </TableRow>
-                    )
-                  ),
-                )
+                accountBills.map((accountBill, id) => (
+                  <TableRow key={id++}>
+                    <TableCell className={classes.tableCell} scope="row">
+                      <span>
+                        {accountBill.account_bill
+                          .toString()
+                          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+                          .trim()}
+                      </span>
+                    </TableCell>
+                    <TableCell className={classes.tableCellRight}>
+                      <span className={classes.availabeFundsContainer}>
+                        {accountBill.available_funds
+                          .toFixed(2)
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                          .replace('.', ',')}
+                      </span>{' '}
+                      PLN
+                    </TableCell>
+                  </TableRow>
+                ))
               ) : (
                 <TableRow>
                   <TableCell>

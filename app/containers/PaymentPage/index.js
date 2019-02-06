@@ -9,6 +9,8 @@
  * the linting exception.
  */
 
+/* eslint no-nested-ternary: 1 */
+
 import React, { Component, Fragment } from 'react';
 import './style.css';
 import PropTypes from 'prop-types';
@@ -26,9 +28,9 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
-import { FormattedMessage } from 'react-intl';
+// import { FormattedMessage } from 'react-intl';
 import Loading from '../../components/App/Loading';
-import messages from './messages';
+// import messages from './messages';
 
 import AuthService from '../../services/AuthService';
 import withAuth from '../../services/withAuth';
@@ -257,13 +259,14 @@ class PaymentPage extends Component {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
 
-    return inputLength === 0
-      ? []
-      : this.state.accountBills.filter(
-        accountBill =>
-          accountBill.account_bill.toLowerCase().slice(0, inputLength) ===
-            inputValue,
-      );
+    if (inputLength === 0) {
+      return [];
+    }
+    return this.state.accountBills.filter(
+      accountBill =>
+        accountBill.account_bill.toLowerCase().slice(0, inputLength) ===
+        inputValue,
+    );
   };
 
   getUserData = debounce(
@@ -282,12 +285,12 @@ class PaymentPage extends Component {
         value: newValue,
       },
       () => {
-        this.state.value.length !== 0 && this.state.value.length !== 26
-          ? (this.setState({
+        if (this.state.value.length !== 0 && this.state.value.length !== 26) {
+          this.setState({
             isLoading: false,
-          }),
-          this.getUserData(newValue))
-          : null;
+          });
+          this.getUserData(newValue);
+        }
       },
     );
   };
@@ -615,7 +618,7 @@ class PaymentPage extends Component {
             }}
           />
           <Stepper className={classes.stepperContainer} activeStep={activeStep}>
-            {steps.map((label, index) => {
+            {steps.map(label => {
               const props = {};
               const labelProps = {};
               return (
@@ -679,7 +682,7 @@ class PaymentPage extends Component {
                     ),
                   ]
                 )}
-                ​
+
                 {activeStep !== 0 ? (
                   <button
                     type="button"

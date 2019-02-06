@@ -1,3 +1,4 @@
+/* eslint func-names: ["error", "never"] */
 module.exports = function(app) {
   const bills = require('../controllers/bill.controller.js');
   const checkAuth = require('../middlewares/checkAuth.middleware.js');

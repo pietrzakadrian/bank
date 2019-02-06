@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
@@ -12,14 +14,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
 // Import Components
-import Loading from 'components/App/Loading';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
+import Loading from '../../components/App/Loading';
 import AuthService from '../../services/AuthService';
 import messages from './messages';
-
 // Import Styles
 const styles = () => ({
   root: {
@@ -91,8 +92,8 @@ class RecentTransactions extends Component {
           });
         }
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        /* just ignore */
       });
   }
 
@@ -109,8 +110,6 @@ class RecentTransactions extends Component {
       ...recentTransactionsSender,
     ];
 
-    let id = 0;
-
     return (
       <Card className={classes.card}>
         <CardContent className={classes.root}>
@@ -125,63 +124,52 @@ class RecentTransactions extends Component {
           {isLoading ? (
             <Table className={classes.table}>
               <TableBody>
-                {sortingData(combinedData).map(
-                  row => (
-                    (id += 1),
-                    (
-                      <TableRow key={id}>
-                        {row.id_sender === this.props.id ? (
-                          <Fragment>
-                            <TableCell
-                              className={classes.tableCell}
-                              scope="row"
-                            >
-                              Do {row.getRecipientdata.name}{' '}
-                              {row.getRecipientdata.surname}
-                              <br />
-                              {row.transfer_title}
-                            </TableCell>
-                            <TableCell className={classes.tableCellRight}>
-                              {moment(row.date_time).format('DD.MM.YYYY')}
-                              <br />
-                              <span className={classes.outgoingTransfer}>
-                                -
-                                {row.amount_money
-                                  .toFixed(2)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                                  .replace('.', ',')}{' '}
-                                PLN
-                              </span>
-                            </TableCell>
-                          </Fragment>
-                        ) : (
-                          <Fragment>
-                            <TableCell
-                              className={classes.tableCell}
-                              scope="row"
-                            >
-                              Od {row.getSenderdata.name}{' '}
-                              {row.getSenderdata.surname}
-                              <br />
-                              {row.transfer_title}
-                            </TableCell>
-                            <TableCell className={classes.tableCellRight}>
-                              {moment(row.date_time).format('DD.MM.YYYY')}
-                              <br />
-                              {row.amount_money
-                                .toFixed(2)
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                                .replace('.', ',')}{' '}
-                              PLN
-                            </TableCell>
-                          </Fragment>
-                        )}
-                      </TableRow>
-                    )
-                  ),
-                )}
+                {sortingData(combinedData).map((row, id) => (
+                  <TableRow key={id++}>
+                    {row.id_sender === this.props.id ? (
+                      <Fragment>
+                        <TableCell className={classes.tableCell} scope="row">
+                          Do {row.getRecipientdata.name}{' '}
+                          {row.getRecipientdata.surname}
+                          <br />
+                          {row.transfer_title}
+                        </TableCell>
+                        <TableCell className={classes.tableCellRight}>
+                          {moment(row.date_time).format('DD.MM.YYYY')}
+                          <br />
+                          <span className={classes.outgoingTransfer}>
+                            -
+                            {row.amount_money
+                              .toFixed(2)
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                              .replace('.', ',')}{' '}
+                            PLN
+                          </span>
+                        </TableCell>
+                      </Fragment>
+                    ) : (
+                      <Fragment>
+                        <TableCell className={classes.tableCell} scope="row">
+                          Od {row.getSenderdata.name}{' '}
+                          {row.getSenderdata.surname}
+                          <br />
+                          {row.transfer_title}
+                        </TableCell>
+                        <TableCell className={classes.tableCellRight}>
+                          {moment(row.date_time).format('DD.MM.YYYY')}
+                          <br />
+                          {row.amount_money
+                            .toFixed(2)
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                            .replace('.', ',')}{' '}
+                          PLN
+                        </TableCell>
+                      </Fragment>
+                    )}
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           ) : (

@@ -23,6 +23,9 @@ module.exports = {
     },
   },
   rules: {
+    'global-require': 0,
+    'consistent-return': 0,
+    camelcase: [0, { properties: 'never' }],
     'prettier/prettier': ['error', prettierOptions],
     'arrow-body-style': [2, 'as-needed'],
     'class-methods-use-this': 0,

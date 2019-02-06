@@ -10,10 +10,8 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+import { withRouter } from 'react-router-dom';
 import AuthService from '../../services/AuthService';
 
 class HomePage extends Component {
@@ -21,7 +19,6 @@ class HomePage extends Component {
     super(props);
 
     this.Auth = new AuthService();
-    this.state = { loading: true };
   }
 
   componentWillMount() {
@@ -30,10 +27,12 @@ class HomePage extends Component {
   }
 
   render() {
-    const { loading } = this.state;
-
     return <Fragment />;
   }
 }
+
+HomePage.propTypes = {
+  history: PropTypes.object.isRequired,
+};
 
 export default withRouter(HomePage);

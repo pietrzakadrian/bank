@@ -5,13 +5,13 @@ module.exports = (req, res, next) => {
       req.params.recipientId ||
       req.params.senderId ||
       req.body.id_sender;
-    if (req.userData.id == id) {
+    if (req.userData.id === parseInt(id, 10)) {
       next();
-    } else {
-      return res.status(401).json({
-        message: 'Auth failed',
-      });
+      return false;
     }
+    return res.status(401).json({
+      message: 'Auth failed',
+    });
   } catch (error) {
     return res.status(401).json({
       message: 'Auth failed',

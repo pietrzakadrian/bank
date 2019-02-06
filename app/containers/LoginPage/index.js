@@ -228,9 +228,9 @@ class LoginPage extends Component {
           });
         }
       })
-      .catch(() => {
+      .catch(err => {
         this.setState({
-          passwordError: 'Przerwa techniczna. Spróbuj za chwilę.',
+          passwordError: err,
         });
       });
   }
@@ -321,12 +321,13 @@ class LoginPage extends Component {
               <b>
                 Jeśli nie posiadasz jeszcze konta w naszym banku, mozesz je
                 utworzyć teraz, klikając na{' '}
-                <span
+                <button
+                  type="button"
                   className={classes.footerLink}
                   onClick={this.goToRegister}
                 >
                   Rejestracja
-                </span>
+                </button>
               </b>
             </div>
           </div>
@@ -381,6 +382,7 @@ class LoginPage extends Component {
 LoginPage.propTypes = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  replace: PropTypes.string,
 };
 
 export default withStyles(styles)(withRouter(LoginPage));

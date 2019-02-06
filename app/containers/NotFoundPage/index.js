@@ -10,6 +10,7 @@
  */
 
 import React, { Fragment, Component } from 'react';
+import PropTypes from 'prop-types';
 // import { FormattedMessage } from 'react-intl';
 import Helmet from 'react-helmet';
 import { withStyles } from '@material-ui/core/styles';
@@ -178,12 +179,13 @@ class NotFoundPage extends Component {
               <b>
                 Jeśli nie posiadasz jeszcze konta w naszym banku, mozesz je
                 utworzyć teraz, klikając na{' '}
-                <span
+                <button
+                  type="button"
                   className={classes.footerLink}
                   onClick={this.goToRegister}
                 >
                   Rejestracja
-                </span>
+                </button>
               </b>
             </div>
           </div>
@@ -234,5 +236,10 @@ class NotFoundPage extends Component {
     );
   }
 }
+
+NotFoundPage.propTypes = {
+  classes: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+};
 
 export default withStyles(styles)(withRouter(NotFoundPage));

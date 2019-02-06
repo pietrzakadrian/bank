@@ -16,6 +16,8 @@ import messages from './messages';
 import withAuth from '../../services/withAuth';
 
 class SettingsPage extends Component {
+  state = {};
+
   render() {
     return (
       <Fragment>

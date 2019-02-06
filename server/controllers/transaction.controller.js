@@ -1,3 +1,5 @@
+/* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
+/* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: false}}] */
 const nodemailer = require('nodemailer');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
@@ -354,7 +356,6 @@ exports.register = (req, res) => {
                 },
                 order: [['date_time', 'DESC']],
               }).then(isAuthorizationKey => {
-                console.log(isAuthorizationKey);
                 if (!isAuthorizationKey) {
                   setTransferHistory(
                     senderId,
@@ -369,7 +370,7 @@ exports.register = (req, res) => {
                     recipientId,
                     amountMoney,
                     authorizationKey,
-                  ).catch(console.error);
+                  ).catch(() => {});
 
                   return res.status(200).json({ success: true });
                 }

@@ -504,7 +504,7 @@ class RegisterPage extends Component {
               {''}
               <b>otrzymasz bonus w postaci 10 PLN</b>.<br />
               <br />
-              Utworzone konta równie podlegają dla tej promocji.
+              Utworzone konta równie podlegają dla tej promocji.
             </div>
           </div>
           <div className={classes.formContainer}>
@@ -602,9 +602,13 @@ class RegisterPage extends Component {
               <b>
                 Jeśli posiadasz juz konto w naszym banku, mozesz się zalogować
                 przechodząc do{' '}
-                <span onClick={this.goToLogin} className={classes.footerLink}>
+                <button
+                  type="button"
+                  onClick={this.goToLogin}
+                  className={classes.footerLink}
+                >
                   Logowania
-                </span>
+                </button>
               </b>
             </div>
           </div>

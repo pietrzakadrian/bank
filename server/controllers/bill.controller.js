@@ -1,3 +1,4 @@
+/* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: false}}] */
 const db = require('../config/db.config.js');
 const Bill = db.bills;
 const Additional = db.additionals;
