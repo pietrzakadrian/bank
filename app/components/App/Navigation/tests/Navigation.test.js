@@ -12,4 +12,10 @@ describe('<Navigation />', () => {
     expect(navigation.props().classes);
     expect(navigation.props().location);
   });
+
+  it('pass props without crashing', () => {
+    const navigation = shallow(<Navigation />);
+    expect(navigation.props().classes);
+    expect(navigation.props().location);
+  });
 });
