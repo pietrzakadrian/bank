@@ -5,6 +5,7 @@ docs
 node_modules
 stats.json
 server/config/env.config.js
+.vscode
 
 # Cruft
 .DS_Store
