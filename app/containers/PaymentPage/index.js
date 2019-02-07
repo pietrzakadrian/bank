@@ -9,7 +9,7 @@
  * the linting exception.
  */
 
-/* eslint no-nested-ternary: 1 */
+/* eslint no-nested-ternary: 0 */
 
 import React, { Component, Fragment } from 'react';
 import './style.css';
