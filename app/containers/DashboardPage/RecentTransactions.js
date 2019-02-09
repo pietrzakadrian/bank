@@ -67,34 +67,35 @@ class RecentTransactions extends Component {
     this.Auth = new AuthService();
   }
 
-  // test
   componentDidMount() {
-    // ! TODO: add i18n http://momentjs.com/docs/#/i18n/
-    this.Auth.recentTransactionsRecipient(this.props.id)
-      .then(res => {
-        if (res) {
-          this.setState({
-            isLoading: true,
-            recentTransactionsRecipient: res,
-          });
-        }
-      })
-      .catch(() => {
-        /* just ignore */
+    Promise.all([
+      this.Auth.recentTransactionsRecipient(this.props.id)
+        .then(res => {
+          if (res) {
+            this.setState({
+              recentTransactionsRecipient: res,
+            });
+          }
+        })
+        .catch(() => {
+          /* just ignore */
+        }),
+      this.Auth.recentTransactionsSender(this.props.id)
+        .then(res => {
+          if (res) {
+            this.setState({
+              recentTransactionsSender: res,
+            });
+          }
+        })
+        .catch(() => {
+          /* just ignore */
+        }),
+    ]).then(() => {
+      this.setState({
+        isLoading: true,
       });
-
-    this.Auth.recentTransactionsSender(this.props.id)
-      .then(res => {
-        if (res) {
-          this.setState({
-            isLoading: true,
-            recentTransactionsSender: res,
-          });
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
+    });
   }
 
   render() {

@@ -4,10 +4,11 @@ const cluster = require('cluster');
 // Code to run if we're in the master process
 if (cluster.isMaster) {
   // Count the machine's CPUs
-  const cpuCount = require('os').cpus().length;
+  // const cpuCount = require('os').cpus().length;
+  // TODO: CHANGE
 
   // Create a worker for each CPU
-  for (let i = 0; i <= cpuCount; i += 1) {
+  for (let i = 0; i <= 2; i += 1) {
     cluster.fork();
   }
 
