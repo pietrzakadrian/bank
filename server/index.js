@@ -4,7 +4,6 @@ const express = require('express');
 const logger = require('./logger');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-
 const argv = require('./argv');
 const port = require('./port');
 const setup = require('./middlewares/frontend.middleware.js');
@@ -15,6 +14,8 @@ const ngrok =
     : false;
 const { resolve } = require('path');
 const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
 require('./routes/user.route.js')(app);
 require('./routes/transaction.route.js')(app);
 require('./routes/bill.route.js')(app);
+require('./routes/additional.route.js')(app);
 
 app.use(morgan('dev'));
 
@@ -62,8 +64,25 @@ app.get('*.js', (req, res, next) => {
   next();
 });
 
+io.on('connection', socket => {
+  console.log('New client connected');
+
+  // just like on the client side, we have a socket.on method that takes a callback function
+  socket.on('new notification', notification => {
+    // once we get a 'change color' event from one of our clients, we will send it to the rest of the clients
+    // we make use of the socket.emit method again with the argument given to use from the callback function above
+    console.log('new notification: ', notification);
+    io.sockets.emit('new notification', notification);
+  });
+
+  // disconnect is fired when a client leaves the server
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
+
 // Start your app.
-app.listen(port, host, async err => {
+server.listen(port, host, async err => {
   if (err) {
     return logger.error(err.message);
   }

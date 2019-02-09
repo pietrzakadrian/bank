@@ -46,6 +46,16 @@ module.exports = (sequelize, Sequelize) => {
           },
         },
       },
+      notification_status: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          notEmpty: {
+            msg: 'The notification_status is required.',
+          },
+        },
+      },
     },
     {
       timestamps: false,

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import ResizeObserver from 'react-resize-observer';
 import { withRouter } from 'react-router-dom';
+import socketIOClient from 'socket.io-client';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
@@ -16,6 +17,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import Hidden from '@material-ui/core/Hidden';
+import Badge from '@material-ui/core/Badge';
 import { FormattedMessage } from 'react-intl';
 
 // Import Services
@@ -42,6 +44,12 @@ const styles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     'box-shadow': '0px 4px 8px -3px rgba(17, 17, 17, .06)', // box-shadow dla header
+  },
+  badge: {
+    left: -20,
+    right: 'auto',
+    backgroundColor: '#ff1100',
+    color: 'white',
   },
   toolBar: {
     padding: 0,
@@ -158,6 +166,7 @@ const styles = theme => ({
       margin: '0 auto',
     },
     display: 'inherit',
+    fontSize: 15,
   },
 });
 
@@ -167,9 +176,11 @@ class Header extends Component {
     this.Auth = new AuthService();
 
     this.state = {
+      invisible: true,
       user_id: null,
       mobileOpen: false,
       desktopOpen: true,
+      endpoint: 'http://localhost:3000',
     };
   }
 
@@ -188,6 +199,17 @@ class Header extends Component {
       }
     }
   }
+
+  // method for emitting a socket.io event
+  send = () => {
+    const socket = socketIOClient(this.state.endpoint);
+    socket.emit('new notification', this.state.invisible);
+  };
+
+  newNotification = () => {
+    const { invisible } = this.state;
+    this.setState({ invisible: !invisible });
+  };
 
   handleDrawerToggleMobile = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
@@ -217,11 +239,17 @@ class Header extends Component {
 
   render() {
     const { classes, location } = this.props;
+    const { invisible } = this.state;
     const headerTitle = {
       '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
       '/payment': <FormattedMessage {...messages.paymentTitle} />,
       '/settings': <FormattedMessage {...messages.settingsTitle} />,
     };
+    const socket = socketIOClient(this.state.endpoint);
+
+    socket.on('new notification', inv => {
+      this.setState({ invisible: inv });
+    });
 
     return (
       <div className={classes.root}>
@@ -257,6 +285,15 @@ class Header extends Component {
             >
               {headerTitle[location.pathname]}
             </Typography>
+
+            <button type="button" onClick={() => this.send()}>
+              setNotify
+            </button>
+
+            <button type="button" id="red" onClick={this.newNotification}>
+              Notify
+            </button>
+
             <span className={classes.headerTopItems}>
               <button type="button" className={classes.logoutButton}>
                 <MailOutlineIcon className={classes.exitToAppClass} />
@@ -264,7 +301,13 @@ class Header extends Component {
               </button>
 
               <button type="button" className={classes.logoutButton}>
-                <NotificationsNoneIcon className={classes.exitToAppClass} />
+                <Badge
+                  badgeContent={1}
+                  invisible={invisible}
+                  classes={{ badge: classes.badge }}
+                >
+                  <NotificationsNoneIcon className={classes.exitToAppClass} />
+                </Badge>
                 <span className={classes.headerMenuItem}>Powiadomienia</span>
               </button>
 

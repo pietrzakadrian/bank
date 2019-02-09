@@ -125,6 +125,7 @@ exports.login = (req, res) => {
               success: true,
               token: getToken(isUser.id),
             });
+            // TODO: SAVE TO SESSION userId
           });
         } else {
           User.update(
