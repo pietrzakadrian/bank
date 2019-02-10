@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import ResizeObserver from 'react-resize-observer';
 import { withRouter } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
+import Helmet from 'react-helmet';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
@@ -217,18 +218,24 @@ class Header extends Component {
     }
   }
 
-  // method for emitting a socket.io event
-  send = () => {
-    const socket = socketIOClient(this.state.endpoint);
-    socket.emit('new notification', this.state.invisible);
-  };
-
   handleDrawerToggleMobile = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
   handleDrawerToggleDesktop = () => {
     this.setState(state => ({ desktopOpen: !state.desktopOpen }));
+  };
+
+  handleNotification = () => {
+    this.Auth.unsetNotification(this.state.user_id)
+      .then(() => {
+        this.setState({
+          invisible: true,
+        });
+      })
+      .catch(() => {
+        /* just ignore */
+      });
   };
 
   handleLogout() {
@@ -274,142 +281,144 @@ class Header extends Component {
     });
 
     return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: this.state.desktopOpen,
-          })}
-        >
-          <Toolbar className={classes.toolBar}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerToggleMobile}
-              className={classes.menuButtonMobile}
-            >
-              <MenuIcon />
-            </IconButton>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerToggleDesktop}
-              className={classes.menuButtonDesktop}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              className={classes.headerItemTitle}
-              variant="h6"
-              color="inherit"
-              noWrap
-            >
-              {headerTitle[location.pathname]}
-            </Typography>
+      <Fragment>
+        {!invisible ? <Helmet titleTemplate="(1) %s" /> : null}
 
-            <button type="button" onClick={() => this.send()}>
-              setNotify
-            </button>
+        <div className={classes.root}>
+          <CssBaseline />
+          <AppBar
+            position="fixed"
+            className={classNames(classes.appBar, {
+              [classes.appBarShift]: this.state.desktopOpen,
+            })}
+          >
+            <Toolbar className={classes.toolBar}>
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={this.handleDrawerToggleMobile}
+                className={classes.menuButtonMobile}
+              >
+                <MenuIcon />
+              </IconButton>
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={this.handleDrawerToggleDesktop}
+                className={classes.menuButtonDesktop}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                className={classes.headerItemTitle}
+                variant="h6"
+                color="inherit"
+                noWrap
+              >
+                {headerTitle[location.pathname]}
+              </Typography>
 
-            <button type="button" id="red" onClick={this.newNotification}>
-              Notify
-            </button>
+              <button type="button" className={classes.logoutButton}>
+                {!invisible ? (
+                  <Badge
+                    badgeContent={1}
+                    invisible={invisible}
+                    classes={{ badge: classes.badge }}
+                  >
+                    <MailIcon className={classes.exitToAppClass} />
+                  </Badge>
+                ) : (
+                  <Badge
+                    badgeContent={1}
+                    invisible={invisible}
+                    classes={{ badge: classes.badge }}
+                  >
+                    <MailOutlineIcon className={classes.exitToAppClass} />
+                  </Badge>
+                )}
+                <span className={classes.headerMenuItem}>Wiadomości</span>
+              </button>
 
-            <button type="button" className={classes.logoutButton}>
-              {!invisible ? (
-                <Badge
-                  badgeContent={1}
-                  invisible={invisible}
-                  classes={{ badge: classes.badge }}
-                >
-                  <MailIcon className={classes.exitToAppClass} />
-                </Badge>
-              ) : (
-                <Badge
-                  badgeContent={1}
-                  invisible={invisible}
-                  classes={{ badge: classes.badge }}
-                >
-                  <MailOutlineIcon className={classes.exitToAppClass} />
-                </Badge>
-              )}
-              <span className={classes.headerMenuItem}>Wiadomości</span>
-            </button>
+              <button
+                type="button"
+                className={classes.logoutButton}
+                onClick={this.handleNotification}
+              >
+                {!invisible ? (
+                  <Badge
+                    badgeContent={1}
+                    invisible={invisible}
+                    classes={{ badge: classes.badge }}
+                  >
+                    <NotificationsActiveIcon
+                      className={classes.exitToAppClass}
+                    />
+                  </Badge>
+                ) : (
+                  <Badge
+                    badgeContent={1}
+                    invisible={invisible}
+                    classes={{ badge: classes.badge }}
+                  >
+                    <NotificationsNoneIcon className={classes.exitToAppClass} />
+                  </Badge>
+                )}
+                <span className={classes.headerMenuItem}>Powiadomienia</span>
+              </button>
 
-            <button type="button" className={classes.logoutButton}>
-              {!invisible ? (
-                <Badge
-                  badgeContent={1}
-                  invisible={invisible}
-                  classes={{ badge: classes.badge }}
-                >
-                  <NotificationsActiveIcon className={classes.exitToAppClass} />
-                </Badge>
-              ) : (
-                <Badge
-                  badgeContent={1}
-                  invisible={invisible}
-                  classes={{ badge: classes.badge }}
-                >
-                  <NotificationsNoneIcon className={classes.exitToAppClass} />
-                </Badge>
-              )}
-              <span className={classes.headerMenuItem}>Powiadomienia</span>
-            </button>
+              <button
+                type="button"
+                onClick={this.handleLogout.bind(this)}
+                className={classes.logoutButton}
+              >
+                <ExitToAppIcon className={classes.exitToAppClass} />
+                <span className={classes.headerMenuItem}>Wyloguj</span>
+              </button>
 
-            <button
-              type="button"
-              onClick={this.handleLogout.bind(this)}
-              className={classes.logoutButton}
-            >
-              <ExitToAppIcon className={classes.exitToAppClass} />
-              <span className={classes.headerMenuItem}>Wyloguj</span>
-            </button>
-
-            <div className={classes.imgContainer}>
-              <img
-                src={Logo}
-                className={classes.imgStyles}
-                alt="Bank Application"
+              <div className={classes.imgContainer}>
+                <img
+                  src={Logo}
+                  className={classes.imgStyles}
+                  alt="Bank Application"
+                />
+              </div>
+            </Toolbar>
+          </AppBar>
+          <nav className={classes.drawer}>
+            <Hidden mdUp implementation="css">
+              <Sidebar
+                open={this.state.mobileOpen}
+                onMenuItemClicked={() => this.setState({ mobileOpen: false })}
+                variant="temporary"
+                onClose={this.handleDrawerToggleMobile}
               />
-            </div>
-          </Toolbar>
-        </AppBar>
-        <nav className={classes.drawer}>
-          <Hidden mdUp implementation="css">
-            <Sidebar
-              open={this.state.mobileOpen}
-              onMenuItemClicked={() => this.setState({ mobileOpen: false })}
-              variant="temporary"
-              onClose={this.handleDrawerToggleMobile}
+            </Hidden>
+            <Hidden smDown implementation="css">
+              <Sidebar
+                open={this.state.desktopOpen}
+                onMenuItemClicked={() => this.setState({ mobileOpen: false })}
+                variant="persistent"
+                onClose={this.handleDrawerToggleDesktop}
+              />
+            </Hidden>
+          </nav>
+          <main
+            className={classNames(classes.content, {
+              [classes.contentShift]: this.state.desktopOpen,
+            })}
+          >
+            <div className={classes.drawerHeader} />
+            {this.props.children}​
+            <ResizeObserver
+              onResize={() => {
+                const evt = window.document.createEvent('UIEvents');
+                evt.initUIEvent('resize', true, false, window, 0);
+                window.dispatchEvent(evt);
+              }}
             />
-          </Hidden>
-          <Hidden smDown implementation="css">
-            <Sidebar
-              open={this.state.desktopOpen}
-              onMenuItemClicked={() => this.setState({ mobileOpen: false })}
-              variant="persistent"
-              onClose={this.handleDrawerToggleDesktop}
-            />
-          </Hidden>
-        </nav>
-        <main
-          className={classNames(classes.content, {
-            [classes.contentShift]: this.state.desktopOpen,
-          })}
-        >
-          <div className={classes.drawerHeader} />
-          {this.props.children}​
-          <ResizeObserver
-            onResize={() => {
-              const evt = window.document.createEvent('UIEvents');
-              evt.initUIEvent('resize', true, false, window, 0);
-              window.dispatchEvent(evt);
-            }}
-          />
-        </main>
-      </div>
+          </main>
+        </div>
+      </Fragment>
     );
   }
 }

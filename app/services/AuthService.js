@@ -230,6 +230,12 @@ export default class AuthService {
     });
   }
 
+  unsetNotification(id) {
+    return this.fetch(`${this.domain}/additionals/unsetNotification/${id}`, {
+      method: 'PUT',
+    });
+  }
+
   // TODO: updateLastSuccessfulLoggedDate(id) when isTokenExpired
   loggedIn() {
     // Checks if there is a saved token and it's still valid

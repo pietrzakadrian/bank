@@ -99,8 +99,6 @@ server.listen(0, host, async err => {
 io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
 
 io.on('connection', socket => {
-  // console.log('New client connected');
-
   socket.on('new notification', () => {
     io.sockets.emit('new notification');
   });

@@ -539,6 +539,8 @@ class PaymentPage extends Component {
           const socket = socketIOClient(this.state.endpoint);
           socket.emit('new notification');
 
+          // socket.to(socket#id).emit('new notification');
+
           this.props.history.replace('/dashboard');
         } else {
           this.setState({
