@@ -13,6 +13,7 @@ const ngrok =
     ? require('ngrok')
     : false;
 const { resolve } = require('path');
+const sio_redis = require('socket.io-redis');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -64,25 +65,8 @@ app.get('*.js', (req, res, next) => {
   next();
 });
 
-io.on('connection', socket => {
-  console.log('New client connected');
-
-  // just like on the client side, we have a socket.on method that takes a callback function
-  socket.on('new notification', notification => {
-    // once we get a 'change color' event from one of our clients, we will send it to the rest of the clients
-    // we make use of the socket.emit method again with the argument given to use from the callback function above
-    console.log('new notification: ', notification);
-    io.sockets.emit('new notification', notification);
-  });
-
-  // disconnect is fired when a client leaves the server
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
-
 // Start your app.
-server.listen(port, host, async err => {
+server.listen(0, host, async err => {
   if (err) {
     return logger.error(err.message);
   }
@@ -99,4 +83,40 @@ server.listen(port, host, async err => {
   } else {
     logger.appStarted(port, prettyHost);
   }
+});
+
+// ---
+
+// Tell Socket.IO to use the redis adapter. By default, the redis
+// server is assumed to be on localhost:6379. You don't have to
+// specify them explicitly unless you want to change them.
+io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
+
+io.on('connection', socket => {
+  // console.log('New client connected');
+
+  socket.on('new notification', notification => {
+    // console.log('new notification: ', notification);
+    io.sockets.emit('new notification', notification);
+  });
+
+  // disconnect is fired when a client leaves the server
+  socket.on('disconnect', () => {
+    // console.log('user disconnected');
+  });
+});
+
+// Here you might use Socket.IO middleware for authorization etc.
+
+// Listen to messages sent from the master. Ignore everything else.
+process.on('message', (message, connection) => {
+  if (message !== 'sticky-session:connection') {
+    return;
+  }
+
+  // Emulate a connection event on the server by emitting the
+  // event with the connection the master sent us.
+  server.emit('connection', connection);
+
+  connection.resume();
 });
