@@ -15,7 +15,9 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import MailIcon from '@material-ui/icons/Mail';
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import Hidden from '@material-ui/core/Hidden';
 import Badge from '@material-ui/core/Badge';
 import { FormattedMessage } from 'react-intl';
@@ -46,7 +48,7 @@ const styles = theme => ({
     'box-shadow': '0px 4px 8px -3px rgba(17, 17, 17, .06)', // box-shadow dla header
   },
   badge: {
-    left: -20,
+    left: -15,
     right: 'auto',
     backgroundColor: '#ff1100',
     color: 'white',
@@ -190,9 +192,24 @@ class Header extends Component {
     } else {
       try {
         const userData = Auth.getUserId();
-        this.setState({
-          user_id: userData.id,
-        });
+        this.setState(
+          {
+            user_id: userData.id,
+          },
+          () => {
+            this.Auth.isNotification(this.state.user_id)
+              .then(res => {
+                if (res) {
+                  this.setState({
+                    invisible: !res.isNotification,
+                  });
+                }
+              })
+              .catch(() => {
+                /* just ignore */
+              });
+          },
+        );
       } catch (err) {
         Auth.unsetToken();
         this.props.history.replace('/login');
@@ -204,11 +221,6 @@ class Header extends Component {
   send = () => {
     const socket = socketIOClient(this.state.endpoint);
     socket.emit('new notification', this.state.invisible);
-  };
-
-  newNotification = () => {
-    const { invisible } = this.state;
-    this.setState({ invisible: !invisible });
   };
 
   handleDrawerToggleMobile = () => {
@@ -247,8 +259,18 @@ class Header extends Component {
     };
     const socket = socketIOClient(this.state.endpoint);
 
-    socket.on('new notification', inv => {
-      this.setState({ invisible: inv });
+    socket.on('new notification', () => {
+      this.Auth.isNotification(this.state.user_id)
+        .then(res => {
+          if (res) {
+            this.setState({
+              invisible: !res.isNotification,
+            });
+          }
+        })
+        .catch(() => {
+          /* just ignore */
+        });
     });
 
     return (
@@ -294,13 +316,37 @@ class Header extends Component {
               Notify
             </button>
 
-            <span className={classes.headerTopItems}>
-              <button type="button" className={classes.logoutButton}>
-                <MailOutlineIcon className={classes.exitToAppClass} />
-                <span className={classes.headerMenuItem}>Wiadomości</span>
-              </button>
+            <button type="button" className={classes.logoutButton}>
+              {!invisible ? (
+                <Badge
+                  badgeContent={1}
+                  invisible={invisible}
+                  classes={{ badge: classes.badge }}
+                >
+                  <MailIcon className={classes.exitToAppClass} />
+                </Badge>
+              ) : (
+                <Badge
+                  badgeContent={1}
+                  invisible={invisible}
+                  classes={{ badge: classes.badge }}
+                >
+                  <MailOutlineIcon className={classes.exitToAppClass} />
+                </Badge>
+              )}
+              <span className={classes.headerMenuItem}>Wiadomości</span>
+            </button>
 
-              <button type="button" className={classes.logoutButton}>
+            <button type="button" className={classes.logoutButton}>
+              {!invisible ? (
+                <Badge
+                  badgeContent={1}
+                  invisible={invisible}
+                  classes={{ badge: classes.badge }}
+                >
+                  <NotificationsActiveIcon className={classes.exitToAppClass} />
+                </Badge>
+              ) : (
                 <Badge
                   badgeContent={1}
                   invisible={invisible}
@@ -308,18 +354,19 @@ class Header extends Component {
                 >
                   <NotificationsNoneIcon className={classes.exitToAppClass} />
                 </Badge>
-                <span className={classes.headerMenuItem}>Powiadomienia</span>
-              </button>
+              )}
+              <span className={classes.headerMenuItem}>Powiadomienia</span>
+            </button>
 
-              <button
-                type="button"
-                onClick={this.handleLogout.bind(this)}
-                className={classes.logoutButton}
-              >
-                <ExitToAppIcon className={classes.exitToAppClass} />
-                <span className={classes.headerMenuItem}>Wyloguj</span>
-              </button>
-            </span>
+            <button
+              type="button"
+              onClick={this.handleLogout.bind(this)}
+              className={classes.logoutButton}
+            >
+              <ExitToAppIcon className={classes.exitToAppClass} />
+              <span className={classes.headerMenuItem}>Wyloguj</span>
+            </button>
+
             <div className={classes.imgContainer}>
               <img
                 src={Logo}

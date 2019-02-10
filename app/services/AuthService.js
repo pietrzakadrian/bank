@@ -11,6 +11,7 @@ export default class AuthService {
     this.isEmail = this.isEmail.bind(this);
     this.isAccountBill = this.isAccountBill.bind(this);
     this.isAmountMoney = this.isAmountMoney.bind(this);
+    this.isNotification = this.isNotification.bind(this);
     this.getUserdata = this.getUserdata.bind(this);
     this.availableFunds = this.availableFunds.bind(this);
     this.accountBills = this.accountBills.bind(this);
@@ -221,6 +222,12 @@ export default class AuthService {
       .catch(() => {
         /* just ignore */
       });
+  }
+
+  isNotification(id) {
+    return this.fetch(`${this.domain}/additionals/isNotification/${id}`, {
+      method: 'GET',
+    });
   }
 
   // TODO: updateLastSuccessfulLoggedDate(id) when isTokenExpired

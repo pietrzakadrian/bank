@@ -2,6 +2,7 @@
 /* eslint-disable no-plusplus */
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import socketIOClient from 'socket.io-client';
 
 // Import Material-UI
 import Typography from '@material-ui/core/Typography';
@@ -63,6 +64,7 @@ class RecentTransactions extends Component {
       recentTransactionsSender: [],
       recentTransactionsRecipient: [],
       isLoading: false,
+      endpoint: 'http://localhost:3000',
     };
     this.Auth = new AuthService();
   }
@@ -110,6 +112,46 @@ class RecentTransactions extends Component {
       ...recentTransactionsRecipient,
       ...recentTransactionsSender,
     ];
+
+    const socket = socketIOClient(this.state.endpoint);
+
+    socket.on('new notification', () => {
+      this.setState(
+        {
+          isLoading: false,
+        },
+        () => {
+          Promise.all([
+            this.Auth.recentTransactionsRecipient(this.props.id)
+              .then(res => {
+                if (res) {
+                  this.setState({
+                    recentTransactionsRecipient: res,
+                  });
+                }
+              })
+              .catch(() => {
+                /* just ignore */
+              }),
+            this.Auth.recentTransactionsSender(this.props.id)
+              .then(res => {
+                if (res) {
+                  this.setState({
+                    recentTransactionsSender: res,
+                  });
+                }
+              })
+              .catch(() => {
+                /* just ignore */
+              }),
+          ]).then(() => {
+            this.setState({
+              isLoading: true,
+            });
+          });
+        },
+      );
+    });
 
     return (
       <Card className={classes.card}>

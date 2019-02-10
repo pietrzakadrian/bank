@@ -133,8 +133,6 @@ html {
       position: relative!important;
     }
   }
-
-
 `;
 
 export default GlobalStyle;

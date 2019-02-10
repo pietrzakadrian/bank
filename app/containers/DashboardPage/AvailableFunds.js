@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import socketIOClient from 'socket.io-client';
 
 // Import Material-UI
 import Paper from '@material-ui/core/Paper';
@@ -87,6 +88,38 @@ class AvailableFunds extends Component {
     const { classes } = this.props;
     const { isLoading, availableFunds, accountBalanceHistory } = this.state;
     const accountBalanceHistoryArray = JSON.parse(`[${accountBalanceHistory}]`);
+
+    const socket = socketIOClient(this.state.endpoint);
+
+    socket.on('new notification', () => {
+      this.setState(
+        {
+          isLoading: false,
+        },
+        () => {
+          this.Auth.availableFunds(this.props.id)
+            .then(res => {
+              if (res) {
+                const amount = res[0].available_funds
+                  .toFixed(2)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                  .replace('.', ',');
+
+                this.setState({
+                  isLoading: true,
+                  accountBalanceHistory:
+                    res[0].additionals[0].account_balance_history,
+                  availableFunds: amount,
+                });
+              }
+            })
+            .catch(() => {
+              /* just ignore */
+            });
+        },
+      );
+    });
 
     return (
       <Paper className={classes.root} elevation={1}>

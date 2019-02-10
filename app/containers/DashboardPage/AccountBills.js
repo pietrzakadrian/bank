@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import socketIOClient from 'socket.io-client';
 
 // Import Material-UI
 import Typography from '@material-ui/core/Typography';
@@ -78,6 +79,7 @@ class AccountBills extends Component {
     this.state = {
       accountBills: '',
       isLoading: false,
+      endpoint: 'http://localhost:3000',
     };
     this.Auth = new AuthService();
   }
@@ -100,6 +102,29 @@ class AccountBills extends Component {
   render() {
     const { classes } = this.props;
     const { accountBills, isLoading } = this.state;
+    const socket = socketIOClient(this.state.endpoint);
+
+    socket.on('new notification', () => {
+      this.setState(
+        {
+          isLoading: false,
+        },
+        () => {
+          this.Auth.accountBills(this.props.id)
+            .then(res => {
+              if (res) {
+                this.setState({
+                  isLoading: true,
+                  accountBills: res,
+                });
+              }
+            })
+            .catch(() => {
+              /* just ignore */
+            });
+        },
+      );
+    });
 
     return (
       <Card className={classes.card}>

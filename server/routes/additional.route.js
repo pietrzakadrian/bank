@@ -5,7 +5,7 @@ module.exports = function(app) {
   const checkToken = require('../middlewares/checkToken.middleware.js');
 
   app.get(
-    '/api/additional/notification/:userId',
+    '/api/additionals/isNotification/:userId',
     checkAuth,
     checkToken,
     additionals.isNotification,
@@ -13,9 +13,17 @@ module.exports = function(app) {
 
   // Confirm a new Transactions
   app.put(
-    '/api/additional/notification/:userId',
+    '/api/additionals/setNotification/:userId',
     checkAuth,
     checkToken,
     additionals.setNotification,
+  );
+
+  // Confirm a new Transactions
+  app.put(
+    '/api/additionals/unsetNotification/:userId',
+    checkAuth,
+    checkToken,
+    additionals.unsetNotification,
   );
 };

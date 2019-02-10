@@ -2,6 +2,7 @@
 /* eslint-disable no-plusplus */
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import socketIOClient from 'socket.io-client';
 
 // Import Material-UI
 import Paper from '@material-ui/core/Paper';
@@ -62,6 +63,7 @@ class SavedMoney extends Component {
       incomingTransfersSum: [],
       procent: null,
       isNothingTransfersSum: 1,
+      endpoint: 'http://localhost:3000',
     };
     this.Auth = new AuthService();
   }
@@ -97,6 +99,7 @@ class SavedMoney extends Component {
       isNothingTransfersSum,
       procent,
     } = this.state;
+    const socket = socketIOClient(this.state.endpoint);
 
     let data;
     let COLORS;
@@ -111,6 +114,37 @@ class SavedMoney extends Component {
       ];
       COLORS = ['#15a0dd', '#ea0000'];
     }
+
+    socket.on('new notification', () => {
+      this.setState(
+        {
+          isLoading: false,
+        },
+        () => {
+          this.Auth.availableFunds(this.props.id)
+            .then(res => {
+              if (res) {
+                const procentd =
+                  (res[0].additionals[0].incoming_transfers_sum * 100) /
+                    (res[0].additionals[0].incoming_transfers_sum +
+                      res[0].additionals[0].outgoing_transfers_sum) || 0;
+
+                this.setState({
+                  isLoading: true,
+                  outgoingTransfersSum:
+                    res[0].additionals[0].outgoing_transfers_sum,
+                  incomingTransfersSum:
+                    res[0].additionals[0].incoming_transfers_sum,
+                  procent: procentd,
+                });
+              }
+            })
+            .catch(() => {
+              /* just ignore */
+            });
+        },
+      );
+    });
 
     return (
       <Paper className={classes.root} elevation={1}>

@@ -19,6 +19,7 @@ import Helmet from 'react-helmet';
 import { withSnackbar } from 'notistack';
 import Autosuggest from 'react-autosuggest';
 import { debounce } from 'lodash';
+import socketIOClient from 'socket.io-client';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
@@ -248,6 +249,7 @@ class PaymentPage extends Component {
       accountBills: [],
       value: '',
       isLoading: true,
+      endpoint: 'http://localhost:3000',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -533,6 +535,10 @@ class PaymentPage extends Component {
           this.props.enqueueSnackbar('Przelew został wykonany.', {
             variant,
           });
+
+          const socket = socketIOClient(this.state.endpoint);
+          socket.emit('new notification');
+
           this.props.history.replace('/dashboard');
         } else {
           this.setState({

@@ -20,6 +20,12 @@ const io = require('socket.io')(server);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(
+  bodyParser.json({
+    limit: '2000kb',
+  }),
+);
+app.disable('x-powered-by');
 
 const db = require('./config/db.config.js');
 
@@ -95,14 +101,12 @@ io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
 io.on('connection', socket => {
   // console.log('New client connected');
 
-  socket.on('new notification', notification => {
-    // console.log('new notification: ', notification);
-    io.sockets.emit('new notification', notification);
+  socket.on('new notification', () => {
+    io.sockets.emit('new notification');
   });
 
-  // disconnect is fired when a client leaves the server
   socket.on('disconnect', () => {
-    // console.log('user disconnected');
+    io.emit('user disconnected');
   });
 });
 

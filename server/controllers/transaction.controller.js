@@ -125,6 +125,21 @@ exports.confirm = (req, res) => {
     });
   }
 
+  function setNotification(id_owner) {
+    Additional.update(
+      {
+        notification_status: 1,
+      },
+      { where: { id_owner } },
+    )
+      .then(() => {
+        res.status(200).json({ success: true });
+      })
+      .catch(() => {
+        /* just ignore */
+      });
+  }
+
   Bill.findOne({
     where: {
       account_bill: req.body.account_bill,
@@ -162,24 +177,31 @@ exports.confirm = (req, res) => {
                   isAuthorizationKey &&
                   isAuthorizationKey.authorization_key === authorizationKey
                 ) {
-                  setAvailableFunds(
-                    senderId,
-                    recipientId,
-                    senderAvailableFunds,
-                    recipientAvailableFunds,
-                    amountMoney,
-                  );
-
-                  setTransferHistory(
-                    senderId,
-                    recipientId,
-                    amountMoney,
-                    transferTitle,
-                    authorizationKey,
-                  ).then(() => {
-                    setWidgetStatus(senderId);
-                    setWidgetStatus(recipientId);
-                    return res.status(200).json({ success: true });
+                  Promise.all([
+                    setAvailableFunds(
+                      senderId,
+                      recipientId,
+                      senderAvailableFunds,
+                      recipientAvailableFunds,
+                      amountMoney,
+                    ),
+                    setTransferHistory(
+                      senderId,
+                      recipientId,
+                      amountMoney,
+                      transferTitle,
+                      authorizationKey,
+                    ),
+                  ]).then(() => {
+                    Promise.all([
+                      setWidgetStatus(senderId),
+                      setWidgetStatus(recipientId),
+                      setNotification(recipientId),
+                    ]).then(success => {
+                      if (success) {
+                        return res.status(200).json({ success: true });
+                      }
+                    });
                   });
                 } else {
                   return res.status(200).json({

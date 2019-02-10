@@ -38,3 +38,19 @@ exports.setNotification = (req, res) => {
       /* just ignore */
     });
 };
+
+exports.unsetNotification = (req, res) => {
+  const id_owner = req.params.userId;
+  Additional.update(
+    {
+      notification_status: 0,
+    },
+    { where: { id_owner } },
+  )
+    .then(() => {
+      res.status(200).json({ success: true });
+    })
+    .catch(() => {
+      /* just ignore */
+    });
+};
