@@ -16,7 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
-import MailIcon from '@material-ui/icons/Mail';
+// import MailIcon from '@material-ui/icons/Mail';
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import Hidden from '@material-ui/core/Hidden';
@@ -40,6 +40,7 @@ const styles = theme => ({
     display: 'flex',
   },
   appBar: {
+    backgroundColor: 'white!important',
     paddingRight: '0!important',
     marginLeft: drawerWidth,
     transition: theme.transitions.create(['margin', 'width'], {
@@ -58,8 +59,12 @@ const styles = theme => ({
     padding: 0,
     height: 65,
     color: 'black', // color dla header
-    backgroundColor: 'white', // background color dla header
+    backgroundColor: 'white!important', // background color dla header
     borderBottom: '1px solid rgba(0, 0, 0, 0.12)', // border bottom dla header
+
+    [theme.breakpoints.down('xs')]: {
+      justifyContent: 'space-between',
+    },
   },
   appBarShift: {
     paddingRight: '0!important',
@@ -324,23 +329,7 @@ class Header extends Component {
               </Typography>
 
               <button type="button" className={classes.logoutButton}>
-                {!invisible ? (
-                  <Badge
-                    badgeContent={1}
-                    invisible={invisible}
-                    classes={{ badge: classes.badge }}
-                  >
-                    <MailIcon className={classes.exitToAppClass} />
-                  </Badge>
-                ) : (
-                  <Badge
-                    badgeContent={1}
-                    invisible={invisible}
-                    classes={{ badge: classes.badge }}
-                  >
-                    <MailOutlineIcon className={classes.exitToAppClass} />
-                  </Badge>
-                )}
+                <MailOutlineIcon className={classes.exitToAppClass} />
                 <span className={classes.headerMenuItem}>Wiadomości</span>
               </button>
 

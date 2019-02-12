@@ -247,6 +247,7 @@ class PaymentPage extends Component {
       message: '',
       activeStep: 0,
       accountBills: [],
+      transferTitle: '',
       value: '',
       isLoading: true,
       endpoint: 'http://localhost:3000',
@@ -566,7 +567,7 @@ class PaymentPage extends Component {
     } else if (activeStep === 2 && transferTitle === '') {
       document.getElementsByTagName('input').transferTitle.value = '';
       this.setState({
-        error: 'Proszę podać imię',
+        error: 'Proszę podać tytuł przelewu',
       });
     } else {
       this.setState({
