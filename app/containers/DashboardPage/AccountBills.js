@@ -102,28 +102,30 @@ class AccountBills extends Component {
   render() {
     const { classes } = this.props;
     const { accountBills, isLoading } = this.state;
-    const socket = socketIOClient(this.state.endpoint);
+    const socket = socketIOClient(`${this.state.endpoint}`);
 
-    socket.on('new notification', () => {
-      this.setState(
-        {
-          isLoading: false,
-        },
-        () => {
-          this.Auth.accountBills(this.props.id)
-            .then(res => {
-              if (res) {
-                this.setState({
-                  isLoading: true,
-                  accountBills: res,
-                });
-              }
-            })
-            .catch(() => {
-              /* just ignore */
-            });
-        },
-      );
+    socket.on('new notification', id => {
+      if (id === this.props.id) {
+        this.setState(
+          {
+            isLoading: false,
+          },
+          () => {
+            this.Auth.accountBills(this.props.id)
+              .then(res => {
+                if (res) {
+                  this.setState({
+                    isLoading: true,
+                    accountBills: res,
+                  });
+                }
+              })
+              .catch(() => {
+                /* just ignore */
+              });
+          },
+        );
+      }
     });
 
     return (

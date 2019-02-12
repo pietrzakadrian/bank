@@ -64,6 +64,7 @@ module.exports = (req, res, next) => {
               {
                 account_balance_history: '0,10',
                 incoming_transfers_sum: incomingTransfersSum + 10,
+                notification_status: 1,
               },
               { where: { id_owner: recipientId } },
             );
@@ -72,6 +73,7 @@ module.exports = (req, res, next) => {
               {
                 account_balance_history: `${accountBalanceHistory},10`,
                 incoming_transfers_sum: incomingTransfersSum + 10,
+                notification_status: 1,
               },
               { where: { id_owner: recipientId } },
             );

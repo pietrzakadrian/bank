@@ -25,32 +25,40 @@ exports.isNotification = (req, res) => {
 // Update User's Notification Status
 exports.setNotification = (req, res) => {
   const id_owner = req.params.userId;
-  Additional.update(
-    {
-      notification_status: 1,
-    },
-    { where: { id_owner } },
-  )
-    .then(() => {
-      res.status(200).json({ success: true });
-    })
-    .catch(() => {
-      /* just ignore */
-    });
+  Additional.findOne({ where: { id_owner } }).then(isUser => {
+    if (!isUser.notification_status) {
+      Additional.update(
+        {
+          notification_status: 1,
+        },
+        { where: { id_owner } },
+      )
+        .then(() => {
+          res.status(200).json({ success: true });
+        })
+        .catch(() => {
+          /* just ignore */
+        });
+    }
+  });
 };
 
 exports.unsetNotification = (req, res) => {
   const id_owner = req.params.userId;
-  Additional.update(
-    {
-      notification_status: 0,
-    },
-    { where: { id_owner } },
-  )
-    .then(() => {
-      res.status(200).json({ success: true });
-    })
-    .catch(() => {
-      /* just ignore */
-    });
+  Additional.findOne({ where: { id_owner } }).then(isUser => {
+    if (isUser.notification_status) {
+      Additional.update(
+        {
+          notification_status: 0,
+        },
+        { where: { id_owner } },
+      )
+        .then(() => {
+          res.status(200).json({ success: true });
+        })
+        .catch(() => {
+          /* just ignore */
+        });
+    }
+  });
 };

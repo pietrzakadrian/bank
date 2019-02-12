@@ -71,6 +71,18 @@ app.get('*.js', (req, res, next) => {
   next();
 });
 
+// eslint-disable-next-line no-undef
+io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
+io.on('connection', socket => {
+  socket.on('new notification', id => {
+    io.sockets.emit('new notification', id);
+  });
+
+  socket.on('disconnect', () => {
+    io.emit('user disconnected');
+  });
+});
+
 // Start your app.
 server.listen(0, host, async err => {
   if (err) {
@@ -91,33 +103,10 @@ server.listen(0, host, async err => {
   }
 });
 
-// ---
-
-// Tell Socket.IO to use the redis adapter. By default, the redis
-// server is assumed to be on localhost:6379. You don't have to
-// specify them explicitly unless you want to change them.
-io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
-
-io.on('connection', socket => {
-  socket.on('new notification', () => {
-    io.sockets.emit('new notification');
-  });
-
-  socket.on('disconnect', () => {
-    io.emit('user disconnected');
-  });
-});
-
-// Here you might use Socket.IO middleware for authorization etc.
-
-// Listen to messages sent from the master. Ignore everything else.
 process.on('message', (message, connection) => {
   if (message !== 'sticky-session:connection') {
     return;
   }
-
-  // Emulate a connection event on the server by emitting the
-  // event with the connection the master sent us.
   server.emit('connection', connection);
 
   connection.resume();

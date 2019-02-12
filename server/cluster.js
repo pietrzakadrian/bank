@@ -7,7 +7,7 @@ const farmhash = require('farmhash');
 
 if (cluster.isMaster) {
   masterProcess();
-} else {
+} else if (cluster.isWorker) {
   childProcess();
 }
 

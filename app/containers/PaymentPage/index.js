@@ -443,6 +443,7 @@ class PaymentPage extends Component {
         if (res.isAccountBill) {
           this.setState(state => ({
             activeStep: state.activeStep + 1,
+            recipientId: res.recipientId,
           }));
 
           this.setState({
@@ -536,10 +537,8 @@ class PaymentPage extends Component {
             variant,
           });
 
-          const socket = socketIOClient(this.state.endpoint);
-          socket.emit('new notification');
-
-          // socket.to(socket#id).emit('new notification');
+          const socket = socketIOClient(`${this.state.endpoint}`);
+          socket.emit('new notification', this.state.recipientId);
 
           this.props.history.replace('/dashboard');
         } else {

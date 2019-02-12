@@ -75,7 +75,9 @@ exports.isAccountBill = (req, res) => {
   })
     .then(isAccountBill => {
       if (isAccountBill && isAccountBill.id !== req.userData.id) {
-        res.status(200).json({ isAccountBill: true });
+        res
+          .status(200)
+          .json({ isAccountBill: true, recipientId: isAccountBill.id });
       } else {
         res.status(200).json({ isAccountBill: false });
       }

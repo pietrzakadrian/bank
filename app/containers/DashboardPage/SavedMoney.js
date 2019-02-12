@@ -99,7 +99,7 @@ class SavedMoney extends Component {
       isNothingTransfersSum,
       procent,
     } = this.state;
-    const socket = socketIOClient(this.state.endpoint);
+    const socket = socketIOClient(`${this.state.endpoint}`);
 
     let data;
     let COLORS;
@@ -115,35 +115,37 @@ class SavedMoney extends Component {
       COLORS = ['#15a0dd', '#ea0000'];
     }
 
-    socket.on('new notification', () => {
-      this.setState(
-        {
-          isLoading: false,
-        },
-        () => {
-          this.Auth.availableFunds(this.props.id)
-            .then(res => {
-              if (res) {
-                const procentd =
-                  (res[0].additionals[0].incoming_transfers_sum * 100) /
-                    (res[0].additionals[0].incoming_transfers_sum +
-                      res[0].additionals[0].outgoing_transfers_sum) || 0;
+    socket.on('new notification', id => {
+      if (id === this.props.id) {
+        this.setState(
+          {
+            isLoading: false,
+          },
+          () => {
+            this.Auth.availableFunds(this.props.id)
+              .then(res => {
+                if (res) {
+                  const procentd =
+                    (res[0].additionals[0].incoming_transfers_sum * 100) /
+                      (res[0].additionals[0].incoming_transfers_sum +
+                        res[0].additionals[0].outgoing_transfers_sum) || 0;
 
-                this.setState({
-                  isLoading: true,
-                  outgoingTransfersSum:
-                    res[0].additionals[0].outgoing_transfers_sum,
-                  incomingTransfersSum:
-                    res[0].additionals[0].incoming_transfers_sum,
-                  procent: procentd,
-                });
-              }
-            })
-            .catch(() => {
-              /* just ignore */
-            });
-        },
-      );
+                  this.setState({
+                    isLoading: true,
+                    outgoingTransfersSum:
+                      res[0].additionals[0].outgoing_transfers_sum,
+                    incomingTransfersSum:
+                      res[0].additionals[0].incoming_transfers_sum,
+                    procent: procentd,
+                  });
+                }
+              })
+              .catch(() => {
+                /* just ignore */
+              });
+          },
+        );
+      }
     });
 
     return (

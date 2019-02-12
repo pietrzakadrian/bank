@@ -57,6 +57,7 @@ class AvailableFunds extends Component {
       isLoading: false,
       availableFunds: [],
       accountBalanceHistory: [],
+      endpoint: 'http://localhost:3000',
     };
     this.Auth = new AuthService();
   }
@@ -89,36 +90,38 @@ class AvailableFunds extends Component {
     const { isLoading, availableFunds, accountBalanceHistory } = this.state;
     const accountBalanceHistoryArray = JSON.parse(`[${accountBalanceHistory}]`);
 
-    const socket = socketIOClient(this.state.endpoint);
+    const socket = socketIOClient(`${this.state.endpoint}`);
 
-    socket.on('new notification', () => {
-      this.setState(
-        {
-          isLoading: false,
-        },
-        () => {
-          this.Auth.availableFunds(this.props.id)
-            .then(res => {
-              if (res) {
-                const amount = res[0].available_funds
-                  .toFixed(2)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                  .replace('.', ',');
+    socket.on('new notification', id => {
+      if (id === this.props.id) {
+        this.setState(
+          {
+            isLoading: false,
+          },
+          () => {
+            this.Auth.availableFunds(this.props.id)
+              .then(res => {
+                if (res) {
+                  const amount = res[0].available_funds
+                    .toFixed(2)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                    .replace('.', ',');
 
-                this.setState({
-                  isLoading: true,
-                  accountBalanceHistory:
-                    res[0].additionals[0].account_balance_history,
-                  availableFunds: amount,
-                });
-              }
-            })
-            .catch(() => {
-              /* just ignore */
-            });
-        },
-      );
+                  this.setState({
+                    isLoading: true,
+                    accountBalanceHistory:
+                      res[0].additionals[0].account_balance_history,
+                    availableFunds: amount,
+                  });
+                }
+              })
+              .catch(() => {
+                /* just ignore */
+              });
+          },
+        );
+      }
     });
 
     return (

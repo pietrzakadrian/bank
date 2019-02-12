@@ -264,20 +264,25 @@ class Header extends Component {
       '/payment': <FormattedMessage {...messages.paymentTitle} />,
       '/settings': <FormattedMessage {...messages.settingsTitle} />,
     };
-    const socket = socketIOClient(this.state.endpoint);
+    const socket = socketIOClient(`${this.state.endpoint}`);
+    socket.on('connect', () => {
+      socket.emit('authenticate', { token: Auth.getToken() }); // send the jwt
+    });
 
-    socket.on('new notification', () => {
-      this.Auth.isNotification(this.state.user_id)
-        .then(res => {
-          if (res) {
-            this.setState({
-              invisible: !res.isNotification,
-            });
-          }
-        })
-        .catch(() => {
-          /* just ignore */
-        });
+    socket.on('new notification', id => {
+      if (id === this.state.user_id) {
+        this.Auth.isNotification(this.state.user_id)
+          .then(res => {
+            if (res) {
+              this.setState({
+                invisible: !res.isNotification,
+              });
+            }
+          })
+          .catch(() => {
+            /* just ignore */
+          });
+      }
     });
 
     return (

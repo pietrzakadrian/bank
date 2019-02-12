@@ -113,44 +113,46 @@ class RecentTransactions extends Component {
       ...recentTransactionsSender,
     ];
 
-    const socket = socketIOClient(this.state.endpoint);
+    const socket = socketIOClient(`${this.state.endpoint}`);
 
-    socket.on('new notification', () => {
-      this.setState(
-        {
-          isLoading: false,
-        },
-        () => {
-          Promise.all([
-            this.Auth.recentTransactionsRecipient(this.props.id)
-              .then(res => {
-                if (res) {
-                  this.setState({
-                    recentTransactionsRecipient: res,
-                  });
-                }
-              })
-              .catch(() => {
-                /* just ignore */
-              }),
-            this.Auth.recentTransactionsSender(this.props.id)
-              .then(res => {
-                if (res) {
-                  this.setState({
-                    recentTransactionsSender: res,
-                  });
-                }
-              })
-              .catch(() => {
-                /* just ignore */
-              }),
-          ]).then(() => {
-            this.setState({
-              isLoading: true,
+    socket.on('new notification', id => {
+      if (id === this.props.id) {
+        this.setState(
+          {
+            isLoading: false,
+          },
+          () => {
+            Promise.all([
+              this.Auth.recentTransactionsRecipient(this.props.id)
+                .then(res => {
+                  if (res) {
+                    this.setState({
+                      recentTransactionsRecipient: res,
+                    });
+                  }
+                })
+                .catch(() => {
+                  /* just ignore */
+                }),
+              this.Auth.recentTransactionsSender(this.props.id)
+                .then(res => {
+                  if (res) {
+                    this.setState({
+                      recentTransactionsSender: res,
+                    });
+                  }
+                })
+                .catch(() => {
+                  /* just ignore */
+                }),
+            ]).then(() => {
+              this.setState({
+                isLoading: true,
+              });
             });
-          });
-        },
-      );
+          },
+        );
+      }
     });
 
     return (
