@@ -71,6 +71,9 @@ const styles = theme => ({
     textTransform: 'none',
     lineHeight: 2,
   },
+  accountBillContainer: {
+    cursor: 'auto',
+  },
 });
 
 class AccountBills extends Component {
@@ -157,7 +160,7 @@ class AccountBills extends Component {
                 accountBills.map((accountBill, id) => (
                   <TableRow key={id++}>
                     <TableCell className={classes.tableCell} scope="row">
-                      <span>
+                      <span className={classes.accountBillContainer}>
                         {accountBill.account_bill
                           .toString()
                           .replace(/(^\d{2}|\d{4})+?/g, '$1 ')

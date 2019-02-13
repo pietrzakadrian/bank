@@ -64,7 +64,7 @@ html {
    width: auto;
   }
 
-  textarea:focus, input:focus, button:focus{
+  textarea:focus, input:focus, button:focus, select:focus{
     outline: none;
   }
 
