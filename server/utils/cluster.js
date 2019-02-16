@@ -52,5 +52,5 @@ function masterProcess() {
 function childProcess() {
   // eslint-disable-next-line no-console
   console.log(`Worker ${process.pid} started and finished`);
-  require('./index.js');
+  require('../index.js');
 }

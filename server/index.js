@@ -1,11 +1,11 @@
 /* eslint consistent-return:0 import/order:0 */
 
 const express = require('express');
-const logger = require('./logger');
+const logger = require('./utils/logger');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const argv = require('./argv');
-const port = require('./port');
+const argv = require('./utils/argv');
+const port = require('./utils/port');
 const setup = require('./middlewares/frontend.middleware.js');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok =
