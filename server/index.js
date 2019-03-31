@@ -5,7 +5,7 @@ const logger = require('./utils/logger');
 const sio_redis = require('socket.io-redis');
 const argv = require('./utils/argv');
 const port = require('./utils/port');
-const setup = require('./middlewares/frontendMiddleware');
+const setup = require('./middlewares/frontend.middleware');
 const db = require('./config/db.config.js');
 const morgan = require('morgan');
 const isDev = process.env.NODE_ENV !== 'production';
