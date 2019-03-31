@@ -6,7 +6,8 @@ import { combineReducers } from 'redux-immutable';
 import { connectRouter } from 'connected-react-router/immutable';
 
 import history from 'utils/history';
-import languageProviderReducer from 'modules/LanguageProvider/reducer';
+import languageProviderReducer from 'containers/LanguageProvider/reducer';
+import globalReducer from 'containers/App/reducer';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -14,6 +15,7 @@ import languageProviderReducer from 'modules/LanguageProvider/reducer';
 export default function createReducer(injectedReducers = {}) {
   const rootReducer = combineReducers({
     language: languageProviderReducer,
+    global: globalReducer,
     ...injectedReducers,
   });
 

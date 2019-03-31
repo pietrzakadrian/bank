@@ -1,11 +1,11 @@
 # Don't check auto-generated stuff into git
 coverage
 build
-docs
 node_modules
 stats.json
 server/config/env.config.js
 .vscode
+
 
 # Cruft
 .DS_Store

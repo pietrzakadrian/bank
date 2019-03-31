@@ -1,22 +1,60 @@
+/**
+ *
+ * LoginPage
+ *
+ */
+
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Helmet from 'react-helmet';
-import classNames from 'classnames';
+import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import { withRouter } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+import AuthService from 'services/AuthService';
+
+// Import Material UI
+import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
-import ErrorOutline from '@material-ui/icons/ErrorOutline';
-import AuthService from '../../services/AuthService';
 
-import Header from '../../components/Header';
-import HeaderSubheading from '../../components/HeaderSubheading';
+// Import Components
+import Header from 'components/Header';
+import Subheader from 'components/Subheader';
+import Notification from 'components/Notification';
+import Footer from 'components/Footer';
 
+// Import Redux
+import injectSaga from 'utils/injectSaga';
+import injectReducer from 'utils/injectReducer';
+import {
+  makeIdSelector,
+  makeIdErrorSelector,
+  makePasswordSelector,
+  makePasswordErrorSelector,
+  makeIsIdExistSelector,
+  makeLoginErrorSelector,
+} from './selectors';
+import reducer from './reducer';
+import saga from './saga';
+import messages from './messages';
+import {
+  changeIdAction,
+  changePasswordAction,
+  enterIdAction,
+  enterPasswordAction,
+  emptyIdAction,
+  emptyPasswordAction,
+  loginStepBackAction,
+} from './actions';
+
+// Import Styles
 const styles = theme => ({
   formItem: {
     padding: 10,
     height: 36,
-
     border: '1px solid grey',
     display: 'block',
     margin: '0 auto',
@@ -32,7 +70,7 @@ const styles = theme => ({
   },
   formSubmit: {
     display: 'block',
-    margin: '20px auto 0',
+    margin: '20px auto 10px',
     padding: 5,
     height: 36,
     backgroundColor: '#0098db',
@@ -51,7 +89,6 @@ const styles = theme => ({
       transition: '0.150s',
     },
   },
-
   formContainer: {
     textAlign: 'center',
     margin: '15px 0',
@@ -65,27 +102,6 @@ const styles = theme => ({
   },
   pageContainer: {
     textAlign: 'center',
-  },
-  alertContainer: {
-    maxWidth: '1024px',
-    padding: '10px 3%',
-    margin: '10px auto 0',
-    borderRadius: 2,
-    backgroundColor: '#0098db',
-    color: 'white',
-  },
-  messageContainer: {
-    textAlign: 'left',
-    [theme.breakpoints.down('md')]: {
-      padding: 0,
-    },
-    [theme.breakpoints.up('md')]: {
-      padding: '0 130px',
-    },
-  },
-  footerContainer: {
-    maxWidth: 550,
-    margin: '15px auto',
   },
   textField: {
     margin: '10px auto 0',
@@ -111,268 +127,168 @@ const styles = theme => ({
     margin: '0 auto',
     fontSize: 14.5,
   },
-  footerText: {
-    textAlign: 'left',
-    padding: '0 15px',
-    margin: '10px -4px',
-  },
-  footerInfoText: {
-    position: 'relative',
-    top: 1,
-    fontSize: 13,
-  },
-  footerAlertText: {
-    color: 'red',
-    fontSize: 13,
-  },
-  errorIcon: {
-    fontSize: 35,
-  },
-  footerLink: {
-    color: '#0098db',
-  },
   buttonText: {
     '&:hover': {
       cursor: 'pointer',
     },
   },
 });
+/* eslint-disable react/prefer-stateless-function */
+export class LoginPage extends Component {
+  constructor(props) {
+    super(props);
 
-class LoginPage extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      login: '',
-      password: '',
-      loginExist: false,
-      loginError: '',
-      passwordError: '',
-    };
-
-    this.goToRegister = this.goToRegister.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleFormSubmitLogin = this.handleFormSubmitLogin.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleEnterId = this.handleEnterId.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.Auth = new AuthService();
   }
 
-  componentWillMount() {
-    if (this.Auth.loggedIn()) this.props.history.replace('/dashboard');
+  componentDidMount() {
+    if (this.Auth.loggedIn()) this.props.history.push('/dashboard');
   }
 
-  validateNumber(e) {
-    const re = /[0-9]+/g;
-    if (!re.test(e.key)) {
+  componentDidUpdate() {
+    if (this.Auth.loggedIn()) this.props.history.push('/dashboard');
+  }
+
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
       e.preventDefault();
+      this.handleEnterId(e);
     }
   }
 
-  goToRegister() {
-    this.props.history.replace('/register');
-  }
-
-  handleChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-      passwordError: '',
-      loginError: '',
-    });
-  }
-
-  handleFormSubmitLogin(e) {
+  handleEnterId(e) {
     e.preventDefault();
 
-    this.Auth.isLogin(this.state.login)
-      .then(res => {
-        if (res.isLogin) {
-          this.setState({
-            loginExist: true,
-            loginError: '',
-            password: '',
-          });
-        } else {
-          this.setState({
-            login: '',
-            loginError: 'Proszę podać prawidłowy identyfikator',
-          });
-        }
-      })
-      .catch(() => {
-        this.setState({
-          loginError: 'Proszę podać prawidłowy identyfikator',
-        });
-      });
+    this.props.id
+      ? this.props.onEnterId(this.props.id)
+      : this.props.isEmptyId(<FormattedMessage {...messages.loginEmpty} />);
   }
 
-  handleFormBack = () => {
-    this.setState({
-      loginExist: false,
-      login: '',
-      password: '',
-      passwordError: '',
-    });
-  };
-
-  handleFormSubmit(e) {
+  handleSubmit(e) {
     e.preventDefault();
 
-    this.Auth.login(this.state.login, this.state.password)
-      .then(res => {
-        if (res) {
-          this.props.history.replace('/dashboard');
-        } else {
-          this.setState({
-            passwordError: 'Proszę podać prawidłowy kod dostępu',
-            password: '',
-          });
-        }
-      })
-      .catch(err => {
-        this.setState({
-          passwordError: err,
-        });
-      });
+    this.props.password
+      ? this.props.onEnterPassword(this.props.password)
+      : this.props.isEmptyPassword(
+          <FormattedMessage {...messages.passwordEmpty} />,
+        );
   }
 
   render() {
-    const { classes } = this.props;
-    const { loginExist, loginError, passwordError } = this.state;
+    const {
+      classes,
+      isIdExist,
+      idError,
+      passwordError,
+      loginError,
+      onChangeId,
+      onChangePassword,
+      onLoginStepBack,
+    } = this.props;
+
+
     return (
       <Fragment>
-        <Helmet title="Login · Bank Application" />
+        <FormattedMessage {...messages.helmetLoginTitle}>
+          {title => <Helmet title={title} />}
+        </FormattedMessage>
+
         <Header />
-        <HeaderSubheading headerText="Logowanie" />
+        <FormattedMessage {...messages.loginToTheSystem}>
+          {title => <Subheader headerText={title} />}
+        </FormattedMessage>
 
         <div className={classes.pageContainer}>
-          <div className={classes.alertContainer}>
-            <div className={classes.messageContainer}>
-              Jeśli skorzystasz z naszej promocji i zarejestrujesz swoje konto
-              do końca stycznia w naszym banku,
-              <b>otrzymasz bonus w postaci 10 PLN</b>.<br />
-              <br />
-              Utworzone konta równie podlegają dla tej promocji.
-            </div>
-          </div>
+          <Notification />
+
           <div className={classes.formContainer}>
-            <form noValidate onSubmit={this.handleFormSubmit}>
-              {!loginExist ? (
+            <form noValidate onSubmit={this.handleSubmit}>
+              {!isIdExist ? (
                 <Fragment>
-                  <div className={classes.textField}>Numer identyfikacyjny</div>
+                  <div className={classes.textField}>
+                    <FormattedMessage {...messages.numberId} />
+                  </div>
                   {[
                     <Fragment key={1}>
-                      <input
-                        onKeyPress={e => this.validateNumber(e)}
-                        className={classNames(classes.formItem, {
-                          [classes.formError]: loginError,
-                        })}
-                        placeholder="Wpisz numer"
-                        name="login"
-                        type="number"
-                        onChange={this.handleChange}
-                      />
-                      {loginError ? (
-                        <div className={classes.textError}>{loginError}</div>
+                      <FormattedMessage {...messages.inputNumber}>
+                        {placeholder => (
+                          <input
+                            className={classNames(classes.formItem, {
+                              [classes.formError]: idError || loginError,
+                            })}
+                            placeholder={placeholder}
+                            name="login"
+                            type="number"
+                            onChange={onChangeId}
+                            onKeyPress={this.handleKeyPress}
+                          />
+                        )}
+                      </FormattedMessage>
+                      {idError || loginError ? (
+                        <div className={classes.textError}>
+                          {idError || loginError}
+                        </div>
                       ) : null}
                     </Fragment>,
                   ]}
                   <button
                     type="button"
                     className={classes.formSubmit}
-                    onClick={this.handleFormSubmitLogin}
+                    onClick={this.handleEnterId}
                   >
-                    <span className={classes.buttonText}>Dalej</span>
+                    <span className={classes.buttonText}>
+                      <FormattedMessage {...messages.nextText} />
+                    </span>
                     <NavigateNext />
                   </button>
                 </Fragment>
               ) : (
                 <Fragment>
-                  <div className={classes.textField}>Hasło dostępu</div>
+                  <div className={classes.textField}>
+                    <FormattedMessage {...messages.accessCode} />
+                  </div>
                   {[
                     <Fragment key={2}>
-                      <input
-                        className={classNames(classes.formItem, {
-                          [classes.formError]: passwordError,
-                        })}
-                        placeholder="Wpisz hasło"
-                        name="password"
-                        type="password"
-                        onChange={this.handleChange}
-                      />
-                      {passwordError ? (
-                        <div className={classes.textError}>{passwordError}</div>
+                      <FormattedMessage {...messages.inputPassowrd}>
+                        {placeholder => (
+                          <input
+                            className={classNames(classes.formItem, {
+                              [classes.formError]: passwordError || loginError,
+                            })}
+                            placeholder={placeholder}
+                            name="password"
+                            type="password"
+                            onChange={onChangePassword}
+                          />
+                        )}
+                      </FormattedMessage>
+                      {passwordError || loginError ? (
+                        <div className={classes.textError}>
+                          {passwordError || loginError}
+                        </div>
                       ) : null}
                     </Fragment>,
                   ]}
                   <button className={classes.formSubmit} type="submit">
-                    <span className={classes.buttonText}>Zaloguj</span>
+                    <span className={classes.buttonText}>
+                      <FormattedMessage {...messages.inputLogin} />
+                    </span>
                   </button>
-                  <button type="button" onClick={this.handleFormBack}>
+                  <button type="button" onClick={onLoginStepBack}>
                     <NavigateBefore />
-                    <span className={classes.buttonText}>Powrót</span>
+                    <span className={classes.buttonText}>
+                      <FormattedMessage {...messages.backText} />
+                    </span>
                   </button>
                 </Fragment>
               )}
-              <br />
             </form>
           </div>
-          <div className={classes.footerContainer}>
-            <div className={classes.footerText}>
-              <b>
-                Jeśli nie posiadasz jeszcze konta w naszym banku, mozesz je
-                utworzyć teraz, klikając na{' '}
-                <button
-                  type="button"
-                  className={classes.footerLink}
-                  onClick={this.goToRegister}
-                >
-                  Rejestracja
-                </button>
-              </b>
-            </div>
-          </div>
 
-          <div className={classes.footerContainer}>
-            <div className={classes.footerText}>
-              <ErrorOutline className={classes.errorIcon} />{' '}
-              <span className={classes.footerInfoText}>
-                Pamiętaj o podstawowych zasadach bezpieczeństwa.
-              </span>
-            </div>
-
-            <div className={classes.footerText}>
-              <span className={classes.footerInfoText}>
-                Zanim wprowadzisz na stronie swój numer identyfikacyjny i hasło
-                dostępu, upewnij się, ze:
-                <ul>
-                  <li>
-                    twoje hasło jest bezpieczne. Zawiera conajmniej 8 znaków
-                    oraz składa się z wielkich i małych liter
-                  </li>
-                  <li>
-                    w pasku adresu lub na pasku stanu w dolnej części ekranu
-                    przeglądarki widoczna jest zamknięta kłódka
-                  </li>
-                </ul>
-              </span>
-            </div>
-
-            <div className={classes.footerText}>
-              <span className={classes.footerAlertText}>
-                Pamiętaj: Bank nie wymaga potwierdzania żadnych danych,
-                poprawnego logowania bądź odczytania komunikatów Banku za pomocą
-                kodu SMS, TAN i/lub mailem, ani też instalacji jakichkolwiek
-                aplikacji na telefonach bądź komputerach użytkowników.
-              </span>
-            </div>
-
-            <div className={classes.footerText}>
-              <span className={classes.footerInfoText}>
-                Więcej informacji na temat bezpieczeństwa znajdziesz na stronie:
-                Zasady bezpieczeństwa
-              </span>
-            </div>
-          </div>
+          <Footer />
         </div>
       </Fragment>
     );
@@ -380,9 +296,51 @@ class LoginPage extends Component {
 }
 
 LoginPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
-  replace: PropTypes.string,
+  id: PropTypes.string,
+  password: PropTypes.string,
+  isIdExist: PropTypes.bool,
+  onChangeId: PropTypes.func,
+  onChangePassword: PropTypes.func,
+  onEnterId: PropTypes.func,
+  onEnterPassword: PropTypes.func,
+  isEmptyId: PropTypes.func,
+  isEmptyPassword: PropTypes.func,
+  onLoginStepBack: PropTypes.func,
 };
 
-export default withStyles(styles)(withRouter(LoginPage));
+const mapStateToProps = createStructuredSelector({
+  id: makeIdSelector(),
+  idError: makeIdErrorSelector(),
+  password: makePasswordSelector(),
+  passwordError: makePasswordErrorSelector(),
+  loginError: makeLoginErrorSelector(),
+  isIdExist: makeIsIdExistSelector(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onChangeId: e => dispatch(changeIdAction(e.target.value)),
+    onChangePassword: e => dispatch(changePasswordAction(e.target.value)),
+    onEnterId: id => dispatch(enterIdAction(id)),
+    onEnterPassword: password => dispatch(enterPasswordAction(password)),
+    isEmptyId: error => dispatch(emptyIdAction(error)),
+    isEmptyPassword: error => dispatch(emptyPasswordAction(error)),
+    onLoginStepBack: () => dispatch(loginStepBackAction()),
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+const withReducer = injectReducer({ key: 'loginPage', reducer });
+const withSaga = injectSaga({ key: 'loginPage', saga });
+
+export default compose(
+  withStyles(styles),
+  withRouter,
+  withReducer,
+  withSaga,
+  withConnect,
+)(LoginPage);

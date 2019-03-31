@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
+
 const User = db.users;
 const Bill = db.bills;
 const Additional = db.additionals;
@@ -120,26 +121,24 @@ exports.login = (req, res) => {
               last_present_logged: getTodayDate(),
             },
             { where: { login: req.body.login } },
-          ).then(() => {
+          ).then(() =>
             res.status(200).json({
               success: true,
               token: getToken(isUser.id),
-            });
-            // TODO: SAVE TO SESSION userId
-          });
-        } else {
-          User.update(
-            {
-              last_failed_logged: getTodayDate(),
-            },
-            { where: { login: req.body.login } },
-          ).then(() => {
-            res.status(200).json({
-              error: 'Auth failed. The password is incorrect.',
-              success: false,
-            });
-          });
+            }),
+          );
         }
+        User.update(
+          {
+            last_failed_logged: getTodayDate(),
+          },
+          { where: { login: req.body.login } },
+        ).then(() => {
+          res.status(200).json({
+            error: 'Auth failed. The password is incorrect.',
+            success: false,
+          });
+        });
       } else {
         res
           .status(200)

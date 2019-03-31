@@ -21,7 +21,6 @@ module.exports = require('./webpack.base.babel')({
   output: {
     filename: '[name].js',
     chunkFilename: '[name].chunk.js',
-    publicPath: '/',
   },
 
   optimization: {
@@ -45,7 +44,7 @@ module.exports = require('./webpack.base.babel')({
 
   // Emit a source map for easier debugging
   // See https://webpack.js.org/configuration/devtool/#devtool
-  devtool: 'eval',
+  devtool: 'eval-source-map',
 
   performance: {
     hints: false,

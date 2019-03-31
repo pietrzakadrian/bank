@@ -1,25 +1,21 @@
-/*
- * Payment
+/**
  *
- * This is the first page thing users see of our App after logging in, at the '/login' route
+ * PaymentPage
  *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
  */
 
-/* eslint no-nested-ternary: 0 */
-
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import './style.css';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
-import Helmet from 'react-helmet';
-import { withSnackbar } from 'notistack';
+import { Helmet } from 'react-helmet';
 import Autosuggest from 'react-autosuggest';
-import { debounce } from 'lodash';
-import socketIOClient from 'socket.io-client';
+import { withSnackbar } from 'notistack';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+import AuthService from 'services/AuthService';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core/styles';
@@ -29,22 +25,54 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
-// import { FormattedMessage } from 'react-intl';
-import Loading from '../../components/App/Loading';
-// import messages from './messages';
 
-import AuthService from '../../services/AuthService';
-import withAuth from '../../services/withAuth';
+// Import Components
+import Loading from 'components/App/Loading';
+import Warning from './Warning';
+import Notifier from 'components/Notifier';
 
-const getSuggestionValue = suggestion => suggestion.account_bill;
+import injectSaga from 'utils/injectSaga';
+import injectReducer from 'utils/injectReducer';
+import {
+  makeAccountBillsSelector,
+  makeAccountNumberSelector,
+  makeAmountMoneySelector,
+  makeTransferTitleSelector,
+  makeAuthorizationKeySelector,
+  makeActiveStepSelector,
+  makeIsLoadingSelector,
+  makeMessageSelector,
+  makeErrorSelector,
+  makeValueSelector,
+  makeSelectPaymentPage,
+  makeIsSendAuthorizationKeySelector,
+} from './selectors';
 
-const renderSuggestion = suggestion => (
-  <div>
-    {suggestion.account_bill} <br />
-    {suggestion.user.name} {suggestion.user.surname}
-  </div>
-);
+import {
+  changeAccountNumberAction,
+  changeAmountMoneyAction,
+  changeTransferTitleAction,
+  changeAuthorizationKeyAction,
+  enterAccountNumberAction,
+  enterAmountMoneyAction,
+  enterTransferTitleAction,
+  enterAuthorizationKeyAction,
+  paymentStepNextAction,
+  paymentStepBackAction,
+  clearAccountBillsAction,
+  searchAccountBillsAction,
+  emptyAccountNumberAction,
+  emptyAmountNumberAction,
+  emptyTransferTitleAction,
+  emptyAuthorizationKeyAction,
+  sendAuthorizationKeyAction,
+} from './actions';
 
+import reducer from './reducer';
+import saga from './saga';
+import messages from './messages';
+
+// Import Styles
 const styles = theme => ({
   button: {
     marginRight: theme.spacing.unit,
@@ -78,7 +106,7 @@ const styles = theme => ({
       width: '100%',
     },
     [theme.breakpoints.up('sm')]: {
-      width: '17rem',
+      width: '300px',
     },
     border: '1px solid grey',
     display: 'block',
@@ -92,7 +120,7 @@ const styles = theme => ({
       width: '100%',
     },
     [theme.breakpoints.up('sm')]: {
-      width: '17rem',
+      width: '300px',
     },
     display: 'block',
     margin: '20px auto 0',
@@ -145,7 +173,7 @@ const styles = theme => ({
       width: '100%',
     },
     [theme.breakpoints.up('sm')]: {
-      width: '17rem',
+      width: '300px',
     },
     textAlign: 'left',
     fontSize: '18px',
@@ -158,7 +186,7 @@ const styles = theme => ({
       width: '100%',
     },
     [theme.breakpoints.up('sm')]: {
-      width: '17rem',
+      width: '300px',
     },
     margin: '0 auto',
     fontSize: 14.5,
@@ -169,7 +197,7 @@ const styles = theme => ({
       width: '100%',
     },
     [theme.breakpoints.up('sm')]: {
-      width: '17rem',
+      width: '300px',
     },
     margin: '0 auto',
     fontSize: 14.5,
@@ -193,6 +221,7 @@ const styles = theme => ({
   },
   footerLink: {
     color: '#0098db',
+    padding: 0,
   },
   buttonText: {
     '&:hover': {
@@ -211,171 +240,152 @@ const styles = theme => ({
   success: {
     backgroundColor: '#0098db',
   },
-  // setAuthorizationCodeBtn: {
-  //   display: 'inline-block',
-  //   width: 90,
-  //   position: 'absolute',
-  //   [theme.breakpoints.up('924px')]: {
-  //     display: 'none',
-  //   },
-  //   top: 197,
-  //   marginLeft: 20,
-  //   marginTop: 0,
-  // },
-  // formSubmitContainer: {
-  //   width: '100%',
-  //   textAlign: 'center',
-  // },
+  infoContainer: {
+    textAlign: 'left',
+    margin: '0 auto',
+    padding: 30,
+  },
+  infoRecipientText:{
+    color: '#0029ab',
+    fontWeight: 'bold'
+  }
 });
 
-function getSteps() {
-  return [
-    'Numer rachunku ',
-    'Ilość pieniędzy',
-    'Tytuł przelewu',
-    'Potwierdź dane',
-  ];
-}
-
-class PaymentPage extends Component {
+/* eslint-disable react/prefer-stateless-function */
+class PaymentPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      senderId: this.props.user.id,
-      error: '',
-      message: '',
-      activeStep: 0,
-      accountBills: [],
-      transferTitle: '',
-      value: '',
-      isLoading: true,
-      endpoint: 'http://localhost:3000',
-    };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.getSteps = this.getSteps.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.Auth = new AuthService();
   }
 
-  getSuggestions = value => {
-    const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
+  componentDidMount() {
+    if (!this.Auth.loggedIn()) this.props.history.push('/');
+  }
 
-    if (inputLength === 0) {
-      return [];
-    }
-    return this.state.accountBills.filter(
-      accountBill =>
-        accountBill.account_bill.toLowerCase().slice(0, inputLength) ===
-        inputValue,
-    );
-  };
+  getSteps() {
+    return [
+      <FormattedMessage key={1} {...messages.stepAccountNumber} />,
+      <FormattedMessage key={2} {...messages.stepAmountOfMoney} />,
+      <FormattedMessage key={3} {...messages.stepTransferTitle} />,
+      <FormattedMessage key={4} {...messages.stepConfirmTheData} />,
+    ];
+  }
 
-  getUserData = debounce(
-    newValue =>
-      this.Auth.getUsersData(newValue).then(res => {
-        if (res) {
-          this.setState({ accountBills: res, isLoading: true });
-        }
-      }),
-    400,
+  getSuggestionValue = suggestion => suggestion.account_bill;
+
+  renderSuggestion = suggestion => (
+    <div>
+      {suggestion.account_bill} <br />
+      {suggestion.user.name} {suggestion.user.surname}
+    </div>
   );
 
-  onChange = (event, { newValue }) => {
-    this.setState(
-      {
-        value: newValue,
-      },
-      () => {
-        if (this.state.value.length !== 0 && this.state.value.length !== 26) {
-          this.setState({
-            isLoading: false,
-          });
-          this.getUserData(newValue);
-        }
-      },
-    );
-  };
-
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      accountBills: this.getSuggestions(value),
-    });
-  };
-
-  onSuggestionsClearRequested = () => {
-    this.setState({
-      accountBills: [],
-    });
-  };
-
   getStepContent = step => {
-    const { classes } = this.props;
-    const { error, accountBills, message } = this.state;
-    const { value } = this.state;
-
-    const inputProps = {
-      placeholder: 'Wprowadź numer',
+    const {
       value,
-      onChange: this.onChange,
+      paymentPage,
+      isLoading,
+      onChange,
+      onSuggestionsFetchRequested,
+      onSuggestionsClearRequested,
+      onChangeAmountMoney,
+      onChangeTransferTitle,
+      onChangeAuthorizationKey,
+      isSendAuthorizationKey,
+      onSendAuthorizationKey,
+      error,
+      message,
+      classes,
+      intl,
+    } = this.props;
+    const inputProps = {
+      placeholder: intl.formatMessage({
+        id: 'app.containers.PaymentPage.inputAccountNumber',
+        defaultMessage: 'Enter the account number',
+      }),
+      value,
+      onChange,
       maxLength: 26,
+      onKeyPress: this.handleKeyPress
     };
 
     switch (step) {
       case 0:
         return (
           <Fragment>
-            {!this.state.isLoading ? (
+            {isLoading ? (
               <Fragment>
                 <Loading />
                 <br />
               </Fragment>
             ) : null}
-            <div className={classes.textField}>Numer rachunku</div>
+            <div className={classes.textField}>
+              <FormattedMessage {...messages.stepAccountNumber} />
+            </div>
             <Autosuggest
               className={classNames(classes.formItem, {
                 [classes.formError]: error,
               })}
-              suggestions={accountBills}
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-              getSuggestionValue={getSuggestionValue}
-              renderSuggestion={renderSuggestion}
+              suggestions={paymentPage.suggestions}
+              onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+              onSuggestionsClearRequested={onSuggestionsClearRequested}
+              getSuggestionValue={this.getSuggestionValue}
+              renderSuggestion={this.renderSuggestion}
               inputProps={inputProps}
             />
+
             {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
       case 1:
         return (
           <Fragment>
-            <div className={classes.textField}>Ilość pieniędzy</div>
-            <input
-              className={classNames(classes.formItem, {
-                [classes.formError]: error,
-              })}
-              placeholder="Wpisz ilość"
-              name="amountMoney"
-              type="number"
-              onChange={this.handleChange}
-            />
+            <div className={classes.textField}>
+              <FormattedMessage {...messages.stepAmountOfMoney} />
+            </div>
+            <FormattedMessage {...messages.inputAmountOfMoney}>
+              {placeholder => (
+                <input
+                  key={1}
+                  className={classNames(classes.formItem, {
+                    [classes.formError]: error,
+                  })}
+                  placeholder={placeholder}
+                  name="amountMoney"
+                  type="number"
+                  onChange={onChangeAmountMoney}
+                  onKeyPress={this.handleKeyPress}
+                />
+              )}
+            </FormattedMessage>
             {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
       case 2:
         return (
           <Fragment>
-            <div className={classes.textField}>Tytuł przelewu</div>
-            <input
-              className={classNames(classes.formItem, {
-                [classes.formError]: error,
-              })}
-              placeholder="Wpisz tytuł"
-              name="transferTitle"
-              type="text"
-              onChange={this.handleChange}
-            />
+            <div className={classes.textField}>
+              <FormattedMessage {...messages.stepTransferTitle} />
+            </div>
+            <FormattedMessage {...messages.inputTransferTitle}>
+              {placeholder => (
+                <input
+                  key={2}
+                  className={classNames(classes.formItem, {
+                    [classes.formError]: error,
+                  })}
+                  placeholder={placeholder}
+                  name="transferTitle"
+                  type="text"
+                  onChange={onChangeTransferTitle}
+                  onKeyPress={this.handleKeyPress}
+                />
+              )}
+            </FormattedMessage>
             {error ? <div className={classes.textError}>{error}</div> : null}
           </Fragment>
         );
@@ -383,17 +393,52 @@ class PaymentPage extends Component {
         return (
           <Fragment>
             <div className={classes.formSubmitContainer}>
-              <div className={classes.textField}>Potwierdź dane</div>
-              <input
-                className={classNames(classes.formItem, classes.formSpecial, {
-                  [classes.formError]: error,
-                })}
-                name="authorizationCode"
-                placeholder="Wpisz klucz autoryzacji"
-                type="text"
-                onChange={this.handleChange}
-              />
+              <div className={classNames(classes.textField, classes.textFieldAuthorizationCode)}>
+                <FormattedMessage {...messages.stepConfirmTheData} />
+              </div>
+
+     <div className={classes.infoContainer}>
+     <div className={classes.infoRecipient}><span className={classes.infoRecipientText}><FormattedMessage {...messages.paymentEndAccountNumber} /></span>: {this.props.value.toString()
+                        .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+                        .trim()}</div>
+
+                        <div className={classes.infoRecipient}><span className={classes.infoRecipientText}><FormattedMessage {...messages.paymentEndAmountMoney} /></span>: {this.props.amountMoney}</div>
+
+                        <div className={classes.infoRecipient}>
+                          <span className={classes.infoRecipientText}>
+                            <FormattedMessage {...messages.paymentEndTransferTitle} />
+                            </span>: {this.props.transferTitle}
+                            </div>
+
+
+     </div>
+
+     <br />
+
+<div className={classes.authoriationCodeContainer}>
+              <FormattedMessage {...messages.inputAuthorizationCoder}>
+                {placeholder => (
+                  <input
+                    key={3}
+                    className={classNames(
+                      classes.formItem,
+                      classes.formSpecial,
+                      {
+                        [classes.formError]: error,
+                      },
+                    )}
+                    name="authorizationCode"
+                    placeholder={placeholder}
+                    type="text"
+                    onChange={onChangeAuthorizationKey}
+                    onKeyPress={this.handleKeyPress}
+                  />
+                )}
+              </FormattedMessage>
+
+
               {error ? <div className={classes.textError}>{error}</div> : null}
+
               {message ? (
                 <div className={classes.textMessage}>{message}</div>
               ) : null}
@@ -404,10 +449,17 @@ class PaymentPage extends Component {
                   classes.formSubmit,
                   classes.setAuthorizationCodeBtn,
                 )}
-                onClick={this.handleFormCheckout}
+                onClick={isSendAuthorizationKey ? null : onSendAuthorizationKey}
+               
               >
-                <span className={classes.buttonText}>Wyślij kod</span>
+                <span className={classes.buttonText}>
+                  <FormattedMessage {...messages.inputReceiveCode} />
+                </span>
               </button>
+              </div>
+
+
+              
             </div>
           </Fragment>
         );
@@ -416,217 +468,63 @@ class PaymentPage extends Component {
     }
   };
 
-  validateNumber(e) {
-    const re = /[0-9]+/g;
-    if (!re.test(e.key)) {
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
       e.preventDefault();
+      this.handleClick(e);
     }
   }
 
-  handleChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
+  handleClick(e) {
+    e.preventDefault();
+
+    if (this.props.activeStep === 0) {
+      this.props.value 
+        ? this.props.onEnterAccountNumber(this.props.value)
+        : this.props.isEmptyAccountNumber(<FormattedMessage {...messages.errorAccountNumberEmpty} />);
+    }
+
+    if (this.props.activeStep === 1) {
+      this.props.amountMoney 
+        ? this.props.onEnterAmountMoney(this.props.amountMoney)
+        : this.props.isEmptyAmountMoney(<FormattedMessage {...messages.errorAmountOfMoneyEmpty} />);
+    }
+
+    if (this.props.activeStep === 2) {
+      this.props.transferTitle 
+        ? this.props.onEnterTransferTitle(this.props.transferTitle)
+        : this.props.isEmptyTransferTitle(<FormattedMessage {...messages.errorTransferTitleIncorrect} />);
+    }
+
+    if (this.props.activeStep === 3) {
+      this.props.authorizationKey 
+        ? this.props.onEnterAuthorizationKey(this.props.authorizationKey)
+        : this.props.isEmptyAuthorizationKey(<FormattedMessage {...messages.errorKeyIncorrect} />);
+    }
   }
-
-  isAccountBill = e => {
-    e.preventDefault();
-
-    if (this.state.value === '') {
-      this.setState({
-        error: 'Proszę wprowadzić numer rachunku',
-      });
-      return;
-    }
-
-    this.Auth.isAccountBill(this.state.value)
-      .then(res => {
-        if (res.isAccountBill) {
-          this.setState(state => ({
-            activeStep: state.activeStep + 1,
-            recipientId: res.recipientId,
-          }));
-
-          this.setState({
-            error: '',
-          });
-          document.getElementsByTagName('input').amountMoney.value = '';
-        } else {
-          this.setState({
-            error: 'Proszę wprowadzić prawidlowy numer rachunku',
-          });
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
-  };
-
-  isAmountMoney = e => {
-    e.preventDefault();
-
-    if (this.state.amountMoney === '') {
-      this.setState({
-        error: 'Proszę wprowadzić kwotę',
-      });
-      return;
-    }
-
-    this.Auth.isAmountMoney(this.state.senderId, this.state.amountMoney)
-      .then(res => {
-        if (res.isAmountMoney) {
-          this.setState(state => ({
-            activeStep: state.activeStep + 1,
-          }));
-
-          this.setState({
-            error: '',
-          });
-          document.getElementsByTagName('input').transferTitle.value = '';
-        } else {
-          this.setState({
-            error: 'Proszę wprowadzić prawidłową kwotę',
-          });
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
-  };
-
-  handleFormCheckout = e => {
-    e.preventDefault();
-
-    this.Auth.registerTransaction(
-      this.state.senderId,
-      this.state.value,
-      this.state.amountMoney,
-      this.state.transferTitle,
-    )
-      .then(res => {
-        if (!res.error) {
-          this.setState({
-            message: 'Klucz został wysłany',
-            error: '',
-          });
-        } else {
-          this.setState({
-            message: 'Przerwa techniczna. Spróbuj za chwilę.',
-          });
-        }
-      })
-      .catch(() => {
-        this.setState({
-          error: 'Przerwa techniczna. Spróbuj za chwilę.',
-        });
-      });
-  };
-
-  handleFormSubmit = variant => e => {
-    e.preventDefault();
-
-    this.Auth.confirmTransaction(
-      this.state.senderId,
-      this.state.value,
-      this.state.amountMoney,
-      this.state.transferTitle,
-      this.state.authorizationCode,
-    )
-      .then(res => {
-        if (!res.error) {
-          this.props.enqueueSnackbar('Przelew został wykonany.', {
-            variant,
-          });
-
-          const socket = socketIOClient(`${this.state.endpoint}`);
-          socket.emit('new notification', this.state.recipientId);
-
-          this.props.history.replace('/dashboard');
-        } else {
-          this.setState({
-            error: 'Niepoprawny klucz autoryzacji.',
-            message: '',
-          });
-        }
-      })
-      .catch(() => {
-        this.setState({
-          error: 'Przerwa techniczna. Spróbuj za chwilę.',
-        });
-      });
-  };
-
-  handleNext = () => {
-    const { activeStep, amountMoney, transferTitle } = this.state;
-
-    if (activeStep === 1 && amountMoney === '') {
-      document.getElementsByTagName('input').amountMoney.value = '';
-      this.setState({
-        error: 'Proszę podać hasło',
-      });
-    } else if (activeStep === 2 && transferTitle === '') {
-      document.getElementsByTagName('input').transferTitle.value = '';
-      this.setState({
-        error: 'Proszę podać tytuł przelewu',
-      });
-    } else {
-      this.setState({
-        activeStep: activeStep + 1,
-        error: '',
-      });
-
-      if (activeStep === 1) {
-        document.getElementsByTagName('input').amountMoney.value = '';
-      } else if (activeStep === 2) {
-        document.getElementsByTagName('input').transferTitle.value = '';
-      }
-    }
-  };
-
-  handleBack = () => {
-    const { activeStep, value, amountMoney, transferTitle } = this.state;
-
-    if (activeStep === 1 && value !== '') {
-      this.setState({
-        value: '',
-      });
-    } else if (activeStep === 2 && amountMoney !== '') {
-      this.setState({
-        amountMoney: '',
-      });
-    } else if (activeStep === 3 && transferTitle !== '') {
-      this.setState({
-        transferTitle: '',
-      });
-    }
-
-    this.setState({
-      activeStep: activeStep - 1,
-      error: '',
-    });
-  };
 
   render() {
-    const { classes } = this.props;
-    const steps = getSteps();
-    const { activeStep } = this.state;
+    const { classes, activeStep, onPaymentStepBack } = this.props;
 
     return (
       <Fragment>
-        <Helmet title="Payment · Bank Application" />
+        <FormattedMessage {...messages.helmetPaymentTitle}>
+          {title => <Helmet title={title} />}
+        </FormattedMessage>
+
         <div className={classes.center}>
           <MobileStepper
             variant="dots"
-            steps={5}
+            steps={4}
             position="static"
-            activeStep={this.state.activeStep}
+            activeStep={activeStep}
             classes={{
               root: classes.mobileStepper,
               dots: classes.mobileStepperDots,
             }}
           />
           <Stepper className={classes.stepperContainer} activeStep={activeStep}>
-            {steps.map(label => {
+            {this.getSteps().map(label => {
               const props = {};
               const labelProps = {};
               return (
@@ -636,21 +534,22 @@ class PaymentPage extends Component {
               );
             })}
           </Stepper>
+
           <div>
-            {activeStep === steps.length ? null : (
+            {activeStep === this.getSteps().length ? null : (
               <div>
                 <div className={classes.instructions}>
-                  <form noValidate onSubmit={this.handleFormSubmit('success')}>
-                    {this.getStepContent(activeStep)}
-                  </form>
+                  <form noValidate>{this.getStepContent(activeStep)}</form>
                 </div>
-                {activeStep === steps.length - 1 ? (
+                {activeStep === this.getSteps().length - 1 ? (
                   <button
                     className={classes.formSubmit}
                     type="submit"
-                    onClick={this.handleFormSubmit('success')}
+                    onClick={this.handleClick}
                   >
-                    <span className={classes.buttonText}>Wykonaj płatność</span>
+                    <span className={classes.buttonText}>
+                      <FormattedMessage {...messages.inputMakePayment} />
+                    </span>
                   </button>
                 ) : (
                   [
@@ -659,10 +558,12 @@ class PaymentPage extends Component {
                         key={1}
                         type="button"
                         className={classes.formSubmit}
-                        onClick={this.isAccountBill}
-                        disabled={this.state.activeStep === 4}
+                        disabled={activeStep === 4}
+                        onClick={this.handleClick}
                       >
-                        <span className={classes.buttonText}>Dalej</span>
+                        <span className={classes.buttonText}>
+                          <FormattedMessage {...messages.nextText} />
+                        </span>
                         <NavigateNext />
                       </button>
                     ) : activeStep === 1 ? (
@@ -670,10 +571,12 @@ class PaymentPage extends Component {
                         type="button"
                         key={2}
                         className={classes.formSubmit}
-                        onClick={this.isAmountMoney}
-                        disabled={this.state.activeStep === 4}
+                        disabled={activeStep === 4}
+                        onClick={this.handleClick}
                       >
-                        <span className={classes.buttonText}>Dalej</span>
+                        <span className={classes.buttonText}>
+                          <FormattedMessage {...messages.nextText} />
+                        </span>
                         <NavigateNext />
                       </button>
                     ) : (
@@ -681,10 +584,12 @@ class PaymentPage extends Component {
                         type="button"
                         key={3}
                         className={classes.formSubmit}
-                        onClick={this.handleNext}
-                        disabled={this.state.activeStep === 4}
+                        onClick={this.handleClick}
+                        disabled={activeStep === 4}
                       >
-                        <span className={classes.buttonText}>Dalej</span>
+                        <span className={classes.buttonText}>
+                          <FormattedMessage {...messages.nextText} />
+                        </span>
                         <NavigateNext />
                       </button>
                     ),
@@ -694,28 +599,92 @@ class PaymentPage extends Component {
                 {activeStep !== 0 ? (
                   <button
                     type="button"
-                    disabled={this.state.activeStep === 0}
-                    onClick={this.handleBack}
+                    disabled={activeStep === 0}
+                    onClick={onPaymentStepBack}
                   >
                     <NavigateBefore />
-                    <span className={classes.buttonText}>Powrót</span>
+                    <span className={classes.buttonText}>
+                      <FormattedMessage {...messages.backText} />
+                    </span>
                   </button>
                 ) : null}
               </div>
             )}
           </div>
         </div>
+
+        <Warning />
+        <Notifier />
+
       </Fragment>
     );
   }
 }
 
-PaymentPage.propTypes = {
-  classes: PropTypes.object,
-  theme: PropTypes.object.isRequired,
-  enqueueSnackbar: PropTypes.func.isRequired,
-};
+PaymentPage.propTypes = {};
 
-export default withAuth(
-  withStyles(styles, { withTheme: true })(withSnackbar(PaymentPage)),
+const mapStateToProps = createStructuredSelector({
+  accountBills: makeAccountBillsSelector(),
+  accountNumber: makeAccountNumberSelector(),
+  amountMoney: makeAmountMoneySelector(),
+  transferTitle: makeTransferTitleSelector(),
+  authorizationKey: makeAuthorizationKeySelector(),
+  activeStep: makeActiveStepSelector(),
+  isLoading: makeIsLoadingSelector(),
+  message: makeMessageSelector(),
+  error: makeErrorSelector(),
+  value: makeValueSelector(),
+  paymentPage: makeSelectPaymentPage(),
+  isSendAuthorizationKey: makeIsSendAuthorizationKeySelector(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    isEmptyAccountNumber: error => dispatch(emptyAccountNumberAction(error)),
+    isEmptyAmountMoney: error => dispatch(emptyAmountNumberAction(error)),
+    isEmptyTransferTitle: error => dispatch(emptyTransferTitleAction(error)),
+    isEmptyAuthorizationKey: error =>
+      dispatch(emptyAuthorizationKeyAction(error)),
+    onChangeAmountMoney: e => dispatch(changeAmountMoneyAction(e.target.value)),
+    onChangeTransferTitle: e =>
+      dispatch(changeTransferTitleAction(e.target.value)),
+    onChangeAuthorizationKey: e =>
+      dispatch(changeAuthorizationKeyAction(e.target.value)),
+    onEnterAccountNumber: value => dispatch(enterAccountNumberAction(value)),
+    onEnterAmountMoney: amountMoney =>
+      dispatch(enterAmountMoneyAction(amountMoney)),
+    onEnterTransferTitle: transferTitle =>
+      dispatch(enterTransferTitleAction(transferTitle)),
+      onSendAuthorizationKey: () => dispatch(sendAuthorizationKeyAction()),
+    onEnterAuthorizationKey: authorizationKey =>
+      dispatch(enterAuthorizationKeyAction(authorizationKey)),
+    onPaymentStepNext: () => dispatch(paymentStepNextAction()),
+    onPaymentStepBack: () => dispatch(paymentStepBackAction()),
+    onChange(event, { newValue }) {
+      dispatch(changeAccountNumberAction(newValue));
+    },
+    onSuggestionsFetchRequested({ value }) {
+      dispatch(searchAccountBillsAction(value));
+    },
+    onSuggestionsClearRequested() {
+      dispatch(clearAccountBillsAction());
+    },
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
 );
+
+const withReducer = injectReducer({ key: 'paymentPage', reducer });
+const withSaga = injectSaga({ key: 'paymentPage', saga });
+
+export default compose(
+  withStyles(styles, { withTheme: true }),
+  withReducer,
+  withSaga,
+  withConnect,
+  withSnackbar,
+  injectIntl,
+)(PaymentPage);

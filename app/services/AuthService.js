@@ -2,164 +2,15 @@ import decode from 'jwt-decode';
 
 export default class AuthService {
   constructor(domain) {
-    this.domain = domain || 'http://localhost:3000/api';
+    this.domain = domain || '/api';
     this.fetch = this.fetch.bind(this);
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
-    this.register = this.register.bind(this);
-    this.isLogin = this.isLogin.bind(this);
-    this.isEmail = this.isEmail.bind(this);
+    this.isRegister = this.isRegister.bind(this);
     this.isAccountBill = this.isAccountBill.bind(this);
     this.isAmountMoney = this.isAmountMoney.bind(this);
-    this.isNotification = this.isNotification.bind(this);
-    this.getUserdata = this.getUserdata.bind(this);
-    this.availableFunds = this.availableFunds.bind(this);
-    this.accountBills = this.accountBills.bind(this);
+    this.unsetRegister = this.unsetRegister.bind(this);
     this.registerTransaction = this.registerTransaction.bind(this);
     this.confirmTransaction = this.confirmTransaction.bind(this);
     this.getUsersData = this.getUsersData.bind(this);
-    this.recentTransactionsSender = this.recentTransactionsSender.bind(this);
-    this.recentTransactionsRecipient = this.recentTransactionsRecipient.bind(
-      this,
-    );
-  }
-
-  // Check Login Exist Action
-  isLogin(id) {
-    return this.fetch(`${this.domain}/users/isLogin/${id}`, {
-      method: 'GET',
-    });
-  }
-
-  // Check Email Exist Action
-  isEmail(email) {
-    return this.fetch(`${this.domain}/users/isEmail/${email}`, {
-      method: 'GET',
-    });
-  }
-
-  // Login Action
-  login(login, password) {
-    return this.fetch(`${this.domain}/users/login`, {
-      method: 'POST',
-      body: JSON.stringify({
-        login,
-        password,
-      }),
-    })
-      .then(res => {
-        if (res.token) {
-          this.setToken(res.token);
-          return 1;
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
-  }
-
-  // Register Action
-  register(login, password, name, surname, email) {
-    return this.fetch(`${this.domain}/users/register`, {
-      method: 'POST',
-      body: JSON.stringify({
-        login,
-        password,
-        name,
-        surname,
-        email,
-      }),
-    });
-  }
-
-  // Logout Action
-  logout(id) {
-    return this.fetch(`${this.domain}/users/logout/${id}`, {
-      method: 'PUT',
-    })
-      .then(res => {
-        if (!res.error) {
-          localStorage.removeItem('id_token');
-          return 1;
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
-  }
-
-  // GreetingHeadline Action
-  getUserdata(id) {
-    return this.fetch(`${this.domain}/users/${id}`, {
-      method: 'GET',
-    })
-      .then(res => {
-        if (!res.error) {
-          return res;
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
-  }
-
-  // AvailableFunds Action
-  availableFunds(id) {
-    return this.fetch(`${this.domain}/bills/${id}`, {
-      method: 'GET',
-    })
-      .then(res => {
-        if (!res.error) {
-          return res;
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
-  }
-
-  // AccountBills Action
-  accountBills(id) {
-    return this.fetch(`${this.domain}/bills/${id}`, {
-      method: 'GET',
-    })
-      .then(res => {
-        if (!res.error) {
-          return res;
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
-  }
-
-  // RecentTransactions Action
-  recentTransactionsRecipient(id) {
-    return this.fetch(`${this.domain}/transactions/recipient/${id}`, {
-      method: 'GET',
-    })
-      .then(res => {
-        if (!res.error) {
-          return res;
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
-  }
-
-  recentTransactionsSender(id) {
-    return this.fetch(`${this.domain}/transactions/sender/${id}`, {
-      method: 'GET',
-    })
-      .then(res => {
-        if (!res.error) {
-          return res;
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
   }
 
   isAccountBill(account_bill) {
@@ -224,16 +75,12 @@ export default class AuthService {
       });
   }
 
-  isNotification(id) {
-    return this.fetch(`${this.domain}/additionals/isNotification/${id}`, {
-      method: 'GET',
-    });
+  isRegister() {
+    return sessionStorage.getItem('register');
   }
 
-  unsetNotification(id) {
-    return this.fetch(`${this.domain}/additionals/unsetNotification/${id}`, {
-      method: 'PUT',
-    });
+  unsetRegister() {
+    return sessionStorage.removeItem('register');
   }
 
   // TODO: updateLastSuccessfulLoggedDate(id) when isTokenExpired
@@ -257,7 +104,7 @@ export default class AuthService {
 
   setToken(idToken) {
     // Saves user token to localStorage
-    localStorage.setItem('id_token', idToken);
+    return localStorage.setItem('id_token', idToken);
   }
 
   unsetToken() {
@@ -293,7 +140,7 @@ export default class AuthService {
       .then(response => response.json());
   }
 
-  checkStatus(response) {
+  _checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
       return response;
     }

@@ -1,15 +1,9 @@
-/* eslint-disable no-var */
 /* eslint-disable vars-on-top */
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const net = require('net');
 const farmhash = require('farmhash');
-
-if (cluster.isMaster) {
-  masterProcess();
-} else if (cluster.isWorker) {
-  childProcess();
-}
+const port = require('./port');
 
 function masterProcess() {
   // eslint-disable-next-line no-console
@@ -17,7 +11,7 @@ function masterProcess() {
   const workers = [];
 
   // eslint-disable-next-line func-names
-  var spawn = function(i) {
+  const spawn = function(i) {
     workers[i] = cluster.fork();
 
     // Optional: Restart worker on exit
@@ -29,7 +23,7 @@ function masterProcess() {
   };
 
   // Spawn workers.
-  for (let i = 0; i < numCPUs; i += 1) {
+  for (let i = 0; i < 2; i += 1) {
     spawn(i);
   }
   // eslint-disable-next-line func-names
@@ -43,14 +37,20 @@ function masterProcess() {
       // We received a connection and need to pass it to the appropriate
       // worker. Get the worker for this connection's source IP and pass
       // it the connection.
-      const worker = workers[worker_index(connection.remoteAddress, numCPUs)];
+      const worker = workers[worker_index(connection.remoteAddress, 2)];
       worker.send('sticky-session:connection', connection);
     })
-    .listen(3000);
+    .listen(port);
 }
 
 function childProcess() {
   // eslint-disable-next-line no-console
   console.log(`Worker ${process.pid} started and finished`);
   require('../index.js');
+}
+
+if (cluster.isMaster) {
+  masterProcess();
+} else if (cluster.isWorker) {
+  childProcess();
 }

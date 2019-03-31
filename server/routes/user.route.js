@@ -1,5 +1,5 @@
 /* eslint func-names: ["error", "never"] */
-module.exports = function(app) {
+module.exports = function (app) {
   const users = require('../controllers/user.controller.js');
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
   const checkToken = require('../middlewares/checkToken.middleware.js');

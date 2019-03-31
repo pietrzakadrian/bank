@@ -1,5 +1,5 @@
 /* eslint func-names: ["error", "never"] */
-module.exports = function(app) {
+module.exports = function (app) {
   const transactions = require('../controllers/transaction.controller.js');
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
   const checkToken = require('../middlewares/checkToken.middleware.js');
@@ -12,7 +12,7 @@ module.exports = function(app) {
     '/api/transactions/register',
     checkAuth,
     checkToken,
-    transactions.register,
+    transactions.register
   );
 
   // Return Recipient's Transaction Data Action
@@ -20,7 +20,7 @@ module.exports = function(app) {
     '/api/transactions/recipient/:recipientId',
     checkAuth,
     checkToken,
-    transactions.getRecipientdata,
+    transactions.getRecipientdata
   );
 
   // Return Sender's Transaction Data Action
@@ -28,6 +28,6 @@ module.exports = function(app) {
     '/api/transactions/sender/:senderId',
     checkAuth,
     checkToken,
-    transactions.getSenderdata,
+    transactions.getSenderdata
   );
 };

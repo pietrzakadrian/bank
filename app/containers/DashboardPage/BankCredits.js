@@ -17,43 +17,43 @@ import messages from './messages';
 // Import Styles
 const styles = () => ({
   root: {
-    padding: 0,
+    padding: 0
   },
   card: {
     height: 245,
-    borderRadius: 0,
+    borderRadius: 0
   },
   typographyTitle: {
     backgroundColor: '#f7f7f7',
     padding: '10px 25px',
-    position: 'relative',
+    position: 'relative'
   },
   cardAction: {
     position: 'absolute',
     right: 0,
     bottom: 0,
-    top: 0,
+    top: 0
   },
   widgetText: {
     height: 193,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   typographyText: {
-    color: 'rgba(0, 0, 0, 0.34)',
+    color: 'rgba(0, 0, 0, 0.34)'
   },
   accountBalanceIcon: {
     position: 'relative',
-    top: -1,
+    top: -1
   },
   buttonText: {
-    color: '#15a0dd',
+    color: '#15a0dd'
   },
   button: {
     textTransform: 'none',
-    lineHeight: 2,
-  },
+    lineHeight: 2
+  }
 });
 
 function BankCredits({ classes }) {
@@ -70,12 +70,12 @@ function BankCredits({ classes }) {
             <Button
               size="small"
               classes={{
-                root: classes.button,
+                root: classes.button
               }}
             >
               <span className={classes.buttonText}>
                 <AccountBalanceIcon className={classes.accountBalanceIcon} />{' '}
-                Nowy kredyt
+                <FormattedMessage {...messages.newCredit} />
               </span>
             </Button>
           </CardActions>
@@ -86,7 +86,7 @@ function BankCredits({ classes }) {
             component="h2"
             className={classes.typographyText}
           >
-            Funkcja Kredyty jest wyłączona.
+            <FormattedMessage {...messages.creditDisabled} />
           </Typography>
         </div>
       </CardContent>
@@ -95,7 +95,7 @@ function BankCredits({ classes }) {
 }
 
 BankCredits.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(BankCredits);

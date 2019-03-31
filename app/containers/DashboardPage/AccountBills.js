@@ -1,8 +1,9 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 
 // Import Material-UI
 import Typography from '@material-ui/core/Typography';
@@ -18,12 +19,18 @@ import TableRow from '@material-ui/core/TableRow';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 
 // Import Components
-import { FormattedMessage } from 'react-intl';
-import Loading from '../../components/App/Loading';
+import Loading from 'components/App/Loading';
 
 // Import Internationalize
+import { FormattedMessage } from 'react-intl';
+import { makeUserIdSelector } from 'containers/App/selectors';
 import messages from './messages';
-import AuthService from '../../services/AuthService';
+
+import { getAccountBillsAction } from './actions';
+import {
+  makeAvailableFundsSelector,
+  makeAccountBillsSelector,
+} from './selectors';
 
 // Import Styles
 const styles = theme => ({
@@ -77,59 +84,23 @@ const styles = theme => ({
 });
 
 class AccountBills extends Component {
-  constructor() {
-    super();
-    this.state = {
-      accountBills: '',
-      isLoading: false,
-      endpoint: 'http://localhost:3000',
-    };
-    this.Auth = new AuthService();
-  }
-
   componentDidMount() {
-    this.Auth.accountBills(this.props.id)
-      .then(res => {
-        if (res) {
-          this.setState({
-            isLoading: true,
-            accountBills: res,
-          });
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
+    this.props.availableFunds && this.props.accountBills
+      ? null
+      : this.props.getAccountBills();
   }
 
   render() {
-    const { classes } = this.props;
-    const { accountBills, isLoading } = this.state;
-    const socket = socketIOClient(`${this.state.endpoint}`);
+    const { classes, availableFunds, accountBills } = this.props;
+    const socket = socketIOClient('/');
 
-    socket.on('new notification', id => {
-      if (id === this.props.id) {
-        this.setState(
-          {
-            isLoading: false,
-          },
-          () => {
-            this.Auth.accountBills(this.props.id)
-              .then(res => {
-                if (res) {
-                  this.setState({
-                    isLoading: true,
-                    accountBills: res,
-                  });
-                }
-              })
-              .catch(() => {
-                /* just ignore */
-              });
-          },
-        );
-      }
-    });
+    try {
+      socket.on('new notification', id => {
+        id === this.props.userId ? this.props.getAccountBills() : null;
+      });
+    } catch (e) {
+      /* just ignore */
+    }
 
     return (
       <Card className={classes.card}>
@@ -148,37 +119,39 @@ class AccountBills extends Component {
                 }}
               >
                 <span className={classes.buttonText}>
-                  <SwapVertIcon className={classes.swapVertIcon} /> Nowa
-                  płatność
+                  <SwapVertIcon className={classes.swapVertIcon} />
+                  <FormattedMessage {...messages.newPayment} />
                 </span>
               </Button>
             </CardActions>
           </Typography>
           <Table>
             <TableBody>
-              {isLoading ? (
-                accountBills.map((accountBill, id) => (
-                  <TableRow key={id++}>
-                    <TableCell className={classes.tableCell} scope="row">
-                      <span className={classes.accountBillContainer}>
-                        {accountBill.account_bill
-                          .toString()
-                          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-                          .trim()}
-                      </span>
-                    </TableCell>
-                    <TableCell className={classes.tableCellRight}>
-                      <span className={classes.availabeFundsContainer}>
-                        {accountBill.available_funds
-                          .toFixed(2)
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                          .replace('.', ',')}
-                      </span>{' '}
-                      PLN
-                    </TableCell>
-                  </TableRow>
-                ))
+              {availableFunds && accountBills ? (
+                <TableRow>
+                  <TableCell
+                    className={classes.tableCell}
+                    onMouseDown={e => e.stopPropagation()}
+                    scope="row"
+                  >
+                    <span className={classes.accountBillContainer}>
+                      {accountBills
+                        .toString()
+                        .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+                        .trim()}
+                    </span>
+                  </TableCell>
+                  <TableCell className={classes.tableCellRight}>
+                    <span className={classes.availabeFundsContainer}>
+                      {availableFunds
+                        .toFixed(2)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                        .replace('.', ',')}
+                    </span>{' '}
+                    <FormattedMessage {...messages.currency} />
+                  </TableCell>
+                </TableRow>
               ) : (
                 <TableRow>
                   <TableCell>
@@ -200,4 +173,26 @@ AccountBills.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AccountBills);
+const mapStateToProps = createStructuredSelector({
+  availableFunds: makeAvailableFundsSelector(),
+  accountBills: makeAccountBillsSelector(),
+  userId: makeUserIdSelector(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getAccountBills: () => {
+      dispatch(getAccountBillsAction());
+    },
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  withStyles(styles),
+  withConnect,
+)(AccountBills);

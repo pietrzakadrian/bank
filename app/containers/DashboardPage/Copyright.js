@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+// Import Material UI
 import { withStyles } from '@material-ui/core';
 
 const styles = {
@@ -8,9 +10,6 @@ const styles = {
     fontSize: 14,
     fontWeight: 500,
     color: '#cacaca',
-    position: 'absolute',
-    bottom: 5,
-    right: 24,
   },
   copyrightHref: {
     textDecoration: 'none',

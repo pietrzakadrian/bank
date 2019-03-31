@@ -1,5 +1,5 @@
 /* eslint func-names: ["error", "never"] */
-module.exports = function(app) {
+module.exports = function (app) {
   const additionals = require('../controllers/additional.controller.js');
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
   const checkToken = require('../middlewares/checkToken.middleware.js');
@@ -8,7 +8,7 @@ module.exports = function(app) {
     '/api/additionals/isNotification/:userId',
     checkAuth,
     checkToken,
-    additionals.isNotification,
+    additionals.isNotification
   );
 
   // Confirm a new Transactions
@@ -16,7 +16,7 @@ module.exports = function(app) {
     '/api/additionals/setNotification/:userId',
     checkAuth,
     checkToken,
-    additionals.setNotification,
+    additionals.setNotification
   );
 
   // Confirm a new Transactions
@@ -24,6 +24,6 @@ module.exports = function(app) {
     '/api/additionals/unsetNotification/:userId',
     checkAuth,
     checkToken,
-    additionals.unsetNotification,
+    additionals.unsetNotification
   );
 };

@@ -1,8 +1,10 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-plusplus */
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import socketIOClient from 'socket.io-client';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 
 // Import Material-UI
 import Typography from '@material-ui/core/Typography';
@@ -15,13 +17,21 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
 // Import Components
+import Loading from 'components/App/Loading';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
-import moment from 'moment';
-import Loading from '../../components/App/Loading';
-import AuthService from '../../services/AuthService';
 import messages from './messages';
+import {
+  makeRecentTransactionsRecipientSelector,
+  makeRecentTransactionsSenderSelector,
+} from './selectors';
+import {
+  getRecentTransactionsRecipientAction,
+  getRecentTransactionsSenderAction,
+} from './actions';
+import { makeUserIdSelector } from '../App/selectors';
+
 // Import Styles
 const styles = () => ({
   root: {
@@ -51,109 +61,43 @@ const styles = () => ({
   outgoingTransfer: {
     color: '#ea0000',
   },
+  recipientName: {
+    color: '#0029ab',
+  },
+  senderName: {
+    color: '#0029ab',
+  },
 });
 
-const sortingData = data =>
-  data.sort((a, b) => Date.parse(b.date_time) - Date.parse(a.date_time));
-
 class RecentTransactions extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      recentTransactionsSender: [],
-      recentTransactionsRecipient: [],
-      isLoading: false,
-      endpoint: 'http://localhost:3000',
-    };
-    this.Auth = new AuthService();
-  }
-
   componentDidMount() {
-    Promise.all([
-      this.Auth.recentTransactionsRecipient(this.props.id)
-        .then(res => {
-          if (res) {
-            this.setState({
-              recentTransactionsRecipient: res,
-            });
-          }
-        })
-        .catch(() => {
-          /* just ignore */
-        }),
-      this.Auth.recentTransactionsSender(this.props.id)
-        .then(res => {
-          if (res) {
-            this.setState({
-              recentTransactionsSender: res,
-            });
-          }
-        })
-        .catch(() => {
-          /* just ignore */
-        }),
-    ]).then(() => {
-      this.setState({
-        isLoading: true,
-      });
-    });
+    this.props.recentTransactionsRecipient &&
+    this.props.recentTransactionsSender
+      ? null
+      : this.props.getRecentTransactionsData();
   }
+
+  sortingData = data =>
+    data.sort((a, b) => Date.parse(b.date_time) - Date.parse(a.date_time));
 
   render() {
-    const { classes } = this.props;
     const {
+      classes,
       recentTransactionsRecipient,
       recentTransactionsSender,
-      isLoading,
-    } = this.state;
+      userId,
+    } = this.props;
+    const socket = socketIOClient('/');
 
-    const combinedData = [
-      ...recentTransactionsRecipient,
-      ...recentTransactionsSender,
-    ];
-
-    const socket = socketIOClient(`${this.state.endpoint}`);
-
-    socket.on('new notification', id => {
-      if (id === this.props.id) {
-        this.setState(
-          {
-            isLoading: false,
-          },
-          () => {
-            Promise.all([
-              this.Auth.recentTransactionsRecipient(this.props.id)
-                .then(res => {
-                  if (res) {
-                    this.setState({
-                      recentTransactionsRecipient: res,
-                    });
-                  }
-                })
-                .catch(() => {
-                  /* just ignore */
-                }),
-              this.Auth.recentTransactionsSender(this.props.id)
-                .then(res => {
-                  if (res) {
-                    this.setState({
-                      recentTransactionsSender: res,
-                    });
-                  }
-                })
-                .catch(() => {
-                  /* just ignore */
-                }),
-            ]).then(() => {
-              this.setState({
-                isLoading: true,
-              });
-            });
-          },
-        );
-      }
-    });
+    try {
+      socket.on('new notification', id => {
+        id === this.props.userId
+          ? this.props.getRecentTransactionsData()
+          : null;
+      });
+    } catch (e) {
+      /* just ignore */
+    }
 
     return (
       <Card className={classes.card}>
@@ -166,16 +110,22 @@ class RecentTransactions extends Component {
             <FormattedMessage {...messages.recentTransactions} />
           </Typography>
 
-          {isLoading ? (
+          {recentTransactionsRecipient && recentTransactionsSender && userId ? (
             <Table className={classes.table}>
               <TableBody>
-                {sortingData(combinedData).map((row, id) => (
+                {this.sortingData([
+                  ...recentTransactionsRecipient,
+                  ...recentTransactionsSender,
+                ]).map((row, id) => (
                   <TableRow key={id++}>
-                    {row.id_sender === this.props.id ? (
+                    {row.id_sender === userId ? (
                       <Fragment>
                         <TableCell className={classes.tableCell} scope="row">
-                          Do {row.getRecipientdata.name}{' '}
-                          {row.getRecipientdata.surname}
+                          <FormattedMessage {...messages.toPayment} />{' '}
+                          <span className={classes.recipientName}>
+                            {row.getRecipientdata.name}{' '}
+                            {row.getRecipientdata.surname}
+                          </span>
                           <br />
                           {row.transfer_title}
                         </TableCell>
@@ -189,15 +139,17 @@ class RecentTransactions extends Component {
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
                               .replace('.', ',')}{' '}
-                            PLN
+                            <FormattedMessage {...messages.currency} />
                           </span>
                         </TableCell>
                       </Fragment>
                     ) : (
                       <Fragment>
                         <TableCell className={classes.tableCell} scope="row">
-                          Od {row.getSenderdata.name}{' '}
-                          {row.getSenderdata.surname}
+                          <FormattedMessage {...messages.fromPayment} />{' '}
+                          <span className={classes.senderName}>
+                            {row.getSenderdata.name} {row.getSenderdata.surname}
+                          </span>
                           <br />
                           {row.transfer_title}
                         </TableCell>
@@ -209,7 +161,7 @@ class RecentTransactions extends Component {
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
                             .replace('.', ',')}{' '}
-                          PLN
+                          <FormattedMessage {...messages.currency} />
                         </TableCell>
                       </Fragment>
                     )}
@@ -232,4 +184,27 @@ RecentTransactions.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(RecentTransactions);
+const mapStateToProps = createStructuredSelector({
+  recentTransactionsRecipient: makeRecentTransactionsRecipientSelector(),
+  recentTransactionsSender: makeRecentTransactionsSenderSelector(),
+  userId: makeUserIdSelector(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getRecentTransactionsData: () => {
+      dispatch(getRecentTransactionsRecipientAction()) &&
+        dispatch(getRecentTransactionsSenderAction());
+    },
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  withStyles(styles),
+  withConnect,
+)(RecentTransactions);

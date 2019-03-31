@@ -1,8 +1,7 @@
-/* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
-/* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: false}}] */
 const nodemailer = require('nodemailer');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
+
 const Op = db.Sequelize.Op;
 const Transaction = db.transactions;
 const Bill = db.bills;
@@ -277,10 +276,11 @@ exports.register = (req, res) => {
     let authorizationKey = '';
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-    for (let i = 0; i < 5; i++)
+    for (let i = 0; i < 5; i++) {
       authorizationKey += possible.charAt(
         Math.floor(Math.random() * possible.length),
       );
+    }
 
     return authorizationKey;
   }

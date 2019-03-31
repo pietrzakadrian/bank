@@ -1,6 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from 'socket.io-client';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 // Import Material-UI
 import Paper from '@material-ui/core/Paper';
@@ -9,12 +13,21 @@ import { withStyles } from '@material-ui/core';
 import Trend from 'react-trend';
 
 // Import Components
-import Loading from 'components/App/Loading/Loading';
+import Loading from 'components/App/Loading';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-import AuthService from '../../services/AuthService';
+
+import {
+  getAvailableFundsAction,
+  getAccountBalanceHistoryAction,
+} from './actions';
+import {
+  makeAvailableFundsSelector,
+  makeAccountBalanceHistorySelector,
+} from './selectors';
+import { makeUserIdSelector } from '../App/selectors';
 
 // Import Styles
 const styles = theme => ({
@@ -50,100 +63,52 @@ const styles = theme => ({
 });
 
 class AvailableFunds extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      isLoading: false,
-      availableFunds: [],
-      accountBalanceHistory: [],
-      endpoint: 'http://localhost:3000',
-    };
-    this.Auth = new AuthService();
-  }
-
   componentDidMount() {
-    this.Auth.availableFunds(this.props.id)
-      .then(res => {
-        if (res) {
-          const amount = res[0].available_funds
-            .toFixed(2)
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-            .replace('.', ',');
-
-          this.setState({
-            isLoading: true,
-            accountBalanceHistory:
-              res[0].additionals[0].account_balance_history,
-            availableFunds: amount,
-          });
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
+    this.props.availableFunds && this.props.accountBalanceHistory
+      ? null
+      : this.props.getUserdata();
   }
 
   render() {
-    const { classes } = this.props;
-    const { isLoading, availableFunds, accountBalanceHistory } = this.state;
+    const { classes, availableFunds, accountBalanceHistory } = this.props;
     const accountBalanceHistoryArray = JSON.parse(`[${accountBalanceHistory}]`);
+    const socket = socketIOClient('/');
 
-    const socket = socketIOClient(`${this.state.endpoint}`);
-
-    socket.on('new notification', id => {
-      if (id === this.props.id) {
-        this.setState(
-          {
-            isLoading: false,
-          },
-          () => {
-            this.Auth.availableFunds(this.props.id)
-              .then(res => {
-                if (res) {
-                  const amount = res[0].available_funds
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                    .replace('.', ',');
-
-                  this.setState({
-                    isLoading: true,
-                    accountBalanceHistory:
-                      res[0].additionals[0].account_balance_history,
-                    availableFunds: amount,
-                  });
-                }
-              })
-              .catch(() => {
-                /* just ignore */
-              });
-          },
-        );
-      }
-    });
+    try {
+      socket.on('new notification', id => {
+        id === this.props.userId ? this.props.getUserdata() : null;
+      });
+    } catch (e) {
+      /* just ignore */
+    }
 
     return (
       <Paper className={classes.root} elevation={1}>
-        {isLoading ? (
+        {availableFunds && accountBalanceHistory ? (
           <Fragment>
             <div>
               <Typography variant="subtitle1">
                 <FormattedMessage {...messages.availableFunds} />
               </Typography>
               <span className={classes.typographyText}>
-                {availableFunds}
+                {availableFunds
+                  .toFixed(2)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                  .replace('.', ',')}
                 &nbsp;
                 <Typography
                   variant="subtitle1"
                   className={classes.typographyMain}
                 >
-                  PLN
+                  <FormattedMessage {...messages.currency} />
                 </Typography>
               </span>
               <Trend
-                className={classes.trendContainer}
+                className={classNames(
+                  classes.trendContainer,
+                  'trend--container',
+                )}
                 width={115}
                 height={40}
                 smooth
@@ -172,4 +137,27 @@ AvailableFunds.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AvailableFunds);
+const mapStateToProps = createStructuredSelector({
+  availableFunds: makeAvailableFundsSelector(),
+  accountBalanceHistory: makeAccountBalanceHistorySelector(),
+  userId: makeUserIdSelector(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getUserdata: () => {
+      dispatch(getAvailableFundsAction()) &&
+        dispatch(getAccountBalanceHistoryAction());
+    },
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  withStyles(styles),
+  withConnect,
+)(AvailableFunds);

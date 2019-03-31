@@ -13,13 +13,11 @@
   z-index: 1;
   will-change: width, height;
 }
-
 .react-grid-item.react-draggable-dragging {
   transition: none;
   z-index: 3;
   will-change: transform;
 }
-
 .react-grid-item.react-grid-placeholder {
   opacity: 0.2;
   transition-duration: 100ms;
@@ -30,7 +28,6 @@
   -o-user-select: none;
   user-select: none;
 }
-
 .react-grid-item > .react-resizable-handle {
   position: absolute;
   width: 20px;
@@ -39,7 +36,6 @@
   right: 0;
   cursor: se-resize;
 }
-
 .react-grid-item > .react-resizable-handle::after {
   content: '';
   position: absolute;

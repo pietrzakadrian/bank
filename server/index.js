@@ -2,21 +2,25 @@
 
 const express = require('express');
 const logger = require('./utils/logger');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
+const sio_redis = require('socket.io-redis');
 const argv = require('./utils/argv');
 const port = require('./utils/port');
-const setup = require('./middlewares/frontend.middleware.js');
+const setup = require('./middlewares/frontendMiddleware');
+const db = require('./config/db.config.js');
+const morgan = require('morgan');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok =
   (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel
     ? require('ngrok')
     : false;
 const { resolve } = require('path');
-const sio_redis = require('socket.io-redis');
+const bodyParser = require('body-parser');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+
+// If you need a backend, e.g. an API, add your custom backend-specific middleware here
+// app.use('/api', myApi);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -27,9 +31,6 @@ app.use(
 );
 app.disable('x-powered-by');
 
-const db = require('./config/db.config.js');
-
-// force: true will drop the table if it already exists
 db.sequelize.sync({ force: false });
 
 app.use((req, res, next) => {
@@ -71,7 +72,6 @@ app.get('*.js', (req, res, next) => {
   next();
 });
 
-// eslint-disable-next-line no-undef
 io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
 io.on('connection', socket => {
   socket.on('new notification', id => {
@@ -98,6 +98,8 @@ server.listen(0, host, async err => {
       return logger.error(e);
     }
     logger.appStarted(port, prettyHost, url);
+
+    console.log('url', url);
   } else {
     logger.appStarted(port, prettyHost);
   }

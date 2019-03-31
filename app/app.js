@@ -20,9 +20,9 @@ import 'sanitize.css/sanitize.css';
 import App from 'containers/App';
 
 // Import Language Provider
-import LanguageProvider from 'modules/LanguageProvider';
+import LanguageProvider from 'containers/LanguageProvider';
 
-// Import Material-UI
+// Import Material UI
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
 
@@ -62,8 +62,6 @@ const theme = createMuiTheme({
   },
 });
 const MOUNT_NODE = document.getElementById('app');
-
-// console.log(theme);
 
 const render = messages => {
   ReactDOM.render(

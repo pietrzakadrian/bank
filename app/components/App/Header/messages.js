@@ -1,11 +1,12 @@
 /*
  * Header Messages
  *
- * This contains all the text for the Header component.
+ * This contains all the text for the Header container.
  */
+
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.components.Header';
+export const scope = 'app.containers.Header';
 
 export default defineMessages({
   dashboardTitle: {
@@ -19,5 +20,17 @@ export default defineMessages({
   settingsTitle: {
     id: `${scope}.settings`,
     defaultMessage: 'Settings',
+  },
+  headerItemMessagesTitle: {
+    id: `${scope}.headerItemMessages`,
+    defaultMessage: 'Messages',
+  },
+  headerItemNotificationsTitle: {
+    id: `${scope}.headerItemNotifications`,
+    defaultMessage: 'Notifications',
+  },
+  headerItemLogoutTitle: {
+    id: `${scope}.headerItemNotifications`,
+    defaultMessage: 'Logout',
   },
 });

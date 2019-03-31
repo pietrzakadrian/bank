@@ -74,8 +74,8 @@ function BankDeposits({ classes }) {
               }}
             >
               <span className={classes.buttonText}>
-                <TrendingUpIcon className={classes.trendingUpIcon} /> Nowa
-                lokata
+                <TrendingUpIcon className={classes.trendingUpIcon} />{' '}
+                <FormattedMessage {...messages.newDeposit} />
               </span>
             </Button>
           </CardActions>
@@ -86,7 +86,7 @@ function BankDeposits({ classes }) {
             component="h2"
             className={classes.typographyText}
           >
-            Funkcja Lokaty jest wyłączona.
+            <FormattedMessage {...messages.depositDisabled} />
           </Typography>
         </div>
       </CardContent>

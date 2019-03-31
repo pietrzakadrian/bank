@@ -9,19 +9,20 @@
  * the linting exception.
  */
 
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import AuthService from '../../services/AuthService';
 
-class HomePage extends Component {
+import { withRouter } from 'react-router-dom';
+import AuthService from 'services/AuthService';
+
+/* eslint-disable react/prefer-stateless-function */
+class HomePage extends React.PureComponent {
   constructor(props) {
     super(props);
-
     this.Auth = new AuthService();
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.Auth.loggedIn()) this.props.history.replace('/dashboard');
     else this.props.history.replace('/login');
   }

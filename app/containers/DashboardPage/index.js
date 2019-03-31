@@ -1,40 +1,37 @@
-/*
- * Dashboard
+/**
  *
- * This is the first page thing users see of our App after logging in, at the '/dashboard' route
+ * DashboardPage
  *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
  */
 
-import React, { Component, Fragment } from 'react';
-import Helmet from 'react-helmet';
-import PropTypes from 'prop-types';
-import { Responsive, WidthProvider } from 'react-grid-layout';
+import React, { Fragment } from 'react';
 import './styles.css';
-
-// import { FormattedMessage } from 'react-intl';
-// import messages from './messages';
+import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+import { FormattedMessage } from 'react-intl';
+import { compose } from 'redux';
+import { Responsive, WidthProvider } from 'react-grid-layout';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core';
+
+import injectSaga from 'utils/injectSaga';
+import injectReducer from 'utils/injectReducer';
+import reducer from './reducer';
+import saga from './saga';
+import messages from './messages';
 
 // Import Components
 import AvailableFunds from './AvailableFunds';
 import BankInformation from './BankInformation';
 import AccountBills from './AccountBills';
-import RecentTransactions from './RecentTransactions';
-import AuthService from '../../services/AuthService';
-import GreetingHeadline from './GreetingHeadline';
-import Copyright from './Copyright';
 import BankCards from './BankCards';
 import BankDeposits from './BankDeposits';
 import BankCredits from './BankCredits';
-import SavedMoney from './SavedMoney';
-
-import withAuth from '../../services/withAuth';
+import RecentTransactions from './RecentTransactions';
+import Savings from './Savings';
+import GreetingHeader from './GreetingHeader';
+import Copyright from './Copyright';
 
 // Import Styles
 const styles = theme => ({
@@ -74,30 +71,16 @@ const styles = theme => ({
     cursor: 'move',
   },
 });
-
 const ResponsiveGridLayout = WidthProvider(Responsive);
 const originalLayouts = getFromLS('layouts') || {};
-
-class DashboardPage extends Component {
+/* eslint-disable react/prefer-stateless-function */
+export class DashboardPage extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       layouts: JSON.parse(JSON.stringify(originalLayouts)),
     };
-
-    this.Auth = new AuthService();
-  }
-
-  static get defaultProps() {
-    return {
-      className: 'layout',
-      cols: { lg: 3, md: 3, sm: 2, xs: 1, xxs: 1 },
-      rowHeight: 9,
-    };
-  }
-
-  resetLayout() {
-    this.setState({ layouts: {} });
   }
 
   onLayoutChange(layout, layouts) {
@@ -107,11 +90,13 @@ class DashboardPage extends Component {
 
   render() {
     const { classes } = this.props;
-
     return (
       <Fragment>
-        <Helmet title="Dashboard · Bank Application" />
-        <GreetingHeadline id={this.props.user.id} />
+        <FormattedMessage {...messages.helmetDashboardTitle}>
+          {title => <Helmet title={title} />}
+        </FormattedMessage>
+
+        <GreetingHeader />
         <div className={classes.container}>
           <ResponsiveGridLayout
             layouts={this.state.layouts}
@@ -119,18 +104,49 @@ class DashboardPage extends Component {
             onLayoutChange={(layout, layouts) =>
               this.onLayoutChange(layout, layouts)
             }
-            breakpoints={{ lg: 1100, md: 900, sm: 610, xs: 480, xxs: 0 }}
-            cols={{ lg: 3, md: 3, sm: 2, xs: 1, xxs: 1 }}
+            breakpoints={{
+              lg: 1100,
+              md: 900,
+              sm: 610,
+              xs: 480,
+              xxs: 0,
+            }}
+            cols={{
+              lg: 3,
+              md: 3,
+              sm: 2,
+              xs: 1,
+              xxs: 1,
+            }}
             rowHeight={9}
             margin={[20, 10]}
             isResizable={false}
             isDraggable={window.matchMedia('(min-width: 480px)').matches}
           >
-            <div key="1" data-grid={{ x: 0, y: 0, w: 1, h: 6, static: true }}>
-              <AvailableFunds id={this.props.user.id} />
+            <div
+              key="1"
+              data-grid={{
+                x: 0,
+                y: 0,
+                w: 1,
+                h: 6,
+                static: true,
+              }}
+            >
+              <AvailableFunds />
             </div>
-            <div key="2" data-grid={{ x: 1, y: 0, w: 1, h: 6, static: true }}>
-              <SavedMoney id={this.props.user.id} />
+
+            <div
+              key="2"
+              data-grid={{
+                x: 1,
+                y: 0,
+                w: 1,
+                h: 6,
+                static: true,
+              }}
+            >
+              <Savings />
             </div>
 
             <div
@@ -156,8 +172,9 @@ class DashboardPage extends Component {
               }}
               className={classes.gridItem}
             >
-              <AccountBills id={this.props.user.id} />
+              <AccountBills />
             </div>
+
             <div
               key="5"
               data-grid={{
@@ -168,7 +185,7 @@ class DashboardPage extends Component {
               }}
               className={classes.gridItem}
             >
-              <RecentTransactions id={this.props.user.id} />
+              <RecentTransactions />
             </div>
 
             <div
@@ -246,4 +263,11 @@ DashboardPage.propTypes = {
   rowHeight: PropTypes.number,
 };
 
-export default withAuth(withStyles(styles)(DashboardPage));
+const withReducer = injectReducer({ key: 'dashboardPage', reducer });
+const withSaga = injectSaga({ key: 'dashboardPage', saga });
+
+export default compose(
+  withStyles(styles),
+  withSaga,
+  withReducer,
+)(DashboardPage);
