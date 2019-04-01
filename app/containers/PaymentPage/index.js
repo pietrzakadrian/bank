@@ -243,7 +243,20 @@ const styles = theme => ({
   infoContainer: {
     textAlign: 'left',
     margin: '0 auto',
-    padding: 30,
+    [theme.breakpoints.down('sm')]: {
+      padding: 10,
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: 30,
+    },
+  },
+  infoAccountNumber: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'block',
+    },
+    [theme.breakpoints.up('sm')]: {
+      display: 'unset'
+    },
   },
   infoRecipientText:{
     color: '#0029ab',
@@ -398,9 +411,10 @@ class PaymentPage extends React.Component {
               </div>
 
      <div className={classes.infoContainer}>
-     <div className={classes.infoRecipient}><span className={classes.infoRecipientText}><FormattedMessage {...messages.paymentEndAccountNumber} /></span>: {this.props.value.toString()
+     <div className={classes.infoRecipient}><span className={classes.infoRecipientText}><FormattedMessage {...messages.paymentEndAccountNumber} /></span>:{' '}
+     <div className={classes.infoAccountNumber}>{this.props.value.toString()
                         .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-                        .trim()}</div>
+                        .trim()}</div></div>
 
                         <div className={classes.infoRecipient}><span className={classes.infoRecipientText}><FormattedMessage {...messages.paymentEndAmountMoney} /></span>: {this.props.amountMoney}</div>
 
