@@ -23,7 +23,7 @@ export default defineMessages({
   },
   historyItem: {
     id: `${scope}.history`,
-    defaultMessage: 'Transfer history',
+    defaultMessage: 'History',
   },
   creditsItem: {
     id: `${scope}.credits`,

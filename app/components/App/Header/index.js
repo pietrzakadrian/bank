@@ -239,6 +239,7 @@ class Header extends React.Component {
     const headerTitle = {
       '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
       '/payment': <FormattedMessage {...messages.paymentTitle} />,
+      '/history': <FormattedMessage {...messages.historyTitle} />,
       '/settings': <FormattedMessage {...messages.settingsTitle} />,
     };
     const socket = socketIOClient('/');

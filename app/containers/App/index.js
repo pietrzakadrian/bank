@@ -16,6 +16,8 @@ import PaymentPage from 'containers/PaymentPage/Loadable';
 import RegisterPage from 'containers/RegisterPage/Loadable';
 import LoginPage from 'containers/LoginPage/Loadable';
 import DashboardPage from 'containers/DashboardPage/Loadable';
+import SettingsPage from 'containers/SettingsPage/Loadable';
+import HistoryPage from 'containers/HistoryPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 // Import Components
@@ -36,6 +38,8 @@ export default function App() {
           <Switch>
             <Route path="/dashboard" component={DashboardPage} />
             <Route path="/payment" component={PaymentPage} />
+            <Route path="/history" component={HistoryPage} />
+            <Route path="/settings" component={SettingsPage} />
             <Route render={() => <Redirect to="/404" />} />
           </Switch>
         </Header>

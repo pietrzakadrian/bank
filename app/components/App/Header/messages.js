@@ -17,6 +17,10 @@ export default defineMessages({
     id: `${scope}.payment`,
     defaultMessage: 'Payment',
   },
+  historyTitle: {
+    id: `${scope}.history`,
+    defaultMessage: 'History',
+  },
   settingsTitle: {
     id: `${scope}.settings`,
     defaultMessage: 'Settings',
