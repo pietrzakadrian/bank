@@ -18,6 +18,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+// const swaggerUi = require('swagger-ui-express');
+// const swaggerDocument = require('./utils/swagger.json');
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);

@@ -107,6 +107,7 @@
     "socket.io": "^2.2.0",
     "socket.io-redis": "^5.2.0",
     "styled-components": "4.0.2",
+    "swagger-ui-express": "^4.0.2",
     "warning": "4.0.2"
   },
   "devDependencies": {

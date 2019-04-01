@@ -98,7 +98,7 @@ exports.confirm = (req, res) => {
       order: [['date_time', 'ASC']],
     }).then(transactionsHistory => {
       if (transactionsHistory) {
-        for (let i = 0; i < transactionsHistory.length; i++) {
+        for (let i = 0, max = transactionsHistory.length; i < max; i++) {
           if (transactionsHistory[i].id_sender === userId) {
             outgoingTransfersSum += transactionsHistory[i].amount_money;
             availableFunds -= transactionsHistory[i].amount_money;
@@ -365,7 +365,6 @@ exports.register = (req, res) => {
         }).then(isAvailableFunds => {
           if (isAvailableFunds) {
             const senderAvailableFunds = isAvailableFunds.available_funds;
-
             if (senderAvailableFunds >= amountMoney && amountMoney > 0) {
               Transaction.findOne({
                 where: {
