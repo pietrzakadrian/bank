@@ -108,6 +108,34 @@ exports.login = (req, res) => {
     return token;
   }
 
+  function setLastPresentLogged(token) {
+    return User.update(
+      {
+        last_present_logged: getTodayDate(),
+      },
+      { where: { login: req.body.login } },
+    ).then(() =>
+      res.status(200).json({
+        success: true,
+        token: getToken(token),
+      }),
+    );
+  }
+
+  function setLastFailedLogged() {
+    return User.update(
+      {
+        last_failed_logged: getTodayDate(),
+      },
+      { where: { login: req.body.login } },
+    ).then(() => {
+      res.status(200).json({
+        error: 'Auth failed. The password is incorrect.',
+        success: false,
+      });
+    });
+  }
+
   User.findOne({
     where: {
       login: req.body.login,
@@ -116,64 +144,48 @@ exports.login = (req, res) => {
     .then(isUser => {
       if (isUser) {
         if (bcrypt.compareSync(req.body.password, isUser.password)) {
-          User.update(
-            {
-              last_present_logged: getTodayDate(),
-            },
-            { where: { login: req.body.login } },
-          ).then(() =>
-            res.status(200).json({
-              success: true,
-              token: getToken(isUser.id),
-            }),
-          );
+          return setLastPresentLogged(isUser.id);
         }
-        User.update(
-          {
-            last_failed_logged: getTodayDate(),
-          },
-          { where: { login: req.body.login } },
-        ).then(() => {
-          res.status(200).json({
-            error: 'Auth failed. The password is incorrect.',
-            success: false,
-          });
-        });
-      } else {
-        res
-          .status(200)
-          .json({ error: 'Auth failed. User does not exist', success: false });
+        return setLastFailedLogged();
       }
+      return res
+        .status(200)
+        .json({ error: 'Auth failed. User does not exist', success: false });
     })
     .catch(() => {
-      /* just ignore */
+      res.status(500).json({ error: 'Internal server error' });
     });
 };
 
 // Update the Last Successful Logged date
 exports.logout = (req, res) => {
   const id = req.params.userId;
+
+  function setLastSuccessfulLogged(isUser) {
+    return User.update(
+      {
+        last_successful_logged: isUser.last_present_logged,
+      },
+      { where: { id } },
+    )
+      .then(() => {
+        res.status(200).json({
+          message: 'Logout successful',
+          success: true,
+        });
+      })
+      .catch(() => {
+        res.status(500).json({ error: 'Internal server error' });
+      });
+  }
+
   User.findOne({
     where: {
       id,
     },
   }).then(isUser => {
     if (isUser) {
-      User.update(
-        {
-          last_successful_logged: isUser.last_present_logged,
-        },
-        { where: { id } },
-      )
-        .then(() => {
-          res.status(200).json({
-            message: 'Logout successful',
-            success: true,
-          });
-        })
-        .catch(() => {
-          /* just ignore */
-        });
+      setLastSuccessfulLogged(isUser);
     }
   });
 };

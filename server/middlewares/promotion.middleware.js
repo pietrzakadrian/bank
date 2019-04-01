@@ -19,15 +19,15 @@ module.exports = (req, res, next) => {
   function setAvailableFunds(
     recipientId,
     recipientAvailableFunds,
-    amountMoney
+    amountMoney,
   ) {
     return Bill.update(
       {
         available_funds: (
           parseFloat(recipientAvailableFunds) + parseFloat(amountMoney)
-        ).toFixed(2)
+        ).toFixed(2),
       },
-      { where: { id_owner: recipientId } }
+      { where: { id_owner: recipientId } },
     );
   }
 
@@ -36,7 +36,7 @@ module.exports = (req, res, next) => {
     recipientId,
     amountMoney,
     transferTitle,
-    authorizationKey
+    authorizationKey,
   ) {
     return Transaction.create({
       id_sender: senderId,
@@ -45,17 +45,17 @@ module.exports = (req, res, next) => {
       amount_money: amountMoney,
       transfer_title: transferTitle,
       authorization_key: authorizationKey,
-      authorization_status: setAuthorizationStatus(1)
+      authorization_status: setAuthorizationStatus(1),
     });
   }
 
   function setWidgetStatus(recipientId) {
     return Additional.findOne({
       where: {
-        id_owner: recipientId
-      }
+        id_owner: recipientId,
+      },
     })
-      .then((isRecipient) => {
+      .then(isRecipient => {
         if (isRecipient) {
           const accountBalanceHistory = isRecipient.account_balance_history;
           const incomingTransfersSum = isRecipient.incoming_transfers_sum;
@@ -65,18 +65,18 @@ module.exports = (req, res, next) => {
               {
                 account_balance_history: '0,10',
                 incoming_transfers_sum: incomingTransfersSum + 10,
-                notification_status: 1
+                notification_status: 1,
               },
-              { where: { id_owner: recipientId } }
+              { where: { id_owner: recipientId } },
             );
           } else {
             Additional.update(
               {
                 account_balance_history: `${accountBalanceHistory},10`,
                 incoming_transfers_sum: incomingTransfersSum + 10,
-                notification_status: 1
+                notification_status: 1,
               },
-              { where: { id_owner: recipientId } }
+              { where: { id_owner: recipientId } },
             );
           }
         }
@@ -88,15 +88,15 @@ module.exports = (req, res, next) => {
 
   try {
     User.findOne({
-      where: { login: req.body.login }
-    }).then((isUser) => {
+      where: { login: req.body.login },
+    }).then(isUser => {
       if (isUser) {
         const recipientId = isUser.id;
         Bill.findOne({
           where: {
-            id_owner: recipientId
-          }
-        }).then((isBill) => {
+            id_owner: recipientId,
+          },
+        }).then(isBill => {
           if (isBill) {
             const recipientAvailableFunds = isBill.available_funds;
 
@@ -104,21 +104,21 @@ module.exports = (req, res, next) => {
               where: {
                 id_recipient: recipientId,
                 authorization_key: 'PROMO10',
-                authorization_status: 1
-              }
-            }).then((isTransaction) => {
+                authorization_status: 1,
+              },
+            }).then(isTransaction => {
               if (!isTransaction) {
                 setAvailableFunds(
                   recipientId,
                   recipientAvailableFunds,
-                  10
+                  10,
                 ).then(() => {
                   setTransferHistory(
                     1,
                     recipientId,
                     10,
                     'Rejestracja konta',
-                    'PROMO10'
+                    'PROMO10',
                   ).then(() => {
                     setWidgetStatus(recipientId).then(() => {
                       next();
@@ -139,7 +139,7 @@ module.exports = (req, res, next) => {
     });
   } catch (error) {
     return res.status(401).json({
-      message: 'Auth failed'
+      message: 'Auth failed',
     });
   }
 };
