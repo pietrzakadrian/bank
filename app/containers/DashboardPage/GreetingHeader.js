@@ -69,7 +69,13 @@ class GreetingHeader extends Component {
           className={classes.greetingHeadlineContainer}
         >
           <div>
-            <FormattedMessage {...messages.greeting} />
+            {moment()
+              .format('HH')
+              .toString() >= 20 ? (
+                <FormattedMessage {...messages.greetingPm} />
+              ) : (
+                <FormattedMessage {...messages.greetingAm} />
+              )}
             {', '}
             <span className={classes.greetingHeadlineName}>
               {name} {surname}

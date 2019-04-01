@@ -21,6 +21,7 @@ import {
   sendAuthorizationKeyErrorAction,
   makePaymentSuccessAction,
   makePaymentErrorAction,
+  errorTransferTitleAction,
 } from './actions';
 
 import {
@@ -91,10 +92,10 @@ export function* isAccountBill() {
       ? (yield put(successAccountNumberAction(response.recipientId)),
        yield put(paymentStepNextAction()))
       : yield put(
-          searchAccountBillsErrorAction(
-            <FormattedMessage {...messages.errorAccountNumberValidate} />,
-          ),
-        );
+        searchAccountBillsErrorAction(
+          <FormattedMessage {...messages.errorAccountNumberValidate} />,
+        ),
+      );
   } catch (err) {
     /* just ignore */
   }
@@ -122,19 +123,31 @@ export function* isAmountMoney() {
 
     response.isAmountMoney
       ? (yield put(successAmountMoneyAction()),
-      yield put(paymentStepNextAction()))
+        yield put(paymentStepNextAction()))
       : yield put(
-        errorAmountMoneyAction(
-          <FormattedMessage {...messages.errorAmountOfMoneyIncorrect} />,
-        ),
-      );
+          errorAmountMoneyAction(
+            <FormattedMessage {...messages.errorAmountOfMoneyIncorrect} />,
+          ),
+        );
   } catch (err) {
     /* just ignore */
   }
 }
 
 export function* isTransferTitle() {
-  yield put(successTransferTitleAction()), yield put(paymentStepNextAction());
+  const title = yield select(makeTransferTitleSelector());
+  const limit = 15;
+
+  if (title.length > limit) {
+    yield put(
+      errorTransferTitleAction(
+        <FormattedMessage {...messages.errorTransferTitleLenght} />,
+      ),
+    );
+  } else {
+    yield put(successTransferTitleAction());
+    yield put(paymentStepNextAction());
+  }
 }
 
 export function* registerTransaction() {
@@ -167,15 +180,15 @@ export function* registerTransaction() {
 
       response.success
         ? yield put(
-          sendAuthorizationKeySuccessAction(
-            <FormattedMessage {...messages.keyHasBeenSent} />,
-          ),
-        )
-        : yield put(
-            sendAuthorizationKeyErrorAction(
-              <FormattedMessage {...messages.errorAmountOfMoneyIncorrect} />,
+            sendAuthorizationKeySuccessAction(
+              <FormattedMessage {...messages.keyHasBeenSent} />,
             ),
-          );
+          )
+        : yield put(
+          sendAuthorizationKeyErrorAction(
+            <FormattedMessage {...messages.errorAmountOfMoneyIncorrect} />,
+          ),
+        );
     } catch (err) {
       /* just ignore */
     }
@@ -215,22 +228,22 @@ export function* confirmTransaction() {
 
       response.success
         ? (yield put(makePaymentSuccessAction()),
-        socket.emit('new notification', recipientId),
-          yield put(
-            enqueueSnackbarAction({
-              message: <FormattedMessage {...messages.paymentHasBeenSent} />,
-              options: {
-                variant: 'success',
-                autoHideDuration: 2000,
-              },
-            }),
-          ),
-          yield put(push('/dashboard')))
+          socket.emit('new notification', recipientId),
+        yield put(
+          enqueueSnackbarAction({
+            message: <FormattedMessage {...messages.paymentHasBeenSent} />,
+            options: {
+              variant: 'success',
+              autoHideDuration: 2000,
+            },
+          }),
+        ),
+        yield put(push('/dashboard')))
         : yield put(
-            makePaymentErrorAction(
-              <FormattedMessage {...messages.errorKeyIncorrect} />,
-            ),
-          );
+          makePaymentErrorAction(
+            <FormattedMessage {...messages.errorKeyIncorrect} />,
+          ),
+        );
     } catch (err) {
       /* just ignore */
     }

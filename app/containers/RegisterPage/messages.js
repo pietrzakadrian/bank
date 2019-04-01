@@ -37,6 +37,14 @@ export default defineMessages({
     id: `${scope}.errorSurname`,
     defaultMessage: 'Please enter your surname',
   },
+  errorNameLenght: {
+    id: `${scope}.errorNameLenght`,
+    defaultMessage: 'The given name is too long.',
+  },
+  errorSurnameLenght: {
+    id: `${scope}.errorSurnameLenght`,
+    defaultMessage: 'The given surname is too long.',
+  },
   errorPassword: {
     id: `${scope}.errorPassword`,
     defaultMessage: 'Please enter your password',
@@ -52,6 +60,10 @@ export default defineMessages({
   invalidId: {
     id: `${scope}.invalidId`,
     defaultMessage: 'Id can not contain letters!',
+  },
+  invalidIdLenght: {
+    id: `${scope}.invalidIdLenght`,
+    defaultMessage: 'The given id is too long',
   },
   existAccountWithSameEmail: {
     id: `${scope}.existAccountWithSameEmail`,
@@ -69,7 +81,6 @@ export default defineMessages({
     id: `${scope}.inputIDEmpty`,
     defaultMessage: 'Please enter the ID',
   },
-
   inputIDExists: {
     id: `${scope}.inputIDExists`,
     defaultMessage: 'An account with this id number already exists',
@@ -78,6 +89,10 @@ export default defineMessages({
     id: `${scope}.emailInformation`,
     defaultMessage:
       'The system does not require confirmation of registration by e-mail, but requires confirmation of payment with a code that you will receive by e-mail.',
+  },
+  errorEmailLenght: {
+    id: `${scope}.errorEmailLenght`,
+    defaultMessage: 'The given E-Mail is too long',
   },
   inputEmail: {
     id: `${scope}.inputEmail`,

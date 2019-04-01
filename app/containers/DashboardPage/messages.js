@@ -62,10 +62,15 @@ export default defineMessages({
     id: `${scope}.bankCredits`,
     defaultMessage: 'Credits',
   },
-  greeting: {
-    id: `${scope}.greeting`,
+  greetingAm: {
+    id: `${scope}.greetingAm`,
     defaultMessage: 'Good morning',
   },
+  greetingPm: {
+    id: `${scope}.greetingPm`,
+    defaultMessage: 'Good evening',
+  },
+
   lastSuccessfulLoginInformation: {
     id: `${scope}.lastSuccessfulLoginInformation`,
     defaultMessage: 'Last successful login:',

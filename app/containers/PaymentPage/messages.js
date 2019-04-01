@@ -69,6 +69,10 @@ export default defineMessages({
     id: `${scope}.errorTransferTitleIncorrect`,
     defaultMessage: 'Please enter the transfer title',
   },
+  errorTransferTitleLenght: {
+    id: `${scope}.errorTransferTitleLenght`,
+    defaultMessage: 'The given transfer title is too long',
+  },
   keyHasBeenSent: {
     id: `${scope}.keyHasBeenSent`,
     defaultMessage: 'The authorization key has been sent',
