@@ -1,5 +1,5 @@
 /* eslint func-names: ["error", "never"] */
-module.exports = function (app) {
+module.exports = function(app) {
   const bills = require('../controllers/bill.controller.js');
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
   const checkToken = require('../middlewares/checkToken.middleware.js');
@@ -14,7 +14,7 @@ module.exports = function (app) {
   app.get(
     '/api/bills/isAccountBill/:accountBill?',
     checkAuth,
-    bills.isAccountBill
+    bills.isAccountBill,
   );
 
   // Check User's Amount Money currently Action
@@ -22,6 +22,6 @@ module.exports = function (app) {
     '/api/bills/isAmountMoney',
     checkAuth,
     checkToken,
-    bills.isAmountMoney
+    bills.isAmountMoney,
   );
 };

@@ -51,7 +51,6 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
-
 import {
   changeIdAction,
   changePasswordAction,
@@ -292,8 +291,6 @@ export class RegisterPage extends React.Component {
     if (this.props.activeStep === 4) {
       if (this.props.email && this.props.isDataProcessingAgreement) {
         this.props.onEnterEmail(this.props.email);
-        
-
       } else if (!this.props.email && !this.props.isDataProcessingAgreement) {
         this.props.errorDataProcessingAgreement(
           <FormattedMessage {...messages.errorCheckbox} />,

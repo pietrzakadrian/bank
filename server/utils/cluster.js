@@ -1,4 +1,4 @@
-/* eslint-disable vars-on-top */
+/* eslint-disable camelcase */
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const net = require('net');
@@ -10,7 +10,6 @@ function masterProcess() {
   console.log(`Master ${process.pid} is running`);
   const workers = [];
 
-  // eslint-disable-next-line func-names
   const spawn = function(i) {
     workers[i] = cluster.fork();
 
@@ -26,7 +25,6 @@ function masterProcess() {
   for (let i = 0; i < 3; i += 1) {
     spawn(i);
   }
-  // eslint-disable-next-line func-names
   const worker_index = function(ip, len) {
     return farmhash.fingerprint32(ip) % len; // Farmhash is the fastest and works with IPv6, too
   };

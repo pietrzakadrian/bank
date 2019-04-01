@@ -23,6 +23,10 @@ module.exports = {
     },
   },
   rules: {
+    'global-require': 0,
+    camelcase: 0,
+    'consistent-return': 0,
+    'func-names': 0,
     'prettier/prettier': ['error', prettierOptions],
     'arrow-body-style': [2, 'as-needed'],
     'class-methods-use-this': 0,

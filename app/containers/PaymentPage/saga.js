@@ -90,7 +90,7 @@ export function* isAccountBill() {
 
     response.isAccountBill
       ? (yield put(successAccountNumberAction(response.recipientId)),
-       yield put(paymentStepNextAction()))
+        yield put(paymentStepNextAction()))
       : yield put(
         searchAccountBillsErrorAction(
           <FormattedMessage {...messages.errorAccountNumberValidate} />,

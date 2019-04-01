@@ -189,7 +189,6 @@ export class LoginPage extends Component {
       onLoginStepBack,
     } = this.props;
 
-
     return (
       <Fragment>
         <FormattedMessage {...messages.helmetLoginTitle}>

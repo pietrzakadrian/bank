@@ -14,23 +14,23 @@ exports.getUsersdata = (req, res) => {
     attributes: ['account_bill'],
     where: {
       id_owner: {
-        [Op.ne]: [req.userData.id]
+        [Op.ne]: [req.userData.id],
       },
       account_bill: {
-        [Op.like]: `${partOfAccountBill}%`
-      }
+        [Op.like]: `${partOfAccountBill}%`,
+      },
     },
     include: [
       {
         model: User,
         where: {
-          id: db.Sequelize.col('bill.id_owner')
+          id: db.Sequelize.col('bill.id_owner'),
         },
-        attributes: ['name', 'surname']
-      }
-    ]
+        attributes: ['name', 'surname'],
+      },
+    ],
   })
-    .then((bill) => {
+    .then(bill => {
       res.send(bill);
     })
     .catch(() => {
@@ -46,19 +46,19 @@ exports.getUserdata = (req, res) => {
       {
         model: Additional,
         where: {
-          id_owner: db.Sequelize.col('bill.id_owner')
+          id_owner: db.Sequelize.col('bill.id_owner'),
         },
         attributes: [
           'account_balance_history',
           'incoming_transfers_sum',
-          'outgoing_transfers_sum'
-        ]
-      }
+          'outgoing_transfers_sum',
+        ],
+      },
     ],
     where: { id_owner },
-    attributes: ['account_bill', 'available_funds']
+    attributes: ['account_bill', 'available_funds'],
   })
-    .then((bill) => {
+    .then(bill => {
       res.send(bill);
     })
     .catch(() => {
@@ -71,10 +71,10 @@ exports.isAccountBill = (req, res) => {
   const account_bill = req.params.accountBill;
   Bill.findOne({
     where: {
-      account_bill
-    }
+      account_bill,
+    },
   })
-    .then((isAccountBill) => {
+    .then(isAccountBill => {
       if (isAccountBill && isAccountBill.id !== req.userData.id) {
         res
           .status(200)
@@ -94,10 +94,10 @@ exports.isAmountMoney = (req, res) => {
   const amountMoney = req.body.amount_money;
   Bill.findOne({
     where: {
-      id_owner: senderId
-    }
+      id_owner: senderId,
+    },
   })
-    .then((isSender) => {
+    .then(isSender => {
       if (isSender.available_funds >= amountMoney && amountMoney > 0) {
         res.status(200).json({ isAmountMoney: true });
       } else {

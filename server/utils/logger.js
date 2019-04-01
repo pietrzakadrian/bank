@@ -10,7 +10,7 @@ const divider = chalk.gray('\n-----------------------------------');
  */
 const logger = {
   // Called whenever there's an error on the server we want to print
-  error: (err) => {
+  error: err => {
     console.error(chalk.red(err));
   },
 
@@ -24,7 +24,7 @@ Localhost: ${chalk.magenta(`http://${host}:${port}`)}
       LAN: ${chalk.magenta(`http://${ip.address()}:${port}`)}${divider}
 ${chalk.blue(`Press ${chalk.italic('CTRL-C')} to stop`)}
     `);
-  }
+  },
 };
 
 module.exports = logger;

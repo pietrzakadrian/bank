@@ -19,7 +19,6 @@ import { FormattedMessage } from 'react-intl';
 import { makeUserIdSelector } from 'containers/App/selectors';
 import messages from './messages';
 
-
 import {
   getOutgoingTransfersSumAction,
   getIncomingTransfersSumAction,

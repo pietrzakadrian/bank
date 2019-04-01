@@ -28,11 +28,11 @@ import NavigateBefore from '@material-ui/icons/NavigateBefore';
 
 // Import Components
 import Loading from 'components/App/Loading';
-import Warning from './Warning';
 import Notifier from 'components/Notifier';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import Warning from './Warning';
 import {
   makeAccountBillsSelector,
   makeAccountNumberSelector,
@@ -255,13 +255,13 @@ const styles = theme => ({
       display: 'block',
     },
     [theme.breakpoints.up('sm')]: {
-      display: 'unset'
+      display: 'unset',
     },
   },
-  infoRecipientText:{
+  infoRecipientText: {
     color: '#0029ab',
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });
 
 /* eslint-disable react/prefer-stateless-function */
@@ -323,7 +323,7 @@ class PaymentPage extends React.Component {
       value,
       onChange,
       maxLength: 26,
-      onKeyPress: this.handleKeyPress
+      onKeyPress: this.handleKeyPress,
     };
 
     switch (step) {
@@ -406,74 +406,91 @@ class PaymentPage extends React.Component {
         return (
           <Fragment>
             <div className={classes.formSubmitContainer}>
-              <div className={classNames(classes.textField, classes.textFieldAuthorizationCode)}>
+              <div
+                className={classNames(
+                  classes.textField,
+                  classes.textFieldAuthorizationCode,
+                )}
+              >
                 <FormattedMessage {...messages.stepConfirmTheData} />
               </div>
 
-     <div className={classes.infoContainer}>
-     <div className={classes.infoRecipient}><span className={classes.infoRecipientText}><FormattedMessage {...messages.paymentEndAccountNumber} /></span>:{' '}
-     <div className={classes.infoAccountNumber}>{this.props.value.toString()
-                        .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-                        .trim()}</div></div>
+              <div className={classes.infoContainer}>
+                <div className={classes.infoRecipient}>
+                  <span className={classes.infoRecipientText}>
+                    <FormattedMessage {...messages.paymentEndAccountNumber} />
+                  </span>
+                  :{' '}
+                  <div className={classes.infoAccountNumber}>
+                    {this.props.value
+                      .toString()
+                      .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+                      .trim()}
+                  </div>
+                </div>
+           
 
-                        <div className={classes.infoRecipient}><span className={classes.infoRecipientText}><FormattedMessage {...messages.paymentEndAmountMoney} /></span>: {this.props.amountMoney}</div>
-
-                        <div className={classes.infoRecipient}>
-                          <span className={classes.infoRecipientText}>
-                            <FormattedMessage {...messages.paymentEndTransferTitle} />
-                            </span>: {this.props.transferTitle}
-                            </div>
-
-
-     </div>
-
-     <br />
-
-<div className={classes.authoriationCodeContainer}>
-              <FormattedMessage {...messages.inputAuthorizationCoder}>
-                {placeholder => (
-                  <input
-                    key={3}
-                    className={classNames(
-                      classes.formItem,
-                      classes.formSpecial,
-                      {
-                        [classes.formError]: error,
-                      },
-                    )}
-                    name="authorizationCode"
-                    placeholder={placeholder}
-                    type="text"
-                    onChange={onChangeAuthorizationKey}
-                    onKeyPress={this.handleKeyPress}
-                  />
-                )}
-              </FormattedMessage>
-
-
-              {error ? <div className={classes.textError}>{error}</div> : null}
-
-              {message ? (
-                <div className={classes.textMessage}>{message}</div>
-              ) : null}
-
-              <button
-                type="button"
-                className={classNames(
-                  classes.formSubmit,
-                  classes.setAuthorizationCodeBtn,
-                )}
-                onClick={isSendAuthorizationKey ? null : onSendAuthorizationKey}
-               
-              >
-                <span className={classes.buttonText}>
-                  <FormattedMessage {...messages.inputReceiveCode} />
+              <div className={classes.infoRecipient}>
+                <span className={classes.infoRecipientText}>
+                  <FormattedMessage {...messages.paymentEndAmountMoney} />
                 </span>
-              </button>
+                : {this.props.amountMoney}
               </div>
 
+              <div className={classes.infoRecipient}>
+                <span className={classes.infoRecipientText}>
+                  <FormattedMessage {...messages.paymentEndTransferTitle} />
+                </span>
+                : {this.props.transferTitle}
+              </div>
+              </div>
 
-              
+              <br />
+
+              <div className={classes.authoriationCodeContainer}>
+                <FormattedMessage {...messages.inputAuthorizationCoder}>
+                  {placeholder => (
+                    <input
+                      key={3}
+                      className={classNames(
+                        classes.formItem,
+                        classes.formSpecial,
+                        {
+                          [classes.formError]: error,
+                        },
+                      )}
+                      name="authorizationCode"
+                      placeholder={placeholder}
+                      type="text"
+                      onChange={onChangeAuthorizationKey}
+                      onKeyPress={this.handleKeyPress}
+                    />
+                  )}
+                </FormattedMessage>
+
+                {error ? (
+                  <div className={classes.textError}>{error}</div>
+                ) : null}
+
+                {message ? (
+                  <div className={classes.textMessage}>{message}</div>
+                ) : null}
+
+                <button
+                  type="button"
+                  className={classNames(
+                    classes.formSubmit,
+                    classes.setAuthorizationCodeBtn,
+                  )}
+                  onClick={
+                    isSendAuthorizationKey ? null : onSendAuthorizationKey
+                  }
+                >
+                  <span className={classes.buttonText}>
+                    <FormattedMessage {...messages.inputReceiveCode} />
+                  </span>
+                </button>
+              </div>
             </div>
           </Fragment>
         );
@@ -493,27 +510,35 @@ class PaymentPage extends React.Component {
     e.preventDefault();
 
     if (this.props.activeStep === 0) {
-      this.props.value 
+      this.props.value
         ? this.props.onEnterAccountNumber(this.props.value)
-        : this.props.isEmptyAccountNumber(<FormattedMessage {...messages.errorAccountNumberEmpty} />);
+        : this.props.isEmptyAccountNumber(
+            <FormattedMessage {...messages.errorAccountNumberEmpty} />,
+          );
     }
 
     if (this.props.activeStep === 1) {
-      this.props.amountMoney 
+      this.props.amountMoney
         ? this.props.onEnterAmountMoney(this.props.amountMoney)
-        : this.props.isEmptyAmountMoney(<FormattedMessage {...messages.errorAmountOfMoneyEmpty} />);
+        : this.props.isEmptyAmountMoney(
+            <FormattedMessage {...messages.errorAmountOfMoneyEmpty} />,
+          );
     }
 
     if (this.props.activeStep === 2) {
-      this.props.transferTitle 
+      this.props.transferTitle
         ? this.props.onEnterTransferTitle(this.props.transferTitle)
-        : this.props.isEmptyTransferTitle(<FormattedMessage {...messages.errorTransferTitleIncorrect} />);
+        : this.props.isEmptyTransferTitle(
+            <FormattedMessage {...messages.errorTransferTitleIncorrect} />,
+          );
     }
 
     if (this.props.activeStep === 3) {
-      this.props.authorizationKey 
+      this.props.authorizationKey
         ? this.props.onEnterAuthorizationKey(this.props.authorizationKey)
-        : this.props.isEmptyAuthorizationKey(<FormattedMessage {...messages.errorKeyIncorrect} />);
+        : this.props.isEmptyAuthorizationKey(
+            <FormattedMessage {...messages.errorKeyIncorrect} />,
+          );
     }
   }
 
@@ -629,7 +654,6 @@ class PaymentPage extends React.Component {
 
         <Warning />
         <Notifier />
-
       </Fragment>
     );
   }
@@ -669,7 +693,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(enterAmountMoneyAction(amountMoney)),
     onEnterTransferTitle: transferTitle =>
       dispatch(enterTransferTitleAction(transferTitle)),
-      onSendAuthorizationKey: () => dispatch(sendAuthorizationKeyAction()),
+    onSendAuthorizationKey: () => dispatch(sendAuthorizationKeyAction()),
     onEnterAuthorizationKey: authorizationKey =>
       dispatch(enterAuthorizationKeyAction(authorizationKey)),
     onPaymentStepNext: () => dispatch(paymentStepNextAction()),
