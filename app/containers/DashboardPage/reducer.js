@@ -7,6 +7,11 @@
 import { fromJS } from 'immutable';
 import { MAKE_PAYMENT_SUCCESS } from 'containers/PaymentPage/constants';
 import {
+  LOGOUT_SUCCESS,
+  NEW_NOTIFICATION,
+} from 'components/App/Header/constants';
+
+import {
   GET_NAME,
   GET_NAME_SUCCESS,
   GET_NAME_ERROR,
@@ -42,8 +47,6 @@ import {
   GET_INCOMING_TRANSFERS_SUM_ERROR,
 } from './constants';
 
-import { LOGOUT_SUCCESS } from 'components/App/Header/constants';
-
 export const initialState = fromJS({
   name: null,
   surname: null,
@@ -61,6 +64,16 @@ export const initialState = fromJS({
 
 function dashboardPageReducer(state = initialState, action) {
   switch (action.type) {
+    case NEW_NOTIFICATION:
+      return state
+        .set('accountBills', null)
+        .set('availableFunds', null)
+        .set('accountBalanceHistory', null)
+        .set('recentTransactionsSender', null)
+        .set('recentTransactionsRecipient', null)
+        .set('outgoingTransfersSum', null)
+        .set('incomingTransfersSum', null);
+
     case LOGOUT_SUCCESS:
       return state
         .set('name', null)
