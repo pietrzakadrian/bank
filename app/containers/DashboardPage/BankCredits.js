@@ -15,45 +15,57 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 // Import Styles
-const styles = () => ({
+const styles = theme => ({
   root: {
-    padding: 0
+    padding: 0,
   },
   card: {
     height: 245,
-    borderRadius: 0
+    borderRadius: 0,
   },
   typographyTitle: {
     backgroundColor: '#f7f7f7',
     padding: '10px 25px',
-    position: 'relative'
+    position: 'relative',
   },
   cardAction: {
     position: 'absolute',
     right: 0,
     bottom: 0,
-    top: 0
+    top: 0,
   },
   widgetText: {
     height: 193,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   typographyText: {
-    color: 'rgba(0, 0, 0, 0.34)'
+    color: 'rgba(0, 0, 0, 0.34)',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 14,
+    },
+    [theme.breakpoints.up('sm')]: {
+      fontSize: 15.5,
+    },
   },
   accountBalanceIcon: {
     position: 'relative',
-    top: -1
+    top: -1,
   },
   buttonText: {
-    color: '#15a0dd'
+    color: '#15a0dd',
   },
   button: {
     textTransform: 'none',
-    lineHeight: 2
-  }
+    lineHeight: 2,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
+  },
 });
 
 function BankCredits({ classes }) {
@@ -70,7 +82,7 @@ function BankCredits({ classes }) {
             <Button
               size="small"
               classes={{
-                root: classes.button
+                root: classes.button,
               }}
             >
               <span className={classes.buttonText}>
@@ -95,7 +107,7 @@ function BankCredits({ classes }) {
 }
 
 BankCredits.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(BankCredits);

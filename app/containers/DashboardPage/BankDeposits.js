@@ -15,7 +15,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 // Import Styles
-const styles = () => ({
+const styles = theme => ({
   root: {
     padding: 0,
   },
@@ -42,6 +42,12 @@ const styles = () => ({
   },
   typographyText: {
     color: 'rgba(0, 0, 0, 0.34)',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 14,
+    },
+    [theme.breakpoints.up('sm')]: {
+      fontSize: 15.5,
+    },
   },
   trendingUpIcon: {
     position: 'relative',
@@ -53,6 +59,12 @@ const styles = () => ({
   button: {
     textTransform: 'none',
     lineHeight: 2,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
   },
 });
 

@@ -77,6 +77,12 @@ const styles = theme => ({
   button: {
     textTransform: 'none',
     lineHeight: 2,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
   },
   accountBillContainer: {
     cursor: 'auto',
