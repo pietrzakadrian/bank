@@ -5,24 +5,28 @@ html {
   position: fixed;
   height: 100%;
   overflow: hidden;
+  width: 100%;
 }
 
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: #fefefe!important;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: none;
-    
+  position: fixed;
+  overscroll-behavior-y: contain;
 }
 
 #app {
   background-color: #fefefe;
   min-height: 100%;
   min-width: 100%;
+}
+
+header {
+  -webkit-overflow-scrolling: auto;
 }
 
 a {
