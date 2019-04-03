@@ -60,6 +60,9 @@
   },
   "dependencies": {
     "@babel/polyfill": "7.0.0",
+    "@devexpress/dx-react-core": "^1.10.5",
+    "@devexpress/dx-react-grid": "^1.10.5",
+    "@devexpress/dx-react-grid-material-ui": "^1.10.5",
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
     "bcrypt": "^3.0.4",

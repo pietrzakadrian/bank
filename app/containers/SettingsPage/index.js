@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
@@ -23,13 +23,11 @@ import messages from './messages';
 export class SettingsPage extends React.Component {
   render() {
     return (
-      <div>
-        <Helmet>
-          <title>SettingsPage</title>
-          <meta name="description" content="Description of SettingsPage" />
-        </Helmet>
-        <FormattedMessage {...messages.header} />
-      </div>
+      <Fragment>
+        <FormattedMessage {...messages.helmetSettingsTitle}>
+          {title => <Helmet title={title} />}
+        </FormattedMessage>
+      </Fragment>
     );
   }
 }

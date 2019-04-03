@@ -9,8 +9,16 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.containers.HistoryPage';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'This is the HistoryPage container!',
+  helmetHistoryTitle: {
+    id: `${scope}.helmetHistoryTitle`,
+    defaultMessage: 'History · Bank Application',
+  },
+  earnings: {
+    id: `${scope}.earnings`,
+    defaultMessage: 'Your earnings',
+  },
+  expenses: {
+    id: `${scope}.expenses`,
+    defaultMessage: 'Your expenses',
   },
 });
