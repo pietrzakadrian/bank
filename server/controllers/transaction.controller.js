@@ -112,7 +112,7 @@ exports.confirm = (req, res) => {
           }
         }
 
-        Additional.update(
+        return Additional.update(
           {
             account_balance_history: accountBalanceHistory,
             outgoing_transfers_sum: outgoingTransfersSum,
@@ -125,18 +125,12 @@ exports.confirm = (req, res) => {
   }
 
   function setNotification(id_owner) {
-    Additional.update(
+    return Additional.update(
       {
         notification_status: 1,
       },
       { where: { id_owner } },
-    )
-      .then(() => {
-        res.status(200).json({ success: true });
-      })
-      .catch(() => {
-        res.status(500).json({ error: 'Internal server error' });
-      });
+    );
   }
 
   Bill.findOne({
@@ -191,16 +185,18 @@ exports.confirm = (req, res) => {
                       transferTitle,
                       authorizationKey,
                     ),
-                  ]).then(() => {
-                    Promise.all([
-                      setWidgetStatus(senderId),
-                      setWidgetStatus(recipientId),
-                      setNotification(recipientId),
-                    ]).then(success => {
-                      if (success) {
-                        return res.status(200).json({ success: true });
-                      }
-                    });
+                  ]).then(isPaymentSuccess => {
+                    if (isPaymentSuccess) {
+                      Promise.all([
+                        setWidgetStatus(senderId),
+                        setWidgetStatus(recipientId),
+                        setNotification(recipientId),
+                      ]).then(isNotificationSuccess => {
+                        if (isNotificationSuccess) {
+                          return res.status(200).json({ success: true });
+                        }
+                      });
+                    }
                   });
                 } else {
                   return res.status(200).json({

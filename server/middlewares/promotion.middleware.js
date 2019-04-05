@@ -61,7 +61,7 @@ module.exports = (req, res, next) => {
           const incomingTransfersSum = isRecipient.incoming_transfers_sum;
 
           if (accountBalanceHistory === '0,0') {
-            Additional.update(
+            return Additional.update(
               {
                 account_balance_history: '0,10',
                 incoming_transfers_sum: incomingTransfersSum + 10,
@@ -69,16 +69,15 @@ module.exports = (req, res, next) => {
               },
               { where: { id_owner: recipientId } },
             );
-          } else {
-            Additional.update(
-              {
-                account_balance_history: `${accountBalanceHistory},10`,
-                incoming_transfers_sum: incomingTransfersSum + 10,
-                notification_status: 1,
-              },
-              { where: { id_owner: recipientId } },
-            );
           }
+          return Additional.update(
+            {
+              account_balance_history: `${accountBalanceHistory},10`,
+              incoming_transfers_sum: incomingTransfersSum + 10,
+              notification_status: 1,
+            },
+            { where: { id_owner: recipientId } },
+          );
         }
       })
       .catch(() => {
