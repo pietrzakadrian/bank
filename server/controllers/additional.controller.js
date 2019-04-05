@@ -18,7 +18,7 @@ exports.isNotification = (req, res) => {
       }
     })
     .catch(() => {
-      /* just ignore */
+      res.status(500).json({ error: 'Internal server error' });
     });
 };
 
@@ -37,7 +37,7 @@ exports.setNotification = (req, res) => {
           res.status(200).json({ success: true });
         })
         .catch(() => {
-          /* just ignore */
+          res.status(500).json({ error: 'Internal server error' });
         });
     }
   });
@@ -57,7 +57,7 @@ exports.unsetNotification = (req, res) => {
           res.status(200).json({ success: true });
         })
         .catch(() => {
-          /* just ignore */
+          res.status(500).json({ error: 'Internal server error' });
         });
     }
   });

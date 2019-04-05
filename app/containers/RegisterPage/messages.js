@@ -136,7 +136,7 @@ export default defineMessages({
   },
   errorLenghtPassword: {
     id: `${scope}.errorLenghtPassword`,
-    defaultMessage: 'Your password is too short.',
+    defaultMessage: 'Your password is too long.',
   },
   errorIncorrectEmail: {
     id: `${scope}.errorIncorrectEmail`,

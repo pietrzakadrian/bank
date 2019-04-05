@@ -45,6 +45,7 @@ const theme = createMuiTheme({
     values: {
       sm: 480,
       md: 768,
+      lg: 850,
     },
   },
   typography: {

@@ -135,7 +135,7 @@ exports.confirm = (req, res) => {
         res.status(200).json({ success: true });
       })
       .catch(() => {
-        /* just ignore */
+        res.status(500).json({ error: 'Internal server error' });
       });
   }
 
@@ -459,7 +459,7 @@ exports.getRecipientdata = (req, res) => {
       res.send(transactions);
     })
     .catch(() => {
-      /* just ignore */
+      res.status(500).json({ error: 'Internal server error' });
     });
 };
 
@@ -497,6 +497,6 @@ exports.getSenderdata = (req, res) => {
       res.send(transactions);
     })
     .catch(() => {
-      /* just ignore */
+      res.status(500).json({ error: 'Internal server error' });
     });
 };

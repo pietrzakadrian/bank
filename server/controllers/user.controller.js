@@ -206,7 +206,7 @@ exports.isLogin = (req, res) => {
       }
     })
     .catch(() => {
-      /* just ignore */
+      res.status(500).json({ error: 'Internal server error' });
     });
 };
 
@@ -226,7 +226,7 @@ exports.isEmail = (req, res) => {
       }
     })
     .catch(() => {
-      /* just ignore */
+      res.status(500).json({ error: 'Internal server error' });
     });
 };
 
@@ -253,27 +253,63 @@ exports.getUserdata = (req, res) => {
       }
     })
     .catch(() => {
-      /* just ignore */
+      res.status(500).json({ error: 'Internal server error' });
     });
 };
 
 // Update basic User's Data
 exports.setUserdata = (req, res) => {
   const id = req.params.userId;
-  User.update(
-    {
-      login: req.body.login,
-      password: req.body.password,
-      name: req.body.name,
-      surname: req.body.surname,
-      email: req.body.email,
+
+  User.findOne({
+    where: {
+      id,
     },
-    { where: { id } },
-  )
-    .then(() => {
-      res.status(200).json({ success: true });
+  })
+    .then(isUser => {
+      if (isUser) {
+        return User.update(
+          {
+            password: req.body.password ? req.body.password : isUser.password,
+            name: req.body.name ? req.body.name : isUser.name,
+            surname: req.body.surname ? req.body.surname : isUser.surname,
+            email: req.body.email ? req.body.email : isUser.email,
+          },
+          { where: { id } },
+        )
+          .then(isChange => {
+            if (isChange) {
+              res.status(200).json({ success: true });
+            } else {
+              res.status(200).json({ success: false });
+            }
+          })
+          .catch(() => {
+            /* just ignore */
+          });
+      }
     })
-    .catch(() => {
-      /* just ignore */
+    .catch(e => {
+      res.status(500).json({ error: e });
     });
+
+  // User.update(
+  //   {
+  //     password: req.body.password ? req.body.password : '',
+  //     name: req.body.name ? req.body.name : '',
+  //     surname: req.body.surname ? req.body.surname : '',
+  //     email: req.body.email ? req.body.email : '',
+  //   },
+  //   { where: { id } },
+  // )
+  //   .then(user => {
+  //     if (user) {
+  //       res.status(200).json({ success: true });
+  //     } else {
+  //       res.status(200).json({ success: false });
+  //     }
+  //   })
+  //   .catch(e => {
+  //     res.status(500).json({ error: e });
+  //   });
 };

@@ -14,9 +14,9 @@ import { Responsive, WidthProvider } from 'react-grid-layout';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core';
-
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import Copyright from 'components/Copyright';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -31,7 +31,6 @@ import BankCredits from './BankCredits';
 import RecentTransactions from './RecentTransactions';
 import Savings from './Savings';
 import GreetingHeader from './GreetingHeader';
-import Copyright from './Copyright';
 
 // Import Styles
 const styles = theme => ({

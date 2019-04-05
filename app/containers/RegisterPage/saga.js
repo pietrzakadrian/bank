@@ -72,9 +72,9 @@ export function* isLogin() {
 
 export function* isPassword() {
   const password = yield select(makePasswordSelector());
-  const min = 2;
+  const max = 35;
 
-  if (password.length < min) {
+  if (password.length > max) {
     yield put(
       errorPasswordAction(
         <FormattedMessage {...messages.errorLenghtPassword} />,
@@ -123,11 +123,10 @@ export function* isSurname() {
 }
 
 export function* isEmail() {
-  // Select username from store
   const email = yield select(makeEmailSelector());
   const requestURL = `/api/users/isEmail/${email}`;
   const re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-  const limit = 25;
+  const limit = 35;
 
   if (!re.test(email)) {
     yield put(
@@ -139,7 +138,6 @@ export function* isEmail() {
     );
   } else {
     try {
-      // Call our request helper (see 'utils/request')
       const response = yield call(request, requestURL);
 
       if (!response.isEmail) {

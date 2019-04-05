@@ -34,7 +34,7 @@ exports.getUsersdata = (req, res) => {
       res.send(bill);
     })
     .catch(() => {
-      /* just ignore */
+      res.status(500).json({ error: 'Internal server error' });
     });
 };
 
@@ -62,7 +62,7 @@ exports.getUserdata = (req, res) => {
       res.send(bill);
     })
     .catch(() => {
-      /* just ignore */
+      res.status(500).json({ error: 'Internal server error' });
     });
 };
 
@@ -84,7 +84,7 @@ exports.isAccountBill = (req, res) => {
       }
     })
     .catch(() => {
-      /* just ignore */
+      res.status(500).json({ error: 'Internal server error' });
     });
 };
 
@@ -105,6 +105,6 @@ exports.isAmountMoney = (req, res) => {
       }
     })
     .catch(() => {
-      /* just ignore */
+      res.status(500).json({ error: 'Internal server error' });
     });
 };

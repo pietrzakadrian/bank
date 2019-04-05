@@ -29,6 +29,7 @@ import NavigateBefore from '@material-ui/icons/NavigateBefore';
 // Import Components
 import Loading from 'components/App/Loading';
 import Notifier from 'components/Notifier';
+import Copyright from 'components/Copyright';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -654,6 +655,7 @@ class PaymentPage extends React.Component {
 
         <Warning />
         <Notifier />
+        <Copyright />
       </Fragment>
     );
   }
