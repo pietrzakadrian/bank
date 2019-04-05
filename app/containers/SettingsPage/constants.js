@@ -29,6 +29,4 @@ export const ENTER_NEW_EMAIL_SUCCESS =
   'app/SettingsPage/ENTER_NEW_EMAIL_SUCCESS';
 export const ENTER_NEW_EMAIL_ERROR = 'app/SettingsPage/ENTER_NEW_EMAIL_ERROR';
 
-export const SAVE_DATA = 'app/SettingsPage/SAVE_DATA';
-export const SAVE_DATA_SUCCESS = 'app/SettingsPage/SAVE_DATA_SUCCESS';
-export const SAVE_DATA_ERROR = 'app/SettingsPage/SAVE_DATA_ERROR';
+export const EMPTY_DATA = 'app/SettingsPage/EMPTY_DATA';

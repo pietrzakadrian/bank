@@ -8,13 +8,13 @@ const styles = {
   copyrightContainer: {
     textAlign: 'right',
     fontSize: 14,
-    fontWeight: 500,
+    fontWeight: 400,
     color: '#cacaca',
   },
   copyrightHref: {
     textDecoration: 'none',
     color: '#cacaca',
-    fontWeight: 550,
+    fontWeight: 700,
   },
 };
 

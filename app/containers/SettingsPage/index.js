@@ -29,7 +29,6 @@ import makeSelectSettingsPage, {
   makeNewNameSelector,
   makeNewSurnameSelector,
   makeNewEmailSelector,
-  makeErrorSelector,
   makeMessageSelector,
   makeErrorPasswordSelector,
   makeErrorNameSelector,
@@ -44,12 +43,11 @@ import {
   changeNewSurnameAction,
   changeNewEmailAction,
   changeNewPasswordAction,
-  saveDataAction,
   enterNewNameAction,
   enterNewSurnameAction,
   enterNewEmailAction,
   enterNewPasswordAction,
-  saveDataErrorAction,
+  emptyDataAction,
 } from './actions';
 
 const styles = theme => ({
@@ -218,8 +216,8 @@ class SettingsPage extends React.Component {
     !this.props.newSurname &&
     !this.props.newPassword
       ? this.props.onEmptySaveData(
-        <FormattedMessage {...messages.saveDataEmpty} />,
-      )
+          <FormattedMessage {...messages.saveDataEmpty} />,
+        )
       : null;
   }
 
@@ -355,6 +353,10 @@ class SettingsPage extends React.Component {
                   <div className={classes.textError}>{errorEmail}</div>
                 ) : null}
 
+                {message ? (
+                  <div className={classes.textMessage}>{message}</div>
+                ) : null}
+
                 <button
                   className={classes.formSubmit}
                   type="submit"
@@ -364,9 +366,6 @@ class SettingsPage extends React.Component {
                     <FormattedMessage {...messages.saveData} />
                   </span>
                 </button>
-                {message ? (
-                  <div className={classes.textMessage}>{message}</div>
-                ) : null}
               </form>
             </Grid>
 
@@ -418,7 +417,7 @@ function mapDispatchToProps(dispatch) {
     onChangeNewSurname: e => dispatch(changeNewSurnameAction(e.target.value)),
     onChangeNewEmail: e => dispatch(changeNewEmailAction(e.target.value)),
     onChangeNewPassword: e => dispatch(changeNewPasswordAction(e.target.value)),
-    onEmptySaveData: error => dispatch(saveDataErrorAction(error)),
+    onEmptySaveData: error => dispatch(emptyDataAction(error)),
     onSaveNewName: name => dispatch(enterNewNameAction(name)),
     onSaveNewSurname: surname => dispatch(enterNewSurnameAction(surname)),
     onSaveNewEmail: email => dispatch(enterNewEmailAction(email)),

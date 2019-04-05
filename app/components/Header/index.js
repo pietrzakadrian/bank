@@ -20,7 +20,7 @@ const styles = {
     color: '#0029ab',
     position: 'relative',
     top: 1,
-    fontWeight: 500,
+    fontWeight: 700,
   },
   appBar: {
     'box-shadow': 'none', // box-shadow dla header
@@ -35,6 +35,7 @@ const styles = {
   headerSubheading: {
     fontSize: '12.8px',
     color: '#15a0dd',
+    marginTop: -5,
   },
   imgStyles: {
     width: 40,

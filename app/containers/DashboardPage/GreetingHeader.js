@@ -30,7 +30,7 @@ const styles = {
     fontSize: 14,
   },
   greetingHeadlineName: {
-    fontWeight: 500,
+    fontWeight: 700,
     color: '#0029ab',
   },
 };

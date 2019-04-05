@@ -9,7 +9,7 @@ html {
 }
 
 body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Lato', sans-serif;
   width: 100vw;
   height: 100%;
   overflow-y: scroll;
@@ -35,7 +35,7 @@ a {
 
 p,
 label {
-  font-family: Georgia, Times, "Times New Roman", serif;
+  font-family: 'Lato', serif;
   line-height: 1.5em;
 }
 

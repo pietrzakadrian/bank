@@ -261,7 +261,7 @@ const styles = theme => ({
   },
   infoRecipientText: {
     color: '#0029ab',
-    fontWeight: 'bold',
+    fontWeight: 700,
   },
 });
 

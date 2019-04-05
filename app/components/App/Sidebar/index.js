@@ -41,11 +41,13 @@ const styles = theme => ({
     color: '#0029ab',
     position: 'relative',
     top: 1,
-    fontWeight: 500,
+    fontWeight: 700,
   },
   headerSubheading: {
     fontSize: '12.8px',
     color: '#15a0dd',
+    marginTop: -5,
+    textAlign: 'center',
   },
 });
 

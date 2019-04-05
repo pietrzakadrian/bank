@@ -65,7 +65,7 @@ const styles = theme => ({
     flexDirection: 'row',
   },
   availabeFundsContainer: {
-    fontWeight: 600,
+    fontWeight: 700,
   },
   swapVertIcon: {
     position: 'relative',

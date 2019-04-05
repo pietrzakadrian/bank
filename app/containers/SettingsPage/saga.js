@@ -1,13 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import request from 'utils/request';
-import { push } from 'connected-react-router/immutable';
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import decode from 'jwt-decode';
 import messages from './messages';
 
 import {
-  SAVE_DATA,
   ENTER_NEW_EMAIL,
   ENTER_NEW_NAME,
   ENTER_NEW_SURNAME,
@@ -31,7 +29,6 @@ import {
   enterNewPasswordErrorAction,
   enterNewSurnameErrorAction,
   saveDataErrorAction,
-  saveDataSuccessAction,
 } from './actions';
 
 function* getToken() {
@@ -54,7 +51,7 @@ export function* isPassword() {
       ),
     );
   } else {
-    // yield call(saveData);
+    yield call(saveNewPassword);
   }
 }
 
@@ -76,7 +73,7 @@ export function* isName() {
       ),
     );
   } else {
-    // yield call(saveData);
+    yield call(saveNewName);
   }
 }
 
@@ -98,7 +95,7 @@ export function* isSurname() {
       ),
     );
   } else {
-    // yield call(saveData);
+    yield call(saveNewSurname);
   }
 }
 
@@ -122,7 +119,7 @@ export function* isEmail() {
     try {
       const response = yield call(request, requestURL);
       if (!response.isEmail) {
-        // yield call(saveData);
+        yield call(saveNewEmail);
       } else {
         yield put(
           enterNewEmailErrorAction(
@@ -138,11 +135,8 @@ export function* isEmail() {
   }
 }
 
-function* saveData() {
+export function* saveNewPassword() {
   const password = yield select(makeNewPasswordSelector());
-  const name = yield select(makeNewNameSelector());
-  const surname = yield select(makeNewSurnameSelector());
-  const email = yield select(makeNewEmailSelector());
   const jwt = yield call(getToken);
   const token = yield call(getUserId);
   const requestURL = `/api/users/${token.id}`;
@@ -157,18 +151,118 @@ function* saveData() {
       },
       body: JSON.stringify({
         password,
+      }),
+    });
+
+    if (response.success) {
+      password ? yield put(enterNewPasswordSuccessAction(<FormattedMessage {...messages.saveDataSuccess} />)) : null;
+    } else {
+      yield put(
+        saveDataErrorAction(<FormattedMessage {...messages.serverError} />),
+      );
+    }
+  } catch (err) {
+    yield put(
+      saveDataErrorAction(<FormattedMessage {...messages.serverError} />),
+    );
+  }
+}
+
+export function* saveNewName() {
+  const name = yield select(makeNewNameSelector());
+  const jwt = yield call(getToken);
+  const token = yield call(getUserId);
+  const requestURL = `/api/users/${token.id}`;
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({
         name,
+      }),
+    });
+
+    if (response.success) {
+      yield put(enterNewNameSuccessAction(<FormattedMessage {...messages.saveDataSuccess} />));
+    } else {
+      yield put(
+        saveDataErrorAction(<FormattedMessage {...messages.serverError} />),
+      );
+    }
+  } catch (err) {
+    yield put(
+      saveDataErrorAction(<FormattedMessage {...messages.serverError} />),
+    );
+  }
+}
+
+export function* saveNewSurname() {
+  const surname = yield select(makeNewSurnameSelector());
+  const jwt = yield call(getToken);
+  const token = yield call(getUserId);
+  const requestURL = `/api/users/${token.id}`;
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({
         surname,
+      }),
+    });
+
+    if (response.success) {
+      yield put(
+        enterNewSurnameSuccessAction(
+          <FormattedMessage {...messages.saveDataSuccess} />,
+        ),
+      );
+    } else {
+      yield put(
+        saveDataErrorAction(<FormattedMessage {...messages.serverError} />),
+      );
+    }
+  } catch (err) {
+    yield put(
+      saveDataErrorAction(<FormattedMessage {...messages.serverError} />),
+    );
+  }
+}
+
+export function* saveNewEmail() {
+  const email = yield select(makeNewEmailSelector());
+  const jwt = yield call(getToken);
+  const token = yield call(getUserId);
+  const requestURL = `/api/users/${token.id}`;
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({
         email,
       }),
     });
 
     if (response.success) {
-      password ? yield put(enterNewPasswordSuccessAction()) : null;
-      name ? yield put(enterNewNameSuccessAction()) : null;
-      surname ? yield put(enterNewSurnameSuccessAction()) : null;
-      email ? yield put(enterNewEmailSuccessAction()) : null;
-      yield put(saveDataSuccessAction());
+      yield put(
+        enterNewEmailSuccessAction(
+          <FormattedMessage {...messages.saveDataSuccess} />,
+        ),
+      );
     } else {
       yield put(
         saveDataErrorAction(<FormattedMessage {...messages.serverError} />),
@@ -183,7 +277,6 @@ function* saveData() {
 
 // Individual exports for testing
 export default function* settingsPageSaga() {
-  // yield takeLatest(SAVE_DATA, saveData);
   yield takeLatest(ENTER_NEW_PASSWORD, isPassword);
   yield takeLatest(ENTER_NEW_NAME, isName);
   yield takeLatest(ENTER_NEW_SURNAME, isSurname);
