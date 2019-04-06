@@ -48,6 +48,7 @@ import {
   enterNewEmailAction,
   enterNewPasswordAction,
   emptyDataAction,
+  saveDataAction,
 } from './actions';
 
 const styles = theme => ({
@@ -160,6 +161,10 @@ const styles = theme => ({
     margin: '0 auto',
     fontSize: 14.5,
   },
+  href: {
+    textDecoration: 'none',
+    color: 'white',
+  },
   formMessage: {
     [theme.breakpoints.down('sm')]: {
       width: '100%',
@@ -202,14 +207,21 @@ class SettingsPage extends React.Component {
   handleClick(e) {
     e.preventDefault();
 
-    this.props.newEmail ? this.props.onSaveNewEmail(this.props.newEmail) : null;
-    this.props.newName ? this.props.onSaveNewName(this.props.newName) : null;
-    this.props.newSurname
-      ? this.props.onSaveNewSurname(this.props.newSurname)
-      : null;
+    this.props.newEmail ||
+    this.props.newName ||
+    this.props.newSurname ||
     this.props.newPassword
-      ? this.props.onSaveNewPassword(this.props.newPassword)
+      ? this.props.onSaveData()
       : null;
+
+    // this.props.newEmail ? this.props.onSaveNewEmail(this.props.newEmail) : null;
+    // this.props.newName ? this.props.onSaveNewName(this.props.newName) : null;
+    // this.props.newSurname
+    //   ? this.props.onSaveNewSurname(this.props.newSurname)
+    //   : null;
+    // this.props.newPassword
+    //   ? this.props.onSaveNewPassword(this.props.newPassword)
+    //   : null;
 
     !this.props.newEmail &&
     !this.props.newName &&
@@ -353,9 +365,13 @@ class SettingsPage extends React.Component {
                   <div className={classes.textError}>{errorEmail}</div>
                 ) : null}
 
-                {message ? (
-                  <div className={classes.textMessage}>{message}</div>
-                ) : null}
+                {message &&
+                !errorEmail &&
+                !errorName &&
+                !errorSurname &&
+                !errorPassword ? (
+                    <div className={classes.textMessage}>{message}</div>
+                  ) : null}
 
                 <button
                   className={classes.formSubmit}
@@ -378,15 +394,17 @@ class SettingsPage extends React.Component {
               </div>
 
               <div className={classes.textField}>
-                <FormattedMessage {...messages.contactTheAuthor} />
+                <FormattedMessage {...messages.reportError} />
               </div>
 
-              <button
-                className={classes.formMessage}
-                onClick={this.handleClick}
-              >
+              <button className={classes.formMessage} type="button">
                 <span className={classes.buttonText}>
-                  <FormattedMessage {...messages.sendMessgeToAuthor} />
+                  <a
+                    className={classes.href}
+                    href="mailto:contact@pietrzakadrian.com"
+                  >
+                    <FormattedMessage {...messages.contactTheDeveloper} />
+                  </a>
                 </span>
               </button>
             </Grid>
@@ -418,6 +436,7 @@ function mapDispatchToProps(dispatch) {
     onChangeNewEmail: e => dispatch(changeNewEmailAction(e.target.value)),
     onChangeNewPassword: e => dispatch(changeNewPasswordAction(e.target.value)),
     onEmptySaveData: error => dispatch(emptyDataAction(error)),
+    onSaveData: () => dispatch(saveDataAction()),
     onSaveNewName: name => dispatch(enterNewNameAction(name)),
     onSaveNewSurname: surname => dispatch(enterNewSurnameAction(surname)),
     onSaveNewEmail: email => dispatch(enterNewEmailAction(email)),

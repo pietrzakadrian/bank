@@ -93,9 +93,13 @@ export default defineMessages({
     id: `${scope}.serverError`,
     defaultMessage: 'Server error',
   },
-  contactTheAuthor: {
-    id: `${scope}.contactTheAuthor`,
-    defaultMessage: 'Contact the author',
+  contactTheDeveloper: {
+    id: `${scope}.contactTheDeveloper`,
+    defaultMessage: 'Contact the developer',
+  },
+  reportError: {
+    id: `${scope}.reportError`,
+    defaultMessage: 'Report an error',
   },
   sendMessgeToAuthor: {
     id: `${scope}.sendMessgeToAuthor`,

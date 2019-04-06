@@ -46,6 +46,10 @@ import {
   GET_INCOMING_TRANSFERS_SUM_SUCCESS,
   GET_INCOMING_TRANSFERS_SUM_ERROR,
 } from './constants';
+import {
+  ENTER_NEW_NAME_SUCCESS,
+  ENTER_NEW_SURNAME_SUCCESS,
+} from '../SettingsPage/constants';
 
 export const initialState = fromJS({
   name: null,
@@ -64,6 +68,10 @@ export const initialState = fromJS({
 
 function dashboardPageReducer(state = initialState, action) {
   switch (action.type) {
+    case ENTER_NEW_NAME_SUCCESS:
+      return state.set('name', null);
+    case ENTER_NEW_SURNAME_SUCCESS:
+      return state.set('surname', null);
     case NEW_NOTIFICATION:
       return state
         .set('accountBills', null)

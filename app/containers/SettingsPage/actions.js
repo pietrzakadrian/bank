@@ -21,12 +21,35 @@ import {
   ENTER_NEW_EMAIL,
   ENTER_NEW_EMAIL_SUCCESS,
   ENTER_NEW_EMAIL_ERROR,
-  EMPTY_DATA,
+  SAVE_DATA,
+  SAVE_DATA_SUCCESS,
+  SAVE_DATA_ERROR,
+  SAVE_DATA_EMPTY,
 } from './constants';
+
+export function saveDataAction() {
+  return {
+    type: SAVE_DATA,
+  };
+}
+
+export function saveDataSuccessAction(message) {
+  return {
+    type: SAVE_DATA_SUCCESS,
+    message,
+  };
+}
+
+export function saveDataErrorAction(error) {
+  return {
+    type: SAVE_DATA_ERROR,
+    error,
+  };
+}
 
 export function emptyDataAction(error) {
   return {
-    type: EMPTY_DATA,
+    type: SAVE_DATA_EMPTY,
     error,
   };
 }
@@ -45,10 +68,9 @@ export function enterNewPasswordAction(password) {
   };
 }
 
-export function enterNewPasswordSuccessAction(message) {
+export function enterNewPasswordSuccessAction() {
   return {
     type: ENTER_NEW_PASSWORD_SUCCESS,
-    message,
   };
 }
 
@@ -73,10 +95,9 @@ export function enterNewNameAction(name) {
   };
 }
 
-export function enterNewNameSuccessAction(message) {
+export function enterNewNameSuccessAction() {
   return {
     type: ENTER_NEW_NAME_SUCCESS,
-    message,
   };
 }
 
@@ -101,10 +122,9 @@ export function enterNewSurnameAction(surname) {
   };
 }
 
-export function enterNewSurnameSuccessAction(message) {
+export function enterNewSurnameSuccessAction() {
   return {
     type: ENTER_NEW_SURNAME_SUCCESS,
-    message,
   };
 }
 
@@ -129,10 +149,9 @@ export function enterNewEmailAction(email) {
   };
 }
 
-export function enterNewEmailSuccessAction(message) {
+export function enterNewEmailSuccessAction() {
   return {
     type: ENTER_NEW_EMAIL_SUCCESS,
-    message,
   };
 }
 
