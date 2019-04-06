@@ -268,7 +268,7 @@ exports.setUserdata = (req, res) => {
   })
     .then(isUser => {
       if (isUser) {
-        bcrypt.hash(req.body.password, 10, async (err, hash) => {
+        bcrypt.hash(req.body.password, 10, (err, hash) => {
           req.body.password = hash;
 
           return User.update(
@@ -287,8 +287,8 @@ exports.setUserdata = (req, res) => {
                 res.status(200).json({ success: false });
               }
             })
-            .catch(e => {
-              console.log(e);
+            .catch(() => {
+              /* just ignore */
             });
         });
       }

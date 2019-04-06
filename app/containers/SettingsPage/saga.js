@@ -51,7 +51,6 @@ function* getUserId() {
 }
 
 export function* isPassword() {
-  console.log('wchodze do is password');
   const password = yield select(makeNewPasswordSelector());
   yield put(enterNewPasswordAction(password));
   const limit = 35;
