@@ -26,45 +26,6 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 const styles = theme => ({
-  formItem: {
-    padding: 10,
-    height: 36,
-
-    border: '1px solid grey',
-    display: 'block',
-    margin: '0 auto',
-    backgroundColor: 'white',
-    fontSize: 14,
-    borderRadius: 2,
-    [theme.breakpoints.down('sm')]: {
-      width: '90%',
-    },
-    [theme.breakpoints.up('sm')]: {
-      width: '17rem',
-    },
-  },
-  formSubmit: {
-    display: 'block',
-    margin: '20px auto 0',
-    padding: 5,
-    height: 36,
-    backgroundColor: '#0098db',
-    borderRadius: 2,
-    color: 'white',
-    [theme.breakpoints.down('sm')]: {
-      width: '90%',
-    },
-    [theme.breakpoints.up('sm')]: {
-      width: '17rem',
-    },
-
-    '&:hover': {
-      backgroundColor: '#15a0dd',
-      cursor: 'pointer',
-      transition: '0.150s',
-    },
-  },
-
   formContainer: {
     textAlign: 'center',
     margin: '15px 0',
@@ -72,82 +33,9 @@ const styles = theme => ({
     backgroundColor: '#f2f4f7',
     padding: '25px 12px',
   },
-  formError: {
-    border: '1px solid red',
-    borderRadius: 2,
-  },
+
   pageContainer: {
     textAlign: 'center',
-  },
-  alertContainer: {
-    maxWidth: '1024px',
-    padding: '10px 3%',
-    margin: '10px auto 0',
-    borderRadius: 2,
-    backgroundColor: '#0098db',
-    color: 'white',
-  },
-  messageContainer: {
-    textAlign: 'left',
-    [theme.breakpoints.down('md')]: {
-      padding: 0,
-    },
-    [theme.breakpoints.up('md')]: {
-      padding: '0 130px',
-    },
-  },
-  footerContainer: {
-    maxWidth: 550,
-    margin: '15px auto',
-  },
-  textField: {
-    margin: '10px auto 0',
-    [theme.breakpoints.down('sm')]: {
-      width: '90%',
-    },
-    [theme.breakpoints.up('sm')]: {
-      width: '17rem',
-    },
-    textAlign: 'left',
-    fontSize: '18px',
-    letterSpacing: 0.3,
-  },
-  textError: {
-    color: 'red',
-    textAlign: 'left',
-    [theme.breakpoints.down('sm')]: {
-      width: '90%',
-    },
-    [theme.breakpoints.up('sm')]: {
-      width: '17rem',
-    },
-    margin: '0 auto',
-    fontSize: 14.5,
-  },
-  footerText: {
-    textAlign: 'left',
-    padding: '0 15px',
-    margin: '10px -4px',
-  },
-  footerInfoText: {
-    position: 'relative',
-    top: 1,
-    fontSize: 13,
-  },
-  footerAlertText: {
-    color: 'red',
-    fontSize: 13,
-  },
-  errorIcon: {
-    fontSize: 35,
-  },
-  footerLink: {
-    color: '#0098db',
-  },
-  buttonText: {
-    '&:hover': {
-      cursor: 'pointer',
-    },
   },
 });
 
