@@ -28,6 +28,7 @@ export const initialState = fromJS({
   passwordError: '',
   loginError: '',
   isIdExist: false,
+  isLoading: false,
 });
 
 function loginPageReducer(state = initialState, action) {
@@ -39,22 +40,28 @@ function loginPageReducer(state = initialState, action) {
         .set('passwordError', '')
         .set('isIdExist', false);
     case ENTER_ID:
-      return state.set('id', action.id);
+      return state.set('id', action.id).set('isLoading', true);
     case ENTER_ID_SUCCESS:
-      return state.set('isIdExist', true);
+      return state.set('isIdExist', true).set('isLoading', false);
     case ENTER_ID_ERROR:
-      return state.set('idError', action.error).set('id', '');
+      return state
+        .set('idError', action.error)
+        .set('id', '')
+        .set('isLoading', false);
     case CHANGE_PASSWORD:
       return state
         .set('password', action.password)
         .set('passwordError', '')
         .set('loginError', '');
     case ENTER_PASSWORD:
-      return state.set('password', action.password);
+      return state.set('password', action.password).set('isLoading', true);
     case ENTER_PASSWORD_SUCCESS:
-      return state.set('isIdExist', false);
+      return state.set('isIdExist', false).set('isLoading', false);
     case ENTER_PASSWORD_ERROR:
-      return state.set('passwordError', action.error).set('password', '');
+      return state
+        .set('passwordError', action.error)
+        .set('password', '')
+        .set('isLoading', false);
     case EMPTY_ID_ERROR:
       return state.set('idError', action.error);
     case EMPTY_PASSWORD_ERROR:
@@ -66,13 +73,15 @@ function loginPageReducer(state = initialState, action) {
         .set('password', '')
         .set('passwordError', '')
         .set('loginError', '')
-        .set('isIdExist', false);
+        .set('isIdExist', false)
+        .set('isLoading', false);
 
     case LOGIN_STEP_BACK:
       return state
         .set('isIdExist', false)
         .set('id', '')
-        .set('password', '');
+        .set('password', '')
+        .set('isLoading', false);
     case LOGIN_FAILURE:
       return state.set('loginError', action.error);
     default:

@@ -49,6 +49,7 @@ export const initialState = fromJS({
   errorDataProcessingAgreement: '',
   error: '',
   activeStep: 0,
+  isLoading: false,
 });
 
 function registerPageReducer(state = initialState, action) {
@@ -56,51 +57,51 @@ function registerPageReducer(state = initialState, action) {
     case CHANGE_ID:
       return state.set('id', action.id).set('error', '');
     case ENTER_ID:
-      return state.set('id', action.id);
+      return state.set('id', action.id).set('isLoading', true);
     case ENTER_ID_SUCCESS:
-      return state.set('error', '');
+      return state.set('error', '').set('isLoading', false);
     case ENTER_ID_ERROR:
-      return state.set('error', action.error);
+      return state.set('error', action.error).set('isLoading', false);
     case EMPTY_ID_ERROR:
       return state.set('error', action.error);
     case CHANGE_PASSWORD:
       return state.set('password', action.password).set('error', '');
     case ENTER_PASSWORD:
-      return state.set('password', action.password);
+      return state.set('password', action.password).set('isLoading', true);
     case ENTER_PASSWORD_SUCCESS:
-      return state.set('error', '');
+      return state.set('error', '').set('isLoading', false);
     case ENTER_PASSWORD_ERROR:
-      return state.set('error', action.error);
+      return state.set('error', action.error).set('isLoading', false);
     case EMPTY_PASSWORD_ERROR:
       return state.set('error', action.error);
     case CHANGE_NAME:
       return state.set('name', action.name).set('error', '');
     case ENTER_NAME:
-      return state.set('name', action.name);
+      return state.set('name', action.name).set('isLoading', true);
     case ENTER_NAME_SUCCESS:
-      return state.set('error', '');
+      return state.set('error', '').set('isLoading', false);
     case ENTER_NAME_ERROR:
-      return state.set('error', action.error);
+      return state.set('error', action.error).set('isLoading', false);
     case EMPTY_NAME_ERROR:
       return state.set('error', action.error);
     case CHANGE_SURNAME:
       return state.set('surname', action.surname).set('error', '');
     case ENTER_SURNAME:
-      return state.set('surname', action.surname);
+      return state.set('surname', action.surname).set('isLoading', true);
     case ENTER_SURNAME_SUCCESS:
-      return state.set('error', '');
+      return state.set('error', '').set('isLoading', false);
     case ENTER_SURNAME_ERROR:
-      return state.set('error', action.error);
+      return state.set('error', action.error).set('isLoading', false);
     case EMPTY_SURNAME_ERROR:
       return state.set('error', action.error);
     case CHANGE_EMAIL:
       return state.set('email', action.email).set('error', '');
     case ENTER_EMAIL:
-      return state.set('email', action.email);
+      return state.set('email', action.email).set('isLoading', true);
     case ENTER_EMAIL_SUCCESS:
-      return state.set('error', '');
+      return state.set('error', '').set('isLoading', false);
     case ENTER_EMAIL_ERROR:
-      return state.set('error', action.error);
+      return state.set('error', action.error).set('isLoading', false);
     case EMPTY_EMAIL_ERROR:
       return state.set('error', action.error);
     case TOGGLE_DATA_PROCESSING_AGREEMENT:

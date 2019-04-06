@@ -46,6 +46,7 @@ import {
   makeErrorSelector,
   makeIsDataProcessingAgreementSelector,
   makeErrorDataProcessingAgreementSelector,
+  makeIsLoadingSelector,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -500,7 +501,7 @@ export class RegisterPage extends React.Component {
   };
 
   render() {
-    const { classes, activeStep, onRegisterStepBack } = this.props;
+    const { classes, activeStep, onRegisterStepBack, isLoading } = this.props;
     const steps = this.getSteps();
 
     return (
@@ -557,6 +558,7 @@ export class RegisterPage extends React.Component {
                           className={classes.formSubmit}
                           onClick={this.handleClick}
                           type="submit"
+                          disabled={isLoading}
                         >
                           <span className={classes.buttonText}>
                             <FormattedMessage {...messages.createAnAccount} />
@@ -571,7 +573,7 @@ export class RegisterPage extends React.Component {
                             key={1}
                             className={classes.formSubmit}
                             onClick={this.handleClick}
-                            disabled={activeStep === 4}
+                            disabled={isLoading}
                           >
                             <span className={classes.buttonText}>
                               <FormattedMessage {...messages.nextText} />
@@ -584,7 +586,7 @@ export class RegisterPage extends React.Component {
                             type="button"
                             className={classes.formSubmit}
                             onClick={this.handleClick}
-                            disabled={activeStep === 4}
+                            disabled={isLoading}
                           >
                             <span className={classes.buttonText}>
                               <FormattedMessage {...messages.nextText} />
@@ -597,7 +599,7 @@ export class RegisterPage extends React.Component {
                             type="button"
                             className={classes.formSubmit}
                             onClick={this.handleClick}
-                            disabled={activeStep === 4}
+                            disabled={isLoading}
                           >
                             <span className={classes.buttonText}>
                               <FormattedMessage {...messages.nextText} />
@@ -610,7 +612,7 @@ export class RegisterPage extends React.Component {
                             type="button"
                             className={classes.formSubmit}
                             onClick={this.handleClick}
-                            disabled={activeStep === 4}
+                            disabled={isLoading}
                           >
                             <span className={classes.buttonText}>
                               <FormattedMessage {...messages.nextText} />
@@ -662,6 +664,7 @@ const mapStateToProps = createStructuredSelector({
   isErrorDataProcessingAgreement: makeErrorDataProcessingAgreementSelector(),
   error: makeErrorSelector(),
   activeStep: makeActiveStepSelector(),
+  isLoading: makeIsLoadingSelector(),
 });
 
 function mapDispatchToProps(dispatch) {

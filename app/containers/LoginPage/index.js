@@ -36,6 +36,7 @@ import {
   makePasswordErrorSelector,
   makeIsIdExistSelector,
   makeLoginErrorSelector,
+  makeIsLoadingSelector,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -182,6 +183,7 @@ export class LoginPage extends Component {
       classes,
       isIdExist,
       idError,
+      isLoading,
       passwordError,
       loginError,
       onChangeId,
@@ -237,6 +239,7 @@ export class LoginPage extends Component {
                     type="button"
                     className={classes.formSubmit}
                     onClick={this.handleEnterId}
+                    disabled={isLoading}
                   >
                     <span className={classes.buttonText}>
                       <FormattedMessage {...messages.nextText} />
@@ -271,7 +274,7 @@ export class LoginPage extends Component {
                       ) : null}
                     </Fragment>,
                   ]}
-                  <button className={classes.formSubmit} type="submit">
+                  <button className={classes.formSubmit} type="submit" disabled={isLoading}>
                     <span className={classes.buttonText}>
                       <FormattedMessage {...messages.inputLogin} />
                     </span>
@@ -314,6 +317,7 @@ const mapStateToProps = createStructuredSelector({
   passwordError: makePasswordErrorSelector(),
   loginError: makeLoginErrorSelector(),
   isIdExist: makeIsIdExistSelector(),
+  isLoading: makeIsLoadingSelector(),
 });
 
 function mapDispatchToProps(dispatch) {

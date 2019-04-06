@@ -108,7 +108,7 @@ function paymentPageReducer(state = initialState, action) {
     case SEARCH_ACCOUNT_BILLS_ERROR:
       return state.set('error', action.error).set('isLoading', false);
     case ENTER_ACCOUNT_NUMBER:
-      return state.set('value', action.value);
+      return state.set('value', action.value).set('isLoading', true);
     case ENTER_ACCOUNT_NUMBER_SUCCESS:
       return state
         .set('isAccountBill', true)
@@ -119,17 +119,21 @@ function paymentPageReducer(state = initialState, action) {
     case CHANGE_AMOUNT_MONEY:
       return state.set('amountMoney', action.amountMoney).set('error', null);
     case ENTER_AMOUNT_MONEY:
-      return state.set('amountMoney', action.amountMoney);
+      return state
+        .set('amountMoney', action.amountMoney)
+        .set('isLoading', true);
     case ENTER_AMOUNT_MONEY_SUCCESS:
-      return state.set('isAmountMoney', true);
+      return state.set('isAmountMoney', true).set('isLoading', false);
     case ENTER_AMOUNT_MONEY_ERROR:
-      return state.set('error', action.error);
+      return state.set('error', action.error).set('isLoading', false);
     case CHANGE_TRANSFER_TITLE:
       return state.set('transferTitle', action.transferTitle);
     case ENTER_TRANSFER_TITLE:
-      return state.set('transferTitle', action.transferTitle);
+      return state
+        .set('transferTitle', action.transferTitle)
+        .set('isLoading', true);
     case ENTER_TRANSFER_TITLE_SUCCESS:
-      return state;
+      return state.set('isLoading', false);
     case ENTER_TRANSFER_TITLE_ERROR:
       return state.set('error', action.error).set('isLoading', false);
     case CHANGE_AUTHORIZATION_KEY:
@@ -138,9 +142,11 @@ function paymentPageReducer(state = initialState, action) {
         .set('error', null)
         .set('message', null);
     case ENTER_AUTHORIZATION_KEY:
-      return state.set('authorizationKey', action.authorizationKey);
+      return state
+        .set('authorizationKey', action.authorizationKey)
+        .set('isLoading', true);
     case ENTER_AUTHORIZATION_KEY_SUCCESS:
-      return state;
+      return state.set('isLoading', false);
     case ENTER_AUTHORIZATION_KEY_ERROR:
       return state.set('error', action.error).set('isLoading', false);
     case SEND_AUTHORIZATION_KEY:
@@ -167,7 +173,8 @@ function paymentPageReducer(state = initialState, action) {
         .set('isAccountBill', false)
         .set('isAmountMoney', false)
         .set('value', '')
-        .set('recipientId', null);
+        .set('recipientId', null)
+        .set('isLoading', false);
 
     case MAKE_PAYMENT_ERROR:
       return state.set('error', action.error).set('message', null);

@@ -39,6 +39,11 @@ const makeEmailSelector = () =>
 const makeErrorSelector = () =>
   createSelector(selectRegisterPageDomain, substate => substate.get('error'));
 
+const makeIsLoadingSelector = () =>
+  createSelector(selectRegisterPageDomain, substate =>
+    substate.get('isLoading'),
+  );
+
 const makeErrorDataProcessingAgreementSelector = () =>
   createSelector(selectRegisterPageDomain, substate =>
     substate.get('errorDataProcessingAgreement'),
@@ -65,4 +70,5 @@ export {
   makeIsDataProcessingAgreementSelector,
   makeErrorDataProcessingAgreementSelector,
   makeActiveStepSelector,
+  makeIsLoadingSelector,
 };

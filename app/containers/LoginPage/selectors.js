@@ -38,6 +38,9 @@ const makeLoginErrorSelector = () =>
 const makeIsIdExistSelector = () =>
   createSelector(selectLoginPageDomain, substate => substate.get('isIdExist'));
 
+const makeIsLoadingSelector = () =>
+  createSelector(selectLoginPageDomain, substate => substate.get('isLoading'));
+
 export default makeSelectLoginPage;
 export {
   selectLoginPageDomain,
@@ -47,4 +50,5 @@ export {
   makePasswordErrorSelector,
   makeLoginErrorSelector,
   makeIsIdExistSelector,
+  makeIsLoadingSelector,
 };

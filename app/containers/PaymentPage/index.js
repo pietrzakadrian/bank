@@ -331,12 +331,6 @@ class PaymentPage extends React.Component {
       case 0:
         return (
           <Fragment>
-            {isLoading ? (
-              <Fragment>
-                <LoadingCircular />
-                <br />
-              </Fragment>
-            ) : null}
             <div className={classes.textField}>
               <FormattedMessage {...messages.stepAccountNumber} />
             </div>
@@ -544,7 +538,7 @@ class PaymentPage extends React.Component {
   }
 
   render() {
-    const { classes, activeStep, onPaymentStepBack } = this.props;
+    const { classes, activeStep, onPaymentStepBack, isLoading } = this.props;
 
     return (
       <Fragment>
@@ -586,6 +580,7 @@ class PaymentPage extends React.Component {
                     className={classes.formSubmit}
                     type="submit"
                     onClick={this.handleClick}
+                    disabled={isLoading}
                   >
                     <span className={classes.buttonText}>
                       <FormattedMessage {...messages.inputMakePayment} />
@@ -598,7 +593,7 @@ class PaymentPage extends React.Component {
                         key={1}
                         type="button"
                         className={classes.formSubmit}
-                        disabled={activeStep === 4}
+                        disabled={isLoading}
                         onClick={this.handleClick}
                       >
                         <span className={classes.buttonText}>
@@ -611,7 +606,7 @@ class PaymentPage extends React.Component {
                         type="button"
                         key={2}
                         className={classes.formSubmit}
-                        disabled={activeStep === 4}
+                        disabled={isLoading}
                         onClick={this.handleClick}
                       >
                         <span className={classes.buttonText}>
@@ -625,7 +620,7 @@ class PaymentPage extends React.Component {
                         key={3}
                         className={classes.formSubmit}
                         onClick={this.handleClick}
-                        disabled={activeStep === 4}
+                        disabled={isLoading}
                       >
                         <span className={classes.buttonText}>
                           <FormattedMessage {...messages.nextText} />
