@@ -268,48 +268,32 @@ exports.setUserdata = (req, res) => {
   })
     .then(isUser => {
       if (isUser) {
-        return User.update(
-          {
-            password: req.body.password ? req.body.password : isUser.password,
-            name: req.body.name ? req.body.name : isUser.name,
-            surname: req.body.surname ? req.body.surname : isUser.surname,
-            email: req.body.email ? req.body.email : isUser.email,
-          },
-          { where: { id } },
-        )
-          .then(isChange => {
-            if (isChange) {
-              res.status(200).json({ success: true });
-            } else {
-              res.status(200).json({ success: false });
-            }
-          })
-          .catch(() => {
-            /* just ignore */
-          });
+        bcrypt.hash(req.body.password, 10, async (err, hash) => {
+          req.body.password = hash;
+
+          return User.update(
+            {
+              password: req.body.password ? req.body.password : isUser.password,
+              name: req.body.name ? req.body.name : isUser.name,
+              surname: req.body.surname ? req.body.surname : isUser.surname,
+              email: req.body.email ? req.body.email : isUser.email,
+            },
+            { where: { id } },
+          )
+            .then(isChange => {
+              if (isChange) {
+                res.status(200).json({ success: true });
+              } else {
+                res.status(200).json({ success: false });
+              }
+            })
+            .catch(e => {
+              console.log(e);
+            });
+        });
       }
     })
     .catch(e => {
       res.status(500).json({ error: e });
     });
-
-  // User.update(
-  //   {
-  //     password: req.body.password ? req.body.password : '',
-  //     name: req.body.name ? req.body.name : '',
-  //     surname: req.body.surname ? req.body.surname : '',
-  //     email: req.body.email ? req.body.email : '',
-  //   },
-  //   { where: { id } },
-  // )
-  //   .then(user => {
-  //     if (user) {
-  //       res.status(200).json({ success: true });
-  //     } else {
-  //       res.status(200).json({ success: false });
-  //     }
-  //   })
-  //   .catch(e => {
-  //     res.status(500).json({ error: e });
-  //   });
 };

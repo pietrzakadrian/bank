@@ -214,15 +214,6 @@ class SettingsPage extends React.Component {
       ? this.props.onSaveData()
       : null;
 
-    // this.props.newEmail ? this.props.onSaveNewEmail(this.props.newEmail) : null;
-    // this.props.newName ? this.props.onSaveNewName(this.props.newName) : null;
-    // this.props.newSurname
-    //   ? this.props.onSaveNewSurname(this.props.newSurname)
-    //   : null;
-    // this.props.newPassword
-    //   ? this.props.onSaveNewPassword(this.props.newPassword)
-    //   : null;
-
     !this.props.newEmail &&
     !this.props.newName &&
     !this.props.newSurname &&
