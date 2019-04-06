@@ -144,4 +144,8 @@ export default defineMessages({
     defaultMessage:
       'Remember that bank transfers take immediately and you can not cancel the transfer after it has been made.',
   },
+  currency: {
+    id: `${scope}.currency`,
+    defaultMessage: 'USD',
+  },
 });

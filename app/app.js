@@ -70,7 +70,10 @@ const render = messages => {
       <MuiThemeProvider theme={theme}>
         <LanguageProvider messages={messages}>
           <SnackbarProvider maxSnack={1}>
-            <ConnectedRouter history={history}>
+            <ConnectedRouter
+              onUpdate={() => window.scrollTo(0, 0)}
+              history={history}
+            >
               <App />
             </ConnectedRouter>
           </SnackbarProvider>

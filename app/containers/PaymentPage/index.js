@@ -429,21 +429,21 @@ class PaymentPage extends React.Component {
                       .trim()}
                   </div>
                 </div>
-           
 
-              <div className={classes.infoRecipient}>
-                <span className={classes.infoRecipientText}>
-                  <FormattedMessage {...messages.paymentEndAmountMoney} />
-                </span>
-                : {this.props.amountMoney}
-              </div>
+                <div className={classes.infoRecipient}>
+                  <span className={classes.infoRecipientText}>
+                    <FormattedMessage {...messages.paymentEndAmountMoney} />
+                  </span>
+                  : {this.props.amountMoney}{' '}
+                  <FormattedMessage {...messages.currency} />
+                </div>
 
-              <div className={classes.infoRecipient}>
-                <span className={classes.infoRecipientText}>
-                  <FormattedMessage {...messages.paymentEndTransferTitle} />
-                </span>
-                : {this.props.transferTitle}
-              </div>
+                <div className={classes.infoRecipient}>
+                  <span className={classes.infoRecipientText}>
+                    <FormattedMessage {...messages.paymentEndTransferTitle} />
+                  </span>
+                  : {this.props.transferTitle}
+                </div>
               </div>
 
               <br />
