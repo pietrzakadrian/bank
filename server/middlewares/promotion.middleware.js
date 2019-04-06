@@ -116,7 +116,7 @@ module.exports = (req, res, next) => {
                     1,
                     recipientId,
                     10,
-                    'Rejestracja konta',
+                    'Create an account',
                     'PROMO10',
                   ).then(() => {
                     setWidgetStatus(recipientId).then(() => {

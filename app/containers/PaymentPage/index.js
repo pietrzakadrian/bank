@@ -27,7 +27,7 @@ import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
 
 // Import Components
-import Loading from 'components/App/Loading';
+import LoadingCircular from 'components/App/LoadingCircular';
 import Notifier from 'components/Notifier';
 import Copyright from 'components/Copyright';
 
@@ -333,7 +333,7 @@ class PaymentPage extends React.Component {
           <Fragment>
             {isLoading ? (
               <Fragment>
-                <Loading />
+                <LoadingCircular />
                 <br />
               </Fragment>
             ) : null}

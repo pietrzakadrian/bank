@@ -13,7 +13,7 @@ import { withStyles } from '@material-ui/core';
 import Trend from 'react-trend';
 
 // Import Components
-import Loading from 'components/App/Loading';
+import LoadingCircular from 'components/App/LoadingCircular';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
@@ -125,7 +125,7 @@ class AvailableFunds extends Component {
           </Fragment>
         ) : (
           <div className={classes.loadingCircular}>
-            <Loading />
+            <LoadingCircular />
           </div>
         )}
       </Paper>

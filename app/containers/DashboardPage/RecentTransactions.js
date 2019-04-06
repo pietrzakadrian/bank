@@ -17,7 +17,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
 // Import Components
-import Loading from 'components/App/Loading';
+import LoadingCircular from 'components/App/LoadingCircular';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
@@ -171,7 +171,7 @@ class RecentTransactions extends Component {
             </Table>
           ) : (
             <div className={classes.loadingCircular}>
-              <Loading />
+              <LoadingCircular />
             </div>
           )}
         </CardContent>

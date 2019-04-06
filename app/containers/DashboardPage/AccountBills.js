@@ -19,7 +19,7 @@ import TableRow from '@material-ui/core/TableRow';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 
 // Import Components
-import Loading from 'components/App/Loading';
+import LoadingCircular from 'components/App/LoadingCircular';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
@@ -162,7 +162,7 @@ class AccountBills extends Component {
                 <TableRow>
                   <TableCell>
                     <div className={classes.loadingCircular}>
-                      <Loading />
+                      <LoadingCircular />
                     </div>
                   </TableCell>
                 </TableRow>

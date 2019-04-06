@@ -12,7 +12,7 @@ import { withStyles } from '@material-ui/core';
 import { PieChart, Pie, Cell } from 'recharts';
 
 // Import Components
-import Loading from 'components/App/Loading';
+import LoadingCircular from 'components/App/LoadingCircular';
 
 // Import Internationalize
 import { FormattedMessage } from 'react-intl';
@@ -180,7 +180,7 @@ class Savings extends Component {
           </Fragment>
         ) : (
           <div className={classes.loadingCircular}>
-            <Loading />
+            <LoadingCircular />
           </div>
         )}
       </Paper>

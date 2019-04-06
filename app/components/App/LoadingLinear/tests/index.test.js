@@ -2,9 +2,9 @@
 // import { mount } from 'enzyme';
 // import { enzymeFind } from 'styled-components/test-utils';
 
-// import Loading from '../index';
+// import LoadingLinear from '../index';
 
-describe('<Loading />', () => {
+describe('<LoadingLinear />', () => {
   it('Expect to have unit tests specified', () => {
     expect(true).toEqual(false);
   });
