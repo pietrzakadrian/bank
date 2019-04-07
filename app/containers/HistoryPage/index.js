@@ -31,8 +31,6 @@ import {
   TableHeaderRow,
   TableColumnVisibility,
   PagingPanel,
-  ColumnChooser,
-  Toolbar,
 } from '@devexpress/dx-react-grid-material-ui';
 
 import injectSaga from 'utils/injectSaga';
@@ -46,14 +44,19 @@ import messages from './messages';
 
 const styles = theme => ({
   root: {
-    minHeight: '320px!important',
     fontFamily: 'Lato',
     color: 'red',
   },
-  center: {
-    textAlign: 'center',
-    maxWidth: 1100,
-    margin: '0 auto',
+  container: {
+    position: 'relative',
+    margin: '10px auto',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      maxWidth: 1100,
+      width: 'calc(100% - 70px)',
+    },
   },
   elevation: {
     boxShadow: 'none',
@@ -67,6 +70,9 @@ const styles = theme => ({
   percent: {
     color: 'red',
   },
+  table: {
+    minWidth: 'none'
+  }
 });
 
 const PercentFormatter = ({ value }) => (
@@ -107,6 +113,9 @@ const tableCellStyles = theme => ({
     fontSize: 14.5,
     fontFamily: 'Lato',
   },
+  table: {
+    minWidth: 'none'
+  }
 });
 
 const tableCell = withStyles(tableCellStyles, { name: 'TableCellBase' })(
@@ -126,23 +135,29 @@ class HistoryPage extends React.Component {
         { name: 'amount', title: 'Amount of money' },
       ],
       rows: generateRows({ columnValues: globalSalesValues, length: 20 }),
-      defaultHiddenColumnNames: [],
+      hiddenColumnNames: [],
       percentColumns: ['amount'],
-    };
-
-    this.hiddenColumnNamesChange = defaultHiddenColumnNames => {
-      this.setState({ defaultHiddenColumnNames });
     };
   }
 
+  hiddenAdditionalColumn = () => {
+    this.state.hiddenColumnNames instanceof Array && this.state.hiddenColumnNames.length === 0 ? (
+      this.setState({
+        hiddenColumnNames: ['product', 'customer', 'sector'],
+      })
+    ) : (null)
+  }
+
+  showAdditionalColumn = () => {
+    this.state.hiddenColumnNames instanceof Array && this.state.hiddenColumnNames.length === 2 ? (
+      this.setState({
+        hiddenColumnNames: [''],
+      })
+    ) : (null)
+  }
+
   render() {
-    const {
-      rows,
-      columns,
-      defaultHiddenColumnNames,
-      percentColumns,
-      hiddenColumnNames,
-    } = this.state;
+    const { rows, columns, percentColumns, hiddenColumnNames } = this.state;
     const { classes } = this.props;
 
     return (
@@ -151,7 +166,8 @@ class HistoryPage extends React.Component {
           {title => <Helmet title={title} />}
         </FormattedMessage>
 
-        <div className={classes.center}>
+
+        <div className={classes.container}>
           <Paper
             classes={{
               elevation2: classes.elevation,
@@ -163,7 +179,8 @@ class HistoryPage extends React.Component {
               <PercentTypeProvider for={percentColumns} />
               <Table
                 cellComponent={tableCell}
-                classes={{ root: classes.root }}
+                classes={{ root: classes.root, table: classes.table }}
+
               />
               <TableHeaderRow cellComponent={HeaderCell} />
               <PagingPanel />
@@ -171,10 +188,24 @@ class HistoryPage extends React.Component {
                 hiddenColumnNames={hiddenColumnNames}
                 onHiddenColumnNamesChange={this.hiddenColumnNamesChange}
               />
-              <Toolbar />
-              <ColumnChooser />
+
             </Grid>
+
+            <ResizeObserver
+              onResize={rect => {
+                rect.width >= 647 ? (this.showAdditionalColumn()) : (this.hiddenAdditionalColumn())
+                console.log(
+                  'Resized. New bounds:',
+                  rect.width,
+                  'x',
+                  rect.height,
+                );
+              }}
+            />
           </Paper>
+
+
+          
         </div>
         <Copyright />
       </Fragment>
@@ -203,7 +234,7 @@ const withReducer = injectReducer({ key: 'historyPage', reducer });
 const withSaga = injectSaga({ key: 'historyPage', saga });
 
 export default compose(
-  withStyles(styles, { withTheme: true }),
+  withStyles(styles),
   withReducer,
   withSaga,
   withConnect,

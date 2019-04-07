@@ -19,6 +19,9 @@ import 'sanitize.css/sanitize.css';
 // Import root app
 import App from 'containers/App';
 
+// Import Services
+import ScrollService from 'services/ScrollService';
+
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
 
@@ -62,6 +65,7 @@ const theme = createMuiTheme({
     },
   },
 });
+
 const MOUNT_NODE = document.getElementById('app');
 
 const render = messages => {
@@ -70,11 +74,10 @@ const render = messages => {
       <MuiThemeProvider theme={theme}>
         <LanguageProvider messages={messages}>
           <SnackbarProvider maxSnack={1}>
-            <ConnectedRouter
-              onUpdate={() => window.scrollTo(0, 0)}
-              history={history}
-            >
-              <App />
+            <ConnectedRouter history={history}>
+              <ScrollService>
+                <App />
+              </ScrollService>
             </ConnectedRouter>
           </SnackbarProvider>
         </LanguageProvider>

@@ -13,11 +13,11 @@ body {
   width: 100vw;
   height: 100%;
   overflow-y: scroll;
-  overflow-x: hidden;
   background-color: #fefefe!important;
   position: fixed;
   overscroll-behavior-y: contain;
 }
+
 
 #app {
   background-color: #fefefe;

@@ -190,12 +190,12 @@ export class LoginPage extends Component {
       onChangePassword,
       onLoginStepBack,
     } = this.props;
-
     return (
       <Fragment>
         <FormattedMessage {...messages.helmetLoginTitle}>
           {title => <Helmet title={title} />}
         </FormattedMessage>
+
 
         <Header />
         <FormattedMessage {...messages.loginToTheSystem}>
