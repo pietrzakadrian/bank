@@ -62,6 +62,7 @@ const styles = theme => ({
     boxShadow: 'none',
     [theme.breakpoints.down('md')]: {
       paddingTop: 0,
+      marginTop: -10,
     },
     [theme.breakpoints.up('md')]: {
       paddingTop: 30,
@@ -70,9 +71,6 @@ const styles = theme => ({
   percent: {
     color: 'red',
   },
-  table: {
-    minWidth: 'none'
-  }
 });
 
 const PercentFormatter = ({ value }) => (
@@ -113,9 +111,6 @@ const tableCellStyles = theme => ({
     fontSize: 14.5,
     fontFamily: 'Lato',
   },
-  table: {
-    minWidth: 'none'
-  }
 });
 
 const tableCell = withStyles(tableCellStyles, { name: 'TableCellBase' })(
@@ -141,20 +136,20 @@ class HistoryPage extends React.Component {
   }
 
   hiddenAdditionalColumn = () => {
-    this.state.hiddenColumnNames instanceof Array && this.state.hiddenColumnNames.length === 0 ? (
+    if (this.state.hiddenColumnNames.length === 0) {
       this.setState({
         hiddenColumnNames: ['product', 'customer', 'sector'],
-      })
-    ) : (null)
-  }
+      });
+    }
+  };
 
   showAdditionalColumn = () => {
-    this.state.hiddenColumnNames instanceof Array && this.state.hiddenColumnNames.length === 2 ? (
+    if (this.state.hiddenColumnNames.length === 3) {
       this.setState({
-        hiddenColumnNames: [''],
-      })
-    ) : (null)
-  }
+        hiddenColumnNames: [],
+      });
+    }
+  };
 
   render() {
     const { rows, columns, percentColumns, hiddenColumnNames } = this.state;
@@ -165,7 +160,6 @@ class HistoryPage extends React.Component {
         <FormattedMessage {...messages.helmetHistoryTitle}>
           {title => <Helmet title={title} />}
         </FormattedMessage>
-
 
         <div className={classes.container}>
           <Paper
@@ -179,8 +173,7 @@ class HistoryPage extends React.Component {
               <PercentTypeProvider for={percentColumns} />
               <Table
                 cellComponent={tableCell}
-                classes={{ root: classes.root, table: classes.table }}
-
+                classes={{ root: classes.root }}
               />
               <TableHeaderRow cellComponent={HeaderCell} />
               <PagingPanel />
@@ -188,24 +181,16 @@ class HistoryPage extends React.Component {
                 hiddenColumnNames={hiddenColumnNames}
                 onHiddenColumnNamesChange={this.hiddenColumnNamesChange}
               />
-
             </Grid>
 
             <ResizeObserver
               onResize={rect => {
-                rect.width >= 647 ? (this.showAdditionalColumn()) : (this.hiddenAdditionalColumn())
-                console.log(
-                  'Resized. New bounds:',
-                  rect.width,
-                  'x',
-                  rect.height,
-                );
+                rect.width >= 647
+                  ? this.showAdditionalColumn()
+                  : this.hiddenAdditionalColumn();
               }}
             />
           </Paper>
-
-
-          
         </div>
         <Copyright />
       </Fragment>

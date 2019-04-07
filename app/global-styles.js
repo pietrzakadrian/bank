@@ -12,20 +12,15 @@ body {
   font-family: 'Lato', sans-serif;
   width: 100vw;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   background-color: #fefefe!important;
   position: fixed;
-  overscroll-behavior-y: contain;
 }
-
 
 #app {
   background-color: #fefefe;
   min-height: 100%;
   min-width: 100%;
-}
-
-header {
   -webkit-overflow-scrolling: auto;
 }
 
