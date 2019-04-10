@@ -1,3 +1,4 @@
+/* eslint-disable react/prefer-stateless-function */
 /**
  *
  * HistoryPage
@@ -21,32 +22,49 @@ import Copyright from 'components/Copyright';
 import { withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import {
+  SortingState,
+  SelectionState,
   PagingState,
+  GroupingState,
+  RowDetailState,
+  IntegratedGrouping,
   IntegratedPaging,
   DataTypeProvider,
+  IntegratedSelection,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
   Table,
   TableHeaderRow,
-  TableColumnVisibility,
+  TableRowDetail,
   PagingPanel,
+  TableColumnReordering,
+  TableColumnVisibility,
 } from '@devexpress/dx-react-grid-material-ui';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { generateRows, globalSalesValues } from './demo-data/generator';
+
+import { createGridAction } from './actions';
 
 import makeSelectHistoryPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
+const lgColumns = [
+  { name: 'date', title: 'Date' },
+  { name: 'firstName', title: 'Sender' },
+  { name: 'lastName', title: 'Recipient' },
+  { name: 'birthDate', title: 'Transfer title' },
+  { name: 'position', title: 'Amount of money' },
+];
+const smColumns = [
+  { name: 'date', title: 'Date' },
+  { name: 'position', title: 'Amount' },
+];
+
 const styles = theme => ({
-  root: {
-    fontFamily: 'Lato',
-    color: 'red',
-  },
   container: {
     position: 'relative',
     margin: '10px auto',
@@ -58,6 +76,13 @@ const styles = theme => ({
       width: 'calc(100% - 70px)',
     },
   },
+  detailContainer: {
+    margin: '10px 0',
+  },
+  title: {
+    color: theme.palette.text.primary,
+    fontSize: theme.typography.fontSize,
+  },
   elevation: {
     boxShadow: 'none',
     [theme.breakpoints.down('md')]: {
@@ -65,14 +90,30 @@ const styles = theme => ({
       marginTop: -10,
     },
     [theme.breakpoints.up('md')]: {
-      paddingTop: 30,
+      paddingTop: 20,
     },
   },
-  percent: {
-    color: 'red',
+  tableHeaderRowDetail: {
+    padding: 0,
+  },
+  tableRoot: {
+    padding: 0,
+  },
+  detailContainer: {
+    marginTop: 10,
+    marginLeft: 32.5,
+  },
+  headerDetail: {
+    fontSize: 16,
+    color: '#0029ab',
+    fontFamily: 'Lato',
+  },
+  TableInfoDetail: {
+    fontSize: 14.5,
+    fontFamily: 'Lato',
+    marginBottom: 10,
   },
 });
-
 const PercentFormatter = ({ value }) => (
   <span className="percent">
     {value} <FormattedMessage {...messages.currency} />
@@ -82,6 +123,21 @@ const PercentFormatter = ({ value }) => (
 const PercentTypeProvider = props => (
   <DataTypeProvider formatterComponent={PercentFormatter} {...props} />
 );
+
+const GridDetailContainerBase = ({ row, classes }) => (
+  <div className={classes.detailContainer}>
+    <div className={classes.headerDetail}> Sender</div>
+    <div className={classes.TableInfoDetail}>Adrian Pietrzak</div>
+    <div className={classes.headerDetail}>Recipient</div>
+    <div className={classes.TableInfoDetail}>Adrian Pietrzak</div>
+    <div className={classes.headerDetail}>Transfer title</div>
+    <div className={classes.TableInfoDetail}>no siema</div>
+  </div>
+);
+
+const GridDetailContainer = withStyles(styles, {
+  name: 'ReduxIntegrationDemo',
+})(GridDetailContainerBase);
 
 const HeaderCellBase = ({ classes, className, ...restProps }) => (
   <TableHeaderRow.Cell
@@ -118,42 +174,20 @@ const tableCell = withStyles(tableCellStyles, { name: 'TableCellBase' })(
 );
 
 class HistoryPage extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      columns: [
-        { name: 'region', title: 'Date' },
-        { name: 'sector', title: 'Sender' },
-        { name: 'customer', title: 'Recipient' },
-        { name: 'product', title: 'Transfer title' },
-        { name: 'amount', title: 'Amount of money' },
-      ],
-      rows: generateRows({ columnValues: globalSalesValues, length: 20 }),
-      hiddenColumnNames: [],
-      percentColumns: ['amount'],
-    };
-  }
-
-  hiddenAdditionalColumn = () => {
-    if (this.state.hiddenColumnNames.length === 0) {
-      this.setState({
-        hiddenColumnNames: ['product', 'customer', 'sector'],
-      });
-    }
-  };
-
-  showAdditionalColumn = () => {
-    if (this.state.hiddenColumnNames.length === 3) {
-      this.setState({
-        hiddenColumnNames: [],
-      });
-    }
-  };
-
   render() {
-    const { rows, columns, percentColumns, hiddenColumnNames } = this.state;
-    const { classes } = this.props;
+    const {
+      classes,
+      historyPage,
+      onSortingChange,
+      onSelectionChange,
+      onExpandedRowIdsChange,
+      onGroupingChange,
+      onExpandedGroupsChange,
+      onCurrentPageChange,
+      onPageSizeChange,
+      onColumnOrderChange,
+      onHiddenColumnNamesChange,
+    } = this.props;
 
     return (
       <Fragment>
@@ -167,29 +201,53 @@ class HistoryPage extends React.Component {
               elevation2: classes.elevation,
             }}
           >
-            <Grid rows={rows} columns={columns}>
-              <PagingState defaultCurrentPage={0} pageSize={12} />
+            <Grid
+              rows={historyPage.rows}
+              columns={
+                window.matchMedia('(min-width: 678px)').matches
+                  ? lgColumns
+                  : smColumns
+              }
+            >
+              <SortingState
+                sorting={historyPage.sorting}
+                onSortingChange={onSortingChange}
+              />
+              <GroupingState
+                onGroupingChange={onGroupingChange}
+                onExpandedGroupsChange={onExpandedGroupsChange}
+              />
+              <PagingState
+                currentPage={historyPage.currentPage}
+                onCurrentPageChange={onCurrentPageChange}
+                pageSize={historyPage.pageSize}
+                onPageSizeChange={onPageSizeChange}
+              />
+              <RowDetailState
+                expandedRowIds={historyPage.historyPageexpandedRowIds}
+                onExpandedRowIdsChange={onExpandedRowIdsChange}
+              />
+              <SelectionState
+                selection={historyPage.selection}
+                onSelectionChange={onSelectionChange}
+              />
+              <IntegratedGrouping />
               <IntegratedPaging />
-              <PercentTypeProvider for={percentColumns} />
-              <Table
-                cellComponent={tableCell}
-                classes={{ root: classes.root }}
-              />
-              <TableHeaderRow cellComponent={HeaderCell} />
-              <PagingPanel />
-              <TableColumnVisibility
-                hiddenColumnNames={hiddenColumnNames}
-                onHiddenColumnNamesChange={this.hiddenColumnNamesChange}
-              />
-            </Grid>
+              <IntegratedSelection />
+              <Table cellComponent={tableCell} />
 
-            <ResizeObserver
-              onResize={rect => {
-                rect.width >= 647
-                  ? this.showAdditionalColumn()
-                  : this.hiddenAdditionalColumn();
-              }}
-            />
+              <TableHeaderRow cellComponent={HeaderCell} />
+              <TableColumnVisibility
+                hiddenColumnNames={historyPage.hiddenColumnNames}
+                onHiddenColumnNamesChange={onHiddenColumnNamesChange}
+              />
+              <TableColumnReordering
+                order={historyPage.columnOrder}
+                onOrderChange={onColumnOrderChange}
+              />
+              <TableRowDetail contentComponent={GridDetailContainer} />
+              <PagingPanel />
+            </Grid>
           </Paper>
         </div>
         <Copyright />
@@ -206,7 +264,26 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    onSortingChange: sorting => dispatch(createGridAction('sorting', sorting)),
+    onSelectionChange: selection =>
+      dispatch(createGridAction('selection', selection)),
+    onExpandedRowIdsChange: expandedRowIds =>
+      dispatch(createGridAction('expandedRowIds', expandedRowIds)),
+    onGroupingChange: grouping =>
+      dispatch(createGridAction('grouping', grouping)),
+    onExpandedGroupsChange: expandedGroups =>
+      dispatch(createGridAction('expandedGroups', expandedGroups)),
+    onFiltersChange: filters => dispatch(createGridAction('filters', filters)),
+    onCurrentPageChange: currentPage =>
+      dispatch(createGridAction('currentPage', currentPage)),
+    onPageSizeChange: pageSize =>
+      dispatch(createGridAction('pageSize', pageSize)),
+    onColumnOrderChange: order =>
+      dispatch(createGridAction('columnOrder', order)),
+    onColumnWidthsChange: widths =>
+      dispatch(createGridAction('columnWidths', widths)),
+    onHiddenColumnNamesChange: hiddenColumns =>
+      dispatch(createGridAction('hiddenColumnNames', hiddenColumns)),
   };
 }
 

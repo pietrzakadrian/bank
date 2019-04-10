@@ -1,3 +1,7 @@
 div table {
   min-width: unset !important;
 }
+
+td {
+  background-color: #fefefe !important;
+}

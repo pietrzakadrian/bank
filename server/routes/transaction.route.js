@@ -15,6 +15,13 @@ module.exports = function(app) {
     transactions.register,
   );
 
+  app.post(
+    '/api/transactions/getTransactions',
+    checkAuth,
+    checkToken,
+    transactions.getTransactionsdata,
+  );
+
   // Return Recipient's Transaction Data Action
   app.get(
     '/api/transactions/recipient/:recipientId',

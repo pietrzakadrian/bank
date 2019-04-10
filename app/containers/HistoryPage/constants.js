@@ -4,4 +4,4 @@
  *
  */
 
-export const DEFAULT_ACTION = 'app/HistoryPage/DEFAULT_ACTION';
+export const GRID_STATE_CHANGE_ACTION = 'app/HistoryPage/GRID_STATE_CHANGE';

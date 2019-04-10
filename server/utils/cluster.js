@@ -22,7 +22,7 @@ function masterProcess() {
   };
 
   // Spawn workers.
-  for (let i = 0; i < 3; i += 1) {
+  for (let i = 0; i < 2; i += 1) {
     spawn(i);
   }
   const worker_index = function(ip, len) {
@@ -35,7 +35,7 @@ function masterProcess() {
       // We received a connection and need to pass it to the appropriate
       // worker. Get the worker for this connection's source IP and pass
       // it the connection.
-      const worker = workers[worker_index(connection.remoteAddress, 3)];
+      const worker = workers[worker_index(connection.remoteAddress, 2)];
       worker.send('sticky-session:connection', connection);
     })
     .listen(port);

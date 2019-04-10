@@ -4,10 +4,12 @@
  *
  */
 
-import { DEFAULT_ACTION } from './constants';
+import { GRID_STATE_CHANGE_ACTION } from './constants';
 
-export function defaultAction() {
+export function createGridAction(partialStateName, partialStateValue) {
   return {
-    type: DEFAULT_ACTION,
+    type: GRID_STATE_CHANGE_ACTION,
+    partialStateName,
+    partialStateValue,
   };
 }

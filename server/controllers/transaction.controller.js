@@ -316,7 +316,9 @@ exports.register = (req, res) => {
       from: `"Bank Application" <${env.nodemailer.email}>`,
       to: `${await getSenderEmail(senderId)}`,
       subject: 'Payment authorization',
-      text: `Dear Customer! We have registered an attempt to make a payment for the amount of: ${amountMoney} USD to ${await getRecipientName(recipientId)}.
+      text: `Dear Customer! We have registered an attempt to make a payment for the amount of: ${amountMoney} USD to ${await getRecipientName(
+        recipientId,
+      )}.
       Confirm the payment by entering the authorization key: ${authorizationKey}`,
       html: `<!doctype html>
       <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -472,7 +474,9 @@ exports.register = (req, res) => {
                         </tr>
                         <tr>
                           <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                            <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;"> Dear Customer! <br /> We have registered an attempt to make a payment for the amount of ${amountMoney} USD to ${await getRecipientName(recipientId)}. <br /><br /> Confirm the payment by entering the authorization key: <b>${authorizationKey}</b>                        </div>
+                            <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;"> Dear Customer! <br /> We have registered an attempt to make a payment for the amount of ${amountMoney} USD to ${await getRecipientName(
+        recipientId,
+      )}. <br /><br /> Confirm the payment by entering the authorization key: <b>${authorizationKey}</b>                        </div>
                           </td>
                         </tr>
                         <tr>
@@ -682,6 +686,53 @@ exports.getSenderdata = (req, res) => {
     ],
     order: [['date_time', 'DESC']],
     include: [
+      {
+        model: User,
+        as: 'getRecipientdata',
+        where: { id: db.Sequelize.col('transaction.id_sender') },
+        attributes: ['name', 'surname'],
+      },
+    ],
+  })
+    .then(transactions => {
+      res.send(transactions);
+    })
+    .catch(() => {
+      res.status(500).json({ error: 'Internal server error' });
+    });
+};
+
+exports.getTransactionsdata = (req, res) => {
+  function setAuthorizationStatus(status) {
+    const authorizationStatus = status;
+    return authorizationStatus;
+  }
+
+  const userId = req.body.userId;
+  const offset = req.body.offset;
+
+  Transaction.findAll({
+    limit: 12,
+    where: {
+      [Op.or]: [{ id_recipient: userId }, { id_sender: userId }],
+      authorization_status: setAuthorizationStatus(1),
+    },
+    offset,
+    attributes: [
+      'amount_money',
+      'date_time',
+      'id_recipient',
+      'id_sender',
+      'transfer_title',
+    ],
+    order: [['date_time', 'DESC']],
+    include: [
+      {
+        model: User,
+        as: 'getSenderdata',
+        where: { id: db.Sequelize.col('transaction.id_sender') },
+        attributes: ['name', 'surname'],
+      },
       {
         model: User,
         as: 'getRecipientdata',

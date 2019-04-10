@@ -130,17 +130,10 @@ const cars = [
   'Audi A4',
   'BMW 750',
 ];
-const positions = [
-  'CEO',
-  'IT Manager',
-  'Ombudsman',
-  'CMO',
-  'Controller',
-  'HR Manager',
-  'Shipping Manager',
-  'Sales Assistant',
-  'HR Assistant',
-];
+
+const dates = ['2019-20-21', '2019-21-20'];
+
+const positions = ['2019 PLN', '10 USD'];
 
 const generateDate = ({
   random,
@@ -163,14 +156,7 @@ const generatePhone = () =>
     .replace(/(\d{3})(\d{3})(\d{4})$/, '($1) $2-$3');
 
 export const defaultColumnValues = {
-  sex: ['Male', 'Female'],
-  name: [
-    'sex',
-    {
-      Male: maleFirstNames,
-      Female: femaleFirstNames,
-    },
-  ],
+  date: dates,
   city: cities,
   car: cars,
 };
@@ -235,15 +221,11 @@ export const globalSalesValues = {
   shipped: [true, false],
 };
 
+export const paymentValues = {};
+
 export const employeeValues = {
   sex: ['Male', 'Female'],
-  prefix: [
-    'sex',
-    {
-      Male: ['Mr.', 'Dr.'],
-      Female: ['Mrs.', 'Ms.', 'Dr.'],
-    },
-  ],
+  date: ['2019-02-21', '2019-03-20', '2019-04-21'],
   firstName: [
     'sex',
     {
@@ -254,11 +236,7 @@ export const employeeValues = {
   lastName: lastNames,
   position: positions,
   state: usStates.map(state => state.name),
-  birthDate: ({ random }) =>
-    generateDate({
-      random,
-      year: () => Math.floor(random() * 30) + 1960,
-    }),
+  birthDate: ['test', 'adrian'],
   phone: generatePhone,
 };
 

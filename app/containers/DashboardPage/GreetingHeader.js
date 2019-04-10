@@ -32,6 +32,7 @@ const styles = {
   greetingHeadlineName: {
     fontWeight: 700,
     color: '#0029ab',
+    textOverflow: 'ellipsis',
   },
 };
 
@@ -72,10 +73,10 @@ class GreetingHeader extends Component {
             {moment()
               .format('HH')
               .toString() >= 20 ? (
-                <FormattedMessage {...messages.greetingPm} />
-              ) : (
-                <FormattedMessage {...messages.greetingAm} />
-              )}
+              <FormattedMessage {...messages.greetingPm} />
+            ) : (
+              <FormattedMessage {...messages.greetingAm} />
+            )}
             {', '}
             <span className={classes.greetingHeadlineName}>
               {name} {surname}
