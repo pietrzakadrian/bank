@@ -17,6 +17,7 @@ import ResizeObserver from 'react-resize-observer';
 
 // Import Components
 import Copyright from 'components/Copyright';
+import LoadingCircular from 'components/App/LoadingCircular';
 
 // Import Material-UI
 import { withStyles } from '@material-ui/core';
@@ -53,8 +54,8 @@ import messages from './messages';
 
 const lgColumns = [
   { name: 'date_time', title: 'Date' },
-  { name: 'sendername', title: 'Sender' },
-  { name: 'recipientname', title: 'Recipient' },
+  { name: 'sender_name', title: 'Sender' },
+  { name: 'recipient_name', title: 'Recipient' },
   { name: 'transfer_title', title: 'Transfer title' },
   { name: 'amount_money', title: 'Amount of money' },
 ];
@@ -218,51 +219,55 @@ class HistoryPage extends React.Component {
               elevation2: classes.elevation,
             }}
           >
-            <Grid
-              rows={historyPage.rows2}
-              columns={
-                window.matchMedia('(min-width: 678px)').matches
-                  ? lgColumns
-                  : smColumns
-              }
-            >
-              <GroupingState
-                onGroupingChange={onGroupingChange}
-                onExpandedGroupsChange={onExpandedGroupsChange}
-              />
-              <PagingState
-                currentPage={historyPage.currentPage}
-                onCurrentPageChange={onCurrentPageChange}
-                pageSize={historyPage.pageSize}
-                onPageSizeChange={onPageSizeChange}
-              />
-              <RowDetailState
-                expandedRowIds={historyPage.historyPageexpandedRowIds}
-                onExpandedRowIdsChange={onExpandedRowIdsChange}
-              />
-              <SelectionState
-                selection={historyPage.selection}
-                onSelectionChange={onSelectionChange}
-              />
-              <IntegratedGrouping />
-              <IntegratedPaging />
-              <IntegratedSelection />
+            {historyPage.rowsTransform ? (
+              <Grid
+                rows={historyPage.rowsTransform}
+                columns={
+                  window.matchMedia('(min-width: 678px)').matches
+                    ? lgColumns
+                    : smColumns
+                }
+              >
+                <GroupingState
+                  onGroupingChange={onGroupingChange}
+                  onExpandedGroupsChange={onExpandedGroupsChange}
+                />
+                <PagingState
+                  currentPage={historyPage.currentPage}
+                  onCurrentPageChange={onCurrentPageChange}
+                  pageSize={historyPage.pageSize}
+                  onPageSizeChange={onPageSizeChange}
+                />
+                <RowDetailState
+                  expandedRowIds={historyPage.historyPageexpandedRowIds}
+                  onExpandedRowIdsChange={onExpandedRowIdsChange}
+                />
+                <SelectionState
+                  selection={historyPage.selection}
+                  onSelectionChange={onSelectionChange}
+                />
+                <IntegratedGrouping />
+                <IntegratedPaging />
+                <IntegratedSelection />
 
-              <PercentTypeProvider for={historyPage.percentColumns} />
-              <Table cellComponent={tableCell} />
+                <PercentTypeProvider for={historyPage.percentColumns} />
+                <Table cellComponent={tableCell} />
 
-              <TableHeaderRow cellComponent={HeaderCell} />
-              <TableColumnVisibility
-                hiddenColumnNames={historyPage.hiddenColumnNames}
-                onHiddenColumnNamesChange={onHiddenColumnNamesChange}
-              />
-              <TableColumnReordering
-                order={historyPage.columnOrder}
-                onOrderChange={onColumnOrderChange}
-              />
-              <TableRowDetail contentComponent={GridDetailContainer} />
-              <PagingPanel />
-            </Grid>
+                <TableHeaderRow cellComponent={HeaderCell} />
+                <TableColumnVisibility
+                  hiddenColumnNames={historyPage.hiddenColumnNames}
+                  onHiddenColumnNamesChange={onHiddenColumnNamesChange}
+                />
+                <TableColumnReordering
+                  order={historyPage.columnOrder}
+                  onOrderChange={onColumnOrderChange}
+                />
+                <TableRowDetail contentComponent={GridDetailContainer} />
+                <PagingPanel />
+              </Grid>
+            ) : (
+              <LoadingCircular />
+            )}
           </Paper>
         </div>
         <Copyright />

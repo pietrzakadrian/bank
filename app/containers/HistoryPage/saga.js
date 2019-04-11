@@ -2,6 +2,7 @@ import decode from 'jwt-decode';
 import { push } from 'connected-react-router/immutable';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
+import moment from 'moment';
 
 import { GET_GRID_DATA } from './constants';
 import {
@@ -25,7 +26,7 @@ export function* getGridData() {
   const jwt = yield call(getToken);
   const requestURL = `/api/transactions/getTransactions`;
   const userId = token.id;
-  const offset = makeSelectHistoryPage().currentPage;
+  // const offset = makeSelectHistoryPage().currentPage;
 
   try {
     // Call our request helper (see 'utils/request')
@@ -38,14 +39,31 @@ export function* getGridData() {
       },
       body: JSON.stringify({
         userId,
-        offset: 0,
+        offset: 0, // todo: change
       }),
     });
 
     if (!response.error) {
-      console.log('ok');
+      yield put(getGridDataSuccessAction());
+      const output = response.rows.map(
+        ({ getSenderdata, getRecipientdata, ...rest }) => ({
+          ...rest,
+          date_time: moment(rest.date_time).format('DD.MM.YYYY, HH:mm'),
+          amount_money:
+            rest.id_sender === userId
+              ? rest.amount_money * -1
+              : rest.amount_money,
+          sender_name: `${getSenderdata.name} ${getSenderdata.surname}`,
+          recipient_name: `${getRecipientdata.name} ${
+            getRecipientdata.surname
+          }`,
+        }),
+      );
+
+      const finalOutupt = { rows: [...output] };
+      yield put(getGridDataTransformSuccessAction(finalOutupt.rows));
     } else {
-      console.log('no ok');
+      yield put(getGridDataErrorAction('error'));
     }
   } catch (err) {
     /* */

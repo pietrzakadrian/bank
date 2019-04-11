@@ -37,6 +37,15 @@ module.exports = (sequelize, Sequelize) => {
           },
         },
       },
+      currency: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        validate: {
+          notEmpty: {
+            msg: 'The currency is required.',
+          },
+        },
+      },
     },
     {
       timestamps: false,
