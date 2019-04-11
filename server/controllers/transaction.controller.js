@@ -711,13 +711,11 @@ exports.getTransactionsdata = (req, res) => {
   const userId = req.body.userId;
   const offset = req.body.offset;
 
-  Transaction.findAll({
-    limit: 12,
+  Transaction.findAndCountAll({
     where: {
       [Op.or]: [{ id_recipient: userId }, { id_sender: userId }],
       authorization_status: setAuthorizationStatus(1),
     },
-    offset,
     attributes: [
       'amount_money',
       'date_time',
@@ -726,6 +724,8 @@ exports.getTransactionsdata = (req, res) => {
       'transfer_title',
     ],
     order: [['date_time', 'DESC']],
+    limit: 12,
+    offset,
     include: [
       {
         model: User,
@@ -744,7 +744,7 @@ exports.getTransactionsdata = (req, res) => {
     .then(transactions => {
       res.send(transactions);
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(e => {
+      res.status(500).json({ error: e });
     });
 };

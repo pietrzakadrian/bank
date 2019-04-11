@@ -5,3 +5,7 @@ div table {
 td {
   background-color: #fefefe !important;
 }
+
+.percent {
+  color: #ea0000;
+}

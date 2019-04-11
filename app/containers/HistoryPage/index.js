@@ -22,7 +22,6 @@ import Copyright from 'components/Copyright';
 import { withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import {
-  SortingState,
   SelectionState,
   PagingState,
   GroupingState,
@@ -45,7 +44,7 @@ import {
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
-import { createGridAction } from './actions';
+import { createGridAction, getGridDataAction } from './actions';
 
 import makeSelectHistoryPage from './selectors';
 import reducer from './reducer';
@@ -53,15 +52,15 @@ import saga from './saga';
 import messages from './messages';
 
 const lgColumns = [
-  { name: 'date', title: 'Date' },
-  { name: 'firstName', title: 'Sender' },
-  { name: 'lastName', title: 'Recipient' },
-  { name: 'birthDate', title: 'Transfer title' },
-  { name: 'position', title: 'Amount of money' },
+  { name: 'date_time', title: 'Date' },
+  { name: 'sendername', title: 'Sender' },
+  { name: 'recipientname', title: 'Recipient' },
+  { name: 'transfer_title', title: 'Transfer title' },
+  { name: 'amount_money', title: 'Amount of money' },
 ];
 const smColumns = [
-  { name: 'date', title: 'Date' },
-  { name: 'position', title: 'Amount' },
+  { name: 'date_time', title: 'Date' },
+  { name: 'amount_money', title: 'Amount' },
 ];
 
 const styles = theme => ({
@@ -99,10 +98,6 @@ const styles = theme => ({
   tableRoot: {
     padding: 0,
   },
-  detailContainer: {
-    marginTop: 10,
-    marginLeft: 32.5,
-  },
   headerDetail: {
     fontSize: 16,
     color: '#0029ab',
@@ -114,11 +109,26 @@ const styles = theme => ({
     marginBottom: 10,
   },
 });
-const PercentFormatter = ({ value }) => (
-  <span className="percent">
-    {value} <FormattedMessage {...messages.currency} />
-  </span>
-);
+const PercentFormatter = ({ value }) =>
+  !value.toString().indexOf('-') ? (
+    <span className="percent">
+      {value
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+        .replace('.', ',')}{' '}
+      <FormattedMessage {...messages.currency} />
+    </span>
+  ) : (
+    <span>
+      {value
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+        .replace('.', ',')}{' '}
+      <FormattedMessage {...messages.currency} />
+    </span>
+  );
 
 const PercentTypeProvider = props => (
   <DataTypeProvider formatterComponent={PercentFormatter} {...props} />
@@ -127,7 +137,11 @@ const PercentTypeProvider = props => (
 const GridDetailContainerBase = ({ row, classes }) => (
   <div className={classes.detailContainer}>
     <div className={classes.headerDetail}> Sender</div>
-    <div className={classes.TableInfoDetail}>Adrian Pietrzak</div>
+    <div className={classes.TableInfoDetail}>{row.result.amount_money}</div>
+    <div className={classes.headerDetail}>Account bill</div>
+    <div className={classes.TableInfoDetail}>
+      42 9760 4671 5909 2300 0022 0097
+    </div>
     <div className={classes.headerDetail}>Recipient</div>
     <div className={classes.TableInfoDetail}>Adrian Pietrzak</div>
     <div className={classes.headerDetail}>Transfer title</div>
@@ -174,11 +188,14 @@ const tableCell = withStyles(tableCellStyles, { name: 'TableCellBase' })(
 );
 
 class HistoryPage extends React.Component {
+  componentDidMount() {
+    this.props.getGridData();
+  }
+
   render() {
     const {
       classes,
       historyPage,
-      onSortingChange,
       onSelectionChange,
       onExpandedRowIdsChange,
       onGroupingChange,
@@ -202,17 +219,13 @@ class HistoryPage extends React.Component {
             }}
           >
             <Grid
-              rows={historyPage.rows}
+              rows={historyPage.rows2}
               columns={
                 window.matchMedia('(min-width: 678px)').matches
                   ? lgColumns
                   : smColumns
               }
             >
-              <SortingState
-                sorting={historyPage.sorting}
-                onSortingChange={onSortingChange}
-              />
               <GroupingState
                 onGroupingChange={onGroupingChange}
                 onExpandedGroupsChange={onExpandedGroupsChange}
@@ -234,6 +247,8 @@ class HistoryPage extends React.Component {
               <IntegratedGrouping />
               <IntegratedPaging />
               <IntegratedSelection />
+
+              <PercentTypeProvider for={historyPage.percentColumns} />
               <Table cellComponent={tableCell} />
 
               <TableHeaderRow cellComponent={HeaderCell} />
@@ -284,6 +299,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(createGridAction('columnWidths', widths)),
     onHiddenColumnNamesChange: hiddenColumns =>
       dispatch(createGridAction('hiddenColumnNames', hiddenColumns)),
+    getGridData: () => dispatch(getGridDataAction()),
   };
 }
 

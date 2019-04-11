@@ -4,7 +4,8 @@ module.exports = (req, res, next) => {
       req.params.userId ||
       req.params.recipientId ||
       req.params.senderId ||
-      req.body.id_sender;
+      req.body.id_sender ||
+      req.body.userId;
     if (req.userData.id === parseInt(id, 10)) {
       next();
       return false;
