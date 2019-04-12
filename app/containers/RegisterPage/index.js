@@ -312,7 +312,7 @@ export class RegisterPage extends React.Component {
           );
     }
 
-    if (this.props.activeStep === 4) {
+    if (this.props.activeStep === 5) {
       if (this.props.email && this.props.isDataProcessingAgreement) {
         this.props.onEnterEmail(this.props.email);
       } else if (!this.props.email && !this.props.isDataProcessingAgreement) {
@@ -337,9 +337,9 @@ export class RegisterPage extends React.Component {
     return [
       <FormattedMessage key={1} {...messages.idNumber} />,
       <FormattedMessage key={2} {...messages.password} />,
-      <FormattedMessage key={3} {...messages.currency} />,
-      <FormattedMessage key={4} {...messages.name} />,
-      <FormattedMessage key={5} {...messages.surname} />,
+      <FormattedMessage key={3} {...messages.name} />,
+      <FormattedMessage key={4} {...messages.surname} />,
+      <FormattedMessage key={5} {...messages.currency} />,
       <FormattedMessage key={6} {...messages.emailAddress} />,
     ];
   }
@@ -466,7 +466,7 @@ export class RegisterPage extends React.Component {
         return (
           <Fragment>
             <div className={classes.textField}>
-              <FormattedMessage {...messages.nationality} />
+              <FormattedMessage {...messages.currency} />
             </div>
           </Fragment>
         );
@@ -639,6 +639,19 @@ export class RegisterPage extends React.Component {
                             <NavigateNext />
                           </button>
                         ) : activeStep === 3 ? (
+                          <button
+                            key={1}
+                            type="button"
+                            className={classes.formSubmit}
+                            onClick={this.handleClick}
+                            disabled={isLoading}
+                          >
+                            <span className={classes.buttonText}>
+                              <FormattedMessage {...messages.nextText} />
+                            </span>
+                            <NavigateNext />
+                          </button>
+                        ) : activeStep === 4 ? (
                           <button
                             key={1}
                             type="button"

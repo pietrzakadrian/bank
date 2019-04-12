@@ -5,6 +5,68 @@ const net = require('net');
 const farmhash = require('farmhash');
 const db = require('../config/db.config.js');
 const port = require('./port');
+const env = require('../config/env.config.js');
+
+function createNecessaryTables() {
+  try {
+    Promise.all([
+      db.currency.create({
+        currency: 'PLN',
+        date_currency_exchange_rate_sync: new Date(),
+        main_currency: 1,
+      }),
+      db.currency.create({
+        currency: 'USD',
+        date_currency_exchange_rate_sync: new Date(),
+        main_currency: 0,
+      }),
+      db.currency.create({
+        currency: 'EUR',
+        date_currency_exchange_rate_sync: new Date(),
+        main_currency: 0,
+      }),
+    ]).then(currency => {
+      if (currency) {
+        db.users
+          .create({
+            login: env.adminAccount.login,
+            password: env.adminAccount.password,
+            name: env.adminAccount.name,
+            surname: env.adminAccount.surname,
+            email: env.adminAccount.email,
+            date_registration: new Date(),
+          })
+          .then(user => {
+            if (user) {
+              db.bills
+                .create({
+                  id_owner: user.id,
+                  account_bill: env.adminAccount.account_bill,
+                  available_funds: env.adminAccount.available_funds,
+                  id_currency: 1,
+                })
+                .then(bill => {
+                  if (bill) {
+                    db.additionals.create({
+                      id_owner: bill.id_owner,
+                      id_currency: bill.id_currency,
+                      account_balance_history:
+                        env.adminAccount.account_balance_history,
+                      incoming_transfers_sum:
+                        env.adminAccount.incoming_transfers_sum,
+                      outgoing_transfers_sum:
+                        env.adminAccount.outgoing_transfers_sum,
+                    });
+                  }
+                });
+            }
+          });
+      }
+    });
+  } catch (e) {
+    /* just ignore */
+  }
+}
 
 function masterProcess() {
   // eslint-disable-next-line no-console
@@ -42,19 +104,7 @@ function masterProcess() {
     .listen(port);
 
   db.sequelize.sync({ force: true }).then(() => {
-    console.log(`Database & tables created!`);
-
-    // Migrations
-    // db.currency.create({
-    //   currency: 'PLN',
-    //   exchange_rate: 1,
-    // });
-    // db.currency.create({
-    //   currency: 'USD',
-    // });
-    // db.currency.create({
-    //   currency: 'EUR',
-    // });
+    createNecessaryTables();
   });
 }
 
