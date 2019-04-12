@@ -46,6 +46,16 @@ module.exports = (sequelize, Sequelize) => {
           },
         },
       },
+      id_currency: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        isNumeric: true,
+        validate: {
+          notEmpty: {
+            msg: 'The id_currency is required.',
+          },
+        },
+      },
       transfer_title: {
         type: Sequelize.STRING,
         allowNull: false,

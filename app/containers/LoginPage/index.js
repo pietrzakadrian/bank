@@ -156,7 +156,7 @@ export class LoginPage extends Component {
   handleKeyPress(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      this.handleEnterId(e);
+      this.props.isLoading === false ? this.handleEnterId(e) : null;
     }
   }
 
@@ -195,7 +195,6 @@ export class LoginPage extends Component {
         <FormattedMessage {...messages.helmetLoginTitle}>
           {title => <Helmet title={title} />}
         </FormattedMessage>
-
 
         <Header />
         <FormattedMessage {...messages.loginToTheSystem}>
@@ -274,7 +273,11 @@ export class LoginPage extends Component {
                       ) : null}
                     </Fragment>,
                   ]}
-                  <button className={classes.formSubmit} type="submit" disabled={isLoading}>
+                  <button
+                    className={classes.formSubmit}
+                    type="submit"
+                    disabled={isLoading}
+                  >
                     <span className={classes.buttonText}>
                       <FormattedMessage {...messages.inputLogin} />
                     </span>

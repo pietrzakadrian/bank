@@ -3,6 +3,7 @@ const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const net = require('net');
 const farmhash = require('farmhash');
+const db = require('../config/db.config.js');
 const port = require('./port');
 
 function masterProcess() {
@@ -39,6 +40,22 @@ function masterProcess() {
       worker.send('sticky-session:connection', connection);
     })
     .listen(port);
+
+  db.sequelize.sync({ force: true }).then(() => {
+    console.log(`Database & tables created!`);
+
+    // Migrations
+    // db.currency.create({
+    //   currency: 'PLN',
+    //   exchange_rate: 1,
+    // });
+    // db.currency.create({
+    //   currency: 'USD',
+    // });
+    // db.currency.create({
+    //   currency: 'EUR',
+    // });
+  });
 }
 
 function childProcess() {

@@ -200,7 +200,7 @@ class SettingsPage extends React.Component {
   handleKeyPress(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      this.handleClick(e);
+      this.props.isLoading === false ? this.handleClick(e) : null;
     }
   }
 
@@ -361,8 +361,8 @@ class SettingsPage extends React.Component {
                 !errorName &&
                 !errorSurname &&
                 !errorPassword ? (
-                    <div className={classes.textMessage}>{message}</div>
-                  ) : null}
+                  <div className={classes.textMessage}>{message}</div>
+                ) : null}
 
                 <button
                   className={classes.formSubmit}

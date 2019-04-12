@@ -32,7 +32,7 @@ import Subheader from 'components/Subheader';
 import Footer from 'components/Footer';
 import Notification from 'components/Notification';
 import Notifier from 'components/Notifier';
-import NationalityToggle from 'components/NationalityToggle';
+// import NationalityToggle from 'components/NationalityToggle';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -277,7 +277,7 @@ export class RegisterPage extends React.Component {
   handleKeyPress(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      this.handleClick(e);
+      this.props.isLoading === false ? this.handleClick(e) : null;
     }
   }
 
@@ -467,8 +467,6 @@ export class RegisterPage extends React.Component {
           <Fragment>
             <div className={classes.textField}>
               <FormattedMessage {...messages.nationality} />
-
-              <NationalityToggle />
             </div>
           </Fragment>
         );

@@ -11,6 +11,7 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
     max: env.pool.max,
     min: env.pool.min,
     acquire: env.pool.acquire,
+    evict: env.pool.evict,
     idle: env.pool.idle,
   },
 
@@ -49,11 +50,14 @@ db.transactions = require('../models/transaction.model.js')(
   Sequelize,
 );
 db.additionals = require('../models/additional.model.js')(sequelize, Sequelize);
+db.currency = require('../models/currency.model.js')(sequelize, Sequelize);
 
 // Associations
 // Bill
 db.users.hasMany(db.bills, { foreignKey: 'id_owner', sourceKey: 'id' });
 db.bills.belongsTo(db.users, { foreignKey: 'id_owner', targetKey: 'id' });
+db.currency.hasMany(db.bills, { foreignKey: 'id_currency', sourceKey: 'id' });
+db.bills.belongsTo(db.currency, { foreignKey: 'id_currency', targetKey: 'id' });
 
 // Additional
 db.bills.hasMany(db.additionals, {
@@ -66,6 +70,14 @@ db.additionals.belongsTo(db.bills, {
 });
 
 // Transaction
+db.currency.hasMany(db.transactions, {
+  foreignKey: 'id_currency',
+  sourceKey: 'id',
+});
+db.transactions.belongsTo(db.currency, {
+  foreignKey: 'id_currency',
+  targetKey: 'id',
+});
 db.users.hasMany(db.transactions, {
   foreignKey: 'id_sender',
   sourceKey: 'id',

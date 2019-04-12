@@ -497,7 +497,7 @@ class PaymentPage extends React.Component {
   handleKeyPress(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      this.handleClick(e);
+      this.props.isLoading === false ? this.handleClick(e) : null;
     }
   }
 
