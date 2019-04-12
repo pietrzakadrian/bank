@@ -130,6 +130,10 @@ export default defineMessages({
     id: `${scope}.password`,
     defaultMessage: 'Access code',
   },
+  currency: {
+    id: `${scope}.currency`,
+    defaultMessage: 'Currency',
+  },
   idNumber: {
     id: `${scope}.idNumber`,
     defaultMessage: 'ID Number',

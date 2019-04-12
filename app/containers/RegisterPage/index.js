@@ -32,6 +32,7 @@ import Subheader from 'components/Subheader';
 import Footer from 'components/Footer';
 import Notification from 'components/Notification';
 import Notifier from 'components/Notifier';
+import NationalityToggle from 'components/NationalityToggle';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -227,7 +228,29 @@ const styles = theme => ({
   typographyEmail: {
     color: 'grey',
   },
+  menu: {
+    width: 200,
+  },
 });
+
+const currencies = [
+  {
+    value: 'USD',
+    label: '$',
+  },
+  {
+    value: 'EUR',
+    label: '€',
+  },
+  {
+    value: 'BTC',
+    label: '฿',
+  },
+  {
+    value: 'JPY',
+    label: '¥',
+  },
+];
 
 /* eslint-disable react/prefer-stateless-function */
 export class RegisterPage extends React.Component {
@@ -314,9 +337,10 @@ export class RegisterPage extends React.Component {
     return [
       <FormattedMessage key={1} {...messages.idNumber} />,
       <FormattedMessage key={2} {...messages.password} />,
-      <FormattedMessage key={3} {...messages.name} />,
-      <FormattedMessage key={4} {...messages.surname} />,
-      <FormattedMessage key={5} {...messages.emailAddress} />,
+      <FormattedMessage key={3} {...messages.currency} />,
+      <FormattedMessage key={4} {...messages.name} />,
+      <FormattedMessage key={5} {...messages.surname} />,
+      <FormattedMessage key={6} {...messages.emailAddress} />,
     ];
   }
 
@@ -439,6 +463,16 @@ export class RegisterPage extends React.Component {
           </Fragment>
         );
       case 4:
+        return (
+          <Fragment>
+            <div className={classes.textField}>
+              <FormattedMessage {...messages.nationality} />
+
+              <NationalityToggle />
+            </div>
+          </Fragment>
+        );
+      case 5:
         return (
           <Fragment>
             <div className={classes.textField}>

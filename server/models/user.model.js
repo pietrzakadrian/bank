@@ -58,15 +58,6 @@ module.exports = (sequelize, Sequelize) => {
           },
         },
       },
-      nationality: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        validate: {
-          notEmpty: {
-            msg: 'The nationality is required.',
-          },
-        },
-      },
       date_registration: {
         type: Sequelize.DATE,
         allowNull: false,
