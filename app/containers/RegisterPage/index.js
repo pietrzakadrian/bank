@@ -233,25 +233,6 @@ const styles = theme => ({
   },
 });
 
-const currencies = [
-  {
-    value: 'USD',
-    label: '$',
-  },
-  {
-    value: 'EUR',
-    label: '€',
-  },
-  {
-    value: 'BTC',
-    label: '฿',
-  },
-  {
-    value: 'JPY',
-    label: '¥',
-  },
-];
-
 /* eslint-disable react/prefer-stateless-function */
 export class RegisterPage extends React.Component {
   constructor(props) {
@@ -312,7 +293,7 @@ export class RegisterPage extends React.Component {
           );
     }
 
-    if (this.props.activeStep === 5) {
+    if (this.props.activeStep === 4) {
       if (this.props.email && this.props.isDataProcessingAgreement) {
         this.props.onEnterEmail(this.props.email);
       } else if (!this.props.email && !this.props.isDataProcessingAgreement) {
@@ -339,8 +320,7 @@ export class RegisterPage extends React.Component {
       <FormattedMessage key={2} {...messages.password} />,
       <FormattedMessage key={3} {...messages.name} />,
       <FormattedMessage key={4} {...messages.surname} />,
-      <FormattedMessage key={5} {...messages.currency} />,
-      <FormattedMessage key={6} {...messages.emailAddress} />,
+      <FormattedMessage key={5} {...messages.emailAddress} />,
     ];
   }
 
@@ -463,14 +443,6 @@ export class RegisterPage extends React.Component {
           </Fragment>
         );
       case 4:
-        return (
-          <Fragment>
-            <div className={classes.textField}>
-              <FormattedMessage {...messages.currency} />
-            </div>
-          </Fragment>
-        );
-      case 5:
         return (
           <Fragment>
             <div className={classes.textField}>
@@ -653,7 +625,7 @@ export class RegisterPage extends React.Component {
                           </button>
                         ) : activeStep === 4 ? (
                           <button
-                            key={1}
+                            key={2}
                             type="button"
                             className={classes.formSubmit}
                             onClick={this.handleClick}

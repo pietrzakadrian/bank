@@ -6,6 +6,7 @@ stats.json
 server/config/env.config.js
 .vscode
 package-lock.json
+yarn.lock
 
 
 # Cruft

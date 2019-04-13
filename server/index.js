@@ -50,6 +50,7 @@ require('./routes/user.route.js')(app);
 require('./routes/transaction.route.js')(app);
 require('./routes/bill.route.js')(app);
 require('./routes/additional.route.js')(app);
+require('./routes/currency.route.js')(app);
 
 app.use(morgan('dev'));
 
