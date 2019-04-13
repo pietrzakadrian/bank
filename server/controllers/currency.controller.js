@@ -12,18 +12,25 @@ exports.getCurrency = (req, res) => {
     });
 };
 
+// todo: add security, because everybody user can change rate!
 exports.setCurrency = (req, res) => {
-  const id = req.body.currencyId;
-  const currency_exchange_rate = req.body.currencyExchangeRate;
-  const date_currency_exchange_rate_sync =
-    req.body.dateCurrencyExchangeRateSync;
+  const objects = req.body;
 
-  Currency.update(
-    {
-      currency_exchange_rate,
-      date_currency_exchange_rate_sync,
-    },
-    { where: { id } },
+  Promise.all(
+    objects.map(object =>
+      Currency.update(
+        {
+          currency_exchange_rate: object.currency_exchange_rate,
+          date_currency_exchange_rate_sync:
+            object.date_currency_exchange_rate_sync,
+        },
+        {
+          where: {
+            id: object.id,
+          },
+        },
+      ),
+    ),
   )
     .then(() => {
       res.status(200).json({ success: true });
