@@ -13,6 +13,7 @@ exports.getCurrency = (req, res) => {
 };
 
 // todo: add security, because everybody user can change rate!
+// https://api.exchangeratesapi.io/latest?base=PLN&symbols=USD%2CEUR
 exports.setCurrency = (req, res) => {
   const objects = req.body;
 
@@ -26,7 +27,7 @@ exports.setCurrency = (req, res) => {
         },
         {
           where: {
-            id: object.id,
+            currency: object.currency,
           },
         },
       ),
@@ -35,7 +36,7 @@ exports.setCurrency = (req, res) => {
     .then(() => {
       res.status(200).json({ success: true });
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(e => {
+      res.status(500).json({ error: 'Internal server error', e });
     });
 };

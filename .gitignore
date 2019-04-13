@@ -7,6 +7,7 @@ server/config/env.config.js
 .vscode
 package-lock.json
 yarn.lock
+yarn-error.log
 
 
 # Cruft
