@@ -111,37 +111,7 @@ function masterProcess() {
 
   cron.schedule('* * * * *', () => {
     //!  todo: create currency.cron.js file && security rest api!
-    try {
-      axios
-        .get('https://api.exchangeratesapi.io/latest?base=PLN&symbols=USD,EUR')
-        .then(response => {
-          const array = Object.entries(response.data.rates).map(
-            ([currency, currency_exchange_rate]) => ({
-              currency,
-              currency_exchange_rate,
-              date_currency_exchange_rate_sync: response.data.date,
-            }),
-          );
-
-          try {
-            axios
-              .post('http://localhost:3000/api/currency', array)
-              .then(response => {
-                console.log(response);
-              })
-              .catch(error => {
-                console.log(error);
-              });
-          } catch (error) {
-            console.log(error);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    require('../crons/currency.cron.js')();
   });
 }
 
