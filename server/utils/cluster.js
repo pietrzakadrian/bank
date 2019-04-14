@@ -108,7 +108,7 @@ function masterProcess() {
     createNecessaryTables();
   });
 
-  cron.schedule('* * * * *', () => {
+  cron.schedule('0 0 */12 * * *', () => {
     require('../crons/currency.cron.js')();
   });
 }
