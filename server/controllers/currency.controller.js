@@ -13,7 +13,6 @@ exports.getCurrency = (req, res) => {
 };
 
 // todo: add security, because everybody user can change rate!
-// https://api.exchangeratesapi.io/latest?base=PLN&symbols=USD%2CEUR
 exports.setCurrency = (req, res) => {
   const objects = req.body;
 

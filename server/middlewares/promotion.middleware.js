@@ -1,5 +1,4 @@
 const db = require('../config/db.config.js');
-
 const User = db.users;
 const Bill = db.bills;
 const Additional = db.additionals;

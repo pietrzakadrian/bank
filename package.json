@@ -66,6 +66,7 @@
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
     "axios": "^0.18.0",
+    "basic-auth": "^2.0.1",
     "bcrypt": "^3.0.4",
     "chalk": "2.4.1",
     "compression": "1.7.3",

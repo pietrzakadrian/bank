@@ -1,4 +1,5 @@
 const axios = require('axios');
+const env = require('../config/env.config.js');
 
 module.exports = function() {
   try {
@@ -14,9 +15,13 @@ module.exports = function() {
         );
 
         try {
-          // todo: change address!
           axios
-            .post('http://localhost:3000/api/currency', array)
+            .post('http://localhost:3000/api/currency', array, {
+              auth: {
+                username: env.adminAccount.login,
+                password: env.adminAccount.password,
+              },
+            })
             .then(() => {
               console.log('currency cron: success!');
             })

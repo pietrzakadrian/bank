@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
-const axios = require('axios');
 const cron = require('node-cron');
 const net = require('net');
 const farmhash = require('farmhash');
@@ -110,7 +109,6 @@ function masterProcess() {
   });
 
   cron.schedule('* * * * *', () => {
-    //!  todo: create currency.cron.js file && security rest api!
     require('../crons/currency.cron.js')();
   });
 }
