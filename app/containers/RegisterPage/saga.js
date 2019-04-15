@@ -11,6 +11,7 @@ import {
   ENTER_NAME,
   ENTER_SURNAME,
   ENTER_EMAIL,
+  ENTER_CURRENCY,
   LOAD_CURRENCY,
 } from './constants';
 import messages from './messages';
@@ -33,6 +34,7 @@ import {
   successSurnameAction,
   errorSurnameAction,
   successEmailAction,
+  enterCurrencySuccessAction,
   errorEmailAction,
   successRegisterAction,
   errorRegisterAction,
@@ -182,6 +184,15 @@ export function* loadCurrency() {
   }
 }
 
+export function* enterCurrency() {
+  const currencyId = yield select(makeCurrencyIdSelector());
+
+  if (currencyId) {
+    yield put(enterCurrencySuccessAction());
+    yield put(registerStepNextAction());
+  }
+}
+
 function* register() {
   const login = yield select(makeIdSelector());
   const password = yield select(makePasswordSelector());
@@ -240,4 +251,5 @@ export default function* registerPageSaga() {
   yield takeLatest(ENTER_SURNAME, isSurname);
   yield takeLatest(ENTER_EMAIL, isEmail);
   yield takeLatest(LOAD_CURRENCY, loadCurrency);
+  yield takeLatest(ENTER_CURRENCY, enterCurrency);
 }

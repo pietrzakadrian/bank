@@ -40,7 +40,8 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onCurrencyToggle: evt => dispatch(changeCurrencyAction(evt.target.value)),
+    onCurrencyToggle: evt =>
+      dispatch(changeCurrencyAction(parseInt(evt.target.value))),
     dispatch,
   };
 }

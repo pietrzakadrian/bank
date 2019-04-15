@@ -51,7 +51,7 @@ export const initialState = fromJS({
   surname: '',
   email: '',
   currency: null,
-  currencyId: null,
+  currencyId: 1,
   isDataProcessingAgreement: false,
   errorDataProcessingAgreement: '',
   error: '',
@@ -108,9 +108,9 @@ function registerPageReducer(state = initialState, action) {
     case LOAD_CURRENCY_ERROR:
       return state.set('error', action.error);
     case CHANGE_CURRENCY:
-      return state.set('currencyId', action.currency);
+      return state.set('currencyId', action.currencyId);
     case ENTER_CURRENCY:
-      return state.set('currencyId', action.currency);
+      return state.set('currencyId', action.currencyId);
     case CHANGE_EMAIL:
       return state.set('email', action.email).set('error', '');
     case ENTER_EMAIL:

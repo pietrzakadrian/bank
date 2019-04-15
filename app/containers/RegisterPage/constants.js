@@ -31,9 +31,9 @@ export const LOAD_CURRENCY = 'app/RegisterPage/LOAD_CURRENCY';
 export const LOAD_CURRENCY_SUCCESS = 'app/RegisterPage/LOAD_CURRENCY_SUCCESS';
 export const LOAD_CURRENCY_ERROR = 'app/RegisterPage/LOAD_CURRENCY_ERROR';
 export const CHANGE_CURRENCY = 'app/RegisterPage/CHANGE_CURRENCY';
-export const ENTER_CURRENCY = 'app/RegisterPage/EMTER_CURRENCY';
+export const ENTER_CURRENCY = 'app/RegisterPage/ENTER_CURRENCY';
 export const ENTER_CURRENCY_SUCCESS = 'app/RegisterPage/ENTER_CURRENCY_SUCCESS';
-export const ENTER_CURRENY_ERROR = 'app/RegisterPage/ENTER_CURRENY_ERROR';
+export const ENTER_CURRENCY_ERROR = 'app/RegisterPage/ENTER_CURRENCY_ERROR';
 
 export const CHANGE_EMAIL = 'app/RegisterPage/CHANGE_EMAIL';
 export const ENTER_EMAIL = 'app/RegisterPage/ENTER_EMAIL';

@@ -528,6 +528,8 @@ export class RegisterPage extends React.Component {
     const { classes, activeStep, onRegisterStepBack, isLoading } = this.props;
     const steps = this.getSteps();
 
+    console.log(this.props);
+
     return (
       <Fragment>
         <FormattedMessage {...messages.helmetRegisterTitle}>
@@ -662,7 +664,7 @@ function mapDispatchToProps(dispatch) {
     onEnterSurname: surname => dispatch(enterSurnameAction(surname)),
     onEnterEmail: email => dispatch(enterEmailAction(email)),
     onLoadCurrency: () => dispatch(loadCurrencyAction()),
-    onEnterCurrency: currencyId => enterCurrencyAction(currencyId),
+    onEnterCurrency: currencyId => dispatch(enterCurrencyAction(currencyId)),
     isEmptyId: error => dispatch(emptyIdAction(error)),
     isEmptyPassword: error => dispatch(emptyPasswordAction(error)),
     isEmptyName: error => dispatch(emptyNameAction(error)),

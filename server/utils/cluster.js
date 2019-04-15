@@ -12,14 +12,14 @@ function createNecessaryTables() {
   try {
     Promise.all([
       db.currency.create({
-        currency: 'PLN',
-        date_currency_exchange_rate_sync: new Date(),
-        main_currency: 1,
-      }),
-      db.currency.create({
         currency: 'USD',
         date_currency_exchange_rate_sync: new Date(),
         main_currency: 0,
+      }),
+      db.currency.create({
+        currency: 'PLN',
+        date_currency_exchange_rate_sync: new Date(),
+        main_currency: 1,
       }),
       db.currency.create({
         currency: 'EUR',

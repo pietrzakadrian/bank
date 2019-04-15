@@ -21,7 +21,7 @@ import {
   LOAD_CURRENCY_SUCCESS,
   ENTER_CURRENCY,
   ENTER_CURRENCY_SUCCESS,
-  ENTER_CURRENY_ERROR,
+  ENTER_CURRENCY_ERROR,
   CHANGE_NAME,
   ENTER_NAME,
   ENTER_NAME_SUCCESS,
@@ -76,6 +76,19 @@ export function enterCurrencyAction(currencyId) {
   return {
     type: ENTER_CURRENCY,
     currencyId,
+  };
+}
+
+export function enterCurrencySuccessAction() {
+  return {
+    type: ENTER_CURRENCY_SUCCESS,
+  };
+}
+
+export function enterCurrencyErrorAction(error) {
+  return {
+    type: ENTER_CURRENCY_ERROR,
+    error,
   };
 }
 
