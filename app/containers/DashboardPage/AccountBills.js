@@ -30,6 +30,7 @@ import { getAccountBillsAction } from './actions';
 import {
   makeAvailableFundsSelector,
   makeAccountBillsSelector,
+  makeCurrencySelector,
 } from './selectors';
 
 // Import Styles
@@ -97,7 +98,7 @@ class AccountBills extends Component {
   }
 
   render() {
-    const { classes, availableFunds, accountBills } = this.props;
+    const { classes, availableFunds, accountBills, currency } = this.props;
     const socket = socketIOClient('/');
 
     try {
@@ -133,7 +134,7 @@ class AccountBills extends Component {
           </Typography>
           <Table>
             <TableBody>
-              {availableFunds && accountBills ? (
+              {availableFunds && accountBills && currency ? (
                 <TableRow>
                   <TableCell
                     className={classes.tableCell}
@@ -155,7 +156,7 @@ class AccountBills extends Component {
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
                         .replace('.', ',')}
                     </span>{' '}
-                    <FormattedMessage {...messages.currency} />
+                    {currency}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -182,6 +183,7 @@ AccountBills.propTypes = {
 const mapStateToProps = createStructuredSelector({
   availableFunds: makeAvailableFundsSelector(),
   accountBills: makeAccountBillsSelector(),
+  currency: makeCurrencySelector(),
   userId: makeUserIdSelector(),
 });
 

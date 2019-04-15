@@ -11,6 +11,9 @@ import {
   GET_SURNAME,
   GET_SURNAME_SUCCESS,
   GET_SURNAME_ERROR,
+  GET_CURRENCY,
+  GET_CURRENCY_SUCCESS,
+  GET_CURRENCY_ERROR,
   GET_LAST_PRESENT_LOGGED,
   GET_LAST_PRESENT_LOGGED_SUCCESS,
   GET_LAST_PRESENT_LOGGED_ERROR,
@@ -76,6 +79,26 @@ export function getSurnameSuccessAction(surname) {
 export function getSurnameErrorAction(error) {
   return {
     type: GET_SURNAME_ERROR,
+    error,
+  };
+}
+
+export function getCurrencyAction() {
+  return {
+    type: GET_CURRENCY,
+  };
+}
+
+export function getCurrencySuccessAction(currency) {
+  return {
+    type: GET_CURRENCY_SUCCESS,
+    currency,
+  };
+}
+
+export function getCurrencyErrorAction(error) {
+  return {
+    type: GET_CURRENCY_ERROR,
     error,
   };
 }

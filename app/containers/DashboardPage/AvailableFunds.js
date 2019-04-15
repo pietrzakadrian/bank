@@ -22,10 +22,12 @@ import messages from './messages';
 import {
   getAvailableFundsAction,
   getAccountBalanceHistoryAction,
+  getCurrencyAction,
 } from './actions';
 import {
   makeAvailableFundsSelector,
   makeAccountBalanceHistorySelector,
+  makeCurrencySelector,
 } from './selectors';
 import { makeUserIdSelector } from '../App/selectors';
 
@@ -70,7 +72,12 @@ class AvailableFunds extends Component {
   }
 
   render() {
-    const { classes, availableFunds, accountBalanceHistory } = this.props;
+    const {
+      classes,
+      availableFunds,
+      accountBalanceHistory,
+      currency,
+    } = this.props;
     const accountBalanceHistoryArray = JSON.parse(`[${accountBalanceHistory}]`);
     const socket = socketIOClient('/');
 
@@ -84,7 +91,7 @@ class AvailableFunds extends Component {
 
     return (
       <Paper className={classes.root} elevation={1}>
-        {availableFunds && accountBalanceHistory ? (
+        {availableFunds && accountBalanceHistory && currency ? (
           <Fragment>
             <div>
               <Typography variant="subtitle1">
@@ -101,7 +108,7 @@ class AvailableFunds extends Component {
                   variant="subtitle1"
                   className={classes.typographyMain}
                 >
-                  <FormattedMessage {...messages.currency} />
+                  {currency}
                 </Typography>
               </span>
               <Trend
@@ -140,6 +147,7 @@ AvailableFunds.propTypes = {
 const mapStateToProps = createStructuredSelector({
   availableFunds: makeAvailableFundsSelector(),
   accountBalanceHistory: makeAccountBalanceHistorySelector(),
+  currency: makeCurrencySelector(),
   userId: makeUserIdSelector(),
 });
 
@@ -147,7 +155,8 @@ function mapDispatchToProps(dispatch) {
   return {
     getUserdata: () => {
       dispatch(getAvailableFundsAction()) &&
-        dispatch(getAccountBalanceHistoryAction());
+        dispatch(getAccountBalanceHistoryAction()) &&
+        dispatch(getCurrencyAction());
     },
   };
 }

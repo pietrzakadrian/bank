@@ -72,6 +72,11 @@ const makeIncomingTransfersSumSelector = () =>
 const makeErrorSelector = () =>
   createSelector(selectDashboardPageDomain, substate => substate.get('error'));
 
+const makeCurrencySelector = () =>
+  createSelector(selectDashboardPageDomain, substate =>
+    substate.get('currency'),
+  );
+
 const makeSelectDashboardPage = () =>
   createSelector(selectDashboardPageDomain, substate => substate.toJS());
 
@@ -89,4 +94,5 @@ export {
   makeErrorSelector,
   makeOutgoingTransfersSumSelector,
   makeIncomingTransfersSumSelector,
+  makeCurrencySelector,
 };

@@ -4,6 +4,7 @@ const db = require('../config/db.config.js');
 const Bill = db.bills;
 const Additional = db.additionals;
 const User = db.users;
+const Currency = db.currency;
 const Op = db.Sequelize.Op;
 
 // Return All User's Bill Data
@@ -53,6 +54,13 @@ exports.getUserdata = (req, res) => {
           'incoming_transfers_sum',
           'outgoing_transfers_sum',
         ],
+      },
+      {
+        model: Currency,
+        where: {
+          id: db.Sequelize.col('bill.id_currency'),
+        },
+        attributes: ['currency'],
       },
     ],
     where: { id_owner },

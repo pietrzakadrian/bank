@@ -1,12 +1,13 @@
 import decode from 'jwt-decode';
 import { push } from 'connected-react-router/immutable';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 import request from 'utils/request';
 import { successLogoutAction } from 'components/App/Header/actions';
 import {
   GET_AVAILABLE_FUNDS,
   GET_ACCOUNT_BALANCE_HISTORY,
   GET_ACCOUNT_BILLS,
+  GET_CURRENCY,
   GET_INCOMING_TRANSFERS_SUM,
   GET_OUTGOING_TRANSFERS_SUM,
   GET_RECENT_TRANSACTIONS_RECIPIENT,
@@ -34,11 +35,14 @@ import {
   getNameErrorAction,
   getSurnameSuccessAction,
   getSurnameErrorAction,
+  getCurrencySuccessAction,
+  getCurrencyErrorAction,
   getLastSuccessfulLoggedSuccessAction,
   getLastSuccessfulLoggedErrorAction,
   getLastPresentLoggedSuccessAction,
   getLastPresentLoggedErrorAction,
 } from './actions';
+import { makeCurrencySelector } from './selectors';
 
 function* getToken() {
   // Retrieves the user token from localStorage
@@ -53,6 +57,7 @@ export function* getUserData() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
   const requestURL = `/api/bills/${token.id}`;
+  const currency = yield select(makeCurrencySelector());
 
   try {
     const response = yield call(request, requestURL, {
@@ -70,11 +75,19 @@ export function* getUserData() {
 
     response[0].additionals[0].account_balance_history
       ? yield put(
-        getAccountBalanceHistorySuccessAction(
-          response[0].additionals[0].account_balance_history,
-        ),
-      )
+          getAccountBalanceHistorySuccessAction(
+            response[0].additionals[0].account_balance_history,
+          ),
+        )
       : yield put(getAccountBalanceHistoryErrorAction('error'));
+
+    console.log(!currency);
+
+    if (!currency) {
+      response[0].currency.currency
+        ? yield put(getCurrencySuccessAction(response[0].currency.currency))
+        : yield put(getCurrencyErrorAction('error'));
+    }
   } catch (err) {
     yield put(successLogoutAction()), yield put(push('/login'));
   }
@@ -120,18 +133,18 @@ export function* getTransfersSum() {
 
     response[0].additionals[0].incoming_transfers_sum || response
       ? yield put(
-        getIncomingTransfersSumSuccessAction(
-          response[0].additionals[0].incoming_transfers_sum,
-        ),
-      )
+          getIncomingTransfersSumSuccessAction(
+            response[0].additionals[0].incoming_transfers_sum,
+          ),
+        )
       : yield put(getIncomingTransfersSumErrorAction('error'));
 
     response[0].additionals[0].outgoing_transfers_sum || response
       ? yield put(
-        getOutgoingTransfersSumSuccessAction(
-          response[0].additionals[0].outgoing_transfers_sum,
-        ),
-      )
+          getOutgoingTransfersSumSuccessAction(
+            response[0].additionals[0].outgoing_transfers_sum,
+          ),
+        )
       : yield put(getOutgoingTransfersSumErrorAction('error'));
   } catch (err) {
     yield put(successLogoutAction());
@@ -238,7 +251,7 @@ export function* getUserInformation() {
 // Individual exports for testing
 export default function* dashboardPageSaga() {
   yield takeLatest(
-    GET_AVAILABLE_FUNDS || GET_ACCOUNT_BALANCE_HISTORY,
+    GET_AVAILABLE_FUNDS || GET_ACCOUNT_BALANCE_HISTORY || GET_CURRENCY,
     getUserData,
   );
 

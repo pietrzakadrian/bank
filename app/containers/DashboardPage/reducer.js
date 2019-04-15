@@ -45,6 +45,9 @@ import {
   GET_INCOMING_TRANSFERS_SUM,
   GET_INCOMING_TRANSFERS_SUM_SUCCESS,
   GET_INCOMING_TRANSFERS_SUM_ERROR,
+  GET_CURRENCY,
+  GET_CURRENCY_SUCCESS,
+  GET_CURRENCY_ERROR,
 } from './constants';
 import {
   ENTER_NEW_NAME_SUCCESS,
@@ -63,6 +66,7 @@ export const initialState = fromJS({
   recentTransactionsRecipient: null,
   outgoingTransfersSum: null,
   incomingTransfersSum: null,
+  currency: null,
   error: null,
 });
 
@@ -72,6 +76,7 @@ function dashboardPageReducer(state = initialState, action) {
       return state.set('name', null);
     case ENTER_NEW_SURNAME_SUCCESS:
       return state.set('surname', null);
+
     case NEW_NOTIFICATION:
       return state
         .set('accountBills', null)
@@ -95,8 +100,15 @@ function dashboardPageReducer(state = initialState, action) {
         .set('recentTransactionsRecipient', null)
         .set('outgoingTransfersSum', null)
         .set('incomingTransfersSum', null)
-        .set('error', null);
+        .set('error', null)
+        .set('currency', null);
 
+    case GET_CURRENCY:
+      return state;
+    case GET_CURRENCY_SUCCESS:
+      return state.set('currency', action.currency);
+    case GET_CURRENCY_ERROR:
+      return state.set('error', action.error);
     case GET_NAME:
       return state;
     case GET_NAME_SUCCESS:
