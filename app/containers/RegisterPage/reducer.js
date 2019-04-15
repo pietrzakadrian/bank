@@ -26,6 +26,11 @@ import {
   ENTER_SURNAME_SUCCESS,
   ENTER_SURNAME_ERROR,
   EMPTY_SURNAME_ERROR,
+  LOAD_CURRENCY,
+  LOAD_CURRENCY_SUCCESS,
+  LOAD_CURRENCY_ERROR,
+  CHANGE_CURRENCY,
+  ENTER_CURRENCY,
   CHANGE_EMAIL,
   ENTER_EMAIL,
   ENTER_EMAIL_SUCCESS,
@@ -45,6 +50,8 @@ export const initialState = fromJS({
   name: '',
   surname: '',
   email: '',
+  currency: null,
+  currencyId: null,
   isDataProcessingAgreement: false,
   errorDataProcessingAgreement: '',
   error: '',
@@ -94,6 +101,16 @@ function registerPageReducer(state = initialState, action) {
       return state.set('error', action.error).set('isLoading', false);
     case EMPTY_SURNAME_ERROR:
       return state.set('error', action.error);
+    case LOAD_CURRENCY:
+      return state;
+    case LOAD_CURRENCY_SUCCESS:
+      return state.set('currency', action.currency);
+    case LOAD_CURRENCY_ERROR:
+      return state.set('error', action.error);
+    case CHANGE_CURRENCY:
+      return state.set('currencyId', action.currency);
+    case ENTER_CURRENCY:
+      return state.set('currencyId', action.currency);
     case CHANGE_EMAIL:
       return state.set('email', action.email).set('error', '');
     case ENTER_EMAIL:
@@ -150,10 +167,15 @@ function registerPageReducer(state = initialState, action) {
         return state
           .set('activeStep', state.get('activeStep') - 1)
           .set('surname', '')
-          .set('error', '')
-          .set('isDataProcessingAgreement', false);
+          .set('error', '');
       }
       if (state.get('activeStep') === 5) {
+        return state
+          .set('activeStep', state.get('activeStep') - 1)
+          .set('currencyId', '')
+          .set('error', '');
+      }
+      if (state.get('activeStep') === 6) {
         return state
           .set('activeStep', state.get('activeStep') - 1)
           .set('email', '')

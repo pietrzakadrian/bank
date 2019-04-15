@@ -11,6 +11,7 @@ import {
   ENTER_NAME,
   ENTER_SURNAME,
   ENTER_EMAIL,
+  LOAD_CURRENCY,
 } from './constants';
 import messages from './messages';
 import {
@@ -19,6 +20,7 @@ import {
   makePasswordSelector,
   makeNameSelector,
   makeSurnameSelector,
+  makeCurrencyIdSelector,
 } from './selectors';
 
 import {
@@ -35,6 +37,8 @@ import {
   successRegisterAction,
   errorRegisterAction,
   registerStepNextAction,
+  loadCurrencyErrorAction,
+  loadCurrencySuccessAction,
 } from './actions';
 
 export function* isLogin() {
@@ -158,16 +162,36 @@ export function* isEmail() {
   }
 }
 
+export function* loadCurrency() {
+  const requestURL = `/api/currency`;
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const currencyData = response.map(({ ...rest }) => [rest.id]);
+    const mergedArray = [].concat.apply([], currencyData);
+
+    yield put(loadCurrencySuccessAction(mergedArray));
+  } catch (err) {
+    yield put(loadCurrencyErrorAction(err));
+  }
+}
+
 function* register() {
   const login = yield select(makeIdSelector());
   const password = yield select(makePasswordSelector());
   const name = yield select(makeNameSelector());
   const surname = yield select(makeSurnameSelector());
   const email = yield select(makeEmailSelector());
+  const currencyId = yield select(makeCurrencyIdSelector());
   const requestURL = `/api/users/register`;
 
   try {
-    // Call our request helper (see 'utils/request')
     const response = yield call(request, requestURL, {
       method: 'POST',
       headers: {
@@ -179,6 +203,7 @@ function* register() {
         password,
         name,
         surname,
+        currencyId,
         email,
       }),
     });
@@ -189,7 +214,7 @@ function* register() {
           message: <FormattedMessage {...messages.succesCreated} />,
           options: {
             variant: 'success',
-            autoHideDuration: 2000,
+            autoHideDuration: 3500,
           },
         }),
       );
@@ -214,4 +239,5 @@ export default function* registerPageSaga() {
   yield takeLatest(ENTER_NAME, isName);
   yield takeLatest(ENTER_SURNAME, isSurname);
   yield takeLatest(ENTER_EMAIL, isEmail);
+  yield takeLatest(LOAD_CURRENCY, loadCurrency);
 }

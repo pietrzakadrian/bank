@@ -32,7 +32,7 @@ import Subheader from 'components/Subheader';
 import Footer from 'components/Footer';
 import Notification from 'components/Notification';
 import Notifier from 'components/Notifier';
-// import NationalityToggle from 'components/NationalityToggle';
+import CurrencyToggle from 'components/CurrencyToggle';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -48,6 +48,8 @@ import {
   makeIsDataProcessingAgreementSelector,
   makeErrorDataProcessingAgreementSelector,
   makeIsLoadingSelector,
+  makeCurrencyIdSelector,
+  makeCurrencySelector,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -73,6 +75,8 @@ import {
   registerStepBackAction,
   toggleDataProcessingAgreementAction,
   errorDataProcessingAgreementAction,
+  loadCurrencyAction,
+  enterCurrencyAction,
 } from './actions';
 
 // Import Styles
@@ -246,6 +250,7 @@ export class RegisterPage extends React.Component {
 
   componentDidMount() {
     if (this.Auth.loggedIn()) this.props.history.push('/dashboard');
+    this.props.onLoadCurrency();
   }
 
   componentDidUpdate() {
@@ -294,6 +299,10 @@ export class RegisterPage extends React.Component {
     }
 
     if (this.props.activeStep === 4) {
+      this.props.onEnterCurrency(this.props.currencyId);
+    }
+
+    if (this.props.activeStep === 5) {
       if (this.props.email && this.props.isDataProcessingAgreement) {
         this.props.onEnterEmail(this.props.email);
       } else if (!this.props.email && !this.props.isDataProcessingAgreement) {
@@ -320,7 +329,8 @@ export class RegisterPage extends React.Component {
       <FormattedMessage key={2} {...messages.password} />,
       <FormattedMessage key={3} {...messages.name} />,
       <FormattedMessage key={4} {...messages.surname} />,
-      <FormattedMessage key={5} {...messages.emailAddress} />,
+      <FormattedMessage key={5} {...messages.currency} />,
+      <FormattedMessage key={6} {...messages.emailAddress} />,
     ];
   }
 
@@ -446,6 +456,16 @@ export class RegisterPage extends React.Component {
         return (
           <Fragment>
             <div className={classes.textField}>
+              <FormattedMessage {...messages.currency} />
+            </div>
+
+            <CurrencyToggle />
+          </Fragment>
+        );
+      case 5:
+        return (
+          <Fragment>
+            <div className={classes.textField}>
               <FormattedMessage {...messages.emailAddress} />
             </div>
 
@@ -525,7 +545,7 @@ export class RegisterPage extends React.Component {
             <div className={classes.stepperRoot}>
               <MobileStepper
                 variant="dots"
-                steps={5}
+                steps={6}
                 position="static"
                 activeStep={activeStep}
                 classes={{
@@ -570,74 +590,17 @@ export class RegisterPage extends React.Component {
                         </button>
                       </Fragment>
                     ) : (
-                      [
-                        activeStep === 0 ? (
-                          <button
-                            type="button"
-                            key={1}
-                            className={classes.formSubmit}
-                            onClick={this.handleClick}
-                            disabled={isLoading}
-                          >
-                            <span className={classes.buttonText}>
-                              <FormattedMessage {...messages.nextText} />
-                            </span>
-                            <NavigateNext />
-                          </button>
-                        ) : activeStep === 1 ? (
-                          <button
-                            key={1}
-                            type="button"
-                            className={classes.formSubmit}
-                            onClick={this.handleClick}
-                            disabled={isLoading}
-                          >
-                            <span className={classes.buttonText}>
-                              <FormattedMessage {...messages.nextText} />
-                            </span>
-                            <NavigateNext />
-                          </button>
-                        ) : activeStep === 2 ? (
-                          <button
-                            key={1}
-                            type="button"
-                            className={classes.formSubmit}
-                            onClick={this.handleClick}
-                            disabled={isLoading}
-                          >
-                            <span className={classes.buttonText}>
-                              <FormattedMessage {...messages.nextText} />
-                            </span>
-                            <NavigateNext />
-                          </button>
-                        ) : activeStep === 3 ? (
-                          <button
-                            key={1}
-                            type="button"
-                            className={classes.formSubmit}
-                            onClick={this.handleClick}
-                            disabled={isLoading}
-                          >
-                            <span className={classes.buttonText}>
-                              <FormattedMessage {...messages.nextText} />
-                            </span>
-                            <NavigateNext />
-                          </button>
-                        ) : activeStep === 4 ? (
-                          <button
-                            key={2}
-                            type="button"
-                            className={classes.formSubmit}
-                            onClick={this.handleClick}
-                            disabled={isLoading}
-                          >
-                            <span className={classes.buttonText}>
-                              <FormattedMessage {...messages.nextText} />
-                            </span>
-                            <NavigateNext />
-                          </button>
-                        ) : null,
-                      ]
+                      <button
+                        type="button"
+                        className={classes.formSubmit}
+                        onClick={this.handleClick}
+                        disabled={isLoading}
+                      >
+                        <span className={classes.buttonText}>
+                          <FormattedMessage {...messages.nextText} />
+                        </span>
+                        <NavigateNext />
+                      </button>
                     )}
 
                     {activeStep !== 0 ? (
@@ -677,6 +640,8 @@ const mapStateToProps = createStructuredSelector({
   name: makeNameSelector(),
   surname: makeSurnameSelector(),
   email: makeEmailSelector(),
+  currencyId: makeCurrencyIdSelector(),
+  currency: makeCurrencySelector(),
   isDataProcessingAgreement: makeIsDataProcessingAgreementSelector(),
   isErrorDataProcessingAgreement: makeErrorDataProcessingAgreementSelector(),
   error: makeErrorSelector(),
@@ -696,6 +661,8 @@ function mapDispatchToProps(dispatch) {
     onEnterName: name => dispatch(enterNameAction(name)),
     onEnterSurname: surname => dispatch(enterSurnameAction(surname)),
     onEnterEmail: email => dispatch(enterEmailAction(email)),
+    onLoadCurrency: () => dispatch(loadCurrencyAction()),
+    onEnterCurrency: currencyId => enterCurrencyAction(currencyId),
     isEmptyId: error => dispatch(emptyIdAction(error)),
     isEmptyPassword: error => dispatch(emptyPasswordAction(error)),
     isEmptyName: error => dispatch(emptyNameAction(error)),

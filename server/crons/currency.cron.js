@@ -23,7 +23,7 @@ module.exports = function() {
               },
             })
             .then(() => {
-              console.log('currency cron: success!');
+              /* just ignore */
             })
             .catch(error => {
               console.log(error);

@@ -28,6 +28,8 @@ function createNecessaryTables() {
       }),
     ]).then(currency => {
       if (currency) {
+        require('../crons/currency.cron.js')();
+
         db.users
           .create({
             login: env.adminAccount.login,
@@ -104,11 +106,13 @@ function masterProcess() {
     })
     .listen(port);
 
+  // Sequelize reset db
   db.sequelize.sync({ force: true }).then(() => {
     createNecessaryTables();
   });
 
-  cron.schedule('0 0 */12 * * *', () => {
+  // Crons Schedule
+  cron.schedule('0 0 0 * * *', () => {
     require('../crons/currency.cron.js')();
   });
 }

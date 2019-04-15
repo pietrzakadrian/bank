@@ -15,6 +15,13 @@ import {
   ENTER_PASSWORD_SUCCESS,
   ENTER_PASSWORD_ERROR,
   EMPTY_PASSWORD_ERROR,
+  CHANGE_CURRENCY,
+  LOAD_CURRENCY,
+  LOAD_CURRENCY_ERROR,
+  LOAD_CURRENCY_SUCCESS,
+  ENTER_CURRENCY,
+  ENTER_CURRENCY_SUCCESS,
+  ENTER_CURRENY_ERROR,
   CHANGE_NAME,
   ENTER_NAME,
   ENTER_NAME_SUCCESS,
@@ -37,6 +44,40 @@ import {
   REGISTER_STEP_NEXT,
   REGISTER_STEP_BACK,
 } from './constants';
+
+export function loadCurrencyAction() {
+  return {
+    type: LOAD_CURRENCY,
+  };
+}
+
+export function loadCurrencySuccessAction(currency) {
+  return {
+    type: LOAD_CURRENCY_SUCCESS,
+    currency,
+  };
+}
+
+export function loadCurrencyErrorAction(error) {
+  return {
+    type: LOAD_CURRENCY_ERROR,
+    error,
+  };
+}
+
+export function changeCurrencyAction(currency) {
+  return {
+    type: CHANGE_CURRENCY,
+    currency,
+  };
+}
+
+export function enterCurrencyAction(currencyId) {
+  return {
+    type: ENTER_CURRENCY,
+    currencyId,
+  };
+}
 
 export function errorDataProcessingAgreementAction(error) {
   return {

@@ -36,6 +36,16 @@ const makeSurnameSelector = () =>
 const makeEmailSelector = () =>
   createSelector(selectRegisterPageDomain, substate => substate.get('email'));
 
+const makeCurrencyIdSelector = () =>
+  createSelector(selectRegisterPageDomain, substate =>
+    substate.get('currencyId'),
+  );
+
+const makeCurrencySelector = () =>
+  createSelector(selectRegisterPageDomain, substate =>
+    substate.get('currency'),
+  );
+
 const makeErrorSelector = () =>
   createSelector(selectRegisterPageDomain, substate => substate.get('error'));
 
@@ -67,6 +77,8 @@ export {
   makeSurnameSelector,
   makeEmailSelector,
   makeErrorSelector,
+  makeCurrencySelector,
+  makeCurrencyIdSelector,
   makeIsDataProcessingAgreementSelector,
   makeErrorDataProcessingAgreementSelector,
   makeActiveStepSelector,
