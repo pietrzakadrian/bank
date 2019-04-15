@@ -51,8 +51,11 @@
   border-width: 0 2px 2px 0;
   display: inline-block;
   padding: 3px;
+  -ms-transform: rotate(45deg);
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+  -webkit-transition: 0.3s ease;
+  -o-transition: 0.3s ease;
   transition: 0.3s ease;
 }
 
@@ -66,9 +69,13 @@
 }
 
 .select__locale select:focus ~ .select_arrow--locale {
+  -webkit-transform: translateY(40%) rotate(225deg);
+  -ms-transform: translateY(40%) rotate(225deg);
   transform: translateY(40%) rotate(225deg);
 }
 
 .select__locale select:not(:hover) ~ .select_arrow--locale {
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
