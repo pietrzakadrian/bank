@@ -658,7 +658,7 @@ function mapDispatchToProps(dispatch) {
     onChangeName: e => dispatch(changeNameAction(e.target.value)),
     onChangeSurname: e => dispatch(changeSurnameAction(e.target.value)),
     onChangeEmail: e => dispatch(changeEmailAction(e.target.value)),
-    onEnterId: id => dispatch(enterIdAction(id)),
+    onEnterId: id => dispatch(enterIdAction(parseInt(id))),
     onEnterPassword: password => dispatch(enterPasswordAction(password)),
     onEnterName: name => dispatch(enterNameAction(name)),
     onEnterSurname: surname => dispatch(enterSurnameAction(surname)),

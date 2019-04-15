@@ -65,10 +65,10 @@ export function loadCurrencyErrorAction(error) {
   };
 }
 
-export function changeCurrencyAction(currency) {
+export function changeCurrencyAction(currencyId) {
   return {
     type: CHANGE_CURRENCY,
-    currency,
+    currencyId,
   };
 }
 

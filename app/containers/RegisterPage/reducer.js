@@ -139,7 +139,10 @@ function registerPageReducer(state = initialState, action) {
         .set('surname', '')
         .set('email', '')
         .set('error', '')
-        .set('isDataProcessingAgreement', false);
+        .set('isDataProcessingAgreement', false)
+        .set('currency', null)
+        .set('currencyId', 1)
+        .set('errorDataProcessingAgreement', '');
     case REGISTER_FAILURE:
       return state.set('error', action.error);
     case REGISTER_STEP_NEXT:

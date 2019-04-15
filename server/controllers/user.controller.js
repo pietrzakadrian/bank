@@ -70,7 +70,7 @@ exports.register = (req, res) => {
             id_owner: user.id,
             account_bill: await getAccountBill(),
             available_funds: getAvailableFunds(),
-            id_currency: 1,
+            id_currency: req.body.currencyId,
           });
           await Additional.create({
             id_owner: bill.id_owner,
