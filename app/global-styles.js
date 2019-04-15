@@ -117,14 +117,14 @@ input[type='number'] {
   background-color: #0098db!important;
 }
 
-// select {
-//   -moz-appearance: none;
-//   -webkit-appearance: none;
-// }
-
-// select::-ms-expand {
-//   display: none;
-// }
+@-moz-document url-prefix() {
+  select, select:-moz-focusring, select::-moz-focus-inner {
+     color: transparent !important;
+     text-shadow: 0 0 0 #000 !important;
+     background-image: none !important;
+     border:0;
+  }
+}
 
 `;
 

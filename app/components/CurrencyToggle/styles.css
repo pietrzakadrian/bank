@@ -1,0 +1,75 @@
+.select__currency {
+  position: relative;
+  display: inline-block;
+  width: 17rem;
+}
+.select__currency select {
+  font-family: 'Lato';
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  padding: 8px 10px;
+  outline: 0;
+  border: 1px solid grey;
+  border-radius: 2px;
+  background: #ffffff;
+  color: #000000;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.select__currency select::-ms-expand {
+  display: none;
+}
+
+.select__currency select:hover,
+.select__currency select:focus {
+  color: #000000;
+  background: #ffffff;
+}
+
+.select__currency select:disabled {
+  opacity: 1;
+  pointer-events: none;
+}
+
+.select_arrow--currency {
+  position: absolute;
+  top: 11px;
+  right: 15px;
+  width: 10px;
+  height: 10px;
+  border: solid #0029ab;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transition: 0.3s ease;
+}
+
+.select__currency select:hover ~ .select_arrow--currency,
+.select__currency select:focus ~ .select_arrow--currency {
+  border-color: #0029ab;
+}
+
+.select__currency select:disabled ~ .select_arrow--currency {
+  border-top-color: #0029ab;
+}
+
+.select__currency select:focus ~ .select_arrow--currency {
+  transform: translateY(40%) rotate(225deg);
+}
+
+.select__currency select:not(:hover) ~ .select_arrow--currency {
+  transform: rotate(45deg);
+}
+
+@media screen and (max-width: 480px) {
+  .select__currency {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+}

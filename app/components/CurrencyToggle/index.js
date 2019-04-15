@@ -9,29 +9,25 @@ import React from 'react';
 // import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import './styles.css';
 
 // Import Components
 import { makeCurrencySelector } from 'containers/RegisterPage/selectors';
 import Toggle from './Toggle';
 import messages from './messages';
-import Wrapper from './Wrapper';
-import {
-  enterCurrencyAction,
-  changeCurrencyAction,
-} from '../../containers/RegisterPage/actions';
+
+import { changeCurrencyAction } from '../../containers/RegisterPage/actions';
 
 class CurrencyToggle extends React.PureComponent {
   // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <Wrapper>
-        <Toggle
-          value={this.props.currencyId}
-          values={this.props.currency}
-          messages={messages}
-          onToggle={this.props.onCurrencyToggle}
-        />
-      </Wrapper>
+      <Toggle
+        value={this.props.currencyId}
+        values={this.props.currency}
+        messages={messages}
+        onToggle={this.props.onCurrencyToggle}
+      />
     );
   }
 }

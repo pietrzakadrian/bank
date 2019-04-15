@@ -8,11 +8,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import './styles.css';
 
-import Toggle from 'components/Toggle';
 import { changeLocale } from 'containers/LanguageProvider/actions';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
-import Wrapper from './Wrapper';
+import Toggle from './Toggle';
+
 import messages from './messages';
 import { appLocales } from '../../i18n';
 
@@ -20,14 +21,12 @@ export class LocaleToggle extends React.PureComponent {
   // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <Wrapper>
-        <Toggle
-          value={this.props.locale}
-          values={appLocales}
-          messages={messages}
-          onToggle={this.props.onLocaleToggle}
-        />
-      </Wrapper>
+      <Toggle
+        value={this.props.locale}
+        values={appLocales}
+        messages={messages}
+        onToggle={this.props.onLocaleToggle}
+      />
     );
   }
 }
