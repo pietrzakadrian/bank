@@ -127,16 +127,17 @@ const PercentTypeProvider = props => (
 
 const GridDetailContainerBase = ({ row, classes }) => (
   <div className={classes.detailContainer}>
+    {console.log(row)}
     <div className={classes.headerDetail}> Sender</div>
-    <div className={classes.TableInfoDetail}>{row.result.amount_money}</div>
+    <div className={classes.TableInfoDetail}>{row.sender_name}</div>
     <div className={classes.headerDetail}>Account bill</div>
     <div className={classes.TableInfoDetail}>
       42 9760 4671 5909 2300 0022 0097
     </div>
     <div className={classes.headerDetail}>Recipient</div>
-    <div className={classes.TableInfoDetail}>Adrian Pietrzak</div>
+    <div className={classes.TableInfoDetail}>{row.recipient_name}</div>
     <div className={classes.headerDetail}>Transfer title</div>
-    <div className={classes.TableInfoDetail}>no siema</div>
+    <div className={classes.TableInfoDetail}>{row.transfer_title}</div>
   </div>
 );
 

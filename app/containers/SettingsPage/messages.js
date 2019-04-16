@@ -89,6 +89,10 @@ export default defineMessages({
     id: `${scope}.changeLang`,
     defaultMessage: 'Change language',
   },
+  changeCurrency: {
+    id: `${scope}.changeCurrency`,
+    defaultMessage: 'Change currency',
+  },
   serverError: {
     id: `${scope}.serverError`,
     defaultMessage: 'Server error',

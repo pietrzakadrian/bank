@@ -20,6 +20,7 @@ import Grid from '@material-ui/core/Grid';
 
 // Import Components
 import LocaleToggle from 'components/LocaleToggle';
+import CurrencyToggle from 'components/CurrencyToggle';
 import Copyright from 'components/Copyright';
 
 import injectSaga from 'utils/injectSaga';
@@ -382,6 +383,13 @@ class SettingsPage extends React.Component {
               </div>
               <div className={classes.textFieldLocaleToggle}>
                 <LocaleToggle />
+              </div>
+
+              <div className={classes.textField}>
+                <FormattedMessage {...messages.changeCurrency} />
+              </div>
+              <div className={classes.textFieldLocaleToggle}>
+                <CurrencyToggle />
               </div>
 
               <div className={classes.textField}>

@@ -41,10 +41,6 @@ export default defineMessages({
     id: `${scope}.depositDisabled`,
     defaultMessage: 'The Deposits function is disabled.',
   },
-  currency: {
-    id: `${scope}.currency`,
-    defaultMessage: 'USD',
-  },
   bankInformation: {
     id: `${scope}.bankInformation`,
     defaultMessage:

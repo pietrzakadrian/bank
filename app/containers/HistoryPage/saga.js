@@ -62,8 +62,6 @@ export function* getGridData() {
 
       const finalOutupt = { rows: [...output] };
 
-      console.log(finalOutupt);
-
       yield put(getGridDataTransformSuccessAction(finalOutupt.rows));
     } else {
       yield put(getGridDataErrorAction('error'));

@@ -21,8 +21,4 @@ export default defineMessages({
     id: `${scope}.expenses`,
     defaultMessage: 'Your expenses',
   },
-  currency: {
-    id: `${scope}.currency`,
-    defaultMessage: 'USD',
-  },
 });
