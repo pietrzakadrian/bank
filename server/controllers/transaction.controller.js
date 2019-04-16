@@ -242,6 +242,18 @@ exports.register = (req, res) => {
     return authorizationStatus;
   }
 
+  async function getCurrencyId(id_sender) {
+    Bill.findOne({
+      where: {
+        id_owner: id_sender,
+      },
+    }).then(isCurrency => {
+      if (isCurrency) {
+        return isCurrency.id_currency;
+      }
+    });
+  }
+
   async function getSenderEmail(id) {
     try {
       const isUser = await User.findOne({
@@ -290,10 +302,6 @@ exports.register = (req, res) => {
 
   //   return formattedAmountMoney;
   // }
-
-  function getEmailMessage() {
-    return ``;
-  }
 
   async function sendAuthorizationKey(
     senderId,
@@ -528,7 +536,7 @@ exports.register = (req, res) => {
     await transporter.sendMail(mailOptions);
   }
 
-  function setTransferHistory(
+  async function setTransferHistory(
     senderId,
     recipientId,
     amountMoney,
@@ -540,6 +548,7 @@ exports.register = (req, res) => {
       id_recipient: recipientId,
       date_time: getTodayDate(),
       amount_money: amountMoney,
+      id_currency: await getCurrencyId(senderId),
       transfer_title: transferTitle,
       authorization_key: authorizationKey,
       authorization_status: setAuthorizationStatus(0),

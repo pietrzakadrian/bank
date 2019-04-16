@@ -70,13 +70,13 @@ db.additionals.belongsTo(db.bills, {
 });
 
 // Transaction
-db.currency.hasMany(db.transactions, {
+db.bills.hasMany(db.transactions, {
   foreignKey: 'id_currency',
-  sourceKey: 'id',
+  sourceKey: 'id_currency',
 });
-db.transactions.belongsTo(db.currency, {
+db.transactions.belongsTo(db.bills, {
   foreignKey: 'id_currency',
-  targetKey: 'id',
+  targetKey: 'id_currency',
 });
 db.users.hasMany(db.transactions, {
   foreignKey: 'id_sender',

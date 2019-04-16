@@ -48,7 +48,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       id_currency: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
         isNumeric: true,
         validate: {
           notEmpty: {
