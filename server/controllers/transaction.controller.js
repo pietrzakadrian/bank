@@ -7,6 +7,7 @@ const Transaction = db.transactions;
 const Bill = db.bills;
 const Additional = db.additionals;
 const User = db.users;
+const Currency = db.currency;
 
 exports.confirm = (req, res) => {
   function getTodayDate() {
@@ -243,15 +244,12 @@ exports.register = (req, res) => {
   }
 
   async function getCurrencyId(id_sender) {
-    Bill.findOne({
+    const isCurrency = await Bill.findOne({
       where: {
         id_owner: id_sender,
       },
-    }).then(isCurrency => {
-      if (isCurrency) {
-        return isCurrency.id_currency;
-      }
     });
+    return isCurrency.id_currency;
   }
 
   async function getSenderEmail(id) {
@@ -429,7 +427,7 @@ exports.register = (req, res) => {
       </head>
       
       <body>
-        <div style="">
+        <div>
           <!--[if mso | IE]>
             <table
                align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600"
@@ -663,6 +661,11 @@ exports.getRecipientdata = (req, res) => {
         where: { id: db.Sequelize.col('transaction.id_sender') },
         attributes: ['name', 'surname'],
       },
+      {
+        model: Currency,
+        where: { id: db.Sequelize.col('transaction.id_sender') },
+        attributes: ['currency'],
+      },
     ],
   })
     .then(transactions => {
@@ -700,6 +703,11 @@ exports.getSenderdata = (req, res) => {
         as: 'getRecipientdata',
         where: { id: db.Sequelize.col('transaction.id_sender') },
         attributes: ['name', 'surname'],
+      },
+      {
+        model: Currency,
+        where: { id: db.Sequelize.col('transaction.id_sender') },
+        attributes: ['currency'],
       },
     ],
   })
@@ -747,6 +755,11 @@ exports.getTransactionsdata = (req, res) => {
         as: 'getRecipientdata',
         where: { id: db.Sequelize.col('transaction.id_sender') },
         attributes: ['name', 'surname'],
+      },
+      {
+        model: Currency,
+        where: { id: db.Sequelize.col('transaction.id_sender') },
+        attributes: ['currency'],
       },
     ],
   })

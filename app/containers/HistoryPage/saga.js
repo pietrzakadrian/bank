@@ -51,8 +51,8 @@ export function* getGridData() {
           date_time: moment(rest.date_time).format('DD.MM.YYYY, HH:mm'),
           amount_money:
             rest.id_sender === userId
-              ? rest.amount_money * -1
-              : rest.amount_money,
+              ? `-${rest.amount_money.toFixed(2)} ${rest.currency.currency}`
+              : `${rest.amount_money.toFixed(2)} ${rest.currency.currency}`,
           sender_name: `${getSenderdata.name} ${getSenderdata.surname}`,
           recipient_name: `${getRecipientdata.name} ${
             getRecipientdata.surname
@@ -61,6 +61,9 @@ export function* getGridData() {
       );
 
       const finalOutupt = { rows: [...output] };
+
+      console.log(finalOutupt);
+
       yield put(getGridDataTransformSuccessAction(finalOutupt.rows));
     } else {
       yield put(getGridDataErrorAction('error'));

@@ -139,7 +139,7 @@ class RecentTransactions extends Component {
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
                               .replace('.', ',')}{' '}
-                            <FormattedMessage {...messages.currency} />
+                            {row.currency.currency}
                           </span>
                         </TableCell>
                       </Fragment>
@@ -161,7 +161,7 @@ class RecentTransactions extends Component {
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
                             .replace('.', ',')}{' '}
-                          <FormattedMessage {...messages.currency} />
+                          {row.currency.currency}
                         </TableCell>
                       </Fragment>
                     )}

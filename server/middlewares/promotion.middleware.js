@@ -15,6 +15,15 @@ module.exports = (req, res, next) => {
     return authorizationStatus;
   }
 
+  async function getCurrencyId(id_sender) {
+    const isCurrency = await Bill.findOne({
+      where: {
+        id_owner: id_sender,
+      },
+    });
+    return isCurrency.id_currency;
+  }
+
   function setAvailableFunds(
     recipientId,
     recipientAvailableFunds,
@@ -30,7 +39,7 @@ module.exports = (req, res, next) => {
     );
   }
 
-  function setTransferHistory(
+  async function setTransferHistory(
     senderId,
     recipientId,
     amountMoney,
@@ -42,6 +51,7 @@ module.exports = (req, res, next) => {
       id_recipient: recipientId,
       date_time: getTodayDate(),
       amount_money: amountMoney,
+      id_currency: await getCurrencyId(senderId),
       transfer_title: transferTitle,
       authorization_key: authorizationKey,
       authorization_status: setAuthorizationStatus(1),

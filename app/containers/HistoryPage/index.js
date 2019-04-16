@@ -113,21 +113,11 @@ const styles = theme => ({
 const PercentFormatter = ({ value }) =>
   !value.toString().indexOf('-') ? (
     <span className="percent">
-      {value
-        .toFixed(2)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-        .replace('.', ',')}{' '}
-      <FormattedMessage {...messages.currency} />
+      {value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ').replace('.', ',')}{' '}
     </span>
   ) : (
     <span>
-      {value
-        .toFixed(2)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-        .replace('.', ',')}{' '}
-      <FormattedMessage {...messages.currency} />
+      {value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ').replace('.', ',')}{' '}
     </span>
   );
 
