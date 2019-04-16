@@ -749,12 +749,24 @@ exports.getTransactionsdata = (req, res) => {
         as: 'getSenderdata',
         where: { id: db.Sequelize.col('transaction.id_sender') },
         attributes: ['name', 'surname'],
+        include: [
+          {
+            model: Bill,
+            attributes: ['account_bill'],
+          },
+        ],
       },
       {
         model: User,
         as: 'getRecipientdata',
         where: { id: db.Sequelize.col('transaction.id_sender') },
         attributes: ['name', 'surname'],
+        include: [
+          {
+            model: Bill,
+            attributes: ['account_bill'],
+          },
+        ],
       },
       {
         model: Currency,

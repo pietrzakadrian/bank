@@ -44,9 +44,7 @@ import {
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-
 import { createGridAction, getGridDataAction } from './actions';
-
 import makeSelectHistoryPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -78,6 +76,8 @@ const styles = theme => ({
   },
   detailContainer: {
     margin: '10px 0',
+    paddingRight: 0,
+    paddingLeft: 33,
   },
   title: {
     color: theme.palette.text.primary,
@@ -127,15 +127,17 @@ const PercentTypeProvider = props => (
 
 const GridDetailContainerBase = ({ row, classes }) => (
   <div className={classes.detailContainer}>
-    {console.log(row)}
     <div className={classes.headerDetail}> Sender</div>
     <div className={classes.TableInfoDetail}>{row.sender_name}</div>
-    <div className={classes.headerDetail}>Account bill</div>
-    <div className={classes.TableInfoDetail}>
-      42 9760 4671 5909 2300 0022 0097
-    </div>
     <div className={classes.headerDetail}>Recipient</div>
     <div className={classes.TableInfoDetail}>{row.recipient_name}</div>
+    <div className={classes.headerDetail}>Account number</div>
+    <div className={classes.TableInfoDetail}>
+      {row.account_bill
+        .toString()
+        .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+        .trim()}
+    </div>
     <div className={classes.headerDetail}>Transfer title</div>
     <div className={classes.TableInfoDetail}>{row.transfer_title}</div>
   </div>
@@ -253,7 +255,9 @@ class HistoryPage extends React.Component {
                   order={historyPage.columnOrder}
                   onOrderChange={onColumnOrderChange}
                 />
-                <TableRowDetail contentComponent={GridDetailContainer} />
+                {window.matchMedia('(max-width: 678px)').matches ? (
+                  <TableRowDetail contentComponent={GridDetailContainer} />
+                ) : null}
                 <PagingPanel />
               </Grid>
             ) : (

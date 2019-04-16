@@ -57,6 +57,10 @@ export function* getGridData() {
           recipient_name: `${getRecipientdata.name} ${
             getRecipientdata.surname
           }`,
+          account_bill:
+            rest.id_sender === userId
+              ? getRecipientdata.bills[0].account_bill
+              : getSenderdata.bills[0].account_bill,
         }),
       );
 
