@@ -15,19 +15,27 @@ module.exports = (req, res, next) => {
     return authorizationStatus;
   }
 
-  async function getCurrencyId(id_sender) {
+  async function getCurrencyId(id_owner) {
     const isCurrency = await Bill.findOne({
       where: {
-        id_owner: id_sender,
+        id_owner,
       },
     });
     return isCurrency.id_currency;
   }
 
-  function setAvailableFunds(
+  async function setAvailableFunds(
     recipientId,
     recipientAvailableFunds,
     amountMoney,
+  ) {
+    await addAvailableFunds(recipientAvailableFunds, amountMoney, recipientId);
+  }
+
+  async function addAvailableFunds(
+    recipientAvailableFunds,
+    amountMoney,
+    recipientId,
   ) {
     return Bill.update(
       {
@@ -114,9 +122,9 @@ module.exports = (req, res, next) => {
                 authorization_key: 'PROMO10',
                 authorization_status: 1,
               },
-            }).then(isTransaction => {
+            }).then(async isTransaction => {
               if (!isTransaction) {
-                setAvailableFunds(
+                await setAvailableFunds(
                   recipientId,
                   recipientAvailableFunds,
                   10,

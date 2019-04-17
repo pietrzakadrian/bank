@@ -5,28 +5,10 @@ export default class AuthService {
     this.domain = domain || '/api';
     this.fetch = this.fetch.bind(this);
     this.isRegister = this.isRegister.bind(this);
-    this.isAccountBill = this.isAccountBill.bind(this);
-    this.isAmountMoney = this.isAmountMoney.bind(this);
     this.unsetRegister = this.unsetRegister.bind(this);
     this.registerTransaction = this.registerTransaction.bind(this);
     this.confirmTransaction = this.confirmTransaction.bind(this);
     this.getUsersData = this.getUsersData.bind(this);
-  }
-
-  isAccountBill(account_bill) {
-    return this.fetch(`${this.domain}/bills/isAccountBill/${account_bill}`, {
-      method: 'GET',
-    });
-  }
-
-  isAmountMoney(id_sender, amount_money) {
-    return this.fetch(`${this.domain}/bills/isAmountMoney`, {
-      method: 'POST',
-      body: JSON.stringify({
-        id_sender,
-        amount_money,
-      }),
-    });
   }
 
   // Payment Action

@@ -107,7 +107,7 @@ function masterProcess() {
     .listen(port);
 
   // Sequelize reset db
-  db.sequelize.sync({ force: false }).then(() => {
+  db.sequelize.sync({ force: true }).then(() => {
     createNecessaryTables();
   });
 

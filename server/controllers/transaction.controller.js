@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
-
 const Op = db.Sequelize.Op;
 const Transaction = db.transactions;
 const Bill = db.bills;
@@ -26,14 +25,34 @@ exports.confirm = (req, res) => {
     return authorizationStatus;
   }
 
-  function setAvailableFunds(
+  async function getCurrencyId(id_owner) {
+    const isCurrency = await Bill.findOne({
+      where: {
+        id_owner,
+      },
+    });
+    return isCurrency.id_currency;
+  }
+
+  async function setAvailableFunds(
     senderId,
     recipientId,
     senderAvailableFunds,
     recipientAvailableFunds,
     amountMoney,
+    transferCurrencyId,
   ) {
-    Bill.update(
+    await subAvailableFunds(senderAvailableFunds, amountMoney, senderId);
+    await addAvailableFunds(
+      recipientAvailableFunds,
+      amountMoney,
+      recipientId,
+      transferCurrencyId,
+    );
+  }
+
+  function subAvailableFunds(senderAvailableFunds, amountMoney, senderId) {
+    return Bill.update(
       {
         available_funds: (
           parseFloat(senderAvailableFunds) - parseFloat(amountMoney)
@@ -41,18 +60,52 @@ exports.confirm = (req, res) => {
       },
       { where: { id_owner: senderId } },
     );
-
-    Bill.update(
-      {
-        available_funds: (
-          parseFloat(recipientAvailableFunds) + parseFloat(amountMoney)
-        ).toFixed(2),
-      },
-      { where: { id_owner: recipientId } },
-    );
   }
 
-  function setTransferHistory(
+  async function addAvailableFunds(
+    recipientAvailableFunds,
+    amountMoney,
+    recipientId,
+    transferCurrencyId,
+  ) {
+    const recipientCurrencyId = await getCurrencyId(recipientId);
+
+    if (recipientCurrencyId === transferCurrencyId) {
+      return Bill.update(
+        {
+          available_funds: (
+            parseFloat(recipientAvailableFunds) + parseFloat(amountMoney)
+          ).toFixed(2),
+        },
+        { where: { id_owner: recipientId } },
+      );
+    } else {
+      // ! todo: change
+       const convertedAmountMoney = await currencyConversion(
+        transferCurrencyId,
+        recipientCurrencyId,
+        amountMoney,
+      );
+
+      return Bill.update(
+        {
+          available_funds: (
+            parseFloat(recipientAvailableFunds) + parseFloat(convertedAmountMoney)
+          ).toFixed(2),
+        },
+        { where: { id_owner: recipientId } },
+      );
+    }
+  }
+
+  // ! todo: change
+  async function currencyConversion(
+    transferCurrencyId,
+    recipientCurrencyId,
+    amountMoney,
+  ) {};
+
+  async function setTransferHistory(
     senderId,
     recipientId,
     amountMoney,
@@ -69,6 +122,7 @@ exports.confirm = (req, res) => {
           id_sender: senderId,
           id_recipient: recipientId,
           amount_money: amountMoney,
+          id_currency: await getCurrencyId(senderId),
           transfer_title: transferTitle,
           authorization_key: authorizationKey,
           authorization_status: setAuthorizationStatus(0),
@@ -152,7 +206,7 @@ exports.confirm = (req, res) => {
           where: {
             id_owner: senderId,
           },
-        }).then(isAvailableFunds => {
+        }).then(async isAvailableFunds => {
           if (isAvailableFunds) {
             const senderAvailableFunds = isAvailableFunds.available_funds;
             if (senderAvailableFunds >= amountMoney && amountMoney > 0) {
@@ -161,25 +215,28 @@ exports.confirm = (req, res) => {
                   id_sender: senderId,
                   id_recipient: recipientId,
                   amount_money: amountMoney,
+                  id_currency: await getCurrencyId(senderId),
                   transfer_title: transferTitle,
                   authorization_key: authorizationKey,
                   authorization_status: setAuthorizationStatus(0),
                 },
                 order: [['date_time', 'DESC']],
-              }).then(isAuthorizationKey => {
+              }).then(async isRegisteredTransfer => {
                 if (
-                  isAuthorizationKey &&
-                  isAuthorizationKey.authorization_key === authorizationKey
+                  isRegisteredTransfer &&
+                  isRegisteredTransfer.authorization_key === authorizationKey
                 ) {
+                  const transferCurrencyId = isRegisteredTransfer.id_currency;
                   Promise.all([
-                    setAvailableFunds(
+                    await setAvailableFunds(
                       senderId,
                       recipientId,
                       senderAvailableFunds,
                       recipientAvailableFunds,
                       amountMoney,
+                      transferCurrencyId,
                     ),
-                    setTransferHistory(
+                    await setTransferHistory(
                       senderId,
                       recipientId,
                       amountMoney,
@@ -570,7 +627,7 @@ exports.register = (req, res) => {
           where: {
             id_owner: senderId,
           },
-        }).then(isAvailableFunds => {
+        }).then(async isAvailableFunds => {
           if (isAvailableFunds) {
             const senderAvailableFunds = isAvailableFunds.available_funds;
             if (senderAvailableFunds >= amountMoney && amountMoney > 0) {
@@ -579,14 +636,15 @@ exports.register = (req, res) => {
                   id_sender: senderId,
                   id_recipient: recipientId,
                   amount_money: amountMoney,
+                  id_currency: await getCurrencyId(senderId),
                   transfer_title: transferTitle,
                   authorization_key: authorizationKey,
                   authorization_status: setAuthorizationStatus(0),
                 },
                 order: [['date_time', 'DESC']],
-              }).then(isAuthorizationKey => {
+              }).then(async isAuthorizationKey => {
                 if (!isAuthorizationKey) {
-                  setTransferHistory(
+                  await setTransferHistory(
                     senderId,
                     recipientId,
                     amountMoney,
@@ -778,7 +836,7 @@ exports.getTransactionsdata = (req, res) => {
     .then(transactions => {
       res.send(transactions);
     })
-    .catch(e => {
-      res.status(500).json({ error: e });
+    .catch(() => {
+      res.status(500).json({ error: 'Internal server error' });
     });
 };
