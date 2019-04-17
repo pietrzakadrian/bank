@@ -181,6 +181,8 @@ exports.confirm = (req, res) => {
       ),
       order: [['date_time', 'ASC']],
     }).then(transactionsHistory => {
+      // todo: if id_currency equal transaction_currency => add
+      // else => exchange currency and add
       if (transactionsHistory) {
         for (let i = 0, max = transactionsHistory.length; i < max; i++) {
           if (transactionsHistory[i].id_sender === userId) {

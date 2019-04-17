@@ -130,35 +130,50 @@ module.exports = (req, res, next) => {
     });
   }
 
-  function setWidgetStatus(recipientId) {
-    return Additional.findOne({
+  async function setWidgetStatus(recipientId) {
+    Additional.findOne({
       where: {
         id_owner: recipientId,
       },
     })
-      .then(isRecipient => {
+      .then(async isRecipient => {
         if (isRecipient) {
           const accountBalanceHistory = isRecipient.account_balance_history;
           const incomingTransfersSum = isRecipient.incoming_transfers_sum;
 
           if (accountBalanceHistory === '0,0') {
+            await Bill.findOne({
+              where: {
+                id: recipientId,
+              },
+            }).then(isAccountBill => {
+              if (isAccountBill) {
+                const availableFunds = isAccountBill.available_funds;
+
+                return Additional.update(
+                  {
+                    account_balance_history: `0,${availableFunds}`,
+                    incoming_transfers_sum:
+                      parseFloat(incomingTransfersSum) +
+                      parseFloat(availableFunds),
+                    notification_status: 1,
+                  },
+                  { where: { id_owner: recipientId } },
+                );
+              }
+            });
+          } else {
+            // todo: 10 USD exchange on currency recipient => then add
+
             return Additional.update(
               {
-                account_balance_history: '0,10',
+                account_balance_history: `${accountBalanceHistory},10`,
                 incoming_transfers_sum: incomingTransfersSum + 10,
                 notification_status: 1,
               },
               { where: { id_owner: recipientId } },
             );
           }
-          return Additional.update(
-            {
-              account_balance_history: `${accountBalanceHistory},10`,
-              incoming_transfers_sum: incomingTransfersSum + 10,
-              notification_status: 1,
-            },
-            { where: { id_owner: recipientId } },
-          );
         }
       })
       .catch(() => {
@@ -200,10 +215,11 @@ module.exports = (req, res, next) => {
                     10,
                     'Create an account',
                     'PROMO10',
-                  ).then(() => {
-                    setWidgetStatus(recipientId).then(() => {
+                  ).then(async isTrasferHistory => {
+                    if (isTrasferHistory) {
+                      await setWidgetStatus(recipientId);
                       next();
-                    });
+                    }
                   });
                 });
               } else {
