@@ -177,7 +177,10 @@ function paymentPageReducer(state = initialState, action) {
         .set('isLoading', false);
 
     case MAKE_PAYMENT_ERROR:
-      return state.set('error', action.error).set('message', null);
+      return state
+        .set('error', action.error)
+        .set('message', null)
+        .set('isLoading', false);
     case PAYMENT_STEP_NEXT: {
       return state
         .set('activeStep', state.get('activeStep') + 1)

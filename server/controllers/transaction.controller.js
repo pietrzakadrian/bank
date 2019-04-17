@@ -1,3 +1,4 @@
+/* eslint-disable no-else-return */
 const nodemailer = require('nodemailer');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
@@ -80,30 +81,58 @@ exports.confirm = (req, res) => {
         { where: { id_owner: recipientId } },
       );
     } else {
-      // ! todo: change
-       const convertedAmountMoney = await currencyConversion(
-        transferCurrencyId,
-        recipientCurrencyId,
-        amountMoney,
-      );
-
-      return Bill.update(
-        {
-          available_funds: (
-            parseFloat(recipientAvailableFunds) + parseFloat(convertedAmountMoney)
-          ).toFixed(2),
+      Currency.findOne({
+        where: {
+          id: recipientCurrencyId,
         },
-        { where: { id_owner: recipientId } },
-      );
+      }).then(isRecipientCurrencyId => {
+        if (isRecipientCurrencyId) {
+          const mainCurrency = isRecipientCurrencyId.main_currency;
+          const recipientCurrencyExchangeRate =
+            isRecipientCurrencyId.currency_exchange_rate;
+
+          Currency.findOne({
+            where: {
+              id: transferCurrencyId,
+            },
+          }).then(isTransferCurrencyId => {
+            if (isTransferCurrencyId) {
+              const transferCurrencyExchangeRate =
+                isTransferCurrencyId.currency_exchange_rate;
+
+              if (mainCurrency) {
+                const convertedAmountMoney =
+                  amountMoney / transferCurrencyExchangeRate;
+
+                return Bill.update(
+                  {
+                    available_funds: (
+                      parseFloat(recipientAvailableFunds) +
+                      parseFloat(convertedAmountMoney)
+                    ).toFixed(2),
+                  },
+                  { where: { id_owner: recipientId } },
+                );
+              } else {
+                const convertedAmountMoney =
+                  (amountMoney / transferCurrencyExchangeRate) *
+                  recipientCurrencyExchangeRate;
+                return Bill.update(
+                  {
+                    available_funds: (
+                      parseFloat(recipientAvailableFunds) +
+                      parseFloat(convertedAmountMoney)
+                    ).toFixed(2),
+                  },
+                  { where: { id_owner: recipientId } },
+                );
+              }
+            }
+          });
+        }
+      });
     }
   }
-
-  // ! todo: change
-  async function currencyConversion(
-    transferCurrencyId,
-    recipientCurrencyId,
-    amountMoney,
-  ) {};
 
   async function setTransferHistory(
     senderId,

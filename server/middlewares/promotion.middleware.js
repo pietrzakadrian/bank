@@ -1,8 +1,10 @@
+/* eslint-disable no-else-return */
 const db = require('../config/db.config.js');
 const User = db.users;
 const Bill = db.bills;
 const Additional = db.additionals;
 const Transaction = db.transactions;
+const Currency = db.currency;
 
 module.exports = (req, res, next) => {
   function getTodayDate() {
@@ -28,23 +30,85 @@ module.exports = (req, res, next) => {
     recipientId,
     recipientAvailableFunds,
     amountMoney,
+    transferCurrencyId,
   ) {
-    await addAvailableFunds(recipientAvailableFunds, amountMoney, recipientId);
+    await addAvailableFunds(
+      recipientAvailableFunds,
+      amountMoney,
+      recipientId,
+      transferCurrencyId,
+    );
   }
 
   async function addAvailableFunds(
     recipientAvailableFunds,
     amountMoney,
     recipientId,
+    transferCurrencyId,
   ) {
-    return Bill.update(
-      {
-        available_funds: (
-          parseFloat(recipientAvailableFunds) + parseFloat(amountMoney)
-        ).toFixed(2),
-      },
-      { where: { id_owner: recipientId } },
-    );
+    const recipientCurrencyId = await getCurrencyId(recipientId);
+
+    if (recipientCurrencyId === transferCurrencyId) {
+      return Bill.update(
+        {
+          available_funds: (
+            parseFloat(recipientAvailableFunds) + parseFloat(amountMoney)
+          ).toFixed(2),
+        },
+        { where: { id_owner: recipientId } },
+      );
+    } else {
+      Currency.findOne({
+        where: {
+          id: recipientCurrencyId,
+        },
+      }).then(isRecipientCurrencyId => {
+        if (isRecipientCurrencyId) {
+          const mainCurrency = isRecipientCurrencyId.main_currency;
+          const recipientCurrencyExchangeRate =
+            isRecipientCurrencyId.currency_exchange_rate;
+
+          Currency.findOne({
+            where: {
+              id: transferCurrencyId,
+            },
+          }).then(isTransferCurrencyId => {
+            if (isTransferCurrencyId) {
+              const transferCurrencyExchangeRate =
+                isTransferCurrencyId.currency_exchange_rate;
+
+              if (mainCurrency) {
+                const convertedAmountMoney =
+                  amountMoney / transferCurrencyExchangeRate;
+
+                return Bill.update(
+                  {
+                    available_funds: (
+                      parseFloat(recipientAvailableFunds) +
+                      parseFloat(convertedAmountMoney)
+                    ).toFixed(2),
+                  },
+                  { where: { id_owner: recipientId } },
+                );
+              } else {
+                const convertedAmountMoney =
+                  (amountMoney / transferCurrencyExchangeRate) *
+                  recipientCurrencyExchangeRate;
+                return Bill.update(
+                  {
+                    available_funds: (
+                      parseFloat(recipientAvailableFunds) +
+                      parseFloat(convertedAmountMoney)
+                    ).toFixed(2),
+                  },
+                  { where: { id_owner: recipientId } },
+                );
+              }
+            }
+          });
+        }
+      });
+    }
   }
 
   async function setTransferHistory(
@@ -128,6 +192,7 @@ module.exports = (req, res, next) => {
                   recipientId,
                   recipientAvailableFunds,
                   10,
+                  1,
                 ).then(() => {
                   setTransferHistory(
                     1,
