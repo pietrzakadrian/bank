@@ -292,7 +292,7 @@ class PaymentPage extends React.Component {
   getSuggestionValue = suggestion => suggestion.account_bill;
 
   renderSuggestion = suggestion => (
-    <div>
+    <div className="renderSuggestion">
       {suggestion.account_bill
         .toString()
         .replace(/(^\d{2}|\d{4})+?/g, '$1 ')

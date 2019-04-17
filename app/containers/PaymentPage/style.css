@@ -2,6 +2,10 @@
   line-height: 52px;
 }
 
+.renderSuggestion {
+  font-size: 13px;
+}
+
 .react-autosuggest__container {
   position: relative;
 }

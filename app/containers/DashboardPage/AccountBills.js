@@ -134,7 +134,9 @@ class AccountBills extends Component {
           </Typography>
           <Table>
             <TableBody>
-              {availableFunds && accountBills && currency ? (
+              {(availableFunds || availableFunds === 0) &&
+              accountBills &&
+              currency ? (
                 <TableRow>
                   <TableCell
                     className={classes.tableCell}

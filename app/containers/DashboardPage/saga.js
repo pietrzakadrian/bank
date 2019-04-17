@@ -69,7 +69,7 @@ export function* getUserData() {
       },
     });
 
-    response[0].available_funds
+    response[0].available_funds === 0 || response[0].available_funds
       ? yield put(getAvailableFundsSuccessAction(response[0].available_funds))
       : yield put(getAvailableFundsErrorAction('error'));
 
@@ -80,8 +80,6 @@ export function* getUserData() {
           ),
         )
       : yield put(getAccountBalanceHistoryErrorAction('error'));
-
-    console.log(!currency);
 
     if (!currency) {
       response[0].currency.currency
