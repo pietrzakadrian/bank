@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable no-else-return */
 const db = require('../config/db.config.js');
 const User = db.users;
@@ -49,14 +50,21 @@ module.exports = (req, res, next) => {
     const recipientCurrencyId = await getCurrencyId(recipientId);
 
     if (recipientCurrencyId === transferCurrencyId) {
-      return Bill.update(
+      Bill.update(
         {
           available_funds: (
             parseFloat(recipientAvailableFunds) + parseFloat(amountMoney)
           ).toFixed(2),
         },
         { where: { id_owner: recipientId } },
-      );
+      ).then(() => {
+        setWidgetStatus(
+          recipientId,
+          false,
+          recipientCurrencyId,
+          transferCurrencyId,
+        );
+      });
     } else {
       Currency.findOne({
         where: {
@@ -81,7 +89,7 @@ module.exports = (req, res, next) => {
                 const convertedAmountMoney =
                   amountMoney / transferCurrencyExchangeRate;
 
-                return Bill.update(
+                Bill.update(
                   {
                     available_funds: (
                       parseFloat(recipientAvailableFunds) +
@@ -89,12 +97,19 @@ module.exports = (req, res, next) => {
                     ).toFixed(2),
                   },
                   { where: { id_owner: recipientId } },
-                );
+                ).then(() => {
+                  setWidgetStatus(
+                    recipientId,
+                    convertedAmountMoney,
+                    recipientCurrencyId,
+                    transferCurrencyId,
+                  );
+                });
               } else {
                 const convertedAmountMoney =
                   (amountMoney / transferCurrencyExchangeRate) *
                   recipientCurrencyExchangeRate;
-                return Bill.update(
+                Bill.update(
                   {
                     available_funds: (
                       parseFloat(recipientAvailableFunds) +
@@ -102,7 +117,14 @@ module.exports = (req, res, next) => {
                     ).toFixed(2),
                   },
                   { where: { id_owner: recipientId } },
-                );
+                ).then(() => {
+                  setWidgetStatus(
+                    recipientId,
+                    convertedAmountMoney,
+                    recipientCurrencyId,
+                    transferCurrencyId,
+                  );
+                });
               }
             }
           });
@@ -130,49 +152,74 @@ module.exports = (req, res, next) => {
     });
   }
 
-  async function setWidgetStatus(recipientId) {
+  function setWidgetStatus(
+    recipientId,
+    convertedAmountMoney,
+    recipientCurrencyId,
+    transferCurrencyId,
+  ) {
     Additional.findOne({
       where: {
         id_owner: recipientId,
       },
     })
-      .then(async isRecipient => {
+      .then(isRecipient => {
         if (isRecipient) {
           const accountBalanceHistory = isRecipient.account_balance_history;
           const incomingTransfersSum = isRecipient.incoming_transfers_sum;
 
           if (accountBalanceHistory === '0,0') {
-            await Bill.findOne({
-              where: {
-                id: recipientId,
-              },
-            }).then(isAccountBill => {
-              if (isAccountBill) {
-                const availableFunds = isAccountBill.available_funds;
-
-                return Additional.update(
-                  {
-                    account_balance_history: `0,${availableFunds}`,
-                    incoming_transfers_sum:
-                      parseFloat(incomingTransfersSum) +
-                      parseFloat(availableFunds),
-                    notification_status: 1,
-                  },
-                  { where: { id_owner: recipientId } },
-                );
-              }
-            });
+            if (recipientCurrencyId === transferCurrencyId) {
+              return Additional.update(
+                {
+                  account_balance_history: '0,10',
+                  incoming_transfers_sum:
+                    parseFloat(incomingTransfersSum.toFixed(2)) +
+                    parseFloat(10),
+                  notification_status: 1,
+                },
+                { where: { id_owner: recipientId } },
+              );
+            } else {
+              return Additional.update(
+                {
+                  account_balance_history: `0,${convertedAmountMoney.toFixed(
+                    2,
+                  )}`,
+                  incoming_transfers_sum:
+                    parseFloat(incomingTransfersSum.toFixed(2)) +
+                    parseFloat(convertedAmountMoney.toFixed(2)),
+                  notification_status: 1,
+                },
+                { where: { id_owner: recipientId } },
+              );
+            }
           } else {
-            // todo: 10 USD exchange on currency recipient => then add
-
-            return Additional.update(
-              {
-                account_balance_history: `${accountBalanceHistory},10`,
-                incoming_transfers_sum: incomingTransfersSum + 10,
-                notification_status: 1,
-              },
-              { where: { id_owner: recipientId } },
-            );
+            if (recipientCurrencyId === transferCurrencyId) {
+              return Additional.update(
+                {
+                  account_balance_history: `${accountBalanceHistory},10`,
+                  incoming_transfers_sum:
+                    parseFloat(incomingTransfersSum.toFixed(2)) +
+                    parseFloat(convertedAmountMoney.toFixed(2)),
+                  notification_status: 1,
+                },
+                { where: { id_owner: recipientId } },
+              );
+            } else {
+              return Additional.update(
+                {
+                  account_balance_history: `${accountBalanceHistory},${convertedAmountMoney.toFixed(
+                    2,
+                  )}`,
+                  incoming_transfers_sum:
+                    parseFloat(incomingTransfersSum.toFixed(2)) +
+                    parseFloat(convertedAmountMoney.toFixed(2)),
+                  notification_status: 1,
+                },
+                { where: { id_owner: recipientId } },
+              );
+            }
           }
         }
       })
@@ -215,9 +262,8 @@ module.exports = (req, res, next) => {
                     10,
                     'Create an account',
                     'PROMO10',
-                  ).then(async isTrasferHistory => {
+                  ).then(isTrasferHistory => {
                     if (isTrasferHistory) {
-                      await setWidgetStatus(recipientId);
                       next();
                     }
                   });
