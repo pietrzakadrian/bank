@@ -27,6 +27,26 @@ module.exports = (req, res, next) => {
     return isCurrency.id_currency;
   }
 
+  function setPromotionalAmount(amount) {
+    const promotionalAmount = amount;
+    return promotionalAmount;
+  }
+
+  function setPromotionCurrencyId(currency) {
+    const promotionalCurreny = currency;
+    return promotionalCurreny;
+  }
+
+  function setPromotionAuthorizationKey(authorizationKey) {
+    const promotionAuthorizationKey = authorizationKey;
+    return promotionAuthorizationKey;
+  }
+
+  function setPromotionSenderId(senderId) {
+    const promotionSenderId = senderId;
+    return promotionSenderId;
+  }
+
   async function setAvailableFunds(
     recipientId,
     recipientAvailableFunds,
@@ -172,10 +192,10 @@ module.exports = (req, res, next) => {
             if (recipientCurrencyId === transferCurrencyId) {
               return Additional.update(
                 {
-                  account_balance_history: '0,10',
+                  account_balance_history: `0,${setPromotionalAmount(10)}`,
                   incoming_transfers_sum:
                     parseFloat(incomingTransfersSum.toFixed(2)) +
-                    parseFloat(10),
+                    parseFloat(setPromotionalAmount(10)),
                   notification_status: 1,
                 },
                 { where: { id_owner: recipientId } },
@@ -198,7 +218,9 @@ module.exports = (req, res, next) => {
             if (recipientCurrencyId === transferCurrencyId) {
               return Additional.update(
                 {
-                  account_balance_history: `${accountBalanceHistory},10`,
+                  account_balance_history: `${accountBalanceHistory},${setPromotionalAmount(
+                    10,
+                  )}`,
                   incoming_transfers_sum:
                     parseFloat(incomingTransfersSum.toFixed(2)) +
                     parseFloat(convertedAmountMoney.toFixed(2)),
@@ -245,7 +267,7 @@ module.exports = (req, res, next) => {
             Transaction.findOne({
               where: {
                 id_recipient: recipientId,
-                authorization_key: 'PROMO10',
+                authorization_key: setPromotionAuthorizationKey('PROMO10'),
                 authorization_status: 1,
               },
             }).then(async isTransaction => {
@@ -253,15 +275,15 @@ module.exports = (req, res, next) => {
                 await setAvailableFunds(
                   recipientId,
                   recipientAvailableFunds,
-                  10,
-                  1,
+                  setPromotionalAmount(10),
+                  setPromotionCurrencyId(1),
                 ).then(() => {
                   setTransferHistory(
-                    1,
+                    setPromotionSenderId(1),
                     recipientId,
-                    10,
+                    setPromotionalAmount(10),
                     'Create an account',
-                    'PROMO10',
+                    setPromotionAuthorizationKey('PROMO10'),
                   ).then(isTrasferHistory => {
                     if (isTrasferHistory) {
                       next();
