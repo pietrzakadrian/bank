@@ -27,6 +27,24 @@ module.exports = (req, res, next) => {
     return isCurrency.id_currency;
   }
 
+  async function isCurrencyMain(id) {
+    const currencyMain = await Currency.findOne({
+      where: {
+        id,
+      },
+    });
+    return currencyMain.main_currency;
+  }
+
+  async function getCurrencyExchangeRate(currencyId) {
+    const isCurrencyExchangeRate = await Currency.findOne({
+      where: {
+        id: currencyId,
+      },
+    });
+    return isCurrencyExchangeRate.currency_exchange_rate;
+  }
+
   function setPromotionalAmount(amount) {
     const promotionalAmount = amount;
     return promotionalAmount;
@@ -86,70 +104,55 @@ module.exports = (req, res, next) => {
         );
       });
     } else {
-      Currency.findOne({
-        where: {
-          id: recipientCurrencyId,
-        },
-      }).then(isRecipientCurrencyId => {
-        if (isRecipientCurrencyId) {
-          const mainCurrency = isRecipientCurrencyId.main_currency;
-          const recipientCurrencyExchangeRate =
-            isRecipientCurrencyId.currency_exchange_rate;
+      const mainCurrency = await isCurrencyMain(recipientCurrencyId);
+      const recipientCurrencyExchangeRate = await getCurrencyExchangeRate(
+        recipientCurrencyId,
+      );
+      const transferCurrencyExchangeRate = await getCurrencyExchangeRate(
+        transferCurrencyId,
+      );
 
-          Currency.findOne({
-            where: {
-              id: transferCurrencyId,
-            },
-          }).then(isTransferCurrencyId => {
-            if (isTransferCurrencyId) {
-              const transferCurrencyExchangeRate =
-                isTransferCurrencyId.currency_exchange_rate;
+      if (mainCurrency) {
+        const convertedAmountMoney = amountMoney / transferCurrencyExchangeRate;
 
-              if (mainCurrency) {
-                const convertedAmountMoney =
-                  amountMoney / transferCurrencyExchangeRate;
+        Bill.update(
+          {
+            available_funds: (
+              parseFloat(recipientAvailableFunds) +
+              parseFloat(convertedAmountMoney)
+            ).toFixed(2),
+          },
+          { where: { id_owner: recipientId } },
+        ).then(() => {
+          setWidgetStatus(
+            recipientId,
+            convertedAmountMoney,
+            recipientCurrencyId,
+            transferCurrencyId,
+          );
+        });
+      } else {
+        const convertedAmountMoney =
+          (amountMoney / transferCurrencyExchangeRate) *
+          recipientCurrencyExchangeRate;
 
-                Bill.update(
-                  {
-                    available_funds: (
-                      parseFloat(recipientAvailableFunds) +
-                      parseFloat(convertedAmountMoney)
-                    ).toFixed(2),
-                  },
-                  { where: { id_owner: recipientId } },
-                ).then(() => {
-                  setWidgetStatus(
-                    recipientId,
-                    convertedAmountMoney,
-                    recipientCurrencyId,
-                    transferCurrencyId,
-                  );
-                });
-              } else {
-                const convertedAmountMoney =
-                  (amountMoney / transferCurrencyExchangeRate) *
-                  recipientCurrencyExchangeRate;
-                Bill.update(
-                  {
-                    available_funds: (
-                      parseFloat(recipientAvailableFunds) +
-                      parseFloat(convertedAmountMoney)
-                    ).toFixed(2),
-                  },
-                  { where: { id_owner: recipientId } },
-                ).then(() => {
-                  setWidgetStatus(
-                    recipientId,
-                    convertedAmountMoney,
-                    recipientCurrencyId,
-                    transferCurrencyId,
-                  );
-                });
-              }
-            }
-          });
-        }
-      });
+        Bill.update(
+          {
+            available_funds: (
+              parseFloat(recipientAvailableFunds) +
+              parseFloat(convertedAmountMoney)
+            ).toFixed(2),
+          },
+          { where: { id_owner: recipientId } },
+        ).then(() => {
+          setWidgetStatus(
+            recipientId,
+            convertedAmountMoney,
+            recipientCurrencyId,
+            transferCurrencyId,
+          );
+        });
+      }
     }
   }
 

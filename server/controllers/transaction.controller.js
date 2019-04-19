@@ -35,6 +35,24 @@ exports.confirm = (req, res) => {
     return isCurrency.id_currency;
   }
 
+  async function isCurrencyMain(id) {
+    const currencyMain = await Currency.findOne({
+      where: {
+        id,
+      },
+    });
+    return currencyMain.main_currency;
+  }
+
+  async function getCurrencyExchangeRate(currencyId) {
+    const isCurrencyExchangeRate = await Currency.findOne({
+      where: {
+        id: currencyId,
+      },
+    });
+    return isCurrencyExchangeRate.currency_exchange_rate;
+  }
+
   async function setAvailableFunds(
     senderId,
     recipientId,
@@ -81,56 +99,40 @@ exports.confirm = (req, res) => {
         { where: { id_owner: recipientId } },
       );
     } else {
-      Currency.findOne({
-        where: {
-          id: recipientCurrencyId,
-        },
-      }).then(isRecipientCurrencyId => {
-        if (isRecipientCurrencyId) {
-          const mainCurrency = isRecipientCurrencyId.main_currency;
-          const recipientCurrencyExchangeRate =
-            isRecipientCurrencyId.currency_exchange_rate;
+      const mainCurrency = await isCurrencyMain(recipientCurrencyId);
+      const transferCurrencyExchangeRate = await getCurrencyExchangeRate(
+        transferCurrencyId,
+      );
+      const recipientCurrencyExchangeRate = await getCurrencyExchangeRate(
+        recipientCurrencyId,
+      );
 
-          Currency.findOne({
-            where: {
-              id: transferCurrencyId,
-            },
-          }).then(isTransferCurrencyId => {
-            if (isTransferCurrencyId) {
-              const transferCurrencyExchangeRate =
-                isTransferCurrencyId.currency_exchange_rate;
+      if (mainCurrency) {
+        const convertedAmountMoney = amountMoney / transferCurrencyExchangeRate;
 
-              if (mainCurrency) {
-                const convertedAmountMoney =
-                  amountMoney / transferCurrencyExchangeRate;
-
-                return Bill.update(
-                  {
-                    available_funds: (
-                      parseFloat(recipientAvailableFunds) +
-                      parseFloat(convertedAmountMoney)
-                    ).toFixed(2),
-                  },
-                  { where: { id_owner: recipientId } },
-                );
-              } else {
-                const convertedAmountMoney =
-                  (amountMoney / transferCurrencyExchangeRate) *
-                  recipientCurrencyExchangeRate;
-                return Bill.update(
-                  {
-                    available_funds: (
-                      parseFloat(recipientAvailableFunds) +
-                      parseFloat(convertedAmountMoney)
-                    ).toFixed(2),
-                  },
-                  { where: { id_owner: recipientId } },
-                );
-              }
-            }
-          });
-        }
-      });
+        return Bill.update(
+          {
+            available_funds: (
+              parseFloat(recipientAvailableFunds) +
+              parseFloat(convertedAmountMoney)
+            ).toFixed(2),
+          },
+          { where: { id_owner: recipientId } },
+        );
+      } else {
+        const convertedAmountMoney =
+          (amountMoney / transferCurrencyExchangeRate) *
+          recipientCurrencyExchangeRate;
+        return Bill.update(
+          {
+            available_funds: (
+              parseFloat(recipientAvailableFunds) +
+              parseFloat(convertedAmountMoney)
+            ).toFixed(2),
+          },
+          { where: { id_owner: recipientId } },
+        );
+      }
     }
   }
 
@@ -160,12 +162,10 @@ exports.confirm = (req, res) => {
     );
   }
 
+  /**
+      TODO: always prepend 0, but balance history is only from the last month
+    */
   function setWidgetStatus(userId) {
-    let availableFunds = null;
-    let accountBalanceHistory = 0; // TODO: always prepend 0, but balance history is only from the last month
-    let incomingTransfersSum = 0; // *
-    let outgoingTransfersSum = 0; // *
-
     Transaction.findAll({
       where: db.Sequelize.and(
         {
@@ -184,17 +184,22 @@ exports.confirm = (req, res) => {
       // todo: if id_currency equal transaction_currency => add
       // else => exchange currency and add
       if (transactionsHistory) {
+        let availableFunds = null;
+        let accountBalanceHistory = 0;
+        let incomingTransfersSum = 0;
+        let outgoingTransfersSum = 0;
+
         for (let i = 0, max = transactionsHistory.length; i < max; i++) {
           if (transactionsHistory[i].id_sender === userId) {
             outgoingTransfersSum += transactionsHistory[i].amount_money;
             availableFunds -= transactionsHistory[i].amount_money;
-            accountBalanceHistory += `,${availableFunds}`;
+            accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
           }
 
           if (transactionsHistory[i].id_recipient === userId) {
             incomingTransfersSum += transactionsHistory[i].amount_money;
             availableFunds += transactionsHistory[i].amount_money;
-            accountBalanceHistory += `,${availableFunds}`;
+            accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
           }
         }
 
@@ -277,7 +282,7 @@ exports.confirm = (req, res) => {
                   ]).then(isPaymentSuccess => {
                     if (isPaymentSuccess) {
                       Promise.all([
-                        setWidgetStatus(senderId),
+                        // setWidgetStatus(senderId),
                         setWidgetStatus(recipientId),
                         setNotification(recipientId),
                       ]).then(isNotificationSuccess => {
@@ -569,8 +574,8 @@ exports.register = (req, res) => {
                         <tr>
                           <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                             <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;"> Dear Customer! <br /> We have registered an attempt to make a payment for the amount of ${amountMoney} USD to ${await getRecipientName(
-        recipientId,
-      )}. <br /><br /> Confirm the payment by entering the authorization key: <b>${authorizationKey}</b>                        </div>
+  recipientId,
+)}. <br /><br /> Confirm the payment by entering the authorization key: <b>${authorizationKey}</b>                        </div>
                           </td>
                         </tr>
                         <tr>

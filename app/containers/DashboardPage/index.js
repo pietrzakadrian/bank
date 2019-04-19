@@ -208,6 +208,7 @@ export class DashboardPage extends React.Component {
                 w: 1,
                 h: 14,
               }}
+              className={classes.gridItem}
             >
               <BankDeposits />
             </div>
