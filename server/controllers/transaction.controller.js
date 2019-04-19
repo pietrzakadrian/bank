@@ -27,30 +27,42 @@ exports.confirm = (req, res) => {
   }
 
   async function getCurrencyId(id_owner) {
-    const isCurrency = await Bill.findOne({
-      where: {
-        id_owner,
-      },
-    });
-    return isCurrency.id_currency;
+    try {
+      const isCurrency = await Bill.findOne({
+        where: {
+          id_owner,
+        },
+      });
+      return isCurrency.id_currency;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async function isCurrencyMain(id) {
-    const currencyMain = await Currency.findOne({
-      where: {
-        id,
-      },
-    });
-    return currencyMain.main_currency;
+    try {
+      const currencyMain = await Currency.findOne({
+        where: {
+          id,
+        },
+      });
+      return currencyMain.main_currency;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async function getCurrencyExchangeRate(currencyId) {
-    const isCurrencyExchangeRate = await Currency.findOne({
-      where: {
-        id: currencyId,
-      },
-    });
-    return isCurrencyExchangeRate.currency_exchange_rate;
+    try {
+      const isCurrencyExchangeRate = await Currency.findOne({
+        where: {
+          id: currencyId,
+        },
+      });
+      return isCurrencyExchangeRate.currency_exchange_rate;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async function setAvailableFunds(
@@ -87,52 +99,57 @@ exports.confirm = (req, res) => {
     recipientId,
     transferCurrencyId,
   ) {
-    const recipientCurrencyId = await getCurrencyId(recipientId);
+    try {
+      const recipientCurrencyId = await getCurrencyId(recipientId);
 
-    if (recipientCurrencyId === transferCurrencyId) {
-      return Bill.update(
-        {
-          available_funds: (
-            parseFloat(recipientAvailableFunds) + parseFloat(amountMoney)
-          ).toFixed(2),
-        },
-        { where: { id_owner: recipientId } },
-      );
-    } else {
-      const mainCurrency = await isCurrencyMain(recipientCurrencyId);
-      const transferCurrencyExchangeRate = await getCurrencyExchangeRate(
-        transferCurrencyId,
-      );
-      const recipientCurrencyExchangeRate = await getCurrencyExchangeRate(
-        recipientCurrencyId,
-      );
-
-      if (mainCurrency) {
-        const convertedAmountMoney = amountMoney / transferCurrencyExchangeRate;
-
+      if (recipientCurrencyId === transferCurrencyId) {
         return Bill.update(
           {
             available_funds: (
-              parseFloat(recipientAvailableFunds) +
-              parseFloat(convertedAmountMoney)
+              parseFloat(recipientAvailableFunds) + parseFloat(amountMoney)
             ).toFixed(2),
           },
           { where: { id_owner: recipientId } },
         );
       } else {
-        const convertedAmountMoney =
-          (amountMoney / transferCurrencyExchangeRate) *
-          recipientCurrencyExchangeRate;
-        return Bill.update(
-          {
-            available_funds: (
-              parseFloat(recipientAvailableFunds) +
-              parseFloat(convertedAmountMoney)
-            ).toFixed(2),
-          },
-          { where: { id_owner: recipientId } },
+        const mainCurrency = await isCurrencyMain(recipientCurrencyId);
+        const transferCurrencyExchangeRate = await getCurrencyExchangeRate(
+          transferCurrencyId,
         );
+        const recipientCurrencyExchangeRate = await getCurrencyExchangeRate(
+          recipientCurrencyId,
+        );
+
+        if (mainCurrency) {
+          const convertedAmountMoney =
+            amountMoney / transferCurrencyExchangeRate;
+
+          return Bill.update(
+            {
+              available_funds: (
+                parseFloat(recipientAvailableFunds) +
+                parseFloat(convertedAmountMoney)
+              ).toFixed(2),
+            },
+            { where: { id_owner: recipientId } },
+          );
+        } else {
+          const convertedAmountMoney =
+            (amountMoney / transferCurrencyExchangeRate) *
+            recipientCurrencyExchangeRate;
+          return Bill.update(
+            {
+              available_funds: (
+                parseFloat(recipientAvailableFunds) +
+                parseFloat(convertedAmountMoney)
+              ).toFixed(2),
+            },
+            { where: { id_owner: recipientId } },
+          );
+        }
       }
+    } catch (e) {
+      console.log(e);
     }
   }
 
@@ -143,96 +160,147 @@ exports.confirm = (req, res) => {
     transferTitle,
     authorizationKey,
   ) {
-    return Transaction.update(
-      {
-        authorization_status: setAuthorizationStatus(1),
-        date_time: getTodayDate(),
-      },
-      {
-        where: {
-          id_sender: senderId,
-          id_recipient: recipientId,
-          amount_money: amountMoney,
-          id_currency: await getCurrencyId(senderId),
-          transfer_title: transferTitle,
-          authorization_key: authorizationKey,
-          authorization_status: setAuthorizationStatus(0),
+    try {
+      return Transaction.update(
+        {
+          authorization_status: setAuthorizationStatus(1),
+          date_time: getTodayDate(),
         },
-      },
-    );
+        {
+          where: {
+            id_sender: senderId,
+            id_recipient: recipientId,
+            amount_money: amountMoney,
+            id_currency: await getCurrencyId(senderId),
+            transfer_title: transferTitle,
+            authorization_key: authorizationKey,
+            authorization_status: setAuthorizationStatus(0),
+          },
+        },
+      );
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   /**
       TODO: always prepend 0, but balance history is only from the last month
     */
-  function setWidgetStatus(userId) {
-    Transaction.findAll({
-      where: db.Sequelize.and(
-        {
-          date_time: {
-            [Op.between]: [
-              getPreviousMonthDate(getTodayDate()),
-              getTodayDate(),
-            ],
-          },
-          authorization_status: setAuthorizationStatus(1),
-        },
-        db.Sequelize.or({ id_sender: userId }, { id_recipient: userId }),
-      ),
-      order: [['date_time', 'ASC']],
-    }).then(async transactionsHistory => {
-      // todo: if id_currency equal transaction_currency => add
-      // else => exchange currency and add
-      if (transactionsHistory) {
-        let availableFunds = null;
-        let accountBalanceHistory = 0;
-        let incomingTransfersSum = 0;
-        let outgoingTransfersSum = 0;
-        const mainCurrency = await isCurrencyMain(userId);
-        const userCurrencyId = await getCurrencyId(userId);
-        const userCurrencyExchangeRate = await getCurrencyExchangeRate(
-          userCurrencyId,
-        );
-        // const transferCurrencyExchangeRate = await getCurrencyExchangeRate(
-        //   transferCurrencyId,
-        // );
-
-        for (let i = 0, max = transactionsHistory.length; i < max; i++) {
-          if (transactionsHistory[i].id_sender === userId) {
-            if (transactionsHistory[i].id_currency === userCurrencyId) {
-              outgoingTransfersSum += transactionsHistory[i].amount_money;
-              availableFunds -= transactionsHistory[i].amount_money;
-              accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
-            } else {
-              // przewalutuj!
-            }
-          }
-
-          if (transactionsHistory[i].id_recipient === userId) {
-            if (transactionsHistory[i].id_currency === userCurrencyId) {
-              incomingTransfersSum += transactionsHistory[i].amount_money;
-              availableFunds += transactionsHistory[i].amount_money;
-              accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
-            } else {
-              // przewalutuj!
-            }
-          }
-        }
-
-        console.log('accountBalanceHistory', accountBalanceHistory);
-        console.log('outgoingTransfersSum', outgoingTransfersSum);
-        console.log('incomingTransfersSum', incomingTransfersSum);
-
-        return Additional.update(
+   function setWidgetStatus(userId) {
+    try {
+      Transaction.findAll({
+        where: db.Sequelize.and(
           {
-            account_balance_history: accountBalanceHistory,
-            outgoing_transfers_sum: outgoingTransfersSum,
-            incoming_transfers_sum: incomingTransfersSum,
+            date_time: {
+              [Op.between]: [
+                getPreviousMonthDate(getTodayDate()),
+                getTodayDate(),
+              ],
+            },
+            authorization_status: setAuthorizationStatus(1),
           },
-          { where: { id_owner: userId } },
-        );
-      }
-    });
+          db.Sequelize.or({ id_sender: userId }, { id_recipient: userId }),
+        ),
+        order: [['date_time', 'ASC']],
+      }).then(async transactionsHistory => {
+        // todo: if id_currency equal transaction_currency => add
+        // else => exchange currency and add
+        if (transactionsHistory) {
+          let availableFunds = null;
+          let accountBalanceHistory = 0;
+          let incomingTransfersSum = 0;
+          let outgoingTransfersSum = 0;
+          let transferCurrencyExchangeRate = null;
+          let convertedAmountMoney = null;
+          const userCurrencyId = await getCurrencyId(userId);
+          const mainCurrency = await isCurrencyMain(userCurrencyId);
+          const userCurrencyExchangeRate = await getCurrencyExchangeRate(
+            userCurrencyId,
+          );
+
+          transactionsHistory.forEach(async transactionHistory => {
+            if (transactionHistory.id_sender === userId) {
+              if (transactionHistory.id_currency === userCurrencyId) {
+                outgoingTransfersSum += transactionHistory.amount_money;
+                availableFunds -= transactionHistory.amount_money;
+                accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+              } else {
+                // przewalutuj!
+
+                transferCurrencyExchangeRate = await getCurrencyExchangeRate(
+                  transactionHistory.id_currency,
+                );
+
+                if (mainCurrency) {
+                  convertedAmountMoney =
+                    transactionHistory.amount_money /
+                    transferCurrencyExchangeRate;
+
+                  outgoingTransfersSum += convertedAmountMoney;
+                  availableFunds -= convertedAmountMoney;
+                  accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+                } else {
+                  convertedAmountMoney =
+                    (transactionHistory.amount_money /
+                      transferCurrencyExchangeRate) *
+                    userCurrencyExchangeRate;
+
+                  outgoingTransfersSum += convertedAmountMoney;
+                  availableFunds -= convertedAmountMoney;
+                  accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+                }
+              }
+            }
+
+            if (transactionHistory.id_recipient === userId) {
+              if (transactionHistory.id_currency === userCurrencyId) {
+                incomingTransfersSum += transactionHistory.amount_money;
+                availableFunds += transactionHistory.amount_money;
+                accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+              } else {
+                transferCurrencyExchangeRate = await getCurrencyExchangeRate(
+                  transactionHistory.id_currency,
+                );
+
+                if (mainCurrency) {
+                  convertedAmountMoney =
+                    transactionHistory.amount_money /
+                    transferCurrencyExchangeRate;
+
+                  incomingTransfersSum += convertedAmountMoney;
+                  availableFunds += convertedAmountMoney;
+                  accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+                } else {
+                  convertedAmountMoney =
+                    (transactionHistory.amount_money /
+                      transferCurrencyExchangeRate) *
+                    userCurrencyExchangeRate;
+
+                  incomingTransfersSum += convertedAmountMoney;
+                  availableFunds += convertedAmountMoney;
+                  accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+                }
+              }
+            }
+          });
+
+          console.log('accountBalanceHistory', accountBalanceHistory);
+          console.log('outgoingTransfersSum', outgoingTransfersSum);
+          console.log('incomingTransfersSum', incomingTransfersSum);
+
+          return Additional.update(
+            {
+              account_balance_history: accountBalanceHistory,
+              outgoing_transfers_sum: outgoingTransfersSum,
+              incoming_transfers_sum: incomingTransfersSum,
+            },
+            { where: { id_owner: userId } },
+          );
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   function setNotification(id_owner) {
@@ -283,6 +351,7 @@ exports.confirm = (req, res) => {
                   isRegisteredTransfer.authorization_key === authorizationKey
                 ) {
                   const transferCurrencyId = isRegisteredTransfer.id_currency;
+
                   Promise.all([
                     await setAvailableFunds(
                       senderId,
@@ -292,17 +361,18 @@ exports.confirm = (req, res) => {
                       amountMoney,
                       transferCurrencyId,
                     ),
-                    await setTransferHistory(
+                    setTransferHistory(
                       senderId,
                       recipientId,
                       amountMoney,
                       transferTitle,
                       authorizationKey,
                     ),
-                  ]).then(isPaymentSuccess => {
+                  ]).then(async isPaymentSuccess => {
                     if (isPaymentSuccess) {
                       Promise.all([
-                        // setWidgetStatus(senderId),
+                        await setWidgetStatus(senderId),
+                        // TODO ! WYWOLANIE FUNKCJI
                         setWidgetStatus(recipientId),
                         setNotification(recipientId),
                       ]).then(isNotificationSuccess => {
@@ -357,12 +427,16 @@ exports.register = (req, res) => {
   }
 
   async function getCurrencyId(id_sender) {
-    const isCurrency = await Bill.findOne({
-      where: {
-        id_owner: id_sender,
-      },
-    });
-    return isCurrency.id_currency;
+    try {
+      const isCurrency = await Bill.findOne({
+        where: {
+          id_owner: id_sender,
+        },
+      });
+      return isCurrency.id_currency;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async function getSenderEmail(id) {
@@ -594,8 +668,8 @@ exports.register = (req, res) => {
                         <tr>
                           <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                             <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;"> Dear Customer! <br /> We have registered an attempt to make a payment for the amount of ${amountMoney} USD to ${await getRecipientName(
-  recipientId,
-)}. <br /><br /> Confirm the payment by entering the authorization key: <b>${authorizationKey}</b>                        </div>
+        recipientId,
+      )}. <br /><br /> Confirm the payment by entering the authorization key: <b>${authorizationKey}</b>                        </div>
                           </td>
                         </tr>
                         <tr>
@@ -654,16 +728,20 @@ exports.register = (req, res) => {
     transferTitle,
     authorizationKey,
   ) {
-    return Transaction.create({
-      id_sender: senderId,
-      id_recipient: recipientId,
-      date_time: getTodayDate(),
-      amount_money: amountMoney,
-      id_currency: await getCurrencyId(senderId),
-      transfer_title: transferTitle,
-      authorization_key: authorizationKey,
-      authorization_status: setAuthorizationStatus(0),
-    });
+    try {
+      return Transaction.create({
+        id_sender: senderId,
+        id_recipient: recipientId,
+        date_time: getTodayDate(),
+        amount_money: amountMoney,
+        id_currency: await getCurrencyId(senderId),
+        transfer_title: transferTitle,
+        authorization_key: authorizationKey,
+        authorization_status: setAuthorizationStatus(0),
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   Bill.findOne({

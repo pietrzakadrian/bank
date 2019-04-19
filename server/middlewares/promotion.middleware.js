@@ -19,30 +19,42 @@ module.exports = (req, res, next) => {
   }
 
   async function getCurrencyId(id_owner) {
-    const isCurrency = await Bill.findOne({
-      where: {
-        id_owner,
-      },
-    });
-    return isCurrency.id_currency;
+    try {
+      const isCurrency = await Bill.findOne({
+        where: {
+          id_owner,
+        },
+      });
+      return isCurrency.id_currency;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async function isCurrencyMain(id) {
-    const currencyMain = await Currency.findOne({
-      where: {
-        id,
-      },
-    });
-    return currencyMain.main_currency;
+    try {
+      const currencyMain = await Currency.findOne({
+        where: {
+          id,
+        },
+      });
+      return currencyMain.main_currency;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async function getCurrencyExchangeRate(currencyId) {
-    const isCurrencyExchangeRate = await Currency.findOne({
-      where: {
-        id: currencyId,
-      },
-    });
-    return isCurrencyExchangeRate.currency_exchange_rate;
+    try {
+      const isCurrencyExchangeRate = await Currency.findOne({
+        where: {
+          id: currencyId,
+        },
+      });
+      return isCurrencyExchangeRate.currency_exchange_rate;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   function setPromotionalAmount(amount) {
@@ -85,74 +97,79 @@ module.exports = (req, res, next) => {
     recipientId,
     transferCurrencyId,
   ) {
-    const recipientCurrencyId = await getCurrencyId(recipientId);
+    try {
+      const recipientCurrencyId = await getCurrencyId(recipientId);
 
-    if (recipientCurrencyId === transferCurrencyId) {
-      Bill.update(
-        {
-          available_funds: (
-            parseFloat(recipientAvailableFunds) + parseFloat(amountMoney)
-          ).toFixed(2),
-        },
-        { where: { id_owner: recipientId } },
-      ).then(() => {
-        setWidgetStatus(
-          recipientId,
-          false,
-          recipientCurrencyId,
-          transferCurrencyId,
-        );
-      });
-    } else {
-      const mainCurrency = await isCurrencyMain(recipientCurrencyId);
-      const recipientCurrencyExchangeRate = await getCurrencyExchangeRate(
-        recipientCurrencyId,
-      );
-      const transferCurrencyExchangeRate = await getCurrencyExchangeRate(
-        transferCurrencyId,
-      );
-
-      if (mainCurrency) {
-        const convertedAmountMoney = amountMoney / transferCurrencyExchangeRate;
-
+      if (recipientCurrencyId === transferCurrencyId) {
         Bill.update(
           {
             available_funds: (
-              parseFloat(recipientAvailableFunds) +
-              parseFloat(convertedAmountMoney)
+              parseFloat(recipientAvailableFunds) + parseFloat(amountMoney)
             ).toFixed(2),
           },
           { where: { id_owner: recipientId } },
         ).then(() => {
           setWidgetStatus(
             recipientId,
-            convertedAmountMoney,
+            false,
             recipientCurrencyId,
             transferCurrencyId,
           );
         });
       } else {
-        const convertedAmountMoney =
-          (amountMoney / transferCurrencyExchangeRate) *
-          recipientCurrencyExchangeRate;
+        const mainCurrency = await isCurrencyMain(recipientCurrencyId);
+        const recipientCurrencyExchangeRate = await getCurrencyExchangeRate(
+          recipientCurrencyId,
+        );
+        const transferCurrencyExchangeRate = await getCurrencyExchangeRate(
+          transferCurrencyId,
+        );
 
-        Bill.update(
-          {
-            available_funds: (
-              parseFloat(recipientAvailableFunds) +
-              parseFloat(convertedAmountMoney)
-            ).toFixed(2),
-          },
-          { where: { id_owner: recipientId } },
-        ).then(() => {
-          setWidgetStatus(
-            recipientId,
-            convertedAmountMoney,
-            recipientCurrencyId,
-            transferCurrencyId,
-          );
-        });
+        if (mainCurrency) {
+          const convertedAmountMoney =
+            amountMoney / transferCurrencyExchangeRate;
+
+          Bill.update(
+            {
+              available_funds: (
+                parseFloat(recipientAvailableFunds) +
+                parseFloat(convertedAmountMoney)
+              ).toFixed(2),
+            },
+            { where: { id_owner: recipientId } },
+          ).then(() => {
+            setWidgetStatus(
+              recipientId,
+              convertedAmountMoney,
+              recipientCurrencyId,
+              transferCurrencyId,
+            );
+          });
+        } else {
+          const convertedAmountMoney =
+            (amountMoney / transferCurrencyExchangeRate) *
+            recipientCurrencyExchangeRate;
+
+          Bill.update(
+            {
+              available_funds: (
+                parseFloat(recipientAvailableFunds) +
+                parseFloat(convertedAmountMoney)
+              ).toFixed(2),
+            },
+            { where: { id_owner: recipientId } },
+          ).then(() => {
+            setWidgetStatus(
+              recipientId,
+              convertedAmountMoney,
+              recipientCurrencyId,
+              transferCurrencyId,
+            );
+          });
+        }
       }
+    } catch (e) {
+      console.log(e);
     }
   }
 
@@ -163,16 +180,20 @@ module.exports = (req, res, next) => {
     transferTitle,
     authorizationKey,
   ) {
-    return Transaction.create({
-      id_sender: senderId,
-      id_recipient: recipientId,
-      date_time: getTodayDate(),
-      amount_money: amountMoney,
-      id_currency: await getCurrencyId(senderId),
-      transfer_title: transferTitle,
-      authorization_key: authorizationKey,
-      authorization_status: setAuthorizationStatus(1),
-    });
+    try {
+      return Transaction.create({
+        id_sender: senderId,
+        id_recipient: recipientId,
+        date_time: getTodayDate(),
+        amount_money: amountMoney,
+        id_currency: await getCurrencyId(senderId),
+        transfer_title: transferTitle,
+        authorization_key: authorizationKey,
+        authorization_status: setAuthorizationStatus(1),
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   function setWidgetStatus(
