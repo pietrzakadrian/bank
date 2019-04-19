@@ -180,7 +180,7 @@ exports.confirm = (req, res) => {
         db.Sequelize.or({ id_sender: userId }, { id_recipient: userId }),
       ),
       order: [['date_time', 'ASC']],
-    }).then(transactionsHistory => {
+    }).then(async transactionsHistory => {
       // todo: if id_currency equal transaction_currency => add
       // else => exchange currency and add
       if (transactionsHistory) {
@@ -188,20 +188,40 @@ exports.confirm = (req, res) => {
         let accountBalanceHistory = 0;
         let incomingTransfersSum = 0;
         let outgoingTransfersSum = 0;
+        const mainCurrency = await isCurrencyMain(userId);
+        const userCurrencyId = await getCurrencyId(userId);
+        const userCurrencyExchangeRate = await getCurrencyExchangeRate(
+          userCurrencyId,
+        );
+        // const transferCurrencyExchangeRate = await getCurrencyExchangeRate(
+        //   transferCurrencyId,
+        // );
 
         for (let i = 0, max = transactionsHistory.length; i < max; i++) {
           if (transactionsHistory[i].id_sender === userId) {
-            outgoingTransfersSum += transactionsHistory[i].amount_money;
-            availableFunds -= transactionsHistory[i].amount_money;
-            accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+            if (transactionsHistory[i].id_currency === userCurrencyId) {
+              outgoingTransfersSum += transactionsHistory[i].amount_money;
+              availableFunds -= transactionsHistory[i].amount_money;
+              accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+            } else {
+              // przewalutuj!
+            }
           }
 
           if (transactionsHistory[i].id_recipient === userId) {
-            incomingTransfersSum += transactionsHistory[i].amount_money;
-            availableFunds += transactionsHistory[i].amount_money;
-            accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+            if (transactionsHistory[i].id_currency === userCurrencyId) {
+              incomingTransfersSum += transactionsHistory[i].amount_money;
+              availableFunds += transactionsHistory[i].amount_money;
+              accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+            } else {
+              // przewalutuj!
+            }
           }
         }
+
+        console.log('accountBalanceHistory', accountBalanceHistory);
+        console.log('outgoingTransfersSum', outgoingTransfersSum);
+        console.log('incomingTransfersSum', incomingTransfersSum);
 
         return Additional.update(
           {
