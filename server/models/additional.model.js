@@ -18,7 +18,7 @@ module.exports = (sequelize, Sequelize) => {
         },
       },
       account_balance_history: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         allowNull: false,
         validate: {
           notEmpty: {

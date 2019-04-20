@@ -95,48 +95,48 @@ class AvailableFunds extends Component {
         accountBalanceHistory &&
         currency ? (
             <Fragment>
-              <div>
+            <div>
               <Typography variant="subtitle1">
-                  <FormattedMessage {...messages.availableFunds} />
-                </Typography>
-                <span className={classes.typographyText}>
-                  {availableFunds
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                    .replace('.', ',')}
+                <FormattedMessage {...messages.availableFunds} />
+              </Typography>
+              <span className={classes.typographyText}>
+                {availableFunds
+                  .toFixed(2)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                  .replace('.', ',')}
                 &nbsp;
-                  <Typography
-                    variant="subtitle1"
-                    className={classes.typographyMain}
-                  >
-                    {currency}
-                  </Typography>
-                </span>
-                <Trend
-                  className={classNames(
-                    classes.trendContainer,
-                    'trend--container',
-                  )}
-                  width={115}
-                  height={40}
-                  smooth
-                  autoDraw
-                  autoDrawDuration={1500}
-                  autoDrawEasing="ease-out"
-                  data={accountBalanceHistoryArray}
-                  gradient={['#15a0dd']}
-                  radius={0}
-                  strokeWidth={2.5}
-                  strokeLinecap="square"
-                />
-              </div>
-            </Fragment>
-          ) : (
-            <div className={classes.loadingCircular}>
-              <LoadingCircular />
+                <Typography
+                  variant="subtitle1"
+                  className={classes.typographyMain}
+                >
+                  {currency}
+                </Typography>
+              </span>
+              <Trend
+                className={classNames(
+                  classes.trendContainer,
+                  'trend--container',
+                )}
+                width={115}
+                height={40}
+                smooth
+                autoDraw
+                autoDrawDuration={1500}
+                autoDrawEasing="ease-out"
+                data={accountBalanceHistoryArray}
+                gradient={['#15a0dd']}
+                radius={0}
+                strokeWidth={2.5}
+                strokeLinecap="square"
+              />
             </div>
-          )}
+          </Fragment>
+        ) : (
+          <div className={classes.loadingCircular}>
+            <LoadingCircular />
+          </div>
+        )}
       </Paper>
     );
   }

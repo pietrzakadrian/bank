@@ -12,16 +12,19 @@ function createNecessaryTables() {
   try {
     Promise.all([
       db.currency.create({
+        id: 1,
         currency: 'USD',
         date_currency_exchange_rate_sync: new Date(),
         main_currency: 0,
       }),
       db.currency.create({
+        id: 2,
         currency: 'PLN',
         date_currency_exchange_rate_sync: new Date(),
         main_currency: 1,
       }),
       db.currency.create({
+        id: 3,
         currency: 'EUR',
         date_currency_exchange_rate_sync: new Date(),
         main_currency: 0,
@@ -107,9 +110,7 @@ function masterProcess() {
     .listen(port);
 
   // Sequelize reset db
-  db.sequelize.sync({ force: true }).then(() => {
-    createNecessaryTables();
-  });
+  db.sequelize.sync({ force: true }).then(() => createNecessaryTables());
 
   // Crons Schedule
   cron.schedule('0 0 0 * * *', () => {

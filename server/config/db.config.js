@@ -5,7 +5,7 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
   host: env.host,
   dialect: env.dialect,
   operatorsAliases: false,
-  timezone: '+01:00',
+  timezone: '+02:00',
 
   pool: {
     max: env.pool.max,

@@ -77,15 +77,15 @@ function dashboardPageReducer(state = initialState, action) {
     case ENTER_NEW_SURNAME_SUCCESS:
       return state.set('surname', null);
 
-    case NEW_NOTIFICATION:
-      return state
-        .set('accountBills', null)
-        .set('availableFunds', null)
-        .set('accountBalanceHistory', null)
-        .set('recentTransactionsSender', null)
-        .set('recentTransactionsRecipient', null)
-        .set('outgoingTransfersSum', null)
-        .set('incomingTransfersSum', null);
+    // case NEW_NOTIFICATION:
+    //   return state
+    //     .set('accountBills', null)
+    //     .set('availableFunds', null)
+    //     .set('accountBalanceHistory', null)
+    //     .set('recentTransactionsSender', null)
+    //     .set('recentTransactionsRecipient', null)
+    //     .set('outgoingTransfersSum', null)
+    //     .set('incomingTransfersSum', null);
 
     case LOGOUT_SUCCESS:
       return state
