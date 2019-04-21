@@ -4,7 +4,6 @@ const env = require('./env.config.js');
 const sequelize = new Sequelize(env.database, env.username, env.password, {
   host: env.host,
   dialect: env.dialect,
-  operatorsAliases: Sequelize.Op,
   timezone: '+02:00',
 
   pool: {
