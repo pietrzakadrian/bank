@@ -232,6 +232,7 @@ exports.confirm = (req, res) => {
           userCurrencyId,
         );
 
+        // eslint-disable-next-line no-restricted-syntax
         for await (const transactionHistory of transactionsHistory) {
           if (transactionHistory.id_sender === userId) {
             if (transactionHistory.id_currency === userCurrencyId) {
@@ -448,6 +449,19 @@ exports.register = (req, res) => {
     }
   }
 
+  async function getCurrencyName(id) {
+    try {
+      const isCurrencyName = await Currency.findOne({
+        where: {
+          id,
+        },
+      });
+      return isCurrencyName.currency;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   async function getSenderEmail(id) {
     try {
       const isUser = await User.findOne({
@@ -487,22 +501,17 @@ exports.register = (req, res) => {
     return authorizationKey;
   }
 
-  // function getAmountMoney(amountMoney) {
-  //   const formattedAmountMoney = amountMoney
-  //     .toFixed(2)
-  //     .toString()
-  //     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-  //     .replace('.', ',');
-
-  //   return formattedAmountMoney;
-  // }
-
   async function sendAuthorizationKey(
     senderId,
     recipientId,
     amountMoney,
     authorizationKey,
+    currencyId,
   ) {
+    const currencyName = await getCurrencyName(currencyId);
+    const recipientName = await getRecipientName(recipientId);
+    const senderName = await getSenderEmail(senderId);
+
     await nodemailer.createTestAccount();
     const transporter = nodemailer.createTransport({
       host: env.nodemailer.host,
@@ -516,11 +525,13 @@ exports.register = (req, res) => {
 
     const mailOptions = {
       from: `"Bank Application" <${env.nodemailer.email}>`,
-      to: `${await getSenderEmail(senderId)}`,
+      to: `${senderName}`,
       subject: 'Payment authorization',
-      text: `Dear Customer! We have registered an attempt to make a payment for the amount of: ${amountMoney} USD to ${await getRecipientName(
-        recipientId,
-      )}.
+      text: `Dear Customer! We have registered an attempt to make a payment for the amount of: ${amountMoney
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+        .replace('.', ',')} ${currencyName} to ${recipientName}.
       Confirm the payment by entering the authorization key: ${authorizationKey}`,
       html: `<!doctype html>
       <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -676,9 +687,14 @@ exports.register = (req, res) => {
                         </tr>
                         <tr>
                           <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                            <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;"> Dear Customer! <br /> We have registered an attempt to make a payment for the amount of ${amountMoney} USD to ${await getRecipientName(
-        recipientId,
-      )}. <br /><br /> Confirm the payment by entering the authorization key: <b>${authorizationKey}</b>                        </div>
+                            <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;"> Dear Customer! <br /> We have registered an attempt to make a payment for the amount of ${amountMoney
+                              .toFixed(2)
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                              .replace(
+                                '.',
+                                ',',
+                              )} ${currencyName} to ${recipientName}. <br /><br /> Confirm the payment by entering the authorization key: <b>${authorizationKey}</b>                        </div>
                           </td>
                         </tr>
                         <tr>
@@ -736,6 +752,7 @@ exports.register = (req, res) => {
     amountMoney,
     transferTitle,
     authorizationKey,
+    currencyId,
   ) {
     try {
       return Transaction.create({
@@ -743,7 +760,7 @@ exports.register = (req, res) => {
         id_recipient: recipientId,
         date_time: getTodayDate(),
         amount_money: amountMoney,
-        id_currency: await getCurrencyId(senderId),
+        id_currency: currencyId,
         transfer_title: transferTitle,
         authorization_key: authorizationKey,
         authorization_status: setAuthorizationStatus(0),
@@ -773,13 +790,15 @@ exports.register = (req, res) => {
         }).then(async isAvailableFunds => {
           if (isAvailableFunds) {
             const senderAvailableFunds = isAvailableFunds.available_funds;
+            const currencyId = await getCurrencyId(senderId);
+
             if (senderAvailableFunds >= amountMoney && amountMoney > 0) {
               Transaction.findOne({
                 where: {
                   id_sender: senderId,
                   id_recipient: recipientId,
                   amount_money: amountMoney,
-                  id_currency: await getCurrencyId(senderId),
+                  id_currency: currencyId,
                   transfer_title: transferTitle,
                   authorization_key: authorizationKey,
                   authorization_status: setAuthorizationStatus(0),
@@ -793,6 +812,7 @@ exports.register = (req, res) => {
                     amountMoney,
                     transferTitle,
                     authorizationKey,
+                    currencyId,
                   );
 
                   sendAuthorizationKey(
@@ -800,7 +820,10 @@ exports.register = (req, res) => {
                     recipientId,
                     amountMoney,
                     authorizationKey,
-                  ).catch(() => {});
+                    currencyId,
+                  ).catch(e => {
+                    console.log(e);
+                  });
 
                   return res.status(200).json({ success: true });
                 }

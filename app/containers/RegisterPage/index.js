@@ -527,9 +527,7 @@ export class RegisterPage extends React.Component {
   render() {
     const { classes, activeStep, onRegisterStepBack, isLoading } = this.props;
     const steps = this.getSteps();
-
-    console.log(this.props);
-
+    
     return (
       <Fragment>
         <FormattedMessage {...messages.helmetRegisterTitle}>

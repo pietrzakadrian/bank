@@ -292,13 +292,15 @@ class PaymentPage extends React.Component {
   getSuggestionValue = suggestion => suggestion.account_bill;
 
   renderSuggestion = suggestion => (
-    <div className="renderSuggestion">
+    <div>
       {suggestion.account_bill
         .toString()
         .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
         .trim()}
       <br />
-      {suggestion.user.name} {suggestion.user.surname}
+      <span className="react-autosuggest__suggestions-list-name">
+        {suggestion.user.name} {suggestion.user.surname}
+      </span>
     </div>
   );
 
@@ -432,7 +434,12 @@ class PaymentPage extends React.Component {
                   <span className={classes.infoRecipientText}>
                     <FormattedMessage {...messages.paymentEndAmountMoney} />
                   </span>
-                  : {this.props.amountMoney}{' '}
+                  :{' '}
+                  {this.props.amountMoney
+                    .toFixed(2)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                    .replace('.', ',')}{' '}
                   <FormattedMessage {...messages.currency} />
                 </div>
 
@@ -684,14 +691,15 @@ function mapDispatchToProps(dispatch) {
     isEmptyTransferTitle: error => dispatch(emptyTransferTitleAction(error)),
     isEmptyAuthorizationKey: error =>
       dispatch(emptyAuthorizationKeyAction(error)),
-    onChangeAmountMoney: e => dispatch(changeAmountMoneyAction(e.target.value)),
+    onChangeAmountMoney: e =>
+      dispatch(changeAmountMoneyAction(parseFloat(e.target.value))),
     onChangeTransferTitle: e =>
       dispatch(changeTransferTitleAction(e.target.value)),
     onChangeAuthorizationKey: e =>
       dispatch(changeAuthorizationKeyAction(e.target.value)),
     onEnterAccountNumber: value => dispatch(enterAccountNumberAction(value)),
     onEnterAmountMoney: amountMoney =>
-      dispatch(enterAmountMoneyAction(amountMoney)),
+      dispatch(enterAmountMoneyAction(parseFloat(amountMoney))),
     onEnterTransferTitle: transferTitle =>
       dispatch(enterTransferTitleAction(transferTitle)),
     onSendAuthorizationKey: () => dispatch(sendAuthorizationKeyAction()),

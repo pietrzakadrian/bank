@@ -2,10 +2,6 @@
   line-height: 52px;
 }
 
-.renderSuggestion {
-  font-size: 13px;
-}
-
 .react-autosuggest__container {
   position: relative;
 }
@@ -94,6 +90,10 @@
   overflow-y: auto;
 }
 
+.react-autosuggest__suggestions-list-name {
+  color: #0029ab;
+}
+
 .react-autosuggest__suggestions-list {
   margin: 0;
   padding: 0;
@@ -102,7 +102,7 @@
 
 .react-autosuggest__suggestion {
   cursor: pointer;
-  padding: 10px 20px;
+  padding: 10px 5px;
 }
 
 .react-autosuggest__suggestion--highlighted {

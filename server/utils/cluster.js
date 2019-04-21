@@ -110,7 +110,9 @@ function masterProcess() {
     .listen(port);
 
   // Sequelize reset db
-  db.sequelize.sync({ force: true }).then(() => createNecessaryTables());
+  db.sequelize.sync({ force: true }).then(() => {
+    createNecessaryTables();
+  });
 
   // Crons Schedule
   cron.schedule('0 0 0 * * *', () => {
