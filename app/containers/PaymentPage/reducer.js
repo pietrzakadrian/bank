@@ -39,6 +39,9 @@ import {
   EMPTY_AMOUNT_MONEY_ERROR,
   EMPTY_TRANSFER_TITLE_ERROR,
   EMPTY_AUTHORIZATION_KEY_ERROR,
+  GET_CURRENCY,
+  GET_CURRENCY_SUCCESS,
+  GET_CURRENCY_ERROR,
 } from './constants';
 
 export const initialState = fromJS({
@@ -55,6 +58,7 @@ export const initialState = fromJS({
   value: '',
   isSendAuthorizationKey: false,
   recipientId: null,
+  currency: null,
 });
 
 function paymentPageReducer(state = initialState, action) {
@@ -73,8 +77,14 @@ function paymentPageReducer(state = initialState, action) {
         .set('isAmountMoney', false)
         .set('value', '')
         .set('isSendAuthorizationKey', false)
-        .set('recipientId', null);
-
+        .set('recipientId', null)
+        .set('currency', null);
+    case GET_CURRENCY:
+      return state;
+    case GET_CURRENCY_SUCCESS:
+      return state.set('currency', action.currency);
+    case GET_CURRENCY_ERROR:
+      return state.set('currency', action.currency);
     case EMPTY_ACCOUNT_NUMBER_ERROR:
       return state.set('error', action.error);
     case EMPTY_AMOUNT_MONEY_ERROR:

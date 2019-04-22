@@ -1,5 +1,6 @@
 import React from 'react';
 import request from 'utils/request';
+import decode from 'jwt-decode';
 import { select, call, put, takeLatest, throttle } from 'redux-saga/effects';
 import { push } from 'connected-react-router/immutable';
 import { successLogoutAction } from 'components/App/Header/actions';
@@ -22,6 +23,8 @@ import {
   makePaymentSuccessAction,
   makePaymentErrorAction,
   errorTransferTitleAction,
+  getCurrencySuccessAction,
+  getCurrencyErrorAction,
 } from './actions';
 
 import {
@@ -31,6 +34,7 @@ import {
   ENTER_TRANSFER_TITLE,
   ENTER_AUTHORIZATION_KEY,
   SEND_AUTHORIZATION_KEY,
+  GET_CURRENCY,
 } from './constants';
 import {
   makeValueSelector,
@@ -40,11 +44,42 @@ import {
   makeIsAmountMoneySelector,
   makeIsAccountBillSelector,
   makeRecipientIdSelector,
+  makeCurrencySelector,
 } from './selectors';
 
 function* getToken() {
   // Retrieves the user token from localStorage
   return localStorage.getItem('id_token');
+}
+
+function* getUserId() {
+  return decode(yield call(getToken));
+}
+
+export function* getCurrency() {
+  const token = yield call(getUserId);
+  const jwt = yield call(getToken);
+  const requestURL = `/api/bills/${token.id}`;
+  const currency = yield select(makeCurrencySelector());
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    if (!currency) {
+      response[0].currency.currency
+        ? yield put(getCurrencySuccessAction(response[0].currency.currency))
+        : yield put(getCurrencyErrorAction('error'));
+    }
+  } catch (err) {
+    yield put(successLogoutAction()), yield put(push('/login'));
+  }
 }
 
 export function* searchAccountNumber() {
@@ -92,10 +127,10 @@ export function* isAccountBill() {
       ? (yield put(successAccountNumberAction(response.recipientId)),
         yield put(paymentStepNextAction()))
       : yield put(
-        searchAccountBillsErrorAction(
-          <FormattedMessage {...messages.errorAccountNumberValidate} />,
-        ),
-      );
+          searchAccountBillsErrorAction(
+            <FormattedMessage {...messages.errorAccountNumberValidate} />,
+          ),
+        );
   } catch (err) {
     /* just ignore */
   }
@@ -185,10 +220,10 @@ export function* registerTransaction() {
             ),
           )
         : yield put(
-          sendAuthorizationKeyErrorAction(
-            <FormattedMessage {...messages.errorAmountOfMoneyIncorrect} />,
-          ),
-        );
+            sendAuthorizationKeyErrorAction(
+              <FormattedMessage {...messages.errorAmountOfMoneyIncorrect} />,
+            ),
+          );
     } catch (err) {
       /* just ignore */
     }
@@ -229,21 +264,21 @@ export function* confirmTransaction() {
       response.success
         ? (yield put(makePaymentSuccessAction()),
           socket.emit('new notification', recipientId),
-        yield put(
-          enqueueSnackbarAction({
-            message: <FormattedMessage {...messages.paymentHasBeenSent} />,
-            options: {
-              variant: 'success',
-              autoHideDuration: 2000,
-            },
-          }),
-        ),
-        yield put(push('/dashboard')))
-        : yield put(
-          makePaymentErrorAction(
-            <FormattedMessage {...messages.errorKeyIncorrect} />,
+          yield put(
+            enqueueSnackbarAction({
+              message: <FormattedMessage {...messages.paymentHasBeenSent} />,
+              options: {
+                variant: 'success',
+                autoHideDuration: 2000,
+              },
+            }),
           ),
-        );
+          yield put(push('/dashboard')))
+        : yield put(
+            makePaymentErrorAction(
+              <FormattedMessage {...messages.errorKeyIncorrect} />,
+            ),
+          );
     } catch (err) {
       /* just ignore */
     }
@@ -252,6 +287,7 @@ export function* confirmTransaction() {
 
 export default function* paymentPageSaga() {
   yield throttle(1000, SEARCH_ACCOUNT_BILLS, searchAccountNumber);
+  yield takeLatest(GET_CURRENCY, getCurrency);
   yield takeLatest(ENTER_ACCOUNT_NUMBER, isAccountBill);
   yield takeLatest(ENTER_AMOUNT_MONEY, isAmountMoney);
   yield takeLatest(ENTER_TRANSFER_TITLE, isTransferTitle);

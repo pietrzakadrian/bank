@@ -87,6 +87,9 @@ const makeSuggestionsSelector = () =>
     substate.get('suggestions'),
   );
 
+const makeCurrencySelector = () =>
+  createSelector(selectPaymentPageDomain, substate => substate.get('currency'));
+
 export default makeSelectPaymentPage;
 export {
   makeAccountBillsSelector,
@@ -105,4 +108,5 @@ export {
   makeIsAmountMoneySelector,
   makeIsSendAuthorizationKeySelector,
   makeRecipientIdSelector,
+  makeCurrencySelector,
 };

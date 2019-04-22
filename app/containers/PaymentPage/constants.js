@@ -55,6 +55,10 @@ export const ENTER_AUTHORIZATION_KEY_ERROR =
 export const EMPTY_AUTHORIZATION_KEY_ERROR =
   'app/PaymentPage/EMPTY_AUTHORIZATION_KEY_ERROR';
 
+export const GET_CURRENCY = 'app/PaymentPage/GET_CURRENCY';
+export const GET_CURRENCY_SUCCESS = 'app/PaymentPage/GET_CURRENCY_SUCCESS';
+export const GET_CURRENCY_ERROR = 'app/PaymentPage/GET_CURRENCY_ERROR';
+
 export const MAKE_PAYMENT = 'app/PaymentPage/MAKE_PAYMENT';
 export const MAKE_PAYMENT_SUCCESS = 'app/PaymentPage/MAKE_PAYMENT_SUCCESS';
 export const MAKE_PAYMENT_ERROR = 'app/PaymentPage/MAKE_PAYMENT_ERROR';

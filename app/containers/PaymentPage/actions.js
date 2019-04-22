@@ -37,7 +37,30 @@ import {
   EMPTY_AMOUNT_MONEY_ERROR,
   EMPTY_TRANSFER_TITLE_ERROR,
   EMPTY_AUTHORIZATION_KEY_ERROR,
+  GET_CURRENCY,
+  GET_CURRENCY_SUCCESS,
+  GET_CURRENCY_ERROR,
 } from './constants';
+
+export function getCurrencyAction() {
+  return {
+    type: GET_CURRENCY,
+  };
+}
+
+export function getCurrencySuccessAction(currency) {
+  return {
+    type: GET_CURRENCY_SUCCESS,
+    currency,
+  };
+}
+
+export function getCurrencyErrorAction(error) {
+  return {
+    type: GET_CURRENCY_ERROR,
+    error,
+  };
+}
 
 export function emptyAccountNumberAction(error) {
   return {

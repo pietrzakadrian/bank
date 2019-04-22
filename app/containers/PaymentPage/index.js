@@ -34,6 +34,7 @@ import Copyright from 'components/Copyright';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Warning from './Warning';
+
 import {
   makeAccountBillsSelector,
   makeAccountNumberSelector,
@@ -47,6 +48,7 @@ import {
   makeValueSelector,
   makeSelectPaymentPage,
   makeIsSendAuthorizationKeySelector,
+  makeCurrencySelector,
 } from './selectors';
 
 import {
@@ -67,6 +69,7 @@ import {
   emptyTransferTitleAction,
   emptyAuthorizationKeyAction,
   sendAuthorizationKeyAction,
+  getCurrencyAction,
 } from './actions';
 
 import reducer from './reducer';
@@ -278,6 +281,7 @@ class PaymentPage extends React.Component {
 
   componentDidMount() {
     if (!this.Auth.loggedIn()) this.props.history.push('/');
+    this.props.currency ? null : this.props.getCurrency();
   }
 
   getSteps() {
@@ -440,7 +444,7 @@ class PaymentPage extends React.Component {
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
                     .replace('.', ',')}{' '}
-                  <FormattedMessage {...messages.currency} />
+                  {this.props.currency}
                 </div>
 
                 <div className={classes.infoRecipient}>
@@ -682,10 +686,12 @@ const mapStateToProps = createStructuredSelector({
   value: makeValueSelector(),
   paymentPage: makeSelectPaymentPage(),
   isSendAuthorizationKey: makeIsSendAuthorizationKeySelector(),
+  currency: makeCurrencySelector(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
+    getCurrency: () => dispatch(getCurrencyAction()),
     isEmptyAccountNumber: error => dispatch(emptyAccountNumberAction(error)),
     isEmptyAmountMoney: error => dispatch(emptyAmountNumberAction(error)),
     isEmptyTransferTitle: error => dispatch(emptyTransferTitleAction(error)),
