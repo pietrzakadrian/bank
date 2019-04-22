@@ -10,6 +10,7 @@ const env = require('../config/env.config.js');
 
 function createNecessaryTables() {
   try {
+    // todo: sprawdz najpierw czy to istnieje
     Promise.all([
       db.currency.create({
         id: 1,

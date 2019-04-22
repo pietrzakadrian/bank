@@ -9,3 +9,8 @@ td {
 .percent {
   color: #ea0000;
 }
+
+.loading--container {
+  margin: 0 auto;
+  text-align: center;
+}

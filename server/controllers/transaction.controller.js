@@ -2,12 +2,12 @@
 const nodemailer = require('nodemailer');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
-const Op = db.Sequelize.Op;
 const Transaction = db.transactions;
 const Bill = db.bills;
 const Additional = db.additionals;
 const User = db.users;
 const Currency = db.currency;
+const Op = db.Sequelize.Op;
 
 exports.confirm = (req, res) => {
   function getTodayDate() {

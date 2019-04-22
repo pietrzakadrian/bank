@@ -18,30 +18,6 @@ const selectHistoryPageDomain = state => state.get('historyPage', initialState);
 const makeRowsSelector = () =>
   createSelector(selectHistoryPageDomain, substate => substate.get('rows'));
 
-const makeSortingSelector = () =>
-  createSelector(selectHistoryPageDomain, substate => substate.get('sorting'));
-
-const makeGroupingSelector = () =>
-  createSelector(selectHistoryPageDomain, substate => substate.get('grouping'));
-
-const makeExpandedGroupsSelector = () =>
-  createSelector(selectHistoryPageDomain, substate =>
-    substate.get('expandedGroups'),
-  );
-
-const makeSelectionSelector = () =>
-  createSelector(selectHistoryPageDomain, substate =>
-    substate.get('selection'),
-  );
-
-const makeExpandedRowIdsSelector = () =>
-  createSelector(selectHistoryPageDomain, substate =>
-    substate.get('expandedRowIds'),
-  );
-
-const makeFiltersSelector = () =>
-  createSelector(selectHistoryPageDomain, substate => substate.get('filters'));
-
 const makeCurrentPageSelector = () =>
   createSelector(selectHistoryPageDomain, substate =>
     substate.get('currentPage'),
@@ -50,19 +26,14 @@ const makeCurrentPageSelector = () =>
 const makePageSizeSelector = () =>
   createSelector(selectHistoryPageDomain, substate => substate.get('pageSize'));
 
-const makePageSizesSelector = () =>
+const makeTotalPagesSelector = () =>
   createSelector(selectHistoryPageDomain, substate =>
-    substate.get('pageSizes'),
+    substate.get('totalPages'),
   );
 
-const makeColumnOrderSelector = () =>
+const makeTotalCountSelector = () =>
   createSelector(selectHistoryPageDomain, substate =>
-    substate.get('columnOrder'),
-  );
-
-const makeColumnWidthsSelector = () =>
-  createSelector(selectHistoryPageDomain, substate =>
-    substate.get('columnWidths'),
+    substate.get('totalCount'),
   );
 
 const makeSelectHistoryPage = () =>
@@ -71,16 +42,9 @@ const makeSelectHistoryPage = () =>
 export default makeSelectHistoryPage;
 export {
   selectHistoryPageDomain,
-  makeColumnWidthsSelector,
-  makeColumnOrderSelector,
-  makePageSizesSelector,
   makePageSizeSelector,
   makeCurrentPageSelector,
-  makeFiltersSelector,
-  makeExpandedRowIdsSelector,
-  makeSelectionSelector,
-  makeExpandedGroupsSelector,
-  makeGroupingSelector,
-  makeSortingSelector,
   makeRowsSelector,
+  makeTotalPagesSelector,
+  makeTotalCountSelector,
 };

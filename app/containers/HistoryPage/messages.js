@@ -21,4 +21,28 @@ export default defineMessages({
     id: `${scope}.expenses`,
     defaultMessage: 'Your expenses',
   },
+  date: {
+    id: `${scope}.date`,
+    defaultMessage: 'Date',
+  },
+  sender: {
+    id: `${scope}.sender`,
+    defaultMessage: 'Sender',
+  },
+  recipient: {
+    id: `${scope}.recipient`,
+    defaultMessage: 'Recipient',
+  },
+  transferTitle: {
+    id: `${scope}.transferTitle`,
+    defaultMessage: 'Transfer title',
+  },
+  amount: {
+    id: `${scope}.amount`,
+    defaultMessage: 'Amount',
+  },
+  accountNumber: {
+    id: `${scope}.accountNumber`,
+    defaultMessage: 'Account number',
+  },
 });

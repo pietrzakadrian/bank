@@ -23,14 +23,12 @@ import LoadingCircular from 'components/App/LoadingCircular';
 import { withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import {
-  SelectionState,
   PagingState,
   GroupingState,
   RowDetailState,
-  IntegratedGrouping,
   IntegratedPaging,
   DataTypeProvider,
-  IntegratedSelection,
+  CustomPaging,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -38,28 +36,39 @@ import {
   TableHeaderRow,
   TableRowDetail,
   PagingPanel,
-  TableColumnReordering,
-  TableColumnVisibility,
 } from '@devexpress/dx-react-grid-material-ui';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { createGridAction, getGridDataAction } from './actions';
+import {
+  createGridAction,
+  getGridDataAction,
+  changePageAction,
+} from './actions';
 import makeSelectHistoryPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
 const lgColumns = [
-  { name: 'date_time', title: 'Date' },
-  { name: 'sender_name', title: 'Sender' },
-  { name: 'recipient_name', title: 'Recipient' },
-  { name: 'transfer_title', title: 'Transfer title' },
-  { name: 'amount_money', title: 'Amount of money' },
+  { name: 'date_time', title: <FormattedMessage {...messages.date} /> },
+  { name: 'sender_name', title: <FormattedMessage {...messages.sender} /> },
+  {
+    name: 'recipient_name',
+    title: <FormattedMessage {...messages.recipient} />,
+  },
+  {
+    name: 'transfer_title',
+    title: <FormattedMessage {...messages.transferTitle} />,
+  },
+  {
+    name: 'amount_money',
+    title: <FormattedMessage {...messages.amount} />,
+  },
 ];
 const smColumns = [
-  { name: 'date_time', title: 'Date' },
-  { name: 'amount_money', title: 'Amount' },
+  { name: 'date_time', title: <FormattedMessage {...messages.date} /> },
+  { name: 'amount_money', title: <FormattedMessage {...messages.amount} /> },
 ];
 
 const styles = theme => ({
@@ -75,7 +84,7 @@ const styles = theme => ({
     },
   },
   detailContainer: {
-    margin: '10px 0',
+    margin: '7px 0',
     paddingRight: 0,
     paddingLeft: 33,
   },
@@ -127,19 +136,45 @@ const PercentTypeProvider = props => (
 
 const GridDetailContainerBase = ({ row, classes }) => (
   <div className={classes.detailContainer}>
-    <div className={classes.headerDetail}> Sender</div>
-    <div className={classes.TableInfoDetail}>{row.sender_name}</div>
-    <div className={classes.headerDetail}>Recipient</div>
-    <div className={classes.TableInfoDetail}>{row.recipient_name}</div>
-    <div className={classes.headerDetail}>Account number</div>
-    <div className={classes.TableInfoDetail}>
-      {row.account_bill
-        .toString()
-        .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-        .trim()}
-    </div>
-    <div className={classes.headerDetail}>Transfer title</div>
-    <div className={classes.TableInfoDetail}>{row.transfer_title}</div>
+    {window.matchMedia('(max-width: 678px)').matches ? (
+      <Fragment>
+        <div className={classes.headerDetail}>
+          <FormattedMessage {...messages.sender} />
+        </div>
+        <div className={classes.TableInfoDetail}>{row.sender_name}</div>
+        <div className={classes.headerDetail}>
+          <FormattedMessage {...messages.recipient} />
+        </div>
+        <div className={classes.TableInfoDetail}>{row.recipient_name}</div>
+        <div className={classes.headerDetail}>
+          <FormattedMessage {...messages.accountNumber} />
+        </div>
+        <div className={classes.TableInfoDetail}>
+          {row.account_bill
+            .toString()
+            .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+            .trim()}
+        </div>
+        <div className={classes.headerDetail}>
+          <FormattedMessage {...messages.transferTitle} />
+        </div>
+        <div className={classes.TableInfoDetail}>{row.transfer_title}</div>
+      </Fragment>
+    ) : (
+      <div className="desktop--container">
+        <div className="account--number">
+          <div className={classes.headerDetail}>
+            <FormattedMessage {...messages.accountNumber} />
+          </div>
+          <div className={classes.TableInfoDetail}>
+            {row.account_bill
+              .toString()
+              .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+              .trim()}
+          </div>
+        </div>
+      </div>
+    )}
   </div>
 );
 
@@ -187,18 +222,7 @@ class HistoryPage extends React.Component {
   }
 
   render() {
-    const {
-      classes,
-      historyPage,
-      onSelectionChange,
-      onExpandedRowIdsChange,
-      onGroupingChange,
-      onExpandedGroupsChange,
-      onCurrentPageChange,
-      onPageSizeChange,
-      onColumnOrderChange,
-      onHiddenColumnNamesChange,
-    } = this.props;
+    const { classes, historyPage, onCurrentPageChange } = this.props;
 
     return (
       <Fragment>
@@ -221,47 +245,24 @@ class HistoryPage extends React.Component {
                     : smColumns
                 }
               >
-                <GroupingState
-                  onGroupingChange={onGroupingChange}
-                  onExpandedGroupsChange={onExpandedGroupsChange}
-                />
+                <GroupingState />
                 <PagingState
                   currentPage={historyPage.currentPage}
                   onCurrentPageChange={onCurrentPageChange}
                   pageSize={historyPage.pageSize}
-                  onPageSizeChange={onPageSizeChange}
                 />
-                <RowDetailState
-                  expandedRowIds={historyPage.historyPageexpandedRowIds}
-                  onExpandedRowIdsChange={onExpandedRowIdsChange}
-                />
-                <SelectionState
-                  selection={historyPage.selection}
-                  onSelectionChange={onSelectionChange}
-                />
-                <IntegratedGrouping />
-                <IntegratedPaging />
-                <IntegratedSelection />
-
+                <RowDetailState />
                 <PercentTypeProvider for={historyPage.percentColumns} />
+                <CustomPaging totalCount={historyPage.totalCount} />
                 <Table cellComponent={tableCell} />
-
                 <TableHeaderRow cellComponent={HeaderCell} />
-                <TableColumnVisibility
-                  hiddenColumnNames={historyPage.hiddenColumnNames}
-                  onHiddenColumnNamesChange={onHiddenColumnNamesChange}
-                />
-                <TableColumnReordering
-                  order={historyPage.columnOrder}
-                  onOrderChange={onColumnOrderChange}
-                />
-                {window.matchMedia('(max-width: 678px)').matches ? (
-                  <TableRowDetail contentComponent={GridDetailContainer} />
-                ) : null}
+                <TableRowDetail contentComponent={GridDetailContainer} />
                 <PagingPanel />
               </Grid>
             ) : (
-              <LoadingCircular />
+              <div className="loading--container">
+                <LoadingCircular />
+              </div>
             )}
           </Paper>
         </div>
@@ -279,27 +280,10 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onSortingChange: sorting => dispatch(createGridAction('sorting', sorting)),
-    onSelectionChange: selection =>
-      dispatch(createGridAction('selection', selection)),
-    onExpandedRowIdsChange: expandedRowIds =>
-      dispatch(createGridAction('expandedRowIds', expandedRowIds)),
-    onGroupingChange: grouping =>
-      dispatch(createGridAction('grouping', grouping)),
-    onExpandedGroupsChange: expandedGroups =>
-      dispatch(createGridAction('expandedGroups', expandedGroups)),
-    onFiltersChange: filters => dispatch(createGridAction('filters', filters)),
     onCurrentPageChange: currentPage =>
       dispatch(createGridAction('currentPage', currentPage)),
-    onPageSizeChange: pageSize =>
-      dispatch(createGridAction('pageSize', pageSize)),
-    onColumnOrderChange: order =>
-      dispatch(createGridAction('columnOrder', order)),
-    onColumnWidthsChange: widths =>
-      dispatch(createGridAction('columnWidths', widths)),
-    onHiddenColumnNamesChange: hiddenColumns =>
-      dispatch(createGridAction('hiddenColumnNames', hiddenColumns)),
     getGridData: () => dispatch(getGridDataAction()),
+    onChangePage: currentPage => dispatch(changePageAction(currentPage)),
   };
 }
 
