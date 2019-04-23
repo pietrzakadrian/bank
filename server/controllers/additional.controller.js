@@ -1,6 +1,9 @@
 const db = require('../config/db.config.js');
-
 const Additional = db.additionals;
+const Transaction = db.transactions;
+const User = db.users;
+const Currency = db.currency;
+const Op = db.Sequelize.Op;
 
 // Update User's Notification Status
 exports.isNotification = (req, res) => {
@@ -67,4 +70,49 @@ exports.unsetNotification = (req, res) => {
         });
     }
   });
+};
+
+exports.newNotification = (req, res) => {
+  function setAuthorizationStatus(status) {
+    const authorizationStatus = status;
+    return authorizationStatus;
+  }
+
+  const id_recipient = req.body.userId;
+  const limit = req.body.notificationCount;
+
+  Transaction.findAll({
+    where: {
+      id_recipient,
+      authorization_status: setAuthorizationStatus(1),
+    },
+    attributes: [
+      'amount_money',
+      'date_time',
+      'id_recipient',
+      'id_sender',
+      'transfer_title',
+    ],
+    order: [['date_time', 'DESC']],
+    limit,
+    include: [
+      {
+        model: User,
+        as: 'getSenderdata',
+        where: { id: db.Sequelize.col('transaction.id_sender') },
+        attributes: ['name', 'surname'],
+      },
+      {
+        model: Currency,
+        where: { id: db.Sequelize.col('transaction.id_sender') },
+        attributes: ['currency'],
+      },
+    ],
+  })
+    .then(transactions => {
+      res.send(transactions);
+    })
+    .catch(() => {
+      res.status(500).json({ error: 'Internal server error' });
+    });
 };

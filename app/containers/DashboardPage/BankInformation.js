@@ -21,12 +21,15 @@ const styles = theme => ({
     borderRadius: 0,
     backgroundColor: '#f3f3f3',
   },
+  subtitle: {
+    fontFamily: 'Lato',
+  },
 });
 
 function BankInformation({ classes }) {
   return (
     <Paper className={classes.root} elevation={1}>
-      <Typography variant="subtitle2">
+      <Typography variant="subtitle2" classes={{ subtitle2: classes.subtitle }}>
         <FormattedMessage {...messages.bankInformation} />
       </Typography>
     </Paper>

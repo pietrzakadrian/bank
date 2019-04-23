@@ -11,26 +11,11 @@ import {
   GET_GRID_DATA_TRANSFORM_SUCCESS,
   GET_GRID_DATA_ERROR,
   CHANGE_PAGE,
-  CHANGE_PAGE_SUCCESS,
-  CHANGE_PAGE_ERROR,
 } from './constants';
 
 export function changePageAction() {
   return {
     type: CHANGE_PAGE,
-  };
-}
-
-export function changePageSuccessAction(currentPage) {
-  return {
-    type: CHANGE_PAGE_SUCCESS,
-    currentPage,
-  };
-}
-
-export function changePageErrorAction() {
-  return {
-    type: CHANGE_PAGE_ERROR,
   };
 }
 

@@ -11,7 +11,13 @@ module.exports = function(app) {
     additionals.isNotification,
   );
 
-  // Confirm a new Transactions
+  app.post(
+    '/api/additionals/newNotification/',
+    checkAuth,
+    checkToken,
+    additionals.newNotification,
+  );
+
   app.put(
     '/api/additionals/setNotification/:userId',
     checkAuth,
@@ -19,7 +25,6 @@ module.exports = function(app) {
     additionals.setNotification,
   );
 
-  // Confirm a new Transactions
   app.put(
     '/api/additionals/unsetNotification/:userId',
     checkAuth,

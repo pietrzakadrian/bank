@@ -14,7 +14,14 @@ import {
   NEW_NOTIFICATION,
   UNSET_NOTIFICATION,
   HIDDEN_MENU_MOBILE,
+  TOGGLE_NOTIFICATION,
 } from './constants';
+
+export function toggleNotificationAction() {
+  return {
+    type: TOGGLE_NOTIFICATION,
+  };
+}
 
 export function isNotificationAction() {
   return {

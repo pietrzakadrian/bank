@@ -21,8 +21,17 @@ const makeIsDesktopOpenSelector = () =>
 const makeIsMobileOpenSelector = () =>
   createSelector(selectHeaderDomain, substate => substate.get('isMobileOpen'));
 
+const makeIsNotificationOpenSelector = () =>
+  createSelector(selectHeaderDomain, substate =>
+    substate.get('isNotificationOpen'),
+  );
+
 const makeSelectHeader = () =>
   createSelector(selectHeaderDomain, substate => substate.toJS());
 
 export default makeSelectHeader;
-export { makeIsDesktopOpenSelector, makeIsMobileOpenSelector };
+export {
+  makeIsDesktopOpenSelector,
+  makeIsMobileOpenSelector,
+  makeIsNotificationOpenSelector,
+};

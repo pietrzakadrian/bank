@@ -21,10 +21,12 @@ function* getUserId() {
 
 export function* isNotification() {
   const token = yield call(getUserId);
-  const requestURL = `/api/additionals/isNotification/${token.id}`;
+  const isNotificationRequestURL = `/api/additionals/isNotification/${
+    token.id
+  }`;
 
   try {
-    const response = yield call(request, requestURL, {
+    const response = yield call(request, isNotificationRequestURL, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

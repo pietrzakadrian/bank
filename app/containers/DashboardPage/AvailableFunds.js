@@ -62,6 +62,9 @@ const styles = theme => ({
     fontWeight: 400,
     lineHeight: 1.33,
   },
+  h6: {
+    fontFamily: 'Lato',
+  },
 });
 
 class AvailableFunds extends Component {

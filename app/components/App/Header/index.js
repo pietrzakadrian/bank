@@ -51,6 +51,7 @@ import {
 import {
   makeIsMobileOpenSelector,
   makeIsDesktopOpenSelector,
+  makeIsNotificationOpenSelector,
 } from './selectors';
 
 import reducer from './reducer';
@@ -63,6 +64,7 @@ import {
   isNotificationAction,
   unsetNotificationAction,
   hiddenMenuMobileAction,
+  toggleNotificationAction,
 } from './actions';
 
 const drawerWidth = 260;
@@ -207,6 +209,12 @@ const styles = theme => ({
     display: 'inherit',
     fontSize: 15,
   },
+  openNotification: {
+    display: 'none',
+  },
+  // notificationContainer: {
+  //   position: 'inherit',
+  // },
 });
 
 /* eslint-disable react/prefer-stateless-function */
@@ -215,6 +223,7 @@ class Header extends React.Component {
     super(props);
 
     this.Auth = new AuthService();
+    this.handleNotification = this.handleNotification.bind(this);
   }
 
   componentDidMount() {
@@ -228,6 +237,11 @@ class Header extends React.Component {
     if (!this.Auth.loggedIn()) this.props.history.replace('/login');
   }
 
+  handleNotification() {
+    this.props.isNewNotification ? this.props.unsetNotification() : null;
+    this.props.toggleNotification();
+  }
+
   render() {
     const {
       classes,
@@ -235,9 +249,9 @@ class Header extends React.Component {
       toggleMobileMenu,
       toggleDesktopMenu,
       onLogout,
-      unsetNotification,
       isNewNotification,
       notificationCount,
+      isNotificationOpen,
     } = this.props;
     const headerTitle = {
       '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
@@ -258,13 +272,7 @@ class Header extends React.Component {
     return (
       <Fragment>
         {isNewNotification ? (
-          <Helmet
-            titleTemplate={`(${
-              this.props.notificationCount > 9
-                ? '9+'
-                : this.props.notificationCount
-            }) %s`}
-          />
+          <Helmet titleTemplate={`(${this.props.notificationCount}) %s`} />
         ) : null}
         <div className={classes.root}>
           <CssBaseline />
@@ -310,7 +318,7 @@ class Header extends React.Component {
               <button
                 type="button"
                 className={classes.logoutButton}
-                onClick={isNewNotification ? unsetNotification : null}
+                onClick={this.handleNotification}
               >
                 {isNewNotification ? (
                   <Badge
@@ -405,6 +413,7 @@ Header.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+  isNotificationOpen: makeIsNotificationOpenSelector(),
   isMobileOpen: makeIsMobileOpenSelector(),
   isDesktopOpen: makeIsDesktopOpenSelector(),
   isNewNotification: makeIsNewNotificationSelector(),
@@ -419,6 +428,7 @@ function mapDispatchToProps(dispatch) {
     onLogout: id => dispatch(logoutAction(id)),
     toggleDesktopMenu: () => dispatch(toggleMenuDesktopAction()),
     toggleMobileMenu: () => dispatch(toggleMenuMobileAction()),
+    toggleNotification: () => dispatch(toggleNotificationAction()),
     hiddenMobileOpen: () => dispatch(hiddenMenuMobileAction()),
     isNotification: () => dispatch(isNotificationAction()),
     unsetNotification: () => dispatch(unsetNotificationAction()),
