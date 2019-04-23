@@ -15,6 +15,11 @@ const makeIsNewNotificationSelector = () =>
     globalState.get('isNewNotification'),
   );
 
+const makeNotificationCountSelector = () =>
+  createSelector(selectGlobal, globalState =>
+    globalState.get('notificationCount'),
+  );
+
 const makeSelectLocation = () =>
   createSelector(selectRouter, routerState =>
     routerState.get('location').toJS(),
@@ -28,5 +33,6 @@ export {
   makeUserIdSelector,
   makeIsLoggedSelector,
   makeIsNewNotificationSelector,
+  makeNotificationCountSelector,
   makeNotificationsSelector,
 };

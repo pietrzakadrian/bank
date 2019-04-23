@@ -33,7 +33,9 @@ export function* isNotification() {
       },
     });
 
-    response.isNotification ? yield put(newNotificationAction()) : null;
+    response.isNotification
+      ? yield put(newNotificationAction(response.notificationCount))
+      : null;
   } catch (err) {
     /* just ignore */
   }

@@ -316,12 +316,23 @@ exports.confirm = (req, res) => {
   }
 
   function setNotification(id_owner) {
-    return Additional.update(
-      {
-        notification_status: 1,
+    Additional.findOne({
+      where: {
+        id_owner,
       },
-      { where: { id_owner } },
-    );
+    }).then(isAdditional => {
+      if (isAdditional) {
+        const notificationCount = isAdditional.notification_count;
+
+        return Additional.update(
+          {
+            notification_status: 1,
+            notification_count: notificationCount + 1,
+          },
+          { where: { id_owner } },
+        );
+      }
+    });
   }
 
   Bill.findOne({

@@ -9,9 +9,13 @@ exports.isNotification = (req, res) => {
     .then(isUser => {
       if (isUser) {
         const notificationStatus = isUser.notification_status;
+        const notificationCount = isUser.notification_count;
 
         if (notificationStatus) {
-          res.status(200).json({ isNotification: true });
+          res.status(200).json({
+            isNotification: true,
+            notificationCount,
+          });
         } else {
           res.status(200).json({ isNotification: false });
         }
@@ -30,6 +34,7 @@ exports.setNotification = (req, res) => {
       Additional.update(
         {
           notification_status: 1,
+          notification_count: isUser.notification_count + 1,
         },
         { where: { id_owner } },
       )
@@ -50,6 +55,7 @@ exports.unsetNotification = (req, res) => {
       Additional.update(
         {
           notification_status: 0,
+          notification_count: 0,
         },
         { where: { id_owner } },
       )

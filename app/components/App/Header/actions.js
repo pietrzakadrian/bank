@@ -22,9 +22,10 @@ export function isNotificationAction() {
   };
 }
 
-export function newNotificationAction() {
+export function newNotificationAction(notificationCount) {
   return {
     type: NEW_NOTIFICATION,
+    notificationCount,
   };
 }
 

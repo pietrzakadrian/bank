@@ -56,6 +56,16 @@ module.exports = (sequelize, Sequelize) => {
           },
         },
       },
+      notification_count: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          notEmpty: {
+            msg: 'The notification_count is required.',
+          },
+        },
+      },
     },
     {
       timestamps: false,

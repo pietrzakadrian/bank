@@ -18,6 +18,7 @@ const initialState = fromJS({
   userId: '',
   isLogged: false,
   isNewNotification: false,
+  notificationCount: 0,
   notifications: [],
 });
 
@@ -26,11 +27,17 @@ function appReducer(state = initialState, action) {
     case LOGIN_SUCCESSFUL:
       return state.set('userId', action.userId).set('isLogged', true);
     case LOGOUT_SUCCESS:
-      return state.set('userId', '').set('isLogged', false);
+      return state
+        .set('userId', '')
+        .set('isLogged', false)
+        .set('isNewNotification', false)
+        .set('notificationCount', 0);
     case NEW_NOTIFICATION:
-      return state.set('isNewNotification', true);
+      return state
+        .set('isNewNotification', true)
+        .set('notificationCount', action.notificationCount);
     case UNSET_NOTIFICATION:
-      return state.set('isNewNotification', false);
+      return state.set('isNewNotification', false).set('notificationCount', 0);
     case ENQUEUE_SNACKBAR:
       return state.set('notifications', [
         ...state.get('notifications'),

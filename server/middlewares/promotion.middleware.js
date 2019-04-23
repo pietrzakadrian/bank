@@ -211,6 +211,7 @@ module.exports = (req, res, next) => {
         if (isRecipient) {
           const accountBalanceHistory = isRecipient.account_balance_history;
           const incomingTransfersSum = isRecipient.incoming_transfers_sum;
+          const notificationCount = isRecipient.notification_count;
 
           if (accountBalanceHistory === '0,0') {
             if (recipientCurrencyId === transferCurrencyId) {
@@ -221,6 +222,7 @@ module.exports = (req, res, next) => {
                     parseFloat(incomingTransfersSum.toFixed(2)) +
                     parseFloat(setPromotionalAmount(10)),
                   notification_status: 1,
+                  notification_count: notificationCount + 1,
                 },
                 { where: { id_owner: recipientId } },
               );
@@ -234,6 +236,7 @@ module.exports = (req, res, next) => {
                     parseFloat(incomingTransfersSum.toFixed(2)) +
                     parseFloat(convertedAmountMoney.toFixed(2)),
                   notification_status: 1,
+                  notification_count: notificationCount + 1,
                 },
                 { where: { id_owner: recipientId } },
               );
@@ -249,6 +252,7 @@ module.exports = (req, res, next) => {
                     parseFloat(incomingTransfersSum.toFixed(2)) +
                     parseFloat(convertedAmountMoney.toFixed(2)),
                   notification_status: 1,
+                  notification_count: notificationCount + 1,
                 },
                 { where: { id_owner: recipientId } },
               );
@@ -262,6 +266,7 @@ module.exports = (req, res, next) => {
                     parseFloat(incomingTransfersSum.toFixed(2)) +
                     parseFloat(convertedAmountMoney.toFixed(2)),
                   notification_status: 1,
+                  notification_count: notificationCount + 1,
                 },
                 { where: { id_owner: recipientId } },
               );

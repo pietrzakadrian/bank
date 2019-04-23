@@ -37,6 +37,7 @@ import AuthService from 'services/AuthService';
 // Import Components
 import Sidebar from 'components/App/Sidebar';
 import Logo from 'images/logo.png';
+import Notification from 'components/App/Notification';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -45,6 +46,7 @@ import {
   makeIsNewNotificationSelector,
   makeIsLoggedSelector,
   makeUserIdSelector,
+  makeNotificationCountSelector,
 } from 'containers/App/selectors';
 import {
   makeIsMobileOpenSelector,
@@ -235,6 +237,7 @@ class Header extends React.Component {
       onLogout,
       unsetNotification,
       isNewNotification,
+      notificationCount,
     } = this.props;
     const headerTitle = {
       '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
@@ -254,7 +257,15 @@ class Header extends React.Component {
 
     return (
       <Fragment>
-        {isNewNotification ? <Helmet titleTemplate="(1) %s" /> : null}
+        {isNewNotification ? (
+          <Helmet
+            titleTemplate={`(${
+              this.props.notificationCount > 9
+                ? '9+'
+                : this.props.notificationCount
+            }) %s`}
+          />
+        ) : null}
         <div className={classes.root}>
           <CssBaseline />
           <AppBar
@@ -303,7 +314,9 @@ class Header extends React.Component {
               >
                 {isNewNotification ? (
                   <Badge
-                    badgeContent={1}
+                    badgeContent={
+                      notificationCount > 9 ? '9+' : notificationCount
+                    }
                     invisible={!isNewNotification}
                     classes={{ badge: classes.badge }}
                   >
@@ -345,6 +358,8 @@ class Header extends React.Component {
                   alt="Bank Application"
                 />
               </div>
+
+              <Notification />
             </Toolbar>
           </AppBar>
           <nav className={classes.drawer}>
@@ -393,6 +408,7 @@ const mapStateToProps = createStructuredSelector({
   isMobileOpen: makeIsMobileOpenSelector(),
   isDesktopOpen: makeIsDesktopOpenSelector(),
   isNewNotification: makeIsNewNotificationSelector(),
+  notificationCount: makeNotificationCountSelector(),
   isLogged: makeIsLoggedSelector(),
   userId: makeUserIdSelector(),
 });
