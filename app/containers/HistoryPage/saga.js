@@ -1,5 +1,4 @@
 import decode from 'jwt-decode';
-import { push } from 'connected-react-router/immutable';
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import request from 'utils/request';
 import moment from 'moment';
@@ -9,14 +8,9 @@ import {
   getGridDataSuccessAction,
   getGridDataTransformSuccessAction,
   getGridDataErrorAction,
-  changePageSuccessAction,
   changePageAction,
 } from './actions';
-import {
-  makeTotalPagesSelector,
-  makeCurrentPageSelector,
-  makePageSizeSelector,
-} from './selectors';
+import { makeCurrentPageSelector, makePageSizeSelector } from './selectors';
 
 function* getToken() {
   // Retrieves the user token from localStorage

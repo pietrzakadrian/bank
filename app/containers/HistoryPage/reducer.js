@@ -5,6 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
+import { LOGOUT_SUCCESS } from 'components/App/Header/constants';
 import {
   GRID_STATE_CHANGE,
   GET_GRID_DATA_SUCCESS,
@@ -30,6 +31,11 @@ function historyPageReducer(state = initialState, action) {
       return state.set('rowsTransform', null);
     case GRID_STATE_CHANGE:
       return state.set(action.partialStateName, action.partialStateValue);
+    case LOGOUT_SUCCESS:
+      return state
+        .set('rowsTransform', null)
+        .set('currentPage', 0)
+        .set('totalCount', null);
     default:
       return state;
   }

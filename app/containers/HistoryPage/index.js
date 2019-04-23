@@ -26,7 +26,6 @@ import {
   PagingState,
   GroupingState,
   RowDetailState,
-  IntegratedPaging,
   DataTypeProvider,
   CustomPaging,
 } from '@devexpress/dx-react-grid';
