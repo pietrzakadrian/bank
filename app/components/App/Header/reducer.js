@@ -5,11 +5,13 @@
  */
 
 import { fromJS } from 'immutable';
+
 import {
   TOGGLE_MENU_DESKTOP,
   TOGGLE_MENU_MOBILE,
   HIDDEN_MENU_MOBILE,
   TOGGLE_NOTIFICATION,
+  LOGOUT_SUCCESS,
 } from './constants';
 
 export const initialState = fromJS({
@@ -32,6 +34,11 @@ function headerReducer(state = initialState, action) {
       return state.set('isMobileOpen', false);
     case TOGGLE_NOTIFICATION:
       return state.set('isNotificationOpen', !state.get('isNotificationOpen'));
+    case LOGOUT_SUCCESS:
+      return state
+        .set('isNotificationOpen', false)
+        .set('isMobileOpen', false)
+        .set('isDesktopOpen', true);
     default:
       return state;
   }
