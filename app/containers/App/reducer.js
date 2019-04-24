@@ -41,7 +41,10 @@ function appReducer(state = initialState, action) {
     case LOAD_NEW_NOTIFICATION:
       return state.set('newNotifications', action.notifications);
     case UNSET_NOTIFICATION:
-      return state.set('isNewNotification', false).set('notificationCount', 0);
+      return state
+        .set('isNewNotification', false)
+        .set('notificationCount', 0)
+        .set('newNotifications', null);
     case ENQUEUE_SNACKBAR:
       return state.set('notifications', [
         ...state.get('notifications'),

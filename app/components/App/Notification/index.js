@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable no-nested-ternary */
 /**
  *
@@ -5,7 +6,7 @@
  *
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import './styles.css';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
@@ -34,29 +35,35 @@ import messages from './messages';
 const styles = {};
 
 class Notification extends React.Component {
-  componentDidUpdate(prevProps) {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      newNotifications: null,
+    };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // todo: make test!
     if (this.props.isNewNotification !== prevProps.isNewNotification) {
-      console.log('notificationCount', prevProps.notificationCount);
+      if (!this.state.newNotifications) {
+        this.setState({
+          newNotifications: prevProps.newNotifications,
+        });
+      } else if (this.state.newNotifications) {
+        this.setState({
+          newNotifications: prevState.newNotifications.concat(
+            prevProps.newNotifications,
+          ),
+        });
+      }
     }
   }
 
   render() {
-    const {
-      classes,
-      isNotificationOpen,
-      isNewNotification,
-      newNotifications,
-      notificationCount,
-    } = this.props;
-    // const socket = socketIOClient('/');
+    const { classes, isNotificationOpen } = this.props;
+    const { newNotifications } = this.state;
 
-    // try {
-    //   socket.on('new notification', id => {
-    //     id === this.props.userId ? this.props.getUserdata() : null;
-    //   });
-    // } catch (e) {
-    //   /* just ignore */
-    // }
     return (
       <div
         style={{
@@ -64,11 +71,40 @@ class Notification extends React.Component {
         }}
         className="arrow_box"
       >
-        <div className="no-test">
-          {/* {newNotifications.map(newNotification =>
-            console.log(newNotification.sender_name),
-          )} */}
-        </div>
+        {newNotifications ? (
+          <div className="no-test">
+            <Table>
+              <TableBody>
+                {newNotifications.map((newNotification, id) => (
+                  <TableRow key={id++}>
+                    <Fragment>
+                      <TableCell>
+                        <span>
+                          You received a cash transfer from{' '}
+                          <span className="notification_sender">
+                            {newNotification.sender_name}
+                          </span>{' '}
+                          worth{' '}
+                          <span className="notification_amount">
+                            {newNotification.amount_money}
+                          </span>
+                        </span>
+                        <br />
+                        <span className="notification_date">
+                          {newNotification.date_time}
+                        </span>
+                      </TableCell>
+                    </Fragment>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        ) : (
+          <div className="no-notification">
+            <FormattedMessage {...messages.noNotification} />
+          </div>
+        )}
       </div>
     );
   }

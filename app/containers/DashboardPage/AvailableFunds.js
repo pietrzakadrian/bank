@@ -97,7 +97,7 @@ class AvailableFunds extends Component {
         {(availableFunds || availableFunds === 0) &&
         accountBalanceHistory &&
         currency ? (
-            <Fragment>
+          <Fragment>
             <div>
               <Typography variant="subtitle1">
                 <FormattedMessage {...messages.availableFunds} />

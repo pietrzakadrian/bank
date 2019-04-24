@@ -82,6 +82,7 @@ exports.newNotification = (req, res) => {
   const limit = req.body.notificationCount;
 
   Transaction.findAll({
+    limit,
     where: {
       id_recipient,
       authorization_status: setAuthorizationStatus(1),
@@ -94,7 +95,6 @@ exports.newNotification = (req, res) => {
       'transfer_title',
     ],
     order: [['date_time', 'DESC']],
-    limit,
     include: [
       {
         model: User,

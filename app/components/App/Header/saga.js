@@ -51,7 +51,7 @@ export function* isNotification() {
 export function* newNotification() {
   const token = yield call(getUserId);
   const userId = token.id;
-  const limit = yield select(makeNotificationCountSelector());
+  const notificationCount = yield select(makeNotificationCountSelector());
   const requestURL = `/api/additionals/newNotification`;
 
   try {
@@ -64,16 +64,18 @@ export function* newNotification() {
       },
       body: JSON.stringify({
         userId,
-        limit,
+        notificationCount,
       }),
     });
 
     if (response.success) {
       const output = response.result.map(({ getSenderdata, ...rest }) => ({
-        date_time: moment(rest.date_time).format('HH:mm'),
-        amount_money: `${rest.amount_money.toFixed(2)} ${
-          rest.currency.currency
-        }`,
+        date_time: moment(rest.date_time).format('dddd, HH:mm'),
+        amount_money: `${rest.amount_money
+          .toFixed(2)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+          .replace('.', ',')} ${rest.currency.currency}`,
         sender_name: `${getSenderdata.name} ${getSenderdata.surname}`,
       }));
 

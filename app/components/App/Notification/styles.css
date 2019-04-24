@@ -6,6 +6,24 @@
   transform: translate(-50%, -50%);
   color: grey;
   opacity: 0.7;
+  font-family: 'Lato', sans-serif;
+}
+
+.no-test {
+  height: 133px;
+  overflow: auto;
+}
+
+.notification_sender {
+  color: #0029ab;
+}
+
+.notification_amount {
+  font-weight: bold;
+}
+
+.notification_date {
+  font-size: 12px;
 }
 
 .arrow_box {
@@ -14,9 +32,8 @@
   border: 1.3px solid rgba(0, 0, 0, 0.12);
   border-radius: 2px;
   top: 63px;
-  padding: 10px 20px;
   width: 100%;
-  height: 145px;
+  height: 133px;
   z-index: 9999;
   box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.06);
 }
@@ -52,10 +69,9 @@
     border-radius: 2px;
     border: 1.3px solid rgba(0, 0, 0, 0.12);
     top: 57px;
-    right: 69px;
-    padding: 10px 20px;
-    width: 300px;
-    height: 145px;
+    right: 77px;
+    width: 270px;
+    height: 133px;
     z-index: 9999;
     box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.06);
   }
@@ -92,11 +108,10 @@
     background: #ffffff;
     border-radius: 2px;
     border: 0.5px solid rgba(0, 0, 0, 0.12);
-    right: 151px;
+    right: 166px;
     top: 57px;
-    padding: 10px 20px;
-    width: 300px;
-    height: 130px;
+    width: 270px;
+    height: 133px;
     box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.06);
   }
   .arrow_box:after,
