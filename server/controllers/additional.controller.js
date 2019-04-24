@@ -110,7 +110,9 @@ exports.newNotification = (req, res) => {
     ],
   })
     .then(transactions => {
-      res.send(transactions);
+      if (transactions) {
+        res.status(200).json({ result: transactions, success: true });
+      }
     })
     .catch(() => {
       res.status(500).json({ error: 'Internal server error' });

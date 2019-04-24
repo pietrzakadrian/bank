@@ -1,13 +1,20 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
-
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router/immutable';
 import request from 'utils/request';
 import decode from 'jwt-decode';
-import { IS_NOTIFICATION, LOGOUT, UNSET_NOTIFICATION } from './constants';
+import moment from 'moment';
+import { makeNotificationCountSelector } from 'containers/App/selectors';
+import {
+  IS_NOTIFICATION,
+  LOGOUT,
+  UNSET_NOTIFICATION,
+  NEW_NOTIFICATION,
+} from './constants';
 import {
   newNotificationAction,
   successLogoutAction,
   errorLogoutAction,
+  loadNewNotificationAction,
 } from './actions';
 
 function* getToken() {
@@ -21,12 +28,10 @@ function* getUserId() {
 
 export function* isNotification() {
   const token = yield call(getUserId);
-  const isNotificationRequestURL = `/api/additionals/isNotification/${
-    token.id
-  }`;
+  const requestURL = `/api/additionals/isNotification/${token.id}`;
 
   try {
-    const response = yield call(request, isNotificationRequestURL, {
+    const response = yield call(request, requestURL, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -38,6 +43,42 @@ export function* isNotification() {
     response.isNotification
       ? yield put(newNotificationAction(response.notificationCount))
       : null;
+  } catch (err) {
+    /* just ignore */
+  }
+}
+
+export function* newNotification() {
+  const token = yield call(getUserId);
+  const userId = token.id;
+  const limit = yield select(makeNotificationCountSelector());
+  const requestURL = `/api/additionals/newNotification`;
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${yield call(getToken)}`,
+      },
+      body: JSON.stringify({
+        userId,
+        limit,
+      }),
+    });
+
+    if (response.success) {
+      const output = response.result.map(({ getSenderdata, ...rest }) => ({
+        date_time: moment(rest.date_time).format('HH:mm'),
+        amount_money: `${rest.amount_money.toFixed(2)} ${
+          rest.currency.currency
+        }`,
+        sender_name: `${getSenderdata.name} ${getSenderdata.surname}`,
+      }));
+
+      yield put(loadNewNotificationAction(output));
+    }
   } catch (err) {
     /* just ignore */
   }
@@ -87,6 +128,7 @@ export function* logout() {
 // Individual exports for testing
 export default function* headerSaga() {
   yield takeLatest(IS_NOTIFICATION, isNotification);
+  yield takeLatest(NEW_NOTIFICATION, newNotification);
   yield takeLatest(UNSET_NOTIFICATION, unsetNotification);
   yield takeLatest(LOGOUT, logout);
 }

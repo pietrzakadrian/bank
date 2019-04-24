@@ -9,6 +9,7 @@ import {
   LOGOUT_SUCCESS,
   NEW_NOTIFICATION,
   UNSET_NOTIFICATION,
+  LOAD_NEW_NOTIFICATION,
 } from 'components/App/Header/constants';
 
 import { ENQUEUE_SNACKBAR, REMOVE_SNACKBAR } from './constants';
@@ -20,6 +21,7 @@ const initialState = fromJS({
   isNewNotification: false,
   notificationCount: 0,
   notifications: [],
+  newNotifications: null,
 });
 
 function appReducer(state = initialState, action) {
@@ -36,6 +38,8 @@ function appReducer(state = initialState, action) {
       return state
         .set('isNewNotification', true)
         .set('notificationCount', action.notificationCount);
+    case LOAD_NEW_NOTIFICATION:
+      return state.set('newNotifications', action.notifications);
     case UNSET_NOTIFICATION:
       return state.set('isNewNotification', false).set('notificationCount', 0);
     case ENQUEUE_SNACKBAR:

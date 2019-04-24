@@ -12,6 +12,7 @@ import {
   HIDDEN_MENU_MOBILE,
   TOGGLE_NOTIFICATION,
   LOGOUT_SUCCESS,
+  LOAD_NEW_NOTIFICATION,
 } from './constants';
 
 export const initialState = fromJS({

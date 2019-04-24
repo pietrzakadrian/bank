@@ -15,4 +15,5 @@ export const HIDDEN_MENU_MOBILE = 'app/Header/HIDDEN_MENU_MOBILE';
 
 export const IS_NOTIFICATION = 'app/Header/IS_NOTIFICATION';
 export const NEW_NOTIFICATION = 'app/Header/NEW_NOTIFICATION';
+export const LOAD_NEW_NOTIFICATION = 'app/Header/LOAD_NEW_NOTIFICATION';
 export const UNSET_NOTIFICATION = 'app/Header/UNSET_NOTIFICATION';

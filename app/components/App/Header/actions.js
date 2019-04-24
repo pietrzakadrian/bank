@@ -12,6 +12,7 @@ import {
   LOGOUT_ERROR,
   IS_NOTIFICATION,
   NEW_NOTIFICATION,
+  LOAD_NEW_NOTIFICATION,
   UNSET_NOTIFICATION,
   HIDDEN_MENU_MOBILE,
   TOGGLE_NOTIFICATION,
@@ -33,6 +34,13 @@ export function newNotificationAction(notificationCount) {
   return {
     type: NEW_NOTIFICATION,
     notificationCount,
+  };
+}
+
+export function loadNewNotificationAction(notifications) {
+  return {
+    type: LOAD_NEW_NOTIFICATION,
+    notifications,
   };
 }
 
