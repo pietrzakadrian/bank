@@ -37,7 +37,8 @@ import AuthService from 'services/AuthService';
 // Import Components
 import Sidebar from 'components/App/Sidebar';
 import Logo from 'images/logo.png';
-import Notification from 'components/App/Notification';
+import Notifications from 'components/App/Notifications';
+import Messages from 'components/App/Messages';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -51,7 +52,7 @@ import {
 import {
   makeIsMobileOpenSelector,
   makeIsDesktopOpenSelector,
-  makeIsNotificationOpenSelector,
+  makeIsNotificationsOpenSelector,
 } from './selectors';
 
 import reducer from './reducer';
@@ -64,7 +65,8 @@ import {
   isNotificationAction,
   unsetNotificationAction,
   hiddenMenuMobileAction,
-  toggleNotificationAction,
+  toggleNotificationsAction,
+  toggleMessagesAction,
 } from './actions';
 
 const drawerWidth = 260;
@@ -224,6 +226,7 @@ class Header extends React.Component {
 
     this.Auth = new AuthService();
     this.handleNotification = this.handleNotification.bind(this);
+    this.handleMessages = this.handleMessages.bind(this);
   }
 
   componentDidMount() {
@@ -242,6 +245,10 @@ class Header extends React.Component {
     this.props.toggleNotification();
   }
 
+  handleMessages() {
+    this.props.toggleMessages();
+  }
+
   render() {
     const {
       classes,
@@ -251,7 +258,7 @@ class Header extends React.Component {
       onLogout,
       isNewNotification,
       notificationCount,
-      isNotificationOpen,
+      isNotificationsOpen,
     } = this.props;
     const headerTitle = {
       '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
@@ -308,7 +315,11 @@ class Header extends React.Component {
                 {headerTitle[location.pathname]}
               </Typography>
 
-              <button type="button" className={classes.logoutButton}>
+              <button
+                type="button"
+                onClick={this.handleMessages}
+                className={classes.logoutButton}
+              >
                 <MailOutlineIcon className={classes.exitToAppClass} />
                 <span className={classes.headerMenuItem}>
                   <FormattedMessage {...messages.headerItemMessagesTitle} />
@@ -367,7 +378,8 @@ class Header extends React.Component {
                 />
               </div>
 
-              <Notification />
+              <Messages />
+              <Notifications />
             </Toolbar>
           </AppBar>
           <nav className={classes.drawer}>
@@ -413,7 +425,7 @@ Header.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  isNotificationOpen: makeIsNotificationOpenSelector(),
+  isNotificationsOpen: makeIsNotificationsOpenSelector(),
   isMobileOpen: makeIsMobileOpenSelector(),
   isDesktopOpen: makeIsDesktopOpenSelector(),
   isNewNotification: makeIsNewNotificationSelector(),
@@ -428,7 +440,8 @@ function mapDispatchToProps(dispatch) {
     onLogout: id => dispatch(logoutAction(id)),
     toggleDesktopMenu: () => dispatch(toggleMenuDesktopAction()),
     toggleMobileMenu: () => dispatch(toggleMenuMobileAction()),
-    toggleNotification: () => dispatch(toggleNotificationAction()),
+    toggleNotification: () => dispatch(toggleNotificationsAction()),
+    toggleMessages: () => dispatch(toggleMessagesAction()),
     hiddenMobileOpen: () => dispatch(hiddenMenuMobileAction()),
     isNotification: () => dispatch(isNotificationAction()),
     unsetNotification: () => dispatch(unsetNotificationAction()),

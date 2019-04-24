@@ -16,9 +16,16 @@ import {
   UNSET_NOTIFICATION,
   HIDDEN_MENU_MOBILE,
   TOGGLE_NOTIFICATION,
+  TOGGLE_MESSAGES,
 } from './constants';
 
-export function toggleNotificationAction() {
+export function toggleMessagesAction() {
+  return {
+    type: TOGGLE_MESSAGES,
+  };
+}
+
+export function toggleNotificationsAction() {
   return {
     type: TOGGLE_NOTIFICATION,
   };

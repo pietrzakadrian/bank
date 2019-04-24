@@ -2,7 +2,7 @@
 /* eslint-disable no-nested-ternary */
 /**
  *
- * Notification
+ * Notifications
  *
  */
 
@@ -23,7 +23,7 @@ import TableRow from '@material-ui/core/TableRow';
 import LoadingCircular from 'components/App/LoadingCircular';
 
 import { FormattedMessage } from 'react-intl';
-import { makeIsNotificationOpenSelector } from 'components/App/Header/selectors';
+import { makeIsNotificationsOpenSelector } from 'components/App/Header/selectors';
 import {
   makeIsNewNotificationSelector,
   makeUserIdSelector,
@@ -34,7 +34,7 @@ import messages from './messages';
 
 const styles = {};
 
-class Notification extends React.Component {
+class Notifications extends React.Component {
   constructor(props) {
     super(props);
 
@@ -44,35 +44,28 @@ class Notification extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // todo: make test!
+    // ! todo: make test!
     if (this.props.isNewNotification !== prevProps.isNewNotification) {
-      if (!this.state.newNotifications) {
-        this.setState({
-          newNotifications: prevProps.newNotifications,
-        });
-      } else if (this.state.newNotifications) {
-        this.setState({
-          newNotifications: prevState.newNotifications.concat(
-            prevProps.newNotifications,
-          ),
-        });
-      }
+      this.setState({
+        newNotifications: prevProps.newNotifications,
+      });
     }
   }
 
   render() {
-    const { classes, isNotificationOpen } = this.props;
+    const { classes, isNotificationsOpen } = this.props;
     const { newNotifications } = this.state;
 
     return (
       <div
         style={{
-          display: isNotificationOpen ? 'block' : 'none',
+          display: isNotificationsOpen ? 'block' : 'none',
         }}
         className="arrow_box"
       >
         {newNotifications ? (
           <div className="no-test">
+            {console.log(this.state.newNotifications)}
             <Table>
               <TableBody>
                 {newNotifications.map((newNotification, id) => (
@@ -102,7 +95,7 @@ class Notification extends React.Component {
           </div>
         ) : (
           <div className="no-notification">
-            <FormattedMessage {...messages.noNotification} />
+            <FormattedMessage {...messages.noNotifications} />
           </div>
         )}
       </div>
@@ -110,14 +103,14 @@ class Notification extends React.Component {
   }
 }
 
-Notification.propTypes = {};
+Notifications.propTypes = {};
 
 const mapStateToProps = createStructuredSelector({
-  isNotificationOpen: makeIsNotificationOpenSelector(),
+  isNotificationsOpen: makeIsNotificationsOpenSelector(),
   isNewNotification: makeIsNewNotificationSelector(),
   notificationCount: makeNotificationCountSelector(),
   newNotifications: makeNewNotificationsSelector(),
   userId: makeUserIdSelector(),
 });
 
-export default withStyles(styles)(connect(mapStateToProps)(Notification));
+export default withStyles(styles)(connect(mapStateToProps)(Notifications));

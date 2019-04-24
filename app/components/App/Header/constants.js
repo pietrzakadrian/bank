@@ -8,6 +8,7 @@ export const LOGOUT = 'app/Header/LOGOUT';
 export const LOGOUT_SUCCESS = 'app/Header/LOGOUT_SUCCESS';
 export const LOGOUT_ERROR = 'app/Header/LOGOUT_ERROR';
 
+export const TOGGLE_MESSAGES = 'app/Header/TOGGLE_MESSAGES';
 export const TOGGLE_NOTIFICATION = 'app/Header/TOGGLE_NOTIFICATION';
 export const TOGGLE_MENU_DESKTOP = 'app/Header/TOGGLE_MENU_DESKTOP';
 export const TOGGLE_MENU_MOBILE = 'app/Header/TOGGLE_MENU_MOBILE';

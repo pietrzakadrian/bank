@@ -9,37 +9,45 @@ import { fromJS } from 'immutable';
 import {
   TOGGLE_MENU_DESKTOP,
   TOGGLE_MENU_MOBILE,
+  TOGGLE_MESSAGES,
   HIDDEN_MENU_MOBILE,
   TOGGLE_NOTIFICATION,
   LOGOUT_SUCCESS,
-  LOAD_NEW_NOTIFICATION,
 } from './constants';
 
 export const initialState = fromJS({
   isMobileOpen: false,
   isDesktopOpen: true,
-  isNotificationOpen: false,
+  isNotificationsOpen: false,
+  isMessagesOpen: false,
 });
 
 function headerReducer(state = initialState, action) {
   switch (action.type) {
+    case TOGGLE_MESSAGES:
+      return state
+        .set('isMessagesOpen', !state.get('isMessagesOpen'))
+        .set('isNotificationsOpen', false);
     case TOGGLE_MENU_DESKTOP:
       return state
         .set('isDesktopOpen', !state.get('isDesktopOpen'))
-        .set('isNotificationOpen', false);
+        .set('isNotificationsOpen', false);
     case TOGGLE_MENU_MOBILE:
       return state
         .set('isMobileOpen', !state.get('isMobileOpen'))
-        .set('isNotificationOpen', false);
+        .set('isNotificationsOpen', false);
     case HIDDEN_MENU_MOBILE:
       return state.set('isMobileOpen', false);
     case TOGGLE_NOTIFICATION:
-      return state.set('isNotificationOpen', !state.get('isNotificationOpen'));
+      return state
+        .set('isNotificationsOpen', !state.get('isNotificationsOpen'))
+        .set('isMessagesOpen', false);
     case LOGOUT_SUCCESS:
       return state
-        .set('isNotificationOpen', false)
+        .set('isNotificationsOpen', false)
         .set('isMobileOpen', false)
-        .set('isDesktopOpen', true);
+        .set('isDesktopOpen', true)
+        .set('isMessagesOpen', false);
     default:
       return state;
   }
