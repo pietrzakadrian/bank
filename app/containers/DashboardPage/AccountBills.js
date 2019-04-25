@@ -59,6 +59,8 @@ const styles = theme => ({
   tableCellRight: {
     fontSize: theme.spacing.unit * 1.8,
     textAlign: 'right',
+    width: '35%',
+    paddingLeft: 0,
   },
   loadingCircular: {
     display: 'flex',
@@ -87,6 +89,9 @@ const styles = theme => ({
   },
   accountBillContainer: {
     cursor: 'auto',
+  },
+  rootTableCell: {
+    padding: '4px 24px 4px 24px',
   },
 });
 
@@ -140,6 +145,7 @@ class AccountBills extends Component {
                 <TableRow>
                   <TableCell
                     className={classes.tableCell}
+                    classes={{ root: classes.rootTableCell }}
                     onMouseDown={e => e.stopPropagation()}
                     scope="row"
                   >
@@ -150,7 +156,10 @@ class AccountBills extends Component {
                         .trim()}
                     </span>
                   </TableCell>
-                  <TableCell className={classes.tableCellRight}>
+                  <TableCell
+                    className={classes.tableCellRight}
+                    classes={{ root: classes.rootTableCellCurrency }}
+                  >
                     <span className={classes.availabeFundsContainer}>
                       {availableFunds
                         .toFixed(2)
