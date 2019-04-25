@@ -173,6 +173,8 @@ const styles = theme => ({
   logoutButton: {
     margin: '0 6px',
     padding: '0 6px',
+    position: 'relative',
+    display: 'block',
 
     '&:hover': {
       cursor: 'pointer',
@@ -212,6 +214,9 @@ const styles = theme => ({
     fontSize: 15,
   },
   openNotification: {
+    display: 'none',
+  },
+  headerMenuItemHidden: {
     display: 'none',
   },
   // notificationContainer: {
@@ -321,9 +326,16 @@ class Header extends React.Component {
                 className={classes.logoutButton}
               >
                 <MailOutlineIcon className={classes.exitToAppClass} />
-                <span className={classes.headerMenuItem}>
+                <span
+                  className={classNames(classes.headerMenuItem, {
+                    [classes.headerMenuItemHidden]:
+                      this.props.isDesktopOpen &&
+                      window.matchMedia('(max-width: 900px)').matches,
+                  })}
+                >
                   <FormattedMessage {...messages.headerItemMessagesTitle} />
                 </span>
+                <Messages />
               </button>
 
               <button
@@ -352,11 +364,18 @@ class Header extends React.Component {
                     <NotificationsNoneIcon className={classes.exitToAppClass} />
                   </Badge>
                 )}
-                <span className={classes.headerMenuItem}>
+                <span
+                  className={classNames(classes.headerMenuItem, {
+                    [classes.headerMenuItemHidden]:
+                      this.props.isDesktopOpen &&
+                      window.matchMedia('(max-width: 900px)').matches,
+                  })}
+                >
                   <FormattedMessage
                     {...messages.headerItemNotificationsTitle}
                   />
                 </span>
+                <Notifications />
               </button>
 
               <button
@@ -365,7 +384,13 @@ class Header extends React.Component {
                 className={classes.logoutButton}
               >
                 <ExitToAppIcon className={classes.exitToAppClass} />
-                <span className={classes.headerMenuItem}>
+                <span
+                  className={classNames(classes.headerMenuItem, {
+                    [classes.headerMenuItemHidden]:
+                      this.props.isDesktopOpen &&
+                      window.matchMedia('(max-width: 900px)').matches,
+                  })}
+                >
                   <FormattedMessage {...messages.headerItemLogoutTitle} />
                 </span>
               </button>
@@ -377,9 +402,6 @@ class Header extends React.Component {
                   alt="Bank Application"
                 />
               </div>
-
-              <Messages />
-              <Notifications />
             </Toolbar>
           </AppBar>
           <nav className={classes.drawer}>

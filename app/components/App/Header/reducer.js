@@ -35,7 +35,8 @@ function headerReducer(state = initialState, action) {
     case TOGGLE_MENU_MOBILE:
       return state
         .set('isMobileOpen', !state.get('isMobileOpen'))
-        .set('isNotificationsOpen', false);
+        .set('isNotificationsOpen', false)
+        .set('isMessagesOpen', false);
     case HIDDEN_MENU_MOBILE:
       return state.set('isMobileOpen', false);
     case TOGGLE_NOTIFICATION:
