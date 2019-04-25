@@ -248,10 +248,10 @@ const styles = theme => ({
     textAlign: 'left',
     margin: '0 auto',
     [theme.breakpoints.down('sm')]: {
-      padding: 10,
+      padding: '10px 10px 0px',
     },
     [theme.breakpoints.up('md')]: {
-      padding: 30,
+      padding: '30px 30px 0px',
     },
   },
   infoAccountNumber: {
