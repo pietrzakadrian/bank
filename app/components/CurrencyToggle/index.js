@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 /**
  *
  * CurrencyToggle
@@ -5,8 +6,7 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
-// import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import './styles.css';
@@ -19,7 +19,6 @@ import messages from './messages';
 import { changeCurrencyAction } from '../../containers/RegisterPage/actions';
 
 class CurrencyToggle extends React.PureComponent {
-  // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <Toggle
@@ -32,7 +31,11 @@ class CurrencyToggle extends React.PureComponent {
   }
 }
 
-CurrencyToggle.propTypes = {};
+CurrencyToggle.propTypes = {
+  currencyId: PropTypes.number,
+  currency: PropTypes.array,
+  onCurrencyToggle: PropTypes.func,
+};
 
 const mapStateToProps = createStructuredSelector({
   currency: makeCurrencySelector(),

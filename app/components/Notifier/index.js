@@ -1,5 +1,8 @@
-import React, { Component } from 'react';
+/* eslint-disable react/prop-types */
+/* eslint-disable no-continue */
+import { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { withSnackbar } from 'notistack';
 import { createStructuredSelector } from 'reselect';
 import { removeSnackbarAction } from 'containers/App/actions';
@@ -43,6 +46,11 @@ class Notifier extends Component {
     return null;
   }
 }
+
+Notifier.propTypes = {
+  enqueueSnackbar: PropTypes.func,
+  onRemoveSnackbar: PropTypes.func,
+};
 
 const mapStateToProps = createStructuredSelector({
   notifications: makeNotificationsSelector(),

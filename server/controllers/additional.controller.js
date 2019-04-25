@@ -3,7 +3,6 @@ const Additional = db.additionals;
 const Transaction = db.transactions;
 const User = db.users;
 const Currency = db.currency;
-const Op = db.Sequelize.Op;
 
 // Update User's Notification Status
 exports.isNotification = (req, res) => {

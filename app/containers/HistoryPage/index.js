@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/prefer-stateless-function */
 /**
  *
@@ -187,7 +188,7 @@ const HeaderCellBase = ({ classes, className, ...restProps }) => (
   />
 );
 
-const headerCellStyles = theme => ({
+const headerCellStyles = () => ({
   text: {
     fontSize: 16,
     color: '#0029ab',
@@ -203,7 +204,7 @@ const TableCellBase = ({ classes, className, ...restProps }) => (
   <Table.Cell {...restProps} className={`${classes.text} ${className}`} />
 );
 
-const tableCellStyles = theme => ({
+const tableCellStyles = () => ({
   text: {
     fontSize: 14.5,
     fontFamily: 'Lato',
@@ -270,7 +271,9 @@ class HistoryPage extends React.Component {
   }
 }
 
-HistoryPage.propTypes = {};
+HistoryPage.propTypes = {
+  value: PropTypes.number,
+};
 
 const mapStateToProps = createStructuredSelector({
   historyPage: makeSelectHistoryPage(),

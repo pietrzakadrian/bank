@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
+// const numCPUs = require('os').cpus().length;
 const cron = require('node-cron');
 const net = require('net');
 const farmhash = require('farmhash');

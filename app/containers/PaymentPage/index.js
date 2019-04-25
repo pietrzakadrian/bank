@@ -1,4 +1,5 @@
-/* eslint-disable indent */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable prettier/prettier */
 /**
  *
  * PaymentPage
@@ -522,32 +523,32 @@ class PaymentPage extends React.Component {
       this.props.value
         ? this.props.onEnterAccountNumber(this.props.value)
         : this.props.isEmptyAccountNumber(
-            <FormattedMessage {...messages.errorAccountNumberEmpty} />,
-          );
+          <FormattedMessage {...messages.errorAccountNumberEmpty} />,
+        );
     }
 
     if (this.props.activeStep === 1) {
       this.props.amountMoney
         ? this.props.onEnterAmountMoney(this.props.amountMoney)
         : this.props.isEmptyAmountMoney(
-            <FormattedMessage {...messages.errorAmountOfMoneyEmpty} />,
-          );
+          <FormattedMessage {...messages.errorAmountOfMoneyEmpty} />,
+        );
     }
 
     if (this.props.activeStep === 2) {
       this.props.transferTitle
         ? this.props.onEnterTransferTitle(this.props.transferTitle)
         : this.props.isEmptyTransferTitle(
-            <FormattedMessage {...messages.errorTransferTitleIncorrect} />,
-          );
+          <FormattedMessage {...messages.errorTransferTitleIncorrect} />,
+        );
     }
 
     if (this.props.activeStep === 3) {
       this.props.authorizationKey
         ? this.props.onEnterAuthorizationKey(this.props.authorizationKey)
         : this.props.isEmptyAuthorizationKey(
-            <FormattedMessage {...messages.errorKeyIncorrect} />,
-          );
+          <FormattedMessage {...messages.errorKeyIncorrect} />,
+        );
     }
   }
 
