@@ -187,6 +187,16 @@ const styles = theme => ({
       cursor: 'pointer',
     },
   },
+  localeToggleContainer: {
+    textAlign: 'left',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '17rem',
+    },
+    margin: '0px auto 20px;',
+  },
 });
 
 class SettingsPage extends React.Component {
@@ -381,16 +391,16 @@ class SettingsPage extends React.Component {
               <div className={classes.textField}>
                 <FormattedMessage {...messages.changeLang} />
               </div>
-              <div className={classes.textFieldLocaleToggle}>
+
+              <div className={classes.localeToggleContainer}>
                 <LocaleToggle />
               </div>
 
               <div className={classes.textField}>
                 <FormattedMessage {...messages.changeCurrency} />
               </div>
-              <div className={classes.textFieldLocaleToggle}>
-                <CurrencyToggle />
-              </div>
+
+              <CurrencyToggle />
 
               <div className={classes.textField}>
                 <FormattedMessage {...messages.reportError} />
