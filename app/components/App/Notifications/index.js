@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable no-nested-ternary */
 /**
@@ -43,12 +44,25 @@ class Notifications extends React.Component {
     };
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    // ! todo: make test!
+  componentDidUpdate(prevProps) {
     if (this.props.isNewNotification !== prevProps.isNewNotification) {
-      this.setState({
-        newNotifications: prevProps.newNotifications,
-      });
+      let newNotifications;
+      if (!this.state.newNotifications) {
+        this.setState({
+          newNotifications: prevProps.newNotifications,
+        });
+      } else {
+        if (prevProps.newNotifications) {
+          newNotifications = prevProps.newNotifications.concat(
+            this.state.newNotifications,
+          );
+          // newNotifications = this.state.newNotifications.concat(
+          //   prevProps.newNotifications,
+          // );
+          // console.log('newNotifications', newNotifications);
+          this.setState({ newNotifications });
+        }
+      }
     }
   }
 
@@ -65,7 +79,6 @@ class Notifications extends React.Component {
       >
         {newNotifications ? (
           <div className="no-test">
-            {console.log(this.state.newNotifications)}
             <Table>
               <TableBody>
                 {newNotifications.map((newNotification, id) => (
