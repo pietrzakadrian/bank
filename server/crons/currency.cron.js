@@ -25,17 +25,17 @@ module.exports = function() {
             .then(() => {
               /* just ignore */
             })
-            .catch(error => {
-              console.log(error);
+            .catch(() => {
+              /* just ignore */
             });
         } catch (error) {
-          console.log(error);
+          /* just ignore */
         }
       })
-      .catch(error => {
-        console.log(error);
+      .catch(() => {
+        /* just ignore */
       });
   } catch (error) {
-    console.log(error);
+    /* just ignore */
   }
 };

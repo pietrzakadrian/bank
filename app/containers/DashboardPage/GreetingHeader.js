@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -37,10 +38,6 @@ const styles = {
 };
 
 class GreetingHeader extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.name &&
     this.props.surname &&

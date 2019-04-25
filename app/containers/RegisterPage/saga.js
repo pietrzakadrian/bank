@@ -1,3 +1,4 @@
+/* eslint-disable prefer-spread */
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import request from 'utils/request';

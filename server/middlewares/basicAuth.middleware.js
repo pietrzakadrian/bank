@@ -1,3 +1,4 @@
+/* eslint-disable no-buffer-constructor */
 const env = require('../config/env.config.js');
 
 module.exports = function(req, res, next) {

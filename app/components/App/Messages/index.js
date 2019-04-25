@@ -18,7 +18,7 @@ import messages from './messages';
 class Messages extends React.Component {
   render() {
     const { isMessagesOpen } = this.props;
-    console.log(isMessagesOpen);
+
     return (
       <div
         style={{

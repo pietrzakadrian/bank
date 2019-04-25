@@ -23,7 +23,6 @@ import HistoryIcon from '@material-ui/icons/History';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import { makeIsMobileOpenSelector } from 'components/App/Header/selectors';

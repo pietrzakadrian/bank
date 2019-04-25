@@ -27,7 +27,7 @@ module.exports = (req, res, next) => {
       });
       return isCurrency.id_currency;
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -40,7 +40,7 @@ module.exports = (req, res, next) => {
       });
       return currencyMain.main_currency;
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -53,7 +53,7 @@ module.exports = (req, res, next) => {
       });
       return isCurrencyExchangeRate.currency_exchange_rate;
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -169,7 +169,7 @@ module.exports = (req, res, next) => {
         }
       }
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -192,7 +192,7 @@ module.exports = (req, res, next) => {
         authorization_status: setAuthorizationStatus(1),
       });
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 

@@ -13,7 +13,6 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import ResizeObserver from 'react-resize-observer';
 
 // Import Components
 import Copyright from 'components/Copyright';

@@ -99,7 +99,7 @@ server.listen(0, host, async err => {
     }
     logger.appStarted(port, prettyHost, url);
 
-    console.log('url', url);
+    // console.log('url', url);
   } else {
     logger.appStarted(port, prettyHost);
   }

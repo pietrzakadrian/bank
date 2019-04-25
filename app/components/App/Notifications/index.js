@@ -11,7 +11,6 @@ import React, { Fragment } from 'react';
 import './styles.css';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import socketIOClient from 'socket.io-client';
 
 // Import Material UI
 import { withStyles } from '@material-ui/core';
@@ -19,9 +18,6 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-
-// Import Components
-import LoadingCircular from 'components/App/LoadingCircular';
 
 import { FormattedMessage } from 'react-intl';
 import { makeIsNotificationsOpenSelector } from 'components/App/Header/selectors';
@@ -67,7 +63,7 @@ class Notifications extends React.Component {
   }
 
   render() {
-    const { classes, isNotificationsOpen } = this.props;
+    const { isNotificationsOpen } = this.props;
     const { newNotifications } = this.state;
 
     return (

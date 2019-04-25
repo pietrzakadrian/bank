@@ -25,7 +25,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
-const styles = theme => ({
+const styles = {
   formContainer: {
     textAlign: 'center',
     margin: '15px 0',
@@ -37,7 +37,7 @@ const styles = theme => ({
   pageContainer: {
     textAlign: 'center',
   },
-});
+};
 
 class NotFoundPage extends React.PureComponent {
   render() {

@@ -6,10 +6,7 @@
 
 import { fromJS } from 'immutable';
 import { MAKE_PAYMENT_SUCCESS } from 'containers/PaymentPage/constants';
-import {
-  LOGOUT_SUCCESS,
-  NEW_NOTIFICATION,
-} from 'components/App/Header/constants';
+import { LOGOUT_SUCCESS } from 'components/App/Header/constants';
 
 import {
   GET_NAME,
@@ -76,16 +73,6 @@ function dashboardPageReducer(state = initialState, action) {
       return state.set('name', null);
     case ENTER_NEW_SURNAME_SUCCESS:
       return state.set('surname', null);
-
-    // case NEW_NOTIFICATION:
-    //   return state
-    //     .set('accountBills', null)
-    //     .set('availableFunds', null)
-    //     .set('accountBalanceHistory', null)
-    //     .set('recentTransactionsSender', null)
-    //     .set('recentTransactionsRecipient', null)
-    //     .set('outgoingTransfersSum', null)
-    //     .set('incomingTransfersSum', null);
 
     case LOGOUT_SUCCESS:
       return state

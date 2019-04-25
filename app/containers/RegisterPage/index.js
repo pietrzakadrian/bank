@@ -1,3 +1,5 @@
+/* eslint-disable radix */
+/* eslint-disable indent */
 /**
  *
  * RegisterPage
@@ -527,7 +529,7 @@ export class RegisterPage extends React.Component {
   render() {
     const { classes, activeStep, onRegisterStepBack, isLoading } = this.props;
     const steps = this.getSteps();
-    
+
     return (
       <Fragment>
         <FormattedMessage {...messages.helmetRegisterTitle}>

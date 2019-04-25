@@ -1,3 +1,5 @@
+/* eslint-disable no-sequences */
+/* eslint-disable indent */
 import decode from 'jwt-decode';
 import { push } from 'connected-react-router/immutable';
 import { call, put, takeLatest, select } from 'redux-saga/effects';

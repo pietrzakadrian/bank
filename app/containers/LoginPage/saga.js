@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /**
  * Gets the repositories of the user from Github
  */
@@ -37,8 +38,6 @@ export function* isLogin() {
 }
 
 export function* login() {
-  // Select username from store
-
   const login = yield select(makeIdSelector());
   const password = yield select(makePasswordSelector());
   const requestURL = `/api/users/login`;

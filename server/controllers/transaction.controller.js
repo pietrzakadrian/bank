@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 const nodemailer = require('nodemailer');
 const db = require('../config/db.config.js');
@@ -35,7 +37,7 @@ exports.confirm = (req, res) => {
       });
       return isCurrency.id_currency;
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -48,7 +50,7 @@ exports.confirm = (req, res) => {
       });
       return currencyMain.main_currency;
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -61,7 +63,7 @@ exports.confirm = (req, res) => {
       });
       return isCurrencyExchangeRate.currency_exchange_rate;
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -82,7 +84,7 @@ exports.confirm = (req, res) => {
         transferCurrencyId,
       );
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -168,7 +170,7 @@ exports.confirm = (req, res) => {
         });
       }
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -198,7 +200,7 @@ exports.confirm = (req, res) => {
         },
       );
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -266,7 +268,7 @@ exports.confirm = (req, res) => {
                   accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
                 }
               } catch (e) {
-                console.log(e);
+                /* just ignore */
               }
             }
           }
@@ -456,7 +458,7 @@ exports.register = (req, res) => {
       });
       return isCurrency.id_currency;
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -469,7 +471,7 @@ exports.register = (req, res) => {
       });
       return isCurrencyName.currency;
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -777,7 +779,7 @@ exports.register = (req, res) => {
         authorization_status: setAuthorizationStatus(0),
       });
     } catch (e) {
-      console.log(e);
+      /* just ignore */
     }
   }
 
@@ -832,8 +834,8 @@ exports.register = (req, res) => {
                     amountMoney,
                     authorizationKey,
                     currencyId,
-                  ).catch(e => {
-                    console.log(e);
+                  ).catch(() => {
+                    /* just ignore */
                   });
 
                   return res.status(200).json({ success: true });

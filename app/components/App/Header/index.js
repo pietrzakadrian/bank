@@ -263,7 +263,6 @@ class Header extends React.Component {
       onLogout,
       isNewNotification,
       notificationCount,
-      isNotificationsOpen,
     } = this.props;
     const headerTitle = {
       '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,

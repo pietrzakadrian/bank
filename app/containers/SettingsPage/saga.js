@@ -5,13 +5,7 @@ import { takeLatest, call, all, put, select } from 'redux-saga/effects';
 import decode from 'jwt-decode';
 import messages from './messages';
 
-import {
-  ENTER_NEW_EMAIL,
-  ENTER_NEW_NAME,
-  ENTER_NEW_SURNAME,
-  ENTER_NEW_PASSWORD,
-  SAVE_DATA,
-} from './constants';
+import { SAVE_DATA } from './constants';
 
 import {
   makeNewEmailSelector,

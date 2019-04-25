@@ -3,9 +3,9 @@ import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router-dom';
 import { shallow, mount } from 'enzyme';
 
+import { changeLocale } from 'containers/LanguageProvider/actions';
+import LanguageProvider from 'containers/LanguageProvider';
 import LocaleToggle, { mapDispatchToProps } from '../index';
-import { changeLocale } from '../../LanguageProvider/actions';
-import LanguageProvider from '../../LanguageProvider';
 
 import configureStore from '../../../configureStore';
 import { translationMessages } from '../../../i18n';

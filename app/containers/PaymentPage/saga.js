@@ -1,3 +1,6 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-sequences */
+/* eslint-disable indent */
 import React from 'react';
 import request from 'utils/request';
 import decode from 'jwt-decode';
