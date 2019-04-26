@@ -10,35 +10,35 @@ export const scope = 'app.components.Navigation';
 
 export default defineMessages({
   dashboardItem: {
-    id: `${scope}.dashboard`,
+    id: `${scope}.dashboardItem`,
     defaultMessage: 'Dashboard',
   },
   paymentItem: {
-    id: `${scope}.payment`,
+    id: `${scope}.paymentItem`,
     defaultMessage: 'Payment',
   },
   billsItem: {
-    id: `${scope}.payment`,
+    id: `${scope}.billsItem`,
     defaultMessage: 'Bills',
   },
   historyItem: {
-    id: `${scope}.history`,
+    id: `${scope}.historyItem`,
     defaultMessage: 'History',
   },
   creditsItem: {
-    id: `${scope}.credits`,
+    id: `${scope}.creditsItem`,
     defaultMessage: 'Credits',
   },
   depositsItem: {
-    id: `${scope}.deposits`,
+    id: `${scope}.depositsItem`,
     defaultMessage: 'Deposits',
   },
   cardsItem: {
-    id: `${scope}.cards`,
+    id: `${scope}.cardsItem`,
     defaultMessage: 'Cards',
   },
   settingsItem: {
-    id: `${scope}.settings`,
+    id: `${scope}.settingsItem`,
     defaultMessage: 'Settings',
   },
 });

@@ -10,31 +10,31 @@ export const scope = 'app.containers.Header';
 
 export default defineMessages({
   dashboardTitle: {
-    id: `${scope}.dashboard`,
+    id: `${scope}.dashboardTitle`,
     defaultMessage: 'Dashboard',
   },
   paymentTitle: {
-    id: `${scope}.payment`,
+    id: `${scope}.paymentTitle`,
     defaultMessage: 'Payment',
   },
   historyTitle: {
-    id: `${scope}.history`,
+    id: `${scope}.historyTitle`,
     defaultMessage: 'History',
   },
   settingsTitle: {
-    id: `${scope}.settings`,
+    id: `${scope}.settingsTitle`,
     defaultMessage: 'Settings',
   },
   headerItemMessagesTitle: {
-    id: `${scope}.headerItemMessages`,
+    id: `${scope}.headerItemMessagesTitle`,
     defaultMessage: 'Messages',
   },
   headerItemNotificationsTitle: {
-    id: `${scope}.headerItemNotifications`,
+    id: `${scope}.headerItemNotificationsTitle`,
     defaultMessage: 'Notifications',
   },
   headerItemLogoutTitle: {
-    id: `${scope}.headerItemNotifications`,
+    id: `${scope}.headerItemLogoutTitle`,
     defaultMessage: 'Logout',
   },
 });

@@ -42,7 +42,7 @@ class Alert extends Component {
   }
 
   render() {
-    const { classes, openAlert, onCurrencyToggle } = this.props;
+    const { openAlert, onCurrencyToggle } = this.props;
     return (
       <Dialog
         open={openAlert}
