@@ -52,10 +52,6 @@ class Notifications extends React.Component {
           newNotifications = prevProps.newNotifications.concat(
             this.state.newNotifications,
           );
-          // newNotifications = this.state.newNotifications.concat(
-          //   prevProps.newNotifications,
-          // );
-          // console.log('newNotifications', newNotifications);
           this.setState({ newNotifications });
         }
       }
@@ -81,7 +77,7 @@ class Notifications extends React.Component {
                   <TableRow key={id++}>
                     <Fragment>
                       <TableCell>
-                        <span>
+                        <div className="notification_message-container">
                           You received a cash transfer from{' '}
                           <span className="notification_sender">
                             {newNotification.sender_name}
@@ -90,7 +86,7 @@ class Notifications extends React.Component {
                           <span className="notification_amount">
                             {newNotification.amount_money}
                           </span>
-                        </span>
+                        </div>
                         <br />
                         <span className="notification_date">
                           {newNotification.date_time}

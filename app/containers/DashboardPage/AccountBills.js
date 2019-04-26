@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { NavLink, withRouter } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -125,17 +126,19 @@ class AccountBills extends Component {
           >
             <FormattedMessage {...messages.bills} />
             <CardActions className={classes.cardAction}>
-              <Button
-                size="small"
-                classes={{
-                  root: classes.button,
-                }}
-              >
-                <span className={classes.buttonText}>
-                  <SwapVertIcon className={classes.swapVertIcon} />
-                  <FormattedMessage {...messages.newPayment} />
-                </span>
-              </Button>
+              <NavLink to="/payment">
+                <Button
+                  size="small"
+                  classes={{
+                    root: classes.button,
+                  }}
+                >
+                  <span className={classes.buttonText}>
+                    <SwapVertIcon className={classes.swapVertIcon} />
+                    <FormattedMessage {...messages.newPayment} />
+                  </span>
+                </Button>
+              </NavLink>
             </CardActions>
           </Typography>
           <Table>
@@ -214,5 +217,6 @@ const withConnect = connect(
 
 export default compose(
   withStyles(styles),
+  withRouter,
   withConnect,
 )(AccountBills);
