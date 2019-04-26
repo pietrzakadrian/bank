@@ -27,6 +27,11 @@ import {
   SAVE_DATA_SUCCESS,
   SAVE_DATA_ERROR,
   SAVE_DATA_EMPTY,
+  TOGGLE_ALERT_CURRENCY,
+  CHANGE_NEW_CURRENCY,
+  ENTER_NEW_CURRENCY,
+  ENTER_NEW_CURRENCY_SUCCESS,
+  ENTER_NEW_CURRENCY_ERROR,
 } from './constants';
 
 export const initialState = fromJS({
@@ -39,10 +44,15 @@ export const initialState = fromJS({
   errorSurname: null,
   errorEmail: null,
   message: null,
+  openAlert: false,
+  currency: null,
+  currencyId: 1,
 });
 
 function settingsPageReducer(state = initialState, action) {
   switch (action.type) {
+    case TOGGLE_ALERT_CURRENCY:
+      return state.set('openAlert', !state.get('openAlert'));
     case SAVE_DATA:
       return state;
     case SAVE_DATA_SUCCESS:
@@ -61,7 +71,8 @@ function settingsPageReducer(state = initialState, action) {
         .set('errorName', null)
         .set('errorSurname', null)
         .set('errorEmail', null)
-        .set('message', null);
+        .set('message', null)
+        .set('openAlert', false);
     case CHANGE_NEW_PASSWORD:
       return state
         .set('newPassword', action.password)

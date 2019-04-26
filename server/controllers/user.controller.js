@@ -1,11 +1,12 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db.config.js');
+const Op = db.Sequelize.Op;
 const env = require('../config/env.config.js');
-
 const User = db.users;
 const Bill = db.bills;
 const Additional = db.additionals;
+const Currency = db.currency;
 
 // Register Action
 exports.register = (req, res) => {
@@ -297,5 +298,78 @@ exports.setUserdata = (req, res) => {
     })
     .catch(e => {
       res.status(500).json({ error: e });
+    });
+};
+
+exports.setCurrency = (req, res) => {
+  const id_owner = req.params.userId;
+  const id_currency = req.body.currencyId;
+
+  Bill.findOne({
+    where: {
+      id_owner,
+    },
+  }).then(isAccountBill => {
+    if (isAccountBill) {
+      const userCurrencyId = isAccountBill.id_currency;
+
+      Currency.findOne({
+        where: {
+          id: id_currency,
+        },
+      }).then(isCurrencyId => {
+        if (isCurrencyId) {
+          if (userCurrencyId !== id_currency) {
+            Bill.update(
+              {
+                id_currency,
+              },
+              {
+                where: { id_owner },
+              },
+            )
+              .then(() => {
+                res.status(200).json({ success: true });
+              })
+              .catch(() => {
+                res.status(500).json({ error: 'Internal server error' });
+              });
+          } else {
+            res.status(200).json({
+              error: 'You are trying to set the same currency',
+              success: false,
+            });
+          }
+        } else {
+          res.status(200).json({
+            error: 'You are trying to set a non-existing currency',
+            success: false,
+          });
+        }
+      });
+    }
+  });
+};
+
+exports.getCurrency = (req, res) => {
+  const id_currency = req.body.currencyId;
+
+  Currency.findAll({
+    where: {
+      id: {
+        [Op.ne]: [id_currency],
+      },
+    },
+    attributes: ['id', 'currency'],
+  })
+    .then(isCurrency => {
+      if (isCurrency) {
+        res.status(200).json({ result: isCurrency, success: true });
+      } else {
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    })
+    .catch(() => {
+      res.status(500).json({ error: 'Internal server error' });
     });
 };

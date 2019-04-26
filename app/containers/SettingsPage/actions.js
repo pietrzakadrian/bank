@@ -25,7 +25,45 @@ import {
   SAVE_DATA_SUCCESS,
   SAVE_DATA_ERROR,
   SAVE_DATA_EMPTY,
+  TOGGLE_ALERT_CURRENCY,
+  CHANGE_NEW_CURRENCY,
+  ENTER_NEW_CURRENCY,
+  ENTER_NEW_CURRENCY_SUCCESS,
+  ENTER_NEW_CURRENCY_ERROR,
 } from './constants';
+
+export function toggleAlertCurrencyAction() {
+  return {
+    type: TOGGLE_ALERT_CURRENCY,
+  };
+}
+
+export function changeNewCurrencyAction(currencyId) {
+  return {
+    type: CHANGE_NEW_CURRENCY,
+    currencyId,
+  };
+}
+
+export function enterNewCurrencyAction(currencyId) {
+  return {
+    type: ENTER_NEW_CURRENCY,
+    currencyId,
+  };
+}
+
+export function enterNewCurrencySuccessAction() {
+  return {
+    type: ENTER_NEW_CURRENCY_SUCCESS,
+  };
+}
+
+export function enterNewCurrencyErrorAction(error) {
+  return {
+    type: ENTER_NEW_CURRENCY_ERROR,
+    error,
+  };
+}
 
 export function saveDataAction() {
   return {

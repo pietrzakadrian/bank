@@ -33,3 +33,11 @@ export const SAVE_DATA = 'app/SettingsPage/SAVE_DATA';
 export const SAVE_DATA_SUCCESS = 'app/SettingsPage/SAVE_DATA_SUCCESS';
 export const SAVE_DATA_ERROR = 'app/SettingsPage/SAVE_DATA_ERROR';
 export const SAVE_DATA_EMPTY = 'app/SettingsPage/SAVE_DATA_EMPTY';
+
+export const TOGGLE_ALERT_CURRENCY = 'app/SettingsPage/TOGGLE_ALERT_CURRENCY';
+export const CHANGE_NEW_CURRENCY = 'app/SettingsPage/CHANGE_NEW_CURRENCY';
+export const ENTER_NEW_CURRENCY = 'app/SettingsPage/ENTER_NEW_CURRENCY';
+export const ENTER_NEW_CURRENCY_SUCCESS =
+  'app/SettingsPage/ENTER_NEW_CURRENCY_SUCCESS';
+export const ENTER_NEW_CURRENCY_ERROR =
+  'app/SettingsPage/ENTER_NEW_CURRENCY_ERROR';

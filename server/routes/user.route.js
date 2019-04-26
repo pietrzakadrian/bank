@@ -24,4 +24,20 @@ module.exports = function(app) {
 
   // Update basic User's Data Action
   app.put('/api/users/:userId', checkAuth, checkToken, users.setUserdata);
+
+  // Update User's Currency Action
+  app.put(
+    '/api/users/setCurrency/:userId',
+    checkAuth,
+    checkToken,
+    users.setCurrency,
+  );
+
+  // Get Currency Action
+  app.get(
+    '/api/users/getCurrency/:userId',
+    checkAuth,
+    checkToken,
+    users.getCurrency,
+  );
 };

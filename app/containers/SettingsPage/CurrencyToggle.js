@@ -11,11 +11,10 @@ import { createStructuredSelector } from 'reselect';
 import './styles.css';
 
 // Import Components
-import { makeCurrencySelector } from 'containers/RegisterPage/selectors';
+import { makeCurrencySelector } from 'containers/SettingsPage/selectors';
+import { changeNewCurrencyAction } from 'containers/SettingsPage/actions';
 import Toggle from './Toggle';
 import messages from './messages';
-
-import { changeCurrencyAction } from '../../containers/RegisterPage/actions';
 
 class CurrencyToggle extends React.PureComponent {
   render() {
@@ -43,7 +42,7 @@ const mapStateToProps = createStructuredSelector({
 export function mapDispatchToProps(dispatch) {
   return {
     onCurrencyToggle: evt =>
-      dispatch(changeCurrencyAction(parseInt(evt.target.value, 10))),
+      dispatch(changeNewCurrencyAction(parseInt(evt.target.value, 10))),
     dispatch,
   };
 }

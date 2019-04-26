@@ -106,7 +106,7 @@ const styles = theme => ({
   },
   formItem: {
     padding: 10,
-    height: 36,
+    height: 37,
     [theme.breakpoints.down('sm')]: {
       width: '100%',
     },

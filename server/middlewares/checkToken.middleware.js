@@ -6,6 +6,7 @@ module.exports = (req, res, next) => {
       req.params.senderId ||
       req.body.id_sender ||
       req.body.userId;
+
     if (req.userData.id === parseInt(id, 10)) {
       next();
       return false;
@@ -16,6 +17,7 @@ module.exports = (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       message: 'Auth failed',
+      error,
     });
   }
 };

@@ -20,8 +20,8 @@ import Grid from '@material-ui/core/Grid';
 
 // Import Components
 import LocaleToggle from 'components/LocaleToggle';
-import CurrencyToggle from 'components/CurrencyToggle';
 import Copyright from 'components/Copyright';
+import CurrencyToggle from 'containers/SettingsPage/CurrencyToggle';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -60,7 +60,7 @@ const styles = theme => ({
   },
   formItem: {
     padding: 10,
-    height: 36,
+    height: 37,
     [theme.breakpoints.down('sm')]: {
       width: '100%',
     },
@@ -195,7 +195,7 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       width: '17rem',
     },
-    margin: '0px auto 20px;',
+    margin: '0px auto;',
   },
 });
 

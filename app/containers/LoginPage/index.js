@@ -56,7 +56,7 @@ import {
 const styles = theme => ({
   formItem: {
     padding: 10,
-    height: 36,
+    height: 37,
     border: '1px solid grey',
     display: 'block',
     margin: '0 auto',

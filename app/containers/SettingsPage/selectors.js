@@ -57,6 +57,16 @@ const makeErrorPasswordSelector = () =>
 const makeMessageSelector = () =>
   createSelector(selectSettingsPageDomain, substate => substate.get('message'));
 
+const makeCurrencySelector = () =>
+  createSelector(selectSettingsPageDomain, substate =>
+    substate.get('currency'),
+  );
+
+const makeCurrencyIdSelector = () =>
+  createSelector(selectSettingsPageDomain, substate =>
+    substate.get('currencyId'),
+  );
+
 const makeSelectSettingsPage = () =>
   createSelector(selectSettingsPageDomain, substate => substate.toJS());
 
@@ -72,4 +82,6 @@ export {
   makeErrorEmailSelector,
   makeErrorPasswordSelector,
   makeMessageSelector,
+  makeCurrencySelector,
+  makeCurrencyIdSelector,
 };

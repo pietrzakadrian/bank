@@ -1,4 +1,3 @@
-/* eslint-disable radix */
 /* eslint-disable indent */
 /**
  *
@@ -95,7 +94,7 @@ const styles = theme => ({
   },
   formItem: {
     padding: 10,
-    height: 36,
+    height: 37,
     [theme.breakpoints.down('sm')]: {
       width: '100%',
     },
@@ -658,7 +657,7 @@ function mapDispatchToProps(dispatch) {
     onChangeName: e => dispatch(changeNameAction(e.target.value)),
     onChangeSurname: e => dispatch(changeSurnameAction(e.target.value)),
     onChangeEmail: e => dispatch(changeEmailAction(e.target.value)),
-    onEnterId: id => dispatch(enterIdAction(parseInt(id))),
+    onEnterId: id => dispatch(enterIdAction(parseInt(id, 10))),
     onEnterPassword: password => dispatch(enterPasswordAction(password)),
     onEnterName: name => dispatch(enterNameAction(name)),
     onEnterSurname: surname => dispatch(enterSurnameAction(surname)),
