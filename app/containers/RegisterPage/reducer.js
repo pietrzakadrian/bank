@@ -51,7 +51,7 @@ export const initialState = fromJS({
   surname: '',
   email: '',
   currency: null,
-  currencyId: 1,
+  currencyId: null,
   isDataProcessingAgreement: false,
   errorDataProcessingAgreement: '',
   error: '',
@@ -104,7 +104,9 @@ function registerPageReducer(state = initialState, action) {
     case LOAD_CURRENCY:
       return state;
     case LOAD_CURRENCY_SUCCESS:
-      return state.set('currency', action.currency);
+      return state
+        .set('currency', action.currency)
+        .set('currencyId', action.currency[0]);
     case LOAD_CURRENCY_ERROR:
       return state.set('error', action.error);
     case CHANGE_CURRENCY:
@@ -141,7 +143,7 @@ function registerPageReducer(state = initialState, action) {
         .set('error', '')
         .set('isDataProcessingAgreement', false)
         .set('currency', null)
-        .set('currencyId', 1)
+        .set('currencyId', null)
         .set('errorDataProcessingAgreement', '');
     case REGISTER_FAILURE:
       return state.set('error', action.error);
@@ -175,7 +177,7 @@ function registerPageReducer(state = initialState, action) {
       if (state.get('activeStep') === 5) {
         return state
           .set('activeStep', state.get('activeStep') - 1)
-          .set('currencyId', '')
+          .set('currencyId', null)
           .set('error', '');
       }
       if (state.get('activeStep') === 6) {

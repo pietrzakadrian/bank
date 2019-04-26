@@ -123,7 +123,7 @@ function Navigation({ classes, location, hiddenMobileOpen, isMobileOpen }) {
         </MenuItem>
       </NavLink>
       {/* <NavLink> */}
-      <MenuItem disabled className={classes.menuItem}>
+      <MenuItem className={classes.menuItem}>
         <ListItemIcon className={classes.icon}>
           <AccountBalanceIcon />
         </ListItemIcon>
@@ -134,7 +134,7 @@ function Navigation({ classes, location, hiddenMobileOpen, isMobileOpen }) {
       </MenuItem>
       {/* </NavLink> */}
       {/* <NavLink> */}
-      <MenuItem disabled className={classes.menuItem}>
+      <MenuItem className={classes.menuItem}>
         <ListItemIcon className={classes.icon}>
           <TrendingUpIcon />
         </ListItemIcon>
@@ -144,7 +144,7 @@ function Navigation({ classes, location, hiddenMobileOpen, isMobileOpen }) {
         />
       </MenuItem>
       {/* </NavLink> */}
-      <MenuItem disabled className={classes.menuItem}>
+      <MenuItem className={classes.menuItem}>
         <ListItemIcon className={classes.icon}>
           <CardIcon />
         </ListItemIcon>
