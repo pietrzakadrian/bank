@@ -305,50 +305,59 @@ exports.setCurrency = (req, res) => {
   const id_owner = req.params.userId;
   const id_currency = req.body.currencyId;
 
-  Bill.findOne({
-    where: {
-      id_owner,
-    },
-  }).then(isAccountBill => {
-    if (isAccountBill) {
-      const userCurrencyId = isAccountBill.id_currency;
+  if (id_currency) {
+    Bill.findOne({
+      where: {
+        id_owner,
+      },
+    }).then(isAccountBill => {
+      if (isAccountBill) {
+        const userCurrencyId = isAccountBill.id_currency;
 
-      Currency.findOne({
-        where: {
-          id: id_currency,
-        },
-      }).then(isCurrencyId => {
-        if (isCurrencyId) {
-          if (userCurrencyId !== id_currency) {
-            Bill.update(
-              {
-                id_currency,
-              },
-              {
-                where: { id_owner },
-              },
-            )
-              .then(() => {
-                res.status(200).json({ success: true });
-              })
-              .catch(() => {
-                res.status(500).json({ error: 'Internal server error' });
+        Currency.findOne({
+          where: {
+            id: id_currency,
+          },
+        }).then(isCurrencyId => {
+          if (isCurrencyId) {
+            if (userCurrencyId !== id_currency) {
+              // musisz tez przewalutowac :)
+
+              Bill.update(
+                {
+                  id_currency,
+                },
+                {
+                  where: { id_owner },
+                },
+              )
+                .then(() => {
+                  res.status(200).json({ success: true });
+                })
+                .catch(() => {
+                  res.status(500).json({ error: 'Internal server error' });
+                });
+            } else {
+              res.status(200).json({
+                error: 'You are trying to set the same currency',
+                success: false,
               });
+            }
           } else {
             res.status(200).json({
-              error: 'You are trying to set the same currency',
+              error: 'You are trying to set a non-existing currency',
               success: false,
             });
           }
-        } else {
-          res.status(200).json({
-            error: 'You are trying to set a non-existing currency',
-            success: false,
-          });
-        }
-      });
-    }
-  });
+        });
+      }
+    });
+  } else {
+    res.status(200).json({
+      error: 'currencyId can not be a null',
+      success: false,
+    });
+  }
 };
 
 exports.getCurrency = (req, res) => {

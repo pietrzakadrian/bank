@@ -313,12 +313,6 @@ export function* enterNewCurrency() {
   }
 }
 
-function* currencyExchange() {
-  // trzeba pobrac walute, jaka zostala teraz zmieniona;
-  // trzeba przewalutować tę walutę z tej co byla na ta co ustawil
-  // trzeba zrobic update widgetu!
-}
-
 export default function* settingsPageSaga() {
   yield takeLatest(SAVE_DATA, saveData);
   yield takeLatest(LOAD_USER_CURRENCY, getCurrencyUser);

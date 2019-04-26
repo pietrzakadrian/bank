@@ -4,10 +4,11 @@
  *
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import './styles.css';
 
 // Import Material UI
 import Button from '@material-ui/core/Button';
@@ -18,18 +19,18 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { FormattedMessage } from 'react-intl';
-import messages from './messages';
 import {
   makeOpenAlertSelector,
   makeCurrencyIdSelector,
-} from '../../../containers/SettingsPage/selectors';
+} from 'containers/SettingsPage/selectors';
 import {
   toggleAlertCurrencyAction,
   enterNewCurrencyAction,
-} from '../../../containers/SettingsPage/actions';
+} from 'containers/SettingsPage/actions';
+import messages from './messages';
 
 /* eslint-disable react/prefer-stateless-function */
-class Alert extends React.PureComponent {
+class Alert extends Component {
   constructor(props) {
     super(props);
 
@@ -41,27 +42,28 @@ class Alert extends React.PureComponent {
   }
 
   render() {
+    const { classes, openAlert, onCurrencyToggle } = this.props;
     return (
       <Dialog
-        open={this.props.openAlert}
-        onClose={this.props.onCurrencyToggle}
+        open={openAlert}
+        onClose={onCurrencyToggle}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Change currency</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          <FormattedMessage {...messages.contentTitle} />
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            You are trying to change the currency. This will result in currency
-            conversion of your available funds according to the exchange rate.
-            Are you sure you want to do this?
+            <FormattedMessage {...messages.contentAlert} />,
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button color="primary" onClick={this.props.onCurrencyToggle}>
-            Disagree
+        <DialogActions className="dialogActions-container">
+          <Button color="primary" onClick={onCurrencyToggle}>
+            <FormattedMessage {...messages.disagree} />
           </Button>
           <Button color="primary" onClick={this.enterCurrency} autoFocus>
-            Agree
+            <FormattedMessage {...messages.agree} />
           </Button>
         </DialogActions>
       </Dialog>
