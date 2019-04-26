@@ -34,10 +34,5 @@ module.exports = function(app) {
   );
 
   // Get Currency Action
-  app.get(
-    '/api/users/getCurrency/:userId',
-    checkAuth,
-    checkToken,
-    users.getCurrency,
-  );
+  app.post('/api/users/getCurrency', checkAuth, checkToken, users.getCurrency);
 };

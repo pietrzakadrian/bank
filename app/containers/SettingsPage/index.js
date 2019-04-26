@@ -22,6 +22,7 @@ import Grid from '@material-ui/core/Grid';
 import LocaleToggle from 'components/LocaleToggle';
 import Copyright from 'components/Copyright';
 import CurrencyToggle from 'containers/SettingsPage/CurrencyToggle';
+import Alert from 'components/App/Alert';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -35,6 +36,8 @@ import makeSelectSettingsPage, {
   makeErrorNameSelector,
   makeErrorSurnameSelector,
   makeErrorEmailSelector,
+  makeUserCurrencyIdSelector,
+  makeCurrencyMessageSelector,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -50,6 +53,7 @@ import {
   enterNewPasswordAction,
   emptyDataAction,
   saveDataAction,
+  loadUserCurrencyIdAction,
 } from './actions';
 
 const styles = theme => ({
@@ -208,6 +212,10 @@ class SettingsPage extends React.Component {
     this.Auth = new AuthService();
   }
 
+  componentDidMount() {
+    this.props.userCurrencyId ? null : this.props.onLoadUserCurrencyId();
+  }
+
   handleKeyPress(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -247,6 +255,7 @@ class SettingsPage extends React.Component {
       onChangeNewSurname,
       onChangeNewPassword,
       onChangeNewEmail,
+      currencyMessage,
     } = this.props;
     return (
       <Fragment>
@@ -402,9 +411,15 @@ class SettingsPage extends React.Component {
 
               <CurrencyToggle />
 
+              {currencyMessage ? (
+                <div className={classes.textMessage}>{currencyMessage}</div>
+              ) : null}
+
               <div className={classes.textField}>
                 <FormattedMessage {...messages.reportError} />
               </div>
+
+              <Alert />
 
               <button className={classes.formMessage} type="button">
                 <span className={classes.buttonText}>
@@ -436,6 +451,8 @@ const mapStateToProps = createStructuredSelector({
   errorSurname: makeErrorSurnameSelector(),
   errorEmail: makeErrorEmailSelector(),
   message: makeMessageSelector(),
+  userCurrencyId: makeUserCurrencyIdSelector(),
+  currencyMessage: makeCurrencyMessageSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -450,6 +467,7 @@ function mapDispatchToProps(dispatch) {
     onSaveNewSurname: surname => dispatch(enterNewSurnameAction(surname)),
     onSaveNewEmail: email => dispatch(enterNewEmailAction(email)),
     onSaveNewPassword: password => dispatch(enterNewPasswordAction(password)),
+    onLoadUserCurrencyId: () => dispatch(loadUserCurrencyIdAction()),
   };
 }
 

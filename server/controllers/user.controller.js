@@ -354,22 +354,26 @@ exports.setCurrency = (req, res) => {
 exports.getCurrency = (req, res) => {
   const id_currency = req.body.currencyId;
 
-  Currency.findAll({
-    where: {
-      id: {
-        [Op.ne]: [id_currency],
+  if (id_currency) {
+    Currency.findAll({
+      where: {
+        id: {
+          [Op.ne]: [id_currency],
+        },
       },
-    },
-    attributes: ['id', 'currency'],
-  })
-    .then(isCurrency => {
-      if (isCurrency) {
-        res.status(200).json({ result: isCurrency, success: true });
-      } else {
-        res.status(500).json({ error: 'Internal server error' });
-      }
+      attributes: ['id', 'currency'],
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
-    });
+      .then(isCurrency => {
+        if (isCurrency) {
+          res.status(200).json({ result: isCurrency, success: true });
+        } else {
+          res.status(500).json({ error: 'Internal server error' });
+        }
+      })
+      .catch(() => {
+        res.status(500).json({ error: 'Internal server error' });
+      });
+  } else {
+    res.status(500).json({ error: 'Internal server error' });
+  }
 };

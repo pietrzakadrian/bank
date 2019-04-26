@@ -60,7 +60,7 @@ exports.getUserdata = (req, res) => {
         where: {
           id: db.Sequelize.col('bill.id_currency'),
         },
-        attributes: ['currency'],
+        attributes: ['id', 'currency'],
       },
     ],
     where: { id_owner },

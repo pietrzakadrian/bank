@@ -67,6 +67,21 @@ const makeCurrencyIdSelector = () =>
     substate.get('currencyId'),
   );
 
+const makeUserCurrencyIdSelector = () =>
+  createSelector(selectSettingsPageDomain, substate =>
+    substate.get('userCurrencyId'),
+  );
+
+const makeOpenAlertSelector = () =>
+  createSelector(selectSettingsPageDomain, substate =>
+    substate.get('openAlert'),
+  );
+
+const makeCurrencyMessageSelector = () =>
+  createSelector(selectSettingsPageDomain, substate =>
+    substate.get('currencyMessage'),
+  );
+
 const makeSelectSettingsPage = () =>
   createSelector(selectSettingsPageDomain, substate => substate.toJS());
 
@@ -84,4 +99,7 @@ export {
   makeMessageSelector,
   makeCurrencySelector,
   makeCurrencyIdSelector,
+  makeUserCurrencyIdSelector,
+  makeOpenAlertSelector,
+  makeCurrencyMessageSelector,
 };

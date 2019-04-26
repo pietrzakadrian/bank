@@ -6,6 +6,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 // Import Material UI
 import Button from '@material-ui/core/Button';
@@ -17,59 +19,72 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
+import {
+  makeOpenAlertSelector,
+  makeCurrencyIdSelector,
+} from '../../../containers/SettingsPage/selectors';
+import {
+  toggleAlertCurrencyAction,
+  enterNewCurrencyAction,
+} from '../../../containers/SettingsPage/actions';
 
 /* eslint-disable react/prefer-stateless-function */
-class Alert extends React.Component {
-  state = {
-    open: false,
-  };
+class Alert extends React.PureComponent {
+  constructor(props) {
+    super(props);
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
+    this.enterCurrency = this.enterCurrency.bind(this);
+  }
 
-  handleClose = () => {
-    this.setState({ open: false });
-  };
+  enterCurrency() {
+    this.props.enterNewCurrency(this.props.currencyId);
+  }
 
   render() {
     return (
-      <div>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={this.handleClickOpen}
-        >
-          Open alert dialog
-        </Button>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Change currency</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              You are trying to change the currency. This will result in
-              currency conversion of your available funds according to the
-              exchange rate. Are you sure you want to do this?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Disagree
-            </Button>
-            <Button onClick={this.handleClose} color="primary" autoFocus>
-              Agree
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
+      <Dialog
+        open={this.props.openAlert}
+        onClose={this.props.onCurrencyToggle}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Change currency</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            You are trying to change the currency. This will result in currency
+            conversion of your available funds according to the exchange rate.
+            Are you sure you want to do this?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" onClick={this.props.onCurrencyToggle}>
+            Disagree
+          </Button>
+          <Button color="primary" onClick={this.enterCurrency} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 }
 
 Alert.propTypes = {};
 
-export default Alert;
+const mapStateToProps = createStructuredSelector({
+  openAlert: makeOpenAlertSelector(),
+  currencyId: makeCurrencyIdSelector(),
+});
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    onCurrencyToggle: () => dispatch(toggleAlertCurrencyAction()),
+    enterNewCurrency: currencyId =>
+      dispatch(enterNewCurrencyAction(currencyId)),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Alert);

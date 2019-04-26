@@ -30,7 +30,53 @@ import {
   ENTER_NEW_CURRENCY,
   ENTER_NEW_CURRENCY_SUCCESS,
   ENTER_NEW_CURRENCY_ERROR,
+  LOAD_USER_CURRENCY,
+  LOAD_USER_CURRENCY_SUCCESS,
+  LOAD_USER_CURRENCY_ERROR,
+  LOAD_CURRENCY,
+  LOAD_CURRENCY_SUCCESS,
+  LOAD_CURRENCY_ERROR,
 } from './constants';
+
+export function loadUserCurrencyIdAction() {
+  return {
+    type: LOAD_USER_CURRENCY,
+  };
+}
+
+export function loadUserCurrencyIdSuccessAction(currencyId) {
+  return {
+    type: LOAD_USER_CURRENCY_SUCCESS,
+    currencyId,
+  };
+}
+
+export function loadUserCurrencyIdErrorAction(error) {
+  return {
+    type: LOAD_USER_CURRENCY_ERROR,
+    error,
+  };
+}
+
+export function loadCurrencyAction() {
+  return {
+    type: LOAD_CURRENCY,
+  };
+}
+
+export function loadCurrencySuccessAction(currency) {
+  return {
+    type: LOAD_CURRENCY_SUCCESS,
+    currency,
+  };
+}
+
+export function loadCurrencyErrorAction(error) {
+  return {
+    type: LOAD_CURRENCY_ERROR,
+    error,
+  };
+}
 
 export function toggleAlertCurrencyAction() {
   return {
@@ -52,9 +98,10 @@ export function enterNewCurrencyAction(currencyId) {
   };
 }
 
-export function enterNewCurrencySuccessAction() {
+export function enterNewCurrencySuccessAction(message) {
   return {
     type: ENTER_NEW_CURRENCY_SUCCESS,
+    message,
   };
 }
 

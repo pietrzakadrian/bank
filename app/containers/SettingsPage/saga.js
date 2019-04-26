@@ -5,7 +5,7 @@ import { takeLatest, call, all, put, select } from 'redux-saga/effects';
 import decode from 'jwt-decode';
 import messages from './messages';
 
-import { SAVE_DATA } from './constants';
+import { SAVE_DATA, LOAD_USER_CURRENCY, ENTER_NEW_CURRENCY } from './constants';
 
 import {
   makeNewEmailSelector,
@@ -16,6 +16,8 @@ import {
   makeErrorNameSelector,
   makeErrorSurnameSelector,
   makeErrorPasswordSelector,
+  makeUserCurrencyIdSelector,
+  makeCurrencyIdSelector,
 } from './selectors';
 
 import {
@@ -33,6 +35,12 @@ import {
   enterNewNameAction,
   enterNewSurnameAction,
   saveDataSuccessAction,
+  loadCurrencySuccessAction,
+  loadUserCurrencyIdSuccessAction,
+  loadUserCurrencyIdErrorAction,
+  loadCurrencyAction,
+  enterNewCurrencySuccessAction,
+  enterNewCurrencyErrorAction,
 } from './actions';
 
 function* getToken() {
@@ -212,7 +220,107 @@ export function* saveData() {
   }
 }
 
-// Individual exports for testing
+export function* getCurrencyUser() {
+  const token = yield call(getUserId);
+  const jwt = yield call(getToken);
+  const requestURL = `/api/bills/${token.id}`;
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    if (response[0].currency.id) {
+      yield put(loadUserCurrencyIdSuccessAction(response[0].currency.id));
+      yield call(loadCurrency);
+    } else {
+      yield put(loadUserCurrencyIdErrorAction('error'));
+    }
+  } catch (err) {
+    // yield put(successLogoutAction());
+    // yield put(push('/login'));
+  }
+}
+
+function* loadCurrency() {
+  const token = yield call(getUserId);
+  const jwt = yield call(getToken);
+  const requestURL = `/api/users/getCurrency/`;
+  const currencyId = yield select(makeUserCurrencyIdSelector());
+  const userId = token.id;
+
+  try {
+    yield put(loadCurrencyAction());
+    const response = yield call(request, requestURL, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({
+        userId,
+        currencyId,
+      }),
+    });
+
+    if (response.success) {
+      const output = response.result.map(item => item.id);
+      yield put(loadCurrencySuccessAction(output));
+    }
+  } catch (e) {
+    console.log(e);
+    /* just ignore */
+  }
+}
+
+export function* enterNewCurrency() {
+  const token = yield call(getUserId);
+  const jwt = yield call(getToken);
+  const requestURL = `/api/users/setCurrency/${token.id}`;
+  const currencyId = yield select(makeCurrencyIdSelector());
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({
+        currencyId,
+      }),
+    });
+
+    if (response.success) {
+      yield put(
+        enterNewCurrencySuccessAction(
+          <FormattedMessage {...messages.saveCurrencySuccess} />,
+        ),
+      );
+    } else {
+      yield put(enterNewCurrencyErrorAction('error'));
+    }
+  } catch (err) {
+    // yield put(successLogoutAction());
+    // yield put(push('/login'));
+  }
+}
+
+function* currencyExchange() {
+  // trzeba pobrac walute, jaka zostala teraz zmieniona;
+  // trzeba przewalutować tę walutę z tej co byla na ta co ustawil
+  // trzeba zrobic update widgetu!
+}
+
 export default function* settingsPageSaga() {
   yield takeLatest(SAVE_DATA, saveData);
+  yield takeLatest(LOAD_USER_CURRENCY, getCurrencyUser);
+  yield takeLatest(ENTER_NEW_CURRENCY, enterNewCurrency);
 }

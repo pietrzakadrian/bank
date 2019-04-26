@@ -32,6 +32,12 @@ import {
   ENTER_NEW_CURRENCY,
   ENTER_NEW_CURRENCY_SUCCESS,
   ENTER_NEW_CURRENCY_ERROR,
+  LOAD_CURRENCY,
+  LOAD_CURRENCY_SUCCESS,
+  LOAD_CURRENCY_ERROR,
+  LOAD_USER_CURRENCY,
+  LOAD_USER_CURRENCY_SUCCESS,
+  LOAD_USER_CURRENCY_ERROR,
 } from './constants';
 
 export const initialState = fromJS({
@@ -46,11 +52,25 @@ export const initialState = fromJS({
   message: null,
   openAlert: false,
   currency: null,
-  currencyId: 1,
+  currencyId: null,
+  userCurrencyId: null,
+  currencyMessage: null,
 });
 
 function settingsPageReducer(state = initialState, action) {
   switch (action.type) {
+    case LOAD_USER_CURRENCY_SUCCESS:
+      return state.set('userCurrencyId', action.currencyId);
+    case LOAD_CURRENCY_SUCCESS:
+      return state
+        .set('currency', action.currency)
+        .set('currencyId', action.currency[0]);
+    case ENTER_NEW_CURRENCY_SUCCESS:
+      return state
+        .set('openAlert', false)
+        .set('currencyMessage', action.message);
+    case CHANGE_NEW_CURRENCY:
+      return state.set('currencyId', action.currencyId).set('openAlert', true);
     case TOGGLE_ALERT_CURRENCY:
       return state.set('openAlert', !state.get('openAlert'));
     case SAVE_DATA:
@@ -72,7 +92,10 @@ function settingsPageReducer(state = initialState, action) {
         .set('errorSurname', null)
         .set('errorEmail', null)
         .set('message', null)
-        .set('openAlert', false);
+        .set('openAlert', false)
+        .set('currencyId', null)
+        .set('userCurrencyId', null)
+        .set('currency', null);
     case CHANGE_NEW_PASSWORD:
       return state
         .set('newPassword', action.password)
