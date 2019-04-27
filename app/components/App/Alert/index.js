@@ -55,7 +55,7 @@ class Alert extends Component {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            <FormattedMessage {...messages.contentAlert} />,
+            <FormattedMessage {...messages.contentAlert} />
           </DialogContentText>
         </DialogContent>
         <DialogActions className="dialogActions-container">

@@ -274,7 +274,6 @@ function* loadCurrency() {
       yield put(loadCurrencySuccessAction(output));
     }
   } catch (e) {
-    console.log(e);
     /* just ignore */
   }
 }
