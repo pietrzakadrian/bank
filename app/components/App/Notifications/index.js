@@ -78,11 +78,11 @@ class Notifications extends React.Component {
                     <Fragment>
                       <TableCell>
                         <div className="notification_message-container">
-                          You received a cash transfer from{' '}
+                          <FormattedMessage {...messages.getTrasnfer} />{' '}
                           <span className="notification_sender">
                             {newNotification.sender_name}
                           </span>{' '}
-                          worth{' '}
+                          <FormattedMessage {...messages.worth} />{' '}
                           <span className="notification_amount">
                             {newNotification.amount_money}
                           </span>

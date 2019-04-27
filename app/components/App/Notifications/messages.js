@@ -13,4 +13,12 @@ export default defineMessages({
     id: `${scope}.noNotifications`,
     defaultMessage: 'No notifications.',
   },
+  getTrasnfer: {
+    id: `${scope}.getTrasnfer`,
+    defaultMessage: 'You received a cash transfer from',
+  },
+  worth: {
+    id: `${scope}.worth`,
+    defaultMessage: 'worth',
+  },
 });
