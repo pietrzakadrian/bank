@@ -77,7 +77,7 @@ export function* getCurrency() {
 
     if (!currency && response) {
       response[0].currency.id
-        ? yield put(getCurrencySuccessAction(response[0].currency.id))
+        ? yield put(getCurrencySuccessAction(response[0].currency.currency))
         : yield put(getCurrencyErrorAction('error'));
     }
   } catch (err) {

@@ -84,7 +84,7 @@ function paymentPageReducer(state = initialState, action) {
     case GET_CURRENCY_SUCCESS:
       return state.set('currency', action.currency);
     case GET_CURRENCY_ERROR:
-      return state.set('currency', action.currency);
+      return state.set('error', action.error);
     case EMPTY_ACCOUNT_NUMBER_ERROR:
       return state.set('error', action.error);
     case EMPTY_AMOUNT_MONEY_ERROR:
