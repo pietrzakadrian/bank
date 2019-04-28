@@ -158,7 +158,7 @@
   "app.containers.RegisterPage.registerText": "Anmeldung",
   "app.containers.RegisterPage.succesCreated": "Erfolg! Das Konto wurde erstellt",
   "app.containers.RegisterPage.surname": "Nachname",
-  "app.containers.RegisterPage.textEmailNeed": "Account registration does not require confirmation by e-mail, but the transfer must be completed with a code that will come to your e-mail address.",
+  "app.containers.RegisterPage.textEmailNeed": "Die Kontoregistrierung erfordert keine Bestätigung per E-Mail, die Übertragung muss jedoch mit einem Code abgeschlossen werden, der an Ihre E-Mail-Adresse gesendet wird.",
   "app.containers.SettingsPage.EUR": "EUR",
   "app.containers.SettingsPage.PLN": "PLN",
   "app.containers.SettingsPage.USD": "USD",
