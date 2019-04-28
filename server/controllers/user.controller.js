@@ -1,3 +1,4 @@
+/* eslint-disable no-else-return */
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db.config.js');
@@ -305,6 +306,90 @@ exports.setCurrency = (req, res) => {
   const id_owner = req.params.userId;
   const id_currency = req.body.currencyId;
 
+  async function isCurrencyMain(id) {
+    try {
+      const currencyMain = await Currency.findOne({
+        where: {
+          id,
+        },
+      });
+      return currencyMain.main_currency;
+    } catch (e) {
+      /* just ignore */
+    }
+  }
+
+  async function getCurrencyExchangeRate(currencyId) {
+    try {
+      const isCurrencyExchangeRate = await Currency.findOne({
+        where: {
+          id: currencyId,
+        },
+      });
+      return isCurrencyExchangeRate.currency_exchange_rate;
+    } catch (e) {
+      /* just ignore */
+    }
+  }
+
+  async function setExchangeCurrency(
+    userAvailableFunds,
+    userCurrencyId,
+    id_currency,
+    id_owner,
+  ) {
+    // potrzebuje wiedziec ile pieniedzy i w jakiej walucie ma user przed zmiana waluty (userAvailableFunds, userCurrencyId)
+    // musze wiedziec na jaka walute chce to przewalutowac (id_currency)
+    // musze to przewalutowac w zaleznosci od tego czy wybral mainCurrency (tylko podziel)
+    // lub !mainCurrency => wtedy podziel i pomnoz
+
+    const newCurrencyExchangeRate = await getCurrencyExchangeRate(id_currency);
+    const userCurrencyExchangeRate = await getCurrencyExchangeRate(
+      userCurrencyId,
+    );
+    const mainCurrency = await isCurrencyMain(id_currency);
+
+    if (mainCurrency) {
+      const convertedAmountMoney =
+        userAvailableFunds / userCurrencyExchangeRate;
+
+      return Bill.update(
+        {
+          available_funds: convertedAmountMoney.toFixed(2),
+        },
+        { where: { id_owner } },
+      );
+    } else {
+      const convertedAmountMoney =
+        (userAvailableFunds / userCurrencyExchangeRate) *
+        newCurrencyExchangeRate;
+
+      return Bill.update(
+        {
+          available_funds: convertedAmountMoney.toFixed(2),
+        },
+        { where: { id_owner } },
+      );
+    }
+  }
+
+  function setNewCurrency(id_currency, id_owner) {
+    return Bill.update(
+      {
+        id_currency,
+      },
+      {
+        where: { id_owner },
+      },
+    )
+      .then(() => {
+        res.status(200).json({ success: true });
+      })
+      .catch(() => {
+        res.status(500).json({ error: 'Internal server error' });
+      });
+  }
+
   if (id_currency) {
     Bill.findOne({
       where: {
@@ -313,30 +398,26 @@ exports.setCurrency = (req, res) => {
     }).then(isAccountBill => {
       if (isAccountBill) {
         const userCurrencyId = isAccountBill.id_currency;
+        const userAvailableFunds = isAccountBill.available_funds;
 
         Currency.findOne({
           where: {
             id: id_currency,
           },
-        }).then(isCurrencyId => {
+        }).then(async isCurrencyId => {
           if (isCurrencyId) {
             if (userCurrencyId !== id_currency) {
-              // musisz tez przewalutowac :)
-
-              Bill.update(
-                {
+              try {
+                await setExchangeCurrency(
+                  userAvailableFunds,
+                  userCurrencyId,
                   id_currency,
-                },
-                {
-                  where: { id_owner },
-                },
-              )
-                .then(() => {
-                  res.status(200).json({ success: true });
-                })
-                .catch(() => {
-                  res.status(500).json({ error: 'Internal server error' });
-                });
+                  id_owner,
+                );
+                setNewCurrency(id_currency, id_owner);
+              } catch (e) {
+                /* just ignore */
+              }
             } else {
               res.status(200).json({
                 error: 'You are trying to set the same currency',

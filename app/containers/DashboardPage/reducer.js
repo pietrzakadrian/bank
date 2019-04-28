@@ -49,6 +49,7 @@ import {
 import {
   ENTER_NEW_NAME_SUCCESS,
   ENTER_NEW_SURNAME_SUCCESS,
+  ENTER_NEW_CURRENCY_SUCCESS,
 } from '../SettingsPage/constants';
 
 export const initialState = fromJS({
@@ -69,6 +70,9 @@ export const initialState = fromJS({
 
 function dashboardPageReducer(state = initialState, action) {
   switch (action.type) {
+    case ENTER_NEW_CURRENCY_SUCCESS:
+      return state.set('availableFunds', null).set('currency', null);
+
     case ENTER_NEW_NAME_SUCCESS:
       return state.set('name', null);
     case ENTER_NEW_SURNAME_SUCCESS:
