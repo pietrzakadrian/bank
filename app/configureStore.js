@@ -16,6 +16,7 @@ const persistConfig = {
   transforms: [immutableTransform()],
   key: 'root',
   storage,
+  blacklist: ['isLoading'],
 };
 
 const sagaMiddleware = createSagaMiddleware();
