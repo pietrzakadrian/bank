@@ -7,10 +7,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import './styles.css';
 
 // Import Material UI
+import { withStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -22,6 +23,7 @@ import { FormattedMessage } from 'react-intl';
 import {
   makeOpenAlertSelector,
   makeCurrencyIdSelector,
+  makeIsLoadingSelector,
 } from 'containers/SettingsPage/selectors';
 import {
   toggleAlertCurrencyAction,
@@ -29,6 +31,17 @@ import {
 } from 'containers/SettingsPage/actions';
 import messages from './messages';
 
+const styles = () => ({
+  dialogActionsRoot: {
+    margin: '12px 12px',
+  },
+  dialogContentRoot: {
+    padding: '0px 24px 0px',
+  },
+  dialogTitleRoot: {
+    padding: '24px 24px 12px',
+  },
+});
 /* eslint-disable react/prefer-stateless-function */
 class Alert extends Component {
   constructor(props) {
@@ -38,11 +51,13 @@ class Alert extends Component {
   }
 
   enterCurrency() {
-    this.props.enterNewCurrency(this.props.currencyId);
+    this.props.isLoading
+      ? null
+      : this.props.enterNewCurrency(this.props.currencyId);
   }
 
   render() {
-    const { openAlert, onCurrencyToggle } = this.props;
+    const { classes, openAlert, onCurrencyToggle } = this.props;
     return (
       <Dialog
         open={openAlert}
@@ -50,15 +65,18 @@ class Alert extends Component {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle
+          classes={{ root: classes.dialogTitleRoot }}
+          id="alert-dialog-title"
+        >
           <FormattedMessage {...messages.contentTitle} />
         </DialogTitle>
-        <DialogContent>
+        <DialogContent classes={{ root: classes.dialogContentRoot }}>
           <DialogContentText id="alert-dialog-description">
             <FormattedMessage {...messages.contentAlert} />
           </DialogContentText>
         </DialogContent>
-        <DialogActions className="dialogActions-container">
+        <DialogActions classes={{ root: classes.dialogActionsRoot }}>
           <Button color="primary" onClick={onCurrencyToggle}>
             <FormattedMessage {...messages.disagree} />
           </Button>
@@ -71,11 +89,14 @@ class Alert extends Component {
   }
 }
 
-Alert.propTypes = {};
+Alert.propTypes = {
+  classes: PropTypes.object,
+};
 
 const mapStateToProps = createStructuredSelector({
   openAlert: makeOpenAlertSelector(),
   currencyId: makeCurrencyIdSelector(),
+  isLoading: makeIsLoadingSelector(),
 });
 
 export function mapDispatchToProps(dispatch) {
@@ -86,7 +107,12 @@ export function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
+const withConnect = connect(
   mapStateToProps,
   mapDispatchToProps,
+);
+
+export default compose(
+  withStyles(styles),
+  withConnect,
 )(Alert);

@@ -29,7 +29,9 @@ import {
   SAVE_DATA_EMPTY,
   TOGGLE_ALERT_CURRENCY,
   CHANGE_NEW_CURRENCY,
+  ENTER_NEW_CURRENCY,
   ENTER_NEW_CURRENCY_SUCCESS,
+  LOAD_CURRENCY,
   LOAD_CURRENCY_SUCCESS,
   LOAD_USER_CURRENCY_SUCCESS,
 } from './constants';
@@ -49,21 +51,30 @@ export const initialState = fromJS({
   currencyId: null,
   userCurrencyId: null,
   currencyMessage: null,
+  isLoading: false,
 });
 
 function settingsPageReducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_USER_CURRENCY_SUCCESS:
-      return state.set('userCurrencyId', action.currencyId);
+      return state
+        .set('userCurrencyId', action.currencyId)
+        .set('isLoading', false);
+    case LOAD_CURRENCY:
+      return state.set('isLoading', true);
     case LOAD_CURRENCY_SUCCESS:
       return state
         .set('currency', action.currency)
-        .set('currencyId', state.get('userCurrencyId'));
+        .set('currencyId', state.get('userCurrencyId'))
+        .set('isLoading', false);
+    case ENTER_NEW_CURRENCY:
+      return state.set('isLoading', true);
     case ENTER_NEW_CURRENCY_SUCCESS:
       return state
         .set('openAlert', false)
         .set('currencyMessage', action.message)
-        .set('userCurrencyId', null);
+        .set('userCurrencyId', null)
+        .set('isLoading', false);
     case CHANGE_NEW_CURRENCY:
       return state
         .set('currencyId', action.currencyId)
@@ -81,6 +92,7 @@ function settingsPageReducer(state = initialState, action) {
       return state.set('message', action.error);
     case LOGOUT_SUCCESS:
       return state
+        .set('isLoading', false)
         .set('newPassword', null)
         .set('newName', null)
         .set('newSurname', null)

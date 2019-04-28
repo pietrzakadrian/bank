@@ -307,17 +307,31 @@ exports.setCurrency = (req, res) => {
   const id_currency = req.body.currencyId;
 
   // TODO: update exchange currency widget
-  // async function setIncomingTransfersSum() {
+  async function getIncomingTransfersSum(id_owner) {
+    try {
+      const incomingTransfersSum = await Additional.findOne({
+        where: {
+          id_owner,
+        },
+      });
+      return incomingTransfersSum.incoming_transfers_sum;
+    } catch (e) {
+      /* just ignore */
+    }
+  }
 
-  // }
-
-  // async function setOutgoingTransfersSum() {
-
-  // }
-
-  // async function setAccountBalanceHistory() {
-
-  // }
+  async function getOutgoingTransfersSum(id_owner) {
+    try {
+      const incomingTransfersSum = await Additional.findOne({
+        where: {
+          id_owner,
+        },
+      });
+      return incomingTransfersSum.outgoing_transfers_sum;
+    } catch (e) {
+      /* just ignore */
+    }
+  }
 
   async function isCurrencyMain(id) {
     try {
@@ -356,14 +370,34 @@ exports.setCurrency = (req, res) => {
       userCurrencyId,
     );
     const mainCurrency = await isCurrencyMain(id_currency);
+    const userIncomingTransfersSum = await getIncomingTransfersSum(id_owner);
+    const userOutgoingTransfersSum = await getOutgoingTransfersSum(id_owner);
 
     if (mainCurrency) {
       const convertedAmountMoney =
         userAvailableFunds / userCurrencyExchangeRate;
+      const convertedIncomingTransfersSum =
+        userIncomingTransfersSum / userCurrencyExchangeRate;
+      const convertedOutgoingTransfersSum =
+        userOutgoingTransfersSum / userCurrencyExchangeRate;
 
-      return Bill.update(
+      Bill.update(
         {
           available_funds: convertedAmountMoney.toFixed(2),
+        },
+        { where: { id_owner } },
+      );
+
+      Additional.update(
+        {
+          incoming_transfers_sum: convertedIncomingTransfersSum.toFixed(2),
+        },
+        { where: { id_owner } },
+      );
+
+      Additional.update(
+        {
+          outgoing_transfers_sum: convertedOutgoingTransfersSum.toFixed(2),
         },
         { where: { id_owner } },
       );
@@ -371,10 +405,30 @@ exports.setCurrency = (req, res) => {
       const convertedAmountMoney =
         (userAvailableFunds / userCurrencyExchangeRate) *
         newCurrencyExchangeRate;
+      const convertedIncomingTransfersSum =
+        (userIncomingTransfersSum / userCurrencyExchangeRate) *
+        newCurrencyExchangeRate;
+      const convertedOutgoingTransfersSum =
+        (userOutgoingTransfersSum / userCurrencyExchangeRate) *
+        newCurrencyExchangeRate;
 
-      return Bill.update(
+      Bill.update(
         {
           available_funds: convertedAmountMoney.toFixed(2),
+        },
+        { where: { id_owner } },
+      );
+
+      Additional.update(
+        {
+          incoming_transfers_sum: convertedIncomingTransfersSum.toFixed(2),
+        },
+        { where: { id_owner } },
+      );
+
+      Additional.update(
+        {
+          outgoing_transfers_sum: convertedOutgoingTransfersSum.toFixed(2),
         },
         { where: { id_owner } },
       );
@@ -403,7 +457,7 @@ exports.setCurrency = (req, res) => {
       where: {
         id_owner,
       },
-    }).then(isAccountBill => {
+    }).then(async isAccountBill => {
       if (isAccountBill) {
         const userCurrencyId = isAccountBill.id_currency;
         const userAvailableFunds = isAccountBill.available_funds;
