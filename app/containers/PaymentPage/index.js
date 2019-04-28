@@ -705,7 +705,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(changeAuthorizationKeyAction(e.target.value)),
     onEnterAccountNumber: value => dispatch(enterAccountNumberAction(value)),
     onEnterAmountMoney: amountMoney =>
-      dispatch(enterAmountMoneyAction(parseFloat(amountMoney))),
+      dispatch(enterAmountMoneyAction(parseFloat(amountMoney.toFixed(2)))),
     onEnterTransferTitle: transferTitle =>
       dispatch(enterTransferTitleAction(transferTitle)),
     onSendAuthorizationKey: () => dispatch(sendAuthorizationKeyAction()),

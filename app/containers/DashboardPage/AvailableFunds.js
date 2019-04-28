@@ -75,6 +75,12 @@ class AvailableFunds extends Component {
       : this.props.getUserdata();
   }
 
+  componentDidUpdate() {
+    this.props.availableFunds && this.props.accountBalanceHistory
+      ? null
+      : this.props.getUserdata();
+  }
+
   render() {
     const {
       classes,

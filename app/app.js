@@ -42,7 +42,8 @@ import { translationMessages } from './i18n';
 
 // Create redux store with history
 const initialState = {};
-const store = configureStore(initialState, history);
+const { store } = configureStore(initialState, history);
+
 const theme = createMuiTheme({
   breakpoints: {
     values: {
