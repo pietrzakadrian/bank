@@ -1,6 +1,6 @@
 {
   "app.components.Alert.agree": "Potwierdź",
-  "app.components.Alert.contentAlert": "Próbujesz zmienić walutę. Spowoduje to przeliczenie walut dostępnych środków zgodnie z kursem wymiany. Czy na pewno chcesz to zrobić?",
+  "app.components.Alert.contentAlert": "Próbujesz zmienić walutę. Spowoduje to przeliczenie waluty dostępnych środków zgodnie z kursem wymiany. Czy na pewno chcesz to zrobić?",
   "app.components.Alert.contentTitle": "Zmień walutę",
   "app.components.Alert.disagree": "Powrót",
   "app.components.Footer.boldMainText": "Jeśli nie masz konta w naszym banku, możesz utworzyć teraz, klikając w",

@@ -306,6 +306,19 @@ exports.setCurrency = (req, res) => {
   const id_owner = req.params.userId;
   const id_currency = req.body.currencyId;
 
+  // TODO: update exchange currency widget
+  // async function setIncomingTransfersSum() {
+
+  // }
+
+  // async function setOutgoingTransfersSum() {
+
+  // }
+
+  // async function setAccountBalanceHistory() {
+
+  // }
+
   async function isCurrencyMain(id) {
     try {
       const currencyMain = await Currency.findOne({
