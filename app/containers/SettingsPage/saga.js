@@ -248,29 +248,22 @@ export function* getCurrencyUser() {
 }
 
 function* loadCurrency() {
-  const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `/api/users/getCurrency/`;
-  const currencyId = yield select(makeUserCurrencyIdSelector());
-  const userId = token.id;
+  const requestURL = '/api/currency/';
 
   try {
     yield put(loadCurrencyAction());
     const response = yield call(request, requestURL, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
       },
-      body: JSON.stringify({
-        userId,
-        currencyId,
-      }),
     });
 
-    if (response.success) {
-      const output = response.result.map(item => item.id);
+    if (response) {
+      const output = response.map(item => item.id);
       yield put(loadCurrencySuccessAction(output));
     }
   } catch (e) {

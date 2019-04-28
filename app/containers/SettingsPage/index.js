@@ -216,6 +216,10 @@ class SettingsPage extends React.Component {
     this.props.userCurrencyId ? null : this.props.onLoadUserCurrencyId();
   }
 
+  componentDidUpdate() {
+    this.props.userCurrencyId ? null : this.props.onLoadUserCurrencyId();
+  }
+
   handleKeyPress(e) {
     if (e.key === 'Enter') {
       e.preventDefault();

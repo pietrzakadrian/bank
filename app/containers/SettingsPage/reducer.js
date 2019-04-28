@@ -58,13 +58,17 @@ function settingsPageReducer(state = initialState, action) {
     case LOAD_CURRENCY_SUCCESS:
       return state
         .set('currency', action.currency)
-        .set('currencyId', action.currency[0]);
+        .set('currencyId', state.get('userCurrencyId'));
     case ENTER_NEW_CURRENCY_SUCCESS:
       return state
         .set('openAlert', false)
-        .set('currencyMessage', action.message);
+        .set('currencyMessage', action.message)
+        .set('userCurrencyId', null);
     case CHANGE_NEW_CURRENCY:
-      return state.set('currencyId', action.currencyId).set('openAlert', true);
+      return state
+        .set('currencyId', action.currencyId)
+        .set('openAlert', true)
+        .set('currencyMessage', null);
     case TOGGLE_ALERT_CURRENCY:
       return state.set('openAlert', !state.get('openAlert'));
     case SAVE_DATA:

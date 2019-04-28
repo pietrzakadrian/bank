@@ -32,7 +32,4 @@ module.exports = function(app) {
     checkToken,
     users.setCurrency,
   );
-
-  // Get Currency Action
-  app.post('/api/users/getCurrency', checkAuth, checkToken, users.getCurrency);
 };

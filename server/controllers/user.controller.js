@@ -338,11 +338,6 @@ exports.setCurrency = (req, res) => {
     id_currency,
     id_owner,
   ) {
-    // potrzebuje wiedziec ile pieniedzy i w jakiej walucie ma user przed zmiana waluty (userAvailableFunds, userCurrencyId)
-    // musze wiedziec na jaka walute chce to przewalutowac (id_currency)
-    // musze to przewalutowac w zaleznosci od tego czy wybral mainCurrency (tylko podziel)
-    // lub !mainCurrency => wtedy podziel i pomnoz
-
     const newCurrencyExchangeRate = await getCurrencyExchangeRate(id_currency);
     const userCurrencyExchangeRate = await getCurrencyExchangeRate(
       userCurrencyId,
@@ -438,32 +433,5 @@ exports.setCurrency = (req, res) => {
       error: 'currencyId can not be a null',
       success: false,
     });
-  }
-};
-
-exports.getCurrency = (req, res) => {
-  const id_currency = req.body.currencyId;
-
-  if (id_currency) {
-    Currency.findAll({
-      where: {
-        id: {
-          [Op.ne]: [id_currency],
-        },
-      },
-      attributes: ['id', 'currency'],
-    })
-      .then(isCurrency => {
-        if (isCurrency) {
-          res.status(200).json({ result: isCurrency, success: true });
-        } else {
-          res.status(500).json({ error: 'Internal server error' });
-        }
-      })
-      .catch(() => {
-        res.status(500).json({ error: 'Internal server error' });
-      });
-  } else {
-    res.status(500).json({ error: 'Internal server error' });
   }
 };

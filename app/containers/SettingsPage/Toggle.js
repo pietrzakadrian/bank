@@ -32,7 +32,7 @@ function Toggle(props) {
 Toggle.propTypes = {
   onToggle: PropTypes.func,
   values: PropTypes.array,
-  value: PropTypes.string,
+  value: PropTypes.number,
   messages: PropTypes.object,
 };
 
