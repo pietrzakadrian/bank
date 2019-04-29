@@ -17,6 +17,7 @@ import { withStyles } from '@material-ui/core';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Copyright from 'components/Copyright';
+import Notifier from 'components/Notifier';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -227,6 +228,7 @@ export class DashboardPage extends React.Component {
             </div>
           </ResponsiveGridLayout>
         </div>
+        <Notifier className={classes.notifierContainer} />
         <Copyright />
       </Fragment>
     );

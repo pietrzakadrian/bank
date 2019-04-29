@@ -8,9 +8,11 @@ import { select, call, put, takeLatest, throttle } from 'redux-saga/effects';
 import { push } from 'connected-react-router/immutable';
 import { successLogoutAction } from 'components/App/Header/actions';
 import { FormattedMessage } from 'react-intl';
+import { makeIsDesktopOpenSelector } from 'components/App/Header/selectors';
 import { makeUserIdSelector } from 'containers/App/selectors';
 import { enqueueSnackbarAction } from 'containers/App/actions';
 import socketIOClient from 'socket.io-client';
+
 import messages from './messages';
 
 import {
@@ -49,6 +51,7 @@ import {
   makeRecipientIdSelector,
   makeCurrencySelector,
 } from './selectors';
+import CustomNoification from '../../components/App/CustomNoification';
 
 function* getToken() {
   // Retrieves the user token from localStorage
@@ -245,6 +248,7 @@ export function* confirmTransaction() {
   const isAccountBill = yield select(makeIsAccountBillSelector());
   const socket = socketIOClient('/');
   const requestURL = `/api/transactions`;
+  const isDesktopOpen = yield select(makeIsDesktopOpenSelector());
 
   if (isAmountMoney && isAccountBill) {
     try {
@@ -272,7 +276,8 @@ export function* confirmTransaction() {
               message: <FormattedMessage {...messages.paymentHasBeenSent} />,
               options: {
                 variant: 'success',
-                autoHideDuration: 2000,
+                autoHideDuration: 2200,
+                className: isDesktopOpen ? 'snackbar-open-menu' : null,
               },
             }),
           ),

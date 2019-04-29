@@ -70,7 +70,7 @@ export function* newNotification() {
 
     if (response.success) {
       const output = response.result.map(({ getSenderdata, ...rest }) => ({
-        date_time: moment(rest.date_time).format('dddd, HH:mm'),
+        date_time: moment(rest.date_time).format('HH:mm'),
         amount_money: `${rest.amount_money
           .toFixed(2)
           .toString()

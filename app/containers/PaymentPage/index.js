@@ -267,6 +267,9 @@ const styles = theme => ({
     color: '#0029ab',
     fontWeight: 700,
   },
+  notifierContainer: {
+    padding: '900',
+  },
 });
 
 /* eslint-disable react/prefer-stateless-function */
@@ -664,7 +667,7 @@ class PaymentPage extends React.Component {
         </div>
 
         <Warning />
-        <Notifier />
+        <Notifier className={classes.notifierContainer} />
         <Copyright />
       </Fragment>
     );

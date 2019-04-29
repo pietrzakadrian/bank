@@ -126,6 +126,11 @@ input[type='number'] {
   }
 }
 
+.snackbar-open-menu {
+  left: 280px!important; 
+  position: absolute; 
+}
+
 `;
 
 export default GlobalStyle;
