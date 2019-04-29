@@ -57,24 +57,20 @@ export const initialState = fromJS({
 function settingsPageReducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_USER_CURRENCY_SUCCESS:
-      return state
-        .set('userCurrencyId', action.currencyId)
-        .set('isLoading', false);
+      return state.set('userCurrencyId', action.currencyId);
     case LOAD_CURRENCY:
       return state.set('isLoading', true);
     case LOAD_CURRENCY_SUCCESS:
       return state
         .set('currency', action.currency)
-        .set('currencyId', state.get('userCurrencyId'))
-        .set('isLoading', false);
+        .set('currencyId', state.get('userCurrencyId'));
     case ENTER_NEW_CURRENCY:
       return state.set('isLoading', true);
     case ENTER_NEW_CURRENCY_SUCCESS:
       return state
         .set('openAlert', false)
         .set('currencyMessage', action.message)
-        .set('userCurrencyId', null)
-        .set('isLoading', false);
+        .set('userCurrencyId', null);
     case CHANGE_NEW_CURRENCY:
       return state
         .set('currencyId', action.currencyId)

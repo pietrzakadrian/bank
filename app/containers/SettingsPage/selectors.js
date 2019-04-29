@@ -82,11 +82,6 @@ const makeCurrencyMessageSelector = () =>
     substate.get('currencyMessage'),
   );
 
-const makeIsLoadingSelector = () =>
-  createSelector(selectSettingsPageDomain, substate =>
-    substate.get('isLoading'),
-  );
-
 const makeSelectSettingsPage = () =>
   createSelector(selectSettingsPageDomain, substate => substate.toJS());
 
@@ -107,5 +102,4 @@ export {
   makeUserCurrencyIdSelector,
   makeOpenAlertSelector,
   makeCurrencyMessageSelector,
-  makeIsLoadingSelector,
 };

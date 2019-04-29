@@ -7,16 +7,19 @@ import { fromJS } from 'immutable';
 import { routerMiddleware } from 'connected-react-router/immutable';
 import createSagaMiddleware from 'redux-saga';
 import immutableTransform from 'redux-persist-transform-immutable';
-import storage from 'redux-persist/lib/storage';
+import localForage from 'localforage';
 import { persistReducer } from 'redux-persist';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import createReducer from './reducers';
 
 const persistConfig = {
-  transforms: [immutableTransform()],
+  transforms: [
+    immutableTransform({
+      whitelist: ['language', 'header'],
+    }),
+  ],
   key: 'root',
-  storage,
-  blacklist: ['isLoading'],
+  storage: localForage,
 };
 
 const sagaMiddleware = createSagaMiddleware();
@@ -60,6 +63,9 @@ export default function configureStore(initialState = {}, history) {
     });
   }
 
-  const persistor = persistStore(store);
+  const persistor = persistStore(store, {
+    storage: localForage,
+    whitelist: ['language', 'header'],
+  });
   return { store, persistor };
 }

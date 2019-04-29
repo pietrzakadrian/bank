@@ -23,7 +23,6 @@ import { FormattedMessage } from 'react-intl';
 import {
   makeOpenAlertSelector,
   makeCurrencyIdSelector,
-  makeIsLoadingSelector,
 } from 'containers/SettingsPage/selectors';
 import {
   toggleAlertCurrencyAction,
@@ -51,9 +50,7 @@ class Alert extends Component {
   }
 
   enterCurrency() {
-    this.props.isLoading
-      ? null
-      : this.props.enterNewCurrency(this.props.currencyId);
+    this.props.enterNewCurrency(this.props.currencyId);
   }
 
   render() {
@@ -96,7 +93,6 @@ Alert.propTypes = {
 const mapStateToProps = createStructuredSelector({
   openAlert: makeOpenAlertSelector(),
   currencyId: makeCurrencyIdSelector(),
-  isLoading: makeIsLoadingSelector(),
 });
 
 export function mapDispatchToProps(dispatch) {
