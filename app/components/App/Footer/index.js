@@ -27,7 +27,7 @@ export function Footer({ classes }) {
     >
       <Divider />
       <Typography className={classes.footerText}>
-        Bank Application 1.0 | 26.04.2019
+        Bank Application 1.0 | 30.04.2019
       </Typography>
     </footer>
   );
