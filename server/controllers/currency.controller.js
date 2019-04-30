@@ -12,7 +12,6 @@ exports.getCurrency = (req, res) => {
     });
 };
 
-// todo: add security, because everybody user can change rate!
 exports.setCurrency = (req, res) => {
   const objects = req.body;
 

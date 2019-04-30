@@ -306,7 +306,6 @@ exports.setCurrency = (req, res) => {
   const id_owner = req.params.userId;
   const id_currency = req.body.currencyId;
 
-  // TODO: update exchange currency widget
   async function getIncomingTransfersSum(id_owner) {
     try {
       const incomingTransfersSum = await Additional.findOne({

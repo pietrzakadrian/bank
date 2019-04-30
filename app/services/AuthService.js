@@ -1,60 +1,16 @@
 import decode from 'jwt-decode';
 
 export default class AuthService {
-  constructor(domain) {
-    this.domain = domain || '/api';
-    this.fetch = this.fetch.bind(this);
+  constructor() {
+    this.setToken = this.setToken.bind(this);
+    this.unsetToken = this.unsetToken.bind(this);
+    this.getToken = this.getToken.bind(this);
     this.isRegister = this.isRegister.bind(this);
     this.unsetRegister = this.unsetRegister.bind(this);
-    this.registerTransaction = this.registerTransaction.bind(this);
-    this.confirmTransaction = this.confirmTransaction.bind(this);
     this.getUsersData = this.getUsersData.bind(this);
-  }
-
-  // Payment Action
-  registerTransaction(id_sender, account_bill, amount_money, transfer_title) {
-    return this.fetch(`${this.domain}/transactions/register`, {
-      method: 'POST',
-      body: JSON.stringify({
-        id_sender,
-        account_bill,
-        amount_money,
-        transfer_title,
-      }),
-    });
-  }
-
-  confirmTransaction(
-    id_sender,
-    account_bill,
-    amount_money,
-    transfer_title,
-    authorization_key,
-  ) {
-    return this.fetch(`${this.domain}/transactions`, {
-      method: 'POST',
-      body: JSON.stringify({
-        id_sender,
-        account_bill,
-        amount_money,
-        transfer_title,
-        authorization_key,
-      }),
-    });
-  }
-
-  getUsersData(partOfAccountBill) {
-    return this.fetch(`${this.domain}/bills/search/${partOfAccountBill}`, {
-      method: 'GET',
-    })
-      .then(res => {
-        if (!res.error) {
-          return res;
-        }
-      })
-      .catch(() => {
-        /* just ignore */
-      });
+    this.loggedIn = this.loggedIn.bind(this);
+    this.isTokenExpired = this.isTokenExpired.bind(this);
+    this.getUserId = this.getUserId.bind(this);
   }
 
   isRegister() {
@@ -65,7 +21,6 @@ export default class AuthService {
     return sessionStorage.removeItem('register');
   }
 
-  // TODO: updateLastSuccessfulLoggedDate(id) when isTokenExpired
   loggedIn() {
     // Checks if there is a saved token and it's still valid
     const token = this.getToken();
@@ -101,33 +56,5 @@ export default class AuthService {
 
   getUserId() {
     return decode(this.getToken());
-  }
-
-  fetch(url, options) {
-    // performs api calls sending the required authentication headers
-    const headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    };
-
-    if (this.loggedIn()) {
-      headers.Authorization = `Bearer ${this.getToken()}`;
-    }
-
-    return fetch(url, {
-      headers,
-      ...options,
-    })
-      .then(this.checkStatus)
-      .then(response => response.json());
-  }
-
-  _checkStatus(response) {
-    if (response.status >= 200 && response.status < 300) {
-      return response;
-    }
-    const error = new Error(response.statusText);
-    error.response = response;
-    throw error;
   }
 }
