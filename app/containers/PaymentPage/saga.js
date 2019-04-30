@@ -245,7 +245,9 @@ export function* confirmTransaction() {
   const authorization_key = yield select(makeAuthorizationKeySelector());
   const isAmountMoney = yield select(makeIsAmountMoneySelector());
   const isAccountBill = yield select(makeIsAccountBillSelector());
-  const socket = socketIOClient('/');
+  const socket = socketIOClient('/', {
+    transports: ['websocket'],
+  });
   const requestURL = `${env.api_url}/transactions`;
   const isDesktopOpen = yield select(makeIsDesktopOpenSelector());
 

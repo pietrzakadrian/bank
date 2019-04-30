@@ -270,13 +270,17 @@ class Header extends React.Component {
       '/history': <FormattedMessage {...messages.historyTitle} />,
       '/settings': <FormattedMessage {...messages.settingsTitle} />,
     };
-    const socket = socketIOClient('/');
+    const socket = socketIOClient('/', {
+      transports: ['websocket'],
+    });
 
     socket.on('connect', () => {
+      socket.io.opts.transports = ['polling', 'websocket'];
       socket.emit('authenticate', { token: this.Auth.getToken() }); // send the jwt
     });
 
     socket.on('new notification', id => {
+      socket.io.opts.transports = ['polling', 'websocket'];
       id === this.props.userId ? this.props.isNotification() : null;
     });
 

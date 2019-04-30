@@ -14,10 +14,16 @@ const ngrok =
 const { resolve } = require('path');
 const bodyParser = require('body-parser');
 const app = express();
-const server = require('http').Server(app);
+const server = require('http').Server(app, {
+  transports: ['websocket', 'polling'],
+});
 const io = require('socket.io')(server);
+const cron = require('node-cron');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./utils/swagger.json');
+const db = require('./config/db.config');
+const env = require('./config/env.config');
+const Op = db.Sequelize.Op;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -62,6 +68,16 @@ const customHost = argv.host || process.env.HOST;
 const host = customHost || null; // Let http.Server use its default IPv6/4 host
 const prettyHost = customHost || 'localhost';
 
+db.sequelize.sync({ force: true }).then(() => {
+  createNecessaryTables();
+});
+
+// Crons Schedule
+cron.schedule('0 0 0 * * *', () => {
+  if (process.env.NODE_APP_INSTANCE === '0')
+    require('./crons/currency.cron.js')();
+});
+
 // use the gzipped bundle
 app.get('*.js', (req, res, next) => {
   req.url = req.url + '.gz'; // eslint-disable-line
@@ -81,7 +97,7 @@ io.on('connection', socket => {
 });
 
 // Start your app.
-server.listen(0, host, async err => {
+server.listen(port, host, async err => {
   if (err) {
     return logger.error(err.message);
   }
@@ -110,3 +126,80 @@ process.on('message', (message, connection) => {
 
   connection.resume();
 });
+
+function createNecessaryTables() {
+  db.currency
+    .findOne({
+      where: {
+        id: {
+          [Op.or]: [1, 2, 3],
+        },
+      },
+    })
+    .then(isCurrency => {
+      if (!isCurrency) {
+        require('./crons/currency.cron.js')();
+        try {
+          Promise.all([
+            db.currency.create({
+              id: 1,
+              currency: 'USD',
+              date_currency_exchange_rate_sync: new Date(),
+              main_currency: 0,
+            }),
+            db.currency.create({
+              id: 2,
+              currency: 'PLN',
+              date_currency_exchange_rate_sync: new Date(),
+              main_currency: 1,
+            }),
+            db.currency.create({
+              id: 3,
+              currency: 'EUR',
+              date_currency_exchange_rate_sync: new Date(),
+              main_currency: 0,
+            }),
+          ]).then(currency => {
+            if (currency) {
+              db.users
+                .create({
+                  login: env.adminAccount.login,
+                  password: env.adminAccount.password,
+                  name: env.adminAccount.name,
+                  surname: env.adminAccount.surname,
+                  email: env.adminAccount.email,
+                  date_registration: new Date(),
+                })
+                .then(user => {
+                  if (user) {
+                    db.bills
+                      .create({
+                        id_owner: user.id,
+                        account_bill: env.adminAccount.account_bill,
+                        available_funds: env.adminAccount.available_funds,
+                        id_currency: 1,
+                      })
+                      .then(bill => {
+                        if (bill) {
+                          db.additionals.create({
+                            id_owner: bill.id_owner,
+                            id_currency: bill.id_currency,
+                            account_balance_history:
+                              env.adminAccount.account_balance_history,
+                            incoming_transfers_sum:
+                              env.adminAccount.incoming_transfers_sum,
+                            outgoing_transfers_sum:
+                              env.adminAccount.outgoing_transfers_sum,
+                          });
+                        }
+                      });
+                  }
+                });
+            }
+          });
+        } catch (e) {
+          /* just ignore */
+        }
+      }
+    });
+}

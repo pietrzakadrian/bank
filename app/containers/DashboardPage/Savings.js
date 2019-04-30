@@ -126,10 +126,13 @@ class Savings extends Component {
   render() {
     const { classes, outgoingTransfersSum, incomingTransfersSum } = this.props;
     const { data, COLORS, procent } = this.state;
-    const socket = socketIOClient('/');
+    const socket = socketIOClient('/', {
+      transports: ['websocket'],
+    });
 
     try {
       socket.on('new notification', id => {
+        socket.io.opts.transports = ['polling', 'websocket'];
         id === this.props.userId ? this.props.getTransfersSumData() : null;
       });
     } catch (e) {

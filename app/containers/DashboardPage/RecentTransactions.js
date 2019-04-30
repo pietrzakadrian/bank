@@ -87,10 +87,13 @@ class RecentTransactions extends Component {
       recentTransactionsSender,
       userId,
     } = this.props;
-    const socket = socketIOClient('/');
+    const socket = socketIOClient('/', {
+      transports: ['websocket'],
+    });
 
     try {
       socket.on('new notification', id => {
+        socket.io.opts.transports = ['polling', 'websocket'];
         id === this.props.userId
           ? this.props.getRecentTransactionsData()
           : null;

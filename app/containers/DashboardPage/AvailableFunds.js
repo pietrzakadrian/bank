@@ -89,10 +89,13 @@ class AvailableFunds extends Component {
       currency,
     } = this.props;
     const accountBalanceHistoryArray = JSON.parse(`[${accountBalanceHistory}]`);
-    const socket = socketIOClient('/');
+    const socket = socketIOClient('/', {
+      transports: ['websocket'],
+    });
 
     try {
       socket.on('new notification', id => {
+        socket.io.opts.transports = ['polling', 'websocket'];
         id === this.props.userId ? this.props.getUserdata() : null;
       });
     } catch (e) {
