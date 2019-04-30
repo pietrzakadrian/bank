@@ -4,6 +4,7 @@ import request from 'utils/request';
 import decode from 'jwt-decode';
 import moment from 'moment';
 import { makeNotificationCountSelector } from 'containers/App/selectors';
+import env from '../../../../server/config/env.config';
 import {
   IS_NOTIFICATION,
   LOGOUT,
@@ -28,7 +29,7 @@ function* getUserId() {
 
 export function* isNotification() {
   const token = yield call(getUserId);
-  const requestURL = `/api/additionals/isNotification/${token.id}`;
+  const requestURL = `${env.api_url}/additionals/isNotification/${token.id}`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -52,7 +53,7 @@ export function* newNotification() {
   const token = yield call(getUserId);
   const userId = token.id;
   const notificationCount = yield select(makeNotificationCountSelector());
-  const requestURL = `/api/additionals/newNotification`;
+  const requestURL = `${env.api_url}/additionals/newNotification`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -88,7 +89,7 @@ export function* newNotification() {
 
 export function* unsetNotification() {
   const token = yield call(getUserId);
-  const requestURL = `/api/additionals/unsetNotification/${token.id}`;
+  const requestURL = `${env.api_url}/additionals/unsetNotification/${token.id}`;
 
   try {
     yield call(request, requestURL, {
@@ -107,7 +108,7 @@ export function* unsetNotification() {
 export function* logout() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `/api/users/logout/${token.id}`;
+  const requestURL = `${env.api_url}/users/logout/${token.id}`;
 
   try {
     const response = yield call(request, requestURL, {

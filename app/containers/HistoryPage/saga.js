@@ -2,7 +2,7 @@ import decode from 'jwt-decode';
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import request from 'utils/request';
 import moment from 'moment';
-
+import env from '../../../server/config/env.config';
 import { GET_GRID_DATA, GRID_STATE_CHANGE } from './constants';
 import {
   getGridDataSuccessAction,
@@ -24,7 +24,7 @@ function* getUserId() {
 export function* getGridData() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `/api/transactions/getTransactions`;
+  const requestURL = `${env.api_url}/transactions/getTransactions`;
   const userId = token.id;
   const pageSize = yield select(makePageSizeSelector());
   const currentPage = yield select(makeCurrentPageSelector());
@@ -81,7 +81,7 @@ export function* getGridData() {
 export function* changePage() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `/api/transactions/getTransactions`;
+  const requestURL = `${env.api_url}/transactions/getTransactions`;
   const userId = token.id;
   const pageSize = yield select(makePageSizeSelector());
   const currentPage = yield select(makeCurrentPageSelector());

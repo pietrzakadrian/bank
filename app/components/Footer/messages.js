@@ -54,6 +54,10 @@ export default defineMessages({
   footerAlertText2: {
     id: `${scope}.footerAlertText2`,
     defaultMessage:
-      'For more information on security, please visit: Security rules',
+      'This site uses cookies to provide services at the highest level. Further use of the site means that you agree to their use. For more information on security, please visit:',
+  },
+  privacyRules: {
+    id: `${scope}.privacyRules`,
+    defaultMessage: 'Privacy rules',
   },
 });

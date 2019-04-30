@@ -16,7 +16,7 @@ module.exports = function() {
 
         try {
           axios
-            .post('http://localhost:3000/api/currency', array, {
+            .post(`${env.api_url}/currency`, array, {
               auth: {
                 username: env.adminAccount.login,
                 password: env.adminAccount.password,

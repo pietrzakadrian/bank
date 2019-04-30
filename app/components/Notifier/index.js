@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-continue */
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withSnackbar } from 'notistack';
 import { createStructuredSelector } from 'reselect';
 import { removeSnackbarAction } from 'containers/App/actions';
 import { makeNotificationsSelector } from 'containers/App/selectors';
-import CustomNoification from 'components/App/CustomNoification';
 
 class Notifier extends Component {
   displayed = [];

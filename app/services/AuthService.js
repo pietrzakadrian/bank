@@ -7,7 +7,6 @@ export default class AuthService {
     this.getToken = this.getToken.bind(this);
     this.isRegister = this.isRegister.bind(this);
     this.unsetRegister = this.unsetRegister.bind(this);
-    this.getUsersData = this.getUsersData.bind(this);
     this.loggedIn = this.loggedIn.bind(this);
     this.isTokenExpired = this.isTokenExpired.bind(this);
     this.getUserId = this.getUserId.bind(this);

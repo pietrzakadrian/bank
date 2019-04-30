@@ -19,6 +19,7 @@ import DashboardPage from 'containers/DashboardPage/Loadable';
 import SettingsPage from 'containers/SettingsPage/Loadable';
 import HistoryPage from 'containers/HistoryPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import PrivacyPage from 'containers/PrivacyPage/Loadable';
 
 // Import Components
 import Header from 'components/App/Header';
@@ -33,6 +34,7 @@ export default function App() {
         <Route exact path="/" component={HomePage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
+        <Route path="/privacy" component={PrivacyPage} />
         <Route path="/404" component={NotFoundPage} />
         <Header>
           <Switch>

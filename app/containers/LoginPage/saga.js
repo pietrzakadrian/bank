@@ -11,6 +11,7 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 import { ENTER_ID, ENTER_PASSWORD } from './constants';
 import messages from './messages';
+import env from '../../../server/config/env.config';
 import { makeIdSelector, makePasswordSelector } from './selectors';
 import {
   successIdAction,
@@ -24,7 +25,7 @@ import {
 export function* isLogin() {
   // Select username from store
   const id = yield select(makeIdSelector());
-  const requestURL = `/api/users/isLogin/${id}`;
+  const requestURL = `${env.api_url}/users/isLogin/${id}`;
 
   try {
     // Call our request helper (see 'utils/request')
@@ -40,7 +41,7 @@ export function* isLogin() {
 export function* login() {
   const login = yield select(makeIdSelector());
   const password = yield select(makePasswordSelector());
-  const requestURL = `/api/users/login`;
+  const requestURL = `${env.api_url}/users/login`;
 
   try {
     // Call our request helper (see 'utils/request')

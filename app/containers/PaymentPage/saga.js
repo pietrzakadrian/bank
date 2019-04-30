@@ -12,7 +12,7 @@ import { makeIsDesktopOpenSelector } from 'components/App/Header/selectors';
 import { makeUserIdSelector } from 'containers/App/selectors';
 import { enqueueSnackbarAction } from 'containers/App/actions';
 import socketIOClient from 'socket.io-client';
-
+import env from '../../../server/config/env.config';
 import messages from './messages';
 
 import {
@@ -51,7 +51,6 @@ import {
   makeRecipientIdSelector,
   makeCurrencySelector,
 } from './selectors';
-import CustomNoification from '../../components/App/CustomNoification';
 
 function* getToken() {
   // Retrieves the user token from localStorage
@@ -65,7 +64,7 @@ function* getUserId() {
 export function* getCurrency() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `/api/bills/${token.id}`;
+  const requestURL = `${env.api_url}/bills/${token.id}`;
   const currency = yield select(makeCurrencySelector());
 
   try {
@@ -91,7 +90,7 @@ export function* getCurrency() {
 export function* searchAccountNumber() {
   const jwt = yield call(getToken);
   const accountNumber = yield select(makeValueSelector());
-  const requestURL = `/api/bills/search/${accountNumber}`;
+  const requestURL = `${env.api_url}/bills/search/${accountNumber}`;
 
   if (accountNumber && accountNumber.length !== 26) {
     try {
@@ -117,7 +116,7 @@ export function* searchAccountNumber() {
 export function* isAccountBill() {
   const jwt = yield call(getToken);
   const accountNumber = yield select(makeValueSelector());
-  const requestURL = `/api/bills/isAccountBill/${accountNumber}`;
+  const requestURL = `${env.api_url}/bills/isAccountBill/${accountNumber}`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -146,7 +145,7 @@ export function* isAmountMoney() {
   const jwt = yield call(getToken);
   const id_sender = yield select(makeUserIdSelector());
   const amount_money = yield select(makeAmountMoneySelector());
-  const requestURL = `/api/bills/isAmountMoney`;
+  const requestURL = `${env.api_url}/bills/isAmountMoney`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -200,7 +199,7 @@ export function* registerTransaction() {
   const isAmountMoney = yield select(makeIsAmountMoneySelector());
   const isAccountBill = yield select(makeIsAccountBillSelector());
 
-  const requestURL = `/api/transactions/register`;
+  const requestURL = `${env.api_url}/transactions/register`;
 
   if (isAmountMoney && isAccountBill) {
     try {
@@ -247,7 +246,7 @@ export function* confirmTransaction() {
   const isAmountMoney = yield select(makeIsAmountMoneySelector());
   const isAccountBill = yield select(makeIsAccountBillSelector());
   const socket = socketIOClient('/');
-  const requestURL = `/api/transactions`;
+  const requestURL = `${env.api_url}/transactions`;
   const isDesktopOpen = yield select(makeIsDesktopOpenSelector());
 
   if (isAmountMoney && isAccountBill) {

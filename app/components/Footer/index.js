@@ -31,6 +31,11 @@ const styles = {
     padding: 0,
     cursor: 'pointer',
   },
+  privacyLink: {
+    color: 'black',
+    padding: 0,
+    cursor: 'pointer',
+  },
   errorIcon: {
     fontSize: 35,
   },
@@ -101,7 +106,12 @@ function Footer({ classes, location }) {
 
         <div className={classes.footerText}>
           <span className={classes.footerInfoText}>
-            <FormattedMessage {...messages.footerAlertText2} />
+            <FormattedMessage {...messages.footerAlertText2} />{' '}
+            <NavLink to="/privacy">
+              <button type="button" className={classes.privacyLink}>
+                <FormattedMessage {...messages.privacyRules} />
+              </button>
+            </NavLink>
           </span>
         </div>
       </div>
