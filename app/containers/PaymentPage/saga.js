@@ -278,7 +278,9 @@ export function* confirmTransaction() {
               options: {
                 variant: 'success',
                 autoHideDuration: 2200,
-                className: isDesktopOpen ? 'snackbar-open-menu' : null,
+                className: isDesktopOpen
+                  ? 'snackbar-open-menu'
+                  : 'snackbar-noopen-menu',
               },
             }),
           ),

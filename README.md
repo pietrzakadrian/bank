@@ -6,6 +6,7 @@
 Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express)**, **WebSocket**, **RESTful API** and **MySQL**
 
 - An application created according to the best practices used in [react-boilerplate](https://github.com/react-boilerplate/react-boilerplate),
+- Updating data and notifications without refreshing page
 - Proper use of NodeJS Cluster using **PM2** and **redis-server**
 - Relational model use of the MySQL database via **Sequelize** ORM
 - Multi-currency service with the current rate charged from REST API
@@ -17,11 +18,13 @@ Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express)**, **
 
 ## Frontend
 
-Tech Stack:
+Technology stack:
 
 1. **ReactJS** with **React-Router**
 2. **Redux.js** with **Redux-Saga**
-3. **Styled Components** for global-styles
+3. **WebSocket** (Socket.IO)
+4. **Material UI** framework
+5. **Styled Components** for global styles
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/store.png"  width="738">
@@ -29,7 +32,7 @@ Tech Stack:
 
 ## Backend
 
-Tech Stack:
+Technology stack:
 
 1. **NodeJS** with **Express.js** framework
 2. **Sequelize** ORM
@@ -94,23 +97,16 @@ This guide on how to install Bank Application:
 
 3. The application supports NodeJS Cluster by default. To start threads correctly, you must use [redis-server](https://redis.io/topics/quickstart).
 
-   ```
-    wget http://download.redis.io/redis-stable.tar.gz
-    tar xvzf redis-stable.tar.gz
-    cd redis-stable
-    make
-   ```
-
 4. Install the necessary packages
 
    ```
-    npm install && npm install -g pm2
+    npm install
    ```
 
 5. Launch applications
 
    ```
-   pm2 start server/
+   npm start
    ```
 
 ## TODO list

@@ -89,6 +89,7 @@
     "node-cron": "^2.0.3",
     "nodemailer": "^5.1.1",
     "notistack": "^0.5.0",
+    "offline-plugin": "^5.0.6",
     "pm2": "^3.5.0",
     "prop-types": "15.6.2",
     "react": "16.6.0",

@@ -108,7 +108,7 @@ input[type='number'] {
 }
 
 @media screen and (max-width: 767px) {
- .snackbar div  {
+ .snackbar  {
     bottom: 0!important;
   }
 }
@@ -129,6 +129,14 @@ input[type='number'] {
 .snackbar-open-menu {
   left: 280px!important; 
   position: absolute; 
+}
+
+.snackbar-open-menu div {
+  background-color: #0098db!important;
+}
+
+.snackbar-noopen-menu div {
+  background-color: #0098db!important;
 }
 
 `;
