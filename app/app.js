@@ -74,7 +74,7 @@ const render = messages => {
     <Provider store={store}>
       <MuiThemeProvider theme={theme}>
         <LanguageProvider messages={messages}>
-          <SnackbarProvider maxSnack={1}>
+          <SnackbarProvider maxSnack={1} className="snackbar">
             <ConnectedRouter history={history}>
               <ScrollService>
                 <App />

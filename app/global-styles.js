@@ -108,12 +108,12 @@ input[type='number'] {
 }
 
 @media screen and (max-width: 767px) {
-  [class*="SnackbarItem"] {
+ .snackbar div  {
     bottom: 0!important;
   }
 }
 
-[class*="variantSuccess"] {
+.snackbar div  {
   background-color: #0098db!important;
 }
 

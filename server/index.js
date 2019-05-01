@@ -75,8 +75,7 @@ db.sequelize.sync({ force: true }).then(() => {
 
 // Crons Schedule
 cron.schedule('0 0 0 * * *', () => {
-  if (process.env.NODE_APP_INSTANCE === '0')
-    require('./crons/currency.cron.js')();
+  require('./crons/currency.cron.js')();
 });
 
 // use the gzipped bundle
@@ -85,7 +84,6 @@ app.get('*.js', (req, res, next) => {
   res.set('Content-Encoding', 'gzip');
   next();
 });
-
 io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
 io.on('connection', socket => {
   socket.on('new notification', id => {
