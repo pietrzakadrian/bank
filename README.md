@@ -1,5 +1,3 @@
-# Bank Application v1.0.0
-
 <p align="center">
 <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/logo.png"
      title="Size Limit logo by Anton Lovchikov" width="200" height="auto">
