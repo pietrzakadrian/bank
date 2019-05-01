@@ -206,7 +206,7 @@ export class LoginPage extends Component {
           <Notification />
 
           <div className={classes.formContainer}>
-            <form noValidate onSubmit={this.handleSubmit}>
+            <form noValidate autoComplete="off">
               {!isIdExist ? (
                 <Fragment>
                   <div className={classes.textField}>
@@ -217,11 +217,12 @@ export class LoginPage extends Component {
                       <FormattedMessage {...messages.inputNumber}>
                         {placeholder => (
                           <input
+                            key={1}
                             className={classNames(classes.formItem, {
                               [classes.formError]: idError || loginError,
                             })}
                             placeholder={placeholder}
-                            name="login"
+                            name="login_login"
                             type="number"
                             onChange={onChangeId}
                             onKeyPress={this.handleKeyPress}
@@ -257,6 +258,8 @@ export class LoginPage extends Component {
                       <FormattedMessage {...messages.inputPassowrd}>
                         {placeholder => (
                           <input
+                            key={2}
+                            id="login_password"
                             className={classNames(classes.formItem, {
                               [classes.formError]: passwordError || loginError,
                             })}
@@ -278,6 +281,7 @@ export class LoginPage extends Component {
                     className={classes.formSubmit}
                     type="submit"
                     disabled={isLoading}
+                    onClick={this.handleSubmit}
                   >
                     <span className={classes.buttonText}>
                       <FormattedMessage {...messages.inputLogin} />

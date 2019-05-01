@@ -364,8 +364,9 @@ export class RegisterPage extends React.Component {
                     [classes.formError]: error,
                   })}
                   key={1}
+                  id="register_id"
                   placeholder={placeholder}
-                  name="login"
+                  name="register_login"
                   type="number"
                   onChange={onChangeId}
                   onKeyPress={this.handleKeyPress}
@@ -390,8 +391,9 @@ export class RegisterPage extends React.Component {
                   className={classNames(classes.formItem, {
                     [classes.formError]: error,
                   })}
+                  id="register_password"
                   placeholder={placeholder}
-                  name="password"
+                  name="register_password"
                   type="password"
                   onChange={onChangePassword}
                   onKeyPress={this.handleKeyPress}
@@ -416,8 +418,9 @@ export class RegisterPage extends React.Component {
                     [classes.formError]: error,
                   })}
                   placeholder={placeholder}
-                  name="name"
+                  name="register_name"
                   type="text"
+                  id="register_name"
                   onChange={onChangeName}
                   onKeyPress={this.handleKeyPress}
                 />
@@ -442,8 +445,9 @@ export class RegisterPage extends React.Component {
                     [classes.formError]: error,
                   })}
                   placeholder={placeholder}
-                  name="surname"
+                  name="register_surname"
                   type="text"
+                  id="register_surname"
                   onChange={onChangeSurname}
                   onKeyPress={this.handleKeyPress}
                 />
@@ -478,8 +482,9 @@ export class RegisterPage extends React.Component {
                     [classes.formError]: error,
                   })}
                   placeholder={placeholder}
-                  name="email"
+                  name="register_email"
                   type="text"
+                  id="register_email"
                   onChange={onChangeEmail}
                   onKeyPress={this.handleKeyPress}
                 />
