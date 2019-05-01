@@ -14,7 +14,7 @@ Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express)**, **
 - Internationalize React App for **EN**, **DE**, **PL** using **react-intl** library
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/dashboard.png" alt="Size Limit CLI" width="738">
+  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/dashboard.png" width="100%">
 </p>
 
 ## Frontend
@@ -26,7 +26,7 @@ Tech Stack:
 3. **Styled Components** for global-styles
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/store.png" alt="Size Limit CLI" width="738">
+  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/store.png"  width="738">
 </p>
 
 ## Backend
@@ -39,7 +39,7 @@ Tech Stack:
 4. **RESTful API** with **Bearer token** authorization
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/mysql.png" alt="Size Limit CLI" width="738">
+  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/mysql.png"  width="738">
 </p>
 
 ## Installation
