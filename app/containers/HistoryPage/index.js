@@ -256,7 +256,16 @@ class HistoryPage extends React.Component {
                 <Table cellComponent={tableCell} />
                 <TableHeaderRow cellComponent={HeaderCell} />
                 <TableRowDetail contentComponent={GridDetailContainer} />
-                <PagingPanel />
+
+                <FormattedMessage {...messages.of}>
+                  {of => (
+                    <PagingPanel
+                      messages={{
+                        info: `{from}-{to} ${of} {count}`,
+                      }}
+                    />
+                  )}
+                </FormattedMessage>
               </Grid>
             ) : (
               <div className="loading--container">

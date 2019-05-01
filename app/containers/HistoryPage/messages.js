@@ -45,4 +45,8 @@ export default defineMessages({
     id: `${scope}.accountNumber`,
     defaultMessage: 'Account number',
   },
+  of: {
+    id: `${scope}.of`,
+    defaultMessage: 'of',
+  },
 });

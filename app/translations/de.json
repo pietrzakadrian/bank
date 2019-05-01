@@ -65,6 +65,7 @@
   "app.containers.HistoryPage.earnings": "",
   "app.containers.HistoryPage.expenses": "",
   "app.containers.HistoryPage.helmetHistoryTitle": "Zahlungsverlauf · Bank Application",
+  "app.containers.HistoryPage.of": "von",
   "app.containers.HistoryPage.recipient": "Empfänger",
   "app.containers.HistoryPage.sender": "Absender",
   "app.containers.HistoryPage.transferTitle": "Titel der Übertragung",
