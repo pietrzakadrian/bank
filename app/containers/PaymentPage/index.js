@@ -591,7 +591,9 @@ class PaymentPage extends React.Component {
             {activeStep === this.getSteps().length ? null : (
               <div>
                 <div className={classes.instructions}>
-                  <form noValidate>{this.getStepContent(activeStep)}</form>
+                  <form noValidate autoComplete="off">
+                    {this.getStepContent(activeStep)}
+                  </form>
                 </div>
                 {activeStep === this.getSteps().length - 1 ? (
                   <button

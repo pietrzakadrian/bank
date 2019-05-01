@@ -110,3 +110,4 @@ This guide on how to install Bank Application:
 ## TODO list
 
 1. Write a Components and Unit tests using Enzyme/Jest
+2. Remove .css files and rewrite all styles to styled-components

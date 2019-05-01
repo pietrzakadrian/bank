@@ -251,7 +251,7 @@ export class RegisterPage extends React.Component {
 
   componentDidMount() {
     if (this.Auth.loggedIn()) this.props.history.push('/dashboard');
-    this.props.onLoadCurrency();
+    if (!this.props.currency) this.props.onLoadCurrency();
   }
 
   componentDidUpdate() {

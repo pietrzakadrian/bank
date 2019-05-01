@@ -5,6 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
+import { LOGOUT_SUCCESS } from 'components/App/Header/constants';
 import {
   CHANGE_ID,
   ENTER_ID,
@@ -61,6 +62,20 @@ export const initialState = fromJS({
 
 function registerPageReducer(state = initialState, action) {
   switch (action.type) {
+    case LOGOUT_SUCCESS:
+      return state
+        .set('activeStep', 0)
+        .set('id', '')
+        .set('password', '')
+        .set('name', '')
+        .set('surname', '')
+        .set('email', '')
+        .set('error', '')
+        .set('isDataProcessingAgreement', false)
+        .set('currency', null)
+        .set('currencyId', null)
+        .set('errorDataProcessingAgreement', '')
+        .set('isLoading', false);
     case CHANGE_ID:
       return state.set('id', action.id).set('error', '');
     case ENTER_ID:
@@ -144,7 +159,9 @@ function registerPageReducer(state = initialState, action) {
         .set('isDataProcessingAgreement', false)
         .set('currency', null)
         .set('currencyId', null)
-        .set('errorDataProcessingAgreement', '');
+        .set('errorDataProcessingAgreement', '')
+        .set('isLoading', false);
+
     case REGISTER_FAILURE:
       return state.set('error', action.error);
     case REGISTER_STEP_NEXT:
