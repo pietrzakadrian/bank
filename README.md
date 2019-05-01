@@ -95,15 +95,13 @@ This guide on how to install Bank Application:
     module.exports = env;
    ```
 
-3. The application supports NodeJS Cluster by default. To start threads correctly, you must use [redis-server](https://redis.io/topics/quickstart).
-
-4. Install the necessary packages
+3. Install the necessary packages
 
    ```
     npm install
    ```
 
-5. Launch applications
+4. Launch applications
 
    ```
    npm start
