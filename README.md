@@ -57,10 +57,10 @@ This guide on how to install Bank Application:
 
    ```
     const env = {
-        database: 'bankapplication', // db name
-        username: 'root', // db user
-        password: 'root', // db password
-        host: 'localhost', // db host
+        database: 'bankapplication',
+        username: 'root',
+        password: 'root',
+        host: 'localhost',
         dialect: 'mysql',
         api_url: 'http://localhost:3000/api',
         pool: {
@@ -70,7 +70,7 @@ This guide on how to install Bank Application:
             evict: 15000,
             acquire: 30000,
         },
-        SECRET_KEY: 'root', // bearer token key
+        SECRET_KEY: 'root',
         nodemailer: {
             username: 'mail-address@gmail.com',
             password: 'mail-password',
@@ -111,4 +111,4 @@ This guide on how to install Bank Application:
 
 ## TODO list
 
-1. Write a test using Enzyme/Jest
+1. Write a Components and Unit tests using Enzyme/Jest
