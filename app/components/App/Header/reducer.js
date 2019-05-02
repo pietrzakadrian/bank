@@ -24,6 +24,13 @@ export const initialState = fromJS({
 
 function headerReducer(state = initialState, action) {
   switch (action.type) {
+    case LOGOUT_SUCCESS:
+      return state
+        .set('isMobileOpen', false)
+        .set('isDesktopOpen', true)
+        .set('isNotificationsOpen', false)
+        .set('isMessagesOpen', false);
+
     case TOGGLE_MESSAGES:
       return state
         .set('isMessagesOpen', !state.get('isMessagesOpen'))
@@ -42,12 +49,6 @@ function headerReducer(state = initialState, action) {
     case TOGGLE_NOTIFICATION:
       return state
         .set('isNotificationsOpen', !state.get('isNotificationsOpen'))
-        .set('isMessagesOpen', false);
-    case LOGOUT_SUCCESS:
-      return state
-        .set('isNotificationsOpen', false)
-        .set('isMobileOpen', false)
-        .set('isDesktopOpen', true)
         .set('isMessagesOpen', false);
     default:
       return state;

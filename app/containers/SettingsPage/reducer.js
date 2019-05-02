@@ -5,7 +5,6 @@
  */
 
 import { fromJS } from 'immutable';
-import { LOGOUT_SUCCESS } from 'components/App/Header/constants';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import {
   CHANGE_NEW_PASSWORD,
@@ -101,23 +100,6 @@ function settingsPageReducer(state = initialState, action) {
       return state.set('error', action.error);
     case SAVE_DATA_EMPTY:
       return state.set('message', action.error);
-    case LOGOUT_SUCCESS:
-      return state
-        .set('isLoading', false)
-        .set('newPassword', null)
-        .set('newName', null)
-        .set('newSurname', null)
-        .set('newEmail', null)
-        .set('errorPassword', null)
-        .set('errorName', null)
-        .set('errorSurname', null)
-        .set('errorEmail', null)
-        .set('message', null)
-        .set('openAlert', false)
-        .set('currencyId', null)
-        .set('userCurrencyId', null)
-        .set('currency', null)
-        .set('currencyMessage', null);
     case CHANGE_NEW_PASSWORD:
       return state
         .set('newPassword', action.password)

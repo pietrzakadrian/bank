@@ -7,7 +7,7 @@
 import { fromJS } from 'immutable';
 import { MAKE_PAYMENT_SUCCESS } from 'containers/PaymentPage/constants';
 import { LOGOUT_SUCCESS } from 'components/App/Header/constants';
-
+import { LOCATION_CHANGE } from 'react-router-redux';
 import {
   GET_NAME,
   GET_NAME_SUCCESS,
@@ -78,7 +78,7 @@ function dashboardPageReducer(state = initialState, action) {
     case ENTER_NEW_SURNAME_SUCCESS:
       return state.set('surname', null);
 
-    case LOGOUT_SUCCESS:
+    case LOCATION_CHANGE:
       return state
         .set('name', null)
         .set('surname', null)

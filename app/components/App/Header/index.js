@@ -333,7 +333,7 @@ class Header extends React.Component {
                   className={classNames(classes.headerMenuItem, {
                     [classes.headerMenuItemHidden]:
                       this.props.isDesktopOpen &&
-                      window.matchMedia('(max-width: 900px)').matches,
+                      window.matchMedia('(max-width: 950px)').matches,
                   })}
                 >
                   <FormattedMessage {...messages.headerItemMessagesTitle} />
