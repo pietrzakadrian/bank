@@ -6,6 +6,7 @@
 
 import { fromJS } from 'immutable';
 import { LOGOUT_SUCCESS } from 'components/App/Header/constants';
+import { LOCATION_CHANGE } from 'react-router-redux';
 import {
   CHANGE_ACCOUNT_NUMBER,
   ENTER_ACCOUNT_NUMBER,
@@ -63,6 +64,22 @@ export const initialState = fromJS({
 
 function paymentPageReducer(state = initialState, action) {
   switch (action.type) {
+    case LOCATION_CHANGE:
+      return state
+        .set('suggestions', [])
+        .set('amountMoney', null)
+        .set('transferTitle', null)
+        .set('authorizationKey', null)
+        .set('activeStep', 0)
+        .set('message', null)
+        .set('error', null)
+        .set('isLoading', false)
+        .set('isAccountBill', false)
+        .set('isAmountMoney', false)
+        .set('value', '')
+        .set('isSendAuthorizationKey', false)
+        .set('recipientId', null)
+        .set('currency', null);
     case LOGOUT_SUCCESS:
       return state
         .set('suggestions', [])

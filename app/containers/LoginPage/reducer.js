@@ -6,6 +6,7 @@
 
 import { fromJS } from 'immutable';
 import { REGISTER_SUCCESSFUL } from 'containers/RegisterPage/constants';
+import { LOCATION_CHANGE } from 'react-router-redux';
 import {
   CHANGE_ID,
   ENTER_ID,
@@ -33,6 +34,15 @@ export const initialState = fromJS({
 
 function loginPageReducer(state = initialState, action) {
   switch (action.type) {
+    case LOCATION_CHANGE:
+      return state
+        .set('id', '')
+        .set('idError', '')
+        .set('password', '')
+        .set('passwordError', '')
+        .set('loginError', '')
+        .set('isIdExist', false)
+        .set('isLoading', false);
     case CHANGE_ID:
       return state
         .set('id', action.id)

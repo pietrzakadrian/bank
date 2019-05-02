@@ -270,7 +270,6 @@ export class RegisterPage extends React.Component {
 
   handleClick(e) {
     e.preventDefault();
-
     if (this.props.activeStep === 0) {
       this.props.id
         ? this.props.onEnterId(this.props.id)
@@ -304,6 +303,7 @@ export class RegisterPage extends React.Component {
     }
 
     if (this.props.activeStep === 5) {
+
       if (this.props.email && this.props.isDataProcessingAgreement) {
         this.props.onEnterEmail(this.props.email);
       } else if (!this.props.email && !this.props.isDataProcessingAgreement) {
@@ -368,6 +368,7 @@ export class RegisterPage extends React.Component {
                   placeholder={placeholder}
                   name="register_login"
                   type="number"
+                  form="form_register"
                   onChange={onChangeId}
                   onKeyPress={this.handleKeyPress}
                 />
@@ -391,6 +392,7 @@ export class RegisterPage extends React.Component {
                   className={classNames(classes.formItem, {
                     [classes.formError]: error,
                   })}
+                  form="form_register"
                   id="register_password"
                   placeholder={placeholder}
                   name="register_password"
@@ -417,6 +419,7 @@ export class RegisterPage extends React.Component {
                   className={classNames(classes.formItem, {
                     [classes.formError]: error,
                   })}
+                  form="form_register"
                   placeholder={placeholder}
                   name="register_name"
                   type="text"
@@ -450,6 +453,7 @@ export class RegisterPage extends React.Component {
                   id="register_surname"
                   onChange={onChangeSurname}
                   onKeyPress={this.handleKeyPress}
+                  form="form_register"
                 />
               )}
             </FormattedMessage>
@@ -478,6 +482,7 @@ export class RegisterPage extends React.Component {
               {placeholder => (
                 <input
                   key={5}
+                  form="form_register"
                   className={classNames(classes.formItem, {
                     [classes.formError]: error,
                   })}
@@ -577,7 +582,12 @@ export class RegisterPage extends React.Component {
                 {activeStep === steps.length ? null : (
                   <div>
                     <span className={classes.instructions}>
-                      <form noValidate autoComplete="off">
+                      <form
+                        id="form_register"
+                        noValidate
+                        autoComplete="off"
+                        key="form_register"
+                      >
                         {this.getStepContent(activeStep)}
                       </form>
                     </span>

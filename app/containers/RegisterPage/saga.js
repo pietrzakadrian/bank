@@ -44,7 +44,7 @@ import {
   loadCurrencySuccessAction,
 } from './actions';
 
-export function* isLogin() {
+export function* isLoginRegister() {
   const id = yield select(makeIdSelector());
   const re = /[0-9]+/g;
   const requestURL = `${env.api_url}/users/isLogin/${id}`;
@@ -246,7 +246,7 @@ function* register() {
 
 // Individual exports for testing
 export default function* registerPageSaga() {
-  yield takeLatest(ENTER_ID, isLogin);
+  yield takeLatest(ENTER_ID, isLoginRegister);
   yield takeLatest(ENTER_PASSWORD, isPassword);
   yield takeLatest(ENTER_NAME, isName);
   yield takeLatest(ENTER_SURNAME, isSurname);

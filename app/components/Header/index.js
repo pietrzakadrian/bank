@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 // Import Material UI
 import { withStyles } from '@material-ui/core/styles';
@@ -24,6 +25,9 @@ const styles = {
   },
   appBar: {
     'box-shadow': 'none', // box-shadow dla header
+  },
+  logocontainer: {
+    flexGrow: 1,
   },
   toolBar: {
     padding: '0 3%',
@@ -54,15 +58,18 @@ function Header(props) {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolBar}>
-          <div className={classes.grow}>
-            <div className={classes.logoContainer}>
-              Bank Application
-              <div className={classes.headerSubheading}>
-                Electronic Payment System
+          <Link to="/">
+            <div className={classes.grow}>
+              <div className={classes.logoContainer}>
+                Bank Application
+                <div className={classes.headerSubheading}>
+                  Electronic Payment System
+                </div>
               </div>
             </div>
-          </div>
-          <div>
+          </Link>
+
+          <div className={classes.logocontainer}>
             <img
               src={Logo}
               className={classes.imgStyles}

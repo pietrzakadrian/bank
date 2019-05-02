@@ -69,7 +69,7 @@ const customHost = argv.host || process.env.HOST;
 const host = customHost || null; // Let http.Server use its default IPv6/4 host
 const prettyHost = customHost || 'localhost';
 
-db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync({ force: !!isDev }).then(() => {
   createNecessaryTables();
 });
 

@@ -163,7 +163,6 @@ export class LoginPage extends Component {
 
   handleEnterId(e) {
     e.preventDefault();
-
     this.props.id
       ? this.props.onEnterId(this.props.id)
       : this.props.isEmptyId(<FormattedMessage {...messages.loginEmpty} />);
@@ -206,7 +205,12 @@ export class LoginPage extends Component {
           <Notification />
 
           <div className={classes.formContainer}>
-            <form noValidate autoComplete="off">
+            <form
+              id="form_login"
+              key="form_login"
+              noValidate
+              autoComplete="off"
+            >
               {!isIdExist ? (
                 <Fragment>
                   <div className={classes.textField}>
@@ -217,6 +221,8 @@ export class LoginPage extends Component {
                       <FormattedMessage {...messages.inputNumber}>
                         {placeholder => (
                           <input
+                            id="login_login"
+                            form="form_login"
                             key={1}
                             className={classNames(classes.formItem, {
                               [classes.formError]: idError || loginError,
@@ -259,6 +265,7 @@ export class LoginPage extends Component {
                         {placeholder => (
                           <input
                             key={2}
+                            form="form_login"
                             id="login_password"
                             className={classNames(classes.formItem, {
                               [classes.formError]: passwordError || loginError,

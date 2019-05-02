@@ -6,6 +6,7 @@
 
 import { fromJS } from 'immutable';
 import { LOGOUT_SUCCESS } from 'components/App/Header/constants';
+import { LOCATION_CHANGE } from 'react-router-redux';
 import {
   CHANGE_ID,
   ENTER_ID,
@@ -62,6 +63,18 @@ export const initialState = fromJS({
 
 function registerPageReducer(state = initialState, action) {
   switch (action.type) {
+    case LOCATION_CHANGE:
+      return state
+        .set('activeStep', 0)
+        .set('id', '')
+        .set('password', '')
+        .set('name', '')
+        .set('surname', '')
+        .set('email', '')
+        .set('error', '')
+        .set('isDataProcessingAgreement', false)
+        .set('errorDataProcessingAgreement', '')
+        .set('isLoading', false);
     case LOGOUT_SUCCESS:
       return state
         .set('activeStep', 0)
@@ -73,7 +86,6 @@ function registerPageReducer(state = initialState, action) {
         .set('error', '')
         .set('isDataProcessingAgreement', false)
         .set('currency', null)
-        .set('currencyId', null)
         .set('errorDataProcessingAgreement', '')
         .set('isLoading', false);
     case CHANGE_ID:
@@ -158,7 +170,6 @@ function registerPageReducer(state = initialState, action) {
         .set('error', '')
         .set('isDataProcessingAgreement', false)
         .set('currency', null)
-        .set('currencyId', null)
         .set('errorDataProcessingAgreement', '')
         .set('isLoading', false);
 
@@ -194,7 +205,6 @@ function registerPageReducer(state = initialState, action) {
       if (state.get('activeStep') === 5) {
         return state
           .set('activeStep', state.get('activeStep') - 1)
-          .set('currencyId', null)
           .set('error', '');
       }
       if (state.get('activeStep') === 6) {
