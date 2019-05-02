@@ -4,8 +4,8 @@
 
 // import LoadingCircular from '../index';
 
-describe('<LoadingCircular />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
-});
+// describe('<LoadingCircular />', () => {
+//   it('Expect to have unit tests specified', () => {
+//     expect(true).toEqual(false);
+//   });
+// });

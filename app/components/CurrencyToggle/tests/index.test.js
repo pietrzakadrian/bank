@@ -4,8 +4,8 @@
 
 // import CurrencyToggle from '../index';
 
-describe('<CurrencyToggle />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
-});
+// describe('<CurrencyToggle />', () => {
+//   it('Expect to have unit tests specified', () => {
+//     expect(true).toEqual(false);
+//   });
+// });

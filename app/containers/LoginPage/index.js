@@ -353,7 +353,10 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'loginPage', reducer });
-const withSaga = injectSaga({ key: 'loginPage', saga });
+const withSaga = injectSaga({
+  key: 'loginPage',
+  saga,
+});
 
 export default compose(
   withStyles(styles),

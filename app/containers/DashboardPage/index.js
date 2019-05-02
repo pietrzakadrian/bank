@@ -266,7 +266,10 @@ DashboardPage.propTypes = {
 };
 
 const withReducer = injectReducer({ key: 'dashboardPage', reducer });
-const withSaga = injectSaga({ key: 'dashboardPage', saga });
+const withSaga = injectSaga({
+  key: 'dashboardPage',
+  saga,
+});
 
 export default compose(
   withStyles(styles),

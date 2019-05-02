@@ -6,7 +6,6 @@
 
 import { fromJS } from 'immutable';
 import { MAKE_PAYMENT_SUCCESS } from 'containers/PaymentPage/constants';
-import { LOGOUT_SUCCESS } from 'components/App/Header/constants';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import {
   GET_NAME,

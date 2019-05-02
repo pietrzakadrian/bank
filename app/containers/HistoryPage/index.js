@@ -36,7 +36,6 @@ import {
   TableRowDetail,
   PagingPanel,
 } from '@devexpress/dx-react-grid-material-ui';
-
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import {

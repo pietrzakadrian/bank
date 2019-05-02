@@ -4,8 +4,8 @@
 
 // import Sidebar from '../index';
 
-describe('<Sidebar />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
-});
+// describe('<Sidebar />', () => {
+//   it('Expect to have unit tests specified', () => {
+//     expect(true).toEqual(false);
+//   });
+// });

@@ -481,7 +481,10 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'settingsPage', reducer });
-const withSaga = injectSaga({ key: 'settingsPage', saga });
+const withSaga = injectSaga({
+  key: 'settingsPage',
+  saga,
+});
 
 export default compose(
   withStyles(styles, { withTheme: true }),

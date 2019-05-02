@@ -4,8 +4,8 @@
 
 // import { PrivacyPage } from '../index';
 
-describe('<PrivacyPage />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
-});
+// describe('<PrivacyPage />', () => {
+//   it('Expect to have unit tests specified', () => {
+//     expect(true).toEqual(false);
+//   });
+// });

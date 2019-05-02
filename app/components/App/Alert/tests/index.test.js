@@ -4,8 +4,8 @@
 
 // import Alert from '../index';
 
-describe('<Alert />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
-});
+// describe('<Alert />', () => {
+//   it('Expect to have unit tests specified', () => {
+//     expect(true).toEqual(false);
+//   });
+// });

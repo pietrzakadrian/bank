@@ -4,8 +4,8 @@
 
 // import LoadingLinear from '../index';
 
-describe('<LoadingLinear />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
-});
+// describe('<LoadingLinear />', () => {
+//   it('Expect to have unit tests specified', () => {
+//     expect(true).toEqual(false);
+//   });
+// });

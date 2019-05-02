@@ -8,8 +8,8 @@
 
 // const generator = paymentPageSaga();
 
-describe('paymentPageSaga Saga', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
-});
+// describe('paymentPageSaga Saga', () => {
+//   it('Expect to have unit tests specified', () => {
+//     expect(true).toEqual(false);
+//   });
+// });

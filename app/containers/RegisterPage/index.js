@@ -303,7 +303,6 @@ export class RegisterPage extends React.Component {
     }
 
     if (this.props.activeStep === 5) {
-
       if (this.props.email && this.props.isDataProcessingAgreement) {
         this.props.onEnterEmail(this.props.email);
       } else if (!this.props.email && !this.props.isDataProcessingAgreement) {
@@ -700,7 +699,10 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'registerPage', reducer });
-const withSaga = injectSaga({ key: 'registerPage', saga });
+const withSaga = injectSaga({
+  key: 'registerPage',
+  saga,
+});
 
 export default compose(
   withStyles(styles, { withTheme: true }),

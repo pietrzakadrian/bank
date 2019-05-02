@@ -8,8 +8,8 @@
 
 // const generator = historyPageSaga();
 
-describe('historyPageSaga Saga', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
-});
+// describe('historyPageSaga Saga', () => {
+//   it('Expect to have unit tests specified', () => {
+//     expect(true).toEqual(false);
+//   });
+// });

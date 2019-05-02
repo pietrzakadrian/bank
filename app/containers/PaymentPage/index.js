@@ -51,7 +51,6 @@ import {
   makeIsSendAuthorizationKeySelector,
   makeCurrencySelector,
 } from './selectors';
-
 import {
   changeAccountNumberAction,
   changeAmountMoneyAction,

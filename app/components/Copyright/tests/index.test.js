@@ -4,8 +4,8 @@
 
 // import Copyright from '../index';
 
-describe('<Copyright />', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
-});
+// describe('<Copyright />', () => {
+//   it('Expect to have unit tests specified', () => {
+//     expect(true).toEqual(false);
+//   });
+// });
