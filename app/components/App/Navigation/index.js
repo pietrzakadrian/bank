@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
 import classNames from 'classnames';
@@ -47,139 +47,150 @@ const styles = () => ({
   },
   selected: {},
 });
-function Navigation({ classes, location, hiddenMobileOpen, isMobileOpen }) {
-  return (
-    <MenuList className={classes.root} disablePadding>
-      <NavLink to="/dashboard">
-        <MenuItem
-          className={classes.menuItem}
-          onClick={isMobileOpen ? hiddenMobileOpen : null}
-          selected={location.pathname === '/dashboard'}
-        >
-          <ListItemIcon
-            className={classNames(classes.icon, {
-              [classes.iconActive]: location.pathname === '/dashboard',
-            })}
+
+class Navigation extends Component {
+  handleNavlink = e => {
+    this.props.location.pathname === '/dashboard' ? e.preventDefault() : null;
+    this.props.location.pathname === '/payment' ? e.preventDefault() : null;
+    this.props.location.pathname === '/history' ? e.preventDefault() : null;
+    this.props.location.pathname === '/settings' ? e.preventDefault() : null;
+  };
+
+  render() {
+    const { classes, location, hiddenMobileOpen, isMobileOpen } = this.props;
+    return (
+      <MenuList className={classes.root} disablePadding>
+        <NavLink to="/dashboard" onClick={this.handleNavlink}>
+          <MenuItem
+            className={classes.menuItem}
+            onClick={isMobileOpen ? hiddenMobileOpen : null}
+            selected={location.pathname === '/dashboard'}
           >
-            <HomeIcon />
+            <ListItemIcon
+              className={classNames(classes.icon, {
+                [classes.iconActive]: location.pathname === '/dashboard',
+              })}
+            >
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText
+              classes={
+                location.pathname === '/dashboard'
+                  ? { primary: classes.primaryActive }
+                  : { primary: classes.primary }
+              }
+              inset
+              primary={<FormattedMessage {...messages.dashboardItem} />}
+            />
+          </MenuItem>
+        </NavLink>
+        <NavLink to="/payment" onClick={this.handleNavlink}>
+          <MenuItem
+            className={classes.menuItem}
+            onClick={isMobileOpen ? hiddenMobileOpen : null}
+            selected={location.pathname === '/payment'}
+          >
+            <ListItemIcon
+              className={classNames(classes.icon, {
+                [classes.iconActive]: location.pathname === '/payment',
+              })}
+            >
+              <SwapVertIcon />
+            </ListItemIcon>
+            <ListItemText
+              classes={
+                location.pathname === '/payment'
+                  ? { primary: classes.primaryActive }
+                  : { primary: classes.primary }
+              }
+              inset
+              primary={<FormattedMessage {...messages.paymentItem} />}
+            />
+          </MenuItem>
+        </NavLink>
+        <NavLink to="/history" onClick={this.handleNavlink}>
+          <MenuItem
+            className={classes.menuItem}
+            onClick={isMobileOpen ? hiddenMobileOpen : null}
+            selected={location.pathname === '/history'}
+          >
+            <ListItemIcon
+              className={classNames(classes.icon, {
+                [classes.iconActive]: location.pathname === '/history',
+              })}
+            >
+              <HistoryIcon />
+            </ListItemIcon>
+            <ListItemText
+              classes={
+                location.pathname === '/history'
+                  ? { primary: classes.primaryActive }
+                  : { primary: classes.primary }
+              }
+              inset
+              primary={<FormattedMessage {...messages.historyItem} />}
+            />
+          </MenuItem>
+        </NavLink>
+        {/* <NavLink> */}
+        <MenuItem className={classes.menuItem}>
+          <ListItemIcon className={classes.icon}>
+            <AccountBalanceIcon />
           </ListItemIcon>
           <ListItemText
-            classes={
-              location.pathname === '/dashboard'
-                ? { primary: classes.primaryActive }
-                : { primary: classes.primary }
-            }
             inset
-            primary={<FormattedMessage {...messages.dashboardItem} />}
+            primary={<FormattedMessage {...messages.creditsItem} />}
           />
         </MenuItem>
-      </NavLink>
-      <NavLink to="/payment">
-        <MenuItem
-          className={classes.menuItem}
-          onClick={isMobileOpen ? hiddenMobileOpen : null}
-          selected={location.pathname === '/payment'}
-        >
-          <ListItemIcon
-            className={classNames(classes.icon, {
-              [classes.iconActive]: location.pathname === '/payment',
-            })}
-          >
-            <SwapVertIcon />
+        {/* </NavLink> */}
+        {/* <NavLink> */}
+        <MenuItem className={classes.menuItem}>
+          <ListItemIcon className={classes.icon}>
+            <TrendingUpIcon />
           </ListItemIcon>
           <ListItemText
-            classes={
-              location.pathname === '/payment'
-                ? { primary: classes.primaryActive }
-                : { primary: classes.primary }
-            }
             inset
-            primary={<FormattedMessage {...messages.paymentItem} />}
+            primary={<FormattedMessage {...messages.depositsItem} />}
           />
         </MenuItem>
-      </NavLink>
-      <NavLink to="/history">
-        <MenuItem
-          className={classes.menuItem}
-          onClick={isMobileOpen ? hiddenMobileOpen : null}
-          selected={location.pathname === '/history'}
-        >
-          <ListItemIcon
-            className={classNames(classes.icon, {
-              [classes.iconActive]: location.pathname === '/history',
-            })}
-          >
-            <HistoryIcon />
+        {/* </NavLink> */}
+        <MenuItem className={classes.menuItem}>
+          <ListItemIcon className={classes.icon}>
+            <CardIcon />
           </ListItemIcon>
           <ListItemText
-            classes={
-              location.pathname === '/history'
-                ? { primary: classes.primaryActive }
-                : { primary: classes.primary }
-            }
             inset
-            primary={<FormattedMessage {...messages.historyItem} />}
+            primary={<FormattedMessage {...messages.cardsItem} />}
           />
         </MenuItem>
-      </NavLink>
-      {/* <NavLink> */}
-      <MenuItem className={classes.menuItem}>
-        <ListItemIcon className={classes.icon}>
-          <AccountBalanceIcon />
-        </ListItemIcon>
-        <ListItemText
-          inset
-          primary={<FormattedMessage {...messages.creditsItem} />}
-        />
-      </MenuItem>
-      {/* </NavLink> */}
-      {/* <NavLink> */}
-      <MenuItem className={classes.menuItem}>
-        <ListItemIcon className={classes.icon}>
-          <TrendingUpIcon />
-        </ListItemIcon>
-        <ListItemText
-          inset
-          primary={<FormattedMessage {...messages.depositsItem} />}
-        />
-      </MenuItem>
-      {/* </NavLink> */}
-      <MenuItem className={classes.menuItem}>
-        <ListItemIcon className={classes.icon}>
-          <CardIcon />
-        </ListItemIcon>
-        <ListItemText
-          inset
-          primary={<FormattedMessage {...messages.cardsItem} />}
-        />
-      </MenuItem>
-      {/* </NavLink> */}
-      <NavLink to="/settings">
-        <MenuItem
-          className={classes.menuItem}
-          onClick={isMobileOpen ? hiddenMobileOpen : null}
-          selected={location.pathname === '/settings'}
-        >
-          <ListItemIcon
-            className={classNames(classes.icon, {
-              [classes.iconActive]: location.pathname === '/settings',
-            })}
+        {/* </NavLink> */}
+        <NavLink to="/settings" onClick={this.handleNavlink}>
+          <MenuItem
+            className={classes.menuItem}
+            onClick={isMobileOpen ? hiddenMobileOpen : null}
+            selected={location.pathname === '/settings'}
           >
-            <SettingsIcon />
-          </ListItemIcon>
-          <ListItemText
-            classes={
-              location.pathname === '/settings'
-                ? { primary: classes.primaryActive }
-                : { primary: classes.primary }
-            }
-            inset
-            primary={<FormattedMessage {...messages.settingsItem} />}
-          />
-        </MenuItem>
-      </NavLink>
-    </MenuList>
-  );
+            <ListItemIcon
+              className={classNames(classes.icon, {
+                [classes.iconActive]: location.pathname === '/settings',
+              })}
+            >
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText
+              classes={
+                location.pathname === '/settings'
+                  ? { primary: classes.primaryActive }
+                  : { primary: classes.primary }
+              }
+              inset
+              primary={<FormattedMessage {...messages.settingsItem} />}
+            />
+          </MenuItem>
+        </NavLink>
+      </MenuList>
+    );
+  }
 }
 
 Navigation.propTypes = {
