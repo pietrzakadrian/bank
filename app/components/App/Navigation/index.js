@@ -50,17 +50,28 @@ const styles = () => ({
 
 class Navigation extends Component {
   handleNavlink = e => {
-    this.props.location.pathname === '/dashboard' ? e.preventDefault() : null;
-    this.props.location.pathname === '/payment' ? e.preventDefault() : null;
-    this.props.location.pathname === '/history' ? e.preventDefault() : null;
-    this.props.location.pathname === '/settings' ? e.preventDefault() : null;
+    this.props.to === this.props.history.location.pathname
+      ? e.preventDefault()
+      : null;
   };
 
   render() {
     const { classes, location, hiddenMobileOpen, isMobileOpen } = this.props;
+
+    console.log('this.props.to', this.props.to);
+    console.log(
+      'this.props.history.location.pathname',
+      this.props.history.location.pathname,
+    );
+
     return (
       <MenuList className={classes.root} disablePadding>
-        <NavLink to="/dashboard" onClick={this.handleNavlink}>
+        <NavLink
+          onClick={e =>
+            location.pathname === '/dashboard' ? e.preventDefault() : null
+          }
+          to="/dashboard"
+        >
           <MenuItem
             className={classes.menuItem}
             onClick={isMobileOpen ? hiddenMobileOpen : null}
@@ -84,7 +95,12 @@ class Navigation extends Component {
             />
           </MenuItem>
         </NavLink>
-        <NavLink to="/payment" onClick={this.handleNavlink}>
+        <NavLink
+          to="/payment"
+          onClick={e =>
+            location.pathname === '/payment' ? e.preventDefault() : null
+          }
+        >
           <MenuItem
             className={classes.menuItem}
             onClick={isMobileOpen ? hiddenMobileOpen : null}
@@ -108,7 +124,12 @@ class Navigation extends Component {
             />
           </MenuItem>
         </NavLink>
-        <NavLink to="/history" onClick={this.handleNavlink}>
+        <NavLink
+          to="/history"
+          onClick={e =>
+            location.pathname === '/history' ? e.preventDefault() : null
+          }
+        >
           <MenuItem
             className={classes.menuItem}
             onClick={isMobileOpen ? hiddenMobileOpen : null}
@@ -133,7 +154,7 @@ class Navigation extends Component {
           </MenuItem>
         </NavLink>
         {/* <NavLink> */}
-        <MenuItem className={classes.menuItem}>
+        <MenuItem className={classes.menuItem} disabled>
           <ListItemIcon className={classes.icon}>
             <AccountBalanceIcon />
           </ListItemIcon>
@@ -144,7 +165,7 @@ class Navigation extends Component {
         </MenuItem>
         {/* </NavLink> */}
         {/* <NavLink> */}
-        <MenuItem className={classes.menuItem}>
+        <MenuItem className={classes.menuItem} disabled>
           <ListItemIcon className={classes.icon}>
             <TrendingUpIcon />
           </ListItemIcon>
@@ -154,7 +175,7 @@ class Navigation extends Component {
           />
         </MenuItem>
         {/* </NavLink> */}
-        <MenuItem className={classes.menuItem}>
+        <MenuItem className={classes.menuItem} disabled>
           <ListItemIcon className={classes.icon}>
             <CardIcon />
           </ListItemIcon>
@@ -164,7 +185,12 @@ class Navigation extends Component {
           />
         </MenuItem>
         {/* </NavLink> */}
-        <NavLink to="/settings" onClick={this.handleNavlink}>
+        <NavLink
+          to="/settings"
+          onClick={e =>
+            location.pathname === '/settings' ? e.preventDefault() : null
+          }
+        >
           <MenuItem
             className={classes.menuItem}
             onClick={isMobileOpen ? hiddenMobileOpen : null}
