@@ -1,3 +1,4 @@
+/* eslint-disable react/prefer-stateless-function */
 /**
  *
  * Navigation
@@ -49,20 +50,8 @@ const styles = () => ({
 });
 
 class Navigation extends Component {
-  handleNavlink = e => {
-    this.props.to === this.props.history.location.pathname
-      ? e.preventDefault()
-      : null;
-  };
-
   render() {
     const { classes, location, hiddenMobileOpen, isMobileOpen } = this.props;
-
-    console.log('this.props.to', this.props.to);
-    console.log(
-      'this.props.history.location.pathname',
-      this.props.history.location.pathname,
-    );
 
     return (
       <MenuList className={classes.root} disablePadding>
