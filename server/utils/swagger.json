@@ -50,7 +50,7 @@
     "/users/{userId}": {
       "get": {
         "tags": ["users"],
-        "summary": "Return basic User's Data",
+        "summary": "Returns basic User's Data",
         "description": "",
         "operationId": "getUser",
         "consumes": ["application/json"],
@@ -285,7 +285,7 @@
           {
             "in": "body",
             "name": "body",
-            "description": "confirm a new Transactions",
+            "description": "confirms a new Transactions",
             "required": true,
             "schema": {
               "$ref": "#/definitions/Transaction"
@@ -338,7 +338,7 @@
     "/transactions/getTransactions": {
       "post": {
         "tags": ["transactions"],
-        "summary": "Create account",
+        "summary": "Returns User's transactions",
         "description": "",
         "operationId": "getTransactions",
         "consumes": ["application/json"],
@@ -369,7 +369,7 @@
     "/transactions/recipient/{recipientId}": {
       "get": {
         "tags": ["transactions"],
-        "summary": "Return Recipient's Transaction",
+        "summary": "Returns Recipient's Transaction",
         "description": "",
         "operationId": "registerRecipientId",
         "consumes": ["application/json"],
@@ -401,7 +401,7 @@
     "/transactions/sender/{senderId}": {
       "get": {
         "tags": ["transactions"],
-        "summary": "Create account",
+        "summary": "Returns Sender's transaction",
         "description": "",
         "operationId": "senderSenderId",
         "consumes": ["application/json"],
@@ -410,7 +410,7 @@
           {
             "name": "senderId",
             "in": "path",
-            "description": "return Recipient's Transaction",
+            "description": "Return Sender's transaction",
             "required": true,
             "type": "integer",
             "maximum": 10,
@@ -433,7 +433,7 @@
     "/bills/{userId}": {
       "get": {
         "tags": ["bills"],
-        "summary": "Return User's Bill Data",
+        "summary": "Returns User's Bill Data",
         "description": "",
         "operationId": "billsConfirm",
         "consumes": ["application/json"],
@@ -465,7 +465,7 @@
     "/bills/search/{accountBill}": {
       "get": {
         "tags": ["bills"],
-        "summary": "Return All User's Bill Data for search",
+        "summary": "Returns All User's Bill Data for search",
         "description": "",
         "operationId": "searchbills",
         "consumes": ["application/json"],
@@ -656,7 +656,7 @@
     "/additionals/newNotification/": {
       "post": {
         "tags": ["additionals"],
-        "summary": "Return new User's notification",
+        "summary": "Returns new User's notification",
         "description": "",
         "operationId": "newNotification",
         "consumes": ["application/json"],
@@ -694,7 +694,7 @@
     "/additionals/unsetNotification/{userId}": {
       "put": {
         "tags": ["additionals"],
-        "summary": "Unset User's notification",
+        "summary": "Unsets User's notification",
         "description": "",
         "operationId": "unsetNotification",
         "consumes": ["application/json"],
