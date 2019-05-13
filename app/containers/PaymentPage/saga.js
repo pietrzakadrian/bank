@@ -248,7 +248,7 @@ export function* confirmTransaction() {
   const socket = socketIOClient('/', {
     transports: ['websocket'],
   });
-  const requestURL = `${env.api_url}/transactions`;
+  const requestURL = `${env.api_url}/transactions/confirm`;
   const isDesktopOpen = yield select(makeIsDesktopOpenSelector());
 
   if (isAmountMoney && isAccountBill) {

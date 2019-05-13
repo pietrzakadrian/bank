@@ -292,13 +292,13 @@ exports.setUserdata = (req, res) => {
               }
             })
             .catch(() => {
-              /* just ignore */
+              res.status(500).json({ error: 'Internal server error' });
             });
         });
       }
     })
-    .catch(e => {
-      res.status(500).json({ error: e });
+    .catch(() => {
+      res.status(500).json({ error: 'Internal server error' });
     });
 };
 

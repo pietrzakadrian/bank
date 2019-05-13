@@ -5,7 +5,12 @@ module.exports = function(app) {
   const checkToken = require('../middlewares/checkToken.middleware.js');
 
   // Confirm a new Transactions
-  app.post('/api/transactions', checkAuth, checkToken, transactions.confirm);
+  app.post(
+    '/api/transactions/confirm',
+    checkAuth,
+    checkToken,
+    transactions.confirm,
+  );
 
   // Register a new Transactions Action
   app.post(

@@ -19,13 +19,6 @@ module.exports = function(app) {
   );
 
   app.put(
-    '/api/additionals/setNotification/:userId',
-    checkAuth,
-    checkToken,
-    additionals.setNotification,
-  );
-
-  app.put(
     '/api/additionals/unsetNotification/:userId',
     checkAuth,
     checkToken,
