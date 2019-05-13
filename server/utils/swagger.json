@@ -1,1 +1,1556 @@
-{}
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the API documentation for Full Stack Web Application \"Bank Application\". Please use the links below if you want more information.",
+    "version": "1.0.0",
+    "title": "Bank Application",
+    "contact": {
+      "email": "contact@pietrzakadrian.com"
+    },
+    "license": {
+      "name": "Live Preview",
+      "url": "https://bank.pietrzakadrian.com/"
+    }
+  },
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "users",
+      "description": "Operations about user"
+    },
+    {
+      "name": "bills",
+      "description": "Operations about bill"
+    },
+    {
+      "name": "transactions",
+      "description": "Operations about transaction"
+    },
+    {
+      "name": "currency",
+      "description": "Operations about currency"
+    },
+    {
+      "name": "additionals",
+      "description": "Operations about additional"
+    }
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    },
+    "basicAuth": {
+      "type": "basic"
+    }
+  },
+  "schemes": ["https", "http"],
+  "paths": {
+    "/users/{userId}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Return basic User's Data",
+        "description": "",
+        "operationId": "getUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "return basic User's Data",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["users"],
+        "summary": "Update basic User's Data",
+        "description": "",
+        "operationId": "updateUserId",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "update basic User's Data",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/users/register": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Register User",
+        "description": "",
+        "operationId": "register",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Login User",
+        "description": "",
+        "operationId": "login",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/users/logout/{userId}": {
+      "put": {
+        "tags": ["users"],
+        "summary": "Log out User",
+        "description": "",
+        "operationId": "logout",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user that needs to be fetched",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/users/isLogin/{userLogin}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Checking if the User's login already exists",
+        "description": "",
+        "operationId": "isLogin",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userLogin",
+            "in": "path",
+            "description": "Checking if the User's login already exists",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/users/isEmail/{userEmail}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Checking if the User's email already exists",
+        "description": "",
+        "operationId": "userEmail",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userEmail",
+            "in": "path",
+            "description": "Checking if the User's login already exists",
+            "required": true,
+            "type": "string",
+            "maximum": 10,
+            "minimum": 1
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/users/setCurrency/{userId}": {
+      "put": {
+        "tags": ["users"],
+        "summary": "Update User's currency",
+        "description": "",
+        "operationId": "setCurrencyUser",
+        "consumes": ["application/xml"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "update User's Currency",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/transactions": {
+      "post": {
+        "tags": ["transactions"],
+        "summary": "Confirm a new Transactions",
+        "description": "",
+        "operationId": "transactionsConfirm",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "confirm a new Transactions",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/transactions/register": {
+      "post": {
+        "tags": ["transactions"],
+        "summary": "Register a new Transactions",
+        "description": "",
+        "operationId": "transactionsRegister",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/transactions/getTransactions": {
+      "post": {
+        "tags": ["transactions"],
+        "summary": "Create account",
+        "description": "",
+        "operationId": "getTransactions",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/transactions/recipient/{recipientId}": {
+      "get": {
+        "tags": ["transactions"],
+        "summary": "Return Recipient's Transaction",
+        "description": "",
+        "operationId": "registerRecipientId",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "recipientId",
+            "in": "path",
+            "description": "return Recipient's Transaction",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/transactions/sender/{senderId}": {
+      "get": {
+        "tags": ["transactions"],
+        "summary": "Create account",
+        "description": "",
+        "operationId": "senderSenderId",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "senderId",
+            "in": "path",
+            "description": "return Recipient's Transaction",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/bills/{userId}": {
+      "get": {
+        "tags": ["bills"],
+        "summary": "Return User's Bill Data",
+        "description": "",
+        "operationId": "billsConfirm",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "return Recipient's Transaction",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/bills/search/{accountBill}": {
+      "get": {
+        "tags": ["bills"],
+        "summary": "Return All User's Bill Data for search",
+        "description": "",
+        "operationId": "searchbills",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "accountBill",
+            "in": "path",
+            "description": "return Recipient's Transaction",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/bills/isAccountBill/{accountBill}": {
+      "get": {
+        "tags": ["bills"],
+        "summary": "Checking if the Bill already exists",
+        "description": "",
+        "operationId": "isAccountBill",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "accountBill",
+            "in": "path",
+            "description": "return Recipient's Transaction",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/bills/isAmountMoney/{accountBill}": {
+      "post": {
+        "tags": ["bills"],
+        "summary": "Checking if the User has a sufficient amount of money",
+        "description": "",
+        "operationId": "isAmountMoney",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "accountBill",
+            "in": "path",
+            "description": "return Recipient's Transaction",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/currency": {
+      "get": {
+        "tags": ["currency"],
+        "summary": "Create account",
+        "description": "",
+        "operationId": "getCurrency",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "return basic User's Data",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["currency"],
+        "summary": "Update an existing pet",
+        "description": "",
+        "operationId": "setCurrency",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "update basic User's Data",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/additionals/isNotification/{userId}": {
+      "get": {
+        "tags": ["additionals"],
+        "summary": "Create account",
+        "description": "",
+        "operationId": "isNotification",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "return basic User's Data",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/additionals/newNotification/": {
+      "post": {
+        "tags": ["additionals"],
+        "summary": "Update an existing pet",
+        "description": "",
+        "operationId": "newNotification",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "update basic User's Data",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/additionals/setNotification/{userId}": {
+      "put": {
+        "tags": ["additionals"],
+        "summary": "Create account",
+        "description": "",
+        "operationId": "setNotification",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "return basic User's Data",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/additionals/unsetNotification/{userId}": {
+      "put": {
+        "tags": ["additionals"],
+        "summary": "Create account",
+        "description": "",
+        "operationId": "unsetNotification",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "return basic User's Data",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/pet/findByStatus": {
+      "get": {
+        "tags": ["pet"],
+        "summary": "Finds Pets by status",
+        "description": "Multiple status values can be provided with comma separated strings",
+        "operationId": "findPetsByStatus",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["available", "pending", "sold"],
+              "default": "available"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid status value"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/pet/findByTags": {
+      "get": {
+        "tags": ["pet"],
+        "summary": "Finds Pets by tags",
+        "description": "Muliple tags can be provided with comma separated strings. Use         tag1, tag2, tag3 for testing.",
+        "operationId": "findPetsByTags",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "Tags to filter by",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid tag value"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "deprecated": true
+      }
+    },
+    "/pet/{petId}": {
+      "get": {
+        "tags": ["pet"],
+        "summary": "Find pet by ID",
+        "description": "Returns a single pet",
+        "operationId": "getPetById",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "ID of pet to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["pet"],
+        "summary": "Updates a pet in the store with form data",
+        "description": "",
+        "operationId": "updatePetWithForm",
+        "consumes": ["application/x-www-form-urlencoded"],
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "ID of pet that needs to be updated",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "description": "Updated name of the pet",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "formData",
+            "description": "Updated status of the pet",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["pet"],
+        "summary": "Deletes a pet",
+        "description": "",
+        "operationId": "deletePet",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "Pet id to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/pet/{petId}/uploadImage": {
+      "post": {
+        "tags": ["pet"],
+        "summary": "uploads an image",
+        "description": "",
+        "operationId": "uploadFile",
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "ID of pet to update",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "additionalMetadata",
+            "in": "formData",
+            "description": "Additional data to pass to server",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file to upload",
+            "required": false,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/store/inventory": {
+      "get": {
+        "tags": ["store"],
+        "summary": "Returns pet inventories by status",
+        "description": "Returns a map of status codes to quantities",
+        "operationId": "getInventory",
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/store/order": {
+      "post": {
+        "tags": ["store"],
+        "summary": "Place an order for a pet",
+        "description": "",
+        "operationId": "placeOrder",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "order placed for purchasing the pet",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid Order"
+          }
+        }
+      }
+    },
+    "/store/order/{orderId}": {
+      "get": {
+        "tags": ["store"],
+        "summary": "Find purchase order by ID",
+        "description": "For valid response try integer IDs with value >= 1 and <= 10.         Other values will generated exceptions",
+        "operationId": "getOrderById",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "ID of pet that needs to be fetched",
+            "required": true,
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["store"],
+        "summary": "Delete purchase order by ID",
+        "description": "For valid response try integer IDs with positive integer value.         Negative or non-integer values will generate API errors",
+        "operationId": "deleteOrder",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "ID of the order that needs to be deleted",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Create user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "createUser",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user/createWithArray": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Creates list of users with given input array",
+        "description": "",
+        "operationId": "createUsersWithArrayInput",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of user object",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user/createWithList": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Creates list of users with given input array",
+        "description": "",
+        "operationId": "createUsersWithListInput",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of user object",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "The user name for login",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "The password for login in clear text",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            },
+            "headers": {
+              "X-Rate-Limit": {
+                "type": "integer",
+                "format": "int32",
+                "description": "calls per hour allowed by the user"
+              },
+              "X-Expires-After": {
+                "type": "string",
+                "format": "date-time",
+                "description": "date in UTC when token expires"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username/password supplied"
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Logs out current logged in user session",
+        "description": "",
+        "operationId": "logoutUser",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user/{username}": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Get user by user name",
+        "description": "",
+        "operationId": "getUserByName",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "The name that needs to be fetched. Use user1 for testing. ",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["user"],
+        "summary": "Updated user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "updateUser",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "name that need to be updated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid user supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["user"],
+        "summary": "Delete user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "deleteUser",
+        "produces": ["application/xml", "application/json"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "The name that needs to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "login",
+        "password",
+        "name",
+        "surname",
+        "email",
+        "date_registration"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "login": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "password": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "date_registration": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_successful_logged": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_failed_logged": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_present_logged": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Bill": {
+      "type": "object",
+      "required": [
+        "id_owner",
+        "account_bill",
+        "available_funds",
+        "id_currency"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "id_owner": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "account_bill": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "available_funds": {
+          "type": "number",
+          "format": "double"
+        },
+        "id_currency": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "required": [
+        "id_sender",
+        "id_recipient",
+        "date_time",
+        "amount_money",
+        "id_currency",
+        "transfer_title",
+        "authorization_key",
+        "authorization_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "id_sender": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "id_recipient": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "date_time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount_money": {
+          "type": "number",
+          "format": "double"
+        },
+        "id_currency": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "transfer_title": {
+          "type": "string"
+        },
+        "authorization_key": {
+          "type": "string"
+        },
+        "authorization_status": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "Additional": {
+      "type": "object",
+      "required": [
+        "id_owner",
+        "account_balance_history",
+        "incoming_transfers_sum",
+        "outgoing_transfers_sum",
+        "notification_status",
+        "notification_count"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "id_owner": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "account_balance_history": {
+          "type": "string"
+        },
+        "incoming_transfers_sum": {
+          "type": "number",
+          "format": "double"
+        },
+        "outgoing_transfers_sum": {
+          "type": "number",
+          "format": "double"
+        },
+        "notification_status": {
+          "type": "boolean",
+          "format": "int64",
+          "default": 0
+        },
+        "notification_count": {
+          "type": "integer",
+          "format": "int64",
+          "default": 0
+        }
+      }
+    },
+    "Currency": {
+      "type": "object",
+      "required": [
+        "currency",
+        "currency_exchange_rate",
+        "date_currency_exchange_rate_sync",
+        "main_currency"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "currency_exchange_rate": {
+          "type": "number",
+          "format": "double",
+          "default": 1
+        },
+        "date_currency_exchange_rate_sync": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "main_currency": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "GitHub",
+    "url": "https://github.com/pietrzakadrian/bank"
+  }
+}
