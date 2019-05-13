@@ -111,6 +111,10 @@ input[type='number'] {
  .snackbar  {
     bottom: 0!important;
   }
+  .snackbar-open-menu {
+    left: 0px!important; 
+    position: unset; 
+  }
 }
 
 .snackbar div  {
