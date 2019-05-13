@@ -1,16 +1,15 @@
 <p align="center">
 <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/logo.png"
-     title="Size Limit logo by Anton Lovchikov" width="200" height="auto">
+     title="Logo" width="200" height="auto">
 </p>
 
 Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express)**, **WebSocket**, **RESTful API** and **MySQL**
 
-- An application created according to the best practices used in [react-boilerplate](https://github.com/react-boilerplate/react-boilerplate),
-- Updating data and notifications without refreshing page
-- Proper use of NodeJS Cluster using **PM2** and **redis-server**
+- An application created according to the best practices used in [react-boilerplate](https://github.com/react-boilerplate/react-boilerplate)
+- The correct configuration of NodeJS Cluster using **PM2** and **redis-server**
 - Relational model use of the MySQL database via **Sequelize** ORM
-- Multi-currency service with the current rate charged from REST API
-- Internationalize React App for **EN**, **DE**, **PL** using **react-intl** library
+- Support for many currencies with the current rate charged by the REST API
+- Immediate change of Internationalize for **EN**, **DE** and **PL**
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/dashboard.png" width="100%">
@@ -38,6 +37,7 @@ Technology stack:
 2. **Sequelize** ORM
 3. **MySQL** database
 4. **RESTful API** with **Bearer token** authorization
+5. [Swagger](http://bank.pietrzakadrian.com/api-docs/) Documentation
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/mysql.png"  width="738">
