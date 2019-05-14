@@ -37,7 +37,7 @@ Technology stack:
 2. **Sequelize** ORM
 3. **MySQL** database
 4. **RESTful API** with **Bearer token** authorization
-5. [Swagger](http://bank.pietrzakadrian.com/api-docs/) Documentation
+5. **[Swagger](http://bank.pietrzakadrian.com/api-docs/)** Documentation
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/mysql.png"  width="738">
