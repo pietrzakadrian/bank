@@ -7,6 +7,7 @@ const argv = require('./utils/argv');
 const port = require('./utils/port');
 const setup = require('./middlewares/frontend.middleware');
 const morgan = require('morgan');
+const cors = require('cors');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok =
   (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel
@@ -34,6 +35,7 @@ app.use(
   }),
 );
 app.disable('x-powered-by');
+app.use(cors());
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
