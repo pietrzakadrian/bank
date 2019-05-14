@@ -128,6 +128,7 @@ class Savings extends Component {
     const { data, COLORS, procent } = this.state;
     const socket = socketIOClient('/', {
       transports: ['websocket'],
+      secure: true,
     });
 
     try {

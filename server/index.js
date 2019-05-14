@@ -2,7 +2,7 @@
 /* eslint consistent-return:0 import/order:0 */
 const express = require('express');
 const logger = require('./utils/logger');
-// const sio_redis = require('socket.io-redis'); uncomment if you want to support the cluster
+const sio_redis = require('socket.io-redis');
 const argv = require('./utils/argv');
 const port = require('./utils/port');
 const setup = require('./middlewares/frontend.middleware');
@@ -18,7 +18,7 @@ const app = express();
 const server = require('http').Server(app, {
   transports: ['websocket', 'polling'],
 });
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, { pingTimeout: 60000 });
 const cron = require('node-cron');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./utils/swagger.json');
@@ -84,7 +84,7 @@ app.get('*.js', (req, res, next) => {
   res.set('Content-Encoding', 'gzip');
   next();
 });
-// io.adapter(sio_redis({ host: 'localhost', port: 6379 })); uncomment if you want to support the cluster
+io.adapter(sio_redis({ host: 'localhost', port: 6379 })); // uncomment if you want to support the cluster
 io.on('connection', socket => {
   socket.on('new notification', id => {
     io.sockets.emit('new notification', id);
@@ -118,14 +118,14 @@ server.listen(port, host, async err => {
 });
 
 // uncomment if you want to support the cluster \/
-// process.on('message', (message, connection) => {
-//   if (message !== 'sticky-session:connection') {
-//     return;
-//   }
-//   server.emit('connection', connection);
+process.on('message', (message, connection) => {
+  if (message !== 'sticky-session:connection') {
+    return;
+  }
+  server.emit('connection', connection);
 
-//   connection.resume();
-// });
+  connection.resume();
+});
 
 function createNecessaryTables() {
   db.currency

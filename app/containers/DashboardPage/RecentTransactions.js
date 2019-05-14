@@ -89,6 +89,7 @@ class RecentTransactions extends Component {
     } = this.props;
     const socket = socketIOClient('/', {
       transports: ['websocket'],
+      secure: true,
     });
 
     try {

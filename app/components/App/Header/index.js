@@ -272,6 +272,7 @@ class Header extends React.Component {
     };
     const socket = socketIOClient('/', {
       transports: ['websocket'],
+      secure: true,
     });
 
     socket.on('connect', () => {
