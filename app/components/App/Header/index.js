@@ -270,7 +270,8 @@ class Header extends React.Component {
       '/history': <FormattedMessage {...messages.historyTitle} />,
       '/settings': <FormattedMessage {...messages.settingsTitle} />,
     };
-    const socket = socketIOClient('/', {
+    const socket = socketIOClient('', {
+      path: '/socket.io',
       transports: ['websocket'],
       secure: true,
     });

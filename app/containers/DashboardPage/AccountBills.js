@@ -104,15 +104,16 @@ class AccountBills extends Component {
       : this.props.getAccountBills();
   }
 
-  // componentDidUpdate() {
-  //   this.props.availableFunds && this.props.accountBills
-  //     ? null
-  //     : this.props.getAccountBills();
-  // }
+  componentDidUpdate() {
+    this.props.availableFunds && this.props.accountBills
+      ? null
+      : this.props.getAccountBills();
+  }
 
   render() {
     const { classes, availableFunds, accountBills, currency } = this.props;
-    const socket = socketIOClient('/', {
+    const socket = socketIOClient('', {
+      path: '/socket.io',
       transports: ['websocket'],
       secure: true,
     });

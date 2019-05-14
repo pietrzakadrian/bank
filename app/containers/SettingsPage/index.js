@@ -223,12 +223,12 @@ class SettingsPage extends React.Component {
       : this.props.onLoadUserData();
   }
 
-  // componentDidUpdate() {
-  //   this.props.userCurrencyId ? null : this.props.onLoadUserCurrencyId();
-  //   this.props.name && this.props.surname && this.props.email
-  //     ? null
-  //     : this.props.onLoadUserData();
-  // }
+  componentDidUpdate() {
+    this.props.userCurrencyId ? null : this.props.onLoadUserCurrencyId();
+    this.props.name && this.props.surname && this.props.email
+      ? null
+      : this.props.onLoadUserData();
+  }
 
   handleKeyPress(e) {
     if (e.key === 'Enter') {

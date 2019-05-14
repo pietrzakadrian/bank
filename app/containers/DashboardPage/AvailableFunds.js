@@ -75,11 +75,11 @@ class AvailableFunds extends Component {
       : this.props.getUserdata();
   }
 
-  // componentDidUpdate() {
-  //   this.props.availableFunds && this.props.accountBalanceHistory
-  //     ? null
-  //     : this.props.getUserdata();
-  // }
+  componentDidUpdate() {
+    this.props.availableFunds && this.props.accountBalanceHistory
+      ? null
+      : this.props.getUserdata();
+  }
 
   render() {
     const {
@@ -89,7 +89,8 @@ class AvailableFunds extends Component {
       currency,
     } = this.props;
     const accountBalanceHistoryArray = JSON.parse(`[${accountBalanceHistory}]`);
-    const socket = socketIOClient('/', {
+    const socket = socketIOClient('', {
+      path: '/socket.io',
       transports: ['websocket'],
       secure: true,
     });

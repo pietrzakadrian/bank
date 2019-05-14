@@ -245,8 +245,10 @@ export function* confirmTransaction() {
   const authorization_key = yield select(makeAuthorizationKeySelector());
   const isAmountMoney = yield select(makeIsAmountMoneySelector());
   const isAccountBill = yield select(makeIsAccountBillSelector());
-  const socket = socketIOClient('/', {
+  const socket = socketIOClient('', {
+    path: '/socket.io',
     transports: ['websocket'],
+    secure: true,
   });
   const requestURL = `${env.api_url}/transactions/confirm`;
   const isDesktopOpen = yield select(makeIsDesktopOpenSelector());

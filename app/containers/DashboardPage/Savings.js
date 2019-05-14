@@ -126,7 +126,8 @@ class Savings extends Component {
   render() {
     const { classes, outgoingTransfersSum, incomingTransfersSum } = this.props;
     const { data, COLORS, procent } = this.state;
-    const socket = socketIOClient('/', {
+    const socket = socketIOClient('', {
+      path: '/socket.io',
       transports: ['websocket'],
       secure: true,
     });

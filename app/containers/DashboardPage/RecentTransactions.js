@@ -87,7 +87,8 @@ class RecentTransactions extends Component {
       recentTransactionsSender,
       userId,
     } = this.props;
-    const socket = socketIOClient('/', {
+    const socket = socketIOClient('', {
+      path: '/socket.io',
       transports: ['websocket'],
       secure: true,
     });
