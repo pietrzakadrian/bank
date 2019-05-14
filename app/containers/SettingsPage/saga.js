@@ -281,8 +281,6 @@ export function* getUserData() {
   const jwt = yield call(getToken);
   const requestURL = `${env.api_url}/users/${token.id}`;
 
-  console.log('wywol');
-
   try {
     const response = yield call(request, requestURL, {
       method: 'GET',
@@ -302,9 +300,7 @@ export function* getUserData() {
 
       yield put(loadUserDataSuccessAction(output));
     }
-  } catch (e) {
-    console.log('e', e);
-  }
+  } catch (e) {}
 }
 
 export function* enterNewCurrency() {
