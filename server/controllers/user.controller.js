@@ -247,6 +247,7 @@ exports.getUserdata = (req, res) => {
       'last_successful_logged',
       'last_failed_logged',
       'last_present_logged',
+      'email',
     ],
   })
     .then(user => {

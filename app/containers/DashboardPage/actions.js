@@ -41,7 +41,30 @@ import {
   GET_INCOMING_TRANSFERS_SUM,
   GET_INCOMING_TRANSFERS_SUM_SUCCESS,
   GET_INCOMING_TRANSFERS_SUM_ERROR,
+  GET_EMAIL,
+  GET_EMAIL_SUCCESS,
+  GET_EMAIL_ERROR,
 } from './constants';
+
+export function getEmailAction() {
+  return {
+    type: GET_EMAIL,
+  };
+}
+
+export function getEmailSuccessAction(email) {
+  return {
+    type: GET_EMAIL_SUCCESS,
+    email,
+  };
+}
+
+export function getEmailErrorAction(error) {
+  return {
+    type: GET_EMAIL_ERROR,
+    error,
+  };
+}
 
 export function getNameAction() {
   return {

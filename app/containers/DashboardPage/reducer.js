@@ -44,11 +44,13 @@ import {
   GET_CURRENCY,
   GET_CURRENCY_SUCCESS,
   GET_CURRENCY_ERROR,
+  GET_EMAIL_SUCCESS,
 } from './constants';
 import {
   ENTER_NEW_NAME_SUCCESS,
   ENTER_NEW_SURNAME_SUCCESS,
   ENTER_NEW_CURRENCY_SUCCESS,
+  ENTER_NEW_EMAIL_SUCCESS,
 } from '../SettingsPage/constants';
 
 export const initialState = fromJS({
@@ -56,6 +58,7 @@ export const initialState = fromJS({
   surname: null,
   lastPresentLogged: null,
   lastSuccessfulLogged: null,
+  email: null,
   availableFunds: null,
   accountBills: null,
   accountBalanceHistory: null,
@@ -69,8 +72,14 @@ export const initialState = fromJS({
 
 function dashboardPageReducer(state = initialState, action) {
   switch (action.type) {
+    case GET_EMAIL_SUCCESS:
+      return state.set('email', action.email);
+
     case ENTER_NEW_CURRENCY_SUCCESS:
       return state.set('availableFunds', null).set('currency', null);
+
+    case ENTER_NEW_EMAIL_SUCCESS:
+      return state.set('email', null);
 
     case ENTER_NEW_NAME_SUCCESS:
       return state.set('name', null);
@@ -91,6 +100,7 @@ function dashboardPageReducer(state = initialState, action) {
         .set('outgoingTransfersSum', null)
         .set('incomingTransfersSum', null)
         .set('error', null)
+        .set('email', null)
         .set('currency', null);
 
     case GET_CURRENCY:

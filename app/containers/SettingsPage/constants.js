@@ -44,6 +44,10 @@ export const LOAD_CURRENCY = 'app/SettingsPage/LOAD_CURRENCY';
 export const LOAD_CURRENCY_SUCCESS = 'app/SettingsPage/LOAD_CURRENCY_SUCCESS';
 export const LOAD_CURRENCY_ERROR = 'app/SettingsPage/LOAD_CURRENCY_ERROR';
 
+export const LOAD_USER_DATA = 'app/SettingsPage/LOAD_USER_DATA';
+export const LOAD_USER_DATA_SUCCESS = 'app/SettingsPage/LOAD_USER_DATA_SUCCESS';
+export const LOAD_USER_DATA_ERROR = 'app/SettingsPage/LOAD_USER_DATA_ERROR';
+
 export const TOGGLE_ALERT_CURRENCY = 'app/SettingsPage/TOGGLE_ALERT_CURRENCY';
 export const CHANGE_NEW_CURRENCY = 'app/SettingsPage/CHANGE_NEW_CURRENCY';
 export const ENTER_NEW_CURRENCY = 'app/SettingsPage/ENTER_NEW_CURRENCY';

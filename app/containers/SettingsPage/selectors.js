@@ -16,6 +16,15 @@ const selectSettingsPageDomain = state =>
  * Default selector used by SettingsPage
  */
 
+const makeNameSelector = () =>
+  createSelector(selectSettingsPageDomain, substate => substate.get('name'));
+
+const makeSurnameSelector = () =>
+  createSelector(selectSettingsPageDomain, substate => substate.get('surname'));
+
+const makeEmailSelector = () =>
+  createSelector(selectSettingsPageDomain, substate => substate.get('email'));
+
 const makeNewPasswordSelector = () =>
   createSelector(selectSettingsPageDomain, substate =>
     substate.get('newPassword'),
@@ -102,4 +111,7 @@ export {
   makeUserCurrencyIdSelector,
   makeOpenAlertSelector,
   makeCurrencyMessageSelector,
+  makeNameSelector,
+  makeSurnameSelector,
+  makeEmailSelector,
 };

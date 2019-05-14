@@ -24,6 +24,9 @@ const makeSurnameSelector = () =>
     substate.get('surname'),
   );
 
+const makeEmailSelector = () =>
+  createSelector(selectDashboardPageDomain, substate => substate.get('email'));
+
 const makeLastPresentLoggedSelector = () =>
   createSelector(selectDashboardPageDomain, substate =>
     substate.get('lastPresentLogged'),
@@ -94,5 +97,6 @@ export {
   makeErrorSelector,
   makeOutgoingTransfersSumSelector,
   makeIncomingTransfersSumSelector,
+  makeEmailSelector,
   makeCurrencySelector,
 };

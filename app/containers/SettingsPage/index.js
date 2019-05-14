@@ -38,6 +38,9 @@ import makeSelectSettingsPage, {
   makeErrorEmailSelector,
   makeUserCurrencyIdSelector,
   makeCurrencyMessageSelector,
+  makeNameSelector,
+  makeSurnameSelector,
+  makeEmailSelector,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -54,6 +57,7 @@ import {
   emptyDataAction,
   saveDataAction,
   loadUserCurrencyIdAction,
+  loadUserDataAction,
 } from './actions';
 
 const styles = theme => ({
@@ -214,11 +218,17 @@ class SettingsPage extends React.Component {
 
   componentDidMount() {
     this.props.userCurrencyId ? null : this.props.onLoadUserCurrencyId();
+    this.props.name && this.props.surname && this.props.email
+      ? null
+      : this.props.onLoadUserData();
   }
 
-  componentDidUpdate() {
-    this.props.userCurrencyId ? null : this.props.onLoadUserCurrencyId();
-  }
+  // componentDidUpdate() {
+  //   this.props.userCurrencyId ? null : this.props.onLoadUserCurrencyId();
+  //   this.props.name && this.props.surname && this.props.email
+  //     ? null
+  //     : this.props.onLoadUserData();
+  // }
 
   handleKeyPress(e) {
     if (e.key === 'Enter') {
@@ -274,58 +284,44 @@ class SettingsPage extends React.Component {
                 <div className={classes.textField}>
                   <FormattedMessage {...messages.changeName} />
                 </div>
-
-                <FormattedMessage {...messages.inputNewName}>
-                  {placeholder => (
-                    <input
-                      key={1}
-                      className={classNames(
-                        classes.formItem,
-                        classes.formSpecial,
-                        {
-                          [classes.formError]: errorName,
-                        },
-                      )}
-                      name="name"
-                      placeholder={placeholder}
-                      type="text"
-                      onChange={onChangeNewName}
-                      onKeyPress={this.handleKeyPress}
-                    />
-                  )}
-                </FormattedMessage>
+                <input
+                  key={1}
+                  className={classNames(classes.formItem, classes.formSpecial, {
+                    [classes.formError]: errorName,
+                  })}
+                  name="name"
+                  value={this.props.name ? this.props.name : this.props.newName}
+                  type="text"
+                  onChange={onChangeNewName}
+                  onKeyPress={this.handleKeyPress}
+                />
 
                 {errorName ? (
                   <div className={classes.textError}>{errorName}</div>
                 ) : null}
-
                 <div className={classes.textField}>
                   <FormattedMessage {...messages.changeSurname} />
                 </div>
-                <FormattedMessage {...messages.inputNewSurname}>
-                  {placeholder => (
-                    <input
-                      key={2}
-                      className={classNames(
-                        classes.formItem,
-                        classes.formSpecial,
-                        {
-                          [classes.formError]: errorSurname,
-                        },
-                      )}
-                      name="surname"
-                      placeholder={placeholder}
-                      type="text"
-                      onChange={onChangeNewSurname}
-                      onKeyPress={this.handleKeyPress}
-                    />
-                  )}
-                </FormattedMessage>
+
+                <input
+                  key={2}
+                  className={classNames(classes.formItem, classes.formSpecial, {
+                    [classes.formError]: errorSurname,
+                  })}
+                  name="surname"
+                  value={
+                    this.props.surname
+                      ? this.props.surname
+                      : this.props.newSurname
+                  }
+                  type="text"
+                  onChange={onChangeNewSurname}
+                  onKeyPress={this.handleKeyPress}
+                />
 
                 {errorSurname ? (
                   <div className={classes.textError}>{errorSurname}</div>
                 ) : null}
-
                 <div className={classes.textField}>
                   <FormattedMessage {...messages.changePassword} />
                 </div>
@@ -348,38 +344,29 @@ class SettingsPage extends React.Component {
                     />
                   )}
                 </FormattedMessage>
-
                 {errorPassword ? (
                   <div className={classes.textError}>{errorPassword}</div>
                 ) : null}
-
                 <div className={classes.textField}>
                   <FormattedMessage {...messages.changeEmail} />
                 </div>
-                <FormattedMessage {...messages.inputNewEmail}>
-                  {placeholder => (
-                    <input
-                      key={4}
-                      className={classNames(
-                        classes.formItem,
-                        classes.formSpecial,
-                        {
-                          [classes.formError]: errorEmail,
-                        },
-                      )}
-                      name="email"
-                      placeholder={placeholder}
-                      type="text"
-                      onChange={onChangeNewEmail}
-                      onKeyPress={this.handleKeyPress}
-                    />
-                  )}
-                </FormattedMessage>
+                <input
+                  key={4}
+                  className={classNames(classes.formItem, classes.formSpecial, {
+                    [classes.formError]: errorEmail,
+                  })}
+                  name="email"
+                  value={
+                    this.props.email ? this.props.email : this.props.newEmail
+                  }
+                  type="text"
+                  onChange={onChangeNewEmail}
+                  onKeyPress={this.handleKeyPress}
+                />
 
                 {errorEmail ? (
                   <div className={classes.textError}>{errorEmail}</div>
                 ) : null}
-
                 {message &&
                 !errorEmail &&
                 !errorName &&
@@ -387,7 +374,6 @@ class SettingsPage extends React.Component {
                 !errorPassword ? (
                   <div className={classes.textMessage}>{message}</div>
                 ) : null}
-
                 <button
                   className={classes.formSubmit}
                   type="submit"
@@ -446,6 +432,9 @@ class SettingsPage extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   settingsPage: makeSelectSettingsPage(),
+  name: makeNameSelector(),
+  surname: makeSurnameSelector(),
+  email: makeEmailSelector(),
   newPassword: makeNewPasswordSelector(),
   newName: makeNewNameSelector(),
   newSurname: makeNewSurnameSelector(),
@@ -472,6 +461,7 @@ function mapDispatchToProps(dispatch) {
     onSaveNewEmail: email => dispatch(enterNewEmailAction(email)),
     onSaveNewPassword: password => dispatch(enterNewPasswordAction(password)),
     onLoadUserCurrencyId: () => dispatch(loadUserCurrencyIdAction()),
+    onLoadUserData: () => dispatch(loadUserDataAction()),
   };
 }
 

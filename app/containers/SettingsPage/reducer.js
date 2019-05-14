@@ -34,9 +34,13 @@ import {
   LOAD_CURRENCY,
   LOAD_CURRENCY_SUCCESS,
   LOAD_USER_CURRENCY_SUCCESS,
+  LOAD_USER_DATA_SUCCESS,
 } from './constants';
 
 export const initialState = fromJS({
+  name: null,
+  surmame: null,
+  email: null,
   newPassword: null,
   newName: null,
   newSurname: null,
@@ -56,13 +60,22 @@ export const initialState = fromJS({
 
 function settingsPageReducer(state = initialState, action) {
   switch (action.type) {
+    case LOAD_USER_DATA_SUCCESS:
+      return state
+        .set('name', action.userData.name)
+        .set('surname', action.userData.surname)
+        .set('email', action.userData.email);
+
     case LOCATION_CHANGE:
       return state
         .set('isLoading', false)
+        .set('name', '')
+        .set('surname', '')
+        .set('email', '')
         .set('newPassword', null)
-        .set('newName', null)
-        .set('newSurname', null)
-        .set('newEmail', null)
+        .set('newName', '')
+        .set('newSurname', '')
+        .set('newEmail', '')
         .set('errorPassword', null)
         .set('errorName', null)
         .set('errorSurname', null)
@@ -103,46 +116,71 @@ function settingsPageReducer(state = initialState, action) {
     case CHANGE_NEW_PASSWORD:
       return state
         .set('newPassword', action.password)
-        .set('errorPassword', null);
+        .set('errorPassword', null)
+        .set('message', null);
     case ENTER_NEW_PASSWORD:
       return state
         .set('newPassword', action.password)
         .set('errorPassword', null);
     case ENTER_NEW_PASSWORD_SUCCESS:
-      return state.set('newPassword', null).set('errorPassword', null);
+      return state.set('newPassword', '').set('errorPassword', null);
     case ENTER_NEW_PASSWORD_ERROR:
       return state
         .set('errorPassword', action.error)
         .set('message', null)
         .set('newPassword', null);
     case CHANGE_NEW_NAME:
-      return state.set('newName', action.name).set('errorName', null);
+      return state
+        .set('newName', action.name)
+        .set('errorName', null)
+        .set('name', '')
+        .set('message', null);
     case ENTER_NEW_NAME:
       return state.set('newName', action.name).set('errorName', null);
     case ENTER_NEW_NAME_SUCCESS:
-      return state.set('newName', null).set('errorName', null);
+      return state
+        .set('name', action.name)
+        .set('errorName', null)
+        .set('newName', '');
     case ENTER_NEW_NAME_ERROR:
       return state
         .set('errorName', action.error)
         .set('message', null)
-        .set('newName', null);
+        .set('newName', '');
     case CHANGE_NEW_SURNAME:
-      return state.set('newSurname', action.surname).set('errorSurname', null);
+      return state
+        .set('newSurname', action.surname)
+        .set('errorSurname', null)
+        .set('surname', '')
+        .set('message', null);
     case ENTER_NEW_SURNAME:
-      return state.set('newSurname', action.surname).set('errorSurname', null);
+      return state
+        .set('newSurname', action.surname)
+        .set('errorSurname', null)
+        .set('surname', '');
     case ENTER_NEW_SURNAME_SUCCESS:
-      return state.set('newSurname', null).set('errorSurname', null);
+      return state
+        .set('newSurname', '')
+        .set('errorSurname', null)
+        .set('surname', action.surname);
     case ENTER_NEW_SURNAME_ERROR:
       return state
         .set('errorSurname', action.error)
         .set('message', null)
-        .set('newSurname', null);
+        .set('newSurname', '');
     case CHANGE_NEW_EMAIL:
-      return state.set('newEmail', action.email).set('errorEmail', null);
+      return state
+        .set('newEmail', action.email)
+        .set('errorEmail', null)
+        .set('email', '')
+        .set('message', null);
     case ENTER_NEW_EMAIL:
       return state.set('newEmail', action.email).set('errorEmail', null);
     case ENTER_NEW_EMAIL_SUCCESS:
-      return state.set('newEmail', null).set('errorEmail', null);
+      return state
+        .set('newEmail', '')
+        .set('errorEmail', null)
+        .set('email', action.email);
     case ENTER_NEW_EMAIL_ERROR:
       return state
         .set('errorEmail', action.error)

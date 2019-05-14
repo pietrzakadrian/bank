@@ -5,7 +5,12 @@ import { takeLatest, call, all, put, select } from 'redux-saga/effects';
 import decode from 'jwt-decode';
 import messages from './messages';
 import env from '../../../server/config/env.config';
-import { SAVE_DATA, LOAD_USER_CURRENCY, ENTER_NEW_CURRENCY } from './constants';
+import {
+  SAVE_DATA,
+  LOAD_USER_CURRENCY,
+  ENTER_NEW_CURRENCY,
+  LOAD_USER_DATA,
+} from './constants';
 
 import {
   makeNewEmailSelector,
@@ -40,6 +45,7 @@ import {
   loadCurrencyAction,
   enterNewCurrencySuccessAction,
   enterNewCurrencyErrorAction,
+  loadUserDataSuccessAction,
 } from './actions';
 
 function* getToken() {
@@ -197,9 +203,9 @@ export function* saveData() {
       });
 
       if (response.success) {
-        email ? yield put(enterNewEmailSuccessAction()) : null;
-        surname ? yield put(enterNewSurnameSuccessAction()) : null;
-        name ? yield put(enterNewNameSuccessAction()) : null;
+        email ? yield put(enterNewEmailSuccessAction(email)) : null;
+        surname ? yield put(enterNewSurnameSuccessAction(surname)) : null;
+        name ? yield put(enterNewNameSuccessAction(name)) : null;
         password ? yield put(enterNewPasswordSuccessAction()) : null;
         yield put(
           saveDataSuccessAction(
@@ -270,6 +276,37 @@ function* loadCurrency() {
   }
 }
 
+export function* getUserData() {
+  const token = yield call(getUserId);
+  const jwt = yield call(getToken);
+  const requestURL = `${env.api_url}/users/${token.id}`;
+
+  console.log('wywol');
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    if (response) {
+      const output = {
+        name: response.user.name,
+        surname: response.user.surname,
+        email: response.user.email,
+      };
+
+      yield put(loadUserDataSuccessAction(output));
+    }
+  } catch (e) {
+    console.log('e', e);
+  }
+}
+
 export function* enterNewCurrency() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
@@ -307,5 +344,6 @@ export function* enterNewCurrency() {
 export default function* settingsPageSaga() {
   yield takeLatest(SAVE_DATA, saveData);
   yield takeLatest(LOAD_USER_CURRENCY, getCurrencyUser);
+  yield takeLatest(LOAD_USER_DATA, getUserData);
   yield takeLatest(ENTER_NEW_CURRENCY, enterNewCurrency);
 }

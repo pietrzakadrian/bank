@@ -33,10 +33,32 @@ import {
   LOAD_USER_CURRENCY,
   LOAD_USER_CURRENCY_SUCCESS,
   LOAD_USER_CURRENCY_ERROR,
+  LOAD_USER_DATA,
+  LOAD_USER_DATA_SUCCESS,
+  LOAD_USER_DATA_ERROR,
   LOAD_CURRENCY,
   LOAD_CURRENCY_SUCCESS,
   LOAD_CURRENCY_ERROR,
 } from './constants';
+
+export function loadUserDataAction() {
+  return {
+    type: LOAD_USER_DATA,
+  };
+}
+
+export function loadUserDataSuccessAction(userData) {
+  return {
+    type: LOAD_USER_DATA_SUCCESS,
+    userData,
+  };
+}
+
+export function loadUserDataErrorAction() {
+  return {
+    type: LOAD_USER_DATA_ERROR,
+  };
+}
 
 export function loadUserCurrencyIdAction() {
   return {
@@ -180,9 +202,10 @@ export function enterNewNameAction(name) {
   };
 }
 
-export function enterNewNameSuccessAction() {
+export function enterNewNameSuccessAction(name) {
   return {
     type: ENTER_NEW_NAME_SUCCESS,
+    name,
   };
 }
 
@@ -207,9 +230,10 @@ export function enterNewSurnameAction(surname) {
   };
 }
 
-export function enterNewSurnameSuccessAction() {
+export function enterNewSurnameSuccessAction(surname) {
   return {
     type: ENTER_NEW_SURNAME_SUCCESS,
+    surname,
   };
 }
 
@@ -234,9 +258,10 @@ export function enterNewEmailAction(email) {
   };
 }
 
-export function enterNewEmailSuccessAction() {
+export function enterNewEmailSuccessAction(email) {
   return {
     type: ENTER_NEW_EMAIL_SUCCESS,
+    email,
   };
 }
 

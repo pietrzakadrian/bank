@@ -44,6 +44,7 @@ import {
   getLastSuccessfulLoggedErrorAction,
   getLastPresentLoggedSuccessAction,
   getLastPresentLoggedErrorAction,
+  getEmailSuccessAction,
 } from './actions';
 import { makeCurrencySelector } from './selectors';
 
@@ -229,6 +230,10 @@ export function* getUserInformation() {
       ? yield put(getSurnameSuccessAction(response.user.surname))
       : yield put(getSurnameErrorAction('error'));
 
+    response.user.email
+      ? yield put(getEmailSuccessAction(response.user.email))
+      : yield put(getSurnameErrorAction('error'));
+
     response.user.last_successful_logged
       ? yield put(
           getLastSuccessfulLoggedSuccessAction(
@@ -246,8 +251,6 @@ export function* getUserInformation() {
     yield put(successLogoutAction()), yield put(push('/login'));
   }
 }
-
-// ----
 
 // Individual exports for testing
 export default function* dashboardPageSaga() {

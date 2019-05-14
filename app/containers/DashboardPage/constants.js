@@ -16,6 +16,10 @@ export const GET_CURRENCY = 'app/DashboardPage/GET_CURRENCY';
 export const GET_CURRENCY_SUCCESS = 'app/DashboardPage/GET_CURRENCY_SUCCESS';
 export const GET_CURRENCY_ERROR = 'app/DashboardPage/GET_CURRENCY_ERROR';
 
+export const GET_EMAIL = 'app/DashboardPage/GET_EMAIL';
+export const GET_EMAIL_SUCCESS = 'app/DashboardPage/GET_EMAIL_SUCCESS';
+export const GET_EMAIL_ERROR = 'app/DashboardPage/GET_EMAIL_ERROR';
+
 export const GET_LAST_PRESENT_LOGGED =
   'app/DashboardPage/GET_LAST_PRESENT_LOGGED';
 export const GET_LAST_PRESENT_LOGGED_SUCCESS =
