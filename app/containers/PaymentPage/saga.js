@@ -188,7 +188,7 @@ export function* isAmountMoney() {
 
 export function* isTransferTitle() {
   const title = yield select(makeTransferTitleSelector());
-  const limit = 15;
+  const limit = 35;
 
   if (title.length > limit) {
     yield put(
