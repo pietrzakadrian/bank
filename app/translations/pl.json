@@ -101,7 +101,7 @@
   "app.containers.PaymentPage.errorTransferTitleIncorrect": "Proszę wprowadzić tytuł",
   "app.containers.PaymentPage.errorTransferTitleLenght": "Wprowadzony tytuł jest zbyt długi",
   "app.containers.PaymentPage.helmetPaymentTitle": "Płatności · Bank Application",
-  "app.containers.PaymentPage.inputAccountNumber": "Wprowadź numer rachunku",
+  "app.containers.PaymentPage.inputAccountNumber": "Wyszukaj numer konta...",
   "app.containers.PaymentPage.inputAmountOfMoney": "Wprowadź kwotę",
   "app.containers.PaymentPage.inputAuthorizationCoder": "Wprowadź kod autoryzacji",
   "app.containers.PaymentPage.inputAuthorizationKey": "Wprowadź klucz autoryzacji",

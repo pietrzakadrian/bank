@@ -331,7 +331,7 @@ class PaymentPage extends React.Component {
     const inputProps = {
       placeholder: intl.formatMessage({
         id: 'app.containers.PaymentPage.inputAccountNumber',
-        defaultMessage: 'Enter the account number',
+        defaultMessage: 'Search for the account number...',
       }),
       value,
       onChange,
@@ -346,6 +346,7 @@ class PaymentPage extends React.Component {
             <div className={classes.textField}>
               <FormattedMessage {...messages.stepAccountNumber} />
             </div>
+
             <Autosuggest
               className={classNames(classes.formItem, {
                 [classes.formError]: error,

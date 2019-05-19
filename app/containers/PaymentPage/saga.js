@@ -221,6 +221,7 @@ export function* registerTransaction() {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${jwt}`,
+          'CSRF-Token': readCookie('XSRF-TOKEN'),
         },
         body: JSON.stringify({
           id_sender,

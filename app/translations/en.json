@@ -101,7 +101,7 @@
   "app.containers.PaymentPage.errorTransferTitleIncorrect": "Please enter the transfer title",
   "app.containers.PaymentPage.errorTransferTitleLenght": "The given transfer title is too long",
   "app.containers.PaymentPage.helmetPaymentTitle": "Payment · Bank Application",
-  "app.containers.PaymentPage.inputAccountNumber": "Enter the account number",
+  "app.containers.PaymentPage.inputAccountNumber": "Search for the account number...",
   "app.containers.PaymentPage.inputAmountOfMoney": "Enter the amount of money",
   "app.containers.PaymentPage.inputAuthorizationCoder": "Enter the authorization code",
   "app.containers.PaymentPage.inputAuthorizationKey": "Enter the authorization key",
