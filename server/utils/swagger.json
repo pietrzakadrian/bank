@@ -61,8 +61,6 @@
             "in": "path",
             "required": true,
             "type": "integer",
-            "maximum": 10,
-            "minimum": 1,
             "format": "int64"
           }
         ],
@@ -116,12 +114,7 @@
               "$ref": "#/definitions/User"
             }
           }
-        ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        }
+        ]
       }
     },
     "/users/login": {
@@ -142,12 +135,7 @@
               "$ref": "#/definitions/User"
             }
           }
-        ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        }
+        ]
       }
     },
     "/users/logout/{userId}": {
@@ -170,11 +158,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -201,12 +184,7 @@
             "minimum": 1,
             "format": "int64"
           }
-        ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        }
+        ]
       }
     },
     "/users/isEmail/{userEmail}": {
@@ -227,12 +205,7 @@
             "maximum": 10,
             "minimum": 1
           }
-        ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        }
+        ]
       }
     },
     "/users/setCurrency/{userId}": {
@@ -255,17 +228,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Pet not found"
-          },
-          "405": {
-            "description": "Validation exception"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -292,11 +254,6 @@
             }
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -323,11 +280,6 @@
             }
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -354,11 +306,6 @@
             }
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -386,11 +333,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -418,11 +360,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -450,11 +387,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -482,11 +414,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -514,11 +441,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -546,11 +468,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -577,12 +494,7 @@
             "minimum": 1,
             "format": "int64"
           }
-        ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        }
+        ]
       },
       "post": {
         "tags": ["currency"],
@@ -603,17 +515,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Pet not found"
-          },
-          "405": {
-            "description": "Validation exception"
-          }
-        },
         "security": [
           {
             "basicAuth": []
@@ -641,11 +542,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -673,17 +569,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Pet not found"
-          },
-          "405": {
-            "description": "Validation exception"
-          }
-        },
         "security": [
           {
             "Bearer": []
@@ -711,11 +596,6 @@
             "format": "int64"
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
         "security": [
           {
             "Bearer": []

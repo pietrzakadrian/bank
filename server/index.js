@@ -2,7 +2,7 @@
 /* eslint consistent-return:0 import/order:0 */
 const express = require('express');
 const logger = require('./utils/logger');
-const sio_redis = require('socket.io-redis');
+// const sio_redis = require('socket.io-redis');
 const argv = require('./utils/argv');
 const port = require('./utils/port');
 const setup = require('./middlewares/frontend.middleware');
@@ -26,6 +26,8 @@ const swaggerDocument = require('./utils/swagger.json');
 const db = require('./config/db.config');
 const env = require('./config/env.config');
 const Op = db.Sequelize.Op;
+const cookieParser = require('cookie-parser');
+const csrf = require('csurf');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -36,6 +38,7 @@ app.use(
 );
 app.disable('x-powered-by');
 app.use(cors());
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -50,15 +53,16 @@ app.use((req, res, next) => {
   }
   next();
 });
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(morgan('dev'));
+
+require('./routes/currency.route.js')(app);
+app.use(csrf({ cookie: true }));
 require('./routes/user.route.js')(app);
 require('./routes/transaction.route.js')(app);
 require('./routes/bill.route.js')(app);
 require('./routes/additional.route.js')(app);
-require('./routes/currency.route.js')(app);
-
-app.use(morgan('dev'));
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {
@@ -76,7 +80,7 @@ db.sequelize.sync({ force: !!isDev }).then(() => {
 });
 
 // Crons Schedule
-cron.schedule('0 0 0 * * *', () => {
+cron.schedule('0 0 */1 * * *', () => {
   require('./crons/currency.cron.js')();
 });
 
@@ -86,7 +90,7 @@ app.get('*.js', (req, res, next) => {
   res.set('Content-Encoding', 'gzip');
   next();
 });
-io.adapter(sio_redis({ host: 'localhost', port: 6379 })); // uncomment if you want to support the cluster
+// io.adapter(sio_redis({ host: 'localhost', port: 6379 })); // uncomment if you want to support the cluster
 io.on('connection', socket => {
   socket.on('new notification', id => {
     io.sockets.emit('new notification', id);

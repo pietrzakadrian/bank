@@ -143,6 +143,7 @@ export class LoginPage extends Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleEnterId = this.handleEnterId.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.readCookie = this.readCookie.bind(this);
     this.Auth = new AuthService();
   }
 
@@ -176,6 +177,17 @@ export class LoginPage extends Component {
       : this.props.isEmptyPassword(
           <FormattedMessage {...messages.passwordEmpty} />,
         );
+  }
+
+  readCookie(name) {
+    const nameEQ = `${name}=`;
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
   }
 
   render() {
@@ -284,6 +296,7 @@ export class LoginPage extends Component {
                       ) : null}
                     </Fragment>,
                   ]}
+
                   <button
                     className={classes.formSubmit}
                     type="submit"

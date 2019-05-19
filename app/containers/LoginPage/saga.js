@@ -37,6 +37,17 @@ export function* isLogin() {
   }
 }
 
+function readCookie(name) {
+  const nameEQ = `${name}=`;
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+
 export function* login() {
   const login = yield select(makeIdSelector());
   const password = yield select(makePasswordSelector());
@@ -46,9 +57,11 @@ export function* login() {
     // Call our request helper (see 'utils/request')
     const response = yield call(request, requestURL, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        'CSRF-Token': readCookie('XSRF-TOKEN'),
       },
       body: JSON.stringify({
         login,

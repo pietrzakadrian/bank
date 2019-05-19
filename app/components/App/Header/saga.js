@@ -49,6 +49,17 @@ export function* isNotification() {
   }
 }
 
+function readCookie(name) {
+  const nameEQ = `${name}=`;
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+
 export function* newNotification() {
   const token = yield call(getUserId);
   const userId = token.id;
@@ -62,6 +73,7 @@ export function* newNotification() {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${yield call(getToken)}`,
+        'CSRF-Token': readCookie('XSRF-TOKEN'),
       },
       body: JSON.stringify({
         userId,
@@ -98,6 +110,7 @@ export function* unsetNotification() {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${yield call(getToken)}`,
+        'CSRF-Token': readCookie('XSRF-TOKEN'),
       },
     });
   } catch (err) {
@@ -117,6 +130,7 @@ export function* logout() {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
+        'CSRF-Token': readCookie('XSRF-TOKEN'),
       },
     });
 
