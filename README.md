@@ -36,7 +36,7 @@ Technology stack:
 1. **NodeJS** with **Express.js** framework
 2. **Sequelize** ORM
 3. **MySQL** database
-4. **RESTful API** with **Bearer token** authorization
+4. **RESTful API** with **Bearer token** authorization and **CSRF** Protection
 5. **[Swagger](http://bank.pietrzakadrian.com/api-docs/)** Documentation
 
 <p align="center">
