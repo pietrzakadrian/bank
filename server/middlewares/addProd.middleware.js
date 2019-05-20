@@ -14,6 +14,7 @@ module.exports = function addProdMiddlewares(app, options) {
 
   app.get('*', (req, res) => {
     res.cookie('_csrf', req.csrfToken());
+
     res.sendFile(path.resolve(outputPath, 'index.html'));
   });
 };
