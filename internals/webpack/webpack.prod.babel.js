@@ -122,10 +122,10 @@ module.exports = require('./webpack.base.babel')({
 
     new WebpackPwaManifest({
       name: 'Bank Application',
-      short_name: 'Bank App',
+      short_name: 'Bank',
       description: 'Electronic Payment System',
       background_color: '#fafafa',
-      theme_color: '#b1624d',
+      theme_color: '#fafafa',
       inject: true,
       ios: true,
       icons: [
