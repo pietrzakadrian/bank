@@ -169,7 +169,7 @@ export function* isAmountMoney() {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
-        'CSRF-Token': readCookie('XSRF-TOKEN'),
+        'CSRF-Token': readCookie('_csrf'),
       },
       body: JSON.stringify({
         id_sender,
@@ -225,7 +225,7 @@ export function* registerTransaction() {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${jwt}`,
-          'CSRF-Token': readCookie('XSRF-TOKEN'),
+          'CSRF-Token': readCookie('_csrf'),
         },
         body: JSON.stringify({
           id_sender,
@@ -278,7 +278,7 @@ export function* confirmTransaction() {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${jwt}`,
-          'CSRF-Token': readCookie('XSRF-TOKEN'),
+          'CSRF-Token': readCookie('_csrf'),
         },
         body: JSON.stringify({
           id_sender,
@@ -338,7 +338,7 @@ export function* getAuthorizationKey() {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${jwt}`,
-          'CSRF-Token': readCookie('XSRF-TOKEN'),
+          'CSRF-Token': readCookie('_csrf'),
         },
         body: JSON.stringify({
           id_sender,

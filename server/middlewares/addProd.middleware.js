@@ -13,7 +13,7 @@ module.exports = function addProdMiddlewares(app, options) {
   app.use(publicPath, express.static(outputPath));
 
   app.get('*', (req, res) => {
-    res.cookie('XSRF-TOKEN', req.csrfToken());
+    res.cookie('_csrf', req.csrfToken());
     res.sendFile(path.resolve(outputPath, 'index.html'));
   });
 };

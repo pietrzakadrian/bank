@@ -220,7 +220,7 @@ function* register() {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'CSRF-Token': readCookie('XSRF-TOKEN'),
+        'CSRF-Token': readCookie('_csrf'),
       },
       body: JSON.stringify({
         login,
