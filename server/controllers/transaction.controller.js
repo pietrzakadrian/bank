@@ -527,9 +527,7 @@ exports.register = (req, res) => {
 
     await nodemailer.createTestAccount();
     const transporter = nodemailer.createTransport({
-      host: env.nodemailer.host,
-      port: env.nodemailer.port,
-      secure: false,
+      service: 'gmail',
       auth: {
         user: env.nodemailer.username,
         pass: env.nodemailer.password,
@@ -834,8 +832,8 @@ exports.register = (req, res) => {
                     amountMoney,
                     authorizationKey,
                     currencyId,
-                  ).catch(() => {
-                    /* just ignore */
+                  ).catch(e => {
+                    console.log('email!!!', e);
                   });
 
                   return res.status(200).json({ success: true });
