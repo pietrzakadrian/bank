@@ -42,4 +42,12 @@ module.exports = function(app) {
     checkToken,
     transactions.getSenderdata,
   );
+
+  // Return Sender's Authorization Key Actions
+  app.post(
+    '/api/transactions/authorizationKey',
+    checkAuth,
+    checkToken,
+    transactions.getAuthorizationKey,
+  );
 };

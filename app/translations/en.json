@@ -110,6 +110,8 @@
   "app.containers.PaymentPage.inputTransferTitle": "Enter the transfer title",
   "app.containers.PaymentPage.keyHasBeenSent": "The authorization key has been sent",
   "app.containers.PaymentPage.nextText": "Next",
+  "app.containers.PaymentPage.noEmailWithoutCode": "I did not receive an email with a code",
+  "app.containers.PaymentPage.yourCodeIs": "Your code is:",
   "app.containers.PaymentPage.paymentEndAccountNumber": "Account number",
   "app.containers.PaymentPage.paymentEndAmountMoney": "Amount money",
   "app.containers.PaymentPage.paymentEndTransferTitle": "Transfer title",

@@ -40,7 +40,30 @@ import {
   GET_CURRENCY,
   GET_CURRENCY_SUCCESS,
   GET_CURRENCY_ERROR,
+  GET_AUTHORIZATION_KEY,
+  GET_AUTHORIZATION_KEY_SUCCESS,
+  GET_AUTHORIZATION_KEY_ERROR,
 } from './constants';
+
+export function getAuthorizationKeyAction() {
+  return {
+    type: GET_AUTHORIZATION_KEY,
+  };
+}
+
+export function getAuthorizationKeySuccessAction(key) {
+  return {
+    type: GET_AUTHORIZATION_KEY_SUCCESS,
+    key,
+  };
+}
+
+export function getAuthorizationKeyErrorAction(error) {
+  return {
+    type: GET_AUTHORIZATION_KEY_ERROR,
+    error,
+  };
+}
 
 export function getCurrencyAction() {
   return {

@@ -87,6 +87,11 @@ const makeSuggestionsSelector = () =>
     substate.get('suggestions'),
   );
 
+const makeAuthorizationKeyWithoutEmailSelector = () =>
+  createSelector(selectPaymentPageDomain, substate =>
+    substate.get('authorizationKeyWithoutMail'),
+  );
+
 const makeCurrencySelector = () =>
   createSelector(selectPaymentPageDomain, substate => substate.get('currency'));
 
@@ -109,4 +114,5 @@ export {
   makeIsSendAuthorizationKeySelector,
   makeRecipientIdSelector,
   makeCurrencySelector,
+  makeAuthorizationKeyWithoutEmailSelector,
 };
