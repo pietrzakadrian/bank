@@ -154,7 +154,9 @@ function paymentPageReducer(state = initialState, action) {
     case ENTER_AMOUNT_MONEY_ERROR:
       return state.set('error', action.error).set('isLoading', false);
     case CHANGE_TRANSFER_TITLE:
-      return state.set('transferTitle', action.transferTitle);
+      return state
+        .set('transferTitle', action.transferTitle)
+        .set('error', null);
     case ENTER_TRANSFER_TITLE:
       return state
         .set('transferTitle', action.transferTitle)
