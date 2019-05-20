@@ -74,9 +74,6 @@ This guide on how to install Bank Application:
         nodemailer: {
             username: 'mail-address@gmail.com',
             password: 'mail-password',
-            host: 'smtp.gmail.com',
-            post: 587,
-            email: 'mail-address@gmail.com',
         },
         adminAccount: {
             login: 1234,
