@@ -297,7 +297,7 @@ export function* confirmTransaction() {
               message: <FormattedMessage {...messages.paymentHasBeenSent} />,
               options: {
                 variant: 'success',
-                autoHideDuration: 2200,
+                autoHideDuration: 3500,
                 className: isDesktopOpen
                   ? 'snackbar-open-menu'
                   : 'snackbar-noopen-menu',
