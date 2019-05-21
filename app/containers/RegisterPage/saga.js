@@ -5,6 +5,7 @@ import request from 'utils/request';
 import { push } from 'connected-react-router/immutable';
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { enqueueSnackbarAction } from 'containers/App/actions';
+import env from '../../../server/config/env.config';
 import {
   ENTER_ID,
   ENTER_PASSWORD,
@@ -165,7 +166,7 @@ export function* isEmail() {
 }
 
 export function* loadCurrency() {
-  const requestURL = `https://bank.pietrzakadrian.com/apiietrzakadrian.com/api/currency`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/currency`;
   try {
     const response = yield call(request, requestURL, {
       method: 'GET',
