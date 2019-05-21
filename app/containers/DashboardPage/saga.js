@@ -211,7 +211,7 @@ export function* getRecentTransactionsData() {
 }
 
 export function* getUserInformation() {
-  const token = yield https://bank.pietrzakadrian.com/api);
+  const token = yield call(getUserId);
   const jwt = yield call(getToken);
   const requestURL = `https://bank.pietrzakadrian.com/api/users/${token.id}`;
 
