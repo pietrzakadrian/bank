@@ -19,9 +19,6 @@ import 'sanitize.css/sanitize.css';
 // Import root app
 import App from 'containers/App';
 
-// Import Services
-import ScrollService from 'services/ScrollService';
-
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
 
@@ -76,9 +73,7 @@ const render = messages => {
         <LanguageProvider messages={messages}>
           <SnackbarProvider maxSnack={1} className="snackbar">
             <ConnectedRouter history={history}>
-              <ScrollService>
-                <App />
-              </ScrollService>
+              <App />
             </ConnectedRouter>
           </SnackbarProvider>
         </LanguageProvider>
