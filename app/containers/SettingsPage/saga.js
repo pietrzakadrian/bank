@@ -313,7 +313,9 @@ export function* getUserData() {
 
       yield put(loadUserDataSuccessAction(output));
     }
-  } catch (e) {}
+  } catch (e) {
+    /* */
+  }
 }
 
 export function* enterNewCurrency() {

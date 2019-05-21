@@ -141,7 +141,7 @@ export function* logout() {
       ? (yield put(successLogoutAction()), yield put(push('/login')))
       : yield put(errorLogoutAction());
   } catch (err) {
-    yield put(errorLogoutAction());
+    // yield put(errorLogoutAction());
   }
 }
 

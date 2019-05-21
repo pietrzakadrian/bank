@@ -87,7 +87,7 @@ export function* getCurrency() {
         : yield put(getCurrencyErrorAction('error'));
     }
   } catch (err) {
-    yield put(successLogoutAction()), yield put(push('/login'));
+    // yield put(successLogoutAction()), yield put(push('/login'));
   }
 }
 
@@ -111,8 +111,8 @@ export function* searchAccountNumber() {
         ? yield put(searchAccountBillsSuccessAction(response))
         : yield put(searchAccountBillsErrorAction('error'));
     } catch (err) {
-      yield put(successLogoutAction());
-      yield put(push('/login'));
+      // yield put(successLogoutAction());
+      // yield put(push('/login'));
     }
   }
 }

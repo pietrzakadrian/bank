@@ -91,7 +91,7 @@ export function* getUserData() {
         : yield put(getCurrencyErrorAction('error'));
     }
   } catch (err) {
-    yield put(successLogoutAction()), yield put(push('/login'));
+    // yield put(successLogoutAction()), yield put(push('/login'));
   }
 }
 
@@ -114,7 +114,7 @@ export function* getAccountBills() {
       ? yield put(getAccountBillsSuccessAction(response[0].account_bill))
       : yield put(getAccountBillsErrorAction('error'));
   } catch (err) {
-    yield put(successLogoutAction());
+    // yield put(successLogoutAction());
   }
 }
 
@@ -149,8 +149,8 @@ export function* getTransfersSum() {
         )
       : yield put(getOutgoingTransfersSumErrorAction('error'));
   } catch (err) {
-    yield put(successLogoutAction());
-    yield put(push('/login'));
+    // yield put(successLogoutAction());
+    // yield put(push('/login'));
   }
 }
 
@@ -173,8 +173,8 @@ function* getRecentTransactionsSender() {
       ? yield put(getRecentTransactionsSenderSuccessAction(response))
       : yield put(getRecentTransactionsSenderErrorAction('error'));
   } catch (err) {
-    yield put(successLogoutAction());
-    yield put(push('/login'));
+    // yield put(successLogoutAction());
+    // yield put(push('/login'));
   }
 }
 
@@ -197,8 +197,8 @@ function* getRecentTransactionsRecipient() {
       ? yield put(getRecentTransactionsRecipientSuccessAction(response))
       : yield put(getRecentTransactionsRecipientSuccessAction('error'));
   } catch (err) {
-    yield put(successLogoutAction());
-    yield put(push('/login'));
+    // yield put(successLogoutAction());
+    // yield put(push('/login'));
   }
 }
 
@@ -248,7 +248,7 @@ export function* getUserInformation() {
         )
       : yield put(getLastPresentLoggedErrorAction('error'));
   } catch (err) {
-    yield put(successLogoutAction()), yield put(push('/login'));
+    // yield put(successLogoutAction()), yield put(push('/login'));
   }
 }
 
