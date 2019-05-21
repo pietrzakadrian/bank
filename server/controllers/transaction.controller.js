@@ -527,9 +527,7 @@ exports.register = (req, res) => {
 
     await nodemailer.createTestAccount();
     const transporter = nodemailer.createTransport({
-      host: env.nodemailer.host,
-      port: env.nodemailer.port,
-      secure: false,
+      service: 'gmail',
       auth: {
         user: env.nodemailer.username,
         pass: env.nodemailer.password,
@@ -834,8 +832,8 @@ exports.register = (req, res) => {
                     amountMoney,
                     authorizationKey,
                     currencyId,
-                  ).catch(() => {
-                    /* just ignore */
+                  ).catch(e => {
+                    console.log('email!!!', e);
                   });
 
                   return res.status(200).json({ success: true });
@@ -1014,6 +1012,39 @@ exports.getTransactionsdata = (req, res) => {
   })
     .then(transactions => {
       res.send(transactions);
+    })
+    .catch(() => {
+      res.status(500).json({ error: 'Internal server error' });
+    });
+};
+
+exports.getAuthorizationKey = (req, res) => {
+  const userId = req.body.id_sender;
+  const recipientId = req.body.recipient_id;
+  const amountMoney = req.body.amount_money;
+  const transferTitle = req.body.transfer_title;
+
+  function setAuthorizationStatus(status) {
+    const authorizationStatus = status;
+    return authorizationStatus;
+  }
+
+  Transaction.findOne({
+    where: {
+      id_sender: userId,
+      id_recipient: recipientId,
+      transfer_title: transferTitle,
+      amount_money: amountMoney,
+      authorization_status: setAuthorizationStatus(0),
+    },
+    attributes: ['authorization_key'],
+    order: [['date_time', 'DESC']],
+  })
+    .then(isAuthorizationKey => {
+      if (isAuthorizationKey) {
+        const authorizationKey = isAuthorizationKey.authorization_key;
+        res.status(200).json({ authorizationKey, success: true });
+      }
     })
     .catch(() => {
       res.status(500).json({ error: 'Internal server error' });

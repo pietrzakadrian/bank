@@ -148,4 +148,12 @@ export default defineMessages({
     id: `${scope}.currency`,
     defaultMessage: 'USD',
   },
+  noEmailWithoutCode: {
+    id: `${scope}.noEmailWithoutCode`,
+    defaultMessage: 'I did not receive an email with a code',
+  },
+  yourCodeIs: {
+    id: `${scope}.yourCodeIs`,
+    defaultMessage: 'Your code is:',
+  },
 });

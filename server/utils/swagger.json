@@ -273,7 +273,7 @@
           {
             "in": "body",
             "name": "body",
-            "description": "Pet object that needs to be added to the store",
+            "description": "Register a new Transactions",
             "required": true,
             "schema": {
               "$ref": "#/definitions/Transaction"
@@ -299,7 +299,7 @@
           {
             "in": "body",
             "name": "body",
-            "description": "Pet object that needs to be added to the store",
+            "description": "Returns User's transactions",
             "required": true,
             "schema": {
               "$ref": "#/definitions/Transaction"
@@ -367,6 +367,34 @@
         ]
       }
     },
+
+    "/transactions/authorizationKey": {
+      "post": {
+        "tags": ["transactions"],
+        "summary": "Returns Recipient's Transaction Authorization Key",
+        "description": "",
+        "operationId": "registerCodeRecipientId",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Returns Recipient's Transaction Authorization Key",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+
     "/bills/{userId}": {
       "get": {
         "tags": ["bills"],

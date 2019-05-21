@@ -43,6 +43,8 @@ import {
   GET_CURRENCY,
   GET_CURRENCY_SUCCESS,
   GET_CURRENCY_ERROR,
+  GET_AUTHORIZATION_KEY_SUCCESS,
+  GET_AUTHORIZATION_KEY_ERROR,
 } from './constants';
 
 export const initialState = fromJS({
@@ -50,6 +52,7 @@ export const initialState = fromJS({
   amountMoney: null,
   transferTitle: null,
   authorizationKey: null,
+  authorizationKeyWithoutMail: null,
   activeStep: 0,
   message: null,
   error: null,
@@ -79,7 +82,8 @@ function paymentPageReducer(state = initialState, action) {
         .set('value', '')
         .set('isSendAuthorizationKey', false)
         .set('recipientId', null)
-        .set('currency', null);
+        .set('currency', null)
+        .set('authorizationKeyWithoutMail', null);
     case LOGOUT_SUCCESS:
       return state
         .set('suggestions', [])
@@ -95,7 +99,15 @@ function paymentPageReducer(state = initialState, action) {
         .set('value', '')
         .set('isSendAuthorizationKey', false)
         .set('recipientId', null)
-        .set('currency', null);
+        .set('currency', null)
+        .set('authorizationKeyWithoutMail', null);
+
+    case GET_AUTHORIZATION_KEY_SUCCESS:
+      return state.set('authorizationKeyWithoutMail', action.key);
+
+    case GET_AUTHORIZATION_KEY_ERROR:
+      return state.set('error', action.error);
+
     case GET_CURRENCY:
       return state;
     case GET_CURRENCY_SUCCESS:
@@ -168,8 +180,7 @@ function paymentPageReducer(state = initialState, action) {
     case CHANGE_AUTHORIZATION_KEY:
       return state
         .set('authorizationKey', action.authorizationKey)
-        .set('error', null)
-        .set('message', null);
+        .set('error', null);
     case ENTER_AUTHORIZATION_KEY:
       return state
         .set('authorizationKey', action.authorizationKey)

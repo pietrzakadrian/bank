@@ -30,6 +30,8 @@ import {
   errorTransferTitleAction,
   getCurrencySuccessAction,
   getCurrencyErrorAction,
+  getAuthorizationKeySuccessAction,
+  getAuthorizationKeyErrorAction,
 } from './actions';
 
 import {
@@ -40,6 +42,7 @@ import {
   ENTER_AUTHORIZATION_KEY,
   SEND_AUTHORIZATION_KEY,
   GET_CURRENCY,
+  GET_AUTHORIZATION_KEY,
 } from './constants';
 import {
   makeValueSelector,
@@ -50,6 +53,7 @@ import {
   makeIsAccountBillSelector,
   makeRecipientIdSelector,
   makeCurrencySelector,
+  makeIsSendAuthorizationKeySelector,
 } from './selectors';
 
 function* getToken() {
@@ -165,7 +169,7 @@ export function* isAmountMoney() {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
-        'CSRF-Token': readCookie('XSRF-TOKEN'),
+        'CSRF-Token': readCookie('_csrf'),
       },
       body: JSON.stringify({
         id_sender,
@@ -221,7 +225,7 @@ export function* registerTransaction() {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${jwt}`,
-          'CSRF-Token': readCookie('XSRF-TOKEN'),
+          'CSRF-Token': readCookie('_csrf'),
         },
         body: JSON.stringify({
           id_sender,
@@ -274,7 +278,7 @@ export function* confirmTransaction() {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${jwt}`,
-          'CSRF-Token': readCookie('XSRF-TOKEN'),
+          'CSRF-Token': readCookie('_csrf'),
         },
         body: JSON.stringify({
           id_sender,
@@ -293,7 +297,7 @@ export function* confirmTransaction() {
               message: <FormattedMessage {...messages.paymentHasBeenSent} />,
               options: {
                 variant: 'success',
-                autoHideDuration: 2200,
+                autoHideDuration: 3500,
                 className: isDesktopOpen
                   ? 'snackbar-open-menu'
                   : 'snackbar-noopen-menu',
@@ -312,9 +316,55 @@ export function* confirmTransaction() {
   }
 }
 
+export function* getAuthorizationKey() {
+  const jwt = yield call(getToken);
+  const id_sender = yield select(makeUserIdSelector());
+  const recipient_id = yield select(makeRecipientIdSelector());
+  const amount_money = yield select(makeAmountMoneySelector());
+  const transfer_title = yield select(makeTransferTitleSelector());
+  const isAmountMoney = yield select(makeIsAmountMoneySelector());
+  const isAccountBill = yield select(makeIsAccountBillSelector());
+  const isSendAuthorizationKey = yield select(
+    makeIsSendAuthorizationKeySelector(),
+  );
+
+  const requestURL = `${env.api_url}/transactions/authorizationKey`;
+
+  if (isAmountMoney && isAccountBill && isSendAuthorizationKey) {
+    try {
+      const response = yield call(request, requestURL, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`,
+          'CSRF-Token': readCookie('_csrf'),
+        },
+        body: JSON.stringify({
+          id_sender,
+          recipient_id,
+          amount_money,
+          transfer_title,
+        }),
+      });
+
+      response.success
+        ? yield put(getAuthorizationKeySuccessAction(response.authorizationKey))
+        : yield put(
+            getAuthorizationKeyErrorAction(
+              <FormattedMessage {...messages.errorAmountOfMoneyIncorrect} />,
+            ),
+          );
+    } catch (err) {
+      /* just ignore */
+    }
+  }
+}
+
 export default function* paymentPageSaga() {
   yield throttle(1000, SEARCH_ACCOUNT_BILLS, searchAccountNumber);
   yield takeLatest(GET_CURRENCY, getCurrency);
+  yield takeLatest(GET_AUTHORIZATION_KEY, getAuthorizationKey);
   yield takeLatest(ENTER_ACCOUNT_NUMBER, isAccountBill);
   yield takeLatest(ENTER_AMOUNT_MONEY, isAmountMoney);
   yield takeLatest(ENTER_TRANSFER_TITLE, isTransferTitle);

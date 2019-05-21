@@ -73,7 +73,7 @@ export function* newNotification() {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${yield call(getToken)}`,
-        'CSRF-Token': readCookie('XSRF-TOKEN'),
+        'CSRF-Token': readCookie('_csrf'),
       },
       body: JSON.stringify({
         userId,
@@ -110,7 +110,7 @@ export function* unsetNotification() {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${yield call(getToken)}`,
-        'CSRF-Token': readCookie('XSRF-TOKEN'),
+        'CSRF-Token': readCookie('_csrf'),
       },
     });
   } catch (err) {
@@ -130,7 +130,7 @@ export function* logout() {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
-        'CSRF-Token': readCookie('XSRF-TOKEN'),
+        'CSRF-Token': readCookie('_csrf'),
       },
     });
 

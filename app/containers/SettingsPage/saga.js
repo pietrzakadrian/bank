@@ -204,7 +204,7 @@ export function* saveData() {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${jwt}`,
-          'CSRF-Token': readCookie('XSRF-TOKEN'),
+          'CSRF-Token': readCookie('_csrf'),
         },
         body: JSON.stringify({
           email: email || null,
@@ -328,7 +328,7 @@ export function* enterNewCurrency() {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
-        'CSRF-Token': readCookie('XSRF-TOKEN'),
+        'CSRF-Token': readCookie('_csrf'),
       },
       body: JSON.stringify({
         currencyId,

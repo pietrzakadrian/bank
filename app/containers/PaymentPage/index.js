@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prettier/prettier */
 /**
@@ -50,6 +51,7 @@ import {
   makeSelectPaymentPage,
   makeIsSendAuthorizationKeySelector,
   makeCurrencySelector,
+  makeAuthorizationKeyWithoutEmailSelector,
 } from './selectors';
 import {
   changeAccountNumberAction,
@@ -70,6 +72,7 @@ import {
   emptyAuthorizationKeyAction,
   sendAuthorizationKeyAction,
   getCurrencyAction,
+  getAuthorizationKeyAction,
 } from './actions';
 
 import reducer from './reducer';
@@ -279,12 +282,18 @@ class PaymentPage extends React.Component {
     this.getSteps = this.getSteps.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.getAuthorizationKey = this.getAuthorizationKey.bind(this);
     this.Auth = new AuthService();
   }
 
   componentDidMount() {
     if (!this.Auth.loggedIn()) this.props.history.push('/');
     this.props.currency ? null : this.props.getCurrency();
+  }
+
+  getAuthorizationKey() {
+    if (!this.props.authorizationKeyWithoutMail)
+      this.props.getAuthorizationKey();
   }
 
   getSteps() {
@@ -323,6 +332,7 @@ class PaymentPage extends React.Component {
       onChangeAuthorizationKey,
       isSendAuthorizationKey,
       onSendAuthorizationKey,
+      authorizationKeyWithoutEmail,
       error,
       message,
       classes,
@@ -486,7 +496,29 @@ class PaymentPage extends React.Component {
                 ) : null}
 
                 {message ? (
-                  <div className={classes.textMessage}>{message}</div>
+                  <Fragment>
+                    <div className={classes.textMessage}>
+                      {message}
+                      <br />
+
+                      {authorizationKeyWithoutEmail ? (
+                        <Fragment>
+                          <FormattedMessage {...messages.yourCodeIs} />{' '}
+                          {authorizationKeyWithoutEmail}
+                        </Fragment>
+                      ) : (
+                        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+                        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                        <span
+                          className="noEmailWithoutCode"
+                          onClick={this.getAuthorizationKey}
+                        >
+                          <FormattedMessage {...messages.noEmailWithoutCode} />
+                        </span>
+                      )}
+                    </div>
+                  </Fragment>
                 ) : null}
 
                 <button
@@ -692,11 +724,13 @@ const mapStateToProps = createStructuredSelector({
   paymentPage: makeSelectPaymentPage(),
   isSendAuthorizationKey: makeIsSendAuthorizationKeySelector(),
   currency: makeCurrencySelector(),
+  authorizationKeyWithoutEmail: makeAuthorizationKeyWithoutEmailSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     getCurrency: () => dispatch(getCurrencyAction()),
+    getAuthorizationKey: () => dispatch(getAuthorizationKeyAction()),
     isEmptyAccountNumber: error => dispatch(emptyAccountNumberAction(error)),
     isEmptyAmountMoney: error => dispatch(emptyAmountNumberAction(error)),
     isEmptyTransferTitle: error => dispatch(emptyTransferTitleAction(error)),

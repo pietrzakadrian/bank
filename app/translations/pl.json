@@ -110,6 +110,8 @@
   "app.containers.PaymentPage.inputTransferTitle": "Wprowadź tytuł",
   "app.containers.PaymentPage.keyHasBeenSent": "Klucz autoryzacji został wysłany",
   "app.containers.PaymentPage.nextText": "Dalej",
+  "app.containers.PaymentPage.noEmailWithoutCode": "Wiadomość z kodem nie dotarła?",
+  "app.containers.PaymentPage.yourCodeIs": "Twój klucz:",
   "app.containers.PaymentPage.paymentEndAccountNumber": "Numer rachunku",
   "app.containers.PaymentPage.paymentEndAmountMoney": "Ilość pieniędzy",
   "app.containers.PaymentPage.paymentEndTransferTitle": "Tytuł przelewu",

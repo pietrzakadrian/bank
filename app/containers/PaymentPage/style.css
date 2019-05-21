@@ -113,3 +113,12 @@
   color: #0029ab;
   font-weight: bold;
 }
+
+.noEmailWithoutCode {
+  color: #0029ab;
+}
+
+.noEmailWithoutCode:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
