@@ -8,8 +8,7 @@ module.exports = (req, res, next) => {
       req.body.userId;
 
     if (req.userData.id === parseInt(id, 10)) {
-      next();
-      return false;
+      return next();
     }
     return res.status(401).json({
       message: 'Auth failed',
