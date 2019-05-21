@@ -12,7 +12,6 @@ import { makeIsDesktopOpenSelector } from 'components/App/Header/selectors';
 import { makeUserIdSelector } from 'containers/App/selectors';
 import { enqueueSnackbarAction } from 'containers/App/actions';
 import socketIOClient from 'socket.io-client';
-import env from '../../../server/config/env.config';
 import messages from './messages';
 
 import {
@@ -68,7 +67,7 @@ function* getUserId() {
 export function* getCurrency() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/bills/${token.id}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/bills/${token.id}`;
   const currency = yield select(makeCurrencySelector());
 
   try {
@@ -94,7 +93,7 @@ export function* getCurrency() {
 export function* searchAccountNumber() {
   const jwt = yield call(getToken);
   const accountNumber = yield select(makeValueSelector());
-  const requestURL = `${env.api_url}/bills/search/${accountNumber}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/bills/search/${accountNumber}`;
 
   if (accountNumber && accountNumber.length !== 26) {
     try {
@@ -120,7 +119,7 @@ export function* searchAccountNumber() {
 export function* isAccountBill() {
   const jwt = yield call(getToken);
   const accountNumber = yield select(makeValueSelector());
-  const requestURL = `${env.api_url}/bills/isAccountBill/${accountNumber}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/bills/isAccountBill/${accountNumber}`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -160,7 +159,7 @@ export function* isAmountMoney() {
   const jwt = yield call(getToken);
   const id_sender = yield select(makeUserIdSelector());
   const amount_money = yield select(makeAmountMoneySelector());
-  const requestURL = `${env.api_url}/bills/isAmountMoney`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/bills/isAmountMoney`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -216,7 +215,7 @@ export function* registerTransaction() {
   const isAmountMoney = yield select(makeIsAmountMoneySelector());
   const isAccountBill = yield select(makeIsAccountBillSelector());
 
-  const requestURL = `${env.api_url}/transactions/register`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/register`;
 
   if (isAmountMoney && isAccountBill) {
     try {
@@ -269,7 +268,7 @@ export function* confirmTransaction() {
     transports: ['websocket'],
     secure: true,
   });
-  const requestURL = `${env.api_url}/transactions/confirm`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/confirm`;
   const isDesktopOpen = yield select(makeIsDesktopOpenSelector());
 
   if (isAmountMoney && isAccountBill) {
@@ -331,7 +330,7 @@ export function* getAuthorizationKey() {
     makeIsSendAuthorizationKeySelector(),
   );
 
-  const requestURL = `${env.api_url}/transactions/authorizationKey`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/authorizationKey`;
 
   if (isAmountMoney && isAccountBill && isSendAuthorizationKey) {
     try {

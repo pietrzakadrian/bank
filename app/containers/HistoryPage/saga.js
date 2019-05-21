@@ -2,7 +2,6 @@ import decode from 'jwt-decode';
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import request from 'utils/request';
 import moment from 'moment';
-import env from '../../../server/config/env.config';
 import { GET_GRID_DATA, GRID_STATE_CHANGE } from './constants';
 import {
   getGridDataSuccessAction,
@@ -11,6 +10,7 @@ import {
   changePageAction,
 } from './actions';
 import { makeCurrentPageSelector, makePageSizeSelector } from './selectors';
+('../../../server/config/env.config');
 
 function* getToken() {
   // Retrieves the user token from localStorage
@@ -35,7 +35,7 @@ function readCookie(name) {
 export function* getGridData() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/transactions/getTransactions`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/getTransactions`;
   const userId = token.id;
   const pageSize = yield select(makePageSizeSelector());
   const currentPage = yield select(makeCurrentPageSelector());
@@ -94,7 +94,7 @@ export function* getGridData() {
 export function* changePage() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/transactions/getTransactions`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/getTransactions`;
   const userId = token.id;
   const pageSize = yield select(makePageSizeSelector());
   const currentPage = yield select(makeCurrentPageSelector());

@@ -4,7 +4,6 @@ import request from 'utils/request';
 import { takeLatest, call, all, put, select } from 'redux-saga/effects';
 import decode from 'jwt-decode';
 import messages from './messages';
-import env from '../../../server/config/env.config';
 import {
   SAVE_DATA,
   LOAD_USER_CURRENCY,
@@ -126,7 +125,7 @@ export function* isSurname() {
 export function* isEmail() {
   const email = yield select(makeNewEmailSelector());
   yield put(enterNewEmailAction(email));
-  const requestURL = `${env.api_url}/users/isEmail/${email}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/users/isEmail/${email}`;
   const re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   const limit = 35;
 
@@ -182,7 +181,7 @@ export function* saveData() {
 
   const jwt = yield call(getToken);
   const token = yield call(getUserId);
-  const requestURL = `${env.api_url}/users/${token.id}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/users/${token.id}`;
 
   yield all([
     password ? call(isPassword) : (password = null),
@@ -241,7 +240,7 @@ export function* saveData() {
 export function* getCurrencyUser() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/bills/${token.id}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/bills/${token.id}`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -267,7 +266,7 @@ export function* getCurrencyUser() {
 
 function* loadCurrency() {
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/currency/`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/currency/`;
 
   try {
     yield put(loadCurrencyAction());
@@ -292,7 +291,7 @@ function* loadCurrency() {
 export function* getUserData() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/users/${token.id}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/users/${token.id}`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -321,7 +320,9 @@ export function* getUserData() {
 export function* enterNewCurrency() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/users/setCurrency/${token.id}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/users/setCurrency/${
+    token.id
+  }`;
   const currencyId = yield select(makeCurrencyIdSelector());
 
   try {

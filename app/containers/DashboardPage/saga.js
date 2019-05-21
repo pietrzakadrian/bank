@@ -5,7 +5,7 @@ import { push } from 'connected-react-router/immutable';
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import request from 'utils/request';
 import { successLogoutAction } from 'components/App/Header/actions';
-import env from '../../../server/config/env.config';
+https://bank.pietrzakadrian.com/api '../../../server/config/env.config';
 import {
   GET_AVAILABLE_FUNDS,
   GET_ACCOUNT_BALANCE_HISTORY,
@@ -60,7 +60,7 @@ function* getUserId() {
 export function* getUserData() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/bills/${token.id}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/bills/${token.id}`;
   const currency = yield select(makeCurrencySelector());
 
   try {
@@ -98,7 +98,7 @@ export function* getUserData() {
 export function* getAccountBills() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/bills/${token.id}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/bills/${token.id}`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -121,7 +121,7 @@ export function* getAccountBills() {
 export function* getTransfersSum() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/bills/${token.id}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/bills/${token.id}`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -157,7 +157,9 @@ export function* getTransfersSum() {
 function* getRecentTransactionsSender() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/transactions/sender/${token.id}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/sender/${
+    token.id
+  }`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -181,7 +183,9 @@ function* getRecentTransactionsSender() {
 function* getRecentTransactionsRecipient() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/transactions/recipient/${token.id}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/recipient/${
+    token.id
+  }`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -208,9 +212,9 @@ export function* getRecentTransactionsData() {
 }
 
 export function* getUserInformation() {
-  const token = yield call(getUserId);
+  const token = yield https://bank.pietrzakadrian.com/api);
   const jwt = yield call(getToken);
-  const requestURL = `${env.api_url}/users/${token.id}`;
+  const requestURL = `https://bank.pietrzakadrian.com/api/users/${token.id}`;
 
   try {
     const response = yield call(request, requestURL, {
