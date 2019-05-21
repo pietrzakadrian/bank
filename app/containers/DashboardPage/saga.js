@@ -5,7 +5,6 @@ import { push } from 'connected-react-router/immutable';
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import request from 'utils/request';
 import { successLogoutAction } from 'components/App/Header/actions';
-https://bank.pietrzakadrian.com/api '../../../server/config/env.config';
 import {
   GET_AVAILABLE_FUNDS,
   GET_ACCOUNT_BALANCE_HISTORY,
