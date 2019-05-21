@@ -217,10 +217,11 @@ function* register() {
   try {
     const response = yield call(request, requestURL, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'CSRF-Token': readCookie('_csrf'),
+        'CSRF-Token': readCookie('XSRF-TOKEN'),
       },
       body: JSON.stringify({
         login,

@@ -44,11 +44,12 @@ export function* getGridData() {
   try {
     const response = yield call(request, requestURL, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
-        'CSRF-Token': readCookie('_csrf'),
+        'CSRF-Token': readCookie('XSRF-TOKEN'),
       },
       body: JSON.stringify({
         userId,
@@ -103,11 +104,12 @@ export function* changePage() {
     yield put(changePageAction());
     const response = yield call(request, requestURL, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
-        'CSRF-Token': readCookie('_csrf'),
+        'CSRF-Token': readCookie('XSRF-TOKEN'),
       },
       body: JSON.stringify({
         userId,

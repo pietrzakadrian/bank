@@ -58,7 +58,15 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(morgan('dev'));
 
 require('./routes/currency.route.js')(app);
-if (!isDev) app.use(csrf({ cookie: true }));
+if (!isDev) {
+  app.use(csrf({ cookie: true }));
+  app.use((req, res, next) => {
+    res.cookie('XSRF-TOKEN', req.csrfToken());
+    res.locals.csrftoken = req.csrfToken();
+    next();
+  });
+}
+
 require('./routes/user.route.js')(app);
 require('./routes/transaction.route.js')(app);
 require('./routes/bill.route.js')(app);

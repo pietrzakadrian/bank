@@ -69,11 +69,12 @@ export function* newNotification() {
   try {
     const response = yield call(request, requestURL, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${yield call(getToken)}`,
-        'CSRF-Token': readCookie('_csrf'),
+        'CSRF-Token': readCookie('XSRF-TOKEN'),
       },
       body: JSON.stringify({
         userId,
@@ -106,11 +107,12 @@ export function* unsetNotification() {
   try {
     yield call(request, requestURL, {
       method: 'PUT',
+      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${yield call(getToken)}`,
-        'CSRF-Token': readCookie('_csrf'),
+        'CSRF-Token': readCookie('XSRF-TOKEN'),
       },
     });
   } catch (err) {
@@ -126,11 +128,12 @@ export function* logout() {
   try {
     const response = yield call(request, requestURL, {
       method: 'PUT',
+      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
-        'CSRF-Token': readCookie('_csrf'),
+        'CSRF-Token': readCookie('XSRF-TOKEN'),
       },
     });
 

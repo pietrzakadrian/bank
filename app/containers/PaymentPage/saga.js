@@ -165,11 +165,12 @@ export function* isAmountMoney() {
   try {
     const response = yield call(request, requestURL, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
-        'CSRF-Token': readCookie('_csrf'),
+        'CSRF-Token': readCookie('XSRF-TOKEN'),
       },
       body: JSON.stringify({
         id_sender,
@@ -221,11 +222,12 @@ export function* registerTransaction() {
     try {
       const response = yield call(request, requestURL, {
         method: 'POST',
+        credentials: 'same-origin',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${jwt}`,
-          'CSRF-Token': readCookie('_csrf'),
+          'CSRF-Token': readCookie('XSRF-TOKEN'),
         },
         body: JSON.stringify({
           id_sender,
@@ -274,11 +276,12 @@ export function* confirmTransaction() {
     try {
       const response = yield call(request, requestURL, {
         method: 'POST',
+        credentials: 'same-origin',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${jwt}`,
-          'CSRF-Token': readCookie('_csrf'),
+          'CSRF-Token': readCookie('XSRF-TOKEN'),
         },
         body: JSON.stringify({
           id_sender,
@@ -334,11 +337,12 @@ export function* getAuthorizationKey() {
     try {
       const response = yield call(request, requestURL, {
         method: 'POST',
+        credentials: 'same-origin',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${jwt}`,
-          'CSRF-Token': readCookie('_csrf'),
+          'CSRF-Token': readCookie('XSRF-TOKEN'),
         },
         body: JSON.stringify({
           id_sender,
