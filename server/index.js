@@ -7,6 +7,7 @@ const argv = require('./utils/argv');
 const port = require('./utils/port');
 const setup = require('./middlewares/frontend.middleware');
 const morgan = require('morgan');
+const newError = require('http-errors');
 const cors = require('cors');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok =
@@ -107,6 +108,18 @@ io.on('connection', socket => {
   socket.on('disconnect', () => {
     io.emit('user disconnected');
   });
+});
+
+// Error handler
+app.use((error, req, res, next) => {
+  if(error.hasOwnProperty('expose')){
+    console.error(new Date(), error);
+    res.status(error.status);
+    return res.json({error: newError(error.status).message, result: null});
+  }else{
+    res.status(error.status);
+    return res.json({error: error.message, result: null});
+  };
 });
 
 // Start your app.

@@ -1,18 +1,19 @@
+const newError = require('http-errors');
 const db = require('../config/db.config.js');
 const Currency = db.currency;
 
 // Return All Currency
-exports.getCurrency = (req, res) => {
+exports.getCurrency = (req, res, next) => {
   Currency.findAll({})
     .then(currency => {
       res.send(currency);
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
-exports.setCurrency = (req, res) => {
+exports.setCurrency = (req, res, next) => {
   const objects = req.body;
 
   Promise.all(
@@ -34,7 +35,7 @@ exports.setCurrency = (req, res) => {
     .then(() => {
       res.status(200).json({ success: true });
     })
-    .catch(e => {
-      res.status(500).json({ error: 'Internal server error', e });
+    .catch(error => {
+      next(newError(500, error));
     });
 };

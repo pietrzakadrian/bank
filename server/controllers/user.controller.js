@@ -2,6 +2,7 @@
 /* eslint-disable no-else-return */
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const newError = require('http-errors');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
 const User = db.users;
@@ -10,7 +11,7 @@ const Additional = db.additionals;
 const Currency = db.currency;
 
 // Register Action
-exports.register = (req, res) => {
+exports.register = (req, res, next) => {
   function getAvailableFunds() {
     const availableFunds = 0;
     return availableFunds;
@@ -83,17 +84,17 @@ exports.register = (req, res) => {
           });
           res.status(200).json({ success: true });
         } catch (e) {
-          res.status(200).json({ error: 'Invalid E-Mail', success: false });
+          next(newError(200, 'Invalid E-mail'));
         }
       });
     } else {
-      res.status(200).json({ error: 'User already exists.', success: false });
+      next(newError(200, 'User already exists'))
     }
   });
 };
 
 // Login Action
-exports.login = (req, res) => {
+exports.login = (req, res, next) => {
   function getTodayDate() {
     const today = new Date();
     return today;
@@ -133,10 +134,7 @@ exports.login = (req, res) => {
       },
       { where: { login: req.body.login } },
     ).then(() => {
-      res.status(200).json({
-        error: 'Auth failed. The password is incorrect.',
-        success: false,
-      });
+      next(newError(200, 'Auth failed. The password is incorrect.'))
     });
   }
 
@@ -152,17 +150,15 @@ exports.login = (req, res) => {
         }
         return setLastFailedLogged();
       }
-      return res
-        .status(200)
-        .json({ error: 'Auth failed. User does not exist', success: false });
+      return next(newError(200, 'Auth failed. User does not exist'));
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
 // Update the Last Successful Logged date
-exports.logout = (req, res) => {
+exports.logout = (req, res, next) => {
   const id = req.params.userId;
 
   function setLastSuccessfulLogged(isUser) {
@@ -178,8 +174,8 @@ exports.logout = (req, res) => {
           success: true,
         });
       })
-      .catch(() => {
-        res.status(500).json({ error: 'Internal server error' });
+      .catch(error => {
+        next(newError(500, error));
       });
   }
 
@@ -195,7 +191,7 @@ exports.logout = (req, res) => {
 };
 
 // Check if the User's Login already exists
-exports.isLogin = (req, res) => {
+exports.isLogin = (req, res, next) => {
   const login = req.params.userLogin;
   User.findOne({
     where: {
@@ -209,13 +205,13 @@ exports.isLogin = (req, res) => {
         res.status(200).json({ isLogin: false });
       }
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
 // Check if the User's Email already exists
-exports.isEmail = (req, res) => {
+exports.isEmail = (req, res, next) => {
   const email = req.params.userEmail;
   User.findOne({
     where: {
@@ -229,13 +225,13 @@ exports.isEmail = (req, res) => {
         res.status(200).json({ isEmail: false });
       }
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
 // Return basic User's Data
-exports.getUserdata = (req, res) => {
+exports.getUserdata = (req, res, next) => {
   const id = req.params.userId;
   User.findOne({
     where: {
@@ -257,13 +253,13 @@ exports.getUserdata = (req, res) => {
         });
       }
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
 // Update basic User's Data
-exports.setUserdata = (req, res) => {
+exports.setUserdata = (req, res, next) => {
   const id = req.params.userId;
 
   User.findOne({
@@ -292,18 +288,18 @@ exports.setUserdata = (req, res) => {
                 res.status(200).json({ success: false });
               }
             })
-            .catch(() => {
-              res.status(500).json({ error: 'Internal server error' });
+            .catch(error => {
+              next(newError(500, error));
             });
         });
       }
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error)); 
     });
 };
 
-exports.setCurrency = (req, res) => {
+exports.setCurrency = (req, res, next) => {
   const id_owner = req.params.userId;
   const id_currency = req.body.currencyId;
 
@@ -447,8 +443,8 @@ exports.setCurrency = (req, res) => {
       .then(() => {
         res.status(200).json({ success: true });
       })
-      .catch(() => {
-        res.status(500).json({ error: 'Internal server error' });
+      .catch(error => {
+        next(newError(500, error))
       });
   }
 
@@ -481,24 +477,15 @@ exports.setCurrency = (req, res) => {
                 /* just ignore */
               }
             } else {
-              res.status(200).json({
-                error: 'You are trying to set the same currency',
-                success: false,
-              });
+              next(newError(200, 'You are trying to set the same currency'));
             }
           } else {
-            res.status(200).json({
-              error: 'You are trying to set a non-existing currency',
-              success: false,
-            });
+            next(newError(200, 'You are trying to set a non-existing currency'));
           }
         });
       }
     });
   } else {
-    res.status(200).json({
-      error: 'currencyId can not be a null',
-      success: false,
-    });
+    next(newError(200, 'currencyId can not be a null'));
   }
 };

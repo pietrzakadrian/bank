@@ -1,6 +1,7 @@
 /* eslint-disable no-lonely-if */
 /* eslint-disable no-else-return */
 const db = require('../config/db.config.js');
+const newError = require('http-errors');
 const User = db.users;
 const Bill = db.bills;
 const Additional = db.additionals;
@@ -332,8 +333,6 @@ module.exports = (req, res, next) => {
       }
     });
   } catch (error) {
-    return res.status(401).json({
-      message: 'Auth failed',
-    });
+    return next(newError(401, 'Auth failed'));
   }
 };

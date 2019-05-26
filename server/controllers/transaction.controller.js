@@ -2,6 +2,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 const nodemailer = require('nodemailer');
+const newError = require('http-errors');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
 const Transaction = db.transactions;
@@ -11,7 +12,7 @@ const User = db.users;
 const Currency = db.currency;
 const Op = db.Sequelize.Op;
 
-exports.confirm = (req, res) => {
+exports.confirm = (req, res, next) => {
   function getTodayDate() {
     const today = new Date();
     return today;
@@ -406,39 +407,26 @@ exports.confirm = (req, res) => {
                     }
                   });
                 } else {
-                  return res.status(200).json({
-                    error:
-                      'Incorrect authorization key or unregistered payment',
-                    success: false,
-                  });
+                  return next(newError(200, 'Incorrect authorization key or unregistered payment'));
                 }
               });
             } else {
-              return res.status(200).json({
-                error: 'Sender does not have enough money',
-                success: false,
-              });
+              return next(newError(200, 'Sender does not have enough money'));
             }
           } else {
-            return res
-              .status(200)
-              .json({ error: 'Sender does not exist', success: false });
+            return next(newError(200, 'Sender does not exist'));
           }
         });
       } else {
-        return res
-          .status(200)
-          .json({ error: 'Attempt payment to myself', success: false });
+        return next(newError(200, 'Attempt payment to myself'));
       }
     } else {
-      return res
-        .status(200)
-        .json({ error: 'Recipient does not exist', success: false });
+      return next(newError(200, 'Recipient does not exist'));
     }
   });
 };
 
-exports.register = (req, res) => {
+exports.register = (req, res, next) => {
   function getTodayDate() {
     const today = new Date();
     return today;
@@ -838,37 +826,25 @@ exports.register = (req, res) => {
 
                   return res.status(200).json({ success: true });
                 }
-                return res.status(200).json({
-                  error: 'Authorization key has been sent',
-                  success: false,
-                });
+                return next(newError(200, 'Authorization key has been sent'));
               });
             } else {
-              return res.status(200).json({
-                error: 'Sender does not have enough money',
-                success: false,
-              });
+              return next(newError(200, 'Sender does not have enough money'));
             }
           } else {
-            return res
-              .status(200)
-              .json({ error: 'Id sender doesnt exist', success: false });
+            return next(newError(200, 'Id sender doesnt exist'));
           }
         });
       } else {
-        return res
-          .status(200)
-          .json({ error: 'Attempt payment to myself', success: false });
+        return next(newError(200, 'Attempt payment to myself'));
       }
     } else {
-      return res
-        .status(200)
-        .json({ error: 'Recipient does not exist', success: false });
+      return next(newError(200, 'Recipient does not exist'));
     }
   });
 };
 
-exports.getRecipientdata = (req, res) => {
+exports.getRecipientdata = (req, res, next) => {
   function setAuthorizationStatus(status) {
     const authorizationStatus = status;
     return authorizationStatus;
@@ -906,12 +882,12 @@ exports.getRecipientdata = (req, res) => {
     .then(transactions => {
       res.send(transactions);
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
-exports.getSenderdata = (req, res) => {
+exports.getSenderdata = (req, res, next) => {
   function setAuthorizationStatus(status) {
     const authorizationStatus = status;
     return authorizationStatus;
@@ -949,12 +925,12 @@ exports.getSenderdata = (req, res) => {
     .then(transactions => {
       res.send(transactions);
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      res.next(newError(500, error));
     });
 };
 
-exports.getTransactionsdata = (req, res) => {
+exports.getTransactionsdata = (req, res, next) => {
   function setAuthorizationStatus(status) {
     const authorizationStatus = status;
     return authorizationStatus;
@@ -1013,12 +989,12 @@ exports.getTransactionsdata = (req, res) => {
     .then(transactions => {
       res.send(transactions);
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
-exports.getAuthorizationKey = (req, res) => {
+exports.getAuthorizationKey = (req, res, next) => {
   const userId = req.body.id_sender;
   const recipientId = req.body.recipient_id;
   const amountMoney = req.body.amount_money;
@@ -1046,7 +1022,7 @@ exports.getAuthorizationKey = (req, res) => {
         res.status(200).json({ authorizationKey, success: true });
       }
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
