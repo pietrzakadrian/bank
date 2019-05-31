@@ -121,7 +121,10 @@ export class DashboardPage extends React.Component {
             rowHeight={9}
             margin={[20, 10]}
             isResizable={false}
-            isDraggable={window.matchMedia('(min-width: 480px)').matches}
+            isDraggable={
+              window.matchMedia('(min-width: 480px)').matches &&
+              window.matchMedia('(min-height: 480px)').matches
+            }
           >
             <div
               key="1"

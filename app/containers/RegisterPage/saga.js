@@ -5,7 +5,7 @@ import request from 'utils/request';
 import { push } from 'connected-react-router/immutable';
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { enqueueSnackbarAction } from 'containers/App/actions';
-import env from '../../../server/config/env.config';
+import env from '../../env';
 import {
   ENTER_ID,
   ENTER_PASSWORD,
@@ -47,7 +47,7 @@ import {
 export function* isLoginRegister() {
   const id = yield select(makeIdSelector());
   const re = /[0-9]+/g;
-  const requestURL = `https://bank.pietrzakadrian.com/api/users/isLogin/${id}`;
+  const requestURL = `${env.API_URL}/api/users/isLogin/${id}`;
   const limit = 12;
 
   if (!re.test(id)) {
@@ -131,7 +131,7 @@ export function* isSurname() {
 
 export function* isEmail() {
   const email = yield select(makeEmailSelector());
-  const requestURL = `https://bank.pietrzakadrian.com/api/users/isEmail/${email}`;
+  const requestURL = `${env.API_URL}/api/users/isEmail/${email}`;
   const re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   const limit = 35;
 
@@ -166,7 +166,7 @@ export function* isEmail() {
 }
 
 export function* loadCurrency() {
-  const requestURL = `https://bank.pietrzakadrian.com/api/currency`;
+  const requestURL = `${env.API_URL}/api/currency`;
   try {
     const response = yield call(request, requestURL, {
       method: 'GET',
@@ -212,7 +212,7 @@ function* register() {
   const surname = yield select(makeSurnameSelector());
   const email = yield select(makeEmailSelector());
   const currencyId = yield select(makeCurrencyIdSelector());
-  const requestURL = `https://bank.pietrzakadrian.com/api/users/register`;
+  const requestURL = `${env.API_URL}/api/users/register`;
 
   try {
     const response = yield call(request, requestURL, {

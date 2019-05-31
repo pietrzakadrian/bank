@@ -1,3 +1,5 @@
+const newError = require('http-errors');
+
 module.exports = (req, res, next) => {
   try {
     const id =
@@ -10,13 +12,8 @@ module.exports = (req, res, next) => {
     if (req.userData.id === parseInt(id, 10)) {
       return next();
     }
-    return res.status(401).json({
-      message: 'Auth failed',
-    });
+    return next(newError(401, 'Auth failed'));
   } catch (error) {
-    return res.status(401).json({
-      message: 'Auth failed',
-      error,
-    });
+    return next(newError(500, error));
   }
 };

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const newError = require('http-errors');
 const env = require('../config/env.config.js');
 
 module.exports = (req, res, next) => {
@@ -9,8 +10,6 @@ module.exports = (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.status(401).json({
-      message: 'Auth failed',
-    });
+    next(newError(401));
   }
 };

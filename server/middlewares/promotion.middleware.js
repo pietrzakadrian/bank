@@ -6,6 +6,7 @@ const Bill = db.bills;
 const Additional = db.additionals;
 const Transaction = db.transactions;
 const Currency = db.currency;
+const newError = require('http-errors');
 
 module.exports = (req, res, next) => {
   function getTodayDate() {
@@ -332,8 +333,6 @@ module.exports = (req, res, next) => {
       }
     });
   } catch (error) {
-    return res.status(401).json({
-      message: 'Auth failed',
-    });
+    return next(newError(401, 'Auth failed'));
   }
 };

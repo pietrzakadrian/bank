@@ -1,3 +1,4 @@
+const newError = require('http-errors');
 const db = require('../config/db.config.js');
 const Additional = db.additionals;
 const Transaction = db.transactions;
@@ -5,7 +6,7 @@ const User = db.users;
 const Currency = db.currency;
 
 // Update User's Notification Status
-exports.isNotification = (req, res) => {
+exports.isNotification = (req, res, next) => {
   const id_owner = req.params.userId;
   Additional.findOne({ where: { id_owner } })
     .then(isUser => {
@@ -23,13 +24,13 @@ exports.isNotification = (req, res) => {
         }
       }
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
 // Update User's Notification Status
-exports.setNotification = (req, res) => {
+exports.setNotification = (req, res, next) => {
   const id_owner = req.params.userId;
   Additional.findOne({ where: { id_owner } }).then(isUser => {
     if (!isUser.notification_status) {
@@ -43,14 +44,14 @@ exports.setNotification = (req, res) => {
         .then(() => {
           res.status(200).json({ success: true });
         })
-        .catch(() => {
-          res.status(500).json({ error: 'Internal server error' });
+        .catch(error => {
+          next(newError(500, error));
         });
     }
   });
 };
 
-exports.unsetNotification = (req, res) => {
+exports.unsetNotification = (req, res, next) => {
   const id_owner = req.params.userId;
   Additional.findOne({ where: { id_owner } }).then(isUser => {
     if (isUser.notification_status) {
@@ -64,14 +65,14 @@ exports.unsetNotification = (req, res) => {
         .then(() => {
           res.status(200).json({ success: true });
         })
-        .catch(() => {
-          res.status(500).json({ error: 'Internal server error' });
+        .catch(error => {
+          next(newError(500, error));
         });
     }
   });
 };
 
-exports.newNotification = (req, res) => {
+exports.newNotification = (req, res, next) => {
   function setAuthorizationStatus(status) {
     const authorizationStatus = status;
     return authorizationStatus;
@@ -113,7 +114,7 @@ exports.newNotification = (req, res) => {
         res.status(200).json({ result: transactions, success: true });
       }
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };

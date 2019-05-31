@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-prototype-builtins */
 /* eslint-disable prefer-destructuring */
 /* eslint consistent-return:0 import/order:0 */
 const express = require('express');
@@ -7,6 +9,7 @@ const argv = require('./utils/argv');
 const port = require('./utils/port');
 const setup = require('./middlewares/frontend.middleware');
 const morgan = require('morgan');
+const newError = require('http-errors');
 const cors = require('cors');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok =
@@ -109,6 +112,17 @@ io.on('connection', socket => {
   });
 });
 
+// Error handler
+app.use((error, res) => {
+  if (error.hasOwnProperty('expose')) {
+    console.error(new Date(), error);
+    res.status(error.status);
+    return res.json({ error: newError(error.status).message, result: null });
+  }
+  res.status(error.status);
+  return res.json({ error: error.message, result: null });
+});
+
 // Start your app.
 server.listen(port, host, async err => {
   if (err) {
@@ -132,14 +146,14 @@ server.listen(port, host, async err => {
 });
 
 // uncomment if you want to support the cluster \/
-process.on('message', (message, connection) => {
-  if (message !== 'sticky-session:connection') {
-    return;
-  }
-  server.emit('connection', connection);
+// process.on('message', (message, connection) => {
+//   if (message !== 'sticky-session:connection') {
+//     return;
+//   }
+//   server.emit('connection', connection);
 
-  connection.resume();
-});
+//   connection.resume();
+// });
 
 function createNecessaryTables() {
   db.currency

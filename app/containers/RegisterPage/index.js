@@ -370,6 +370,7 @@ export class RegisterPage extends React.Component {
                   form="form_register"
                   onChange={onChangeId}
                   onKeyPress={this.handleKeyPress}
+                  value={this.props.id}
                 />
               )}
             </FormattedMessage>
@@ -398,6 +399,7 @@ export class RegisterPage extends React.Component {
                   type="password"
                   onChange={onChangePassword}
                   onKeyPress={this.handleKeyPress}
+                  value={this.props.password}
                 />
               )}
             </FormattedMessage>
@@ -425,6 +427,7 @@ export class RegisterPage extends React.Component {
                   id="register_name"
                   onChange={onChangeName}
                   onKeyPress={this.handleKeyPress}
+                  value={this.props.name}
                 />
               )}
             </FormattedMessage>
@@ -453,6 +456,7 @@ export class RegisterPage extends React.Component {
                   onChange={onChangeSurname}
                   onKeyPress={this.handleKeyPress}
                   form="form_register"
+                  value={this.props.surname}
                 />
               )}
             </FormattedMessage>
@@ -491,6 +495,7 @@ export class RegisterPage extends React.Component {
                   id="register_email"
                   onChange={onChangeEmail}
                   onKeyPress={this.handleKeyPress}
+                  value={this.props.email}
                 />
               )}
             </FormattedMessage>

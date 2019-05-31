@@ -10,7 +10,7 @@ import {
   changePageAction,
 } from './actions';
 import { makeCurrentPageSelector, makePageSizeSelector } from './selectors';
-('../../../server/config/env.config');
+import env from '../../env';
 
 function* getToken() {
   // Retrieves the user token from localStorage
@@ -35,7 +35,7 @@ function readCookie(name) {
 export function* getGridData() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/getTransactions`;
+  const requestURL = `${env.API_URL}/api/transactions/getTransactions`;
   const userId = token.id;
   const pageSize = yield select(makePageSizeSelector());
   const currentPage = yield select(makeCurrentPageSelector());
@@ -94,7 +94,7 @@ export function* getGridData() {
 export function* changePage() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/getTransactions`;
+  const requestURL = `${env.API_URL}/api/transactions/getTransactions`;
   const userId = token.id;
   const pageSize = yield select(makePageSizeSelector());
   const currentPage = yield select(makeCurrentPageSelector());

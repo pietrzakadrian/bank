@@ -1,6 +1,6 @@
 /* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: false}}] */
+const newError = require('http-errors');
 const db = require('../config/db.config.js');
-
 const Bill = db.bills;
 const Additional = db.additionals;
 const User = db.users;
@@ -8,7 +8,7 @@ const Currency = db.currency;
 const Op = db.Sequelize.Op;
 
 // Return All User's Bill Data
-exports.getUsersdata = (req, res) => {
+exports.getUsersdata = (req, res, next) => {
   const partOfAccountBill = req.params.accountBill;
 
   Bill.findAll({
@@ -34,13 +34,13 @@ exports.getUsersdata = (req, res) => {
     .then(bill => {
       res.send(bill);
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
 // Return basic User's Bill Data
-exports.getUserdata = (req, res) => {
+exports.getUserdata = (req, res, next) => {
   const id_owner = req.params.userId;
   Bill.findAll({
     include: [
@@ -69,13 +69,13 @@ exports.getUserdata = (req, res) => {
     .then(bill => {
       res.send(bill);
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
 // Check if the User's Account Bill already exists
-exports.isAccountBill = (req, res) => {
+exports.isAccountBill = (req, res, next) => {
   const account_bill = req.params.accountBill;
   Bill.findOne({
     where: {
@@ -91,13 +91,13 @@ exports.isAccountBill = (req, res) => {
         res.status(200).json({ isAccountBill: false });
       }
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
 // Check if the User's Amount Money correctly
-exports.isAmountMoney = (req, res) => {
+exports.isAmountMoney = (req, res, next) => {
   const senderId = req.body.id_sender;
   const amountMoney = req.body.amount_money;
   Bill.findOne({
@@ -112,7 +112,7 @@ exports.isAmountMoney = (req, res) => {
         res.status(200).json({ isAmountMoney: false });
       }
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };

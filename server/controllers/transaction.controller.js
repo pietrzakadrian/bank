@@ -2,6 +2,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 const nodemailer = require('nodemailer');
+const newError = require('http-errors');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
 const Transaction = db.transactions;
@@ -833,7 +834,7 @@ exports.register = (req, res) => {
                     authorizationKey,
                     currencyId,
                   ).catch(e => {
-                    console.log('email!!!', e);
+                    /* just ignore */
                   });
 
                   return res.status(200).json({ success: true });
@@ -868,7 +869,7 @@ exports.register = (req, res) => {
   });
 };
 
-exports.getRecipientdata = (req, res) => {
+exports.getRecipientdata = (req, res, next) => {
   function setAuthorizationStatus(status) {
     const authorizationStatus = status;
     return authorizationStatus;
@@ -906,12 +907,12 @@ exports.getRecipientdata = (req, res) => {
     .then(transactions => {
       res.send(transactions);
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
-exports.getSenderdata = (req, res) => {
+exports.getSenderdata = (req, res, next) => {
   function setAuthorizationStatus(status) {
     const authorizationStatus = status;
     return authorizationStatus;
@@ -949,12 +950,12 @@ exports.getSenderdata = (req, res) => {
     .then(transactions => {
       res.send(transactions);
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
-exports.getTransactionsdata = (req, res) => {
+exports.getTransactionsdata = (req, res, next) => {
   function setAuthorizationStatus(status) {
     const authorizationStatus = status;
     return authorizationStatus;
@@ -1013,12 +1014,12 @@ exports.getTransactionsdata = (req, res) => {
     .then(transactions => {
       res.send(transactions);
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };
 
-exports.getAuthorizationKey = (req, res) => {
+exports.getAuthorizationKey = (req, res, next) => {
   const userId = req.body.id_sender;
   const recipientId = req.body.recipient_id;
   const amountMoney = req.body.amount_money;
@@ -1046,7 +1047,7 @@ exports.getAuthorizationKey = (req, res) => {
         res.status(200).json({ authorizationKey, success: true });
       }
     })
-    .catch(() => {
-      res.status(500).json({ error: 'Internal server error' });
+    .catch(error => {
+      next(newError(500, error));
     });
 };

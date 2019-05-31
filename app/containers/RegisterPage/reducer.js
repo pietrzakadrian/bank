@@ -172,50 +172,14 @@ function registerPageReducer(state = initialState, action) {
         .set('currency', null)
         .set('errorDataProcessingAgreement', '')
         .set('isLoading', false);
-
     case REGISTER_FAILURE:
       return state.set('error', action.error);
     case REGISTER_STEP_NEXT:
       return state.set('activeStep', state.get('activeStep') + 1);
-    case REGISTER_STEP_BACK: {
-      if (state.get('activeStep') === 1) {
-        return state
-          .set('activeStep', state.get('activeStep') - 1)
-          .set('id', '')
-          .set('error', '');
-      }
-      if (state.get('activeStep') === 2) {
-        return state
-          .set('activeStep', state.get('activeStep') - 1)
-          .set('password', '')
-          .set('error', '');
-      }
-      if (state.get('activeStep') === 3) {
-        return state
-          .set('activeStep', state.get('activeStep') - 1)
-          .set('name', '')
-          .set('error', '');
-      }
-      if (state.get('activeStep') === 4) {
-        return state
-          .set('activeStep', state.get('activeStep') - 1)
-          .set('surname', '')
-          .set('error', '');
-      }
-      if (state.get('activeStep') === 5) {
-        return state
-          .set('activeStep', state.get('activeStep') - 1)
-          .set('error', '');
-      }
-      if (state.get('activeStep') === 6) {
-        return state
-          .set('activeStep', state.get('activeStep') - 1)
-          .set('email', '')
-          .set('error', '')
-          .set('isDataProcessingAgreement', false);
-      }
-      return state.set('activeStep', state.get('activeStep') - 1);
-    }
+    case REGISTER_STEP_BACK:
+      return state
+        .set('activeStep', state.get('activeStep') - 1)
+        .set('error', '');
     default:
       return state;
   }

@@ -77,6 +77,7 @@
     "fontfaceobserver": "2.0.13",
     "history": "4.7.2",
     "hoist-non-react-statics": "3.0.1",
+    "http-errors": "^1.7.2",
     "immutable": "3.8.2",
     "intl": "1.2.5",
     "invariant": "2.2.4",

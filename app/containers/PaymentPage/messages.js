@@ -27,7 +27,7 @@ export default defineMessages({
   },
   inputAccountNumber: {
     id: `${scope}.inputAccountNumber`,
-    defaultMessage: 'Search for the account number...',
+    defaultMessage: 'Search for the account number... *',
   },
   inputAuthorizationCoder: {
     id: `${scope}.inputAuthorizationCoder`,
@@ -155,5 +155,10 @@ export default defineMessages({
   yourCodeIs: {
     id: `${scope}.yourCodeIs`,
     defaultMessage: 'Your code is:',
+  },
+  searchInformation: {
+    id: `${scope}.searchInformation`,
+    defaultMessage:
+      '* You can search for the account number by entering subsequent digits',
   },
 });

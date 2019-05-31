@@ -1,4 +1,5 @@
 /* eslint-disable no-buffer-constructor */
+const newError = require('http-errors');
 const env = require('../config/env.config.js');
 
 module.exports = function(req, res, next) {
@@ -14,9 +15,7 @@ module.exports = function(req, res, next) {
     ) {
       next();
     } else {
-      res
-        .status(401)
-        .json({ message: 'Authentication required', success: false });
+      next(newError(401));
     }
   }
 };

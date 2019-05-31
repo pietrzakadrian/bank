@@ -16,6 +16,7 @@ import {
   errorLogoutAction,
   loadNewNotificationAction,
 } from './actions';
+import env from '../../../env';
 
 function* getToken() {
   // Retrieves the user token from localStorage
@@ -28,7 +29,7 @@ function* getUserId() {
 
 export function* isNotification() {
   const token = yield call(getUserId);
-  const requestURL = `https://bank.pietrzakadrian.com/api/additionals/isNotification/${
+  const requestURL = `${env.API_URL}/api/additionals/isNotification/${
     token.id
   }`;
 
@@ -65,7 +66,7 @@ export function* newNotification() {
   const token = yield call(getUserId);
   const userId = token.id;
   const notificationCount = yield select(makeNotificationCountSelector());
-  const requestURL = `https://bank.pietrzakadrian.com/api/additionals/newNotification`;
+  const requestURL = `${env.API_URL}/api/additionals/newNotification`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -103,7 +104,7 @@ export function* newNotification() {
 
 export function* unsetNotification() {
   const token = yield call(getUserId);
-  const requestURL = `https://bank.pietrzakadrian.com/api/additionals/unsetNotification/${
+  const requestURL = `${env.API_URL}/api/additionals/unsetNotification/${
     token.id
   }`;
 
@@ -126,9 +127,7 @@ export function* unsetNotification() {
 export function* logout() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `https://bank.pietrzakadrian.com/api/users/logout/${
-    token.id
-  }`;
+  const requestURL = `${env.API_URL}/api/users/logout/${token.id}`;
 
   try {
     const response = yield call(request, requestURL, {

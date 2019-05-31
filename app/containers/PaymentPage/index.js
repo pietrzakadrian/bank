@@ -143,6 +143,50 @@ const styles = theme => ({
       cursor: 'pointer',
     },
   },
+
+  formItemAuthCode: {
+    padding: 10,
+    height: 37,
+    [theme.breakpoints.down('sm')]: {
+      width: '84%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '300px',
+    },
+    border: '1px solid grey',
+    display: 'block',
+    margin: '0 auto',
+    backgroundColor: 'white',
+    fontSize: 14,
+    borderRadius: 2,
+  },
+
+  formAuthCode: {
+    [theme.breakpoints.down('sm')]: {
+      width: '95%',
+      marginLeft: '20px',
+    },
+    [theme.breakpoints.down('md')]: {
+      width: '95%',
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '300px',
+      margin: '10px auto 0px',
+    },
+    display: 'block',
+    padding: 5,
+    height: 37,
+    backgroundColor: '#0098db',
+    borderRadius: 2,
+    color: 'white',
+
+    '&:hover': {
+      transition: '0.150s',
+      backgroundColor: '#15a0dd',
+      cursor: 'pointer',
+    },
+  },
+
   formContainer: {
     textAlign: 'center',
     margin: '15px 0',
@@ -208,6 +252,16 @@ const styles = theme => ({
     },
     margin: '0 auto',
     fontSize: 14.5,
+  },
+  textMessageSearch: {
+    textAlign: 'center',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '300px',
+    },
+    margin: '0 auto',
   },
   footerText: {
     textAlign: 'left',
@@ -341,12 +395,13 @@ class PaymentPage extends React.Component {
     const inputProps = {
       placeholder: intl.formatMessage({
         id: 'app.containers.PaymentPage.inputAccountNumber',
-        defaultMessage: 'Search for the account number...',
+        defaultMessage: 'Search for the account number... *',
       }),
       value,
       onChange,
       maxLength: 26,
       onKeyPress: this.handleKeyPress,
+      type: 'number',
     };
 
     switch (step) {
@@ -370,6 +425,8 @@ class PaymentPage extends React.Component {
             />
 
             {error ? <div className={classes.textError}>{error}</div> : null}
+
+            <div className={classes.textMessageSearch}><span className="ba--text-search"><FormattedMessage {...messages.searchInformation} /></span></div>
           </Fragment>
         );
       case 1:
@@ -470,13 +527,15 @@ class PaymentPage extends React.Component {
 
               <br />
 
-              <div className={classes.authoriationCodeContainer}>
+              {window.matchMedia('(min-width: 768px)').matches ? (
+
+                <div className="ba--authoriation-code-container">
                 <FormattedMessage {...messages.inputAuthorizationCoder}>
                   {placeholder => (
                     <input
                       key={3}
                       className={classNames(
-                        classes.formItem,
+                        classes.formItemAuthCode,
                         classes.formSpecial,
                         {
                           [classes.formError]: error,
@@ -524,7 +583,7 @@ class PaymentPage extends React.Component {
                 <button
                   type="button"
                   className={classNames(
-                    classes.formSubmit,
+                    classes.formAuthCode,
                     classes.setAuthorizationCodeBtn,
                   )}
                   onClick={
@@ -536,6 +595,83 @@ class PaymentPage extends React.Component {
                   </span>
                 </button>
               </div>
+
+
+              ) : (
+                <Fragment>
+                <div className="ba--authoriation-code-container">
+                <FormattedMessage {...messages.inputAuthorizationCoder}>
+                  {placeholder => (
+                    <input
+                      key={3}
+                      className={classNames(
+                        classes.formItemAuthCode,
+                        classes.formSpecial,
+                        {
+                          [classes.formError]: error,
+                        },
+                      )}
+                      name="authorizationCode"
+                      placeholder={placeholder}
+                      type="text"
+                      onChange={onChangeAuthorizationKey}
+                      onKeyPress={this.handleKeyPress}
+                    />
+                  )}
+                </FormattedMessage>
+
+                <button
+                  type="button"
+                  className={classNames(
+                    classes.formAuthCode,
+                    classes.setAuthorizationCodeBtn,
+                  )}
+                  onClick={
+                    isSendAuthorizationKey ? null : onSendAuthorizationKey
+                  }
+                >
+                  <span className={classes.buttonText}>
+                    <FormattedMessage {...messages.inputReceiveCode} />
+                  </span>
+                </button>
+              </div>
+
+              {error ? (
+                  <div className={classes.textError}>{error}</div>
+                ) : null}
+
+                {message ? (
+                  <Fragment>
+                    <div className={classes.textMessage}>
+                      {message}
+                      <br />
+
+                      {authorizationKeyWithoutEmail ? (
+                        <Fragment>
+                          <FormattedMessage {...messages.yourCodeIs} />{' '}
+                          {authorizationKeyWithoutEmail}
+                        </Fragment>
+                      ) : (
+                        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+                        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                        <span
+                          className="noEmailWithoutCode"
+                          onClick={this.getAuthorizationKey}
+                        >
+                          <FormattedMessage {...messages.noEmailWithoutCode} />
+                        </span>
+                      )}
+                    </div>
+                  </Fragment>
+                ) : null}
+
+                </Fragment>
+
+
+
+              )}
+
             </div>
           </Fragment>
         );

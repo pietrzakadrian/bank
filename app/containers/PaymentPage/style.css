@@ -122,3 +122,24 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+.ba--text-search {
+  font-size: 9.5px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+@media screen and (max-width: 767px) {
+  .ba--authoriation-code-container {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .ba--authoriation-code-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+}

@@ -6,7 +6,7 @@ import request from 'utils/request';
 import decode from 'jwt-decode';
 import { select, call, put, takeLatest, throttle } from 'redux-saga/effects';
 import { push } from 'connected-react-router/immutable';
-import { successLogoutAction } from 'components/App/Header/actions';
+// import { successLogoutAction } from 'components/App/Header/actions';
 import { FormattedMessage } from 'react-intl';
 import { makeIsDesktopOpenSelector } from 'components/App/Header/selectors';
 import { makeUserIdSelector } from 'containers/App/selectors';
@@ -54,6 +54,7 @@ import {
   makeCurrencySelector,
   makeIsSendAuthorizationKeySelector,
 } from './selectors';
+import env from '../../env';
 
 function* getToken() {
   // Retrieves the user token from localStorage
@@ -67,7 +68,7 @@ function* getUserId() {
 export function* getCurrency() {
   const token = yield call(getUserId);
   const jwt = yield call(getToken);
-  const requestURL = `https://bank.pietrzakadrian.com/api/bills/${token.id}`;
+  const requestURL = `${env.API_URL}/api/bills/${token.id}`;
   const currency = yield select(makeCurrencySelector());
 
   try {
@@ -93,7 +94,10 @@ export function* getCurrency() {
 export function* searchAccountNumber() {
   const jwt = yield call(getToken);
   const accountNumber = yield select(makeValueSelector());
-  const requestURL = `https://bank.pietrzakadrian.com/api/bills/search/${accountNumber}`;
+  const requestURL = `${env.API_URL}/api/bills/search/${accountNumber.replace(
+    /\s+/g,
+    '',
+  )}`;
 
   if (accountNumber && accountNumber.length !== 26) {
     try {
@@ -119,7 +123,7 @@ export function* searchAccountNumber() {
 export function* isAccountBill() {
   const jwt = yield call(getToken);
   const accountNumber = yield select(makeValueSelector());
-  const requestURL = `https://bank.pietrzakadrian.com/api/bills/isAccountBill/${accountNumber}`;
+  const requestURL = `${env.API_URL}/api/bills/isAccountBill/${accountNumber}`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -159,7 +163,7 @@ export function* isAmountMoney() {
   const jwt = yield call(getToken);
   const id_sender = yield select(makeUserIdSelector());
   const amount_money = yield select(makeAmountMoneySelector());
-  const requestURL = `https://bank.pietrzakadrian.com/api/bills/isAmountMoney`;
+  const requestURL = `${env.API_URL}/api/bills/isAmountMoney`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -215,7 +219,7 @@ export function* registerTransaction() {
   const isAmountMoney = yield select(makeIsAmountMoneySelector());
   const isAccountBill = yield select(makeIsAccountBillSelector());
 
-  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/register`;
+  const requestURL = `${env.API_URL}/api/transactions/register`;
 
   if (isAmountMoney && isAccountBill) {
     try {
@@ -268,7 +272,7 @@ export function* confirmTransaction() {
     transports: ['websocket'],
     secure: true,
   });
-  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/confirm`;
+  const requestURL = `${env.API_URL}/api/transactions/confirm`;
   const isDesktopOpen = yield select(makeIsDesktopOpenSelector());
 
   if (isAmountMoney && isAccountBill) {
@@ -330,7 +334,7 @@ export function* getAuthorizationKey() {
     makeIsSendAuthorizationKeySelector(),
   );
 
-  const requestURL = `https://bank.pietrzakadrian.com/api/transactions/authorizationKey`;
+  const requestURL = `${env.API_URL}/api/transactions/authorizationKey`;
 
   if (isAmountMoney && isAccountBill && isSendAuthorizationKey) {
     try {

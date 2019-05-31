@@ -11,6 +11,7 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 import { ENTER_ID, ENTER_PASSWORD } from './constants';
 import messages from './messages';
+import env from '../../env';
 
 import { makeIdSelector, makePasswordSelector } from './selectors';
 import {
@@ -25,7 +26,7 @@ import {
 export function* isLogin() {
   // Select username from store
   const id = yield select(makeIdSelector());
-  const requestURL = `https://bank.pietrzakadrian.com/api/users/isLogin/${id}`;
+  const requestURL = `${env.API_URL}/api/users/isLogin/${id}`;
   try {
     // Call our request helper (see 'utils/request')
     const response = yield call(request, requestURL);
@@ -51,7 +52,7 @@ function readCookie(name) {
 export function* login() {
   const login = yield select(makeIdSelector());
   const password = yield select(makePasswordSelector());
-  const requestURL = `https://bank.pietrzakadrian.com/api/users/login`;
+  const requestURL = `${env.API_URL}/api/users/login`;
 
   try {
     // Call our request helper (see 'utils/request')
