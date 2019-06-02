@@ -2,6 +2,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 const nodemailer = require('nodemailer');
+const { validationResult } = require('express-validator/check');
 const newError = require('http-errors');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
@@ -12,7 +13,7 @@ const User = db.users;
 const Currency = db.currency;
 const Op = db.Sequelize.Op;
 
-exports.confirm = (req, res) => {
+exports.confirm = (req, res, next) => {
   function getTodayDate() {
     const today = new Date();
     return today;
@@ -338,6 +339,11 @@ exports.confirm = (req, res) => {
     });
   }
 
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
+
   Bill.findOne({
     where: {
       account_bill: req.body.account_bill,
@@ -439,7 +445,7 @@ exports.confirm = (req, res) => {
   });
 };
 
-exports.register = (req, res) => {
+exports.register = (req, res, next) => {
   function getTodayDate() {
     const today = new Date();
     return today;
@@ -782,6 +788,11 @@ exports.register = (req, res) => {
     }
   }
 
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
+
   Bill.findOne({
     where: {
       account_bill: req.body.account_bill,
@@ -833,7 +844,7 @@ exports.register = (req, res) => {
                     amountMoney,
                     authorizationKey,
                     currencyId,
-                  ).catch(e => {
+                  ).catch(() => {
                     /* just ignore */
                   });
 
@@ -874,8 +885,13 @@ exports.getRecipientdata = (req, res, next) => {
     const authorizationStatus = status;
     return authorizationStatus;
   }
-
+  const errors = validationResult(req);
   const id_recipient = req.params.recipientId;
+
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
+
   Transaction.findAll({
     limit: 4,
     where: {
@@ -917,8 +933,13 @@ exports.getSenderdata = (req, res, next) => {
     const authorizationStatus = status;
     return authorizationStatus;
   }
-
+  const errors = validationResult(req);
   const id_sender = req.params.senderId;
+
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
+
   Transaction.findAll({
     limit: 4,
     where: {
@@ -961,8 +982,13 @@ exports.getTransactionsdata = (req, res, next) => {
     return authorizationStatus;
   }
 
+  const errors = validationResult(req);
   const userId = req.body.userId;
   const offset = req.body.offset;
+
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
 
   Transaction.findAndCountAll({
     where: {
@@ -1024,10 +1050,15 @@ exports.getAuthorizationKey = (req, res, next) => {
   const recipientId = req.body.recipient_id;
   const amountMoney = req.body.amount_money;
   const transferTitle = req.body.transfer_title;
+  const errors = validationResult(req);
 
   function setAuthorizationStatus(status) {
     const authorizationStatus = status;
     return authorizationStatus;
+  }
+
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
   }
 
   Transaction.findOne({

@@ -1,12 +1,12 @@
 /* eslint-disable no-lonely-if */
 /* eslint-disable no-else-return */
+const newError = require('http-errors');
 const db = require('../config/db.config.js');
 const User = db.users;
 const Bill = db.bills;
 const Additional = db.additionals;
 const Transaction = db.transactions;
 const Currency = db.currency;
-const newError = require('http-errors');
 
 module.exports = (req, res, next) => {
   function getTodayDate() {

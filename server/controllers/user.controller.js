@@ -2,6 +2,7 @@
 /* eslint-disable no-else-return */
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator/check');
 const newError = require('http-errors');
 const db = require('../config/db.config.js');
 const env = require('../config/env.config.js');
@@ -11,7 +12,7 @@ const Additional = db.additionals;
 const Currency = db.currency;
 
 // Register Action
-exports.register = (req, res) => {
+exports.register = (req, res, next) => {
   function getAvailableFunds() {
     const availableFunds = 0;
     return availableFunds;
@@ -51,6 +52,11 @@ exports.register = (req, res) => {
   function getTodayDate() {
     const today = new Date();
     return today;
+  }
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
   }
 
   User.findOne({
@@ -141,6 +147,11 @@ exports.login = (req, res, next) => {
     });
   }
 
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
+
   User.findOne({
     where: {
       login: req.body.login,
@@ -165,6 +176,11 @@ exports.login = (req, res, next) => {
 // Update the Last Successful Logged date
 exports.logout = (req, res, next) => {
   const id = req.params.userId;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
 
   function setLastSuccessfulLogged(isUser) {
     return User.update(
@@ -198,6 +214,12 @@ exports.logout = (req, res, next) => {
 // Check if the User's Login already exists
 exports.isLogin = (req, res, next) => {
   const login = req.params.userLogin;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
+
   User.findOne({
     where: {
       login,
@@ -238,6 +260,12 @@ exports.isEmail = (req, res, next) => {
 // Return basic User's Data
 exports.getUserdata = (req, res, next) => {
   const id = req.params.userId;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
+
   User.findOne({
     where: {
       id,
@@ -266,6 +294,11 @@ exports.getUserdata = (req, res, next) => {
 // Update basic User's Data
 exports.setUserdata = (req, res, next) => {
   const id = req.params.userId;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
 
   User.findOne({
     where: {
@@ -307,6 +340,11 @@ exports.setUserdata = (req, res, next) => {
 exports.setCurrency = (req, res, next) => {
   const id_owner = req.params.userId;
   const id_currency = req.body.currencyId;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
 
   async function getIncomingTransfersSum(id_owner) {
     try {

@@ -3,11 +3,17 @@ module.exports = function(app) {
   const additionals = require('../controllers/additional.controller.js');
   const checkAuth = require('../middlewares/checkAuth.middleware.js');
   const checkToken = require('../middlewares/checkToken.middleware.js');
+  const { check } = require('express-validator/check');
 
   app.get(
     '/api/additionals/isNotification/:userId',
     checkAuth,
     checkToken,
+    [
+      check('userId')
+        .isInt()
+        .exists(),
+    ],
     additionals.isNotification,
   );
 
@@ -15,6 +21,14 @@ module.exports = function(app) {
     '/api/additionals/newNotification/',
     checkAuth,
     checkToken,
+    [
+      check('userId')
+        .isInt()
+        .exists(),
+      check('notificationCount')
+        .isInt()
+        .exists(),
+    ],
     additionals.newNotification,
   );
 
@@ -22,6 +36,11 @@ module.exports = function(app) {
     '/api/additionals/unsetNotification/:userId',
     checkAuth,
     checkToken,
+    [
+      check('userId')
+        .isInt()
+        .exists(),
+    ],
     additionals.unsetNotification,
   );
 };

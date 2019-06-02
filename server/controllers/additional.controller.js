@@ -1,4 +1,5 @@
 const newError = require('http-errors');
+const { validationResult } = require('express-validator/check');
 const db = require('../config/db.config.js');
 const Additional = db.additionals;
 const Transaction = db.transactions;
@@ -7,7 +8,13 @@ const Currency = db.currency;
 
 // Update User's Notification Status
 exports.isNotification = (req, res, next) => {
+  const errors = validationResult(req);
   const id_owner = req.params.userId;
+
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
+
   Additional.findOne({ where: { id_owner } })
     .then(isUser => {
       if (isUser) {
@@ -29,30 +36,14 @@ exports.isNotification = (req, res, next) => {
     });
 };
 
-// Update User's Notification Status
-exports.setNotification = (req, res, next) => {
-  const id_owner = req.params.userId;
-  Additional.findOne({ where: { id_owner } }).then(isUser => {
-    if (!isUser.notification_status) {
-      Additional.update(
-        {
-          notification_status: 1,
-          notification_count: isUser.notification_count + 1,
-        },
-        { where: { id_owner } },
-      )
-        .then(() => {
-          res.status(200).json({ success: true });
-        })
-        .catch(error => {
-          next(newError(500, error));
-        });
-    }
-  });
-};
-
 exports.unsetNotification = (req, res, next) => {
   const id_owner = req.params.userId;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
+
   Additional.findOne({ where: { id_owner } }).then(isUser => {
     if (isUser.notification_status) {
       Additional.update(
@@ -73,13 +64,18 @@ exports.unsetNotification = (req, res, next) => {
 };
 
 exports.newNotification = (req, res, next) => {
+  const errors = validationResult(req);
+  const id_recipient = req.body.userId;
+  const limit = req.body.notificationCount;
+
   function setAuthorizationStatus(status) {
     const authorizationStatus = status;
     return authorizationStatus;
   }
 
-  const id_recipient = req.body.userId;
-  const limit = req.body.notificationCount;
+  if (!errors.isEmpty()) {
+    return next(newError(422, errors.array()));
+  }
 
   Transaction.findAll({
     limit,

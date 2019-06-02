@@ -73,6 +73,7 @@
     "cross-env": "5.2.0",
     "csurf": "^1.10.0",
     "express": "4.16.4",
+    "express-validator": "^5.3.1",
     "farmhash": "^2.1.0",
     "fontfaceobserver": "2.0.13",
     "history": "4.7.2",
