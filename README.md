@@ -62,14 +62,6 @@ This guide on how to install Bank Application:
         password: 'root',
         host: 'localhost',
         dialect: 'mysql',
-        api_url: 'http://localhost:3000/api',
-        pool: {
-            max: 15,
-            min: 5,
-            idle: 20000,
-            evict: 15000,
-            acquire: 30000,
-        },
         SECRET_KEY: 'root',
         nodemailer: {
             username: 'mail-address@gmail.com',
