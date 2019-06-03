@@ -24,7 +24,7 @@ module.exports = function(app) {
       check('transfer_title')
         .exists()
         .isString()
-        .isLength({ max: 35 }),
+        .isLength({ max: 255 }),
       check('authorization_key').exists(),
     ],
     transactions.confirm,

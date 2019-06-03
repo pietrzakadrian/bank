@@ -11,17 +11,23 @@ module.exports = function(app) {
     [
       check('login')
         .isInt()
-        .exists(),
-      check('password').exists(),
+        .exists()
+        .isLength({ max: 20 }),
+      check('password')
+        .exists()
+        .isLength({ max: 255 }),
       check('name')
         .exists()
-        .isString(),
+        .isString()
+        .isLength({ max: 255 }),
       check('surname')
         .exists()
-        .isString(),
+        .isString()
+        .isLength({ max: 255 }),
       check('email')
         .exists()
-        .isEmail(),
+        .isEmail()
+        .isLength({ max: 255 }),
     ],
     users.register,
   );
