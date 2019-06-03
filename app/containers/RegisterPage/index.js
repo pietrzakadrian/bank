@@ -371,6 +371,7 @@ export class RegisterPage extends React.Component {
                   onChange={onChangeId}
                   onKeyPress={this.handleKeyPress}
                   value={this.props.id}
+                  onKeyDown={evt => evt.key === 'e' && evt.preventDefault()}
                 />
               )}
             </FormattedMessage>

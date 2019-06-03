@@ -336,6 +336,7 @@ class PaymentPage extends React.Component {
     this.getSteps = this.getSteps.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.getAuthorizationKey = this.getAuthorizationKey.bind(this);
     this.Auth = new AuthService();
   }
@@ -401,6 +402,7 @@ class PaymentPage extends React.Component {
       onChange,
       maxLength: 26,
       onKeyPress: this.handleKeyPress,
+      onKeyDown: this.handleKeyDown,
       type: 'number',
     };
 
@@ -447,6 +449,7 @@ class PaymentPage extends React.Component {
                   type="number"
                   onChange={onChangeAmountMoney}
                   onKeyPress={this.handleKeyPress}
+                  onKeyDown={this.handleKeyDown}
                 />
               )}
             </FormattedMessage>
@@ -685,6 +688,10 @@ class PaymentPage extends React.Component {
       e.preventDefault();
       this.props.isLoading === false ? this.handleClick(e) : null;
     }
+  }
+
+  handleKeyDown(e) {
+    e.key === 'e' ? e.preventDefault() : null;
   }
 
   handleClick(e) {

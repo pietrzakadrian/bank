@@ -9,6 +9,11 @@ function parseJSON(response) {
   if (response.status === 204 || response.status === 205) {
     return null;
   }
+
+  if (response.status === 422) {
+    return response.status;
+  }
+
   return response.json();
 }
 

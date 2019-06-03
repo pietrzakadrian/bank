@@ -295,8 +295,8 @@ export function* confirmTransaction() {
         }),
       });
 
-      response.success
-        ? (yield put(makePaymentSuccessAction()),
+      if (response.success) {
+        yield put(makePaymentSuccessAction()),
           socket.emit('new notification', recipientId),
           yield put(
             enqueueSnackbarAction({
@@ -310,14 +310,26 @@ export function* confirmTransaction() {
               },
             }),
           ),
-          yield put(push('/dashboard')))
-        : yield put(
-            makePaymentErrorAction(
-              <FormattedMessage {...messages.errorKeyIncorrect} />,
-            ),
-          );
+          yield put(push('/dashboard'));
+      } else if (response === 422) {
+        yield put(
+          makePaymentErrorAction(
+            <FormattedMessage {...messages.errorKeyIncorrect} />,
+          ),
+        );
+      } else {
+        yield put(
+          makePaymentErrorAction(
+            <FormattedMessage {...messages.errorKeyIncorrect} />,
+          ),
+        );
+      }
     } catch (err) {
-      /* just ignore */
+      yield put(
+        makePaymentErrorAction(
+          <FormattedMessage {...messages.errorKeyIncorrect} />,
+        ),
+      );
     }
   }
 }

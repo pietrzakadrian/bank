@@ -38,7 +38,7 @@ module.exports = function(app) {
     [
       check('accountBill')
         .isDecimal()
-        .isLength({ min: 26, max: 26 })
+        .isLength({ max: 26 })
         .exists(),
     ],
     bills.isAccountBill,

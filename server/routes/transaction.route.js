@@ -14,7 +14,7 @@ module.exports = function(app) {
       check('account_bill')
         .isDecimal()
         .exists()
-        .isLength({ min: 26, max: 26 }),
+        .isLength({ max: 26 }),
       check('id_sender')
         .isInt()
         .exists(),
@@ -39,7 +39,7 @@ module.exports = function(app) {
       check('account_bill')
         .isDecimal()
         .exists()
-        .isLength({ min: 26, max: 26 }),
+        .isLength({ max: 26 }),
       check('id_sender')
         .isInt()
         .exists(),
