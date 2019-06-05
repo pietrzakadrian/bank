@@ -12,7 +12,7 @@ import '@babel/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router/immutable';
+import { ConnectedRouter } from 'connected-react-router';
 import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 
@@ -21,10 +21,6 @@ import App from 'containers/App';
 
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
-
-// Import Material UI
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { SnackbarProvider } from 'notistack';
 
 // Load the favicon and the .htaccess file
 /* eslint-disable import/no-unresolved, import/extensions */
@@ -39,45 +35,17 @@ import { translationMessages } from './i18n';
 
 // Create redux store with history
 const initialState = {};
-const { store } = configureStore(initialState, history);
-
-const theme = createMuiTheme({
-  breakpoints: {
-    values: {
-      sm: 480,
-      md: 768,
-      lg: 850,
-    },
-  },
-  typography: {
-    useNextVariants: true,
-    suppressDeprecationWarnings: true,
-  },
-  palette: {
-    primary: {
-      main: '#0098db',
-    },
-    action: {
-      selected: '#15a0dd',
-      hover: '#f7f7f7',
-    },
-  },
-});
-
+const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
 const render = messages => {
   ReactDOM.render(
     <Provider store={store}>
-      <MuiThemeProvider theme={theme}>
-        <LanguageProvider messages={messages}>
-          <SnackbarProvider maxSnack={1} className="snackbar">
-            <ConnectedRouter history={history}>
-              <App />
-            </ConnectedRouter>
-          </SnackbarProvider>
-        </LanguageProvider>
-      </MuiThemeProvider>
+      <LanguageProvider messages={messages}>
+        <ConnectedRouter history={history}>
+          <App />
+        </ConnectedRouter>
+      </LanguageProvider>
     </Provider>,
     MOUNT_NODE,
   );
@@ -98,13 +66,7 @@ if (!window.Intl) {
   new Promise(resolve => {
     resolve(import('intl'));
   })
-    .then(() =>
-      Promise.all([
-        import('intl/locale-data/jsonp/en.js'),
-        import('intl/locale-data/jsonp/de.js'),
-        import('intl/locale-data/jsonp/pl.js'),
-      ]),
-    )
+    .then(() => Promise.all([import('intl/locale-data/jsonp/en.js')]))
     .then(() => render(translationMessages))
     .catch(err => {
       throw err;

@@ -3,50 +3,42 @@
  */
 
 import { createStore, applyMiddleware, compose } from 'redux';
-import { fromJS } from 'immutable';
-import { routerMiddleware } from 'connected-react-router/immutable';
+import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
-import immutableTransform from 'redux-persist-transform-immutable';
-import localForage from 'localforage';
-import { persistReducer } from 'redux-persist';
-import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import createReducer from './reducers';
 
-const persistConfig = {
-  transforms: [
-    immutableTransform({
-      whitelist: ['language', 'header'],
-    }),
-  ],
-  key: 'root',
-  storage: localForage,
-};
-
-const sagaMiddleware = createSagaMiddleware();
-const rootReducer = createReducer();
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 export default function configureStore(initialState = {}, history) {
+  let composeEnhancers = compose;
+  const reduxSagaMonitorOptions = {};
+
+  // If Redux Dev Tools and Saga Dev Tools Extensions are installed, enable them
+  /* istanbul ignore next */
+  if (process.env.NODE_ENV !== 'production' && typeof window === 'object') {
+    /* eslint-disable no-underscore-dangle */
+    if (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
+      composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({});
+
+    // NOTE: Uncomment the code below to restore support for Redux Saga
+    // Dev Tools once it supports redux-saga version 1.x.x
+    // if (window.__SAGA_MONITOR_EXTENSION__)
+    //   reduxSagaMonitorOptions = {
+    //     sagaMonitor: window.__SAGA_MONITOR_EXTENSION__,
+    //   };
+    /* eslint-enable */
+  }
+
+  const sagaMiddleware = createSagaMiddleware(reduxSagaMonitorOptions);
+
   // Create the store with two middlewares
   // 1. sagaMiddleware: Makes redux-sagas work
   // 2. routerMiddleware: Syncs the location/URL path to the state
   const middlewares = [sagaMiddleware, routerMiddleware(history)];
 
-  const enhancers = [applyMiddleware(...middlewares), autoRehydrate()];
-
-  // If Redux DevTools Extension is installed use it, otherwise use Redux compose
-  /* eslint-disable no-underscore-dangle, indent */
-  const composeEnhancers =
-    process.env.NODE_ENV !== 'production' &&
-    typeof window === 'object' &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-      ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
-      : compose;
-  /* eslint-enable */
+  const enhancers = [applyMiddleware(...middlewares)];
 
   const store = createStore(
-    persistedReducer,
-    fromJS(initialState),
+    createReducer(),
+    initialState,
     composeEnhancers(...enhancers),
   );
 
@@ -63,9 +55,5 @@ export default function configureStore(initialState = {}, history) {
     });
   }
 
-  const persistor = persistStore(store, {
-    storage: localForage,
-    whitelist: ['language', 'header'],
-  });
-  return { store, persistor };
+  return store;
 }

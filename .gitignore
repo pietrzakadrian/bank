@@ -3,13 +3,6 @@ coverage
 build
 node_modules
 stats.json
-server/config/env.config.js
-server/config/ecosystem.config.js
-.vscode
-package-lock.json
-yarn.lock
-yarn-error.log
-
 
 # Cruft
 .DS_Store
