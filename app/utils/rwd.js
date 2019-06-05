@@ -1,0 +1,4 @@
+export const PHONE_LANDSCAPE_VIEWPORT_WIDTH = '30em';
+export const TABLET_VIEWPORT_WIDTH = '48em';
+export const TABLET_LANDSCAPE_VIEWPORT_WIDTH = '64em';
+export const DESKTOP_VIEWPORT_WIDTH = '78.75em';
