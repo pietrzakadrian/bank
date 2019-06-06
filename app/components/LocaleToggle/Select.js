@@ -1,22 +1,30 @@
 import styled from 'styled-components';
-import { LINE_GREY } from 'utils/colors';
+import { PRIMARY_DARK, PRIMARY_LIGHT } from 'utils/colors';
 
 const Select = styled.select`
-  font-family: 'Lato';
   display: inline-block;
   width: 100%;
   cursor: pointer;
-  padding: 8px 10px;
+  padding: 9px 11px;
   outline: 0;
-  border: 1px solid ${LINE_GREY};
+  border: 1px solid ${PRIMARY_DARK};
   border-radius: 2px;
-  background: #ffffff;
-  color: #000000;
+  background: ${PRIMARY_LIGHT};
+  color: ${PRIMARY_DARK};
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   text-indent: 0.01px;
   text-overflow: '';
+  height: 37px;
+
+  &:focus {
+    & ~ div {
+      -webkit-transform: translateY(40%) rotate(225deg);
+      -ms-transform: translateY(40%) rotate(225deg);
+      transform: translateY(40%) rotate(225deg);
+    }
+  }
 `;
 
 export default Select;

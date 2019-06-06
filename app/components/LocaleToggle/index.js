@@ -17,14 +17,12 @@ import { appLocales } from '../../i18n';
 
 export function LocaleToggle(props) {
   return (
-    <div>
-      <Toggle
-        value={props.locale}
-        values={appLocales}
-        messages={messages}
-        onToggle={props.onLocaleToggle}
-      />
-    </div>
+    <Toggle
+      value={props.locale}
+      values={appLocales}
+      messages={messages}
+      onToggle={props.onLocaleToggle}
+    />
   );
 }
 
