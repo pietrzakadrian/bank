@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { PRIMARY_DARK, PRIMARY_LIGHT } from 'utils/colors';
+import { PRIMARY_BORDER_GREY, PRIMARY_LIGHT, PRIMARY_DARK } from 'utils/colors';
 
 const Select = styled.select`
   display: inline-block;
@@ -7,7 +7,7 @@ const Select = styled.select`
   cursor: pointer;
   padding: 9px 11px;
   outline: 0;
-  border: 1px solid ${PRIMARY_DARK};
+  border: 1px solid ${PRIMARY_BORDER_GREY};
   border-radius: 2px;
   background: ${PRIMARY_LIGHT};
   color: ${PRIMARY_DARK};

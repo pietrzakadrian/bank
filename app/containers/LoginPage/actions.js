@@ -27,10 +27,9 @@ export function changeLoginAction(login) {
   };
 }
 
-export function enterLoginAction(login) {
+export function enterLoginAction() {
   return {
     type: ENTER_LOGIN,
-    login,
   };
 }
 
@@ -54,10 +53,9 @@ export function changePasswordAction(password) {
   };
 }
 
-export function enterPasswordAction(password) {
+export function enterPasswordAction() {
   return {
     type: ENTER_PASSWORD,
-    password,
   };
 }
 

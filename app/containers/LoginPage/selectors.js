@@ -14,31 +14,31 @@ const selectLoginPageDomain = state => state.loginPage || initialState;
 const makeLoginSelector = () =>
   createSelector(
     selectLoginPageDomain,
-    substate => substate.get('login'),
+    substate => substate.login,
   );
 
 const makePasswordSelector = () =>
   createSelector(
     selectLoginPageDomain,
-    substate => substate.get('password'),
+    substate => substate.password,
   );
 
 const makeErrorSelector = () =>
   createSelector(
     selectLoginPageDomain,
-    substate => substate.get('error'),
+    substate => substate.error,
   );
 
 const makeActiveStepSelector = () =>
   createSelector(
     selectLoginPageDomain,
-    substate => substate.get('activeStep'),
+    substate => substate.activeStep,
   );
 
 const makeIsLoadingSelector = () =>
   createSelector(
     selectLoginPageDomain,
-    substate => substate.get('isLoading'),
+    substate => substate.isLoading,
   );
 
 /**

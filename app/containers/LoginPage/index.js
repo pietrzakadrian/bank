@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
@@ -17,6 +17,7 @@ import Header from 'components/Header';
 import Subheader from 'components/Subheader';
 import Information from 'components/Information';
 import Footer from 'components/Footer';
+import LoginForm from 'components/LoginForm';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -30,7 +31,7 @@ export function LoginPage() {
   useInjectSaga({ key: 'loginPage', saga });
 
   return (
-    <div>
+    <Fragment>
       {/* SEO */}
       <Helmet>
         <FormattedMessage {...messages.helmetLoginTitle}>
@@ -51,12 +52,13 @@ export function LoginPage() {
 
       {/* CONTENT */}
       <Information />
+      <LoginForm />
       {/* CONTENT */}
 
       {/* FOOTER  */}
       <Footer />
       {/* FOOTER  */}
-    </div>
+    </Fragment>
   );
 }
 

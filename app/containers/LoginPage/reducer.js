@@ -35,9 +35,9 @@ const loginPageReducer = (state = initialState, action) =>
     switch (action.type) {
       case CHANGE_LOGIN:
         draft.login = action.login;
+        draft.error = '';
         break;
       case ENTER_LOGIN:
-        draft.login = action.login;
         draft.isLoading = true;
         break;
       case ENTER_LOGIN_SUCCESS:
@@ -50,9 +50,9 @@ const loginPageReducer = (state = initialState, action) =>
         break;
       case CHANGE_PASSWORD:
         draft.password = action.password;
+        draft.error = '';
         break;
       case ENTER_PASSWORD:
-        draft.password = action.password;
         draft.isLoading = true;
         break;
       case ENTER_PASSWORD_SUCCESS:
