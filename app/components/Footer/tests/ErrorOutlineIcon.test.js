@@ -6,7 +6,7 @@ import ErrorOutlineIcon from '../ErrorOutlineIcon';
 describe('<ErrorOutlineIcon />', () => {
   it('should render an <svg> tag', () => {
     const { container } = render(<ErrorOutlineIcon />);
-    expect(container.querySelector('button')).not.toBeNull();
+    expect(container.querySelector('svg')).not.toBeNull();
   });
 
   it('should have a class attribute', () => {
