@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { BORDER_GREY_LIGHT } from 'utils/colors';
 import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
 
-const HeaderWrapper = styled.header`
+const SubheaderWrapper = styled.nav`
   width: 100%;
   height: 55px;
   display: flex;
@@ -16,4 +16,4 @@ const HeaderWrapper = styled.header`
   }
 `;
 
-export default HeaderWrapper;
+export default SubheaderWrapper;

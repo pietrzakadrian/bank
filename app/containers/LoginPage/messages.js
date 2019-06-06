@@ -9,8 +9,12 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.containers.LoginPage';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'This is the LoginPage container!',
+  loginToTheSystem: {
+    id: `${scope}.loginToTheSystem`,
+    defaultMessage: 'Log in',
+  },
+  helmetLoginTitle: {
+    id: `${scope}.helmetPaymentTitle`,
+    defaultMessage: 'Login · Bank Application',
   },
 });
