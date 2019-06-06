@@ -34,8 +34,7 @@ export function LoginPage() {
         <meta name="description" content="Description of LoginPage" />
       </Helmet>
       <Header />
-      <Subheader />
-      {/* <FormattedMessage {...messages.header} /> */}
+      <Subheader title="Log in" />
     </div>
   );
 }

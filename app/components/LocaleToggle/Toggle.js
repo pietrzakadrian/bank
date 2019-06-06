@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Select from './Select';
 import ToggleOption from '../ToggleOption';
 
 function Toggle(props) {
@@ -20,12 +21,9 @@ function Toggle(props) {
   }
 
   return (
-    <div className="select__locale">
-      <select value={props.value} onChange={props.onToggle}>
-        {content}
-      </select>
-      <div className="select_arrow--locale" />
-    </div>
+    <Select value={props.value} onChange={props.onToggle}>
+      {content}
+    </Select>
   );
 }
 

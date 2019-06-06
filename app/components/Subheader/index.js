@@ -13,10 +13,9 @@ import TitleWrapper from './TitleWrapper';
 import LocaleToggleWrapper from './LocaleToggleWrapper';
 
 function Subheader(props) {
-  const { title } = props;
   return (
     <SubheaderWrapper>
-      <TitleWrapper>{title}</TitleWrapper>
+      <TitleWrapper>{props.title}</TitleWrapper>
       <LocaleToggleWrapper>
         <LocaleToggle />
       </LocaleToggleWrapper>

@@ -2,20 +2,14 @@
 
 exports[`<LocaleToggle /> should match the snapshot 1`] = `
 <div>
-  <div
-    class="select__locale"
+  <select
+    class="Select-sc-15n6sxn-0 btfomW"
   >
-    <select>
-      <option
-        class="currency__option"
-        value="en"
-      >
-        EN
-      </option>
-    </select>
-    <div
-      class="select_arrow--locale"
-    />
-  </div>
+    <option
+      value="en"
+    >
+      EN
+    </option>
+  </select>
 </div>
 `;
