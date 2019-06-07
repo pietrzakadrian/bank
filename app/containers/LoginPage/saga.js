@@ -2,7 +2,7 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
 import { makeLoginSelector, makePasswordSelector } from './selectors';
-import { ENTER_LOGIN, ENTER_PASSWORD } from './constants';
+import { ENTER_LOGIN, ENTER_PASSWORD, LOGGED_IN } from './constants';
 
 import {
   enterLoginSuccessAction,
@@ -15,6 +15,10 @@ import {
   loginErrorAction,
 } from './actions';
 import env from '../../env';
+
+export function* isLogged() {
+  if (sessionStorage.getItem('token')) yield put(push('/dashboard'));
+}
 
 export function* handleLogin() {
   const login = yield select(makeLoginSelector());
@@ -78,4 +82,5 @@ function* loginAttempt() {
 export default function* loginPageSaga() {
   yield takeLatest(ENTER_LOGIN, handleLogin);
   yield takeLatest(ENTER_PASSWORD, handlePassword);
+  yield takeLatest(LOGGED_IN, isLogged);
 }

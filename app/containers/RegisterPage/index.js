@@ -1,14 +1,15 @@
 /**
  *
- * LoginPage
+ * RegisterPage
  *
  */
 
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
+import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
 // Import Components
@@ -16,21 +17,20 @@ import Header from 'components/Header';
 import Subheader from 'components/Subheader';
 import Information from 'components/Information';
 import Footer from 'components/Footer';
-import LoginForm from 'components/LoginForm';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import makeSelectRegisterPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-import { loggedInAction } from './actions';
 
-export function LoginPage({ isLogged }) {
-  useInjectReducer({ key: 'loginPage', reducer });
-  useInjectSaga({ key: 'loginPage', saga });
-  useEffect(() => {
-    isLogged();
-  }, []);
+export function RegisterPage() {
+  useInjectReducer({ key: 'registerPage', reducer });
+  useInjectSaga({ key: 'registerPage', saga });
+  // useEffect(() => {
+  //   isLogged();
+  // }, []);
 
   return (
     <Fragment>
@@ -38,31 +38,27 @@ export function LoginPage({ isLogged }) {
         <FormattedMessage {...messages.helmetLoginTitle}>
           {title => <title>{title}</title>}
         </FormattedMessage>
-        <FormattedMessage {...messages.helmetLoginTitle}>
+        {/* <FormattedMessage {...messages.helmetRegisterTitle}>
           {description => <meta name="description" content={description} />}
-        </FormattedMessage>
+        </FormattedMessage> */}
       </Helmet>
 
       <Header />
-      <FormattedMessage {...messages.loginToTheSystem}>
+      <FormattedMessage {...messages.registerText}>
         {title => <Subheader title={title} />}
       </FormattedMessage>
 
       <Information />
-      <LoginForm />
-
       <Footer />
     </Fragment>
   );
 }
 
-LoginPage.propTypes = {
-  isLogged: PropTypes.func,
-};
+RegisterPage.propTypes = {};
 
 function mapDispatchToProps(dispatch) {
   return {
-    isLogged: () => dispatch(loggedInAction()),
+    dispatch,
   };
 }
 
@@ -71,4 +67,4 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export default compose(withConnect)(LoginPage);
+export default compose(withConnect)(RegisterPage);

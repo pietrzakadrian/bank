@@ -18,6 +18,7 @@ import {
   LOGIN,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
+  LOGGED_IN,
 } from './constants';
 
 export function changeLoginAction(login) {
@@ -102,5 +103,11 @@ export function loginErrorAction(error) {
   return {
     type: LOGIN_ERROR,
     error,
+  };
+}
+
+export function loggedInAction() {
+  return {
+    type: LOGGED_IN,
   };
 }
