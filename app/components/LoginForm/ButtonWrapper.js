@@ -9,7 +9,7 @@ import {
 const ButtonWrapper = styled.button`
   display: block;
   margin: 15px auto 10px;
-  height: 36px;
+  height: 35px;
   background-color: ${SECONDARY_BLUE_LIGHT};
   border-radius: 2px;
   color: ${PRIMARY_LIGHT};

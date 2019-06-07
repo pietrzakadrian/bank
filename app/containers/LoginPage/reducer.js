@@ -41,7 +41,6 @@ const loginPageReducer = (state = initialState, action) =>
         draft.isLoading = true;
         break;
       case ENTER_LOGIN_SUCCESS:
-        draft.login = action.login;
         draft.isLoading = false;
         break;
       case ENTER_LOGIN_ERROR:
@@ -76,9 +75,11 @@ const loginPageReducer = (state = initialState, action) =>
         break;
       case STEP_NEXT:
         draft.activeStep += 1;
+        draft.error = '';
         break;
       case STEP_BACK:
         draft.activeStep -= 1;
+        draft.error = '';
         break;
       case LOCATION_CHANGE:
         draft.login = '';

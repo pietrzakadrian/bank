@@ -23,6 +23,7 @@ import {
   changePasswordAction,
   enterLoginAction,
   enterPasswordAction,
+  stepBackAction,
 } from 'containers/LoginPage/actions';
 import messages from './messages';
 
@@ -30,7 +31,9 @@ import LoginFormWrapper from './LoginFormWrapper';
 import LabelWrapper from './LabelWrapper';
 import InputWrapper from './InputWrapper';
 import ButtonWrapper from './ButtonWrapper';
+import ButtonBackWrapper from './ButtonBackWrapper';
 import NavigateNextIcon from './NavigateNextIcon';
+import NavigateBackIcon from './NavigateBackIcon';
 
 function LoginForm({
   login,
@@ -42,6 +45,9 @@ function LoginForm({
   onChangePassword,
   onEnterLogin,
   onEnterPassword,
+  onStepBack,
+  handleKeyDown,
+  handleKeyPress,
 }) {
   return (
     <LoginFormWrapper>
@@ -58,11 +64,16 @@ function LoginForm({
                   key={1}
                   placeholder={placeholder}
                   type="number"
-                  value={login}
+                  value={login || ''}
+                  error={error}
                   onChange={onChangeLogin}
+                  onKeyDown={handleKeyDown}
+                  onKeyPress={handleKeyPress}
                 />
               )}
             </FormattedMessage>
+
+            {error ? <LabelWrapper error={error}>{error}</LabelWrapper> : null}
 
             <ButtonWrapper
               type="button"
@@ -84,12 +95,16 @@ function LoginForm({
                 <InputWrapper
                   key={2}
                   placeholder={placeholder}
-                  type="text"
-                  value={password}
+                  type="password"
+                  value={password || ''}
+                  error={error}
                   onChange={onChangePassword}
+                  onKeyDown={e => handleKeyDown(e, password)}
                 />
               )}
             </FormattedMessage>
+
+            {error ? <LabelWrapper error={error}>{error}</LabelWrapper> : null}
 
             <ButtonWrapper
               type="button"
@@ -98,6 +113,15 @@ function LoginForm({
             >
               <FormattedMessage {...messages.inputLogin} />
             </ButtonWrapper>
+
+            <ButtonBackWrapper
+              type="button"
+              onClick={onStepBack}
+              disabled={isLoading}
+            >
+              <NavigateBackIcon />
+              <FormattedMessage {...messages.backText} />
+            </ButtonBackWrapper>
           </Fragment>
         )}
       </form>
@@ -111,11 +135,13 @@ LoginForm.propTypes = {
   error: PropTypes.string,
   activeStep: PropTypes.number,
   isLoading: PropTypes.bool,
-
   onChangeLogin: PropTypes.func,
   onChangePassword: PropTypes.func,
   onEnterLogin: PropTypes.func,
   onEnterPassword: PropTypes.func,
+  onStepBack: PropTypes.func,
+  handleKeyDown: PropTypes.func,
+  handleKeyPress: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -131,7 +157,15 @@ function mapDispatchToProps(dispatch) {
     onChangeLogin: e => dispatch(changeLoginAction(e.target.value)),
     onChangePassword: e => dispatch(changePasswordAction(e.target.value)),
     onEnterLogin: () => dispatch(enterLoginAction()),
-    onEnterPassword: password => dispatch(enterPasswordAction(password)),
+    onEnterPassword: () => dispatch(enterPasswordAction()),
+    onStepBack: () => dispatch(stepBackAction()),
+    handleKeyPress: e => e.key === 'e' && e.preventDefault(),
+    handleKeyDown: (e, password) =>
+      e.key === 'Enter' &&
+      (e.preventDefault(),
+      !password
+        ? dispatch(enterLoginAction())
+        : dispatch(enterPasswordAction())),
   };
 }
 
