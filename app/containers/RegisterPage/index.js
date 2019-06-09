@@ -4,38 +4,38 @@
  *
  */
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
 // Import Components
 import Header from 'components/Header';
 import Subheader from 'components/Subheader';
 import Information from 'components/Information';
+import RegisterForm from 'components/RegisterForm';
 import Footer from 'components/Footer';
 
 import { useInjectSaga } from 'utils/injectSaga';
+import { isLoggedAction } from 'containers/App/actions';
 import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectRegisterPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
-export function RegisterPage() {
+export function RegisterPage({ isLogged }) {
   useInjectReducer({ key: 'registerPage', reducer });
   useInjectSaga({ key: 'registerPage', saga });
-  // useEffect(() => {
-  //   isLogged();
-  // }, []);
+  useEffect(() => {
+    isLogged();
+  }, []);
 
   return (
     <Fragment>
       <Helmet>
-        <FormattedMessage {...messages.helmetLoginTitle}>
+        <FormattedMessage {...messages.helmetRegisterTitle}>
           {title => <title>{title}</title>}
         </FormattedMessage>
         {/* <FormattedMessage {...messages.helmetRegisterTitle}>
@@ -49,16 +49,19 @@ export function RegisterPage() {
       </FormattedMessage>
 
       <Information />
+      <RegisterForm />
       <Footer />
     </Fragment>
   );
 }
 
-RegisterPage.propTypes = {};
+RegisterPage.propTypes = {
+  isLogged: PropTypes.func,
+};
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    isLogged: () => dispatch(isLoggedAction()),
   };
 }
 

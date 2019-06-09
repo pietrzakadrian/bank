@@ -24,6 +24,8 @@ import {
   enterPasswordAction,
   stepBackAction,
 } from 'containers/LoginPage/actions';
+
+// Import Components
 import FormWrapper from 'components/FormWrapper';
 import LabelWrapper from 'components/LabelWrapper';
 import InputWrapper from 'components/InputWrapper';
@@ -31,6 +33,7 @@ import ButtonWrapper from 'components/ButtonWrapper';
 import ButtonBackWrapper from 'components/ButtonBackWrapper';
 import NavigateNextIcon from 'components/NavigateNextIcon';
 import NavigateBackIcon from 'components/NavigateBackIcon';
+
 import messages from './messages';
 
 function LoginForm({
@@ -43,7 +46,7 @@ function LoginForm({
   onChangePassword,
   onEnterLogin,
   onEnterPassword,
-  onStepBack,
+  handleStepBack,
   handleKeyDown,
   handleKeyPress,
 }) {
@@ -114,7 +117,7 @@ function LoginForm({
 
             <ButtonBackWrapper
               type="button"
-              onClick={onStepBack}
+              onClick={handleStepBack}
               disabled={isLoading}
             >
               <NavigateBackIcon />
@@ -137,7 +140,7 @@ LoginForm.propTypes = {
   onChangePassword: PropTypes.func,
   onEnterLogin: PropTypes.func,
   onEnterPassword: PropTypes.func,
-  onStepBack: PropTypes.func,
+  handleStepBack: PropTypes.func,
   handleKeyDown: PropTypes.func,
   handleKeyPress: PropTypes.func,
 };
@@ -156,7 +159,7 @@ function mapDispatchToProps(dispatch) {
     onChangePassword: e => dispatch(changePasswordAction(e.target.value)),
     onEnterLogin: () => dispatch(enterLoginAction()),
     onEnterPassword: () => dispatch(enterPasswordAction()),
-    onStepBack: () => dispatch(stepBackAction()),
+    handleStepBack: () => dispatch(stepBackAction()),
     handleKeyPress: e => e.key === 'e' && e.preventDefault(),
     handleKeyDown: (e, password) =>
       e.key === 'Enter' &&

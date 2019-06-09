@@ -4,15 +4,211 @@
  *
  */
 import produce from 'immer';
-import { DEFAULT_ACTION } from './constants';
+import { LOCATION_CHANGE } from 'connected-react-router';
+import {
+  CHANGE_LOGIN,
+  ENTER_LOGIN,
+  ENTER_LOGIN_SUCCESS,
+  ENTER_LOGIN_ERROR,
+  CHANGE_PASSWORD,
+  ENTER_PASSWORD,
+  ENTER_PASSWORD_SUCCESS,
+  ENTER_PASSWORD_ERROR,
+  CHANGE_NAME,
+  ENTER_NAME,
+  ENTER_NAME_SUCCESS,
+  ENTER_NAME_ERROR,
+  CHANGE_SURNAME,
+  ENTER_SURNAME,
+  ENTER_SURNAME_SUCCESS,
+  ENTER_SURNAME_ERROR,
+  LOAD_CURRENCY,
+  LOAD_CURRENCY_SUCCESS,
+  LOAD_CURRENCY_ERROR,
+  CHANGE_CURRENCY,
+  ENTER_CURRENCY,
+  ENTER_CURRENCY_SUCCESS,
+  ENTER_CURRENCY_ERROR,
+  CHANGE_EMAIL,
+  ENTER_EMAIL,
+  ENTER_EMAIL_SUCCESS,
+  ENTER_EMAIL_ERROR,
+  TOGGLE_DATA_PROCESSING_AGREEMENT,
+  DATA_PROCESSING_AGREEMENT_ERROR,
+  REGISTER,
+  REGISTER_SUCCESS,
+  REGISTER_ERROR,
+  STEP_NEXT,
+  STEP_BACK,
+} from './constants';
 
-export const initialState = {};
+export const initialState = {
+  login: '',
+  password: '',
+  name: '',
+  surname: '',
+  email: '',
+  error: '',
+  currency: [],
+  currencyId: null,
+  isDataProcessingAgreement: false,
+  errorDataProcessingAgreement: '',
+  isLoading: false,
+  activeStep: 0,
+};
 
 /* eslint-disable default-case, no-param-reassign */
 const registerPageReducer = (state = initialState, action) =>
-  produce(state, (/* draft */) => {
+  produce(state, draft => {
     switch (action.type) {
-      case DEFAULT_ACTION:
+      case CHANGE_LOGIN:
+        draft.login = action.login;
+        draft.error = '';
+        break;
+      case ENTER_LOGIN:
+        draft.login = action.login;
+        draft.isLoading = true;
+        break;
+      case ENTER_LOGIN_SUCCESS:
+        draft.isLoading = false;
+        break;
+      case ENTER_LOGIN_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
+        break;
+      case CHANGE_PASSWORD:
+        draft.password = action.password;
+        draft.error = '';
+        break;
+      case ENTER_PASSWORD:
+        draft.password = action.password;
+        draft.isLoading = true;
+        break;
+      case ENTER_PASSWORD_SUCCESS:
+        draft.isLoading = false;
+        break;
+      case ENTER_PASSWORD_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
+        break;
+      case CHANGE_NAME:
+        draft.name = action.name;
+        draft.error = '';
+        break;
+      case ENTER_NAME:
+        draft.name = action.name;
+        draft.isLoading = true;
+        break;
+      case ENTER_NAME_SUCCESS:
+        draft.isLoading = false;
+        break;
+      case ENTER_NAME_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
+        break;
+      case CHANGE_SURNAME:
+        draft.name = action.surname;
+        draft.error = '';
+        break;
+      case ENTER_SURNAME:
+        draft.name = action.surname;
+        draft.isLoading = true;
+        break;
+      case ENTER_SURNAME_SUCCESS:
+        draft.isLoading = false;
+        break;
+      case ENTER_SURNAME_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
+        break;
+      case LOAD_CURRENCY:
+        draft.isLoading = true;
+        break;
+      case LOAD_CURRENCY_SUCCESS:
+        draft.currency = action.currency;
+        // eslint-disable-next-line prefer-destructuring
+        draft.currencyId = action.currency[0];
+        draft.isLoading = false;
+        break;
+      case LOAD_CURRENCY_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
+        break;
+      case CHANGE_CURRENCY:
+        draft.currencyId = action.currencyId;
+        draft.error = '';
+        break;
+      case ENTER_CURRENCY:
+        draft.currencyId = action.currencyId;
+        draft.isLoading = true;
+        break;
+      case ENTER_CURRENCY_SUCCESS:
+        draft.isLoading = false;
+        break;
+      case ENTER_CURRENCY_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
+        break;
+      case CHANGE_EMAIL:
+        draft.email = action.email;
+        draft.error = '';
+        break;
+      case ENTER_EMAIL:
+        draft.email = action.email;
+        draft.isLoading = true;
+        break;
+      case ENTER_EMAIL_SUCCESS:
+        draft.isLoading = false;
+        break;
+      case ENTER_EMAIL_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
+        break;
+      case TOGGLE_DATA_PROCESSING_AGREEMENT:
+        draft.isDataProcessingAgreement = !draft.isDataProcessingAgreement;
+        draft.errorDataProcessingAgreement = '';
+        break;
+      case DATA_PROCESSING_AGREEMENT_ERROR:
+        draft.errorDataProcessingAgreement = action.error;
+        break;
+      case REGISTER:
+        draft.login = action.login;
+        draft.password = action.password;
+        draft.name = action.name;
+        draft.surname = action.surname;
+        draft.currencyId = action.currencyId;
+        draft.isDataProcessingAgreement = action.isDataProcessingAgreement;
+        draft.email = action.email;
+        draft.isLoading = true;
+        break;
+      case REGISTER_SUCCESS:
+        draft.isLoading = false;
+        break;
+      case REGISTER_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
+        break;
+      case STEP_NEXT:
+        draft.activeStep += 1;
+        draft.error = '';
+        break;
+      case STEP_BACK:
+        draft.activeStep -= 1;
+        draft.error = '';
+        break;
+      case LOCATION_CHANGE:
+        draft.login = '';
+        draft.password = '';
+        draft.name = '';
+        draft.surname = '';
+        draft.email = '';
+        draft.error = '';
+        draft.currency = [];
+        draft.currencyId = null;
+        draft.isDataProcessingAgreement = false;
+        draft.errorDataProcessingAgreement = '';
+        draft.isLoading = false;
+        draft.activeStep = 0;
         break;
     }
   });
