@@ -1,18 +1,41 @@
-/*
- * HomePage
+/**
  *
- * This is the first thing users see of our App, at the '/' route
+ * HomePage
  *
  */
 
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+import { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
-export default function HomePage() {
-  return (
-    <h1>
-      <FormattedMessage {...messages.header} />
-    </h1>
-  );
+import { isLoggedAction } from 'containers/App/actions';
+
+import { useInjectSaga } from 'utils/injectSaga';
+import saga from './saga';
+
+export function HomePage({ isLogged }) {
+  useInjectSaga({ key: 'homePage', saga });
+  useEffect(() => {
+    isLogged();
+  }, []);
+
+  return null;
 }
+
+HomePage.propTypes = {
+  isLogged: PropTypes.func,
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    isLogged: () => dispatch(isLoggedAction()),
+  };
+}
+
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
+
+export default compose(withConnect)(HomePage);

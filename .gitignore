@@ -7,6 +7,7 @@ stats.json
 jsconfig.json
 .github
 package-lock.json
+yarn.lock
 
 # Cruft
 .DS_Store

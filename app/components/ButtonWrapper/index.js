@@ -1,3 +1,9 @@
+/**
+ *
+ * ButtonWrapper
+ *
+ */
+
 import styled from 'styled-components';
 import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
 import {

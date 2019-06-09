@@ -18,12 +18,12 @@ import Information from 'components/Information';
 import Footer from 'components/Footer';
 import LoginForm from 'components/LoginForm';
 
+import { isLoggedAction } from 'containers/App/actions';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-import { loggedInAction } from './actions';
 
 export function LoginPage({ isLogged }) {
   useInjectReducer({ key: 'loginPage', reducer });
@@ -62,7 +62,7 @@ LoginPage.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    isLogged: () => dispatch(loggedInAction()),
+    isLogged: () => dispatch(isLoggedAction()),
   };
 }
 

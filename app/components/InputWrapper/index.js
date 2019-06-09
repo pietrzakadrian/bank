@@ -1,3 +1,9 @@
+/**
+ *
+ * InputWraper
+ *
+ */
+
 import styled from 'styled-components';
 import { PRIMARY_LIGHT, PRIMARY_BORDER_GREY, PRIMARY_RED } from 'utils/colors';
 import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';

@@ -1,3 +1,9 @@
+/**
+ *
+ * LabelWrapper
+ *
+ */
+
 import styled from 'styled-components';
 import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
 import { PRIMARY_RED } from 'utils/colors';

@@ -6,7 +6,6 @@
 
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -25,15 +24,14 @@ import {
   enterPasswordAction,
   stepBackAction,
 } from 'containers/LoginPage/actions';
+import FormWrapper from 'components/FormWrapper';
+import LabelWrapper from 'components/LabelWrapper';
+import InputWrapper from 'components/InputWrapper';
+import ButtonWrapper from 'components/ButtonWrapper';
+import ButtonBackWrapper from 'components/ButtonBackWrapper';
+import NavigateNextIcon from 'components/NavigateNextIcon';
+import NavigateBackIcon from 'components/NavigateBackIcon';
 import messages from './messages';
-
-import LoginFormWrapper from './LoginFormWrapper';
-import LabelWrapper from './LabelWrapper';
-import InputWrapper from './InputWrapper';
-import ButtonWrapper from './ButtonWrapper';
-import ButtonBackWrapper from './ButtonBackWrapper';
-import NavigateNextIcon from './NavigateNextIcon';
-import NavigateBackIcon from './NavigateBackIcon';
 
 function LoginForm({
   login,
@@ -50,7 +48,7 @@ function LoginForm({
   handleKeyPress,
 }) {
   return (
-    <LoginFormWrapper>
+    <FormWrapper>
       <form noValidate autoComplete="off">
         {activeStep === 0 ? (
           <Fragment>
@@ -73,7 +71,7 @@ function LoginForm({
               )}
             </FormattedMessage>
 
-            {error ? <LabelWrapper error={error}>{error}</LabelWrapper> : null}
+            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
 
             <ButtonWrapper
               type="button"
@@ -104,7 +102,7 @@ function LoginForm({
               )}
             </FormattedMessage>
 
-            {error ? <LabelWrapper error={error}>{error}</LabelWrapper> : null}
+            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
 
             <ButtonWrapper
               type="button"
@@ -125,7 +123,7 @@ function LoginForm({
           </Fragment>
         )}
       </form>
-    </LoginFormWrapper>
+    </FormWrapper>
   );
 }
 

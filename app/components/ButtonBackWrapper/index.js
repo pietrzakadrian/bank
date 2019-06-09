@@ -1,3 +1,9 @@
+/**
+ *
+ * ButtonBackWrapper
+ *
+ */
+
 import styled from 'styled-components';
 
 const ButtonBackWrapper = styled.button`

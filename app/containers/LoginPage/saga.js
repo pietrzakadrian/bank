@@ -1,9 +1,16 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
+import decode from 'jwt-decode';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
+import { IS_LOGGED } from 'containers/App/constants';
+import {
+  makeIsLoggedSelector,
+  makeUserIdSelector,
+  makeTokenSelector,
+} from 'containers/App/selectors';
+import { loggedInAction } from 'containers/App/actions';
 import { makeLoginSelector, makePasswordSelector } from './selectors';
-import { ENTER_LOGIN, ENTER_PASSWORD, LOGGED_IN } from './constants';
-
+import { ENTER_LOGIN, ENTER_PASSWORD } from './constants';
 import {
   enterLoginSuccessAction,
   enterLoginErrorAction,
@@ -14,15 +21,19 @@ import {
   loginSuccessAction,
   loginErrorAction,
 } from './actions';
-import env from '../../env';
+import api from '../../api';
 
-export function* isLogged() {
-  if (sessionStorage.getItem('token')) yield put(push('/dashboard'));
+export function* handleLogged() {
+  const isLogged = yield select(makeIsLoggedSelector());
+  const userId = yield select(makeUserIdSelector());
+  const token = yield select(makeTokenSelector());
+
+  if (isLogged && userId && token) yield put(push('/dashboard'));
 }
 
 export function* handleLogin() {
   const login = yield select(makeLoginSelector());
-  const requestURL = `${env.API_URL}/api/users/isLogin/${login}`;
+  const requestURL = `${api.baseURL}${api.users.isLoginPath}${login}`;
   const isNumber = /^\d+$/;
 
   if (!login) return yield put(enterLoginErrorAction('empty'));
@@ -50,7 +61,7 @@ export function* handlePassword() {
 function* loginAttempt() {
   const login = yield select(makeLoginSelector());
   const password = yield select(makePasswordSelector());
-  const requestURL = `${env.API_URL}/api/users/login`;
+  const requestURL = `${api.baseURL}${api.users.loginPath}`;
 
   if (!login || !password) return yield put(loginErrorAction('empty'));
 
@@ -71,8 +82,7 @@ function* loginAttempt() {
     if (!response.success) return yield put(loginErrorAction('error'));
     yield put(enterPasswordSuccessAction());
     yield put(loginSuccessAction());
-
-    localStorage.setItem('token', response.token);
+    yield put(loggedInAction(decode(response.token).id, response.token));
     yield put(push('/dashboard'));
   } catch (err) {
     yield put(loginErrorAction(err));
@@ -82,5 +92,5 @@ function* loginAttempt() {
 export default function* loginPageSaga() {
   yield takeLatest(ENTER_LOGIN, handleLogin);
   yield takeLatest(ENTER_PASSWORD, handlePassword);
-  yield takeLatest(LOGGED_IN, isLogged);
+  yield takeLatest(IS_LOGGED, handleLogged);
 }
