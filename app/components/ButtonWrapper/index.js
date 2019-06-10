@@ -14,7 +14,7 @@ import {
 
 const ButtonWrapper = styled.button`
   display: block;
-  margin: 15px auto 10px;
+  margin: 15px auto 5px;
   height: 35px;
   background-color: ${SECONDARY_BLUE_LIGHT};
   border-radius: 2px;

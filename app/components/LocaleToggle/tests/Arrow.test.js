@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-testing-library';
 
-import Arrow from '../Arrow';
+import Arrow from 'components/Arrow';
 
 describe('<Arrow />', () => {
   it('should render an <div> tag', () => {

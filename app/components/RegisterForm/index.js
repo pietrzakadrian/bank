@@ -55,12 +55,11 @@ import {
   changeEmailAction,
   enterEmailAction,
   toggleDataProcessingAgreementAction,
-  loadCurrencyAction,
   enterCurrencyAction,
 } from 'containers/RegisterPage/actions';
 import InformationWrapper from './InformationWrapper';
 import CheckboxWrapper from './CheckboxWrapper';
-import P from './P';
+import TextWrapper from './TextWrapper';
 import messages from './messages';
 
 function getSteps() {
@@ -81,7 +80,6 @@ function RegisterForm({
   surname,
   email,
   error,
-  currency,
   currencyId,
   isDataProcessingAgreement,
   errorDataProcessingAgreement,
@@ -98,28 +96,22 @@ function RegisterForm({
   onChangeEmail,
   onEnterEmail,
   toggleDataProcessingAgreement,
-  onLoadCurrency,
   onEnterCurrency,
   handleKeyDown,
   handleKeyPress,
-  handleStepNext,
   handleStepBack,
 }) {
   const steps = getSteps();
+
   return (
     <FormWrapper>
       <StepperWrapper>
         <StepperDesktop activeStep={activeStep}>
-          {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
-
-            return (
-              <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
-              </Step>
-            );
-          })}
+          {steps.map(label => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
         </StepperDesktop>
 
         <StepperMobile
@@ -301,7 +293,9 @@ function RegisterForm({
                 color="primary"
               />
 
-              <P>I consent to the processing of my personal data.</P>
+              <TextWrapper>
+                I consent to the processing of my personal data.
+              </TextWrapper>
             </CheckboxWrapper>
 
             {errorDataProcessingAgreement && (
@@ -365,7 +359,6 @@ RegisterForm.propTypes = {
   onChangeEmail: PropTypes.func,
   onEnterEmail: PropTypes.func,
   toggleDataProcessingAgreement: PropTypes.func,
-  onLoadCurrency: PropTypes.func,
   onEnterCurrency: PropTypes.func,
   handleStepNext: PropTypes.func,
   handleStepBack: PropTypes.func,
@@ -402,7 +395,6 @@ function mapDispatchToProps(dispatch) {
     onEnterEmail: email => dispatch(enterEmailAction(email)),
     toggleDataProcessingAgreement: () =>
       dispatch(toggleDataProcessingAgreementAction()),
-    onLoadCurrency: () => dispatch(loadCurrencyAction()),
     onEnterCurrency: currencyId => dispatch(enterCurrencyAction(currencyId)),
     handleStepNext: () => dispatch(stepNextAction()),
     handleStepBack: () => dispatch(stepBackAction()),

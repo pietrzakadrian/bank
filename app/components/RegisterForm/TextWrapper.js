@@ -5,9 +5,8 @@
  */
 
 import styled from 'styled-components';
-import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 
-const P = styled.p`
+const TextWrapper = styled.p`
   margin: 0 0 0 5px;
   font-size: 12.5px;
   display: flex;
@@ -15,4 +14,4 @@ const P = styled.p`
   text-align: left;
 `;
 
-export default P;
+export default TextWrapper;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-testing-library';
 
-import Select from '../Select';
+import Select from 'components/Select';
 
 describe('<Select />', () => {
   it('should render an <select> tag', () => {
