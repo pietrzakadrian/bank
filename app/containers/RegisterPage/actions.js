@@ -39,7 +39,14 @@ import {
   REGISTER_ERROR,
   STEP_NEXT,
   STEP_BACK,
+  IS_LOGGED,
 } from './constants';
+
+export function isLoggedAction() {
+  return {
+    type: IS_LOGGED,
+  };
+}
 
 export function changeLoginAction(login) {
   return {

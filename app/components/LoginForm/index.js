@@ -109,7 +109,7 @@ function LoginForm({
 
             <ButtonWrapper
               type="button"
-              onClick={onEnterPassword}
+              onClick={() => onEnterPassword(password)}
               disabled={isLoading}
             >
               <FormattedMessage {...messages.inputLogin} />
@@ -155,10 +155,11 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onChangeLogin: e => dispatch(changeLoginAction(e.target.value)),
+    onChangeLogin: e =>
+      dispatch(changeLoginAction(parseInt(e.target.value, 10))),
     onChangePassword: e => dispatch(changePasswordAction(e.target.value)),
-    onEnterLogin: () => dispatch(enterLoginAction()),
-    onEnterPassword: () => dispatch(enterPasswordAction()),
+    onEnterLogin: login => dispatch(enterLoginAction(login)),
+    onEnterPassword: password => dispatch(enterPasswordAction(password)),
     handleStepBack: () => dispatch(stepBackAction()),
     handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
     handleKeyDown: (e, password) =>

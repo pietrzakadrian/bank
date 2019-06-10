@@ -2,7 +2,7 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import decode from 'jwt-decode';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
-import { IS_LOGGED } from 'containers/App/constants';
+
 import {
   makeIsLoggedSelector,
   makeUserIdSelector,
@@ -10,7 +10,7 @@ import {
 } from 'containers/App/selectors';
 import { loggedInAction } from 'containers/App/actions';
 import { makeLoginSelector, makePasswordSelector } from './selectors';
-import { ENTER_LOGIN, ENTER_PASSWORD } from './constants';
+import { ENTER_LOGIN, ENTER_PASSWORD, IS_LOGGED } from './constants';
 import {
   enterLoginSuccessAction,
   enterLoginErrorAction,

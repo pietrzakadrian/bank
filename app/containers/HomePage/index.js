@@ -9,9 +9,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { isLoggedAction } from 'containers/App/actions';
-
 import { useInjectSaga } from 'utils/injectSaga';
+import { isLoggedAction } from './actions';
+
 import saga from './saga';
 
 export function HomePage({ isLogged }) {

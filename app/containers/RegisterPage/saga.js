@@ -1,6 +1,5 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import { IS_LOGGED } from 'containers/App/constants';
 import request from 'utils/request';
 import {
   makeIsLoggedSelector,
@@ -44,6 +43,7 @@ import {
   LOAD_CURRENCY,
   ENTER_CURRENCY,
   ENTER_EMAIL,
+  IS_LOGGED,
 } from './constants';
 import api from '../../api';
 

@@ -5,11 +5,8 @@
  */
 
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { compose } from 'redux';
 
 // Import Components
 import Header from 'components/Header';
@@ -57,17 +54,4 @@ export function PrivacyPage() {
   );
 }
 
-PrivacyPage.propTypes = {};
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(PrivacyPage);
+export default PrivacyPage;

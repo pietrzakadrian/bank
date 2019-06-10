@@ -49,3 +49,5 @@ export const REGISTER_ERROR = 'app/RegisterPage/REGISTER_ERROR';
 
 export const STEP_NEXT = 'app/RegisterPage/STEP_NEXT';
 export const STEP_BACK = 'app/RegisterPage/STEP_BACK';
+
+export const IS_LOGGED = 'app/RegisterPage/IS_LOGGED';

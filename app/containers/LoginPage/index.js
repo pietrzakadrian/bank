@@ -18,9 +18,9 @@ import Information from 'components/Information';
 import Footer from 'components/Footer';
 import LoginForm from 'components/LoginForm';
 
-import { isLoggedAction } from 'containers/App/actions';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import { isLoggedAction } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';

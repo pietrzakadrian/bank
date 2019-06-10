@@ -19,17 +19,17 @@ import RegisterForm from 'components/RegisterForm';
 import Footer from 'components/Footer';
 
 import { useInjectSaga } from 'utils/injectSaga';
-import { isLoggedAction } from 'containers/App/actions';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-import { loadCurrencyAction } from './actions';
+import { loadCurrencyAction, isLoggedAction } from './actions';
 
 export function RegisterPage({ isLogged, getCurrency }) {
   useInjectReducer({ key: 'registerPage', reducer });
   useInjectSaga({ key: 'registerPage', saga });
   useEffect(() => {
+    isLogged();
     getCurrency();
   }, []);
 
@@ -58,7 +58,7 @@ RegisterPage.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    // isLogged: () => dispatch(isLoggedAction()),
+    isLogged: () => dispatch(isLoggedAction()),
     getCurrency: () => dispatch(loadCurrencyAction()),
   };
 }

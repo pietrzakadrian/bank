@@ -18,7 +18,14 @@ import {
   LOGIN,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
+  IS_LOGGED,
 } from './constants';
+
+export function isLoggedAction() {
+  return {
+    type: IS_LOGGED,
+  };
+}
 
 export function changeLoginAction(login) {
   return {
@@ -27,9 +34,10 @@ export function changeLoginAction(login) {
   };
 }
 
-export function enterLoginAction() {
+export function enterLoginAction(login) {
   return {
     type: ENTER_LOGIN,
+    login,
   };
 }
 
@@ -53,9 +61,10 @@ export function changePasswordAction(password) {
   };
 }
 
-export function enterPasswordAction() {
+export function enterPasswordAction(password) {
   return {
     type: ENTER_PASSWORD,
+    password,
   };
 }
 
