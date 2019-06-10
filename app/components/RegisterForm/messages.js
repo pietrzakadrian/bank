@@ -9,8 +9,20 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.components.RegisterForm';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'This is the RegisterForm component!',
+  nextText: {
+    id: `${scope}.nextText`,
+    defaultMessage: 'Next',
+  },
+  backText: {
+    id: `${scope}.backText`,
+    defaultMessage: 'Back',
+  },
+  createAnAccount: {
+    id: `${scope}.createAnAccount`,
+    defaultMessage: 'Create an account',
+  },
+  inputNumber: {
+    id: `${scope}.inputNumber`,
+    defaultMessage: 'Enter an ID',
   },
 });

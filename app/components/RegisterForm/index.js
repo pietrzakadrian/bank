@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -40,24 +40,22 @@ import {
 import {
   stepNextAction,
   stepBackAction,
+  changeLoginAction,
+  changePasswordAction,
+  enterLoginAction,
+  enterPasswordAction,
+  changeNameAction,
+  enterNameAction,
+  changeSurnameAction,
+  changeEmailAction,
+  toggleDataProcessingAgreementAction,
+  loadCurrencyAction,
+  enterCurrencyAction,
 } from 'containers/RegisterPage/actions';
 import messages from './messages';
 
 function getSteps() {
   return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
-}
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return 'Select campaign settings...';
-    case 1:
-      return 'What is an ad group anyways?';
-    case 2:
-      return 'This is the bit I really care about!';
-    default:
-      return 'Unknown step';
-  }
 }
 
 function RegisterForm({
@@ -73,6 +71,21 @@ function RegisterForm({
   errorDataProcessingAgreement,
   isLoading,
   activeStep,
+  onChangeLogin,
+  onEnterLogin,
+  onChangePassword,
+  onEnterPassword,
+  onChangeName,
+  onEnterName,
+  onChangeSurname,
+  onEnterSurname,
+  onChangeEmail,
+  onEnterEmail,
+  toggleDataProcessingAgreement,
+  onLoadCurrency,
+  onEnterCurrency,
+  handleKeyDown,
+  handleKeyPress,
   handleStepNext,
   handleStepBack,
 }) {
@@ -92,8 +105,39 @@ function RegisterForm({
         })}
       </Stepper>
 
-      {activeStep === 0 && getStepContent(activeStep)}
+      <form noValidate autoComplete="off">
+        {activeStep === 0 && (
+          <Fragment>
+            <LabelWrapper>tekst</LabelWrapper>
 
+            <FormattedMessage {...messages.inputNumber}>
+              {placeholder => (
+                <InputWrapper
+                  key={1}
+                  placeholder={placeholder}
+                  type="number"
+                  value={login || ''}
+                  error={error}
+                  onChange={onChangeLogin}
+                  onKeyDown={handleKeyDown}
+                  onKeyPress={handleKeyPress}
+                />
+              )}
+            </FormattedMessage>
+
+            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
+
+            <ButtonWrapper
+              type="button"
+              onClick={() => onEnterLogin(login)}
+              disabled={isLoading}
+            >
+              <FormattedMessage {...messages.nextText} />
+              <NavigateNextIcon />
+            </ButtonWrapper>
+          </Fragment>
+        )}
+      </form>
     </FormWrapper>
   );
 }
@@ -111,8 +155,23 @@ RegisterForm.propTypes = {
   errorDataProcessingAgreement: PropTypes.string,
   isLoading: PropTypes.bool,
   activeStep: PropTypes.number,
+  onChangeLogin: PropTypes.func,
+  onEnterLogin: PropTypes.func,
+  onChangePassword: PropTypes.func,
+  onEnterPassword: PropTypes.func,
+  onChangeName: PropTypes.func,
+  onEnterName: PropTypes.func,
+  onChangeSurname: PropTypes.func,
+  onEnterSurname: PropTypes.func,
+  onChangeEmail: PropTypes.func,
+  onEnterEmail: PropTypes.func,
+  toggleDataProcessingAgreement: PropTypes.func,
+  onLoadCurrency: PropTypes.func,
+  onEnterCurrency: PropTypes.func,
   handleStepNext: PropTypes.func,
   handleStepBack: PropTypes.func,
+  handleKeyPress: PropTypes.func,
+  handleKeyDown: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -132,8 +191,24 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    onChangeLogin: e => dispatch(changeLoginAction(e.target.value)),
+    onEnterLogin: login => dispatch(enterLoginAction(login)),
+    onChangePassword: e => dispatch(changePasswordAction(e.target.value)),
+    onEnterPassword: password => dispatch(enterPasswordAction(password)),
+    onChangeName: e => dispatch(changeNameAction(e.target.value)),
+    onEnterName: name => dispatch(enterNameAction(name)),
+    onChangeSurname: e => dispatch(changeSurnameAction(e.target.value)),
+    onEnterSurname: surname => dispatch(changeSurnameAction(surname)),
+    onChangeEmail: e => dispatch(changeEmailAction(e.target.value)),
+    onEnterEmail: email => dispatch(changeEmailAction(email)),
+    toggleDataProcessingAgreement: () =>
+      dispatch(toggleDataProcessingAgreementAction()),
+    onLoadCurrency: () => dispatch(loadCurrencyAction()),
+    onEnterCurrency: currencyId => dispatch(enterCurrencyAction(currencyId)),
     handleStepNext: () => dispatch(stepNextAction()),
     handleStepBack: () => dispatch(stepBackAction()),
+    handleKeyPress: e => e.key === 'e' && e.preventDefault(),
+    handleKeyDown: e => e.key === 'Enter' && e.preventDefault(),
   };
 }
 
