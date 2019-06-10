@@ -16,6 +16,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 import FontFaceObserver from 'fontfaceobserver';
+import { SnackbarProvider } from 'notistack';
 import { SECONDARY_BLUE_LIGHT } from 'utils/colors';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -63,11 +64,13 @@ const render = messages => {
   ReactDOM.render(
     <Provider store={store}>
       <MuiThemeProvider theme={theme}>
-        <LanguageProvider messages={messages}>
-          <ConnectedRouter history={history}>
-            <App />
-          </ConnectedRouter>
-        </LanguageProvider>
+        <SnackbarProvider>
+          <LanguageProvider messages={messages}>
+            <ConnectedRouter history={history}>
+              <App />
+            </ConnectedRouter>
+          </LanguageProvider>
+        </SnackbarProvider>
       </MuiThemeProvider>
     </Provider>,
     MOUNT_NODE,
