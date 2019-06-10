@@ -34,14 +34,9 @@ export function LoginPage({ isLogged }) {
 
   return (
     <Fragment>
-      <Helmet>
-        <FormattedMessage {...messages.helmetLoginTitle}>
-          {title => <title>{title}</title>}
-        </FormattedMessage>
-        <FormattedMessage {...messages.helmetLoginTitle}>
-          {description => <meta name="description" content={description} />}
-        </FormattedMessage>
-      </Helmet>
+      <FormattedMessage {...messages.helmetLoginTitle}>
+        {title => <Helmet title={title} />}
+      </FormattedMessage>
 
       <Header />
       <FormattedMessage {...messages.loginToTheSystem}>

@@ -189,6 +189,7 @@ const registerPageReducer = (state = initialState, action) =>
       case STEP_BACK:
         draft.activeStep -= 1;
         draft.error = '';
+        draft.errorDataProcessingAgreement = '';
         break;
       case LOCATION_CHANGE:
         draft.login = '';

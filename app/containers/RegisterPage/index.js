@@ -30,20 +30,14 @@ export function RegisterPage({ isLogged, getCurrency }) {
   useInjectReducer({ key: 'registerPage', reducer });
   useInjectSaga({ key: 'registerPage', saga });
   useEffect(() => {
-    isLogged();
     getCurrency();
   }, []);
 
   return (
     <Fragment>
-      <Helmet>
-        <FormattedMessage {...messages.helmetRegisterTitle}>
-          {title => <title>{title}</title>}
-        </FormattedMessage>
-        {/* <FormattedMessage {...messages.helmetRegisterTitle}>
-          {description => <meta name="description" content={description} />}
-        </FormattedMessage> */}
-      </Helmet>
+      <FormattedMessage {...messages.helmetRegisterTitle}>
+        {title => <Helmet title={title} />}
+      </FormattedMessage>
 
       <Header />
       <FormattedMessage {...messages.registerText}>
@@ -64,7 +58,7 @@ RegisterPage.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    isLogged: () => dispatch(isLoggedAction()),
+    // isLogged: () => dispatch(isLoggedAction()),
     getCurrency: () => dispatch(loadCurrencyAction()),
   };
 }
