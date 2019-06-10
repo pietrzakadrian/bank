@@ -7,7 +7,7 @@ the _view_ layer of your app, let's see how to test Components too!
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Shallow rendering](#shallow-rendering)
-- [react-testing-library](#react-testing-library)
+- [@testing-library/react](#@testing-library/react)
   - [Snapshot testing](#snapshot-testing)
   - [Behavior testing](#behavior-testing)
 
@@ -86,10 +86,10 @@ one we're testing!
 The problem with the shallow renderer is that all assertions have to be done
 manually, and you cannot do anything that needs the DOM.
 
-## react-testing-library
+## @testing-library/react
 
 In order to write more maintainable tests which also resemble more closely the way
-our component is used in real life, we have included [react-testing-library](https://github.com/kentcdodds/react-testing-library).
+our component is used in real life, we have included [@testing-library/react](https://github.com/kentcdodds/@testing-library/react).
 This library renders our component within an actual DOM and provides utilities for querying it.
 
 Let's give it a go with our `<Button />` component, shall we? First, let's check that it renders our component with its
@@ -99,7 +99,7 @@ This is our test setup:
 
 ```javascript
 import React from 'react';
-import { render, fireEvent } from 'react-testing-library';
+import { render, fireEvent } from '@testing-library/react';
 import Button from '../Button';
 
 describe('<Button />', () => {
@@ -163,7 +163,7 @@ Our finished test file looks like this:
 
 ```javascript
 import React from 'react';
-import { render, fireEvent } from 'react-testing-library';
+import { render, fireEvent } from '@testing-library/react';
 import Button from '../Button';
 
 describe('<Button />', () => {
@@ -188,6 +188,6 @@ describe('<Button />', () => {
 And that's how you unit test your components and make sure they work correctly!
 
 Also have a look at our example application. It deliberately shows some variations of implementing tests with
-react-testing-library.
+@testing-library/react.
 
 _Continue to learn how to test your components [remotely](remote-testing.md)!_
