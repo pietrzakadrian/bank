@@ -5,7 +5,7 @@
  */
 
 import styled from 'styled-components';
-import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
+import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 import { PRIMARY_RED } from 'utils/colors';
 
 const LabelWrapper = styled.label`
@@ -17,7 +17,7 @@ const LabelWrapper = styled.label`
   display: block;
   color: ${props => (props.error ? PRIMARY_RED : 'inherit')};
 
-  @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
+  @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
     width: 17rem;
   }
 `;

@@ -7,7 +7,7 @@
  *
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import HomePage from 'containers/HomePage/Loadable';
@@ -19,7 +19,7 @@ import GlobalStyle from '../../global-styles';
 
 export default function App() {
   return (
-    <div>
+    <Fragment>
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/login" component={LoginPage} />
@@ -27,6 +27,6 @@ export default function App() {
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
-    </div>
+    </Fragment>
   );
 }

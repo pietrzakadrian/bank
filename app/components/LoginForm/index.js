@@ -160,7 +160,7 @@ function mapDispatchToProps(dispatch) {
     onEnterLogin: () => dispatch(enterLoginAction()),
     onEnterPassword: () => dispatch(enterPasswordAction()),
     handleStepBack: () => dispatch(stepBackAction()),
-    handleKeyPress: e => e.key === 'e' && e.preventDefault(),
+    handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
     handleKeyDown: (e, password) =>
       e.key === 'Enter' &&
       (e.preventDefault(),

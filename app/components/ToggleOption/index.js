@@ -13,7 +13,7 @@ const ToggleOption = ({ value, message, intl }) => (
 );
 
 ToggleOption.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   message: PropTypes.object,
   intl: intlShape.isRequired,
 };

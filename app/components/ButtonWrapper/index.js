@@ -5,7 +5,7 @@
  */
 
 import styled from 'styled-components';
-import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
+import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 import {
   SECONDARY_BLUE_LIGHT,
   PRIMARY_LIGHT,
@@ -26,7 +26,7 @@ const ButtonWrapper = styled.button`
     cursor: pointer;
   }
 
-  @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
+  @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
     width: 17rem;
   }
 `;

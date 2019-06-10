@@ -1,3 +1,9 @@
+/**
+ *
+ * Arrow
+ *
+ */
+
 import styled from 'styled-components';
 
 const Arrow = styled.div`

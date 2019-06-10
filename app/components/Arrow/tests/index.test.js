@@ -1,6 +1,6 @@
 /**
  *
- * Tests for ButtonWrapper
+ * Tests for Arrow
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
@@ -10,12 +10,12 @@ import React from 'react';
 import { render } from 'react-testing-library';
 // import 'jest-dom/extend-expect'; // add some helpful assertions
 
-import ButtonWrapper from '../index';
+import Arrow from '../index';
 
-describe('<ButtonWrapper />', () => {
+describe('<Arrow />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    render(<ButtonWrapper />);
+    render(<Arrow />);
     expect(spy).not.toHaveBeenCalled();
   });
 
@@ -31,22 +31,7 @@ describe('<ButtonWrapper />', () => {
   it.skip('Should render and match the snapshot', () => {
     const {
       container: { firstChild },
-    } = render(<ButtonWrapper />);
+    } = render(<Arrow />);
     expect(firstChild).toMatchSnapshot();
-  });
-
-  it('should render an <button> tag', () => {
-    const { container } = render(<ButtonWrapper />);
-    expect(container.querySelector('button')).not.toBeNull();
-  });
-
-  it('should have a class attribute', () => {
-    const { container } = render(<ButtonWrapper />);
-    expect(container.querySelector('button').hasAttribute('class')).toBe(true);
-  });
-
-  it('should not adopt an invalid attribute', () => {
-    const { container } = render(<ButtonWrapper attribute="test" />);
-    expect(container.querySelector('button[attribute="test"]')).toBeNull();
   });
 });

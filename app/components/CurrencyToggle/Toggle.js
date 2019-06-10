@@ -33,10 +33,10 @@ function Toggle(props) {
 }
 
 Toggle.propTypes = {
-  onToggle: PropTypes.func,
+  onToggle: PropTypes.func.isRequired,
   values: PropTypes.array,
-  value: PropTypes.string,
-  messages: PropTypes.object,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  messages: PropTypes.object.isRequired,
 };
 
 export default Toggle;

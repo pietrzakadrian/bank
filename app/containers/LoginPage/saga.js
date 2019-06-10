@@ -35,9 +35,11 @@ export function* handleLogin() {
   const login = yield select(makeLoginSelector());
   const requestURL = `${api.baseURL}${api.users.isLoginPath}${login}`;
   const isNumber = /^\d+$/;
+  const limit = 20;
 
   if (!login) return yield put(enterLoginErrorAction('empty'));
-  if (!isNumber.test(login)) return yield put(enterLoginErrorAction('error'));
+  if (!isNumber.test(login) || login.length > limit)
+    return yield put(enterLoginErrorAction('error'));
 
   try {
     const response = yield call(request, requestURL);
@@ -53,8 +55,12 @@ export function* handleLogin() {
 
 export function* handlePassword() {
   const password = yield select(makePasswordSelector());
+  const limit = 255;
 
   if (!password) return yield put(enterPasswordErrorAction('empty'));
+  if (password.length > limit)
+    return yield put(enterPasswordErrorAction('error'));
+
   yield call(loginAttempt);
 }
 

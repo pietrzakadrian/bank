@@ -16,6 +16,8 @@ import { ConnectedRouter } from 'connected-react-router';
 import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 import FontFaceObserver from 'fontfaceobserver';
+import { SECONDARY_BLUE_LIGHT } from 'utils/colors';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 // Import root app
 import App from 'containers/App';
@@ -49,14 +51,24 @@ const initialState = {};
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: `${SECONDARY_BLUE_LIGHT}`,
+    },
+  },
+});
+
 const render = messages => {
   ReactDOM.render(
     <Provider store={store}>
-      <LanguageProvider messages={messages}>
-        <ConnectedRouter history={history}>
-          <App />
-        </ConnectedRouter>
-      </LanguageProvider>
+      <MuiThemeProvider theme={theme}>
+        <LanguageProvider messages={messages}>
+          <ConnectedRouter history={history}>
+            <App />
+          </ConnectedRouter>
+        </LanguageProvider>
+      </MuiThemeProvider>
     </Provider>,
     MOUNT_NODE,
   );

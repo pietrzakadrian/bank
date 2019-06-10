@@ -1,25 +1,21 @@
 /**
  *
- * ButtonBackWrapper
+ * CheckboxWrapper
  *
  */
 
 import styled from 'styled-components';
 import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 
-const ButtonBackWrapper = styled.button`
-  display: block;
-  border-radius: 2px;
+const CheckboxWrapper = styled.div`
+  text-align: left;
   width: 90%;
-  display: inline-block;
+  display: inline-flex;
+  padding: 10px 0 0;
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
     width: 17rem;
   }
-
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
-export default ButtonBackWrapper;
+export default CheckboxWrapper;

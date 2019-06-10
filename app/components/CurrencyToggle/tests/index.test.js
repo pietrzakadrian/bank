@@ -1,6 +1,6 @@
 /**
  *
- * Tests for ButtonWrapper
+ * Tests for CurrencyToggle
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
@@ -8,14 +8,20 @@
 
 import React from 'react';
 import { render } from 'react-testing-library';
+import { IntlProvider } from 'react-intl';
 // import 'jest-dom/extend-expect'; // add some helpful assertions
 
-import ButtonWrapper from '../index';
+import CurrencyToggle from '../index';
+import { DEFAULT_LOCALE } from '../../../i18n';
 
-describe('<ButtonWrapper />', () => {
+describe('<CurrencyToggle />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    render(<ButtonWrapper />);
+    render(
+      <IntlProvider locale={DEFAULT_LOCALE}>
+        <CurrencyToggle />
+      </IntlProvider>,
+    );
     expect(spy).not.toHaveBeenCalled();
   });
 
@@ -31,22 +37,11 @@ describe('<ButtonWrapper />', () => {
   it.skip('Should render and match the snapshot', () => {
     const {
       container: { firstChild },
-    } = render(<ButtonWrapper />);
+    } = render(
+      <IntlProvider locale={DEFAULT_LOCALE}>
+        <CurrencyToggle />
+      </IntlProvider>,
+    );
     expect(firstChild).toMatchSnapshot();
-  });
-
-  it('should render an <button> tag', () => {
-    const { container } = render(<ButtonWrapper />);
-    expect(container.querySelector('button')).not.toBeNull();
-  });
-
-  it('should have a class attribute', () => {
-    const { container } = render(<ButtonWrapper />);
-    expect(container.querySelector('button').hasAttribute('class')).toBe(true);
-  });
-
-  it('should not adopt an invalid attribute', () => {
-    const { container } = render(<ButtonWrapper attribute="test" />);
-    expect(container.querySelector('button[attribute="test"]')).toBeNull();
   });
 });

@@ -22,7 +22,6 @@ import {
   ENTER_SURNAME,
   ENTER_SURNAME_SUCCESS,
   ENTER_SURNAME_ERROR,
-  LOAD_CURRENCY,
   LOAD_CURRENCY_SUCCESS,
   LOAD_CURRENCY_ERROR,
   CHANGE_CURRENCY,
@@ -92,11 +91,11 @@ const registerPageReducer = (state = initialState, action) =>
         draft.isLoading = false;
         break;
       case CHANGE_NAME:
-        draft.name = action.name;
+        draft.name = action.name.trim();
         draft.error = '';
         break;
       case ENTER_NAME:
-        draft.name = action.name;
+        draft.name = action.name.trim();
         draft.isLoading = true;
         break;
       case ENTER_NAME_SUCCESS:
@@ -107,11 +106,11 @@ const registerPageReducer = (state = initialState, action) =>
         draft.isLoading = false;
         break;
       case CHANGE_SURNAME:
-        draft.name = action.surname;
+        draft.surname = action.surname.trim();
         draft.error = '';
         break;
       case ENTER_SURNAME:
-        draft.name = action.surname;
+        draft.name = action.surname.trim();
         draft.isLoading = true;
         break;
       case ENTER_SURNAME_SUCCESS:
@@ -121,18 +120,13 @@ const registerPageReducer = (state = initialState, action) =>
         draft.error = action.error;
         draft.isLoading = false;
         break;
-      case LOAD_CURRENCY:
-        draft.isLoading = true;
-        break;
       case LOAD_CURRENCY_SUCCESS:
         draft.currency = action.currency;
         // eslint-disable-next-line prefer-destructuring
         draft.currencyId = action.currency[0];
-        draft.isLoading = false;
         break;
       case LOAD_CURRENCY_ERROR:
         draft.error = action.error;
-        draft.isLoading = false;
         break;
       case CHANGE_CURRENCY:
         draft.currencyId = action.currencyId;
@@ -150,11 +144,11 @@ const registerPageReducer = (state = initialState, action) =>
         draft.isLoading = false;
         break;
       case CHANGE_EMAIL:
-        draft.email = action.email;
+        draft.email = action.email.trim();
         draft.error = '';
         break;
       case ENTER_EMAIL:
-        draft.email = action.email;
+        draft.email = action.email.trim();
         draft.isLoading = true;
         break;
       case ENTER_EMAIL_SUCCESS:
@@ -174,11 +168,11 @@ const registerPageReducer = (state = initialState, action) =>
       case REGISTER:
         draft.login = action.login;
         draft.password = action.password;
-        draft.name = action.name;
-        draft.surname = action.surname;
+        draft.name = action.name.trim();
+        draft.surname = action.surname.trim();
         draft.currencyId = action.currencyId;
         draft.isDataProcessingAgreement = action.isDataProcessingAgreement;
-        draft.email = action.email;
+        draft.email = action.email.trim();
         draft.isLoading = true;
         break;
       case REGISTER_SUCCESS:

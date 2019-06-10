@@ -6,7 +6,7 @@
 
 import styled from 'styled-components';
 import { PRIMARY_LIGHT, PRIMARY_BORDER_GREY, PRIMARY_RED } from 'utils/colors';
-import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
+import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 
 const InputWrapper = styled.input`
   padding: 10px;
@@ -19,7 +19,7 @@ const InputWrapper = styled.input`
   border: 1px solid
     ${props => (props.error ? PRIMARY_RED : PRIMARY_BORDER_GREY)};
 
-  @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
+  @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
     width: 17rem;
   }
 `;
