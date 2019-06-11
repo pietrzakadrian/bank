@@ -35,7 +35,7 @@ const loginPageReducer = (state = initialState, action) =>
         break;
       case ENQUEUE_SNACKBAR:
         draft.notifications = [
-          ...action.notifications,
+          ...draft.notifications,
           {
             key: action.key,
             ...action.notification,

@@ -64,7 +64,7 @@ const render = messages => {
   ReactDOM.render(
     <Provider store={store}>
       <MuiThemeProvider theme={theme}>
-        <SnackbarProvider>
+        <SnackbarProvider className="snackbar__provider">
           <LanguageProvider messages={messages}>
             <ConnectedRouter history={history}>
               <App />

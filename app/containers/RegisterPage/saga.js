@@ -6,6 +6,7 @@ import {
   makeUserIdSelector,
   makeTokenSelector,
 } from 'containers/App/selectors';
+import { enqueueSnackbarAction } from 'containers/App/actions';
 import {
   makeLoginSelector,
   makePasswordSelector,
@@ -209,6 +210,16 @@ function* registerAttempt() {
     if (!response.success) return yield put(registerErrorAction('error'));
 
     yield put(registerSuccessAction());
+    yield put(
+      enqueueSnackbarAction({
+        message: 'Failed fetching data.',
+        options: {
+          key: new Date().getTime() + Math.random(),
+          variant: 'success',
+          autoHideDuration: 3000,
+        },
+      }),
+    );
     yield put(push('/login'));
   } catch (err) {
     yield select(registerErrorAction(err));

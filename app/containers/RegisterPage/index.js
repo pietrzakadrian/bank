@@ -17,6 +17,7 @@ import Subheader from 'components/Subheader';
 import Information from 'components/Information';
 import RegisterForm from 'components/RegisterForm';
 import Footer from 'components/Footer';
+import Notifier from 'components/Notifier';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -47,6 +48,7 @@ export function RegisterPage({ isLogged, getCurrency }) {
       <Information />
       <RegisterForm />
       <Footer />
+      <Notifier />
     </Fragment>
   );
 }
