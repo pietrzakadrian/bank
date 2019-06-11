@@ -23,6 +23,12 @@ const makeTokenSelector = () =>
     globalState => globalState.token,
   );
 
+const makeNotificationsSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.token,
+  );
+
 const makeSelectLocation = () =>
   createSelector(
     selectRouter,
@@ -34,4 +40,5 @@ export {
   makeUserIdSelector,
   makeTokenSelector,
   makeSelectLocation,
+  makeNotificationsSelector,
 };
