@@ -26,7 +26,7 @@ const makeTokenSelector = () =>
 const makeNotificationsSelector = () =>
   createSelector(
     selectGlobal,
-    globalState => globalState.token,
+    globalState => globalState.notifications,
   );
 
 const makeSelectLocation = () =>
