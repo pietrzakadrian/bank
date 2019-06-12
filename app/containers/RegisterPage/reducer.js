@@ -164,6 +164,7 @@ const registerPageReducer = (state = initialState, action) =>
         break;
       case DATA_PROCESSING_AGREEMENT_ERROR:
         draft.errorDataProcessingAgreement = action.error;
+        draft.isLoading = false;
         break;
       case REGISTER:
         draft.login = action.login;

@@ -33,21 +33,33 @@ export default defineMessages({
     id: `${scope}.errorName`,
     defaultMessage: 'Please enter your first name',
   },
+  errorNameCorrect: {
+    id: `${scope}.errorNameCorrect`,
+    defaultMessage: 'Please enter the correct first name',
+  },
   errorSurname: {
     id: `${scope}.errorSurname`,
     defaultMessage: 'Please enter your surname',
   },
+  errorSurnameCorrect: {
+    id: `${scope}.errorSurnameCorrect`,
+    defaultMessage: 'Please enter the correct surname',
+  },
   errorPassword: {
     id: `${scope}.errorPassword`,
-    defaultMessage: 'Please enter your password',
+    defaultMessage: 'Please enter your access code',
+  },
+  errorPasswordCorrect: {
+    id: `${scope}.errorPasswordCorrect`,
+    defaultMessage: 'Please enter the correct access code',
   },
   succesCreated: {
     id: `${scope}.succesCreated`,
     defaultMessage: 'Success! The account has been created',
   },
-  invalidEmail: {
-    id: `${scope}.invalidEmail`,
-    defaultMessage: 'Invalid E-Mail',
+  enterEmailEmpty: {
+    id: `${scope}.enterEmailEmpty`,
+    defaultMessage: 'Please enter your email address',
   },
   invalidId: {
     id: `${scope}.invalidId`,
@@ -57,13 +69,17 @@ export default defineMessages({
     id: `${scope}.existAccountWithSameEmail`,
     defaultMessage: 'An account with this E-Mail address already exists',
   },
+  entercurrency: {
+    id: `${scope}.entercurrency`,
+    defaultMessage: 'Please enter the currency',
+  },
   errorServer: {
     id: `${scope}.errorServer`,
     defaultMessage: 'Please try again in a moment',
   },
   inputEmailAddressEmpty: {
     id: `${scope}.inputEmailAddressEmpty`,
-    defaultMessage: 'Please enter the E-Mail address',
+    defaultMessage: 'Please enter the email address',
   },
   inputIDEmpty: {
     id: `${scope}.inputIDEmpty`,
@@ -75,7 +91,7 @@ export default defineMessages({
   },
   errorIncorrectEmail: {
     id: `${scope}.errorIncorrectEmail`,
-    defaultMessage: 'Your email is incorrect.',
+    defaultMessage: 'Please enter the correct email address',
   },
   errorCheckbox: {
     id: `${scope}.errorCheckbox`,
