@@ -64,12 +64,12 @@ import messages from './messages';
 
 function getSteps() {
   return [
-    'ID number',
-    'Access code',
-    'First name',
-    'Surname',
-    'Currency',
-    'Email address',
+    <FormattedMessage {...messages.idNumber} />,
+    <FormattedMessage {...messages.password} />,
+    <FormattedMessage {...messages.name} />,
+    <FormattedMessage {...messages.surname} />,
+    <FormattedMessage {...messages.currency} />,
+    <FormattedMessage {...messages.emailAddress} />,
   ];
 }
 
@@ -125,7 +125,9 @@ function RegisterForm({
       <form noValidate autoComplete="off">
         {activeStep === 0 && (
           <Fragment>
-            <LabelWrapper>tekst</LabelWrapper>
+            <LabelWrapper>
+              <FormattedMessage {...messages.idNumber} />
+            </LabelWrapper>
 
             <FormattedMessage {...messages.inputNumber}>
               {placeholder => (
@@ -133,6 +135,7 @@ function RegisterForm({
                   key={1}
                   placeholder={placeholder}
                   type="number"
+                  max="20"
                   value={login || ''}
                   error={error}
                   onChange={onChangeLogin}
@@ -157,9 +160,11 @@ function RegisterForm({
 
         {activeStep === 1 && (
           <Fragment>
-            <LabelWrapper>tekst 2</LabelWrapper>
+            <LabelWrapper>
+              <FormattedMessage {...messages.password} />
+            </LabelWrapper>
 
-            <FormattedMessage {...messages.inputNumber}>
+            <FormattedMessage {...messages.inputPassword}>
               {placeholder => (
                 <InputWrapper
                   key={2}
@@ -188,9 +193,11 @@ function RegisterForm({
 
         {activeStep === 2 && (
           <Fragment>
-            <LabelWrapper>tekst 3</LabelWrapper>
+            <LabelWrapper>
+              <FormattedMessage {...messages.name} />
+            </LabelWrapper>
 
-            <FormattedMessage {...messages.inputNumber}>
+            <FormattedMessage {...messages.inputName}>
               {placeholder => (
                 <InputWrapper
                   key={3}
@@ -219,9 +226,11 @@ function RegisterForm({
 
         {activeStep === 3 && (
           <Fragment>
-            <LabelWrapper>tekst 4</LabelWrapper>
+            <LabelWrapper>
+              <FormattedMessage {...messages.surname} />
+            </LabelWrapper>
 
-            <FormattedMessage {...messages.inputNumber}>
+            <FormattedMessage {...messages.inputSurname}>
               {placeholder => (
                 <InputWrapper
                   key={4}
@@ -250,7 +259,9 @@ function RegisterForm({
 
         {activeStep === 4 && (
           <Fragment>
-            <LabelWrapper>tekst 5</LabelWrapper>
+            <LabelWrapper>
+              <FormattedMessage {...messages.currency} />
+            </LabelWrapper>
             <CurrencyToggle />
 
             {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
@@ -268,9 +279,11 @@ function RegisterForm({
 
         {activeStep === 5 && (
           <Fragment>
-            <LabelWrapper>tekst 6</LabelWrapper>
+            <LabelWrapper>
+              <FormattedMessage {...messages.emailAddress} />
+            </LabelWrapper>
 
-            <FormattedMessage {...messages.inputNumber}>
+            <FormattedMessage {...messages.inputEmail}>
               {placeholder => (
                 <InputWrapper
                   key={5}
@@ -294,7 +307,7 @@ function RegisterForm({
               />
 
               <TextWrapper>
-                I consent to the processing of my personal data.
+                <FormattedMessage {...messages.checkboxRodo} />
               </TextWrapper>
             </CheckboxWrapper>
 
@@ -305,9 +318,7 @@ function RegisterForm({
             )}
 
             <InformationWrapper>
-              Account registration does not require confirmation by e-mail, but
-              the transfer must be confirmed with a code that will come to your
-              e-mail address.
+              <FormattedMessage {...messages.textEmailNeed} />
             </InformationWrapper>
 
             <ButtonWrapper
@@ -341,11 +352,14 @@ RegisterForm.propTypes = {
   name: PropTypes.string,
   surname: PropTypes.string,
   email: PropTypes.string,
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   currency: PropTypes.array,
   currencyId: PropTypes.number,
   isDataProcessingAgreement: PropTypes.bool,
-  errorDataProcessingAgreement: PropTypes.string,
+  errorDataProcessingAgreement: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
   isLoading: PropTypes.bool,
   activeStep: PropTypes.number,
   onChangeLogin: PropTypes.func,

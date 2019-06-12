@@ -131,9 +131,9 @@ function LoginForm({
 }
 
 LoginForm.propTypes = {
-  login: PropTypes.string,
+  login: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   password: PropTypes.string,
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   activeStep: PropTypes.number,
   isLoading: PropTypes.bool,
   onChangeLogin: PropTypes.func,
@@ -158,7 +158,7 @@ function mapDispatchToProps(dispatch) {
     onChangeLogin: e =>
       dispatch(changeLoginAction(parseInt(e.target.value, 10))),
     onChangePassword: e => dispatch(changePasswordAction(e.target.value)),
-    onEnterLogin: login => dispatch(enterLoginAction(login)),
+    onEnterLogin: login => dispatch(enterLoginAction(parseInt(login, 10))),
     onEnterPassword: password => dispatch(enterPasswordAction(password)),
     handleStepBack: () => dispatch(stepBackAction()),
     handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),

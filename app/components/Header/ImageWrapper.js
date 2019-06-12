@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const ImageWrapper = styled.div`
-  margin: 10px;
+  margin: 0 10px;
 `;
 
 export default ImageWrapper;

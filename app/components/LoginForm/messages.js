@@ -9,33 +9,9 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.components.LoginForm';
 
 export default defineMessages({
-  loginError: {
-    id: `${scope}.loginError`,
-    defaultMessage: 'Please enter the correct ID',
-  },
-  passwordError: {
-    id: `${scope}.passwordError`,
-    defaultMessage: 'Please enter the correct access code',
-  },
-  loginEmpty: {
-    id: `${scope}.loginEmpty`,
-    defaultMessage: 'Please enter the ID',
-  },
-  passwordEmpty: {
-    id: `${scope}.passwordEmpty`,
-    defaultMessage: 'Please enter the access code',
-  },
-  loginToTheSystem: {
-    id: `${scope}.loginToTheSystem`,
-    defaultMessage: 'Login',
-  },
-  helmetLoginTitle: {
-    id: `${scope}.helmetPaymentTitle`,
-    defaultMessage: 'Login · Bank Application',
-  },
   numberId: {
     id: `${scope}.numberId`,
-    defaultMessage: 'ID number',
+    defaultMessage: 'Account pin',
   },
   accessCode: {
     id: `${scope}.accessCode`,
@@ -51,7 +27,7 @@ export default defineMessages({
   },
   inputNumber: {
     id: `${scope}.inputNumber`,
-    defaultMessage: 'Enter the number',
+    defaultMessage: 'Enter the account pin',
   },
   inputPassowrd: {
     id: `${scope}.inputPassowrd`,
@@ -60,9 +36,5 @@ export default defineMessages({
   inputLogin: {
     id: `${scope}.inputLogin`,
     defaultMessage: 'Log in',
-  },
-  serverError: {
-    id: `${scope}.serverError`,
-    defaultMessage: 'Please try again in a moment',
   },
 });

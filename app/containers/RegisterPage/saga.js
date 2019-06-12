@@ -1,4 +1,7 @@
+import React from 'react'
 import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
 import { push } from 'connected-react-router';
 import request from 'utils/request';
 import {
@@ -54,14 +57,22 @@ export function* handleLogin() {
   const isNumber = /^\d+$/;
   const limit = 20;
 
-  if (!login) return yield put(enterLoginErrorAction('empty'));
+  if (!login)
+    return yield put(
+      enterLoginErrorAction(<FormattedMessage {...messages.inputIDEmpty} />),
+    );
   if (!isNumber.test(login) || login.length > limit)
-    return yield put(enterLoginErrorAction('error'));
+    return yield put(
+      enterLoginErrorAction(<FormattedMessage {...messages.invalidId} />),
+    );
 
   try {
     const response = yield call(request, requestURL);
 
-    if (response.isLogin) return yield put(enterLoginErrorAction('exist'));
+    if (response.isLogin)
+      return yield put(
+        enterLoginErrorAction(<FormattedMessage {...messages.inputIDExists} />),
+      );
 
     yield put(enterLoginSuccessAction());
     yield put(stepNextAction());

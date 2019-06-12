@@ -1,4 +1,6 @@
+import React from 'react';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { FormattedMessage } from 'react-intl';
 import decode from 'jwt-decode';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
@@ -9,6 +11,7 @@ import {
   makeTokenSelector,
 } from 'containers/App/selectors';
 import { loggedInAction } from 'containers/App/actions';
+import messages from './messages';
 import { makeLoginSelector, makePasswordSelector } from './selectors';
 import { ENTER_LOGIN, ENTER_PASSWORD, IS_LOGGED } from './constants';
 import {
@@ -37,19 +40,29 @@ export function* handleLogin() {
   const isNumber = /^\d+$/;
   const limit = 20;
 
-  if (!login) return yield put(enterLoginErrorAction('empty'));
+  if (!login)
+    return yield put(
+      enterLoginErrorAction(<FormattedMessage {...messages.loginEmpty} />),
+    );
   if (!isNumber.test(login) || login.length > limit)
-    return yield put(enterLoginErrorAction('error'));
+    return yield put(
+      enterLoginErrorAction(<FormattedMessage {...messages.loginError} />),
+    );
 
   try {
     const response = yield call(request, requestURL);
 
-    if (!response.isLogin) return yield put(enterLoginErrorAction('not exist'));
+    if (!response.isLogin)
+      return yield put(
+        enterLoginErrorAction(<FormattedMessage {...messages.loginError} />),
+      );
 
     yield put(enterLoginSuccessAction());
     yield put(stepNextAction());
-  } catch (err) {
-    yield put(enterLoginErrorAction(err));
+  } catch (error) {
+    yield put(
+      enterLoginErrorAction(<FormattedMessage {...messages.serverError} />),
+    );
   }
 }
 
@@ -57,9 +70,18 @@ export function* handlePassword() {
   const password = yield select(makePasswordSelector());
   const limit = 255;
 
-  if (!password) return yield put(enterPasswordErrorAction('empty'));
+  if (!password)
+    return yield put(
+      enterPasswordErrorAction(
+        <FormattedMessage {...messages.passwordEmpty} />,
+      ),
+    );
   if (password.length > limit)
-    return yield put(enterPasswordErrorAction('error'));
+    return yield put(
+      enterPasswordErrorAction(
+        <FormattedMessage {...messages.passwordError} />,
+      ),
+    );
 
   yield call(loginAttempt);
 }
@@ -69,7 +91,10 @@ function* loginAttempt() {
   const password = yield select(makePasswordSelector());
   const requestURL = `${api.baseURL}${api.users.loginPath}`;
 
-  if (!login || !password) return yield put(loginErrorAction('empty'));
+  if (!login || !password)
+    return yield put(
+      loginErrorAction(<FormattedMessage {...messages.loginAttemptError} />),
+    );
 
   try {
     yield put(loginAction(login, password));
@@ -85,13 +110,16 @@ function* loginAttempt() {
       }),
     });
 
-    if (!response.success) return yield put(loginErrorAction('error'));
+    if (!response.success)
+      return yield put(
+        loginErrorAction(<FormattedMessage {...messages.passwordError} />),
+      );
     yield put(enterPasswordSuccessAction());
     yield put(loginSuccessAction());
     yield put(loggedInAction(decode(response.token).id, response.token));
     yield put(push('/dashboard'));
-  } catch (err) {
-    yield put(loginErrorAction(err));
+  } catch (error) {
+    yield put(loginErrorAction(<FormattedMessage {...messages.serverError} />));
   }
 }
 
