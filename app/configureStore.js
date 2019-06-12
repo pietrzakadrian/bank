@@ -5,6 +5,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
+import { persistStore } from 'redux-persist';
 import createReducer from './reducers';
 
 export default function configureStore(initialState = {}, history) {
@@ -55,5 +56,6 @@ export default function configureStore(initialState = {}, history) {
     });
   }
 
-  return store;
+  const persistor = persistStore(store);
+  return { store, persistor };
 }

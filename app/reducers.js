@@ -4,18 +4,26 @@
 
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import history from 'utils/history';
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
 import globalReducer from 'containers/App/reducer';
+
+const persistConfig = {
+  key: 'bank',
+  storage,
+  debug: true,
+};
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
  */
 export default function createReducer(injectedReducers = {}) {
   const rootReducer = combineReducers({
-    global: globalReducer,
-    language: languageProviderReducer,
+    global: persistReducer(persistConfig, globalReducer),
+    language: persistReducer(persistConfig, languageProviderReducer),
     router: connectRouter(history),
     ...injectedReducers,
   });

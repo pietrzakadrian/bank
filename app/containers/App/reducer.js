@@ -3,7 +3,7 @@
  * App reducer
  *
  */
-import produce from 'immer';
+import produce, { setAutoFreeze } from 'immer';
 import {
   LOGGED_IN,
   LOGGED_OUT,
@@ -19,8 +19,9 @@ export const initialState = {
   notifications: [],
 };
 
+setAutoFreeze(false);
 /* eslint-disable default-case, no-param-reassign */
-const loginPageReducer = (state = initialState, action) =>
+const appPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
       case LOGGED_IN:
@@ -57,4 +58,4 @@ const loginPageReducer = (state = initialState, action) =>
     }
   });
 
-export default loginPageReducer;
+export default appPageReducer;
