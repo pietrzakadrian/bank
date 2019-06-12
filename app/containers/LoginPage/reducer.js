@@ -81,13 +81,13 @@ const loginPageReducer = (state = initialState, action) =>
         draft.activeStep -= 1;
         draft.error = '';
         break;
-      // case LOCATION_CHANGE:
-      //   draft.login = '';
-      //   draft.password = '';
-      //   draft.error = '';
-      //   draft.activeStep = 0;
-      //   draft.isLoading = false;
-      //   break;
+      case LOCATION_CHANGE:
+        draft.login = '';
+        draft.password = '';
+        draft.error = '';
+        draft.activeStep = 0;
+        draft.isLoading = false;
+        break;
     }
   });
 
