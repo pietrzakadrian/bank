@@ -116,11 +116,10 @@ function* loginAttempt() {
       );
     yield put(enterPasswordSuccessAction());
     yield put(loginSuccessAction());
-    console.log('test jeste');
     yield put(loggedInAction(decode(response.token).id, response.token));
     yield put(push('/dashboard'));
   } catch (error) {
-    yield put(loginErrorAction(error));
+    yield put(loginErrorAction(<FormattedMessage {...messages.serverError} />));
   }
 }
 
