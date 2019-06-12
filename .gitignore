@@ -9,6 +9,7 @@ jsconfig.json
 package-lock.json
 yarn.lock
 yarn-error.log
+.github/
 
 # Cruft
 .DS_Store

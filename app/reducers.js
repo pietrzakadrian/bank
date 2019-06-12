@@ -10,10 +10,14 @@ import history from 'utils/history';
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
 import globalReducer from 'containers/App/reducer';
 
-const persistConfig = {
-  key: 'bank',
+const globalPersistConfig = {
+  key: 'bank_global',
   storage: localForage,
-  debug: true,
+};
+
+const languagePersistConfig = {
+  key: 'bank_language',
+  storage: localForage,
 };
 
 /**
@@ -21,8 +25,8 @@ const persistConfig = {
  */
 export default function createReducer(injectedReducers = {}) {
   const rootReducer = combineReducers({
-    global: persistReducer(persistConfig, globalReducer),
-    language: persistReducer(persistConfig, languageProviderReducer),
+    global: persistReducer(globalPersistConfig, globalReducer),
+    language: persistReducer(languagePersistConfig, languageProviderReducer),
     router: connectRouter(history),
     ...injectedReducers,
   });
