@@ -6,10 +6,16 @@
 
 import {
   LOGGED_IN,
-  LOGGED_OUT,
+  LOGOUT,
+  LOGOUT_SUCCESS,
+  LOGOUT_ERROR,
   ENQUEUE_SNACKBAR,
   CLOSE_SNACKBAR,
   REMOVE_SNACKBAR,
+  TOGGLE_NAVIGATION_DESKTOP,
+  TOGGLE_NAVIGATION_MOBILE,
+  TOGGLE_MESSAGES,
+  TOGGLE_NOTIFICATIONS,
 } from './constants';
 
 export function loggedInAction(userId, token) {
@@ -20,9 +26,46 @@ export function loggedInAction(userId, token) {
   };
 }
 
-export function loggedOutAction() {
+export function logoutAction() {
   return {
-    type: LOGGED_OUT,
+    type: LOGOUT,
+  };
+}
+
+export function logoutSuccessAction() {
+  return {
+    type: LOGOUT_SUCCESS,
+  };
+}
+
+export function toggleNavigationDesktopAction() {
+  return {
+    type: TOGGLE_NAVIGATION_DESKTOP,
+  };
+}
+
+export function toggleNavigationMobileAction() {
+  return {
+    type: TOGGLE_NAVIGATION_MOBILE,
+  };
+}
+
+export function toggleMessagesAction() {
+  return {
+    type: TOGGLE_MESSAGES,
+  };
+}
+
+export function toggleNotificationsAction() {
+  return {
+    type: TOGGLE_NOTIFICATIONS,
+  };
+}
+
+export function logoutErrorAction(error) {
+  return {
+    type: LOGOUT_ERROR,
+    error,
   };
 }
 

@@ -29,6 +29,12 @@ const makeNotificationsSelector = () =>
     globalState => globalState.notifications,
   );
 
+const makeErrorSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.error,
+  );
+
 const makeSelectLocation = () =>
   createSelector(
     selectRouter,
@@ -41,4 +47,5 @@ export {
   makeTokenSelector,
   makeSelectLocation,
   makeNotificationsSelector,
+  makeErrorSelector,
 };
