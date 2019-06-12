@@ -15,21 +15,6 @@ import { DashboardPage } from '../index';
 import { DEFAULT_LOCALE } from '../../../i18n';
 
 describe('<DashboardPage />', () => {
-  it('Expect to not log errors in console', () => {
-    const spy = jest.spyOn(global.console, 'error');
-    const dispatch = jest.fn();
-    render(
-      <IntlProvider locale={DEFAULT_LOCALE}>
-        <DashboardPage dispatch={dispatch} />
-      </IntlProvider>,
-    );
-    expect(spy).not.toHaveBeenCalled();
-  });
-
-  it('Expect to have additional unit tests specified', () => {
-    expect(true).toEqual(false);
-  });
-
   /**
    * Unskip this test to use it
    *

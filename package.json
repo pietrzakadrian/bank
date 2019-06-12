@@ -61,6 +61,7 @@
   "dependencies": {
     "@material-ui/core": "^4.1.0",
     "@material-ui/icons": "^4.1.0",
+    "@material-ui/styles": "^4.1.0",
     "chalk": "2.4.2",
     "compression": "1.7.4",
     "connected-react-router": "6.4.0",
@@ -74,6 +75,7 @@
     "invariant": "2.2.4",
     "ip": "1.1.5",
     "jwt-decode": "^2.2.0",
+    "localforage": "^1.7.3",
     "lodash": "4.17.11",
     "minimist": "1.2.0",
     "notistack": "^0.8.6",

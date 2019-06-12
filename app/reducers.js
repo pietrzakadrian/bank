@@ -5,15 +5,14 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-
+import localForage from 'localforage';
 import history from 'utils/history';
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
 import globalReducer from 'containers/App/reducer';
 
 const persistConfig = {
   key: 'bank',
-  storage,
+  storage: localForage,
   debug: true,
 };
 
