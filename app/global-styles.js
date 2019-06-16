@@ -1,5 +1,9 @@
 import { createGlobalStyle } from 'styled-components';
-import { SECONDARY_BLUE_LIGHT } from 'utils/colors';
+import {
+  SECONDARY_BLUE_LIGHT,
+  PRIMARY_BLUE_LIGHT,
+  PRIMARY_LIGHT,
+} from 'utils/colors';
 import {
   TABLET_VIEWPORT_WIDTH,
   PHONE_LANDSCAPE_VIEWPORT_WIDTH,
@@ -85,6 +89,37 @@ const GlobalStyle = createGlobalStyle`
 
   input[type='number'] {
     -moz-appearance:textfield;
+  }
+
+  [disabled] {
+    opacity: 0.3;
+
+    &:hover {
+      background-color: unset;
+      cursor: unset;
+    }
+  }
+
+  .active {
+    &:hover {
+      cursor: unset;
+    }
+
+    .icon {
+      color: ${PRIMARY_LIGHT};
+    }
+  }
+
+  .icon {
+    color: ${PRIMARY_BLUE_LIGHT};
+    position: relative;
+    margin: 0!important;
+    top: -1px!important;
+    font-size: 28.5px!important;
+
+    @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
+      margin: 0 5px 0 0!important;
+    }
   }
 
   .snackbar__provider,

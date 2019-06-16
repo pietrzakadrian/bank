@@ -9,7 +9,7 @@ import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 import {
   SECONDARY_BLUE_LIGHT,
   PRIMARY_LIGHT,
-  SECONDARY_BLUE_LIGHT_HOVER,
+  PRIMARY_BLUE_LIGHT,
 } from 'utils/colors';
 
 const ButtonWrapper = styled.button`
@@ -22,7 +22,7 @@ const ButtonWrapper = styled.button`
   width: 90%;
 
   &:hover {
-    background-color: ${SECONDARY_BLUE_LIGHT_HOVER};
+    background-color: ${PRIMARY_BLUE_LIGHT};
     cursor: pointer;
   }
 

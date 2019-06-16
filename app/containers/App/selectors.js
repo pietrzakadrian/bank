@@ -35,6 +35,30 @@ const makeErrorSelector = () =>
     globalState => globalState.error,
   );
 
+const makeIsOpenNavigationMobileSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.isOpenNavigationMobile,
+  );
+
+const makeIsOpenNavigationDesktopSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.isOpenNavigationDesktop,
+  );
+
+const makeIsOpenNotificationsSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.isOpenNotifications,
+  );
+
+const makeIsOpenMessagesSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.isOpenMessages,
+  );
+
 const makeSelectLocation = () =>
   createSelector(
     selectRouter,
@@ -48,4 +72,8 @@ export {
   makeSelectLocation,
   makeNotificationsSelector,
   makeErrorSelector,
+  makeIsOpenNavigationMobileSelector,
+  makeIsOpenNavigationDesktopSelector,
+  makeIsOpenNotificationsSelector,
+  makeIsOpenMessagesSelector,
 };

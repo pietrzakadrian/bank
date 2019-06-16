@@ -9,6 +9,7 @@
 
 import React, { Fragment } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { useInjectSaga } from 'utils/injectSaga';
 
 // Import Containers
 import HomePage from 'containers/HomePage/Loadable';
@@ -20,10 +21,13 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 // Import Components
 import Header from 'components/App/Header';
+import saga from './saga';
 
 import GlobalStyle from '../../global-styles';
 
 export default function App() {
+  useInjectSaga({ key: 'appPage', saga });
+
   return (
     <Fragment>
       <Switch>

@@ -9,8 +9,32 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.components.Header';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'This is the Header component!',
+  dashboardTitle: {
+    id: `${scope}.dashboardTitle`,
+    defaultMessage: 'Dashboard',
+  },
+  paymentTitle: {
+    id: `${scope}.paymentTitle`,
+    defaultMessage: 'Payment',
+  },
+  historyTitle: {
+    id: `${scope}.historyTitle`,
+    defaultMessage: 'History',
+  },
+  settingsTitle: {
+    id: `${scope}.settingsTitle`,
+    defaultMessage: 'Settings',
+  },
+  headerItemMessagesTitle: {
+    id: `${scope}.headerItemMessagesTitle`,
+    defaultMessage: 'Messages',
+  },
+  headerItemNotificationsTitle: {
+    id: `${scope}.headerItemNotificationsTitle`,
+    defaultMessage: 'Notifications',
+  },
+  headerItemLogoutTitle: {
+    id: `${scope}.headerItemLogoutTitle`,
+    defaultMessage: 'Logout',
   },
 });

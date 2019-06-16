@@ -4,11 +4,13 @@ import { PRIMARY_GREY } from 'utils/colors';
 import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
 
 const StepperDesktop = styled(Stepper)`
-  background-color: ${PRIMARY_GREY}!important;
-  display: none !important;
+  &&& {
+    background-color: ${PRIMARY_GREY};
+    display: none;
 
-  @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
-    display: flex !important;
+    @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
+      display: flex;
+    }
   }
 `;
 
