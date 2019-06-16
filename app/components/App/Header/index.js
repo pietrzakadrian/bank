@@ -43,9 +43,11 @@ import TitleWrapper from './TitleWrapper';
 import ItemWrapper from './ItemWrapper';
 import ButtonWrapper from './ButtonWrapper';
 import LogoWrapper from './LogoWrapper';
+import ContentWrapper from './ContentWrapper';
 import messages from './messages';
 
 function Header({
+  children,
   location,
   isOpenNavigationMobile,
   isOpenNavigationDesktop,
@@ -104,14 +106,16 @@ function Header({
         </ToolbarWrapper>
       </AppBarWrapper>
       <Sidebar />
-
-      <ResizeObserver
-        onResize={() => {
-          const evt = window.document.createEvent('UIEvents');
-          evt.initUIEvent('resize', true, false, window, 0);
-          window.dispatchEvent(evt);
-        }}
-      />
+      <ContentWrapper open={isOpenNavigationDesktop}>
+        {children}
+        <ResizeObserver
+          onResize={() => {
+            const evt = window.document.createEvent('UIEvents');
+            evt.initUIEvent('resize', true, false, window, 0);
+            window.dispatchEvent(evt);
+          }}
+        />
+      </ContentWrapper>
     </Fragment>
   );
 }
