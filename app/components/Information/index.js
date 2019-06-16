@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
 
 import { FormattedMessage } from 'react-intl';
 import InformationWrapper from './InformationWrapper';
@@ -22,7 +21,5 @@ function Information() {
     </InformationWrapper>
   );
 }
-
-Information.propTypes = {};
 
 export default Information;

@@ -6,7 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -25,7 +24,7 @@ import {
   toggleNavigationDesktopAction,
   toggleNavigationMobileAction,
 } from 'containers/App/actions';
-import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
+import { TOGGLE_TOOLBAR_VIEWPORT_WIDTH } from 'utils/rwd';
 import HeaderWrapper from './HeaderWrapper';
 import DrawerWrapper from './DrawerWrapper';
 
@@ -36,7 +35,7 @@ function Sidebar({
   onToggleNavigationMobile,
 }) {
   return (
-    <MediaQuery minWidth={`${PHONE_LANDSCAPE_VIEWPORT_WIDTH}`}>
+    <MediaQuery minWidth={TOGGLE_TOOLBAR_VIEWPORT_WIDTH}>
       {matches => (
         <DrawerWrapper
           variant={matches ? 'persistent' : 'temporary'}
