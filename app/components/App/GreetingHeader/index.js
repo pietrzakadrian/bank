@@ -51,6 +51,7 @@ function GreetingHeader({
   getLastPresentLogged,
   getLastSuccessfulLogged,
   getLastFailedLogged,
+  isGreetingEvening,
 }) {
   useInjectSaga({ key: 'dashboardPage', saga });
   useInjectReducer({ key: 'dashboardPage', reducer });
@@ -70,12 +71,21 @@ function GreetingHeader({
       lastPresentLogged={lastPresentLogged}
       lastSuccessfulLogged={lastSuccessfulLogged}
     >
-      <div>
-        <FormattedMessage {...messages.greetingPm} />
+      <TextWrapper>
+        {isGreetingEvening(
+          locale,
+          format(new Date(), 'hh'),
+          format(new Date(), 'A'),
+        ) || isGreetingEvening(locale, format(new Date(), 'HH')) ? (
+            <FormattedMessage {...messages.greetingPm} />
+        ) : (
+            <FormattedMessage {...messages.greetingAm} />
+          )}
+
         <HeadlineNameWrapper>
           {', '} {name} {surname}
         </HeadlineNameWrapper>
-      </div>
+      </TextWrapper>
       <TextWrapper>
         <FormattedMessage {...messages.lastSuccessfulLoginInformation} />{' '}
         <time>
@@ -115,6 +125,7 @@ GreetingHeader.propTypes = {
   getLastPresentLogged: PropTypes.func,
   getLastSuccessfulLogged: PropTypes.func,
   getLastFailedLogged: PropTypes.func,
+  isGreetingEvening: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -135,6 +146,15 @@ function mapDispatchToProps(dispatch) {
     getLastPresentLogged: () => dispatch(getLastPresentLoggedAction()),
     getLastSuccessfulLogged: () => dispatch(getLastSuccessfulLoggedAction()),
     getLastFailedLogged: () => dispatch(getLastFailedLoggedAction()),
+    isGreetingEvening: (locale, hour, meridiem) => {
+      if (
+        (locale === 'en' && (hour >= 7 && meridiem === 'PM')) ||
+        (hour <= 5 && meridiem === 'AM') ||
+        (locale !== 'en' && (hour >= 19 || hour <= 5))
+      )
+        return true;
+      return false;
+    },
   };
 }
 
