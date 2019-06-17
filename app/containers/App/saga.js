@@ -17,8 +17,7 @@ export function* handleLogout() {
   const token = yield select(makeTokenSelector());
   const requestURL = `${api.baseURL}${api.users.logoutPath}${userId}`;
 
-  if (!isLogged || !userId || !token)
-    return yield put(logoutErrorAction('err'));
+  if (!isLogged || !userId || !token) return yield put(push('/'));
 
   try {
     const response = yield call(request, requestURL, {
@@ -30,12 +29,13 @@ export function* handleLogout() {
       },
     });
 
-    if (!response.success) return yield put(logoutErrorAction('err'));
-
-    yield put(logoutSuccessAction());
-    yield put(push('/'));
+    if (response.success) {
+      yield put(logoutSuccessAction());
+      return yield put(push('/'));
+    }
   } catch (error) {
-    return yield put(logoutErrorAction(error));
+    yield put(logoutErrorAction(error));
+    yield put(push('/'));
   }
 }
 

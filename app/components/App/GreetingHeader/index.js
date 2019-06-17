@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import { format } from 'date-fns';
 import {
   makeNameSelector,
   makeSurnameSelector,
@@ -30,14 +31,17 @@ import {
 } from 'containers/DashboardPage/actions';
 import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
+import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 import messages from './messages';
 import HeadlineWrapper from './HeadlineWrapper';
 import HeadlineNameWrapper from './HeadlineNameWrapper';
+import TextWrapper from './TextWrapper';
 
 function GreetingHeader({
   name,
   surname,
   email,
+  locale,
   lastSuccessfulLogged,
   lastPresentLogged,
   lastFailedLogged,
@@ -72,10 +76,27 @@ function GreetingHeader({
           {', '} {name} {surname}
         </HeadlineNameWrapper>
       </div>
-      <div>
+      <TextWrapper>
         <FormattedMessage {...messages.lastSuccessfulLoginInformation} />{' '}
-        {lastSuccessfulLogged || lastPresentLogged}
-      </div>
+        <time>
+          {format(
+            lastSuccessfulLogged || lastPresentLogged,
+            `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
+          )}
+        </time>
+      </TextWrapper>
+
+      {lastFailedLogged && (
+        <TextWrapper lastFailedLogged={lastFailedLogged}>
+          <FormattedMessage {...messages.lastFailedLoginInformation} />{' '}
+          <time>
+            {format(
+              lastFailedLogged,
+              `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
+            )}
+          </time>
+        </TextWrapper>
+      )}
     </HeadlineWrapper>
   );
 }
@@ -84,6 +105,7 @@ GreetingHeader.propTypes = {
   name: PropTypes.string,
   surname: PropTypes.string,
   email: PropTypes.string,
+  locale: PropTypes.string,
   lastSuccessfulLogged: PropTypes.string,
   lastPresentLogged: PropTypes.string,
   lastFailedLogged: PropTypes.string,
@@ -99,6 +121,7 @@ const mapStateToProps = createStructuredSelector({
   name: makeNameSelector(),
   surname: makeSurnameSelector(),
   email: makeEmailSelector(),
+  locale: makeSelectLocale(),
   lastPresentLogged: makeLastPresentLoggedSelector(),
   lastSuccessfulLogged: makeLastSuccessfulLoggedSelector(),
   lastFailedLogged: makeLastFailedLoggedSelector(),

@@ -67,7 +67,14 @@ const appPageReducer = (state = initialState, action) =>
         draft.isOpenMessages = false;
         break;
       case LOGOUT_ERROR:
-        draft.error = action.error;
+        draft.isLogged = false;
+        draft.userId = '';
+        draft.token = '';
+        draft.error = '';
+        draft.isOpenNavigationMobile = false;
+        draft.isOpenNavigationDesktop = true;
+        draft.isOpenNotifications = false;
+        draft.isOpenMessages = false;
         break;
       case ENQUEUE_SNACKBAR:
         draft.notifications = [

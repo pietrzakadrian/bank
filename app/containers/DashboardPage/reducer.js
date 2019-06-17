@@ -5,6 +5,7 @@
  */
 import produce from 'immer';
 import { LOCATION_CHANGE } from 'connected-react-router';
+import { LOGOUT_SUCCESS, LOGOUT_ERROR } from 'containers/App/constants';
 import {
   GET_NAME,
   GET_NAME_SUCCESS,
@@ -74,6 +75,42 @@ const dashboardPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
       case LOCATION_CHANGE:
+        draft.availableFunds = '';
+        draft.accountBills = '';
+        draft.savings = '';
+        draft.accountBalanceHistory = '';
+        draft.recentTransactionsSender = '';
+        draft.recentTransactionsRecipient = '';
+        draft.outgoingTransfersSum = '';
+        draft.incomingTransfersSum = '';
+        draft.currency = '';
+        draft.error = '';
+        break;
+      case LOGOUT_SUCCESS:
+        draft.name = '';
+        draft.surname = '';
+        draft.email = '';
+        draft.lastPresentLogged = '';
+        draft.lastSuccessfulLogged = '';
+        draft.lastFailedLogged = '';
+        draft.availableFunds = '';
+        draft.accountBills = '';
+        draft.savings = '';
+        draft.accountBalanceHistory = '';
+        draft.recentTransactionsSender = '';
+        draft.recentTransactionsRecipient = '';
+        draft.outgoingTransfersSum = '';
+        draft.incomingTransfersSum = '';
+        draft.currency = '';
+        draft.error = '';
+        break;
+      case LOGOUT_ERROR:
+        draft.name = '';
+        draft.surname = '';
+        draft.email = '';
+        draft.lastPresentLogged = '';
+        draft.lastSuccessfulLogged = '';
+        draft.lastFailedLogged = '';
         draft.availableFunds = '';
         draft.accountBills = '';
         draft.savings = '';

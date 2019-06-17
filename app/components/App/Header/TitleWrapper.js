@@ -11,13 +11,14 @@ import {
   HIDDEN_TOOLBAR_TITLE_VIEWPORT_WIDTH,
 } from 'utils/rwd';
 
-const TitleWrapper = styled.div`
+const TitleWrapper = styled.h1`
   font-size: 21.5px;
   padding: 0 12px;
   color: ${PRIMARY_DARK};
   flex-grow: 1;
   max-height: 26px;
   overflow: hidden;
+  font-weight: unset;
   display: none;
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {

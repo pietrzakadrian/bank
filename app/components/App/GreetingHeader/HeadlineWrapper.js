@@ -13,7 +13,9 @@ const HeadlineWrapper = styled.section`
   opacity: ${props =>
     props.name &&
     props.surname &&
-    (props.lastSuccessfulLogged || props.lastPresentLogged ? 1 : 0)};
+    (props.lastSuccessfulLogged || props.lastPresentLogged)
+      ? 1
+      : 0};
 `;
 
 export default HeadlineWrapper;
