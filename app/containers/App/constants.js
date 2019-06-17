@@ -5,6 +5,7 @@
  */
 
 export const LOGGED_IN = 'app/App/LOGGED_IN';
+export const IS_LOGGED = 'app/App/IS_LOGGED';
 
 export const LOGOUT = 'app/App/LOGOUT';
 export const LOGOUT_SUCCESS = 'app/App/LOGOUT_SUCCESS';

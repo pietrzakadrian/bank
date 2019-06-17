@@ -15,7 +15,7 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import GreetingHeader from 'components/App/GreetingHeader';
-import makeSelectDashboardPage from './selectors';
+
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -37,10 +37,6 @@ export function DashboardPage() {
 
 DashboardPage.propTypes = {};
 
-const mapStateToProps = createStructuredSelector({
-  dashboardPage: makeSelectDashboardPage(),
-});
-
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
@@ -48,7 +44,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const withConnect = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 );
 

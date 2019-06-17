@@ -10,9 +10,12 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
 import {
   makeNameSelector,
   makeSurnameSelector,
+  makeEmailSelector,
   makeLastSuccessfulLoggedSelector,
   makeLastPresentLoggedSelector,
   makeLastFailedLoggedSelector,
@@ -25,25 +28,37 @@ import {
   getLastFailedLoggedAction,
   getEmailAction,
 } from 'containers/DashboardPage/actions';
+import saga from 'containers/DashboardPage/saga';
+import reducer from 'containers/DashboardPage/reducer';
 import messages from './messages';
 
 function GreetingHeader({
   name,
   surname,
+  email,
   lastSuccessfulLogged,
   lastPresentLogged,
   lastFailedLogged,
-  getUserdata,
+  getName,
+  getSurname,
+  getEmail,
+  getLastPresentLogged,
+  getLastSuccessfulLogged,
+  getLastFailedLogged,
 }) {
+  useInjectSaga({ key: 'dashboardPage', saga });
+  useInjectReducer({ key: 'dashboardPage', reducer });
   useEffect(() => {
-    if (
-      !name ||
-      !surname ||
-      !lastSuccessfulLogged ||
-      !lastPresentLogged ||
-      !lastFailedLogged
-    )
-      getUserdata();
+    if (!name) getName();
+    if (!surname) getSurname();
+    if (!email) getEmail();
+    if (!lastPresentLogged) getLastPresentLogged();
+    if (!lastSuccessfulLogged) getLastSuccessfulLogged();
+    if (!lastFailedLogged) getLastFailedLogged();
+
+    console.log('lastFailedLogged', !lastFailedLogged);
+    console.log('lastSuccessfulLogged', !lastSuccessfulLogged);
+    console.log('lastPresentLogged', !lastPresentLogged);
   }, []);
 
   return (
@@ -56,30 +71,35 @@ function GreetingHeader({
 GreetingHeader.propTypes = {
   name: PropTypes.string,
   surname: PropTypes.string,
+  email: PropTypes.string,
   lastSuccessfulLogged: PropTypes.string,
   lastPresentLogged: PropTypes.string,
   lastFailedLogged: PropTypes.string,
-  getUserdata: PropTypes.func,
+  getName: PropTypes.func,
+  getSurname: PropTypes.func,
+  getEmail: PropTypes.func,
+  getLastPresentLogged: PropTypes.func,
+  getLastSuccessfulLogged: PropTypes.func,
+  getLastFailedLogged: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   name: makeNameSelector(),
   surname: makeSurnameSelector(),
-  lastSuccessfulLogged: makeLastSuccessfulLoggedSelector(),
+  email: makeEmailSelector(),
   lastPresentLogged: makeLastPresentLoggedSelector(),
+  lastSuccessfulLogged: makeLastSuccessfulLoggedSelector(),
   lastFailedLogged: makeLastFailedLoggedSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    getUserdata: () => {
-      dispatch(getNameAction());
-      dispatch(getSurnameAction());
-      dispatch(getEmailAction());
-      dispatch(getLastPresentLoggedAction());
-      dispatch(getLastSuccessfulLoggedAction());
-      dispatch(getLastFailedLoggedAction());
-    },
+    getName: () => dispatch(getNameAction()),
+    getSurname: () => dispatch(getSurnameAction()),
+    getEmail: () => dispatch(getEmailAction()),
+    getLastPresentLogged: () => dispatch(getLastPresentLoggedAction()),
+    getLastSuccessfulLogged: () => dispatch(getLastSuccessfulLoggedAction()),
+    getLastFailedLogged: () => dispatch(getLastFailedLoggedAction()),
   };
 }
 

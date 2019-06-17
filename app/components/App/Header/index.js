@@ -4,7 +4,7 @@
  *
  */
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -35,6 +35,7 @@ import {
   logoutAction,
   toggleMessagesAction,
   toggleNotificationsAction,
+  isLoggedAction,
 } from 'containers/App/actions';
 import AppBarWrapper from './AppBarWrapper';
 import ToolbarWrapper from './ToolbarWrapper';
@@ -56,6 +57,7 @@ function Header({
   onToggleNavigationDesktop,
   onToggleNavigationMobile,
   onLogout,
+  isLogged,
 }) {
   const title = {
     '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
@@ -63,6 +65,10 @@ function Header({
     '/history': <FormattedMessage {...messages.historyTitle} />,
     '/settings': <FormattedMessage {...messages.settingsTitle} />,
   };
+
+  useEffect(() => {
+    isLogged();
+  }, []);
 
   return (
     <Fragment>
@@ -121,6 +127,7 @@ function Header({
 }
 
 Header.propTypes = {
+  children: PropTypes.object,
   location: PropTypes.object,
   isOpenNavigationMobile: PropTypes.bool,
   isOpenNavigationDesktop: PropTypes.bool,
@@ -131,6 +138,7 @@ Header.propTypes = {
   onToggleMessages: PropTypes.func,
   onToggleNotifications: PropTypes.func,
   onLogout: PropTypes.func,
+  isLogged: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -147,6 +155,7 @@ function mapDispatchToProps(dispatch) {
     onToggleMessages: () => dispatch(toggleMessagesAction()),
     onToggleNotifications: () => dispatch(toggleNotificationsAction()),
     onLogout: () => dispatch(logoutAction()),
+    isLogged: () => dispatch(isLoggedAction()),
   };
 }
 

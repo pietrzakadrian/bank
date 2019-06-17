@@ -5,6 +5,7 @@
  */
 
 import {
+  IS_LOGGED,
   LOGGED_IN,
   LOGOUT,
   LOGOUT_SUCCESS,
@@ -17,6 +18,12 @@ import {
   TOGGLE_MESSAGES,
   TOGGLE_NOTIFICATIONS,
 } from './constants';
+
+export function isLoggedAction() {
+  return {
+    type: IS_LOGGED,
+  };
+}
 
 export function loggedInAction(userId, token) {
   return {

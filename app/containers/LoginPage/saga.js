@@ -4,13 +4,12 @@ import { FormattedMessage } from 'react-intl';
 import decode from 'jwt-decode';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
-
 import {
   makeIsLoggedSelector,
   makeUserIdSelector,
   makeTokenSelector,
 } from 'containers/App/selectors';
-import { loggedInAction } from 'containers/App/actions';
+import { loggedInAction, logoutSuccessAction } from 'containers/App/actions';
 import messages from './messages';
 import { makeLoginSelector, makePasswordSelector } from './selectors';
 import { ENTER_LOGIN, ENTER_PASSWORD, IS_LOGGED } from './constants';
@@ -24,6 +23,7 @@ import {
   loginSuccessAction,
   loginErrorAction,
 } from './actions';
+
 import api from '../../api';
 
 export function* handleLogged() {
@@ -31,7 +31,10 @@ export function* handleLogged() {
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
 
-  if (isLogged && userId && token) yield put(push('/dashboard'));
+  if (token && decode(token).exp < new Date().getTime() / 1000)
+    yield put(logoutSuccessAction());
+
+  if (isLogged && userId && token) return yield put(push('/dashboard'));
 }
 
 export function* handleLogin() {
@@ -114,6 +117,7 @@ function* loginAttempt() {
       return yield put(
         loginErrorAction(<FormattedMessage {...messages.passwordError} />),
       );
+
     yield put(enterPasswordSuccessAction());
     yield put(loginSuccessAction());
     yield put(loggedInAction(decode(response.token).id, response.token));

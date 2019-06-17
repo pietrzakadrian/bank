@@ -6,8 +6,9 @@ import {
   makeTokenSelector,
 } from 'containers/App/selectors';
 import request from 'utils/request';
+import decode from 'jwt-decode';
 import api from '../../api';
-import { LOGOUT } from './constants';
+import { LOGOUT, IS_LOGGED } from './constants';
 import { logoutErrorAction, logoutSuccessAction } from './actions';
 
 export function* handleLogout() {
@@ -38,6 +39,18 @@ export function* handleLogout() {
   }
 }
 
+export function* handleLogged() {
+  const isLogged = yield select(makeIsLoggedSelector());
+  const userId = yield select(makeUserIdSelector());
+  const token = yield select(makeTokenSelector());
+
+  if (token && decode(token).exp < new Date().getTime() / 1000)
+    yield put(logoutSuccessAction());
+
+  if (!isLogged || !userId || !token) return yield put(push('/'));
+}
+
 export default function* appPageSaga() {
   yield takeLatest(LOGOUT, handleLogout);
+  yield takeLatest(IS_LOGGED, handleLogged);
 }

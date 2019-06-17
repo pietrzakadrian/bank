@@ -3,12 +3,16 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { FormattedMessage } from 'react-intl';
 import { push } from 'connected-react-router';
 import request from 'utils/request';
+import decode from 'jwt-decode';
 import {
   makeIsLoggedSelector,
   makeUserIdSelector,
   makeTokenSelector,
 } from 'containers/App/selectors';
-import { enqueueSnackbarAction } from 'containers/App/actions';
+import {
+  enqueueSnackbarAction,
+  logoutSuccessAction,
+} from 'containers/App/actions';
 import messages from './messages';
 import {
   makeLoginSelector,
@@ -301,7 +305,10 @@ export function* handleLogged() {
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
 
-  if (isLogged && userId && token) yield put(push('/dashboard'));
+  if (token && decode(token).exp < new Date().getTime() / 1000)
+    yield put(logoutSuccessAction());
+
+  if (isLogged && userId && token) return yield put(push('/dashboard'));
 }
 
 export default function* registerPageSaga() {

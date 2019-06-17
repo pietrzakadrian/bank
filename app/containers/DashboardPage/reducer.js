@@ -74,12 +74,6 @@ const dashboardPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
       case LOCATION_CHANGE:
-        draft.name = '';
-        draft.surname = '';
-        draft.email = '';
-        draft.lastPresentLogged = '';
-        draft.lastSuccessfulLogged = '';
-        draft.lastFailedLogged = '';
         draft.availableFunds = '';
         draft.accountBills = '';
         draft.savings = '';

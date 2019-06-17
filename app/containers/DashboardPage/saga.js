@@ -49,36 +49,39 @@ export function* handleUserdata() {
       },
     });
 
-    if (!response.user.name) return yield put(getNameErrorAction('error'));
-    yield put(getNameSuccessAction(response.user.name));
+    if (!response.user.name) yield put(getNameErrorAction('error'));
+    else yield put(getNameSuccessAction(response.user.name));
 
-    if (!response.user.surname) return yield put(getSurnameAction('error'));
-    yield put(getSurnameSuccessAction(response.user.surname));
+    if (!response.user.surname) yield put(getSurnameAction('error'));
+    else yield put(getSurnameSuccessAction(response.user.surname));
 
-    if (!response.user.email) return yield put(getEmailErrorAction('error'));
-    yield put(getEmailSuccessAction(response.user.email));
-
-    if (!response.user.last_successful_logged)
-      return yield put(getLastSuccessfulLoggedErrorAction('error'));
-    yield put(
-      getLastSuccessfulLoggedSuccessAction(
-        response.user.last_successful_logged,
-      ),
-    );
+    if (!response.user.email) yield put(getEmailErrorAction('error'));
+    else yield put(getEmailSuccessAction(response.user.email));
 
     if (!response.user.last_present_logged)
-      return yield put(getLastPresentLoggedErrorAction('error'));
-    yield put(
-      getLastPresentLoggedSuccessAction(response.user.last_present_logged),
-    );
+      yield put(getLastPresentLoggedErrorAction('error'));
+    else
+      yield put(
+        getLastPresentLoggedSuccessAction(response.user.last_present_logged),
+      );
+
+    if (!response.user.last_successful_logged)
+      yield put(getLastSuccessfulLoggedErrorAction('error'));
+    else
+      yield put(
+        getLastSuccessfulLoggedSuccessAction(
+          response.user.last_successful_logged,
+        ),
+      );
 
     if (!response.user.last_failed_logged)
-      return yield put(getLastFailedLoggedErrorAction('error'));
-    yield put(
-      getLastFailedLoggedSuccessAction(response.user.last_failed_logged),
-    );
+      yield put(getLastFailedLoggedErrorAction('error'));
+    else
+      yield put(
+        getLastFailedLoggedSuccessAction(response.user.last_failed_logged),
+      );
   } catch (error) {
-    return yield put(logoutErrorAction(error));
+    yield put(logoutErrorAction(error));
   }
 }
 
@@ -87,9 +90,9 @@ export default function* dashboardPageSaga() {
     GET_NAME ||
       GET_SURNAME ||
       GET_EMAIL ||
+      GET_LAST_FAILED_LOGGED ||
       GET_LAST_PRESENT_LOGGED ||
-      GET_LAST_SUCCESSFUL_LOGGED ||
-      GET_LAST_FAILED_LOGGED,
+      GET_LAST_SUCCESSFUL_LOGGED,
     handleUserdata,
   );
 }

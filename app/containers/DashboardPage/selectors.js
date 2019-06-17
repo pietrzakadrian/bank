@@ -23,6 +23,12 @@ const makeSurnameSelector = () =>
     substate => substate.surname,
   );
 
+const makeEmailSelector = () =>
+  createSelector(
+    selectDashboardPageDomain,
+    substate => substate.email,
+  );
+
 const makeLastPresentLoggedSelector = () =>
   createSelector(
     selectDashboardPageDomain,
@@ -115,6 +121,7 @@ export default makeSelectDashboardPage;
 export {
   makeNameSelector,
   makeSurnameSelector,
+  makeEmailSelector,
   makeLastPresentLoggedSelector,
   makeLastSuccessfulLoggedSelector,
   makeLastFailedLoggedSelector,

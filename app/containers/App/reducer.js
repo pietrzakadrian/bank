@@ -20,7 +20,7 @@ import {
 
 export const initialState = {
   isLogged: false,
-  userId: null,
+  userId: '',
   token: '',
   notifications: [],
   error: '',
