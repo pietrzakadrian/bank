@@ -31,6 +31,8 @@ import {
 import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
 import messages from './messages';
+import HeadlineWrapper from './HeadlineWrapper';
+import HeadlineNameWrapper from './HeadlineNameWrapper';
 
 function GreetingHeader({
   name,
@@ -55,16 +57,26 @@ function GreetingHeader({
     if (!lastPresentLogged) getLastPresentLogged();
     if (!lastSuccessfulLogged) getLastSuccessfulLogged();
     if (!lastFailedLogged) getLastFailedLogged();
-
-    console.log('lastFailedLogged', !lastFailedLogged);
-    console.log('lastSuccessfulLogged', !lastSuccessfulLogged);
-    console.log('lastPresentLogged', !lastPresentLogged);
   }, []);
 
   return (
-    <div>
-      <FormattedMessage {...messages.header} />
-    </div>
+    <HeadlineWrapper
+      name={name}
+      surname={surname}
+      lastPresentLogged={lastPresentLogged}
+      lastSuccessfulLogged={lastSuccessfulLogged}
+    >
+      <div>
+        <FormattedMessage {...messages.greetingPm} />
+        <HeadlineNameWrapper>
+          {', '} {name} {surname}
+        </HeadlineNameWrapper>
+      </div>
+      <div>
+        <FormattedMessage {...messages.lastSuccessfulLoginInformation} />{' '}
+        {lastSuccessfulLogged || lastPresentLogged}
+      </div>
+    </HeadlineWrapper>
   );
 }
 

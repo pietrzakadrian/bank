@@ -9,8 +9,20 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.components.GreetingHeader';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'This is the GreetingHeader component!',
+  lastSuccessfulLoginInformation: {
+    id: `${scope}.lastSuccessfulLoginInformation`,
+    defaultMessage: 'Last successful login:',
+  },
+  lastFailedLoginInformation: {
+    id: `${scope}.lastFailedLoginInformation`,
+    defaultMessage: 'Last failed login:',
+  },
+  greetingAm: {
+    id: `${scope}.greetingAm`,
+    defaultMessage: 'Good morning',
+  },
+  greetingPm: {
+    id: `${scope}.greetingPm`,
+    defaultMessage: 'Good evening',
   },
 });
