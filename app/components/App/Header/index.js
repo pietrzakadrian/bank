@@ -37,6 +37,10 @@ import {
   toggleNotificationsAction,
   isLoggedAction,
 } from 'containers/App/actions';
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
+import saga from 'containers/App/saga';
+import reducer from 'containers/App/reducer';
 import AppBarWrapper from './AppBarWrapper';
 import ToolbarWrapper from './ToolbarWrapper';
 import HamburgerWrapper from './HamburgerWrapper';
@@ -66,6 +70,8 @@ function Header({
     '/settings': <FormattedMessage {...messages.settingsTitle} />,
   };
 
+  useInjectSaga({ key: 'appPage', saga });
+  useInjectReducer({ key: 'appPage', reducer });
   useEffect(() => {
     isLogged();
   }, []);
