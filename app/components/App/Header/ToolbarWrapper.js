@@ -19,7 +19,7 @@ const ToolbarWrapper = styled(Toolbar)`
     position: relative;
 
     @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-      justify-content: ${props => (props.open ? 'space-between' : 'unset')};
+      justify-content: ${props => (props.open ? 'space-between' : 'normal')};
     }
   }
 `;

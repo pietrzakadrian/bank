@@ -14,8 +14,8 @@ const TextWrapper = styled.span`
   color: ${PRIMARY_BORDER_GREY};
 
   p {
-    display: unset;
-    font-weight: bold;
+    display: initial;
+    font-weight: 700;
   }
 `;
 

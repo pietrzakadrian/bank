@@ -4,7 +4,7 @@ const FooterTitleWrapper = styled.h3`
   text-align: left;
   padding: 15px;
   margin: 0;
-  font-weight: bold;
+  font-weight: 700;
   display: block;
 `;
 

@@ -63,18 +63,18 @@ function Header({
   onLogout,
   isLogged,
 }) {
+  useInjectSaga({ key: 'appPage', saga });
+  useInjectReducer({ key: 'appPage', reducer });
+  useEffect(() => {
+    isLogged();
+  }, []);
+
   const title = {
     '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
     '/payment': <FormattedMessage {...messages.paymentTitle} />,
     '/history': <FormattedMessage {...messages.historyTitle} />,
     '/settings': <FormattedMessage {...messages.settingsTitle} />,
   };
-
-  useInjectSaga({ key: 'appPage', saga });
-  useInjectReducer({ key: 'appPage', reducer });
-  useEffect(() => {
-    isLogged();
-  }, []);
 
   return (
     <Fragment>

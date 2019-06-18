@@ -75,12 +75,13 @@ function GreetingHeader({
         {isGreetingEvening(
           locale,
           format(new Date(), 'hh'),
+          format(new Date(), 'HH'),
           format(new Date(), 'A'),
-        ) || isGreetingEvening(locale, format(new Date(), 'HH')) ? (
+        ) ? (
             <FormattedMessage {...messages.greetingPm} />
-        ) : (
+          ) : (
             <FormattedMessage {...messages.greetingAm} />
-          )}
+        )}
 
         <HeadlineNameWrapper>
           {', '} {name} {surname}
@@ -146,11 +147,11 @@ function mapDispatchToProps(dispatch) {
     getLastPresentLogged: () => dispatch(getLastPresentLoggedAction()),
     getLastSuccessfulLogged: () => dispatch(getLastSuccessfulLoggedAction()),
     getLastFailedLogged: () => dispatch(getLastFailedLoggedAction()),
-    isGreetingEvening: (locale, hour, meridiem) => {
+    isGreetingEvening: (locale, hh, HH, A) => {
       if (
-        (locale === 'en' && (hour >= 7 && meridiem === 'PM')) ||
-        (hour <= 5 && meridiem === 'AM') ||
-        (locale !== 'en' && (hour >= 19 || hour <= 5))
+        (locale === 'en' && (hh >= 7 && A === 'PM')) ||
+        (hh <= 5 && A === 'AM') ||
+        (locale !== 'en' && (HH >= 19 || HH <= 5))
       )
         return true;
       return false;

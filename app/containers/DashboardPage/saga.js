@@ -1,7 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
+import { push } from 'connected-react-router';
 import {
-  makeIsLoggedSelector,
   makeUserIdSelector,
   makeTokenSelector,
 } from 'containers/App/selectors';
@@ -13,6 +13,9 @@ import {
   GET_LAST_SUCCESSFUL_LOGGED,
   GET_LAST_FAILED_LOGGED,
   GET_EMAIL,
+  GET_AVAILABLE_FUNDS,
+  GET_ACCOUNT_BALANCE_HISTORY,
+  GET_CURRENCY,
 } from './constants';
 import api from '../../api';
 import {
@@ -28,16 +31,19 @@ import {
   getLastSuccessfulLoggedSuccessAction,
   getLastPresentLoggedSuccessAction,
   getLastFailedLoggedSuccessAction,
+  getAvailableFundsSuccessAction,
+  getAvailableFundsErrorAction,
+  getAccountBalanceHistorySuccessAction,
+  getAccountBalanceHistoryErrorAction,
+  getCurrencySuccessAction,
+  getCurrencyErrorAction,
 } from './actions';
+import { makeCurrencySelector } from './selectors';
 
 export function* handleUserdata() {
-  const isLogged = yield select(makeIsLoggedSelector());
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
   const requestURL = `${api.baseURL}${api.users.userPath}${userId}`;
-
-  if (!isLogged || !userId || !token)
-    return yield put(logoutErrorAction('error'));
 
   try {
     const response = yield call(request, requestURL, {
@@ -82,6 +88,53 @@ export function* handleUserdata() {
       );
   } catch (error) {
     yield put(logoutErrorAction(error));
+    yield put(push('/'));
+  }
+}
+
+export function* handleAccountingData() {
+  const userId = yield select(makeUserIdSelector());
+  const token = yield select(makeTokenSelector());
+  const requestURL = `${api.baseURL}${api.bills.billsPath}${userId}`;
+  const currency = yield select(makeCurrencySelector());
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response[0].available_funds === 0 || response[0].available_funds)
+      yield put(
+        getAvailableFundsSuccessAction(
+          response[0].available_funds
+            .toFixed(2)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+            .replace('.', ','),
+        ),
+      );
+    else yield put(getAvailableFundsErrorAction('error'));
+
+    if (response[0].additionals[0].account_balance_history)
+      yield put(
+        getAccountBalanceHistorySuccessAction(
+          JSON.parse(`[${response[0].additionals[0].account_balance_history}]`),
+        ),
+      );
+    else getAccountBalanceHistoryErrorAction('error');
+
+    if (!currency && response[0].currency.currency)
+      yield put(getCurrencySuccessAction(response[0].currency.currency));
+    else yield put(getCurrencyErrorAction('error'));
+  } catch (error) {
+    yield put(getAvailableFundsErrorAction(error));
+    yield put(getAccountBalanceHistoryErrorAction(error));
+    if (!currency) yield put(getCurrencyErrorAction(error));
   }
 }
 
@@ -94,5 +147,9 @@ export default function* dashboardPageSaga() {
       GET_LAST_PRESENT_LOGGED ||
       GET_LAST_SUCCESSFUL_LOGGED,
     handleUserdata,
+  );
+  yield takeLatest(
+    GET_AVAILABLE_FUNDS || GET_ACCOUNT_BALANCE_HISTORY || GET_CURRENCY,
+    handleAccountingData,
   );
 }

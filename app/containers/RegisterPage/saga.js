@@ -305,10 +305,14 @@ export function* handleLogged() {
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
 
-  if (token && decode(token).exp < new Date().getTime() / 1000)
-    yield put(logoutSuccessAction());
-
-  if (isLogged && userId && token) return yield put(push('/dashboard'));
+  if (
+    isLogged &&
+    userId &&
+    token &&
+    decode(token).exp > new Date().getTime() / 1000
+  ) {
+    return yield put(push('/dashboard'));
+  }
 }
 
 export default function* registerPageSaga() {

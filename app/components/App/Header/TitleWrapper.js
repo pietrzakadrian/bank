@@ -18,7 +18,7 @@ const TitleWrapper = styled.h1`
   flex-grow: 1;
   max-height: 26px;
   overflow: hidden;
-  font-weight: unset;
+  font-weight: 400;
   display: none;
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
