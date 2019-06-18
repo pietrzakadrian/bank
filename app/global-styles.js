@@ -91,6 +91,16 @@ const GlobalStyle = createGlobalStyle`
     -moz-appearance:textfield;
   }
 
+  .recharts-wrapper {
+    width: 76px!important;
+    height: 204px!important;
+    margin-right: -20px;
+    
+    .recharts-surface {
+      width: 100%;
+    }
+  }
+
   [disabled] {
     opacity: 0.3;
 

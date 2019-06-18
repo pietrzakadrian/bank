@@ -24,6 +24,7 @@ import {
   TABLET_VIEWPORT_WIDTH,
 } from 'utils/rwd';
 import AvailableFunds from 'components/App/AvailableFunds';
+import Savings from 'components/App/Savings';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -78,6 +79,19 @@ export function DashboardPage() {
                 }}
               >
                 <AvailableFunds />
+              </div>
+
+              <div
+                key="2"
+                data-grid={{
+                  x: 1,
+                  y: 0,
+                  w: 1,
+                  h: 6,
+                  static: true,
+                }}
+              >
+                <Savings />
               </div>
             </ResponsiveGridLayout>
           </ContainerWrapper>

@@ -107,6 +107,24 @@ const makeErrorSelector = () =>
     substate => substate.error,
   );
 
+const makeRechartsProcentSelector = () =>
+  createSelector(
+    selectDashboardPageDomain,
+    substate => substate.rechartsProcent,
+  );
+
+const makeRechartsColorsSelector = () =>
+  createSelector(
+    selectDashboardPageDomain,
+    substate => substate.rechartsColors,
+  );
+
+const makeRechartsDataSelector = () =>
+  createSelector(
+    selectDashboardPageDomain,
+    substate => substate.rechartsData,
+  );
+
 /**
  * Default selector used by DashboardPage
  */
@@ -134,5 +152,8 @@ export {
   makeOutgoingTransfersSumSelector,
   makeIncomingTransfersSumSelector,
   makeCurrencySelector,
+  makeRechartsProcentSelector,
+  makeRechartsColorsSelector,
+  makeRechartsDataSelector,
   makeErrorSelector,
 };

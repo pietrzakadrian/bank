@@ -49,6 +49,15 @@ import {
   GET_CURRENCY,
   GET_CURRENCY_SUCCESS,
   GET_CURRENCY_ERROR,
+  GET_RECHARTS_DATA,
+  GET_RECHARTS_DATA_SUCCESS,
+  GET_RECHARTS_DATA_ERROR,
+  GET_RECHARTS_COLORS,
+  GET_RECHARTS_COLORS_SUCCESS,
+  GET_RECHARTS_COLORS_ERROR,
+  GET_RECHARTS_PROCENT,
+  GET_RECHARTS_PROCENT_SUCCESS,
+  GET_RECHARTS_PROCENT_ERROR,
 } from './constants';
 
 export const initialState = {
@@ -67,6 +76,9 @@ export const initialState = {
   outgoingTransfersSum: '',
   incomingTransfersSum: '',
   currency: '',
+  rechartsProcent: '',
+  rechartsColors: '',
+  rechartsData: '',
   error: '',
 };
 
@@ -84,6 +96,9 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.outgoingTransfersSum = '';
         draft.incomingTransfersSum = '';
         draft.currency = '';
+        draft.rechartsProcent = '';
+        draft.echartsColors = '';
+        draft.rechartsData = '';
         draft.error = '';
         break;
       case LOGOUT_SUCCESS:
@@ -102,6 +117,9 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.outgoingTransfersSum = '';
         draft.incomingTransfersSum = '';
         draft.currency = '';
+        draft.rechartsProcent = '';
+        draft.echartsColors = '';
+        draft.rechartsData = '';
         draft.error = '';
         break;
       case LOGOUT_ERROR:
@@ -120,6 +138,9 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.outgoingTransfersSum = '';
         draft.incomingTransfersSum = '';
         draft.currency = '';
+        draft.rechartsProcent = '';
+        draft.echartsColors = '';
+        draft.rechartsData = '';
         draft.error = '';
         break;
       case GET_NAME_SUCCESS:
@@ -204,6 +225,24 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.currency = action.currency;
         break;
       case GET_CURRENCY_ERROR:
+        draft.error = action.error;
+        break;
+      case GET_RECHARTS_DATA_SUCCESS:
+        draft.rechartsData = action.rechartsData;
+        break;
+      case GET_RECHARTS_DATA_ERROR:
+        draft.error = action.error;
+        break;
+      case GET_RECHARTS_COLORS_SUCCESS:
+        draft.rechartsColors = action.rechartsColors;
+        break;
+      case GET_RECHARTS_COLORS_ERROR:
+        draft.error = action.error;
+        break;
+      case GET_RECHARTS_PROCENT_SUCCESS:
+        draft.rechartsProcent = action.rechartsProcent;
+        break;
+      case GET_RECHARTS_PROCENT_ERROR:
         draft.error = action.error;
         break;
     }

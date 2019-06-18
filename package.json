@@ -91,6 +91,7 @@
     "react-responsive": "^7.0.0",
     "react-router-dom": "5.0.0",
     "react-trend": "^1.2.5",
+    "recharts": "^1.6.2",
     "redux": "4.0.1",
     "redux-persist": "^5.10.0",
     "redux-saga": "1.0.2",

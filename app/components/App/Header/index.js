@@ -64,7 +64,6 @@ function Header({
   isLogged,
 }) {
   useInjectSaga({ key: 'appPage', saga });
-  useInjectReducer({ key: 'appPage', reducer });
   useEffect(() => {
     isLogged();
   }, []);
