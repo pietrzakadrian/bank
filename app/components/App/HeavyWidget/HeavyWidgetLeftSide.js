@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 const HeavyWidgetLeftSide = styled.div`
   float: left;
-  width: 65%;
+  width: ${props => (props.pie ? '65%' : '70%')};
   height: 100%;
   display: flex;
   flex-direction: column;

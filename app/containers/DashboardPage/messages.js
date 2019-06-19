@@ -41,11 +41,6 @@ export default defineMessages({
     id: `${scope}.depositDisabled`,
     defaultMessage: 'The Deposits function is disabled.',
   },
-  bankInformation: {
-    id: `${scope}.bankInformation`,
-    defaultMessage:
-      'Did you know that transfers in our bank arrive immediately?',
-  },
   bankCards: {
     id: `${scope}.bankCards`,
     defaultMessage: 'Cards',

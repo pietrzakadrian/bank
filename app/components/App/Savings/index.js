@@ -57,43 +57,43 @@ function Savings({
       {rechartsData &&
       rechartsColors &&
       (rechartsProcent || rechartsProcent === 0) ? (
-        <Fragment>
-          <HeavyWidgetLeftSide>
-            <HeavyWidgetHeader>
-              <FormattedMessage {...messages.savings} />
-            </HeavyWidgetHeader>
+          <Fragment>
+            <HeavyWidgetLeftSide pie>
+              <HeavyWidgetHeader>
+                <FormattedMessage {...messages.savings} />
+              </HeavyWidgetHeader>
               <HeavyWidgetJoin>
-              <HeavyWidgetMain>{rechartsProcent}</HeavyWidgetMain>{' '}
-              <HeavyWidgetUnit>%</HeavyWidgetUnit>
-            </HeavyWidgetJoin>
-          </HeavyWidgetLeftSide>
-          <HeavyWidgetRightSide>
+                <HeavyWidgetMain>{rechartsProcent}</HeavyWidgetMain>{' '}
+                <HeavyWidgetUnit>%</HeavyWidgetUnit>
+              </HeavyWidgetJoin>
+            </HeavyWidgetLeftSide>
+            <HeavyWidgetRightSide pie>
               <PieChart width={200} height={200}>
                 <Pie
                   data={rechartsData}
                   dataKey="value"
-                cx={100}
-                cy={100}
+                  cx={100}
+                  cy={100}
                   innerRadius={70}
                   outerRadius={80}
                   fill="#8884d8"
-                paddingAngle={0}
+                  paddingAngle={0}
                 >
-                {rechartsData.map((entry, index, id) => (
-                  <Cell
+                  {rechartsData.map((entry, index, id) => (
+                    <Cell
                       key={id++}
                       fill={rechartsColors[index % rechartsColors.length]}
-                  />
-                ))}
-              </Pie>
+                    />
+                  ))}
+                </Pie>
               </PieChart>
-          </HeavyWidgetRightSide>
-        </Fragment>
-      ) : (
-        <LoadingWrapper>
-          <LoadingCircular />
-        </LoadingWrapper>
-      )}
+            </HeavyWidgetRightSide>
+          </Fragment>
+        ) : (
+          <LoadingWrapper>
+            <LoadingCircular />
+          </LoadingWrapper>
+        )}
     </HeavyWidgetWrapper>
   );
 }

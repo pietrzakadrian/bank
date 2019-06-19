@@ -20,6 +20,7 @@ import MediaQuery from 'react-responsive';
 import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 import AvailableFunds from 'components/App/AvailableFunds';
 import Savings from 'components/App/Savings';
+import BankInformation from 'components/App/BankInformation';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -87,6 +88,19 @@ export function DashboardPage() {
                 }}
               >
                 <Savings />
+              </div>
+
+              <div
+                key="3"
+                data-grid={{
+                  x: 2,
+                  y: 0,
+                  w: 1,
+                  h: 6,
+                  static: true,
+                }}
+              >
+                <BankInformation />
               </div>
             </ResponsiveGridLayout>
           </ContainerWrapper>
