@@ -13,7 +13,6 @@ const HeavyWidgetWrapper = styled.section`
   border: 1.3px solid ${BORDER_GREY_LIGHT};
   background-color: #f3f3f3;
   position: relative;
-  max-width: 340px;
 
   &:after {
     content: '';

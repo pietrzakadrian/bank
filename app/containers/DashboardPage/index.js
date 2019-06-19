@@ -17,12 +17,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import GreetingHeader from 'components/App/GreetingHeader';
 import ContainerWrapper from 'components/App/ContainerWrapper';
 import MediaQuery from 'react-responsive';
-import {
-  PHONE_LANDSCAPE_VIEWPORT_WIDTH,
-  DESKTOP_VIEWPORT_WIDTH,
-  TABLET_LANDSCAPE_VIEWPORT_WIDTH,
-  TABLET_VIEWPORT_WIDTH,
-} from 'utils/rwd';
+import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 import AvailableFunds from 'components/App/AvailableFunds';
 import Savings from 'components/App/Savings';
 import reducer from './reducer';
@@ -50,10 +45,10 @@ export function DashboardPage() {
           <ContainerWrapper>
             <ResponsiveGridLayout
               breakpoints={{
-                lg: `${DESKTOP_VIEWPORT_WIDTH}`,
-                md: `${TABLET_LANDSCAPE_VIEWPORT_WIDTH}`,
-                sm: `${TABLET_VIEWPORT_WIDTH}`,
-                xs: `${PHONE_LANDSCAPE_VIEWPORT_WIDTH}`,
+                lg: 1100,
+                md: 900,
+                sm: 610,
+                xs: 480,
                 xxs: 0,
               }}
               cols={{

@@ -92,9 +92,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .recharts-wrapper {
-    width: 76px!important;
+    width: 73px!important;
     height: 204px!important;
-    margin-right: -20px;
+    position: absolute!important;
+    right: 19px;
     
     .recharts-surface {
       width: 100%;
