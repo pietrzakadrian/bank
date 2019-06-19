@@ -61,18 +61,6 @@ export default defineMessages({
     id: `${scope}.toPayment`,
     defaultMessage: 'to',
   },
-  savings: {
-    id: `${scope}.savings`,
-    defaultMessage: 'Savings',
-  },
-  bills: {
-    id: `${scope}.bills`,
-    defaultMessage: 'Account Bills',
-  },
-  makeTransferBtn: {
-    id: `${scope}.makeTransferBtn`,
-    defaultMessage: 'Make a transfer',
-  },
   availableFunds: {
     id: `${scope}.availableFunds`,
     defaultMessage: 'Available Funds',

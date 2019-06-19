@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { PRIMARY_BORDER_GREY } from 'utils/colors';
 
 const TextWrapper = styled.span`
-  margin: 10px;
+  margin: 0.625em;
   text-align: center;
   display: block;
   color: ${PRIMARY_BORDER_GREY};

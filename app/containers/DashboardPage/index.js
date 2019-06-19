@@ -21,6 +21,8 @@ import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 import AvailableFunds from 'components/App/AvailableFunds';
 import Savings from 'components/App/Savings';
 import BankInformation from 'components/App/BankInformation';
+import AccountBills from 'components/App/AccountBills';
+import GridItemWrapper from 'components/App/GridItemWrapper';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -64,7 +66,7 @@ export function DashboardPage() {
               isResizable={false}
               isDraggable={matches}
             >
-              <div
+              <GridItemWrapper
                 key="1"
                 data-grid={{
                   x: 0,
@@ -75,9 +77,9 @@ export function DashboardPage() {
                 }}
               >
                 <AvailableFunds />
-              </div>
+              </GridItemWrapper>
 
-              <div
+              <GridItemWrapper
                 key="2"
                 data-grid={{
                   x: 1,
@@ -88,9 +90,9 @@ export function DashboardPage() {
                 }}
               >
                 <Savings />
-              </div>
+              </GridItemWrapper>
 
-              <div
+              <GridItemWrapper
                 key="3"
                 data-grid={{
                   x: 2,
@@ -101,7 +103,19 @@ export function DashboardPage() {
                 }}
               >
                 <BankInformation />
-              </div>
+              </GridItemWrapper>
+
+              <GridItemWrapper
+                key="4"
+                data-grid={{
+                  x: 0,
+                  y: 2,
+                  w: 2,
+                  h: 14,
+                }}
+              >
+                <AccountBills />
+              </GridItemWrapper>
             </ResponsiveGridLayout>
           </ContainerWrapper>
         )}

@@ -7,8 +7,8 @@
 import styled from 'styled-components';
 
 const LogoWrapper = styled.img`
-  width: 40px;
-  margin: 0 6px;
+  width: 2.5em;
+  margin: 0 0.375em;
 `;
 
 export default LogoWrapper;

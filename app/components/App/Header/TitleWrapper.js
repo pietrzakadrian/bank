@@ -12,11 +12,11 @@ import {
 } from 'utils/rwd';
 
 const TitleWrapper = styled.h1`
-  font-size: 21.5px;
-  padding: 0 12px;
   color: ${PRIMARY_DARK};
+  font-size: 1.3438em;
+  padding: 0 0.75em;
   flex-grow: 1;
-  max-height: 26px;
+  max-height: 1.625em;
   overflow: hidden;
   font-weight: 400;
   display: none;

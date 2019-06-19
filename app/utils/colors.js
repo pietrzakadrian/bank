@@ -8,3 +8,6 @@ export const PRIMARY_DARK = '#000000';
 export const PRIMARY_RED = '#e50000';
 export const PRIMARY_GREY = '#f2f4f7';
 export const SECONDARY_GREY = '#b7b7b7';
+export const PRIMARY_BACKGROUND_GREY = '#f7f7f7';
+export const SECONDARY_BACKGROUND_GREY = '#f3f3f3';
+export const SECONDARY_HOVER_GREY = 'rgba(0, 0, 0, 0.08)';

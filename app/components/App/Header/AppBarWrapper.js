@@ -13,13 +13,13 @@ const AppBarWrapper = styled(AppBar)`
   &&& {
     background-color: ${PRIMARY_LIGHT};
     padding: 0;
-    margin-left: 260px;
-    box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.06);
+    margin-left: 16.25em;
+    box-shadow: 0em 0.25em 0.5em -0.1875em rgba(17, 17, 17, 0.06);
     transition: width 0.3s;
     width: 100%;
 
     @media screen and (min-width: ${TOGGLE_TOOLBAR_VIEWPORT_WIDTH}) {
-      width: ${props => props.open && 'calc(100% - 260px)'};
+      width: ${props => props.open && 'calc(100% - 16.25em)'};
     }
   }
 `;

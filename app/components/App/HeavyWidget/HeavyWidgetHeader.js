@@ -5,11 +5,10 @@
  */
 
 import styled from 'styled-components';
-import { BORDER_GREY_LIGHT } from 'utils/colors';
 
-const HeavyWidgetHeader = styled.div`
+const HeavyWidgetHeader = styled.header`
   font-weight: 400;
-  font-size: 18px;
+  font-size: 1.125em;
   padding: 0;
   margin: 0;
 `;
