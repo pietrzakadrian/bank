@@ -23,8 +23,10 @@ import {
   GET_CURRENCY,
   GET_RECHARTS_DATA,
   GET_RECHARTS_COLORS,
-  GET_RECHARTS_PROCENT,
+  GET_SAVINGS,
   GET_ACCOUNT_BILLS,
+  GET_RECENT_TRANSACTIONS_RECIPIENT,
+  GET_RECENT_TRANSACTIONS_SENDER,
 } from './constants';
 import api from '../../api';
 import {
@@ -47,17 +49,13 @@ import {
   getCurrencySuccessAction,
   getCurrencyErrorAction,
   getRecentTransactionsSenderErrorAction,
-  getRecentTransactionsRecipientAction,
-  getRecentTransactionsSenderAction,
   getRecentTransactionsSenderSuccessAction,
   getRecentTransactionsRecipientSuccessAction,
   getRecentTransactionsRecipientErrorAction,
-  getRechartsColorsAction,
   getRechartsColorsSuccessAction,
-  getRechartsDataAction,
   getRechartsDataSuccessAction,
-  getRechartsProcentAction,
-  getRechartsProcentSuccessAction,
+  getSavingsSuccessAction,
+  getSavingsErrorAction,
   getIncomingTransfersSumSuccessAction,
   getIncomingTransfersSumErrorAction,
   getOutgoingTransfersSumSuccessAction,
@@ -66,7 +64,6 @@ import {
   getAccountBillsErrorAction,
 } from './actions';
 import {
-  makeCurrencySelector,
   makeRecentTransactionsSenderSelector,
   makeRecentTransactionsRecipientSelector,
   makeOutgoingTransfersSumSelector,
@@ -190,6 +187,8 @@ export function* handleAccountingData() {
         ),
       );
     else yield put(getOutgoingTransfersSumErrorAction('error'));
+
+    yield call(handleRecharts);
   } catch (error) {
     yield put(getAvailableFundsErrorAction(error));
     yield put(getAccountBalanceHistoryErrorAction(error));
@@ -197,69 +196,9 @@ export function* handleAccountingData() {
   }
 }
 
-export function* handleRecharts() {
+export function* handleRecentTransactions() {
   yield call(getRecentTransactionsSender);
   yield call(getRecentTransactionsRecipient);
-
-  const recentTransactionsSender = yield select(
-    makeRecentTransactionsSenderSelector(),
-  );
-  const recentTransactionsRecipient = yield select(
-    makeRecentTransactionsRecipientSelector(),
-  );
-  const outgoingTransfersSum = yield select(makeOutgoingTransfersSumSelector());
-  const incomingTransfersSum = yield select(makeIncomingTransfersSumSelector());
-
-  if (recentTransactionsSender || recentTransactionsRecipient) {
-    if (recentTransactionsSender === 0 && recentTransactionsRecipient === 0) {
-      yield put(getRechartsColorsAction());
-      yield put(
-        getRechartsColorsSuccessAction(JSON.parse(`["${BORDER_GREY_LIGHT}"]`)),
-      );
-
-      // todo: ?
-      // yield put(getRechartsDataAction());
-      yield put(getRechartsDataSuccessAction([{ name: 'Group A', value: 1 }]));
-
-      yield put(getRechartsProcentAction());
-      yield put(getRechartsProcentSuccessAction(0));
-    } else {
-      yield put(getRechartsColorsAction());
-      yield put(
-        getRechartsColorsSuccessAction(
-          JSON.parse(`["${PRIMARY_BLUE_LIGHT}", "${PRIMARY_RED}"]`),
-        ),
-      );
-
-      // todo: ?
-      // yield put(getRechartsDataAction());
-      yield put(
-        getRechartsDataSuccessAction([
-          {
-            name: 'Group A',
-            value: incomingTransfersSum,
-          },
-          {
-            name: 'Group B',
-            value: outgoingTransfersSum,
-          },
-        ]),
-      );
-
-      yield put(getRechartsProcentAction());
-
-      const rechartsProcent =
-        (incomingTransfersSum * 100) /
-          (parseFloat(incomingTransfersSum) +
-            parseFloat(outgoingTransfersSum)) || 0;
-
-      yield put(
-        getRechartsProcentSuccessAction(
-          rechartsProcent.toFixed(1).replace('.', ','),
-        ),
-      );
-    }
-  }
 }
 
 function* getRecentTransactionsSender() {
@@ -268,8 +207,6 @@ function* getRecentTransactionsSender() {
   const requestURL = `${api.baseURL}${api.transactions.senderPath}${userId}`;
 
   try {
-    yield put(getRecentTransactionsSenderAction());
-
     const response = yield call(request, requestURL, {
       method: 'GET',
       headers: {
@@ -292,8 +229,6 @@ function* getRecentTransactionsRecipient() {
   const requestURL = `${api.baseURL}${api.transactions.recipientPath}${userId}`;
 
   try {
-    yield put(getRecentTransactionsRecipientAction());
-
     const response = yield call(request, requestURL, {
       method: 'GET',
       headers: {
@@ -311,6 +246,55 @@ function* getRecentTransactionsRecipient() {
   }
 }
 
+function* handleRecharts() {
+  const recentTransactionsSender = yield select(
+    makeRecentTransactionsSenderSelector(),
+  );
+  const recentTransactionsRecipient = yield select(
+    makeRecentTransactionsRecipientSelector(),
+  );
+  const outgoingTransfersSum = yield select(makeOutgoingTransfersSumSelector());
+  const incomingTransfersSum = yield select(makeIncomingTransfersSumSelector());
+
+  if (recentTransactionsSender === 0 && recentTransactionsRecipient === 0) {
+    yield put(
+      getRechartsColorsSuccessAction(JSON.parse(`["${BORDER_GREY_LIGHT}"]`)),
+    );
+    yield put(getRechartsDataSuccessAction([{ name: 'Group A', value: 1 }]));
+    yield put(getSavingsSuccessAction(0));
+  } else {
+    yield put(
+      getRechartsColorsSuccessAction(
+        JSON.parse(`["${PRIMARY_BLUE_LIGHT}", "${PRIMARY_RED}"]`),
+      ),
+    );
+
+    yield put(
+      getRechartsDataSuccessAction([
+        {
+          name: 'Group A',
+          value: incomingTransfersSum,
+        },
+        {
+          name: 'Group B',
+          value: outgoingTransfersSum,
+        },
+      ]),
+    );
+
+    const rechartsProcent =
+      (incomingTransfersSum * 100) /
+        (parseFloat(incomingTransfersSum) + parseFloat(outgoingTransfersSum)) ||
+      0;
+
+    yield put(
+      getSavingsSuccessAction(
+        rechartsProcent.toFixed(1).replace('.', ','),
+      ),
+    );
+  }
+}
+
 export default function* dashboardPageSaga() {
   yield takeLatest(
     GET_NAME ||
@@ -325,11 +309,14 @@ export default function* dashboardPageSaga() {
     GET_AVAILABLE_FUNDS ||
       GET_ACCOUNT_BILLS ||
       GET_ACCOUNT_BALANCE_HISTORY ||
-      GET_CURRENCY,
+      GET_CURRENCY ||
+      GET_RECHARTS_DATA ||
+      GET_RECHARTS_COLORS ||
+      GET_SAVINGS,
     handleAccountingData,
   );
   yield takeLatest(
-    GET_RECHARTS_DATA || GET_RECHARTS_COLORS || GET_RECHARTS_PROCENT,
-    handleRecharts,
+    GET_RECENT_TRANSACTIONS_RECIPIENT || GET_RECENT_TRANSACTIONS_SENDER,
+    handleRecentTransactions,
   );
 }

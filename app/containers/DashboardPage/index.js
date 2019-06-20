@@ -23,6 +23,7 @@ import Savings from 'components/App/Savings';
 import BankInformation from 'components/App/BankInformation';
 import AccountBills from 'components/App/AccountBills';
 import GridItemWrapper from 'components/App/GridItemWrapper';
+import RecentTransactions from 'components/App/RecentTransactions';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -115,6 +116,18 @@ export function DashboardPage() {
                 }}
               >
                 <AccountBills />
+              </GridItemWrapper>
+
+              <GridItemWrapper
+                key="5"
+                data-grid={{
+                  x: 2,
+                  y: 2,
+                  w: 1,
+                  h: 14,
+                }}
+              >
+                <RecentTransactions />
               </GridItemWrapper>
             </ResponsiveGridLayout>
           </ContainerWrapper>

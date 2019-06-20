@@ -56,9 +56,6 @@ import {
   GET_RECHARTS_COLORS,
   GET_RECHARTS_COLORS_SUCCESS,
   GET_RECHARTS_COLORS_ERROR,
-  GET_RECHARTS_PROCENT,
-  GET_RECHARTS_PROCENT_SUCCESS,
-  GET_RECHARTS_PROCENT_ERROR,
 } from './constants';
 
 export function getNameAction() {
@@ -401,26 +398,6 @@ export function getRechartsColorsSuccessAction(rechartsColors) {
 export function getRechartsColorsErrorAction(error) {
   return {
     type: GET_RECHARTS_COLORS_ERROR,
-    error,
-  };
-}
-
-export function getRechartsProcentAction() {
-  return {
-    type: GET_RECHARTS_PROCENT,
-  };
-}
-
-export function getRechartsProcentSuccessAction(rechartsProcent) {
-  return {
-    type: GET_RECHARTS_PROCENT_SUCCESS,
-    rechartsProcent,
-  };
-}
-
-export function getRechartsProcentErrorAction(error) {
-  return {
-    type: GET_RECHARTS_PROCENT_ERROR,
     error,
   };
 }

@@ -55,9 +55,9 @@ import {
   GET_RECHARTS_COLORS,
   GET_RECHARTS_COLORS_SUCCESS,
   GET_RECHARTS_COLORS_ERROR,
-  GET_RECHARTS_PROCENT,
-  GET_RECHARTS_PROCENT_SUCCESS,
-  GET_RECHARTS_PROCENT_ERROR,
+  GET_SAVINGS,
+  GET_SAVINGS_SUCCESS,
+  GET_SAVINGS_ERROR,
 } from './constants';
 
 export const initialState = {
@@ -76,7 +76,6 @@ export const initialState = {
   outgoingTransfersSum: '',
   incomingTransfersSum: '',
   currency: '',
-  rechartsProcent: '',
   rechartsColors: '',
   rechartsData: '',
   error: '',
@@ -96,7 +95,7 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.outgoingTransfersSum = '';
         draft.incomingTransfersSum = '';
         draft.currency = '';
-        draft.rechartsProcent = '';
+        draft.savings = '';
         draft.rechartsColors = '';
         draft.rechartsData = '';
         draft.error = '';
@@ -138,7 +137,7 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.outgoingTransfersSum = '';
         draft.incomingTransfersSum = '';
         draft.currency = '';
-        draft.rechartsProcent = '';
+        draft.savings = '';
         draft.rechartsColors = '';
         draft.rechartsData = '';
         draft.error = '';
@@ -239,10 +238,10 @@ const dashboardPageReducer = (state = initialState, action) =>
       case GET_RECHARTS_COLORS_ERROR:
         draft.error = action.error;
         break;
-      case GET_RECHARTS_PROCENT_SUCCESS:
-        draft.rechartsProcent = action.rechartsProcent;
+      case GET_SAVINGS_SUCCESS:
+        draft.savings = action.savings;
         break;
-      case GET_RECHARTS_PROCENT_ERROR:
+      case GET_SAVINGS_ERROR:
         draft.error = action.error;
         break;
     }

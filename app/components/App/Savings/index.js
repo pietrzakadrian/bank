@@ -26,20 +26,21 @@ import { FormattedMessage } from 'react-intl';
 import {
   getRechartsColorsAction,
   getRechartsDataAction,
-  getRechartsProcentAction,
+  getSavingsAction,
 } from 'containers/DashboardPage/actions';
 import {
   makeRechartsColorsSelector,
-  makeRechartsProcentSelector,
   makeRechartsDataSelector,
+  makeSavingsSelector,
 } from 'containers/DashboardPage/selectors';
 import LoadingWrapper from './LoadingWrapper';
 import messages from './messages';
 
 function Savings({
+  savings,
   rechartsColors,
-  rechartsProcent,
   rechartsData,
+  getSavings,
   getRechartsColors,
   getRechartsData,
   getRechartsProcent,
@@ -47,23 +48,23 @@ function Savings({
   useInjectSaga({ key: 'dashboardPage', saga });
   useInjectReducer({ key: 'dashboardPage', reducer });
   useEffect(() => {
+    getSavings(),
     getRechartsColors();
     getRechartsData();
-    getRechartsProcent();
   }, []);
 
   return (
     <HeavyWidgetWrapper>
       {rechartsData &&
       rechartsColors &&
-      (rechartsProcent || rechartsProcent === 0) ? (
+      (savings || savings === 0) ? (
           <Fragment>
             <HeavyWidgetLeftSide pie>
               <HeavyWidgetHeader>
                 <FormattedMessage {...messages.savings} />
               </HeavyWidgetHeader>
               <HeavyWidgetJoin>
-                <HeavyWidgetMain>{rechartsProcent}</HeavyWidgetMain>{' '}
+                <HeavyWidgetMain>{savings}</HeavyWidgetMain>{' '}
                 <HeavyWidgetUnit>%</HeavyWidgetUnit>
               </HeavyWidgetJoin>
             </HeavyWidgetLeftSide>
@@ -99,22 +100,22 @@ function Savings({
 }
 
 Savings.propTypes = {
+  getSavings: PropTypes.func,
   getRechartsColors: PropTypes.func,
   getRechartsData: PropTypes.func,
-  getRechartsProcent: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
+  savings: makeSavingsSelector(),
   rechartsColors: makeRechartsColorsSelector(),
-  rechartsProcent: makeRechartsProcentSelector(),
   rechartsData: makeRechartsDataSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
+    getSavings: () => dispatch(getSavingsAction()),
     getRechartsColors: () => dispatch(getRechartsColorsAction()),
     getRechartsData: () => dispatch(getRechartsDataAction()),
-    getRechartsProcent: () => dispatch(getRechartsProcentAction()),
   };
 }
 
