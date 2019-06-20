@@ -24,6 +24,7 @@ import {
   GET_RECHARTS_DATA,
   GET_RECHARTS_COLORS,
   GET_RECHARTS_PROCENT,
+  GET_ACCOUNT_BILLS,
 } from './constants';
 import api from '../../api';
 import {
@@ -61,6 +62,8 @@ import {
   getIncomingTransfersSumErrorAction,
   getOutgoingTransfersSumSuccessAction,
   getOutgoingTransfersSumErrorAction,
+  getAccountBillsSuccessAction,
+  getAccountBillsErrorAction,
 } from './actions';
 import {
   makeCurrencySelector,
@@ -126,7 +129,6 @@ export function* handleAccountingData() {
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
   const requestURL = `${api.baseURL}${api.bills.billsPath}${userId}`;
-  const currency = yield select(makeCurrencySelector());
 
   try {
     const response = yield call(request, requestURL, {
@@ -150,6 +152,17 @@ export function* handleAccountingData() {
       );
     else yield put(getAvailableFundsErrorAction('error'));
 
+    if (response[0].account_bill)
+      yield put(
+        getAccountBillsSuccessAction(
+          response[0].account_bill
+            .toString()
+            .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+            .trim(),
+        ),
+      );
+    else yield put(getAccountBillsErrorAction('error'));
+
     if (response[0].additionals[0].account_balance_history)
       yield put(
         getAccountBalanceHistorySuccessAction(
@@ -158,7 +171,7 @@ export function* handleAccountingData() {
       );
     else getAccountBalanceHistoryErrorAction('error');
 
-    if (!currency && response[0].currency.currency)
+    if (response[0].currency.currency)
       yield put(getCurrencySuccessAction(response[0].currency.currency));
     else yield put(getCurrencyErrorAction('error'));
 
@@ -180,7 +193,7 @@ export function* handleAccountingData() {
   } catch (error) {
     yield put(getAvailableFundsErrorAction(error));
     yield put(getAccountBalanceHistoryErrorAction(error));
-    if (!currency) yield put(getCurrencyErrorAction(error));
+    yield put(getCurrencyErrorAction(error));
   }
 }
 
@@ -309,7 +322,10 @@ export default function* dashboardPageSaga() {
     handleUserdata,
   );
   yield takeLatest(
-    GET_AVAILABLE_FUNDS || GET_ACCOUNT_BALANCE_HISTORY || GET_CURRENCY,
+    GET_AVAILABLE_FUNDS ||
+      GET_ACCOUNT_BILLS ||
+      GET_ACCOUNT_BALANCE_HISTORY ||
+      GET_CURRENCY,
     handleAccountingData,
   );
   yield takeLatest(

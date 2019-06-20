@@ -97,7 +97,7 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.incomingTransfersSum = '';
         draft.currency = '';
         draft.rechartsProcent = '';
-        draft.echartsColors = '';
+        draft.rechartsColors = '';
         draft.rechartsData = '';
         draft.error = '';
         break;
@@ -118,7 +118,7 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.incomingTransfersSum = '';
         draft.currency = '';
         draft.rechartsProcent = '';
-        draft.echartsColors = '';
+        draft.rechartsColors = '';
         draft.rechartsData = '';
         draft.error = '';
         break;
@@ -139,7 +139,7 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.incomingTransfersSum = '';
         draft.currency = '';
         draft.rechartsProcent = '';
-        draft.echartsColors = '';
+        draft.rechartsColors = '';
         draft.rechartsData = '';
         draft.error = '';
         break;
