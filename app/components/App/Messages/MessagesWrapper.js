@@ -31,7 +31,7 @@ const MessagesWrapper = styled.div`
   &:before,
   &:after {
     bottom: 100%;
-    left: 30%;
+    left: 29.5%;
     border: solid transparent;
     content: ' ';
     height: 0;
@@ -59,7 +59,7 @@ const MessagesWrapper = styled.div`
     &:before,
     &:after {
       left: auto;
-      right: 180px;
+      right: 187px;
     }
 
     &:before {
@@ -75,7 +75,7 @@ const MessagesWrapper = styled.div`
     @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
       width: 330px;
       left: auto;
-      right: 70px;
+      right: 76px;
 
       &:before,
       &:after {
@@ -84,7 +84,7 @@ const MessagesWrapper = styled.div`
     }
 
     @media screen and (min-width: 950px) {
-      right: 278px;
+      right: 285px;
     }
   }
 `;

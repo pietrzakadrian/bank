@@ -21,7 +21,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Logo from 'images/icon.png';
 import Sidebar from 'components/App/Sidebar';
-import { TOGGLE_TOOLBAR_VIEWPORT_WIDTH } from 'utils/rwd';
+import {
+  TOGGLE_TOOLBAR_VIEWPORT_WIDTH,
+  HIDDEN_TOOLBAR_TITLE_VIEWPORT_WIDTH,
+} from 'utils/rwd';
 
 import { FormattedMessage } from 'react-intl';
 import {
@@ -180,7 +183,8 @@ function Header({
       <ResizeObserver
         onResize={rect => {
           if (
-            rect.width <= parseInt(`${TOGGLE_TOOLBAR_VIEWPORT_WIDTH}`, 10) &&
+            rect.width <=
+              parseInt(`${HIDDEN_TOOLBAR_TITLE_VIEWPORT_WIDTH}`, 10) &&
             isOpenNavigationDesktop
           ) {
             onToggleNavigationDesktop();
