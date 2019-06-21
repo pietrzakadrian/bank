@@ -79,9 +79,6 @@ function Header({
     isLogged();
     onCheckNewNotifications();
     onCheckNewMessages();
-
-    // todo: if \/ and max-width: TOGGLE_TOOLBAR_VIEWPORT_WIDTH
-    // if (isOpenNavigationDesktop) onToggleNavigationDesktop();
   }, []);
   const refWrapper = useRef(null);
   const title = {
@@ -179,6 +176,17 @@ function Header({
           }}
         />
       </ContentWrapper>
+
+      <ResizeObserver
+        onResize={rect => {
+          if (
+            rect.width <= parseInt(`${TOGGLE_TOOLBAR_VIEWPORT_WIDTH}`, 10) &&
+            isOpenNavigationDesktop
+          ) {
+            onToggleNavigationDesktop();
+          }
+        }}
+      />
     </Fragment>
   );
 }
