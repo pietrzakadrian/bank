@@ -219,12 +219,20 @@ function* getRecentTransactionsSender() {
 
     if (response) {
       const recentTransactionsSender = response.map(({ ...transaction }) => ({
-        ...transaction,
+        id_sender: transaction.id_sender,
         amount_money: `-${transaction.amount_money
           .toFixed(2)
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
           .replace('.', ',')}`,
+        recipient: {
+          id: transaction.id_recipient,
+          name: transaction.getRecipientdata.name,
+          surname: transaction.getRecipientdata.surname,
+        },
+        currency: transaction.currency.currency,
+        transfer_title: transaction.transfer_title,
+        date_time: transaction.date_time,
       }));
 
       yield put(
@@ -253,12 +261,20 @@ function* getRecentTransactionsRecipient() {
     if (response) {
       const recentTransactionsRecipient = response.map(
         ({ ...transaction }) => ({
-          ...transaction,
           amount_money: transaction.amount_money
             .toFixed(2)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
             .replace('.', ','),
+          sender: {
+            id: transaction.id_sender,
+            name: transaction.getSenderdata.name,
+            surname: transaction.getSenderdata.surname,
+          },
+          date_time: transaction.date_time,
+          currency: transaction.currency.currency,
+          id_recipient: transaction.id_recipient,
+          transfer_title: transaction.transfer_title,
         }),
       );
 

@@ -76,8 +76,7 @@ function RecentTransactions({
                       <RecentTransitionsRecipientNameWrapper>
                         <FormattedMessage {...messages.toPayment} />{' '}
                         <RecentTransitionsTitleWrapper>
-                          {row.getRecipientdata.name}{' '}
-                          {row.getRecipientdata.surname}
+                          {row.recipient.name} {row.recipient.surname}
                         </RecentTransitionsTitleWrapper>
                       </RecentTransitionsRecipientNameWrapper>
                       <div>{row.transfer_title}</div>
@@ -85,7 +84,7 @@ function RecentTransactions({
                     <TableCellWrapper>
                       <div>{format(row.date_time, `DD.MM.YYYY`)}</div>
                       <RecentTransitionsSenderAmountWrapper>
-                        {row.amount_money} {row.currency.currency}
+                        {row.amount_money} {row.currency}
                       </RecentTransitionsSenderAmountWrapper>
                     </TableCellWrapper>
                   </Fragment>
@@ -94,7 +93,7 @@ function RecentTransactions({
                     <TableCellWrapper>
                       <div>
                         <FormattedMessage {...messages.fromPayment} />
-                        {row.getSenderdata.name} {row.getSenderdata.surname}
+                        {row.sender.name} {row.sender.surname}
                       </div>
                       <RecentTransitionsTitleWrapper>
                         {row.transfer_title}
@@ -103,7 +102,7 @@ function RecentTransactions({
                     <TableCellWrapper>
                       <div>{format(row.date_time, `DD.MM.YYYY`)}</div>
                       <div>
-                        {row.amount_money} {row.currency.currency}
+                        {row.amount_money} {row.currency}
                       </div>
                     </TableCellWrapper>
                   </Fragment>
