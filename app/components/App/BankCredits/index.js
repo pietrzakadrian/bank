@@ -20,7 +20,7 @@ function BankCredits() {
     <SoftWidgetWrapper>
       <SoftWidgetHeader>
         <FormattedMessage {...messages.bankCredits} />
-        <SoftWidgetHeaderAction>
+        <SoftWidgetHeaderAction onMouseDown={e => e.stopPropagation()}>
           <AccountBalanceIcon /> <FormattedMessage {...messages.newCredit} />
         </SoftWidgetHeaderAction>
       </SoftWidgetHeader>

@@ -27,6 +27,7 @@ import RecentTransactions from 'components/App/RecentTransactions';
 import BankCards from 'components/App/BankCards';
 import BankDeposits from 'components/App/BankDeposits';
 import BankCredits from 'components/App/BankCredits';
+import Copyright from 'components/App/Copyright';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -172,7 +173,7 @@ export function DashboardPage() {
           </ContainerWrapper>
         )}
       </MediaQuery>
-      <ContainerWrapper />
+      <Copyright />
     </Fragment>
   );
 }

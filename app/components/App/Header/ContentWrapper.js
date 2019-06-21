@@ -9,7 +9,7 @@ import { TOGGLE_TOOLBAR_VIEWPORT_WIDTH } from 'utils/rwd';
 
 const ContentWrapper = styled.main`
   flex-grow: 1;
-  padding: 5.5625em 1.5em;
+  padding: 5.5625em 1.5em 1.5em;
   position: relative;
   transform: translate(0, 0);
   transition: margin 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;

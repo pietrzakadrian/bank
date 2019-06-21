@@ -19,7 +19,7 @@ function BankDeposits() {
     <SoftWidgetWrapper>
       <SoftWidgetHeader>
         <FormattedMessage {...messages.bankDeposits} />
-        <SoftWidgetHeaderAction>
+        <SoftWidgetHeaderAction onMouseDown={e => e.stopPropagation()}>
           <TrendingUpIcon /> <FormattedMessage {...messages.newDeposit} />
         </SoftWidgetHeaderAction>
       </SoftWidgetHeader>

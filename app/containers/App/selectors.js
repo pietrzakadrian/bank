@@ -29,6 +29,18 @@ const makeNotificationsSelector = () =>
     globalState => globalState.notifications,
   );
 
+const makeSnackbarsSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.snackbars,
+  );
+
+const makeMessagesSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.messages,
+  );
+
 const makeErrorSelector = () =>
   createSelector(
     selectGlobal,
@@ -59,6 +71,18 @@ const makeIsOpenMessagesSelector = () =>
     globalState => globalState.isOpenMessages,
   );
 
+const makeIsNewMessagesSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.isNewMessages,
+  );
+
+const makeIsNewNotificationsSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.isNewNotifications,
+  );
+
 const makeSelectLocation = () =>
   createSelector(
     selectRouter,
@@ -71,9 +95,13 @@ export {
   makeTokenSelector,
   makeSelectLocation,
   makeNotificationsSelector,
+  makeMessagesSelector,
+  makeSnackbarsSelector,
   makeErrorSelector,
   makeIsOpenNavigationMobileSelector,
   makeIsOpenNavigationDesktopSelector,
   makeIsOpenNotificationsSelector,
   makeIsOpenMessagesSelector,
+  makeIsNewMessagesSelector,
+  makeIsNewNotificationsSelector,
 };

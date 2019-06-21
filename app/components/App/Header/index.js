@@ -14,6 +14,7 @@ import MediaQuery from 'react-responsive';
 
 // Import Components
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import MailActiveIcon from '@material-ui/icons/Mail';
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -28,6 +29,8 @@ import {
   makeIsOpenNavigationDesktopSelector,
   makeIsOpenNotificationsSelector,
   makeIsOpenMessagesSelector,
+  makeIsNewNotificationsSelector,
+  makeIsNewMessagesSelector,
 } from 'containers/App/selectors';
 import {
   toggleNavigationDesktopAction,
@@ -36,11 +39,12 @@ import {
   toggleMessagesAction,
   toggleNotificationsAction,
   isLoggedAction,
+  checkNewMessagesAction,
+  checkNewNotificationsAction,
 } from 'containers/App/actions';
 import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/App/saga';
-import reducer from 'containers/App/reducer';
+import Messages from 'components/App/Messages';
 import AppBarWrapper from './AppBarWrapper';
 import ToolbarWrapper from './ToolbarWrapper';
 import HamburgerWrapper from './HamburgerWrapper';
@@ -50,6 +54,7 @@ import ButtonWrapper from './ButtonWrapper';
 import LogoWrapper from './LogoWrapper';
 import ContentWrapper from './ContentWrapper';
 import messages from './messages';
+import BadgeWrapper from './BadgeWrapper';
 
 function Header({
   children,
@@ -58,14 +63,22 @@ function Header({
   isOpenNavigationDesktop,
   isOpenNotifications,
   isOpenMessages,
+  isNewNotifications,
+  isNewMessages,
   onToggleNavigationDesktop,
   onToggleNavigationMobile,
+  onToggleMessages,
+  onToggleNotifications,
   onLogout,
   isLogged,
+  onCheckNewNotifications,
+  onCheckNewMessages,
 }) {
   useInjectSaga({ key: 'appPage', saga });
   useEffect(() => {
     isLogged();
+    onCheckNewNotifications();
+    onCheckNewMessages();
   }, []);
 
   const title = {
@@ -95,17 +108,45 @@ function Header({
             {title[location.pathname]}
           </TitleWrapper>
 
-          <ButtonWrapper type="button">
-            <MailOutlineIcon className="icon" />
-            <ItemWrapper>
-              <FormattedMessage {...messages.headerItemMessagesTitle} />
-            </ItemWrapper>
+          <ButtonWrapper type="button" onClick={onToggleMessages}>
+            {isNewMessages ? (
+              <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={1}>
+                <MailActiveIcon className="icon" />
+                <ItemWrapper>
+                  <FormattedMessage {...messages.headerItemMessagesTitle} />
+                </ItemWrapper>
+              </BadgeWrapper>
+            ) : (
+              <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={0}>
+                <MailOutlineIcon className="icon" />
+                <ItemWrapper>
+                  <FormattedMessage {...messages.headerItemMessagesTitle} />
+                </ItemWrapper>
+              </BadgeWrapper>
+            )}
+
+            <Messages />
           </ButtonWrapper>
-          <ButtonWrapper type="button">
-            <NotificationsNoneIcon className="icon" />
-            <ItemWrapper>
-              <FormattedMessage {...messages.headerItemNotificationsTitle} />
-            </ItemWrapper>
+          <ButtonWrapper type="button" onClick={onToggleNotifications}>
+            {isNewNotifications ? (
+              <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={1}>
+                <NotificationsActiveIcon className="icon" />
+                <ItemWrapper>
+                  <FormattedMessage
+                    {...messages.headerItemNotificationsTitle}
+                  />
+                </ItemWrapper>
+              </BadgeWrapper>
+            ) : (
+              <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={0}>
+                <NotificationsNoneIcon className="icon" />
+                <ItemWrapper>
+                  <FormattedMessage
+                    {...messages.headerItemNotificationsTitle}
+                  />
+                </ItemWrapper>
+              </BadgeWrapper>
+            )}
           </ButtonWrapper>
           <ButtonWrapper type="button" onClick={onLogout}>
             <ExitToAppIcon className="icon" />
@@ -138,12 +179,16 @@ Header.propTypes = {
   isOpenNavigationDesktop: PropTypes.bool,
   isOpenNotifications: PropTypes.bool,
   isOpenMessages: PropTypes.bool,
+  isNewNotifications: PropTypes.bool,
+  isNewMessages: PropTypes.bool,
   onToggleNavigationDesktop: PropTypes.func,
   onToggleNavigationMobile: PropTypes.func,
   onToggleMessages: PropTypes.func,
   onToggleNotifications: PropTypes.func,
   onLogout: PropTypes.func,
   isLogged: PropTypes.func,
+  onCheckNewNotifications: PropTypes.func,
+  onCheckNewMessages: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -151,6 +196,8 @@ const mapStateToProps = createStructuredSelector({
   isOpenNavigationDesktop: makeIsOpenNavigationDesktopSelector(),
   isOpenNotifications: makeIsOpenNotificationsSelector(),
   isOpenMessages: makeIsOpenMessagesSelector(),
+  isNewNotifications: makeIsNewNotificationsSelector(),
+  isNewMessages: makeIsNewMessagesSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -161,6 +208,8 @@ function mapDispatchToProps(dispatch) {
     onToggleNotifications: () => dispatch(toggleNotificationsAction()),
     onLogout: () => dispatch(logoutAction()),
     isLogged: () => dispatch(isLoggedAction()),
+    onCheckNewNotifications: () => dispatch(checkNewNotificationsAction()),
+    onCheckNewMessages: () => dispatch(checkNewMessagesAction()),
   };
 }
 

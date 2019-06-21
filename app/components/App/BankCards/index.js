@@ -20,7 +20,7 @@ function BankCards() {
     <SoftWidgetWrapper>
       <SoftWidgetHeader>
         <FormattedMessage {...messages.bankCards} />
-        <SoftWidgetHeaderAction>
+        <SoftWidgetHeaderAction onMouseDown={e => e.stopPropagation()}>
           <CardIcon /> <FormattedMessage {...messages.newCard} />
         </SoftWidgetHeaderAction>
       </SoftWidgetHeader>

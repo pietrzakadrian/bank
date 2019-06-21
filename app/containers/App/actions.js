@@ -17,7 +17,37 @@ import {
   TOGGLE_NAVIGATION_MOBILE,
   TOGGLE_MESSAGES,
   TOGGLE_NOTIFICATIONS,
+  CHECK_NEW_MESSAGES,
+  CHECK_NEW_MESSAGES_SUCCESS,
+  CHECK_NEW_NOTIFICATIONS,
+  CHECK_NEW_NOTIFICATIONS_SUCCESS,
 } from './constants';
+
+export function checkNewMessagesAction() {
+  return {
+    type: CHECK_NEW_MESSAGES,
+  };
+}
+
+export function checkNewMessagesSuccessAction(messages) {
+  return {
+    type: CHECK_NEW_MESSAGES_SUCCESS,
+    messages,
+  };
+}
+
+export function checkNewNotificationsAction() {
+  return {
+    type: CHECK_NEW_NOTIFICATIONS,
+  };
+}
+
+export function checkNewNotificationsSuccessAction(notifications) {
+  return {
+    type: CHECK_NEW_NOTIFICATIONS_SUCCESS,
+    notifications,
+  };
+}
 
 export function isLoggedAction() {
   return {
@@ -76,13 +106,13 @@ export function logoutErrorAction(error) {
   };
 }
 
-export function enqueueSnackbarAction(notification) {
-  const key = notification.options && notification.options.key;
+export function enqueueSnackbarAction(snackbar) {
+  const key = snackbar.options && snackbar.options.key;
 
   return {
     type: ENQUEUE_SNACKBAR,
-    notification: {
-      ...notification,
+    snackbar: {
+      ...snackbar,
       key: key || new Date().getTime() + Math.random(),
     },
   };

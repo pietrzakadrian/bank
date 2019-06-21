@@ -52,7 +52,7 @@ function AccountBills({
     <SoftWidgetWrapper>
       <SoftWidgetHeader>
         <FormattedMessage {...messages.bills} />
-        <SoftWidgetHeaderAction>
+        <SoftWidgetHeaderAction onMouseDown={e => e.stopPropagation()}>
           <SwapVertIcon /> <FormattedMessage {...messages.makeTransferBtn} />
         </SoftWidgetHeaderAction>
       </SoftWidgetHeader>

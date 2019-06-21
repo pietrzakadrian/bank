@@ -5,7 +5,7 @@
  */
 
 import { Component } from 'react';
-import { makeNotificationsSelector } from 'containers/App/selectors';
+import { makeSnackbarsSelector } from 'containers/App/selectors';
 import {
   removeSnackbarAction,
   closeSnackbarAction,
@@ -23,17 +23,17 @@ class Notifier extends Component {
     this.displayed = [...this.displayed, id];
   };
 
-  shouldComponentUpdate({ notifications, onCloseSnackbar, onRemoveSnackbar }) {
-    if (!notifications.length) {
+  shouldComponentUpdate({ snackbars, onCloseSnackbar, onRemoveSnackbar }) {
+    if (!snackbars.length) {
       this.displayed = [];
       return false;
     }
 
-    const { notifications: currentSnacks } = this.props;
+    const { snackbars: currentSnacks } = this.props;
     let notExists = false;
 
-    for (let i = 0; i < notifications.length; i += 1) {
-      const newSnack = notifications[i];
+    for (let i = 0; i < snackbars.length; i += 1) {
+      const newSnack = snackbars[i];
 
       if (newSnack.dismissed) {
         onCloseSnackbar(newSnack.key);
@@ -51,9 +51,9 @@ class Notifier extends Component {
   }
 
   componentDidUpdate({ onRemoveSnackbar }) {
-    const { notifications = [] } = this.props;
+    const { snackbars = [] } = this.props;
 
-    notifications.forEach(({ key, message, options = {} }) => {
+    snackbars.forEach(({ key, message, options = {} }) => {
       if (this.displayed.includes(key)) return;
 
       this.props.enqueueSnackbar(message, {
@@ -76,14 +76,14 @@ class Notifier extends Component {
 }
 
 Notifier.propTypes = {
-  notifications: PropTypes.array,
+  snackbars: PropTypes.array,
   enqueueSnackbar: PropTypes.func,
   onRemoveSnackbar: PropTypes.func,
   onCloseSnackbar: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
-  notifications: makeNotificationsSelector(),
+  snackbars: makeSnackbarsSelector(),
 });
 
 function mapDispatchToProps(dispatch) {

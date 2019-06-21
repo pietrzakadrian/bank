@@ -11,3 +11,4 @@ export const SECONDARY_GREY = '#b7b7b7';
 export const PRIMARY_BACKGROUND_GREY = '#f7f7f7';
 export const SECONDARY_BACKGROUND_GREY = '#f3f3f3';
 export const SECONDARY_HOVER_GREY = 'rgba(0, 0, 0, 0.08)';
+export const TRANSPARENT = 'rgba(0, 0, 0, 0)';

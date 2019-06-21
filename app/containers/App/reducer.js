@@ -16,18 +16,26 @@ import {
   TOGGLE_NAVIGATION_MOBILE,
   TOGGLE_MESSAGES,
   TOGGLE_NOTIFICATIONS,
+  CHECK_NEW_MESSAGES,
+  CHECK_NEW_MESSAGES_SUCCESS,
+  CHECK_NEW_NOTIFICATIONS,
+  CHECK_NEW_NOTIFICATIONS_SUCCESS,
 } from './constants';
 
 export const initialState = {
   isLogged: false,
   userId: '',
   token: '',
+  messages: [],
   notifications: [],
+  snackbars: [],
   error: '',
   isOpenNavigationMobile: false,
   isOpenNavigationDesktop: true,
   isOpenNotifications: false,
   isOpenMessages: false,
+  isNewNotifications: false,
+  isNewMessages: false,
 };
 
 setAutoFreeze(false);
@@ -35,6 +43,12 @@ setAutoFreeze(false);
 const appPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case CHECK_NEW_MESSAGES_SUCCESS:
+        draft.isNewMessages = true;
+        break;
+      case CHECK_NEW_NOTIFICATIONS_SUCCESS:
+        draft.isNewNotifications = true;
+        break;
       case TOGGLE_NAVIGATION_DESKTOP:
         draft.isOpenNavigationDesktop = !draft.isOpenNavigationDesktop;
         break;
@@ -43,9 +57,11 @@ const appPageReducer = (state = initialState, action) =>
         break;
       case TOGGLE_MESSAGES:
         draft.isOpenMessages = !draft.isOpenMessages;
+        draft.isNewMessages = false;
         break;
       case TOGGLE_NOTIFICATIONS:
         draft.isOpenNotifications = !draft.isOpenNotifications;
+        draft.isNewNotifications = false;
         break;
       case LOGGED_IN:
         draft.isLogged = true;
@@ -61,40 +77,50 @@ const appPageReducer = (state = initialState, action) =>
         draft.userId = '';
         draft.token = '';
         draft.error = '';
+        draft.messages = [];
+        draft.notifications = [];
+        draft.snackbars = [];
         draft.isOpenNavigationMobile = false;
         draft.isOpenNavigationDesktop = true;
         draft.isOpenNotifications = false;
         draft.isOpenMessages = false;
+        draft.isNewNotifications = false;
+        draft.isNewMessages = false;
         break;
       case LOGOUT_ERROR:
         draft.isLogged = false;
         draft.userId = '';
         draft.token = '';
         draft.error = '';
+        draft.messages = [];
+        draft.notifications = [];
+        draft.snackbars = [];
         draft.isOpenNavigationMobile = false;
         draft.isOpenNavigationDesktop = true;
         draft.isOpenNotifications = false;
         draft.isOpenMessages = false;
+        draft.isNewNotifications = false;
+        draft.isNewMessages = false;
         break;
       case ENQUEUE_SNACKBAR:
-        draft.notifications = [
-          ...draft.notifications,
+        draft.snackbars = [
+          ...draft.snackbar,
           {
             key: action.key,
-            ...action.notification,
+            ...action.snackbar,
           },
         ];
         break;
       case CLOSE_SNACKBAR:
-        draft.notifications = draft.notifications.map(notification =>
-          action.dismissAll || notification.key === action.key
-            ? { ...notification, dismissed: true }
-            : { ...notification },
+        draft.snackbars = draft.snackbars.map(snackbar =>
+          action.dismissAll || snackbar.key === action.key
+            ? { ...snackbar, dismissed: true }
+            : { ...snackbar },
         );
         break;
       case REMOVE_SNACKBAR:
-        draft.notifications = draft.notifications.filter(
-          notification => notification.key !== action.key,
+        draft.snackbars = draft.snackbars.filter(
+          snackbar => snackbar.key !== action.key,
         );
         break;
     }

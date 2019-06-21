@@ -17,6 +17,8 @@ const ToolbarWrapper = styled(Toolbar)`
     border-bottom: 0.0625em solid ${BORDER_GREY_LIGHT};
     justify-content: space-between;
     position: relative;
+    min-height: 56px;
+    padding: 0 16px;
 
     @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
       justify-content: ${props => (props.open ? 'space-between' : 'normal')};
