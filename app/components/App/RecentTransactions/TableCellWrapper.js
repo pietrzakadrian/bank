@@ -12,6 +12,7 @@ const TableCellWrapper = styled(TableCell)`
     cursor: auto;
     max-height: 48px;
     overflow: hidden;
+    font-family: Lato;
 
     &:first-child {
       padding: 4px 0px 4px 25px;

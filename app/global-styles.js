@@ -101,6 +101,10 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .cssTransforms {
+    transition: 0.1s;
+  }
+
   [disabled] {
     opacity: 0.3;
 

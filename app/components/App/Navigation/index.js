@@ -22,6 +22,7 @@ import { toggleNavigationMobileAction } from 'containers/App/actions';
 import NavLinkWrapper from './NavLinkWrapper';
 import Ul from './Ul';
 import messages from './messages';
+
 import TextWrapper from './TextWrapper';
 
 function Navigation({ isOpenNavigationMobile, onToggleNavigationMobile }) {
@@ -30,8 +31,8 @@ function Navigation({ isOpenNavigationMobile, onToggleNavigationMobile }) {
       <Ul>
         <li>
           <NavLinkWrapper
-            to="/dashboard"
             onClick={isOpenNavigationMobile ? onToggleNavigationMobile : null}
+            to="/dashboard"
           >
             <HomeIcon className="icon" />
             <TextWrapper>
@@ -114,6 +115,7 @@ function Navigation({ isOpenNavigationMobile, onToggleNavigationMobile }) {
 }
 
 Navigation.propTypes = {
+  location: PropTypes.object,
   isOpenNavigationMobile: PropTypes.bool,
   onToggleNavigationMobile: PropTypes.func,
 };

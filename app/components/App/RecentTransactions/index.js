@@ -35,6 +35,7 @@ import messages from './messages';
 import LoadingCircular from '../LoadingCircular';
 import RecentTransitionsSenderAmountWrapper from './RecentTransitionsSenderAmountWrapper';
 import RecentTransitionsRecipientNameWrapper from './RecentTransitionsRecipientNameWrapper';
+import RecentTransitionsTitleWrapper from './RecentTransitionsTitleWrapper';
 
 function RecentTransactions({
   recentTransactionsRecipient,
@@ -66,16 +67,16 @@ function RecentTransactions({
               ...recentTransactionsRecipient,
               ...recentTransactionsSender,
             ]).map(row => (
-              <TableRow key={index++}>
+              <TableRow key={index++} onMouseDown={e => e.stopPropagation()}>
                 {row.id_sender === userId ? (
                   <Fragment>
                     <TableCellWrapper recent="true">
                       <RecentTransitionsRecipientNameWrapper>
                         <FormattedMessage {...messages.toPayment} />{' '}
-                        <span>
+                        <RecentTransitionsTitleWrapper>
                           {row.getRecipientdata.name}{' '}
                           {row.getRecipientdata.surname}
-                        </span>
+                        </RecentTransitionsTitleWrapper>
                       </RecentTransitionsRecipientNameWrapper>
                       <div>{row.transfer_title}</div>
                     </TableCellWrapper>
@@ -93,7 +94,9 @@ function RecentTransactions({
                         <FormattedMessage {...messages.fromPayment} />
                         {row.getSenderdata.name} {row.getSenderdata.surname}
                       </div>
-                      <div>{row.transfer_title}</div>
+                      <RecentTransitionsTitleWrapper>
+                        {row.transfer_title}
+                      </RecentTransitionsTitleWrapper>
                     </TableCellWrapper>
                     <TableCellWrapper>
                       <div>{format(row.date_time, `DD.MM.YYYY`)}</div>

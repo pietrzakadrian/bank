@@ -12,6 +12,7 @@ const TableCellWrapper = styled(TableCell)`
     height: ${props => props.loading && '193.24px'};
     cursor: auto;
     width: 50%;
+    font-family: Lato;
 
     &:first-child {
       padding: 14.5px 0 15px 25px;

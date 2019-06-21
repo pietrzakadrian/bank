@@ -24,6 +24,9 @@ import BankInformation from 'components/App/BankInformation';
 import AccountBills from 'components/App/AccountBills';
 import GridItemWrapper from 'components/App/GridItemWrapper';
 import RecentTransactions from 'components/App/RecentTransactions';
+import BankCards from 'components/App/BankCards';
+import BankDeposits from 'components/App/BankDeposits';
+import BankCredits from 'components/App/BankCredits';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -128,6 +131,42 @@ export function DashboardPage() {
                 }}
               >
                 <RecentTransactions />
+              </GridItemWrapper>
+
+              <GridItemWrapper
+                key="6"
+                data-grid={{
+                  x: 0,
+                  y: 3,
+                  w: 1,
+                  h: 14,
+                }}
+              >
+                <BankCards />
+              </GridItemWrapper>
+
+              <GridItemWrapper
+                key="7"
+                data-grid={{
+                  x: 1,
+                  y: 3,
+                  w: 1,
+                  h: 14,
+                }}
+              >
+                <BankDeposits />
+              </GridItemWrapper>
+
+              <GridItemWrapper
+                key="8"
+                data-grid={{
+                  x: 2,
+                  y: 2,
+                  w: 1,
+                  h: 14,
+                }}
+              >
+                <BankCredits />
               </GridItemWrapper>
             </ResponsiveGridLayout>
           </ContainerWrapper>

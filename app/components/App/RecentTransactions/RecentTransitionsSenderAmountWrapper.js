@@ -9,6 +9,10 @@ import { PRIMARY_RED } from 'utils/colors';
 
 const RecentTransitionsSenderAmountWrapper = styled.div`
   color: ${PRIMARY_RED};
+
+  &::selection {
+    color: ${PRIMARY_RED};
+  }
 `;
 
 export default RecentTransitionsSenderAmountWrapper;

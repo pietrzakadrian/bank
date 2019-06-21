@@ -13,6 +13,10 @@ const RecentTransitionsRecipientNameWrapper = styled.div`
 
   span:nth-child(2) {
     color: ${PRIMARY_BLUE_DARK};
+
+    &::selection {
+      color: ${PRIMARY_BLUE_DARK};
+    }
   }
 `;
 

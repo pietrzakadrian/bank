@@ -32,6 +32,7 @@ const NavLinkWrapper = styled(NavLink)`
   &.active {
     background-color: ${PRIMARY_BLUE_LIGHT};
     color: ${PRIMARY_LIGHT};
+    pointer-events: none;
   }
 `;
 

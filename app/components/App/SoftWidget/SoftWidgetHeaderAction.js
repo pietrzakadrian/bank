@@ -32,6 +32,12 @@ const SoftWidgetHeaderAction = styled.button`
   svg {
     font-size: 1.3em;
   }
+
+  span {
+    &::selection {
+      color: ${PRIMARY_BLUE_LIGHT};
+    }
+  }
 `;
 
 export default SoftWidgetHeaderAction;
