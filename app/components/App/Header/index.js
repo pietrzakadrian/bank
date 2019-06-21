@@ -79,6 +79,9 @@ function Header({
     isLogged();
     onCheckNewNotifications();
     onCheckNewMessages();
+
+    // todo: if \/ and max-width: TOGGLE_TOOLBAR_VIEWPORT_WIDTH
+    if (isOpenNavigationDesktop) onToggleNavigationDesktop();
   }, []);
 
   const title = {
@@ -103,11 +106,9 @@ function Header({
               </HamburgerWrapper>
             )}
           </MediaQuery>
-
           <TitleWrapper open={isOpenNavigationDesktop}>
             {title[location.pathname]}
           </TitleWrapper>
-
           <ButtonWrapper type="button" onClick={onToggleMessages}>
             {isNewMessages ? (
               <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={1}>
