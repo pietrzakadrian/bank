@@ -9,18 +9,25 @@ import TableCell from '@material-ui/core/TableCell';
 
 const TableCellWrapper = styled(TableCell)`
   &&& {
-    height: ${props => props.loading && '193.24px'};
     cursor: auto;
-    width: 50%;
+    max-height: 48px;
+    overflow: hidden;
 
     &:first-child {
-      padding: 14.5px 0 15px 25px;
+      padding: 4px 0px 4px 25px;
       text-align: left;
+      width: 55%;
     }
 
     &:last-child {
-      padding: 14.5px 25px 15px 0;
+      padding: 4px 25px 4px 0;
+      width: 45%;
       text-align: right;
+
+      div {
+        max-height: 20px;
+        overflow: hidden;
+      }
     }
   }
 `;

@@ -28,13 +28,13 @@ import SoftWidgetWrapper from 'components/App/SoftWidget/SoftWidgetWrapper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
+import LoadingWrapper from 'components/App/LoadingWrapper';
+import TableCellRightSide from 'components/App/Table/TableCellRightSide';
+import TableCellLeftSide from 'components/App/Table/TableCellLeftSide';
 import messages from './messages';
 import LoadingCircular from '../LoadingCircular';
 import TableCellWrapper from './TableCellWrapper';
-import LoadingWrapper from './LoadingWrapper';
 import AvailableFundsWrapper from './AvailableFundsWrapper';
-import TableCellRightSide from './TableCellRightSide';
-import TableCellLeftSide from './TableCellLeftSide';
 
 function AccountBills({
   availableFunds,
@@ -61,33 +61,28 @@ function AccountBills({
           {(availableFunds === 0 || availableFunds) &&
           accountBills &&
           currency ? (
-            <TableRow onMouseDown={e => e.stopPropagation()}>
-              <TableCellWrapper >
-                <TableCellLeftSide>
-                  {accountBills}
-                  </TableCellLeftSide>
-              </TableCellWrapper>
-              <TableCellWrapper>
-                <TableCellRightSide>
-                <AvailableFundsWrapper>
-                {availableFunds}
-                  </AvailableFundsWrapper> 
-                  {' '}
-                  <span>
-                  {currency}
-                  </span>
-                  </TableCellRightSide>
-              </TableCellWrapper>
-            </TableRow>
-          ) : (
-            <TableRow>
-              <TableCellWrapper loading="true">
-                <LoadingWrapper>
-                  <LoadingCircular />
-                </LoadingWrapper>
-              </TableCellWrapper>
-            </TableRow>
-            )}
+              <TableRow onMouseDown={e => e.stopPropagation()}>
+                <TableCellWrapper>
+                  <TableCellLeftSide>{accountBills}</TableCellLeftSide>
+                </TableCellWrapper>
+                <TableCellWrapper>
+                  <TableCellRightSide>
+                      <AvailableFundsWrapper>
+                          {availableFunds}
+                    </AvailableFundsWrapper>{' '}
+                    <span>{currency}</span>
+                </TableCellRightSide>
+                </TableCellWrapper>
+              </TableRow>
+            ) : (
+              <TableRow>
+                <TableCellWrapper loading="true">
+                  <LoadingWrapper>
+                    <LoadingCircular />
+                  </LoadingWrapper>
+                </TableCellWrapper>
+              </TableRow>
+          )}
         </TableBody>
       </Table>
     </SoftWidgetWrapper>

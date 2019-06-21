@@ -1,6 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
+import { format } from 'date-fns';
 import {
   BORDER_GREY_LIGHT,
   PRIMARY_BLUE_LIGHT,
@@ -216,8 +217,20 @@ function* getRecentTransactionsSender() {
       },
     });
 
-    if (response) yield put(getRecentTransactionsSenderSuccessAction(response));
-    else yield put(getRecentTransactionsSenderErrorAction('error'));
+    if (response) {
+      const recentTransactionsSender = response.map(({ ...transaction }) => ({
+        ...transaction,
+        amount_money: `-${transaction.amount_money
+          .toFixed(2)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+          .replace('.', ',')}`,
+      }));
+
+      yield put(
+        getRecentTransactionsSenderSuccessAction(recentTransactionsSender),
+      );
+    } else yield put(getRecentTransactionsSenderErrorAction('error'));
   } catch (error) {
     yield put(getRecentTransactionsSenderErrorAction(error));
   }
@@ -237,10 +250,24 @@ function* getRecentTransactionsRecipient() {
         Authorization: `Bearer ${token}`,
       },
     });
+    if (response) {
+      const recentTransactionsRecipient = response.map(
+        ({ ...transaction }) => ({
+          ...transaction,
+          amount_money: transaction.amount_money
+            .toFixed(2)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+            .replace('.', ','),
+        }),
+      );
 
-    if (response)
-      yield put(getRecentTransactionsRecipientSuccessAction(response));
-    else yield put(getRecentTransactionsRecipientErrorAction('error'));
+      yield put(
+        getRecentTransactionsRecipientSuccessAction(
+          recentTransactionsRecipient,
+        ),
+      );
+    } else yield put(getRecentTransactionsRecipientErrorAction('error'));
   } catch (error) {
     yield put(getRecentTransactionsSenderErrorAction(error));
   }
@@ -288,9 +315,7 @@ function* handleRecharts() {
       0;
 
     yield put(
-      getSavingsSuccessAction(
-        rechartsProcent.toFixed(1).replace('.', ','),
-      ),
+      getSavingsSuccessAction(rechartsProcent.toFixed(1).replace('.', ',')),
     );
   }
 }

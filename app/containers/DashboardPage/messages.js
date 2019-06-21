@@ -53,20 +53,8 @@ export default defineMessages({
     id: `${scope}.bankCredits`,
     defaultMessage: 'Credits',
   },
-  fromPayment: {
-    id: `${scope}.fromPayment`,
-    defaultMessage: 'from',
-  },
-  toPayment: {
-    id: `${scope}.toPayment`,
-    defaultMessage: 'to',
-  },
   availableFunds: {
     id: `${scope}.availableFunds`,
     defaultMessage: 'Available Funds',
-  },
-  recentTransactions: {
-    id: `${scope}.recentTransactions`,
-    defaultMessage: 'Recent Transactions',
   },
 });

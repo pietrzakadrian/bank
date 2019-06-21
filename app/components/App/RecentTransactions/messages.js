@@ -9,8 +9,16 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.components.RecentTransactions';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'This is the RecentTransactions component!',
+  recentTransactions: {
+    id: `${scope}.recentTransactions`,
+    defaultMessage: 'Recent Transactions',
+  },
+  fromPayment: {
+    id: `${scope}.fromPayment`,
+    defaultMessage: 'from',
+  },
+  toPayment: {
+    id: `${scope}.toPayment`,
+    defaultMessage: 'to',
   },
 });
