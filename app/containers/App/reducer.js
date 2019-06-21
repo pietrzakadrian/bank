@@ -51,17 +51,23 @@ const appPageReducer = (state = initialState, action) =>
         break;
       case TOGGLE_NAVIGATION_DESKTOP:
         draft.isOpenNavigationDesktop = !draft.isOpenNavigationDesktop;
+        draft.isOpenMessages = false;
+        draft.isOpenNotifications = false;
         break;
       case TOGGLE_NAVIGATION_MOBILE:
         draft.isOpenNavigationMobile = !draft.isOpenNavigationMobile;
+        draft.isOpenMessages = false;
+        draft.isOpenNotifications = false;
         break;
       case TOGGLE_MESSAGES:
         draft.isOpenMessages = !draft.isOpenMessages;
         draft.isNewMessages = false;
+        draft.isOpenNotifications = false;
         break;
       case TOGGLE_NOTIFICATIONS:
         draft.isOpenNotifications = !draft.isOpenNotifications;
         draft.isNewNotifications = false;
+        draft.isOpenMessages = false;
         break;
       case LOGGED_IN:
         draft.isLogged = true;

@@ -11,21 +11,6 @@ import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 import ResizeObserver from 'react-resize-observer';
 import MediaQuery from 'react-responsive';
-
-// Import Components
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
-import MailActiveIcon from '@material-ui/icons/Mail';
-import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import MenuIcon from '@material-ui/icons/Menu';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Logo from 'images/icon.png';
-import Sidebar from 'components/App/Sidebar';
-import {
-  TOGGLE_TOOLBAR_VIEWPORT_WIDTH,
-  HIDDEN_TOOLBAR_TITLE_VIEWPORT_WIDTH,
-} from 'utils/rwd';
-
 import { FormattedMessage } from 'react-intl';
 import {
   makeIsOpenNavigationMobileSelector,
@@ -47,6 +32,20 @@ import {
 } from 'containers/App/actions';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/App/saga';
+import {
+  TOGGLE_TOOLBAR_VIEWPORT_WIDTH,
+  HIDDEN_TOOLBAR_TITLE_VIEWPORT_WIDTH,
+} from 'utils/rwd';
+
+// Import Components
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import MailActiveIcon from '@material-ui/icons/Mail';
+import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+import MenuIcon from '@material-ui/icons/Menu';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Logo from 'images/icon.png';
+import Sidebar from 'components/App/Sidebar';
 import Messages from 'components/App/Messages';
 import AppBarWrapper from './AppBarWrapper';
 import ToolbarWrapper from './ToolbarWrapper';
@@ -58,6 +57,7 @@ import LogoWrapper from './LogoWrapper';
 import ContentWrapper from './ContentWrapper';
 import messages from './messages';
 import BadgeWrapper from './BadgeWrapper';
+import Notifications from '../Notifications';
 
 function Header({
   children,
@@ -83,6 +83,7 @@ function Header({
     onCheckNewNotifications();
     onCheckNewMessages();
   }, []);
+
   const refWrapper = useRef(null);
   const title = {
     '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
@@ -135,9 +136,9 @@ function Header({
                 </ItemWrapper>
               </BadgeWrapper>
             )}
-
             <Messages />
           </ButtonWrapper>
+
           <ButtonWrapper type="button" onClick={onToggleNotifications}>
             {isNewNotifications ? (
               <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={1}>
@@ -158,13 +159,16 @@ function Header({
                 </ItemWrapper>
               </BadgeWrapper>
             )}
+            <Notifications />
           </ButtonWrapper>
+
           <ButtonWrapper type="button" onClick={onLogout}>
             <ExitToAppIcon className="icon" />
             <ItemWrapper>
               <FormattedMessage {...messages.headerItemLogoutTitle} />
             </ItemWrapper>
           </ButtonWrapper>
+
           <LogoWrapper src={Logo} alt="Bank Application" />
         </ToolbarWrapper>
       </AppBarWrapper>

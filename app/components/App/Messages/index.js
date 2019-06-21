@@ -16,9 +16,9 @@ import MessagesWrapper from './MessagesWrapper';
 import TextWrapper from './TextWrapper';
 import messages from './messages';
 
-function Messages({ isMessagesOpen }) {
+function Messages({ isOpenMessages }) {
   return (
-    <MessagesWrapper open={isMessagesOpen}>
+    <MessagesWrapper open={isOpenMessages}>
       <TextWrapper>
         <FormattedMessage {...messages.noMessages} />
       </TextWrapper>
@@ -27,11 +27,11 @@ function Messages({ isMessagesOpen }) {
 }
 
 Messages.propTypes = {
-  isMessagesOpen: PropTypes.bool,
+  isOpenMessages: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
-  isMessagesOpen: makeIsOpenMessagesSelector(),
+  isOpenMessages: makeIsOpenMessagesSelector(),
 });
 
 export default connect(mapStateToProps)(Messages);

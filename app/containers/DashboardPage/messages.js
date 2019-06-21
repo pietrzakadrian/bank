@@ -13,12 +13,4 @@ export default defineMessages({
     id: `${scope}.helmetDashboardTitle`,
     defaultMessage: 'Dashboard · Bank Application',
   },
-  newPayment: {
-    id: `${scope}.newPayment`,
-    defaultMessage: 'New payment',
-  },
-  availableFunds: {
-    id: `${scope}.availableFunds`,
-    defaultMessage: 'Available Funds',
-  },
 });
