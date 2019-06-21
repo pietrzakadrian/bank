@@ -10,9 +10,11 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { makeIsOpenMessagesSelector } from 'containers/App/selectors';
+
+// Import Components
 import MessagesWrapper from './MessagesWrapper';
-import messages from './messages';
 import TextWrapper from './TextWrapper';
+import messages from './messages';
 
 function Messages({ isMessagesOpen }) {
   return (

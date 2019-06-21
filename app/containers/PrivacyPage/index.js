@@ -15,7 +15,6 @@ import Information from 'components/Information';
 import Footer from 'components/Footer';
 import FormWrapper from 'components/FormWrapper';
 import TextWrapper from './TextWrapper';
-
 import messages from './messages';
 
 export function PrivacyPage() {

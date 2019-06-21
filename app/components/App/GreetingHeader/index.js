@@ -32,10 +32,12 @@ import {
 import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
-import messages from './messages';
+
+// Import Components
 import HeadlineWrapper from './HeadlineWrapper';
 import HeadlineNameWrapper from './HeadlineNameWrapper';
 import TextWrapper from './TextWrapper';
+import messages from './messages';
 
 function GreetingHeader({
   name,

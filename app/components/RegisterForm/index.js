@@ -10,23 +10,6 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-
-// Import Components
-import FormWrapper from 'components/FormWrapper';
-import LabelWrapper from 'components/LabelWrapper';
-import InputWrapper from 'components/InputWrapper';
-import StepperWrapper from 'components/StepperWrapper';
-import ButtonWrapper from 'components/ButtonWrapper';
-import ButtonBackWrapper from 'components/ButtonBackWrapper';
-import NavigateNextIcon from 'components/NavigateNextIcon';
-import NavigateBackIcon from 'components/NavigateBackIcon';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import StepperDesktop from 'components/StepperDesktop';
-import StepperMobile from 'components/StepperMobile';
-import Checkbox from '@material-ui/core/Checkbox';
-import CurrencyToggle from 'components/CurrencyToggle';
-
 import {
   makeIsLoadingSelector,
   makeNameSelector,
@@ -57,6 +40,22 @@ import {
   toggleDataProcessingAgreementAction,
   enterCurrencyAction,
 } from 'containers/RegisterPage/actions';
+
+// Import Components
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormWrapper from 'components/FormWrapper';
+import LabelWrapper from 'components/LabelWrapper';
+import InputWrapper from 'components/InputWrapper';
+import StepperWrapper from 'components/StepperWrapper';
+import ButtonWrapper from 'components/ButtonWrapper';
+import ButtonBackWrapper from 'components/ButtonBackWrapper';
+import NavigateNextIcon from 'components/NavigateNextIcon';
+import NavigateBackIcon from 'components/NavigateBackIcon';
+import StepperDesktop from 'components/StepperDesktop';
+import StepperMobile from 'components/StepperMobile';
+import CurrencyToggle from 'components/CurrencyToggle';
 import InformationWrapper from './InformationWrapper';
 import CheckboxWrapper from './CheckboxWrapper';
 import TextWrapper from './TextWrapper';

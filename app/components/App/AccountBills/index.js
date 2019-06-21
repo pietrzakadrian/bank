@@ -15,26 +15,28 @@ import reducer from 'containers/DashboardPage/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { makeUserIdSelector } from 'containers/App/selectors';
-import SwapVertIcon from '@material-ui/icons/SwapVert';
 import { getAccountBillsAction } from 'containers/DashboardPage/actions';
 import {
   makeAvailableFundsSelector,
   makeAccountBillsSelector,
   makeCurrencySelector,
 } from 'containers/DashboardPage/selectors';
-import SoftWidgetHeader from 'components/App/SoftWidget/SoftWidgetHeader';
-import SoftWidgetHeaderAction from 'components/App/SoftWidget/SoftWidgetHeaderAction';
-import SoftWidgetWrapper from 'components/App/SoftWidget/SoftWidgetWrapper';
+
+// Import Components
+import SwapVertIcon from '@material-ui/icons/SwapVert';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
+import SoftWidgetHeader from 'components/App/SoftWidget/SoftWidgetHeader';
+import SoftWidgetHeaderAction from 'components/App/SoftWidget/SoftWidgetHeaderAction';
+import SoftWidgetWrapper from 'components/App/SoftWidget/SoftWidgetWrapper';
 import LoadingWrapper from 'components/App/LoadingWrapper';
 import TableCellRightSide from 'components/App/Table/TableCellRightSide';
 import TableCellLeftSide from 'components/App/Table/TableCellLeftSide';
-import messages from './messages';
-import LoadingCircular from '../LoadingCircular';
+import LoadingCircular from 'components/App/LoadingCircular';
 import TableCellWrapper from './TableCellWrapper';
 import AvailableFundsWrapper from './AvailableFundsWrapper';
+import messages from './messages';
 
 function AccountBills({
   availableFunds,

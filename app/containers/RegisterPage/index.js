@@ -10,6 +10,8 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
 
 // Import Components
 import Header from 'components/Header';
@@ -18,12 +20,10 @@ import Information from 'components/Information';
 import RegisterForm from 'components/RegisterForm';
 import Footer from 'components/Footer';
 import Notifier from 'components/Notifier';
+import messages from './messages';
 
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
 import reducer from './reducer';
 import saga from './saga';
-import messages from './messages';
 import { loadCurrencyAction, isLoggedAction } from './actions';
 
 export function RegisterPage({ isLogged, getCurrency }) {

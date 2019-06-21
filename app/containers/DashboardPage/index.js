@@ -5,19 +5,20 @@
  */
 
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import GreetingHeader from 'components/App/GreetingHeader';
-import ContainerWrapper from 'components/App/ContainerWrapper';
 import MediaQuery from 'react-responsive';
 import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
+
+// Import Components
+import GreetingHeader from 'components/App/GreetingHeader';
+import ContainerWrapper from 'components/App/ContainerWrapper';
 import AvailableFunds from 'components/App/AvailableFunds';
 import Savings from 'components/App/Savings';
 import BankInformation from 'components/App/BankInformation';
@@ -28,9 +29,10 @@ import BankCards from 'components/App/BankCards';
 import BankDeposits from 'components/App/BankDeposits';
 import BankCredits from 'components/App/BankCredits';
 import Copyright from 'components/App/Copyright';
+import messages from './messages';
+
 import reducer from './reducer';
 import saga from './saga';
-import messages from './messages';
 
 export function DashboardPage() {
   useInjectReducer({ key: 'dashboardPage', reducer });

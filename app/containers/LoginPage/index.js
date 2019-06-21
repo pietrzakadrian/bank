@@ -10,6 +10,8 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
 
 // Import Components
 import Header from 'components/Header';
@@ -17,13 +19,11 @@ import Subheader from 'components/Subheader';
 import Information from 'components/Information';
 import Footer from 'components/Footer';
 import LoginForm from 'components/LoginForm';
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
 import { isLoggedAction } from './actions';
+import messages from './messages';
+
 import reducer from './reducer';
 import saga from './saga';
-import messages from './messages';
 
 export function LoginPage({ isLogged }) {
   useInjectReducer({ key: 'loginPage', reducer });

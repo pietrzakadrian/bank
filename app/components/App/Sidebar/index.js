@@ -10,12 +10,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import MediaQuery from 'react-responsive';
-
-import Logo from 'components/Header/Logo';
-import Footer from 'components/App/Footer';
-import ImageWrapper from 'components/Header/ImageWrapper';
-import Navigation from 'components/App/Navigation';
-import Divider from '@material-ui/core/Divider';
 import {
   makeIsOpenNavigationMobileSelector,
   makeIsOpenNavigationDesktopSelector,
@@ -25,6 +19,13 @@ import {
   toggleNavigationMobileAction,
 } from 'containers/App/actions';
 import { TOGGLE_TOOLBAR_VIEWPORT_WIDTH } from 'utils/rwd';
+
+// Import Components
+import Divider from '@material-ui/core/Divider';
+import Logo from 'components/Header/Logo';
+import Footer from 'components/App/Footer';
+import ImageWrapper from 'components/Header/ImageWrapper';
+import Navigation from 'components/App/Navigation';
 import HeaderWrapper from './HeaderWrapper';
 import DrawerWrapper from './DrawerWrapper';
 

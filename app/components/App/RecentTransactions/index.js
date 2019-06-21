@@ -24,18 +24,20 @@ import {
   getRecentTransactionsRecipientAction,
   getRecentTransactionsSenderAction,
 } from 'containers/DashboardPage/actions';
-import SoftWidgetHeader from 'components/App/SoftWidget/SoftWidgetHeader';
-import SoftWidgetWrapper from 'components/App/SoftWidget/SoftWidgetWrapper';
+
+// Import Components
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
+import SoftWidgetHeader from 'components/App/SoftWidget/SoftWidgetHeader';
+import SoftWidgetWrapper from 'components/App/SoftWidget/SoftWidgetWrapper';
 import LoadingWrapper from 'components/App/LoadingWrapper';
 import TableBodyWrapper from 'components/App/Table/TableBodyWrapper';
+import LoadingCircular from 'components/App/LoadingCircular';
 import TableCellWrapper from './TableCellWrapper';
-import messages from './messages';
-import LoadingCircular from '../LoadingCircular';
 import RecentTransitionsSenderAmountWrapper from './RecentTransitionsSenderAmountWrapper';
 import RecentTransitionsRecipientNameWrapper from './RecentTransitionsRecipientNameWrapper';
 import RecentTransitionsTitleWrapper from './RecentTransitionsTitleWrapper';
+import messages from './messages';
 
 function RecentTransactions({
   recentTransactionsRecipient,

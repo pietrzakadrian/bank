@@ -5,6 +5,8 @@
  */
 
 import React from 'react';
+
+// Import Components
 import HeaderWrapper from './HeaderWrapper';
 import ImageWrapper from './ImageWrapper';
 import Logo from './Logo';

@@ -9,19 +9,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import HeavyWidgetWrapper from 'components/App/HeavyWidget/HeavyWidgetWrapper';
-import HeavyWidgetLeftSide from 'components/App/HeavyWidget/HeavyWidgetLeftSide';
-import HeavyWidgetRightSide from 'components/App/HeavyWidget/HeavyWidgetRightSide';
-import HeavyWidgetJoin from 'components/App/HeavyWidget/HeavyWidgetJoin';
-import HeavyWidgetHeader from 'components/App/HeavyWidget/HeavyWidgetHeader';
-import HeavyWidgetMain from 'components/App/HeavyWidget/HeavyWidgetMain';
-import HeavyWidgetUnit from 'components/App/HeavyWidget/HeavyWidgetUnit';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
-import { PieChart, Pie, Cell } from 'recharts';
-import LoadingCircular from 'components/App/LoadingCircular';
 import { FormattedMessage } from 'react-intl';
 import {
   getRechartsColorsAction,
@@ -33,6 +24,17 @@ import {
   makeRechartsDataSelector,
   makeSavingsSelector,
 } from 'containers/DashboardPage/selectors';
+
+// Import Components
+import { PieChart, Pie, Cell } from 'recharts';
+import LoadingCircular from 'components/App/LoadingCircular';
+import HeavyWidgetWrapper from 'components/App/HeavyWidget/HeavyWidgetWrapper';
+import HeavyWidgetLeftSide from 'components/App/HeavyWidget/HeavyWidgetLeftSide';
+import HeavyWidgetRightSide from 'components/App/HeavyWidget/HeavyWidgetRightSide';
+import HeavyWidgetJoin from 'components/App/HeavyWidget/HeavyWidgetJoin';
+import HeavyWidgetHeader from 'components/App/HeavyWidget/HeavyWidgetHeader';
+import HeavyWidgetMain from 'components/App/HeavyWidget/HeavyWidgetMain';
+import HeavyWidgetUnit from 'components/App/HeavyWidget/HeavyWidgetUnit';
 import LoadingWrapper from './LoadingWrapper';
 import messages from './messages';
 

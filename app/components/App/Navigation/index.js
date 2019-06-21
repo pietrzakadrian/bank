@@ -10,6 +10,10 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { makeIsOpenNavigationMobileSelector } from 'containers/App/selectors';
+import { toggleNavigationMobileAction } from 'containers/App/actions';
+
+// Import Components
 import CardIcon from '@material-ui/icons/CreditCard';
 import HomeIcon from '@material-ui/icons/Home';
 import HistoryIcon from '@material-ui/icons/History';
@@ -17,13 +21,10 @@ import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { makeIsOpenNavigationMobileSelector } from 'containers/App/selectors';
-import { toggleNavigationMobileAction } from 'containers/App/actions';
 import NavLinkWrapper from './NavLinkWrapper';
 import Ul from './Ul';
-import messages from './messages';
-
 import TextWrapper from './TextWrapper';
+import messages from './messages';
 
 function Navigation({ isOpenNavigationMobile, onToggleNavigationMobile }) {
   return (

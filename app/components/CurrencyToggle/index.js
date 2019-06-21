@@ -14,12 +14,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
 import {
   makeCurrencySelector,
   makeCurrencyIdSelector,
 } from 'containers/RegisterPage/selectors';
 import { changeCurrencyAction } from 'containers/RegisterPage/actions';
+
+// Import Components
 import Toggle from './Toggle';
 import messages from './messages';
 

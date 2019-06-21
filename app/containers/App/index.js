@@ -22,7 +22,6 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 // Import Components
 import Header from 'components/App/Header';
 import saga from './saga';
-
 import GlobalStyle from '../../global-styles';
 
 export default function App() {

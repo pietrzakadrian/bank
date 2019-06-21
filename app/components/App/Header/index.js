@@ -4,7 +4,7 @@
  *
  */
 
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -81,9 +81,9 @@ function Header({
     onCheckNewMessages();
 
     // todo: if \/ and max-width: TOGGLE_TOOLBAR_VIEWPORT_WIDTH
-    if (isOpenNavigationDesktop) onToggleNavigationDesktop();
+    // if (isOpenNavigationDesktop) onToggleNavigationDesktop();
   }, []);
-
+  const refWrapper = useRef(null);
   const title = {
     '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
     '/payment': <FormattedMessage {...messages.paymentTitle} />,
@@ -91,9 +91,17 @@ function Header({
     '/settings': <FormattedMessage {...messages.settingsTitle} />,
   };
 
+  useOutsideWidgetDisabled(
+    refWrapper,
+    isOpenMessages,
+    isOpenNotifications,
+    onToggleMessages,
+    onToggleNotifications,
+  );
+
   return (
     <Fragment>
-      <AppBarWrapper open={isOpenNavigationDesktop}>
+      <AppBarWrapper ref={refWrapper} open={isOpenNavigationDesktop}>
         <ToolbarWrapper open={isOpenNavigationDesktop}>
           <MediaQuery minWidth={TOGGLE_TOOLBAR_VIEWPORT_WIDTH}>
             {matches => (
@@ -106,9 +114,11 @@ function Header({
               </HamburgerWrapper>
             )}
           </MediaQuery>
+
           <TitleWrapper open={isOpenNavigationDesktop}>
             {title[location.pathname]}
           </TitleWrapper>
+
           <ButtonWrapper type="button" onClick={onToggleMessages}>
             {isNewMessages ? (
               <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={1}>
@@ -171,6 +181,28 @@ function Header({
       </ContentWrapper>
     </Fragment>
   );
+}
+
+function useOutsideWidgetDisabled(
+  ref,
+  isOpenMessages,
+  isOpenNotifications,
+  onToggleMessages,
+  onToggleNotifications,
+) {
+  function handleClickOutside(event) {
+    if (ref.current && !ref.current.contains(event.target)) {
+      if (isOpenMessages) onToggleMessages();
+      if (isOpenNotifications) onToggleNotifications();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
 }
 
 Header.propTypes = {

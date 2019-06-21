@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Import Components
 import LocaleToggle from 'components/LocaleToggle';
 import SubheaderWrapper from './SubheaderWrapper';
 import TitleWrapper from './TitleWrapper';

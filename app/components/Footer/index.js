@@ -12,6 +12,8 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { makeSelectLocation } from 'containers/App/selectors';
 import { compose } from 'redux';
+
+// Import Components
 import ErrorOutlineIcon from './ErrorOutlineIcon';
 import FooterWrapper from './FooterWrapper';
 import FooterTitleWrapper from './FooterTitleWrapper';
