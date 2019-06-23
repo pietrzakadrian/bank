@@ -45,7 +45,6 @@ function RecentTransactions({
   userId,
   getRecentTransactionsRecipient,
   getRecentTransactionsSender,
-  sortingData,
 }) {
   useInjectSaga({ key: 'dashboardPage', saga });
   useInjectReducer({ key: 'dashboardPage', reducer });
@@ -120,10 +119,15 @@ function RecentTransactions({
   );
 }
 
+function sortingData(data) {
+  return data
+    .sort((a, b) => Date.parse(b.date_time) - Date.parse(a.date_time))
+    .slice(0, 4);
+}
+
 RecentTransactions.propTypes = {
   getRecentTransactionsRecipient: PropTypes.func,
   getRecentTransactionsSender: PropTypes.func,
-  sortingData: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -138,10 +142,6 @@ function mapDispatchToProps(dispatch) {
       dispatch(getRecentTransactionsRecipientAction()),
     getRecentTransactionsSender: () =>
       dispatch(getRecentTransactionsSenderAction()),
-    sortingData: data =>
-      data
-        .sort((a, b) => Date.parse(b.date_time) - Date.parse(a.date_time))
-        .slice(0, 4),
   };
 }
 

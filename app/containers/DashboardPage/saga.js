@@ -12,6 +12,7 @@ import {
   makeTokenSelector,
 } from 'containers/App/selectors';
 import { logoutErrorAction } from 'containers/App/actions';
+import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 import {
   GET_NAME,
   GET_SURNAME,
@@ -63,6 +64,7 @@ import {
   getOutgoingTransfersSumErrorAction,
   getAccountBillsSuccessAction,
   getAccountBillsErrorAction,
+  getRechartsDataErrorAction,
 } from './actions';
 import {
   makeRecentTransactionsSenderSelector,
@@ -74,6 +76,7 @@ import {
 export function* handleUserdata() {
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
+  const locale = yield select(makeSelectLocale());
   const requestURL = `${api.baseURL}${api.users.userPath}${userId}`;
 
   try {
@@ -86,37 +89,49 @@ export function* handleUserdata() {
       },
     });
 
-    if (!response.user.name) yield put(getNameErrorAction('error'));
-    else yield put(getNameSuccessAction(response.user.name));
-
-    if (!response.user.surname) yield put(getSurnameAction('error'));
-    else yield put(getSurnameSuccessAction(response.user.surname));
-
-    if (!response.user.email) yield put(getEmailErrorAction('error'));
-    else yield put(getEmailSuccessAction(response.user.email));
-
-    if (!response.user.last_present_logged)
-      yield put(getLastPresentLoggedErrorAction('error'));
-    else
-      yield put(
-        getLastPresentLoggedSuccessAction(response.user.last_present_logged),
+    if (response) {
+      const {
+        name,
+        surname,
+        email,
+        last_present_logged,
+        last_successful_logged,
+        last_failed_logged,
+      } = response.user;
+      const lastPresentLogged = format(
+        last_present_logged,
+        `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
+      );
+      const lastSuccessfulLogged = format(
+        last_successful_logged,
+        `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
+      );
+      const lastFailedLogged = format(
+        last_failed_logged,
+        `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
       );
 
-    if (!response.user.last_successful_logged)
-      yield put(getLastSuccessfulLoggedErrorAction('error'));
-    else
-      yield put(
-        getLastSuccessfulLoggedSuccessAction(
-          response.user.last_successful_logged,
-        ),
-      );
+      if (!name) yield put(getNameErrorAction('error'));
+      else yield put(getNameSuccessAction(name));
 
-    if (!response.user.last_failed_logged)
-      yield put(getLastFailedLoggedErrorAction('error'));
-    else
-      yield put(
-        getLastFailedLoggedSuccessAction(response.user.last_failed_logged),
-      );
+      if (!surname) yield put(getSurnameAction('error'));
+      else yield put(getSurnameSuccessAction(surname));
+
+      if (!email) yield put(getEmailErrorAction('error'));
+      else yield put(getEmailSuccessAction(email));
+
+      if (!lastPresentLogged)
+        yield put(getLastPresentLoggedErrorAction('error'));
+      else yield put(getLastPresentLoggedSuccessAction(lastPresentLogged));
+
+      if (!lastSuccessfulLogged)
+        yield put(getLastSuccessfulLoggedErrorAction('error'));
+      else
+        yield put(getLastSuccessfulLoggedSuccessAction(lastSuccessfulLogged));
+
+      if (!lastFailedLogged) yield put(getLastFailedLoggedErrorAction('error'));
+      else yield put(getLastFailedLoggedSuccessAction(lastFailedLogged));
+    }
   } catch (error) {
     yield put(logoutErrorAction(error));
     yield put(push('/'));
@@ -138,56 +153,83 @@ export function* handleAccountingData() {
       },
     });
 
-    if (response[0].available_funds === 0 || response[0].available_funds)
-      yield put(
-        getAvailableFundsSuccessAction(
-          response[0].available_funds
-            .toFixed(2)
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-            .replace('.', ','),
-        ),
-      );
-    else yield put(getAvailableFundsErrorAction('error'));
+    if (response) {
+      const transformAccountingData = response.map(({ ...accountingData }) => ({
+        accountBill: accountingData.account_bill,
+        currency: accountingData.currency.currency,
+        availableFunds: accountingData.available_funds,
+        additionals: {
+          accountBalanceHistory:
+            accountingData.additionals[0].account_balance_history,
+          incomingTransfersSum:
+            accountingData.additionals[0].incoming_transfers_sum,
+          outgoingTransfersSum:
+            accountingData.additionals[0].outgoing_transfers_sum,
+        },
+      }))[0];
 
-    if (response[0].account_bill)
-      yield put(
-        getAccountBillsSuccessAction(
-          response[0].account_bill
-            .toString()
-            .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-            .trim(),
-        ),
-      );
-    else yield put(getAccountBillsErrorAction('error'));
+      if (
+        transformAccountingData.availableFunds ||
+        transformAccountingData.availableFunds === 0
+      )
+        yield put(
+          getAvailableFundsSuccessAction(
+            transformAccountingData.availableFunds
+              .toFixed(2)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+              .replace('.', ','),
+          ),
+        );
+      else yield put(getAvailableFundsErrorAction('error'));
 
-    if (response[0].additionals[0].account_balance_history)
-      yield put(
-        getAccountBalanceHistorySuccessAction(
-          JSON.parse(`[${response[0].additionals[0].account_balance_history}]`),
-        ),
-      );
-    else getAccountBalanceHistoryErrorAction('error');
+      if (transformAccountingData.accountBill)
+        yield put(
+          getAccountBillsSuccessAction(
+            transformAccountingData.accountBill
+              .toString()
+              .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+              .trim(),
+          ),
+        );
+      else yield put(getAccountBillsErrorAction('error'));
 
-    if (response[0].currency.currency)
-      yield put(getCurrencySuccessAction(response[0].currency.currency));
-    else yield put(getCurrencyErrorAction('error'));
+      if (transformAccountingData.additionals.accountBalanceHistory)
+        yield put(
+          getAccountBalanceHistorySuccessAction(
+            JSON.parse(
+              `[${transformAccountingData.additionals.accountBalanceHistory}]`,
+            ),
+          ),
+        );
+      else getAccountBalanceHistoryErrorAction('error');
 
-    if (response[0].additionals[0].incoming_transfers_sum || response)
-      yield put(
-        getIncomingTransfersSumSuccessAction(
-          response[0].additionals[0].incoming_transfers_sum,
-        ),
-      );
-    else yield put(getIncomingTransfersSumErrorAction('error'));
+      if (transformAccountingData.currency)
+        yield put(getCurrencySuccessAction(transformAccountingData.currency));
+      else yield put(getCurrencyErrorAction('error'));
 
-    if (response[0].additionals[0].outgoing_transfers_sum || response)
-      yield put(
-        getOutgoingTransfersSumSuccessAction(
-          response[0].additionals[0].outgoing_transfers_sum,
-        ),
-      );
-    else yield put(getOutgoingTransfersSumErrorAction('error'));
+      if (
+        transformAccountingData.additionals.incomingTransfersSum ||
+        transformAccountingData.additionals.incomingTransfersSum === 0
+      )
+        yield put(
+          getIncomingTransfersSumSuccessAction(
+            transformAccountingData.additionals.incomingTransfersSum,
+          ),
+        );
+      else yield put(getIncomingTransfersSumErrorAction('error'));
+
+      if (
+        transformAccountingData.additionals.outgoingTransfersSum ||
+        transformAccountingData.additionals.outgoingTransfersSum === 0
+      )
+        yield put(
+          getOutgoingTransfersSumSuccessAction(
+            transformAccountingData.additionals.outgoingTransfersSum,
+          ),
+        );
+      else yield put(getOutgoingTransfersSumErrorAction('error'));
+    }
 
     yield call(handleRecharts);
   } catch (error) {
@@ -299,40 +341,46 @@ function* handleRecharts() {
   const outgoingTransfersSum = yield select(makeOutgoingTransfersSumSelector());
   const incomingTransfersSum = yield select(makeIncomingTransfersSumSelector());
 
-  if (recentTransactionsSender === 0 && recentTransactionsRecipient === 0) {
-    yield put(
-      getRechartsColorsSuccessAction(JSON.parse(`["${BORDER_GREY_LIGHT}"]`)),
-    );
-    yield put(getRechartsDataSuccessAction([{ name: 'Group A', value: 1 }]));
-    yield put(getSavingsSuccessAction(0));
-  } else {
-    yield put(
-      getRechartsColorsSuccessAction(
-        JSON.parse(`["${PRIMARY_BLUE_LIGHT}", "${PRIMARY_RED}"]`),
-      ),
-    );
+  try {
+    if (recentTransactionsSender === 0 && recentTransactionsRecipient === 0) {
+      yield put(
+        getRechartsColorsSuccessAction(JSON.parse(`["${BORDER_GREY_LIGHT}"]`)),
+      );
+      yield put(getRechartsDataSuccessAction([{ name: 'Group A', value: 1 }]));
+      yield put(getSavingsSuccessAction(0));
+    } else {
+      yield put(
+        getRechartsColorsSuccessAction(
+          JSON.parse(`["${PRIMARY_BLUE_LIGHT}", "${PRIMARY_RED}"]`),
+        ),
+      );
 
-    yield put(
-      getRechartsDataSuccessAction([
-        {
-          name: 'Group A',
-          value: incomingTransfersSum,
-        },
-        {
-          name: 'Group B',
-          value: outgoingTransfersSum,
-        },
-      ]),
-    );
+      yield put(
+        getRechartsDataSuccessAction([
+          {
+            name: 'Group A',
+            value: incomingTransfersSum,
+          },
+          {
+            name: 'Group B',
+            value: outgoingTransfersSum,
+          },
+        ]),
+      );
 
-    const rechartsProcent =
-      (incomingTransfersSum * 100) /
-        (parseFloat(incomingTransfersSum) + parseFloat(outgoingTransfersSum)) ||
-      0;
+      const rechartsProcent =
+        (incomingTransfersSum * 100) /
+          (parseFloat(incomingTransfersSum) +
+            parseFloat(outgoingTransfersSum)) || 0;
 
-    yield put(
-      getSavingsSuccessAction(rechartsProcent.toFixed(1).replace('.', ',')),
-    );
+      yield put(
+        getSavingsSuccessAction(rechartsProcent.toFixed(1).replace('.', ',')),
+      );
+    }
+  } catch (error) {
+    yield put(getRechartsColorsSuccessAction(error));
+    yield put(getRechartsDataErrorAction(error));
+    yield put(getSavingsErrorAction(error));
   }
 }
 

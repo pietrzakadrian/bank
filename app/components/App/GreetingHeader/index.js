@@ -53,7 +53,6 @@ function GreetingHeader({
   getLastPresentLogged,
   getLastSuccessfulLogged,
   getLastFailedLogged,
-  isGreetingEvening,
 }) {
   useInjectSaga({ key: 'dashboardPage', saga });
   useInjectReducer({ key: 'dashboardPage', reducer });
@@ -92,10 +91,9 @@ function GreetingHeader({
       <TextWrapper>
         <FormattedMessage {...messages.lastSuccessfulLoginInformation} />{' '}
         <time>
-          {format(
-            lastSuccessfulLogged || lastPresentLogged,
-            `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
-          )}
+          {
+            lastSuccessfulLogged || lastPresentLogged
+          }
         </time>
       </TextWrapper>
 
@@ -103,15 +101,24 @@ function GreetingHeader({
         <TextWrapper lastFailedLogged={lastFailedLogged}>
           <FormattedMessage {...messages.lastFailedLoginInformation} />{' '}
           <time>
-            {format(
-              lastFailedLogged,
-              `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
-            )}
+            {
+              lastFailedLogged
+            }
           </time>
         </TextWrapper>
       )}
     </HeadlineWrapper>
   );
+}
+
+function isGreetingEvening(locale, hh, HH, A) {
+  if (
+    (locale === 'en' && (hh >= 7 && A === 'PM')) ||
+    (hh <= 5 && A === 'AM') ||
+    (locale !== 'en' && (HH >= 19 || HH <= 5))
+  )
+    return true;
+  return false;
 }
 
 GreetingHeader.propTypes = {
@@ -128,7 +135,6 @@ GreetingHeader.propTypes = {
   getLastPresentLogged: PropTypes.func,
   getLastSuccessfulLogged: PropTypes.func,
   getLastFailedLogged: PropTypes.func,
-  isGreetingEvening: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -149,15 +155,6 @@ function mapDispatchToProps(dispatch) {
     getLastPresentLogged: () => dispatch(getLastPresentLoggedAction()),
     getLastSuccessfulLogged: () => dispatch(getLastSuccessfulLoggedAction()),
     getLastFailedLogged: () => dispatch(getLastFailedLoggedAction()),
-    isGreetingEvening: (locale, hh, HH, A) => {
-      if (
-        (locale === 'en' && (hh >= 7 && A === 'PM')) ||
-        (hh <= 5 && A === 'AM') ||
-        (locale !== 'en' && (HH >= 19 || HH <= 5))
-      )
-        return true;
-      return false;
-    },
   };
 }
 
