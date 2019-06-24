@@ -16,7 +16,6 @@ import {
   PagingState,
   GroupingState,
   RowDetailState,
-  DataTypeProvider,
   CustomPaging,
 } from '@devexpress/dx-react-grid';
 import {
@@ -27,7 +26,7 @@ import {
   PagingPanel,
 } from '@devexpress/dx-react-grid-material-ui';
 import MediaQuery from 'react-responsive';
-import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
+import { TABLET_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 import {
   getGridDataAction,
   changePageAction,
@@ -43,13 +42,11 @@ import reducer from 'containers/HistoryPage/reducer';
 import saga from 'containers/HistoryPage/saga';
 import LoadingCircular from 'components/App/LoadingCircular';
 import messages from './messages';
-import HeaderDetailWrapper from './HeaderDetailWrapper';
-import MainDetailWrapper from './MainDetailWrapper';
 import LoadingWrapper from './LoadingWrapper';
-import DetailContainerWrapper from './DetailContainerWrapper';
-import AmountWrapper from './AmountWrapper';
 import HeaderWrapper from './HeaderWrapper';
 import TableCellWrapper from './TableCellWrapper';
+import PercentTypeProvider from './PercentTypeProvider';
+import GridDetailContainer from './GridDetailContainer';
 
 function HistoryGrid({
   gridData,
@@ -91,7 +88,7 @@ function HistoryGrid({
   return (
     <Fragment>
       {gridData.length ? (
-        <MediaQuery minWidth={TABLET_VIEWPORT_WIDTH}>
+        <MediaQuery minWidth={TABLET_LANDSCAPE_VIEWPORT_WIDTH}>
           {matches => (
             <Grid
               rows={gridData}
@@ -108,7 +105,7 @@ function HistoryGrid({
               <CustomPaging totalCount={totalCount} />
               <Table cellComponent={TableCellWrapper} />
               <TableHeaderRow cellComponent={HeaderWrapper} />
-              <TableRowDetail contentComponent={GridDetailContainerBase} />
+              <TableRowDetail contentComponent={GridDetailContainer} />
 
               <FormattedMessage {...messages.of}>
                 {of => (
@@ -131,61 +128,7 @@ function HistoryGrid({
   );
 }
 
-function GridDetailContainerBase({ row }) {
-  const { sender_name, recipient_name, account_bill, transfer_title } = row;
-
-  return (
-    <DetailContainerWrapper>
-      <MediaQuery maxWidth={TABLET_VIEWPORT_WIDTH}>
-        {matches =>
-          matches ? (
-            <Fragment>
-              <HeaderDetailWrapper>
-                <FormattedMessage {...messages.sender} />
-              </HeaderDetailWrapper>
-              <MainDetailWrapper>{sender_name}</MainDetailWrapper>
-              <HeaderDetailWrapper>
-                <FormattedMessage {...messages.recipient} />
-              </HeaderDetailWrapper>
-              <MainDetailWrapper>{recipient_name}</MainDetailWrapper>
-              <HeaderDetailWrapper>
-                <FormattedMessage {...messages.accountNumber} />
-              </HeaderDetailWrapper>
-              <MainDetailWrapper>{account_bill}</MainDetailWrapper>
-              <HeaderDetailWrapper>
-                <FormattedMessage {...messages.transferTitle} />
-              </HeaderDetailWrapper>
-              <MainDetailWrapper>{transfer_title}</MainDetailWrapper>
-            </Fragment>
-          ) : (
-            <Fragment>
-              <HeaderDetailWrapper>
-                <FormattedMessage {...messages.accountNumber} />
-              </HeaderDetailWrapper>
-              <div>{account_bill}</div>
-            </Fragment>
-          )
-        }
-      </MediaQuery>
-    </DetailContainerWrapper>
-  );
-}
-
-function PercentTypeProvider(props) {
-  return <DataTypeProvider formatterComponent={AmountFormatter} {...props} />;
-}
-
-function AmountFormatter({ value }) {
-  return !value.indexOf('-') ? (
-    <AmountWrapper>{value}</AmountWrapper>
-  ) : (
-    <span>{value}</span>
-  );
-}
-
 HistoryGrid.propTypes = {
-  row: PropTypes.object,
-  value: PropTypes.number,
   gridData: PropTypes.array,
   currentPage: PropTypes.number,
   pageSize: PropTypes.number,
