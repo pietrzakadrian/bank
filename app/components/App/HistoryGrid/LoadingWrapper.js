@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 const LoadingWrapper = styled.div`
   display: flex;
-  justify-content: flex;
+  justify-content: center;
   height: 100%;
   align-items: center;
 `;

@@ -45,7 +45,7 @@ function GridDetailContainer({ row }) {
               <HeaderDetailWrapper>
                 <FormattedMessage {...messages.accountNumber} />
               </HeaderDetailWrapper>
-              <div>{account_bill}</div>
+              <MainDetailWrapper>{account_bill}</MainDetailWrapper>
             </Fragment>
           )
         }
