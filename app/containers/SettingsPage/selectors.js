@@ -20,7 +20,7 @@ const makeNameSelector = () =>
 const makeSurnameSelector = () =>
   createSelector(
     selectSettingsPageDomain,
-    substate => substate.surmame,
+    substate => substate.surname,
   );
 
 const makeEmailSelector = () =>

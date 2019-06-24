@@ -13,6 +13,7 @@ import DetailContainerWrapper from './DetailContainerWrapper';
 import HeaderDetailWrapper from './HeaderDetailWrapper';
 import MainDetailWrapper from './MainDetailWrapper';
 import messages from './messages';
+import ItemDetailWrapper from './ItemDetailWrapper';
 
 function GridDetailContainer({ row }) {
   const { sender_name, recipient_name, account_bill, transfer_title } = row;
@@ -23,22 +24,33 @@ function GridDetailContainer({ row }) {
         {matches =>
           matches ? (
             <Fragment>
-              <HeaderDetailWrapper>
-                <FormattedMessage {...messages.sender} />
-              </HeaderDetailWrapper>
-              <MainDetailWrapper>{sender_name}</MainDetailWrapper>
-              <HeaderDetailWrapper>
-                <FormattedMessage {...messages.recipient} />
-              </HeaderDetailWrapper>
-              <MainDetailWrapper>{recipient_name}</MainDetailWrapper>
-              <HeaderDetailWrapper>
-                <FormattedMessage {...messages.accountNumber} />
-              </HeaderDetailWrapper>
-              <MainDetailWrapper>{account_bill}</MainDetailWrapper>
-              <HeaderDetailWrapper>
-                <FormattedMessage {...messages.transferTitle} />
-              </HeaderDetailWrapper>
-              <MainDetailWrapper>{transfer_title}</MainDetailWrapper>
+              <ItemDetailWrapper>
+                <HeaderDetailWrapper>
+                  <FormattedMessage {...messages.sender} />
+                </HeaderDetailWrapper>
+                <MainDetailWrapper>{sender_name}</MainDetailWrapper>
+              </ItemDetailWrapper>
+
+              <ItemDetailWrapper>
+                <HeaderDetailWrapper>
+                  <FormattedMessage {...messages.recipient} />
+                </HeaderDetailWrapper>
+                <MainDetailWrapper>{recipient_name}</MainDetailWrapper>
+              </ItemDetailWrapper>
+
+              <ItemDetailWrapper>
+                <HeaderDetailWrapper>
+                  <FormattedMessage {...messages.accountNumber} />
+                </HeaderDetailWrapper>
+                <MainDetailWrapper>{account_bill}</MainDetailWrapper>
+              </ItemDetailWrapper>
+
+              <ItemDetailWrapper>
+                <HeaderDetailWrapper>
+                  <FormattedMessage {...messages.transferTitle} />
+                </HeaderDetailWrapper>
+                <MainDetailWrapper>{transfer_title}</MainDetailWrapper>
+              </ItemDetailWrapper>
             </Fragment>
           ) : (
             <Fragment>

@@ -49,6 +49,9 @@ import {
   GET_CURRENCY,
   GET_CURRENCY_SUCCESS,
   GET_CURRENCY_ERROR,
+  GET_CURRENCY_ID,
+  GET_CURRENCY_ID_SUCCESS,
+  GET_CURRENCY_ID_ERROR,
   GET_RECHARTS_DATA,
   GET_RECHARTS_DATA_SUCCESS,
   GET_RECHARTS_DATA_ERROR,
@@ -224,6 +227,12 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.currency = action.currency;
         break;
       case GET_CURRENCY_ERROR:
+        draft.error = action.error;
+        break;
+      case GET_CURRENCY_ID_SUCCESS:
+        draft.currencyId = action.currencyId;
+        break;
+      case GET_CURRENCY_ID_ERROR:
         draft.error = action.error;
         break;
       case GET_RECHARTS_DATA_SUCCESS:

@@ -50,6 +50,9 @@ import {
   GET_CURRENCY,
   GET_CURRENCY_SUCCESS,
   GET_CURRENCY_ERROR,
+  GET_CURRENCY_ID,
+  GET_CURRENCY_ID_SUCCESS,
+  GET_CURRENCY_ID_ERROR,
   GET_RECHARTS_DATA,
   GET_RECHARTS_DATA_SUCCESS,
   GET_RECHARTS_DATA_ERROR,
@@ -134,6 +137,26 @@ export function getCurrencySuccessAction(currency) {
 export function getCurrencyErrorAction(error) {
   return {
     type: GET_CURRENCY_ERROR,
+    error,
+  };
+}
+
+export function getCurrencyIdAction() {
+  return {
+    type: GET_CURRENCY_ID,
+  };
+}
+
+export function getCurrencyIdSuccessAction(currencyId) {
+  return {
+    type: GET_CURRENCY_ID_SUCCESS,
+    currencyId,
+  };
+}
+
+export function getCurrencyIdErrorAction(error) {
+  return {
+    type: GET_CURRENCY_ID_ERROR,
     error,
   };
 }

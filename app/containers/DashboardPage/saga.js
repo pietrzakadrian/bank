@@ -65,6 +65,8 @@ import {
   getAccountBillsSuccessAction,
   getAccountBillsErrorAction,
   getRechartsDataErrorAction,
+  getCurrencyIdSuccessAction,
+  getCurrencyIdErrorAction,
 } from './actions';
 import {
   makeRecentTransactionsSenderSelector,
@@ -157,6 +159,7 @@ export function* handleAccountingData() {
       const transformAccountingData = response.map(({ ...accountingData }) => ({
         accountBill: accountingData.account_bill,
         currency: accountingData.currency.currency,
+        currencyId: accountingData.currency.id,
         availableFunds: accountingData.available_funds,
         additionals: {
           accountBalanceHistory:
@@ -207,6 +210,12 @@ export function* handleAccountingData() {
       if (transformAccountingData.currency)
         yield put(getCurrencySuccessAction(transformAccountingData.currency));
       else yield put(getCurrencyErrorAction('error'));
+
+      if (transformAccountingData.currencyId)
+        yield put(
+          getCurrencyIdSuccessAction(transformAccountingData.currencyId),
+        );
+      else yield put(getCurrencyIdErrorAction('error'));
 
       if (
         transformAccountingData.additionals.incomingTransfersSum ||

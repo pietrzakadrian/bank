@@ -9,8 +9,8 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.containers.SettingsPage';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'This is the SettingsPage container!',
+  helmetSettingsTitle: {
+    id: `${scope}.helmetSettingsTitle`,
+    defaultMessage: 'Settings · Bank Application',
   },
 });

@@ -42,7 +42,7 @@ import {
 
 export const initialState = {
   name: '',
-  surmame: '',
+  surname: '',
   email: '',
   newPassword: '',
   newName: '',
@@ -63,9 +63,40 @@ export const initialState = {
 
 /* eslint-disable default-case, no-param-reassign */
 const settingsPageReducer = (state = initialState, action) =>
-  produce(state, (/* draft */) => {
+  produce(state, draft => {
     switch (action.type) {
       case LOAD_USER_DATA:
+        draft.isLoading = true;
+        break;
+      case LOAD_USER_DATA_SUCCESS:
+        draft.name = action.name;
+        draft.surname = action.surname;
+        draft.email = action.email;
+        draft.currencyId = action.currencyId;
+        draft.isLoading = false;
+        break;
+      case CHANGE_NEW_NAME:
+        draft.newName = action.name;
+        draft.name = '';
+        draft.errorName = '';
+        draft.message = '';
+        break;
+      case CHANGE_NEW_SURNAME:
+        draft.newSurname = action.surname;
+        draft.surname = '';
+        draft.errorSurname = '';
+        draft.message = '';
+        break;
+      case CHANGE_NEW_PASSWORD:
+        draft.newPassword = action.password;
+        draft.errorPassword = '';
+        draft.message = '';
+        break;
+      case CHANGE_NEW_EMAIL:
+        draft.newEmail = action.email;
+        draft.email = '';
+        draft.errorEmail = '';
+        draft.message = '';
         break;
     }
   });

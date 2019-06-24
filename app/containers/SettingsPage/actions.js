@@ -29,9 +29,6 @@ import {
   ENTER_NEW_CURRENCY,
   ENTER_NEW_CURRENCY_SUCCESS,
   ENTER_NEW_CURRENCY_ERROR,
-  LOAD_USER_CURRENCY,
-  LOAD_USER_CURRENCY_SUCCESS,
-  LOAD_USER_CURRENCY_ERROR,
   LOAD_USER_DATA,
   LOAD_USER_DATA_SUCCESS,
   LOAD_USER_DATA_ERROR,
@@ -46,35 +43,19 @@ export function loadUserDataAction() {
   };
 }
 
-export function loadUserDataSuccessAction(userData) {
+export function loadUserDataSuccessAction(name, surname, email, currencyId) {
   return {
     type: LOAD_USER_DATA_SUCCESS,
-    userData,
-  };
-}
-
-export function loadUserDataErrorAction() {
-  return {
-    type: LOAD_USER_DATA_ERROR,
-  };
-}
-
-export function loadUserCurrencyIdAction() {
-  return {
-    type: LOAD_USER_CURRENCY,
-  };
-}
-
-export function loadUserCurrencyIdSuccessAction(currencyId) {
-  return {
-    type: LOAD_USER_CURRENCY_SUCCESS,
+    name,
+    surname,
+    email,
     currencyId,
   };
 }
 
-export function loadUserCurrencyIdErrorAction(error) {
+export function loadUserDataErrorAction(error) {
   return {
-    type: LOAD_USER_CURRENCY_ERROR,
+    type: LOAD_USER_DATA_ERROR,
     error,
   };
 }

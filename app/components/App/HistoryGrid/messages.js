@@ -35,7 +35,7 @@ export default defineMessages({
   },
   amount: {
     id: `${scope}.amount`,
-    defaultMessage: 'Amount',
+    defaultMessage: 'Amount money',
   },
   accountNumber: {
     id: `${scope}.accountNumber`,

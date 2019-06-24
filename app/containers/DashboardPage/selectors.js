@@ -101,6 +101,12 @@ const makeCurrencySelector = () =>
     substate => substate.currency,
   );
 
+const makeCurrencyIdSelector = () =>
+  createSelector(
+    selectDashboardPageDomain,
+    substate => substate.currencyId,
+  );
+
 const makeErrorSelector = () =>
   createSelector(
     selectDashboardPageDomain,
@@ -146,6 +152,7 @@ export {
   makeOutgoingTransfersSumSelector,
   makeIncomingTransfersSumSelector,
   makeCurrencySelector,
+  makeCurrencyIdSelector,
   makeRechartsColorsSelector,
   makeRechartsDataSelector,
   makeErrorSelector,
