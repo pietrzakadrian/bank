@@ -15,6 +15,7 @@ export const initialState = {
   gridData: [],
   pageSize: 12,
   currentPage: 0,
+
   totalCount: 0,
   error: '',
 };

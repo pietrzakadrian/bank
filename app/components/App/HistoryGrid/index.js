@@ -31,6 +31,7 @@ import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
 import {
   getGridDataAction,
   changePageAction,
+  toggleRowDetailAction,
 } from 'containers/HistoryPage/actions';
 import {
   makeGridDataSelector,
@@ -40,13 +41,15 @@ import {
 } from 'containers/HistoryPage/selectors';
 import reducer from 'containers/HistoryPage/reducer';
 import saga from 'containers/HistoryPage/saga';
-import { withStyles } from '@material-ui/core';
 import LoadingCircular from 'components/App/LoadingCircular';
 import messages from './messages';
 import HeaderDetailWrapper from './HeaderDetailWrapper';
 import MainDetailWrapper from './MainDetailWrapper';
 import LoadingWrapper from './LoadingWrapper';
 import DetailContainerWrapper from './DetailContainerWrapper';
+import AmountWrapper from './AmountWrapper';
+import HeaderWrapper from './HeaderWrapper';
+import TableCellWrapper from './TableCellWrapper';
 
 function HistoryGrid({
   gridData,
@@ -55,6 +58,7 @@ function HistoryGrid({
   totalCount,
   getGridData,
   onChangePage,
+  onToggleRowDetail,
 }) {
   useInjectReducer({ key: 'historyPage', reducer });
   useInjectSaga({ key: 'historyPage', saga });
@@ -99,12 +103,12 @@ function HistoryGrid({
                 onCurrentPageChange={onChangePage}
                 pageSize={pageSize}
               />
-              <RowDetailState />
+              <RowDetailState onExpandedRowIdsChange={onToggleRowDetail} />
               <PercentTypeProvider for={formattedColumns} />
               <CustomPaging totalCount={totalCount} />
-              <Table />
-              <TableHeaderRow />
-              <TableRowDetail contentComponent={GridDetailContainer} />
+              <Table cellComponent={TableCellWrapper} />
+              <TableHeaderRow cellComponent={HeaderWrapper} />
+              <TableRowDetail contentComponent={GridDetailContainerBase} />
 
               <FormattedMessage {...messages.of}>
                 {of => (
@@ -127,26 +131,9 @@ function HistoryGrid({
   );
 }
 
-function PercentTypeProvider(props) {
-  return <DataTypeProvider {...props} />;
-}
+function GridDetailContainerBase({ row }) {
+  const { sender_name, recipient_name, account_bill, transfer_title } = row;
 
-function HeaderCellBase(classes, className, ...restProps) {
-  return (
-    <TableHeaderRow.Cell
-      {...restProps}
-      className={`${classes.text} ${className}`}
-    />
-  );
-}
-
-function TableCellBase(classes, className, ...restProps) {
-  return (
-    <Table.Cell {...restProps} className={`${classes.text} ${className}`} />
-  );
-}
-
-function GridDetailContainerBase(row) {
   return (
     <DetailContainerWrapper>
       <MediaQuery maxWidth={TABLET_VIEWPORT_WIDTH}>
@@ -156,29 +143,27 @@ function GridDetailContainerBase(row) {
               <HeaderDetailWrapper>
                 <FormattedMessage {...messages.sender} />
               </HeaderDetailWrapper>
-              <MainDetailWrapper>{row.row.sender_name}</MainDetailWrapper>
+              <MainDetailWrapper>{sender_name}</MainDetailWrapper>
               <HeaderDetailWrapper>
                 <FormattedMessage {...messages.recipient} />
               </HeaderDetailWrapper>
-              <MainDetailWrapper>{row.row.recipient_name}</MainDetailWrapper>
+              <MainDetailWrapper>{recipient_name}</MainDetailWrapper>
               <HeaderDetailWrapper>
                 <FormattedMessage {...messages.accountNumber} />
               </HeaderDetailWrapper>
-              <MainDetailWrapper>{row.row.account_bill}</MainDetailWrapper>
+              <MainDetailWrapper>{account_bill}</MainDetailWrapper>
               <HeaderDetailWrapper>
                 <FormattedMessage {...messages.transferTitle} />
               </HeaderDetailWrapper>
-              <MainDetailWrapper>{row.row.transfer_title}</MainDetailWrapper>
+              <MainDetailWrapper>{transfer_title}</MainDetailWrapper>
             </Fragment>
           ) : (
-            <div className="desktop--container">
-              <div className="account--number">
-                <HeaderDetailWrapper>
-                  <FormattedMessage {...messages.accountNumber} />
-                </HeaderDetailWrapper>
-                <div>{row.row.account_bill}</div>
-              </div>
-            </div>
+            <Fragment>
+              <HeaderDetailWrapper>
+                <FormattedMessage {...messages.accountNumber} />
+              </HeaderDetailWrapper>
+              <div>{account_bill}</div>
+            </Fragment>
           )
         }
       </MediaQuery>
@@ -186,42 +171,28 @@ function GridDetailContainerBase(row) {
   );
 }
 
-const styles = {};
+function PercentTypeProvider(props) {
+  return <DataTypeProvider formatterComponent={AmountFormatter} {...props} />;
+}
 
-const GridDetailContainer = withStyles(styles, {
-  name: 'ReduxIntegrationDemo',
-})(GridDetailContainerBase);
-
-const headerCellStyles = () => ({
-  text: {
-    fontSize: 16,
-    color: '#0029ab',
-    fontFamily: 'Lato',
-  },
-});
-
-const HeaderCell = withStyles(headerCellStyles, { name: 'HeaderCellBase' })(
-  HeaderCellBase,
-);
-
-const tableCellStyles = () => ({
-  text: {
-    fontSize: 14.5,
-    fontFamily: 'Lato',
-  },
-});
-
-const tableCell = withStyles(tableCellStyles, { name: 'TableCellBase' })(
-  TableCellBase,
-);
+function AmountFormatter({ value }) {
+  return !value.indexOf('-') ? (
+    <AmountWrapper>{value}</AmountWrapper>
+  ) : (
+    <span>{value}</span>
+  );
+}
 
 HistoryGrid.propTypes = {
+  row: PropTypes.object,
+  value: PropTypes.number,
   gridData: PropTypes.array,
   currentPage: PropTypes.number,
   pageSize: PropTypes.number,
   totalCount: PropTypes.number,
   getGridData: PropTypes.func,
   onChangePage: PropTypes.func,
+  onToggleRowDetail: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -235,6 +206,7 @@ function mapDispatchToProps(dispatch) {
   return {
     getGridData: () => dispatch(getGridDataAction()),
     onChangePage: currentPage => dispatch(changePageAction(currentPage)),
+    onToggleRowDetail: () => dispatch(toggleRowDetailAction()),
   };
 }
 
@@ -243,7 +215,4 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export default compose(
-  withStyles(styles),
-  withConnect,
-)(HistoryGrid);
+export default compose(withConnect)(HistoryGrid);

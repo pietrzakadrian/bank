@@ -9,12 +9,19 @@ import {
   GET_GRID_DATA_SUCCESS,
   GET_GRID_DATA_ERROR,
   CHANGE_PAGE,
+  TOGGLE_ROW_DETAIL,
 } from './constants';
 
 export function changePageAction(currentPage) {
   return {
     type: CHANGE_PAGE,
     currentPage,
+  };
+}
+
+export function toggleRowDetailAction() {
+  return {
+    type: TOGGLE_ROW_DETAIL,
   };
 }
 

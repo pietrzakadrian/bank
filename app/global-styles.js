@@ -30,6 +30,16 @@ const GlobalStyle = createGlobalStyle`
     min-width: 100%;
   }
 
+  div {
+    table {
+      min-width: unset !important;
+
+      td {
+        background-color: ${PRIMARY_LIGHT} !important;
+      }
+    }
+  }
+
   p,
   label,
   h3 {
