@@ -53,9 +53,8 @@ export const initialState = {
   errorSurname: '',
   errorEmail: '',
   message: '',
-  currency: '',
+  currency: [],
   currencyId: '',
-  userCurrencyId: '',
   currencyMessage: '',
   isOpenAlert: false,
   isLoading: false,
@@ -97,6 +96,9 @@ const settingsPageReducer = (state = initialState, action) =>
         draft.email = '';
         draft.errorEmail = '';
         draft.message = '';
+        break;
+      case LOAD_CURRENCY_SUCCESS:
+        draft.currency = action.currency;
         break;
     }
   });

@@ -95,12 +95,6 @@ const makeCurrencyIdSelector = () =>
     substate => substate.currencyId,
   );
 
-const makeUserCurrencyIdSelector = () =>
-  createSelector(
-    selectSettingsPageDomain,
-    substate => substate.userCurrencyId,
-  );
-
 const makeCurrencyMessageSelector = () =>
   createSelector(
     selectSettingsPageDomain,
@@ -145,7 +139,6 @@ export {
   makeMessageSelector,
   makeCurrencySelector,
   makeCurrencyIdSelector,
-  makeUserCurrencyIdSelector,
   makeCurrencyMessageSelector,
   makeIsOpenAlertSelector,
   makeIsLoadingSelector,

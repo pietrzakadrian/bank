@@ -11,8 +11,13 @@ import {
   makeEmailSelector,
   makeCurrencyIdSelector,
 } from 'containers/DashboardPage/selectors';
-import { LOAD_USER_DATA } from './constants';
-import { loadUserDataSuccessAction, loadUserDataErrorAction } from './actions';
+import { LOAD_USER_DATA, LOAD_CURRENCY } from './constants';
+import {
+  loadUserDataSuccessAction,
+  loadUserDataErrorAction,
+  loadCurrencyErrorAction,
+  loadCurrencySuccessAction,
+} from './actions';
 
 export function* handleUserData() {
   const token = yield select(makeTokenSelector());
@@ -70,7 +75,31 @@ export function* handleUserData() {
   } else yield put(loadUserDataSuccessAction(name, surname, email, currencyId));
 }
 
+export function* handleCurrency() {
+  const token = yield select(makeTokenSelector());
+  const requestURL = `${api.baseURL}${api.currency.currencyPath}`;
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response) {
+      const transformCurrency = response.map(item => item.id);
+      yield put(loadCurrencySuccessAction(transformCurrency));
+    }
+  } catch (error) {
+    yield put(loadCurrencyErrorAction(error));
+  }
+}
+
 // Individual exports for testing
 export default function* settingsPageSaga() {
   yield takeLatest(LOAD_USER_DATA, handleUserData);
+  yield takeLatest(LOAD_CURRENCY, handleCurrency);
 }

@@ -17,6 +17,7 @@ import reducer from 'containers/SettingsPage/reducer';
 import LabelWrapper from 'components/LabelWrapper';
 import InputWrapper from 'components/InputWrapper';
 import ButtonWrapper from 'components/ButtonWrapper';
+import CurrencyToggle from 'components/App/CurrencyToggle';
 import {
   makeNameSelector,
   makeSurnameSelector,
@@ -32,7 +33,6 @@ import {
   makeMessageSelector,
   makeCurrencySelector,
   makeCurrencyIdSelector,
-  makeUserCurrencyIdSelector,
   makeCurrencyMessageSelector,
   makeIsOpenAlertSelector,
   makeIsLoadingSelector,
@@ -44,16 +44,21 @@ import {
   changeNewEmailAction,
   saveDataAction,
   loadUserDataAction,
+  loadCurrencyAction,
 } from 'containers/SettingsPage/actions';
+import LocaleToggle from 'components/LocaleToggle';
 
 import messages from './messages';
+import SelectWrapper from '../SelectWrapper';
 
 function SettingsForm({
   name,
   newName,
   surname,
   email,
+  isLoading,
   onLoadUserData,
+  onLoadCurrency,
   onChangeName,
   onChangeSurname,
   onChangePassword,
@@ -63,68 +68,92 @@ function SettingsForm({
   useInjectSaga({ key: 'settingsPage', saga });
   useEffect(() => {
     onLoadUserData();
+    onLoadCurrency();
   }, []);
 
   return (
     <Fragment>
       <div>
-        <LabelWrapper>
-          <FormattedMessage {...messages.changeName} />
-        </LabelWrapper>
+        <div>
+          <LabelWrapper>
+            <FormattedMessage {...messages.changeName} />
+          </LabelWrapper>
 
-        <InputWrapper
-          key={1}
-          value={name || newName}
-          type="text"
-          onChange={onChangeName}
-        />
+          <InputWrapper
+            key={1}
+            value={name || newName}
+            type="text"
+            onChange={onChangeName}
+          />
+        </div>
+
+        <div>
+          <LabelWrapper>
+            <FormattedMessage {...messages.changeSurname} />
+          </LabelWrapper>
+
+          <InputWrapper
+            key={2}
+            value={surname}
+            type="text"
+            onChange={onChangeSurname}
+          />
+        </div>
+
+        <div>
+          <LabelWrapper>
+            <FormattedMessage {...messages.changePassword} />
+          </LabelWrapper>
+          <FormattedMessage {...messages.inputNewPassword}>
+            {placeholder => (
+              <InputWrapper
+                key={3}
+                placeholder={placeholder}
+                type="password"
+                onChange={onChangePassword}
+              />
+            )}
+          </FormattedMessage>
+        </div>
+
+        <div>
+          <LabelWrapper>
+            <FormattedMessage {...messages.changeEmail} />
+          </LabelWrapper>
+
+          <InputWrapper
+            key={4}
+            value={email}
+            type="email"
+            onChange={onChangeEmail}
+          />
+        </div>
+
+        <ButtonWrapper type="button" disabled={isLoading}>
+          <FormattedMessage {...messages.saveData} />
+        </ButtonWrapper>
       </div>
 
       <div>
-        <LabelWrapper>
-          <FormattedMessage {...messages.changeSurname} />
-        </LabelWrapper>
+        <span>
+          <LabelWrapper>
+            <FormattedMessage {...messages.changeLang} />
+          </LabelWrapper>
+          <SelectWrapper>
+            <LocaleToggle />
+          </SelectWrapper>
+        </span>
 
-        <InputWrapper
-          key={2}
-          value={surname}
-          type="text"
-          onChange={onChangeSurname}
-        />
+        <div>
+          <LabelWrapper>
+            <FormattedMessage {...messages.changeCurrency} />
+          </LabelWrapper>
+
+          <SelectWrapper>
+            <CurrencyToggle />
+          </SelectWrapper>
+        </div>
       </div>
-
-      <div>
-        <LabelWrapper>
-          <FormattedMessage {...messages.changePassword} />
-        </LabelWrapper>
-        <FormattedMessage {...messages.inputNewPassword}>
-          {placeholder => (
-            <InputWrapper
-              key={3}
-              placeholder={placeholder}
-              type="password"
-              onChange={onChangePassword}
-            />
-          )}
-        </FormattedMessage>
-      </div>
-
-      <div>
-        <LabelWrapper>
-          <FormattedMessage {...messages.changeEmail} />
-        </LabelWrapper>
-
-        <InputWrapper
-          key={4}
-          value={email}
-          type="email"
-          onChange={onChangeEmail}
-        />
-      </div>
-
-      <ButtonWrapper type="button">
-        <FormattedMessage {...messages.saveData} />
-      </ButtonWrapper>
     </Fragment>
   );
 }
@@ -133,7 +162,9 @@ SettingsForm.propTypes = {
   name: PropTypes.string,
   surname: PropTypes.string,
   email: PropTypes.string,
+  isLoading: PropTypes.bool,
   onLoadUserData: PropTypes.func,
+  onLoadCurrency: PropTypes.func,
   onChangeName: PropTypes.func,
   onChangeSurname: PropTypes.func,
   onChangePassword: PropTypes.func,
@@ -155,7 +186,6 @@ const mapStateToProps = createStructuredSelector({
   message: makeMessageSelector(),
   currency: makeCurrencySelector(),
   currencyId: makeCurrencyIdSelector(),
-  userCurrencyId: makeUserCurrencyIdSelector(),
   currencyMessage: makeCurrencyMessageSelector(),
   isOpenAlert: makeIsOpenAlertSelector(),
   isLoading: makeIsLoadingSelector(),
@@ -169,6 +199,7 @@ function mapDispatchToProps(dispatch) {
     onChangeEmail: e => dispatch(changeNewEmailAction(e.target.value)),
     onSaveData: () => dispatch(saveDataAction()),
     onLoadUserData: () => dispatch(loadUserDataAction()),
+    onLoadCurrency: () => dispatch(loadCurrencyAction()),
   };
 }
 
