@@ -77,6 +77,12 @@ const makeErrorEmailSelector = () =>
     substate => substate.errorEmail,
   );
 
+const makeErrorSelector = () =>
+  createSelector(
+    selectSettingsPageDomain,
+    substate => substate.error,
+  );
+
 const makeMessageSelector = () =>
   createSelector(
     selectSettingsPageDomain,
@@ -136,6 +142,7 @@ export {
   makeErrorNameSelector,
   makeErrorSurnameSelector,
   makeErrorEmailSelector,
+  makeErrorSelector,
   makeMessageSelector,
   makeCurrencySelector,
   makeCurrencyIdSelector,

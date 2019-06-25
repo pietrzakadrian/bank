@@ -35,6 +35,7 @@ import {
   makeCurrencyIdSelector,
   makeCurrencyMessageSelector,
   makeIsOpenAlertSelector,
+  makeErrorSelector,
   makeIsLoadingSelector,
 } from 'containers/SettingsPage/selectors';
 import {
@@ -47,23 +48,34 @@ import {
   loadCurrencyAction,
 } from 'containers/SettingsPage/actions';
 import LocaleToggle from 'components/LocaleToggle';
+import { makeIsOpenNavigationDesktopSelector } from 'containers/App/selectors';
 import ContainerWrapper from './ContainerWrapper';
 import FormWrapper from './FormWrapper';
 import messages from './messages';
 import SelectWrapper from '../SelectWrapper';
+import TextWrapper from './TextWrapper';
 function SettingsForm({
   name,
   newName,
+  errorName,
   surname,
+  newSurname,
+  errorSurname,
   email,
+  newEmail,
+  errorEmail,
+  errorPassword,
+  error,
+  message,
   isLoading,
+  isOpenNavigationDesktop,
   onLoadUserData,
   onLoadCurrency,
-  handleKeyPress,
   onChangeName,
   onChangeSurname,
   onChangePassword,
   onChangeEmail,
+  onSaveData,
 }) {
   useInjectReducer({ key: 'settingsPage', reducer });
   useInjectSaga({ key: 'settingsPage', saga });
@@ -73,67 +85,93 @@ function SettingsForm({
   }, []);
 
   return (
-    <ContainerWrapper>
-      <FormWrapper noValidate autoComplete="off">
-        <div>
-          <LabelWrapper>
-            <FormattedMessage {...messages.changeName} />
-          </LabelWrapper>
+    <ContainerWrapper open={isOpenNavigationDesktop}>
+      <FormWrapper>
+        <form noValidate autoComplete="off" onSubmit={onSaveData}>
+          <div>
+            <LabelWrapper>
+              <FormattedMessage {...messages.changeName} />
+            </LabelWrapper>
 
-          <InputWrapper
-            key={1}
-            value={name || newName}
-            type="text"
-            onChange={onChangeName}
-            onKeyPress={handleKeyPress}
-          />
-        </div>
+            <InputWrapper
+              key={1}
+              value={name || newName}
+              type="text"
+              error={errorName}
+              onChange={onChangeName}
+            />
 
-        <div>
-          <LabelWrapper>
-            <FormattedMessage {...messages.changeSurname} />
-          </LabelWrapper>
-
-          <InputWrapper
-            key={2}
-            value={surname}
-            type="text"
-            onChange={onChangeSurname}
-          />
-        </div>
-
-        <div>
-          <LabelWrapper>
-            <FormattedMessage {...messages.changePassword} />
-          </LabelWrapper>
-          <FormattedMessage {...messages.inputNewPassword}>
-            {placeholder => (
-              <InputWrapper
-                key={3}
-                placeholder={placeholder}
-                type="password"
-                onChange={onChangePassword}
-              />
+            {errorName && (
+              <LabelWrapper error={errorName}>{errorName}</LabelWrapper>
             )}
-          </FormattedMessage>
-        </div>
+          </div>
 
-        <div>
-          <LabelWrapper>
-            <FormattedMessage {...messages.changeEmail} />
-          </LabelWrapper>
+          <div>
+            <LabelWrapper>
+              <FormattedMessage {...messages.changeSurname} />
+            </LabelWrapper>
 
-          <InputWrapper
-            key={4}
-            value={email}
-            type="email"
-            onChange={onChangeEmail}
-          />
-        </div>
+            <InputWrapper
+              key={2}
+              value={surname || newSurname}
+              type="text"
+              error={errorSurname}
+              onChange={onChangeSurname}
+            />
 
-        <ButtonWrapper type="button" disabled={isLoading}>
-          <FormattedMessage {...messages.saveData} />
-        </ButtonWrapper>
+            {errorSurname && (
+              <LabelWrapper error={errorSurname}>{errorSurname}</LabelWrapper>
+            )}
+          </div>
+
+          <div>
+            <LabelWrapper>
+              <FormattedMessage {...messages.changePassword} />
+            </LabelWrapper>
+
+            <FormattedMessage {...messages.inputNewPassword}>
+              {placeholder => (
+                <InputWrapper
+                  key={3}
+                  placeholder={placeholder}
+                  type="password"
+                  error={errorPassword}
+                  onChange={onChangePassword}
+                />
+              )}
+            </FormattedMessage>
+
+            {errorPassword && (
+              <LabelWrapper error={errorPassword}>{errorPassword}</LabelWrapper>
+            )}
+          </div>
+
+          <div>
+            <LabelWrapper>
+              <FormattedMessage {...messages.changeEmail} />
+            </LabelWrapper>
+
+            <InputWrapper
+              key={4}
+              value={email || newEmail}
+              type="email"
+              error={errorEmail}
+              onChange={onChangeEmail}
+            />
+
+            {errorEmail && (
+              <LabelWrapper error={errorEmail}>{errorEmail}</LabelWrapper>
+            )}
+          </div>
+
+          <ButtonWrapper type="submit" disabled={isLoading}>
+            <FormattedMessage {...messages.saveData} />
+          </ButtonWrapper>
+
+          {(message || error) && (
+            <TextWrapper error={error}>{message || error}</TextWrapper>
+          )}
+        </form>
       </FormWrapper>
 
       <FormWrapper>
@@ -162,15 +200,26 @@ function SettingsForm({
 
 SettingsForm.propTypes = {
   name: PropTypes.string,
+  newName: PropTypes.string,
+  errorName: PropTypes.string,
   surname: PropTypes.string,
+  newSurname: PropTypes.string,
+  errorSurname: PropTypes.string,
   email: PropTypes.string,
+  newEmail: PropTypes.string,
+  errorEmail: PropTypes.string,
+  errorPassword: PropTypes.string,
+  error: PropTypes.string,
+  message: PropTypes.string,
   isLoading: PropTypes.bool,
+  isOpenNavigationDesktop: PropTypes.bool,
   onLoadUserData: PropTypes.func,
   onLoadCurrency: PropTypes.func,
   onChangeName: PropTypes.func,
   onChangeSurname: PropTypes.func,
   onChangePassword: PropTypes.func,
   onChangeEmail: PropTypes.func,
+  onSaveData: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -185,12 +234,14 @@ const mapStateToProps = createStructuredSelector({
   errorName: makeErrorNameSelector(),
   errorSurname: makeErrorSurnameSelector(),
   errorEmail: makeErrorEmailSelector(),
+  error: makeErrorSelector(),
   message: makeMessageSelector(),
   currency: makeCurrencySelector(),
   currencyId: makeCurrencyIdSelector(),
   currencyMessage: makeCurrencyMessageSelector(),
   isOpenAlert: makeIsOpenAlertSelector(),
   isLoading: makeIsLoadingSelector(),
+  isOpenNavigationDesktop: makeIsOpenNavigationDesktopSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -199,7 +250,7 @@ function mapDispatchToProps(dispatch) {
     onChangeSurname: e => dispatch(changeNewSurnameAction(e.target.value)),
     onChangePassword: e => dispatch(changeNewPasswordAction(e.target.value)),
     onChangeEmail: e => dispatch(changeNewEmailAction(e.target.value)),
-    onSaveData: () => dispatch(saveDataAction()),
+    onSaveData: e => dispatch(saveDataAction()) && e.preventDefault(),
     onLoadUserData: () => dispatch(loadUserDataAction()),
     onLoadCurrency: () => dispatch(loadCurrencyAction()),
   };

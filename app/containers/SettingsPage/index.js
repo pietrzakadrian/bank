@@ -4,8 +4,7 @@
  *
  */
 
-import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
@@ -37,8 +36,6 @@ export function SettingsPage() {
     </Fragment>
   );
 }
-
-SettingsPage.propTypes = {};
 
 function mapDispatchToProps(dispatch) {
   return {

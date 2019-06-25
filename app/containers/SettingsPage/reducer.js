@@ -52,6 +52,7 @@ export const initialState = {
   errorName: '',
   errorSurname: '',
   errorEmail: '',
+  error: '',
   message: '',
   currency: [],
   currencyId: 1,
@@ -77,25 +78,61 @@ const settingsPageReducer = (state = initialState, action) =>
       case CHANGE_NEW_NAME:
         draft.newName = action.name;
         draft.name = '';
+        draft.error = '';
         draft.errorName = '';
         draft.message = '';
+        break;
+      case ENTER_NEW_NAME:
+        draft.newName = action.name;
+        break;
+      case ENTER_NEW_NAME_ERROR:
+        draft.errorName = action.error;
+        draft.isLoading = false;
         break;
       case CHANGE_NEW_SURNAME:
         draft.newSurname = action.surname;
         draft.surname = '';
         draft.errorSurname = '';
+        draft.error = '';
         draft.message = '';
+        break;
+      case ENTER_NEW_SURNAME:
+        draft.newSurname = action.surname;
+        break;
+      case ENTER_NEW_SURNAME_ERROR:
+        draft.errorSurname = action.error;
+        draft.isLoading = false;
         break;
       case CHANGE_NEW_PASSWORD:
         draft.newPassword = action.password;
         draft.errorPassword = '';
+        draft.error = '';
         draft.message = '';
         break;
       case CHANGE_NEW_EMAIL:
         draft.newEmail = action.email;
         draft.email = '';
         draft.errorEmail = '';
+        draft.error = '';
         draft.message = '';
+        break;
+      case ENTER_NEW_EMAIL:
+        draft.newEmail = action.email;
+        break;
+      case ENTER_NEW_EMAIL_ERROR:
+        draft.errorEmail = action.error;
+        draft.isLoading = false;
+        break;
+      case SAVE_DATA:
+        draft.isLoading = true;
+        break;
+      case SAVE_DATA_SUCCESS:
+        draft.isLoading = false;
+        draft.message = action.message;
+        break;
+      case SAVE_DATA_ERROR:
+        draft.isLoading = false;
+        draft.error = action.error;
         break;
       case LOAD_CURRENCY_SUCCESS:
         draft.currency = action.currency;
