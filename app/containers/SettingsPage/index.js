@@ -13,6 +13,7 @@ import { Helmet } from 'react-helmet';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import ContainerWrapper from 'components/App/ContainerWrapper';
+import Copyright from 'components/App/Copyright';
 import SettingsForm from 'components/App/SettingsForm';
 import reducer from './reducer';
 import saga from './saga';
@@ -31,6 +32,8 @@ export function SettingsPage() {
       <ContainerWrapper>
         <SettingsForm />
       </ContainerWrapper>
+
+      <Copyright />
     </Fragment>
   );
 }

@@ -16,6 +16,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 // Import Components
 import ContainerWrapper from 'components/App/ContainerWrapper';
 import HistoryGrid from 'components/App/HistoryGrid';
+import Copyright from 'components/App/Copyright';
 
 import reducer from './reducer';
 import saga from './saga';
@@ -34,6 +35,7 @@ export function HistoryPage() {
       <ContainerWrapper>
         <HistoryGrid />
       </ContainerWrapper>
+      <Copyright />
     </Fragment>
   );
 }

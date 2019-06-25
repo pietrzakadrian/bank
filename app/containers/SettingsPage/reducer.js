@@ -54,7 +54,7 @@ export const initialState = {
   errorEmail: '',
   message: '',
   currency: [],
-  currencyId: '',
+  currencyId: 1,
   currencyMessage: '',
   isOpenAlert: false,
   isLoading: false,

@@ -4,7 +4,7 @@
  *
  */
 
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -47,10 +47,10 @@ import {
   loadCurrencyAction,
 } from 'containers/SettingsPage/actions';
 import LocaleToggle from 'components/LocaleToggle';
-
+import ContainerWrapper from './ContainerWrapper';
+import FormWrapper from './FormWrapper';
 import messages from './messages';
 import SelectWrapper from '../SelectWrapper';
-
 function SettingsForm({
   name,
   newName,
@@ -59,6 +59,7 @@ function SettingsForm({
   isLoading,
   onLoadUserData,
   onLoadCurrency,
+  handleKeyPress,
   onChangeName,
   onChangeSurname,
   onChangePassword,
@@ -72,8 +73,8 @@ function SettingsForm({
   }, []);
 
   return (
-    <Fragment>
-      <div>
+    <ContainerWrapper>
+      <FormWrapper noValidate autoComplete="off">
         <div>
           <LabelWrapper>
             <FormattedMessage {...messages.changeName} />
@@ -84,6 +85,7 @@ function SettingsForm({
             value={name || newName}
             type="text"
             onChange={onChangeName}
+            onKeyPress={handleKeyPress}
           />
         </div>
 
@@ -132,17 +134,17 @@ function SettingsForm({
         <ButtonWrapper type="button" disabled={isLoading}>
           <FormattedMessage {...messages.saveData} />
         </ButtonWrapper>
-      </div>
+      </FormWrapper>
 
-      <div>
-        <span>
+      <FormWrapper>
+        <div>
           <LabelWrapper>
             <FormattedMessage {...messages.changeLang} />
           </LabelWrapper>
           <SelectWrapper>
             <LocaleToggle />
           </SelectWrapper>
-        </span>
+        </div>
 
         <div>
           <LabelWrapper>
@@ -153,8 +155,8 @@ function SettingsForm({
             <CurrencyToggle />
           </SelectWrapper>
         </div>
-      </div>
-    </Fragment>
+      </FormWrapper>
+    </ContainerWrapper>
   );
 }
 
