@@ -18,6 +18,7 @@ import LabelWrapper from 'components/LabelWrapper';
 import InputWrapper from 'components/InputWrapper';
 import ButtonWrapper from 'components/ButtonWrapper';
 import CurrencyToggle from 'components/App/CurrencyToggle';
+import CurrencyAlert from 'components/App/CurrencyAlert';
 import {
   makeNameSelector,
   makeSurnameSelector,
@@ -67,6 +68,7 @@ function SettingsForm({
   errorPassword,
   error,
   message,
+  currencyMessage,
   isLoading,
   isOpenNavigationDesktop,
   onLoadUserData,
@@ -191,7 +193,10 @@ function SettingsForm({
 
           <SelectWrapper>
             <CurrencyToggle />
+            <CurrencyAlert />
           </SelectWrapper>
+
+          {currencyMessage && <TextWrapper>{currencyMessage}</TextWrapper>}
         </div>
       </FormWrapper>
     </ContainerWrapper>
@@ -211,6 +216,7 @@ SettingsForm.propTypes = {
   errorPassword: PropTypes.string,
   error: PropTypes.string,
   message: PropTypes.string,
+  currencyMessage: PropTypes.string,
   isLoading: PropTypes.bool,
   isOpenNavigationDesktop: PropTypes.bool,
   onLoadUserData: PropTypes.func,

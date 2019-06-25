@@ -30,7 +30,7 @@ import {
   GET_RECENT_TRANSACTIONS_RECIPIENT,
   GET_RECENT_TRANSACTIONS_SENDER,
 } from './constants';
-import api from '../../api';
+import api from 'api';
 import {
   getNameErrorAction,
   getSurnameAction,

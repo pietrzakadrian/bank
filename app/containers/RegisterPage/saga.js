@@ -53,7 +53,7 @@ import {
   ENTER_EMAIL,
   IS_LOGGED,
 } from './constants';
-import api from '../../api';
+import api from 'api';
 
 export function* handleLogin() {
   const login = yield select(makeLoginSelector());

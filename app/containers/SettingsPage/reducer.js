@@ -56,6 +56,7 @@ export const initialState = {
   message: '',
   currency: [],
   currencyId: 1,
+  newCurrencyId: null,
   currencyMessage: '',
   isOpenAlert: false,
   isLoading: false,
@@ -123,6 +124,15 @@ const settingsPageReducer = (state = initialState, action) =>
         draft.errorEmail = action.error;
         draft.isLoading = false;
         break;
+      case ENTER_NEW_CURRENCY:
+        draft.isLoading = true;
+        break;
+      case ENTER_NEW_CURRENCY_SUCCESS:
+        draft.isLoading = false;
+        draft.currencyId = draft.newCurrencyId;
+        draft.isOpenAlert = false;
+        draft.currencyMessage = action.message;
+        break;
       case SAVE_DATA:
         draft.isLoading = true;
         break;
@@ -136,6 +146,14 @@ const settingsPageReducer = (state = initialState, action) =>
         break;
       case LOAD_CURRENCY_SUCCESS:
         draft.currency = action.currency;
+        break;
+      case CHANGE_NEW_CURRENCY:
+        draft.isOpenAlert = true;
+        draft.newCurrencyId = action.currencyId;
+        draft.currencyMessage = '';
+        break;
+      case TOGGLE_ALERT_CURRENCY:
+        draft.isOpenAlert = !draft.isOpenAlert;
         break;
     }
   });

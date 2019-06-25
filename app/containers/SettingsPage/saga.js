@@ -14,7 +14,12 @@ import {
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { enterSurnameSuccessAction } from 'containers/RegisterPage/actions';
-import { LOAD_USER_DATA, LOAD_CURRENCY, SAVE_DATA } from './constants';
+import {
+  LOAD_USER_DATA,
+  LOAD_CURRENCY,
+  SAVE_DATA,
+  ENTER_NEW_CURRENCY,
+} from './constants';
 import {
   loadUserDataSuccessAction,
   loadUserDataErrorAction,
@@ -33,6 +38,8 @@ import {
   enterNewEmailSuccessAction,
   enterNewPasswordSuccessAction,
   saveDataSuccessAction,
+  enterNewCurrencyErrorAction,
+  enterNewCurrencySuccessAction,
 } from './actions';
 import {
   makeNewNameSelector,
@@ -43,6 +50,7 @@ import {
   makeErrorSurnameSelector,
   makeErrorPasswordSelector,
   makeErrorEmailSelector,
+  makeNewCurrencyIdSelector,
 } from './selectors';
 import messages from './messages';
 
@@ -306,9 +314,41 @@ function* handleEmail() {
   }
 }
 
+export function* handleChangeCurrency() {
+  const token = yield select(makeTokenSelector());
+  const userId = yield select(makeUserIdSelector());
+  const requestURL = `${api.baseURL}${api.users.setCurrencyPath}${userId}`;
+  const currencyId = yield select(makeNewCurrencyIdSelector());
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        currencyId,
+      }),
+    });
+
+    if (response.success) {
+      yield put(
+        enterNewCurrencySuccessAction(
+          <FormattedMessage {...messages.saveCurrencySuccess} />,
+        ),
+      );
+    }
+  } catch (error) {
+    yield put(enterNewCurrencyErrorAction(error));
+  }
+}
+
 // Individual exports for testing
 export default function* settingsPageSaga() {
   yield takeLatest(LOAD_USER_DATA, handleUserData);
   yield takeLatest(LOAD_CURRENCY, handleCurrency);
   yield takeLatest(SAVE_DATA, handleSaveData);
+  yield takeLatest(ENTER_NEW_CURRENCY, handleChangeCurrency);
 }

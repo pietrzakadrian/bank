@@ -7,7 +7,7 @@ import {
 import { format } from 'date-fns';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 import { GET_GRID_DATA, CHANGE_PAGE } from './constants';
-import api from '../../api';
+import api from 'api';
 import { getGridDataErrorAction, getGridDataSuccessAction } from './actions';
 import { makePageSizeSelector, makeCurrentPageSelector } from './selectors';
 

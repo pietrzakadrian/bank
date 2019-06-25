@@ -9,7 +9,8 @@ import {
   makeUserIdSelector,
   makeTokenSelector,
 } from 'containers/App/selectors';
-import { loggedInAction, logoutSuccessAction } from 'containers/App/actions';
+import { loggedInAction } from 'containers/App/actions';
+import api from 'api';
 import messages from './messages';
 import { makeLoginSelector, makePasswordSelector } from './selectors';
 import { ENTER_LOGIN, ENTER_PASSWORD, IS_LOGGED } from './constants';
@@ -23,8 +24,6 @@ import {
   loginSuccessAction,
   loginErrorAction,
 } from './actions';
-
-import api from '../../api';
 
 export function* handleLogged() {
   const isLogged = yield select(makeIsLoggedSelector());

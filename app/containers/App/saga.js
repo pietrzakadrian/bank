@@ -7,7 +7,7 @@ import {
 } from 'containers/App/selectors';
 import request from 'utils/request';
 import decode from 'jwt-decode';
-import api from '../../api';
+import api from 'api';
 import { LOGOUT, IS_LOGGED } from './constants';
 import { logoutErrorAction, logoutSuccessAction } from './actions';
 

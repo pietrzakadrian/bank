@@ -10,7 +10,7 @@ import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 const SelectWrapper = styled.div`
   height: 37px;
   display: block;
-  margin: 0 auto;
+  margin: 0 auto 5px;
   border-radius: 2px;
   width: 90%;
 
