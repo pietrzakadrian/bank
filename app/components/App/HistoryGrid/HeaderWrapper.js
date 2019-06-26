@@ -6,7 +6,6 @@
 
 import styled from 'styled-components';
 import { PRIMARY_BLUE_DARK } from 'utils/colors';
-
 import { TableHeaderRow } from '@devexpress/dx-react-grid-material-ui';
 
 const HeaderCellWrapper = styled(TableHeaderRow.Cell)`

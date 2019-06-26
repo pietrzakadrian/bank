@@ -17,6 +17,7 @@ import Copyright from 'components/App/Copyright';
 import ContainerWrapper from 'components/App/ContainerWrapper';
 import { Helmet } from 'react-helmet';
 import Footer from 'components/Footer';
+import PaymentForm from 'components/App/PaymentForm';
 import makeSelectPaymentPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -32,7 +33,9 @@ export function PaymentPage() {
         {title => <Helmet title={title} />}
       </FormattedMessage>
 
-      <ContainerWrapper>test</ContainerWrapper>
+      <ContainerWrapper>
+        <PaymentForm />
+      </ContainerWrapper>
       <Footer />
       <Copyright />
     </Fragment>

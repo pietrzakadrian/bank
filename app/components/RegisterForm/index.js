@@ -373,7 +373,6 @@ RegisterForm.propTypes = {
   onEnterEmail: PropTypes.func,
   toggleDataProcessingAgreement: PropTypes.func,
   onEnterCurrency: PropTypes.func,
-  handleStepNext: PropTypes.func,
   handleStepBack: PropTypes.func,
   handleKeyPress: PropTypes.func,
   handleKeyDown: PropTypes.func,
@@ -410,7 +409,6 @@ function mapDispatchToProps(dispatch) {
     toggleDataProcessingAgreement: () =>
       dispatch(toggleDataProcessingAgreementAction()),
     onEnterCurrency: currencyId => dispatch(enterCurrencyAction(currencyId)),
-    handleStepNext: () => dispatch(stepNextAction()),
     handleStepBack: () => dispatch(stepBackAction()),
     handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
     handleKeyDown: e => e.keyCode === 13 && e.preventDefault(),
