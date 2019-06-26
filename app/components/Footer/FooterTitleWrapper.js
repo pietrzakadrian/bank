@@ -5,7 +5,10 @@ const FooterTitleWrapper = styled.h3`
   padding: 15px;
   margin: 0;
   font-weight: 700;
-  display: block;
+  display: ${props =>
+    props.location !== '/register' && props.location !== '/login'
+      ? 'none'
+      : 'block'};
 `;
 
 export default FooterTitleWrapper;

@@ -27,7 +27,7 @@ import messages from './messages';
 function Footer({ location }) {
   return (
     <FooterWrapper>
-      <FooterTitleWrapper>
+      <FooterTitleWrapper location={location.pathname}>
         {location.pathname === '/login' ? (
           <Fragment>
             <FormattedMessage {...messages.boldMainText} />

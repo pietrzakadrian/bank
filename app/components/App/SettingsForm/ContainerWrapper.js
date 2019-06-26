@@ -8,6 +8,8 @@ import styled from 'styled-components';
 import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
 
 const ContainerWrapper = styled.div`
+  transition: all 0.5s ease;
+
   @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
     display: ${props => !props.open && 'flex'};
     justify-content: ${props => !props.open && 'space-evenly'};

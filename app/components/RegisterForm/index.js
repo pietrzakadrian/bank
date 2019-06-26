@@ -61,17 +61,6 @@ import CheckboxWrapper from './CheckboxWrapper';
 import TextWrapper from './TextWrapper';
 import messages from './messages';
 
-function getSteps() {
-  return [
-    <FormattedMessage {...messages.idNumber} />,
-    <FormattedMessage {...messages.password} />,
-    <FormattedMessage {...messages.name} />,
-    <FormattedMessage {...messages.surname} />,
-    <FormattedMessage {...messages.currency} />,
-    <FormattedMessage {...messages.emailAddress} />,
-  ];
-}
-
 function RegisterForm({
   login,
   password,
@@ -343,6 +332,17 @@ function RegisterForm({
       </form>
     </FormWrapper>
   );
+}
+
+function getSteps() {
+  return [
+    <FormattedMessage {...messages.idNumber} />,
+    <FormattedMessage {...messages.password} />,
+    <FormattedMessage {...messages.name} />,
+    <FormattedMessage {...messages.surname} />,
+    <FormattedMessage {...messages.currency} />,
+    <FormattedMessage {...messages.emailAddress} />,
+  ];
 }
 
 RegisterForm.propTypes = {
