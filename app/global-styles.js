@@ -79,6 +79,10 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
   }
 
+  [aria-controls] {
+    cursor: auto;
+  }
+
   button {
     border: none;
     width: auto;

@@ -42,6 +42,7 @@ import {
 } from './constants';
 
 export const initialState = {
+  accountNumber: '',
   amountMoney: '',
   transferTitle: '',
   activeStep: 2,
@@ -54,6 +55,9 @@ export const initialState = {
 const paymentPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case CHANGE_ACCOUNT_NUMBER:
+        draft.accountNumber = action.value;
+        break;
       case CHANGE_AMOUNT_MONEY:
         draft.amountMoney = action.amountMoney;
         break;

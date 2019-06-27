@@ -9,10 +9,8 @@ import {
   makeUserIdSelector,
   makeTokenSelector,
 } from 'containers/App/selectors';
-import {
-  enqueueSnackbarAction,
-  logoutSuccessAction,
-} from 'containers/App/actions';
+import { enqueueSnackbarAction } from 'containers/App/actions';
+import api from 'api';
 import messages from './messages';
 import {
   makeLoginSelector,
@@ -53,7 +51,6 @@ import {
   ENTER_EMAIL,
   IS_LOGGED,
 } from './constants';
-import api from 'api';
 
 export function* handleLogin() {
   const login = yield select(makeLoginSelector());

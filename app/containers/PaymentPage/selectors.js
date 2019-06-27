@@ -11,6 +11,12 @@ const selectPaymentPageDomain = state => state.paymentPage || initialState;
  * Other specific selectors
  */
 
+const makeAccountNumberSelector = () =>
+  createSelector(
+    selectPaymentPageDomain,
+    substate => substate.accountNumber,
+  );
+
 const makeAmountMoneySelector = () =>
   createSelector(
     selectPaymentPageDomain,
@@ -59,6 +65,7 @@ const makeSelectPaymentPage = () =>
 
 export default makeSelectPaymentPage;
 export {
+  makeAccountNumberSelector,
   makeAmountMoneySelector,
   makeTransferTitleSelector,
   makeActiveStepSelector,
