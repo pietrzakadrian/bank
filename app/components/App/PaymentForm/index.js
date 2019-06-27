@@ -17,6 +17,8 @@ import {
   makeIsLoadingSelector,
   makeErrorSelector,
   makeSuggestionsSelector,
+  makeAmountMoneySelector,
+  makeTransferTitleSelector,
 } from 'containers/PaymentPage/selectors';
 import ButtonBackWrapper from 'components/ButtonBackWrapper';
 import { connect } from 'react-redux';
@@ -28,10 +30,28 @@ import NavigateBackIcon from 'components/NavigateBackIcon';
 import InputWrapper from 'components/InputWrapper';
 import FormWrapper from 'components/FormWrapper';
 import ButtonWrapper from 'components/ButtonWrapper';
-import { stepBackAction } from 'containers/PaymentPage/actions';
+import {
+  stepBackAction,
+  changeAmountMoneyAction,
+  changeTransferTitleAction,
+  enterAmountMoneyAction,
+  enterTransferTitleAction,
+} from 'containers/PaymentPage/actions';
 import messages from './messages';
 
-function PaymentForm({ activeStep, isLoading, error, handleStepBack }) {
+function PaymentForm({
+  amountMoney,
+  transferTitle,
+  activeStep,
+  isLoading,
+  error,
+  onChangeAmountMoney,
+  onEnterAmountMoney,
+  onChangeTransferTitle,
+  onEnterTransferTitle,
+  handleStepBack,
+  handleKeyPress,
+}) {
   const steps = getSteps();
 
   return (
@@ -81,6 +101,8 @@ function PaymentForm({ activeStep, isLoading, error, handleStepBack }) {
                 <InputWrapper
                   large
                   key={1}
+                  onChange={onChangeAmountMoney}
+                  onKeyPress={handleKeyPress}
                   placeholder={placeholder}
                   type="number"
                   error={error}
@@ -90,7 +112,12 @@ function PaymentForm({ activeStep, isLoading, error, handleStepBack }) {
 
             {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
 
-            <ButtonWrapper large type="button" disabled={isLoading}>
+            <ButtonWrapper
+              large
+              type="button"
+              disabled={isLoading}
+              onClick={() => onEnterAmountMoney(amountMoney)}
+            >
               <FormattedMessage {...messages.nextText} />
               <NavigateNextIcon />
             </ButtonWrapper>
@@ -108,8 +135,9 @@ function PaymentForm({ activeStep, isLoading, error, handleStepBack }) {
                 <InputWrapper
                   large
                   key={1}
+                  onChange={onChangeTransferTitle}
                   placeholder={placeholder}
-                  type="number"
+                  type="text"
                   error={error}
                 />
               )}
@@ -117,7 +145,12 @@ function PaymentForm({ activeStep, isLoading, error, handleStepBack }) {
 
             {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
 
-            <ButtonWrapper large type="button" disabled={isLoading}>
+            <ButtonWrapper
+              large
+              type="button"
+              disabled={isLoading}
+              onClick={() => onEnterTransferTitle(transferTitle)}
+            >
               <FormattedMessage {...messages.nextText} />
               <NavigateNextIcon />
             </ButtonWrapper>
@@ -150,13 +183,21 @@ function getSteps() {
 }
 
 PaymentForm.propTypes = {
+  transferTitle: PropTypes.string,
   activeStep: PropTypes.number,
   isLoading: PropTypes.bool,
   suggestions: PropTypes.array,
   handleStepBack: PropTypes.func,
+  handleKeyPress: PropTypes.func,
+  onChangeAmountMoney: PropTypes.func,
+  onEnterAmountMoney: PropTypes.func,
+  onChangeTransferTitle: PropTypes.func,
+  onEnterTransferTitle: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
+  amountMoney: makeAmountMoneySelector(),
+  transferTitle: makeTransferTitleSelector(),
   activeStep: makeActiveStepSelector(),
   isLoading: makeIsLoadingSelector(),
   error: makeErrorSelector(),
@@ -165,7 +206,15 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    onChangeAmountMoney: e => dispatch(changeAmountMoneyAction(e.target.value)),
+    onEnterAmountMoney: amountMoney =>
+      dispatch(enterAmountMoneyAction(amountMoney)),
+    onChangeTransferTitle: e =>
+      dispatch(changeTransferTitleAction(e.target.value)),
+    onEnterTransferTitle: transferTitle =>
+      dispatch(enterTransferTitleAction(transferTitle)),
     handleStepBack: () => dispatch(stepBackAction()),
+    handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
   };
 }
 
