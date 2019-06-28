@@ -45,7 +45,7 @@ export const initialState = {
   accountNumber: '',
   amountMoney: '',
   transferTitle: '',
-  activeStep: 2,
+  activeStep: 0,
   isLoading: false,
   error: '',
   suggestions: [],
@@ -63,6 +63,12 @@ const paymentPageReducer = (state = initialState, action) =>
         break;
       case CHANGE_TRANSFER_TITLE:
         draft.transferTitle = action.transferTitle;
+        break;
+      case SEARCH_ACCOUNT_BILLS:
+        draft.suggestions = action.value;
+        break;
+      case SEARCH_ACCOUNT_BILLS_SUCCESS:
+        draft.suggestions = action.suggestions;
         break;
       case PAYMENT_STEP_NEXT:
         draft.activeStep += 1;

@@ -214,10 +214,12 @@ function getSteps() {
 }
 
 function getSuggestionValue(suggestion) {
+  console.log('wchodze', suggestion);
   return suggestion.account_bill;
 }
 
 function renderSuggestion(suggestion) {
+  console.log('wchodze2', suggestion);
   return (
     <div>
       {suggestion.account_bill
@@ -236,7 +238,6 @@ PaymentForm.propTypes = {
   transferTitle: PropTypes.string,
   activeStep: PropTypes.number,
   isLoading: PropTypes.bool,
-  suggestions: PropTypes.array,
   handleStepBack: PropTypes.func,
   handleKeyDown: PropTypes.func,
   handleKeyPress: PropTypes.func,

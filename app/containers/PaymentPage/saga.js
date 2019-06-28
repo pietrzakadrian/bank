@@ -4,7 +4,10 @@ import request from 'utils/request';
 import { makeTokenSelector } from 'containers/App/selectors';
 import { SEARCH_ACCOUNT_BILLS } from './constants';
 import { makeAccountNumberSelector } from './selectors';
-import { searchAccountBillsSuccessAction } from './actions';
+import {
+  searchAccountBillsSuccessAction,
+  searchAccountBillsErrorAction,
+} from './actions';
 
 export function* searchAccountNumber() {
   const accountNumber = yield select(makeAccountNumberSelector());
@@ -24,9 +27,11 @@ export function* searchAccountNumber() {
 
       if (response) {
         console.log(response);
+        yield put(searchAccountBillsSuccessAction(response));
       }
     } catch (error) {
-      yield put(searchAccountBillsSuccessAction());
+      console.log(error);
+      yield put(searchAccountBillsErrorAction(error));
     }
   }
 }
