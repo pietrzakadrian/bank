@@ -29,6 +29,18 @@ const makeTransferTitleSelector = () =>
     substate => substate.transferTitle,
   );
 
+const makeAuthorizationKeySelector = () =>
+  createSelector(
+    selectPaymentPageDomain,
+    substate => substate.authorizationKey,
+  );
+
+const makeRecipientIdSelector = () =>
+  createSelector(
+    selectPaymentPageDomain,
+    substate => substate.recipientId,
+  );
+
 const makeActiveStepSelector = () =>
   createSelector(
     selectPaymentPageDomain,
@@ -68,6 +80,8 @@ export {
   makeAccountNumberSelector,
   makeAmountMoneySelector,
   makeTransferTitleSelector,
+  makeAuthorizationKeySelector,
+  makeRecipientIdSelector,
   makeActiveStepSelector,
   makeIsLoadingSelector,
   makeErrorSelector,

@@ -110,7 +110,7 @@ const appPageReducer = (state = initialState, action) =>
         break;
       case ENQUEUE_SNACKBAR:
         draft.snackbars = [
-          ...draft.snackbar,
+          ...draft.snackbars,
           {
             key: action.key,
             ...action.snackbar,

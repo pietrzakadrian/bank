@@ -40,10 +40,12 @@ import {
   enterTransferTitleAction,
   searchAccountBillsAction,
   clearAccountBillsAction,
+  enterAccountNumberAction,
 } from 'containers/PaymentPage/actions';
 import Autosuggest from 'react-autosuggest';
 import AutosuggestWrapper from './AutosuggestWrapper';
 import messages from './messages';
+import AutosuggestSuggestionsListWrapper from './AutosuggestSuggestionsListWrapper';
 
 function PaymentForm({
   accountNumber,
@@ -54,6 +56,7 @@ function PaymentForm({
   isLoading,
   error,
   onChangeAccountNumber,
+  onEnterAccountNumber,
   onChangeAmountMoney,
   onEnterAmountMoney,
   onChangeTransferTitle,
@@ -114,7 +117,12 @@ function PaymentForm({
 
             {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
 
-            <ButtonWrapper large type="button" disabled={isLoading}>
+            <ButtonWrapper
+              large
+              type="button"
+              disabled={isLoading}
+              onClick={() => onEnterAccountNumber(accountNumber)}
+            >
               <FormattedMessage {...messages.nextText} />
               <NavigateNextIcon />
             </ButtonWrapper>
@@ -134,6 +142,7 @@ function PaymentForm({
                   key={1}
                   onChange={onChangeAmountMoney}
                   onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyDown}
                   placeholder={placeholder}
                   type="number"
                   error={error}
@@ -167,6 +176,7 @@ function PaymentForm({
                   large
                   key={1}
                   onChange={onChangeTransferTitle}
+                  onKeyPress={handleKeyPress}
                   placeholder={placeholder}
                   type="text"
                   error={error}
@@ -214,22 +224,21 @@ function getSteps() {
 }
 
 function getSuggestionValue(suggestion) {
-  console.log('wchodze', suggestion);
   return suggestion.account_bill;
 }
 
 function renderSuggestion(suggestion) {
-  console.log('wchodze2', suggestion);
   return (
     <div>
-      {suggestion.account_bill
-        .toString()
-        .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-        .trim()}
-      <br />
-      <span className="react-autosuggest__suggestions-list-name">
+      <div>
+        {suggestion.account_bill
+          .toString()
+          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+          .trim()}
+      </div>
+      <AutosuggestSuggestionsListWrapper>
         {suggestion.user.name} {suggestion.user.surname}
-      </span>
+      </AutosuggestSuggestionsListWrapper>
     </div>
   );
 }
@@ -244,6 +253,7 @@ PaymentForm.propTypes = {
   handleSuggestionsFetchRequested: PropTypes.func,
   handleSuggestionsClearRequested: PropTypes.func,
   onChangeAccountNumber: PropTypes.func,
+  onEnterAccountNumber: PropTypes.func,
   onChangeAmountMoney: PropTypes.func,
   onEnterAmountMoney: PropTypes.func,
   onChangeTransferTitle: PropTypes.func,
@@ -262,21 +272,23 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onChangeAccountNumber: e =>
-      dispatch(changeAccountNumberAction(e.target.value)),
+    onChangeAccountNumber: (e, { newValue }) =>
+      dispatch(changeAccountNumberAction(newValue)),
     onChangeAmountMoney: e => dispatch(changeAmountMoneyAction(e.target.value)),
+    onEnterAccountNumber: accountNumber =>
+      dispatch(enterAccountNumberAction(accountNumber)),
     onEnterAmountMoney: amountMoney =>
       dispatch(enterAmountMoneyAction(amountMoney)),
     onChangeTransferTitle: e =>
       dispatch(changeTransferTitleAction(e.target.value)),
     onEnterTransferTitle: transferTitle =>
       dispatch(enterTransferTitleAction(transferTitle)),
-    handleStepBack: () => dispatch(stepBackAction()),
-    handleKeyPress: e => e.key === 13 && e.preventDefault(),
-    handleKeyDown: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
     handleSuggestionsFetchRequested: value =>
       dispatch(searchAccountBillsAction(value)),
     handleSuggestionsClearRequested: () => dispatch(clearAccountBillsAction()),
+    handleStepBack: () => dispatch(stepBackAction()),
+    handleKeyPress: e => e.key === 13 && e.preventDefault(),
+    handleKeyDown: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
   };
 }
 

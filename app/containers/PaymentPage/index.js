@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import Copyright from 'components/App/Copyright';
@@ -18,6 +17,7 @@ import ContainerWrapper from 'components/App/ContainerWrapper';
 import { Helmet } from 'react-helmet';
 import Footer from 'components/Footer';
 import PaymentForm from 'components/App/PaymentForm';
+import Notifier from 'components/Notifier';
 import makeSelectPaymentPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -38,6 +38,7 @@ export function PaymentPage() {
       </ContainerWrapper>
       <Footer />
       <Copyright />
+      <Notifier />
     </Fragment>
   );
 }

@@ -178,6 +178,17 @@ const registerPageReducer = (state = initialState, action) =>
         break;
       case REGISTER_SUCCESS:
         draft.isLoading = false;
+        draft.login = '';
+        draft.password = '';
+        draft.name = '';
+        draft.surname = '';
+        draft.email = '';
+        draft.error = '';
+        draft.currency = [];
+        draft.currencyId = null;
+        draft.isDataProcessingAgreement = false;
+        draft.errorDataProcessingAgreement = '';
+        draft.activeStep = 0;
         break;
       case REGISTER_ERROR:
         draft.error = action.error;

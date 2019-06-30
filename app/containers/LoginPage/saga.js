@@ -50,7 +50,7 @@ export function* handleLogin() {
     return yield put(
       enterLoginErrorAction(<FormattedMessage {...messages.loginEmpty} />),
     );
-  if (!isNumber.test(login) || login.length > limit)
+  if (!isNumber.test(login) || login.length >= limit)
     return yield put(
       enterLoginErrorAction(<FormattedMessage {...messages.loginError} />),
     );
@@ -82,7 +82,7 @@ export function* handlePassword() {
         <FormattedMessage {...messages.passwordEmpty} />,
       ),
     );
-  if (password.length > limit)
+  if (password.length >= limit)
     return yield put(
       enterPasswordErrorAction(
         <FormattedMessage {...messages.passwordError} />,

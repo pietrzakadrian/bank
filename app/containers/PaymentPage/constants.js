@@ -4,7 +4,9 @@
  *
  */
 
-export const DEFAULT_ACTION = 'app/PaymentPage/DEFAULT_ACTION';
+export const GET_CURRENCY = 'app/PaymentPage/GET_CURRENCY';
+export const GET_CURRENCY_SUCCESS = 'app/PaymentPage/GET_CURRENCY_SUCCESS';
+export const GET_CURRENCY_ERROR = 'app/PaymentPage/GET_CURRENCY_ERROR';
 
 export const CHANGE_ACCOUNT_NUMBER = 'app/PaymentPage/CHANGE_ACCOUNT_NUMBER';
 export const ENTER_ACCOUNT_NUMBER = 'app/PaymentPage/ENTER_ACCOUNT_NUMBER';
@@ -48,10 +50,6 @@ export const ENTER_AUTHORIZATION_KEY_SUCCESS =
   'app/PaymentPage/ENTER_AUTHORIZATION_KEY_SUCCESS';
 export const ENTER_AUTHORIZATION_KEY_ERROR =
   'app/PaymentPage/ENTER_AUTHORIZATION_KEY_ERROR';
-
-export const GET_CURRENCY = 'app/PaymentPage/GET_CURRENCY';
-export const GET_CURRENCY_SUCCESS = 'app/PaymentPage/GET_CURRENCY_SUCCESS';
-export const GET_CURRENCY_ERROR = 'app/PaymentPage/GET_CURRENCY_ERROR';
 
 export const GET_AUTHORIZATION_KEY = 'app/PaymentPage/GET_AUTHORIZATION_KEY';
 export const GET_AUTHORIZATION_KEY_SUCCESS =

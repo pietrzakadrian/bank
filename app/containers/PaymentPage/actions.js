@@ -122,14 +122,14 @@ export function enterAccountNumberAction(value) {
   };
 }
 
-export function successAccountNumberAction(recipientId) {
+export function enterAccountNumberSuccessAction(recipientId) {
   return {
     type: ENTER_ACCOUNT_NUMBER_SUCCESS,
     recipientId,
   };
 }
 
-export function errorAccountNumberAction(error) {
+export function enterAccountNumberErrorAction(error) {
   return {
     type: ENTER_ACCOUNT_NUMBER_ERROR,
     error,
@@ -150,14 +150,14 @@ export function enterAmountMoneyAction(amountMoney) {
   };
 }
 
-export function successAmountMoneyAction(amountMoney) {
+export function enterAmountMoneySuccessAction(amountMoney) {
   return {
     type: ENTER_AMOUNT_MONEY_SUCCESS,
     amountMoney,
   };
 }
 
-export function errorAmountMoneyAction(error) {
+export function enterAmountMoneyErrorAction(error) {
   return {
     type: ENTER_AMOUNT_MONEY_ERROR,
     error,
@@ -178,14 +178,14 @@ export function enterTransferTitleAction(transferTitle) {
   };
 }
 
-export function successTransferTitleAction(title) {
+export function enterTransferTitleSuccessAction(title) {
   return {
     type: ENTER_TRANSFER_TITLE_SUCCESS,
     title,
   };
 }
 
-export function errorTransferTitleAction(error) {
+export function enterTransferTitleErrorAction(error) {
   return {
     type: ENTER_TRANSFER_TITLE_ERROR,
     error,
@@ -206,14 +206,14 @@ export function enterAuthorizationKeyAction(authorizationKey) {
   };
 }
 
-export function successAuthorizationKeyAction(authorizationKey) {
+export function enterAuthorizationKeySuccessAction(authorizationKey) {
   return {
     type: ENTER_AUTHORIZATION_KEY_SUCCESS,
     authorizationKey,
   };
 }
 
-export function errorAuthorizationKeyAction(error) {
+export function enterAuthorizationKeyErrorAction(error) {
   return {
     type: ENTER_AUTHORIZATION_KEY_ERROR,
     error,
