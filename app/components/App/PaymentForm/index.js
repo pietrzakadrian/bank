@@ -4,7 +4,7 @@
  *
  */
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import StepperWrapper from 'components/StepperWrapper';
 import StepperDesktop from 'components/StepperDesktop';
@@ -21,6 +21,7 @@ import {
   makeAmountMoneySelector,
   makeTransferTitleSelector,
   makeIsSendAuthorizationKeySelector,
+  makeCurrencySelector,
 } from 'containers/PaymentPage/selectors';
 import ButtonBackWrapper from 'components/ButtonBackWrapper';
 import { connect } from 'react-redux';
@@ -43,17 +44,24 @@ import {
   clearAccountBillsAction,
   enterAccountNumberAction,
   sendAuthorizationKeyAction,
+  getCurrencyAction,
 } from 'containers/PaymentPage/actions';
 import Autosuggest from 'react-autosuggest';
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
+import reducer from 'containers/PaymentPage/reducer';
+import saga from 'containers/PaymentPage/saga';
 import AutosuggestWrapper from './AutosuggestWrapper';
 import messages from './messages';
 import AutosuggestSuggestionsListWrapper from './AutosuggestSuggestionsListWrapper';
 import ContainerWrapper from '../ContainerWrapper';
+import ConfirmPaymentWrapper from './ConfirmPaymentWrapper';
 
 function PaymentForm({
   accountNumber,
   amountMoney,
   transferTitle,
+  currency,
   activeStep,
   suggestions,
   isSendAuthorizationKey,
@@ -71,7 +79,14 @@ function PaymentForm({
   handleKeyPress,
   handleSuggestionsFetchRequested,
   handleSuggestionsClearRequested,
+  handleCurrency,
 }) {
+  useInjectSaga({ key: 'paymentPage', saga });
+  useInjectReducer({ key: 'paymentPage', reducer });
+  useEffect(() => {
+    handleCurrency();
+  }, []);
+
   const steps = getSteps();
   const inputProps = {
     value: accountNumber,
@@ -96,6 +111,7 @@ function PaymentForm({
         <StepperMobile
           background="white"
           variant="dots"
+          dashboardPage
           steps={steps.length}
           position="static"
           activeStep={activeStep}
@@ -205,52 +221,58 @@ function PaymentForm({
 
         {activeStep === 3 && (
           <ContainerWrapper>
-            <FormWrapper>
-              <div>
-                <LabelWrapper large>
-                  <FormattedMessage {...messages.stepAccountNumber} />
-                </LabelWrapper>
+            <div>
+              <LabelWrapper large>
+                <FormattedMessage {...messages.stepAccountNumber} />
+              </LabelWrapper>
 
-                <InputWrapper large key={1} value={accountNumber} readonly />
-              </div>
+              <InputWrapper large key={1} value={accountNumber} readonly />
+            </div>
 
-              <div>
-                <LabelWrapper large>
-                  <FormattedMessage {...messages.stepAmountOfMoney} />
-                </LabelWrapper>
+            <div>
+              <LabelWrapper large>
+                <FormattedMessage {...messages.stepAmountOfMoney} />
+              </LabelWrapper>
 
-                <InputWrapper large key={2} value={amountMoney} readonly />
-              </div>
-
-              <div>
-                <LabelWrapper large>
-                  <FormattedMessage {...messages.stepTransferTitle} />
-                </LabelWrapper>
-
-                <InputWrapper large key={3} value={transferTitle} readonly />
-              </div>
-
-              <ButtonWrapper
+              <InputWrapper
                 large
-                type="button"
-                disabled={isLoading || isSendAuthorizationKey}
-                onClick={onSendAuthorizationKey}
-              >
-                <FormattedMessage {...messages.inputReceiveCode} />
-                <NavigateNextIcon />
-              </ButtonWrapper>
+                key={2}
+                value={`${amountMoney} ${currency}`}
+                readonly
+              />
+            </div>
 
-              {isSendAuthorizationKey && (
-                <div>
-                  <InputWrapper key={4} />
+            <div>
+              <LabelWrapper large>
+                <FormattedMessage {...messages.stepTransferTitle} />
+              </LabelWrapper>
 
-                  <ButtonWrapper type="button" disabled={isLoading}>
-                    <FormattedMessage {...messages.inputMakePayment} />
-                    <NavigateNextIcon />
-                  </ButtonWrapper>
-                </div>
-              )}
-            </FormWrapper>
+              <InputWrapper large key={3} value={transferTitle} readonly />
+            </div>
+
+            <ButtonWrapper
+              large
+              type="button"
+              disabled={isLoading || isSendAuthorizationKey}
+              onClick={onSendAuthorizationKey}
+            >
+              <FormattedMessage {...messages.inputReceiveCode} />
+              <NavigateNextIcon />
+            </ButtonWrapper>
+
+            {isSendAuthorizationKey && (
+              <ConfirmPaymentWrapper>
+                <InputWrapper key={4} />
+
+                <ButtonWrapper
+                  margin="false"
+                  type="submit"
+                  disabled={isLoading}
+                >
+                  <FormattedMessage {...messages.inputMakePayment} />
+                </ButtonWrapper>
+              </ConfirmPaymentWrapper>
+            )}
           </ContainerWrapper>
         )}
 
@@ -302,6 +324,7 @@ function renderSuggestion(suggestion) {
 PaymentForm.propTypes = {
   transferTitle: PropTypes.string,
   activeStep: PropTypes.number,
+  currency: PropTypes.string,
   isLoading: PropTypes.bool,
   isSendAuthorizationKey: PropTypes.bool,
   handleStepBack: PropTypes.func,
@@ -309,6 +332,7 @@ PaymentForm.propTypes = {
   handleKeyPress: PropTypes.func,
   handleSuggestionsFetchRequested: PropTypes.func,
   handleSuggestionsClearRequested: PropTypes.func,
+  handleCurrency: PropTypes.func,
   onChangeAccountNumber: PropTypes.func,
   onEnterAccountNumber: PropTypes.func,
   onChangeAmountMoney: PropTypes.func,
@@ -326,6 +350,7 @@ const mapStateToProps = createStructuredSelector({
   isSendAuthorizationKey: makeIsSendAuthorizationKeySelector(),
   isLoading: makeIsLoadingSelector(),
   error: makeErrorSelector(),
+  currency: makeCurrencySelector(),
   suggestions: makeSuggestionsSelector(),
 });
 
@@ -349,6 +374,7 @@ function mapDispatchToProps(dispatch) {
     handleStepBack: () => dispatch(stepBackAction()),
     handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
     handleKeyDown: e => e.keyCode === 13 && e.preventDefault(),
+    handleCurrency: () => dispatch(getCurrencyAction()),
   };
 }
 

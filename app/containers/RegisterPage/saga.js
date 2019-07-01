@@ -291,10 +291,9 @@ function* registerAttempt() {
     );
     yield put(push('/login'));
   } catch (error) {
-    console.log(error);
-    // yield put(
-    //   registerErrorAction(<FormattedMessage {...messages.errorServer} />),
-    // );
+    yield put(
+      registerErrorAction(<FormattedMessage {...messages.errorServer} />),
+    );
   }
 }
 

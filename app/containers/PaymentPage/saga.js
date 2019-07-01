@@ -15,6 +15,7 @@ import {
   ENTER_TRANSFER_TITLE,
   SEND_AUTHORIZATION_KEY,
   ENTER_AUTHORIZATION_KEY,
+  GET_CURRENCY,
 } from './constants';
 import {
   makeAccountNumberSelector,
@@ -22,6 +23,7 @@ import {
   makeTransferTitleSelector,
   makeRecipientIdSelector,
   makeAuthorizationKeySelector,
+  makeCurrencySelector,
 } from './selectors';
 import {
   searchAccountBillsSuccessAction,
@@ -38,7 +40,34 @@ import {
   makePaymentErrorAction,
   makePaymentSuccessAction,
   makePaymentAction,
+  getCurrencyErrorAction,
+  getCurrencySuccessAction,
 } from './actions';
+
+export function* handleCurrency() {
+  const token = yield select(makeTokenSelector());
+  const userId = yield select(makeUserIdSelector());
+  const requestURL = `${api.baseURL}${api.bills.billsPath}${userId}`;
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response) return yield put(getCurrencyErrorAction('error'));
+
+    const { currency } = response[0].currency;
+
+    yield put(getCurrencySuccessAction(currency));
+  } catch (error) {
+    yield put(getCurrencyErrorAction(error));
+  }
+}
 
 export function* searchAccountNumber() {
   const accountNumber = yield select(makeAccountNumberSelector());
@@ -240,6 +269,7 @@ export function* handleConfirmTransaction() {
 
 // Individual exports for testing
 export default function* paymentPageSaga() {
+  yield takeLatest(GET_CURRENCY, handleCurrency);
   yield throttle(1000, SEARCH_ACCOUNT_BILLS, searchAccountNumber);
   yield takeLatest(ENTER_ACCOUNT_NUMBER, handleAccountNumber);
   yield takeLatest(ENTER_AMOUNT_MONEY, handleAmountMoney);

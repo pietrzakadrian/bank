@@ -48,6 +48,7 @@ export const initialState = {
   authorizationKey: '',
   recipientId: '',
   error: '',
+  currency: '',
   activeStep: 0,
   suggestions: [],
   isLoading: false,
@@ -88,12 +89,22 @@ const paymentPageReducer = (state = initialState, action) =>
         draft.recipientId = action.recipientId;
         draft.isLoading = false;
         break;
+      case ENTER_AMOUNT_MONEY:
+        draft.isLoading = true;
+        draft.amountMoney = action.amountMoney;
+        break;
+      case ENTER_AMOUNT_MONEY_SUCCESS:
+        draft.isLoading = false;
+        break;
       case SEND_AUTHORIZATION_KEY:
         draft.isLoading = true;
         break;
       case SEND_AUTHORIZATION_KEY_SUCCESS:
         draft.isSendAuthorizationKey = true;
         draft.isLoading = false;
+        break;
+      case GET_CURRENCY_SUCCESS:
+        draft.currency = action.currency;
         break;
       case PAYMENT_STEP_NEXT:
         draft.activeStep += 1;

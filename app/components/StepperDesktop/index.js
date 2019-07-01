@@ -12,6 +12,10 @@ const StepperDesktop = styled(Stepper)`
     @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
       display: flex;
     }
+
+    span {
+      font-family: inherit;
+    }
   }
 `;
 

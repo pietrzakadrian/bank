@@ -71,6 +71,12 @@ const makeIsSendAuthorizationKeySelector = () =>
     substate => substate.isSendAuthorizationKey,
   );
 
+const makeCurrencySelector = () =>
+  createSelector(
+    selectPaymentPageDomain,
+    substate => substate.currency,
+  );
+
 /**
  * Default selector used by PaymentPage
  */
@@ -93,4 +99,5 @@ export {
   makeIsLoadingSelector,
   makeErrorSelector,
   makeSuggestionsSelector,
+  makeCurrencySelector,
 };
