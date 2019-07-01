@@ -63,24 +63,32 @@ const paymentPageReducer = (state = initialState, action) =>
     switch (action.type) {
       case CHANGE_ACCOUNT_NUMBER:
         draft.accountNumber = action.value;
+        draft.error = '';
         break;
       case CHANGE_AMOUNT_MONEY:
         draft.amountMoney = action.amountMoney;
+        draft.error = '';
         break;
       case CHANGE_TRANSFER_TITLE:
         draft.transferTitle = action.transferTitle;
+        draft.error = '';
         break;
       case CHANGE_AUTHORIZATION_KEY:
         draft.authorizationKey = action.authorizationKey;
+        draft.error = '';
         break;
       case SEARCH_ACCOUNT_BILLS:
-        if (draft.accountNumber !== action.value && action.value.length <= 26) {
+        if (draft.accountNumber !== action.value) {
           draft.suggestions = action.value;
           draft.isLoading = true;
         }
         break;
       case SEARCH_ACCOUNT_BILLS_SUCCESS:
         draft.suggestions = action.suggestions;
+        draft.isLoading = false;
+        break;
+      case SEARCH_ACCOUNT_BILLS_ERROR:
+        draft.error = action.error;
         draft.isLoading = false;
         break;
       case CLEAR_ACCOUNT_BILLS:
@@ -94,12 +102,23 @@ const paymentPageReducer = (state = initialState, action) =>
         draft.recipientId = action.recipientId;
         draft.isLoading = false;
         break;
+      case ENTER_ACCOUNT_NUMBER_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
+        break;
       case ENTER_AMOUNT_MONEY:
         draft.isLoading = true;
         draft.amountMoney = action.amountMoney;
         break;
       case ENTER_AMOUNT_MONEY_SUCCESS:
         draft.isLoading = false;
+        break;
+      case ENTER_AMOUNT_MONEY_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
+        break;
+      case ENTER_TRANSFER_TITLE_ERROR:
+        draft.error = action.error;
         break;
       case SEND_AUTHORIZATION_KEY:
         draft.isLoading = true;
@@ -109,17 +128,38 @@ const paymentPageReducer = (state = initialState, action) =>
         draft.isLoading = false;
         draft.message = action.message;
         break;
+      case SEND_AUTHORIZATION_KEY_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
+        break;
       case GET_CURRENCY_SUCCESS:
         draft.currency = action.currency;
         break;
+      case GET_CURRENCY_ERROR:
+        draft.error = action.error;
+        break;
       case GET_AUTHORIZATION_KEY_SUCCESS:
         draft.suggestionAuthorizationKey = action.suggestionAuthorizationKey;
+        break;
+      case GET_AUTHORIZATION_KEY_ERROR:
+        draft.error = action.error;
+        break;
+      case MAKE_PAYMENT:
+        draft.isLoading = true;
+        break;
+      case MAKE_PAYMENT_SUCCESS:
+        draft.isLoading = false;
+        break;
+      case MAKE_PAYMENT_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
         break;
       case PAYMENT_STEP_NEXT:
         draft.activeStep += 1;
         break;
       case PAYMENT_STEP_BACK:
         draft.activeStep -= 1;
+        draft.error = '';
         break;
     }
   });

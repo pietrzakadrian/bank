@@ -24,7 +24,6 @@ import {
   makeTransferTitleSelector,
   makeRecipientIdSelector,
   makeAuthorizationKeySelector,
-  makeCurrencySelector,
   makeIsSendAuthorizationKeySelector,
 } from './selectors';
 import {
@@ -80,10 +79,12 @@ export function* searchAccountNumber() {
   const limit = 26;
   const isNumber = /^\d+$/;
 
-  if (!isNumber.test(accountNumber))
+  if (!accountNumber) return yield put(searchAccountBillsErrorAction('empty'));
+
+  if (!isNumber.test(accountNumber) || accountNumber.length > limit)
     return yield put(searchAccountBillsErrorAction('error'));
 
-  if (accountNumber && accountNumber.length !== limit) {
+  if (accountNumber.length !== limit) {
     try {
       const response = yield call(request, requestURL, {
         method: 'GET',
@@ -94,9 +95,7 @@ export function* searchAccountNumber() {
         },
       });
 
-      if (response) {
-        yield put(searchAccountBillsSuccessAction(response));
-      }
+      if (response) yield put(searchAccountBillsSuccessAction(response));
     } catch (error) {
       yield put(searchAccountBillsErrorAction(error));
     }
@@ -112,7 +111,9 @@ export function* handleAccountNumber() {
   const isNumber = /^\d+$/;
   const limit = 26;
 
-  if (!isNumber.test(accountNumber) || accountNumber.length > limit)
+  if (!accountNumber) return yield put(enterAccountNumberErrorAction('empty'));
+
+  if (!isNumber.test(accountNumber) || accountNumber.length !== limit)
     return yield put(enterAccountNumberErrorAction('error'));
 
   try {
@@ -143,6 +144,8 @@ export function* handleAmountMoney() {
   const token = yield select(makeTokenSelector());
   const requestURL = `${api.baseURL}${api.bills.isAmountMoneyPath}`;
   const isNumber = /^\d+$/;
+
+  if (!amountMoney) return yield put(enterAmountMoneyErrorAction('empty'));
 
   if (!isNumber.test(amountMoney))
     return yield put(enterAmountMoneyErrorAction('error'));
@@ -175,6 +178,8 @@ export function* handleAmountMoney() {
 export function* handleTransferTitle() {
   const transferTitle = yield select(makeTransferTitleSelector());
   const limit = 255;
+
+  if (!transferTitle) return yield put(enterTransferTitleErrorAction('empty'));
 
   if (transferTitle.length > limit)
     return yield put(enterTransferTitleErrorAction('error'));
@@ -227,6 +232,8 @@ export function* handleConfirmTransaction() {
     makeIsOpenNavigationDesktopSelector(),
   );
   const requestURL = `${api.baseURL}${api.transactions.confirmPath}`;
+
+  if (!authorizationKey) return yield put(makePaymentErrorAction('empty'));
 
   try {
     yield put(makePaymentAction());

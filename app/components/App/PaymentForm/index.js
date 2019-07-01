@@ -11,7 +11,7 @@ import StepperDesktop from 'components/StepperDesktop';
 import StepperMobile from 'components/StepperMobile';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   makeAccountNumberSelector,
   makeActiveStepSelector,
@@ -80,6 +80,7 @@ function PaymentForm({
   isLoading,
   message,
   error,
+  intl,
   onChangeAccountNumber,
   onEnterAccountNumber,
   onChangeAmountMoney,
@@ -111,6 +112,10 @@ function PaymentForm({
     onKeyPress: handleKeyPress,
     onKeyDown: handleKeyDown,
     type: 'number',
+    placeholder: intl.formatMessage({
+      id: 'app.containers.PaymentPage.inputAccountNumber',
+      defaultMessage: 'Search for the account number...',
+    }),
   };
 
   return (
@@ -151,7 +156,11 @@ function PaymentForm({
               />
             </AutosuggestWrapper>
 
-            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
+            {error && (
+              <LabelWrapper large error={error}>
+                {error}
+              </LabelWrapper>
+            )}
 
             <ButtonWrapper
               large
@@ -186,7 +195,11 @@ function PaymentForm({
               )}
             </FormattedMessage>
 
-            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
+            {error && (
+              <LabelWrapper large error={error}>
+                {error}
+              </LabelWrapper>
+            )}
 
             <ButtonWrapper
               large
@@ -220,7 +233,11 @@ function PaymentForm({
               )}
             </FormattedMessage>
 
-            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
+            {error && (
+              <LabelWrapper large error={error}>
+                {error}
+              </LabelWrapper>
+            )}
 
             <ButtonWrapper
               large
@@ -315,6 +332,12 @@ function PaymentForm({
                     <FormattedMessage {...messages.inputMakePayment} />
                   </ButtonWrapper>
                 </ConfirmPaymentWrapper>
+
+                {error && (
+                  <LabelWrapper large error={error}>
+                    {error}
+                  </LabelWrapper>
+                )}
 
                 <TextWrapper large>
                   {suggestionAuthorizationKey ? (
@@ -459,4 +482,7 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export default compose(withConnect)(PaymentForm);
+export default compose(
+  withConnect,
+  injectIntl,
+)(PaymentForm);
