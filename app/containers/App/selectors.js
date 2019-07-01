@@ -83,6 +83,18 @@ const makeIsNewNotificationsSelector = () =>
     globalState => globalState.isNewNotifications,
   );
 
+const makeNotificationCountSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.notificationCount,
+  );
+
+const makeMessageCountSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.messageCount,
+  );
+
 const makeSelectLocation = () =>
   createSelector(
     selectRouter,
@@ -104,4 +116,6 @@ export {
   makeIsOpenMessagesSelector,
   makeIsNewMessagesSelector,
   makeIsNewNotificationsSelector,
+  makeNotificationCountSelector,
+  makeMessageCountSelector,
 };

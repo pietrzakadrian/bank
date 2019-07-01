@@ -19,8 +19,13 @@ import {
   TOGGLE_NOTIFICATIONS,
   CHECK_NEW_MESSAGES,
   CHECK_NEW_MESSAGES_SUCCESS,
+  CHECK_NEW_MESSAGES_ERROR,
   CHECK_NEW_NOTIFICATIONS,
   CHECK_NEW_NOTIFICATIONS_SUCCESS,
+  CHECK_NEW_NOTIFICATIONS_ERROR,
+  GET_NEW_NOTIFICATIONS,
+  GET_NEW_NOTIFICATIONS_SUCCESS,
+  GET_NEW_NOTIFICATIONS_ERROR,
 } from './constants';
 
 export function checkNewMessagesAction() {
@@ -36,16 +41,50 @@ export function checkNewMessagesSuccessAction(messages) {
   };
 }
 
+export function checkNewMessagesErrorAction(error) {
+  return {
+    type: CHECK_NEW_MESSAGES_ERROR,
+    error,
+  };
+}
+
 export function checkNewNotificationsAction() {
   return {
     type: CHECK_NEW_NOTIFICATIONS,
   };
 }
 
-export function checkNewNotificationsSuccessAction(notifications) {
+export function checkNewNotificationsSuccessAction(notificationCount) {
   return {
     type: CHECK_NEW_NOTIFICATIONS_SUCCESS,
+    notificationCount,
+  };
+}
+
+export function checkNewNotificationsErrorAction(error) {
+  return {
+    type: CHECK_NEW_NOTIFICATIONS_ERROR,
+    error,
+  };
+}
+
+export function getNewNotificationsAction() {
+  return {
+    type: GET_NEW_NOTIFICATIONS,
+  };
+}
+
+export function getNewNotificationsSuccessAction(notifications) {
+  return {
+    type: GET_NEW_NOTIFICATIONS_SUCCESS,
     notifications,
+  };
+}
+
+export function getNewNotificationsErrorAction(error) {
+  return {
+    type: GET_NEW_NOTIFICATIONS_SUCCESS,
+    error,
   };
 }
 

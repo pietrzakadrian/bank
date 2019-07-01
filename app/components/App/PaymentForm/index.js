@@ -138,7 +138,11 @@ function PaymentForm({
         />
       </StepperWrapper>
 
-      <form noValidate autoComplete="off" onSubmit={onEnterAuthorizationKey}>
+      <form
+        noValidate
+        autoComplete="off"
+        onSubmit={e => onEnterAuthorizationKey(e, authorizationKey)}
+      >
         {activeStep === 0 && (
           <Fragment>
             <LabelWrapper large>
@@ -326,7 +330,7 @@ function PaymentForm({
                   <ButtonWrapper
                     margin="false"
                     type="submit"
-                    onClick={onEnterAuthorizationKey}
+                    onClick={e => onEnterAuthorizationKey(e, authorizationKey)}
                     disabled={isLoading}
                   >
                     <FormattedMessage {...messages.inputMakePayment} />

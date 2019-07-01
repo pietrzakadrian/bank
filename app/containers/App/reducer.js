@@ -16,10 +16,11 @@ import {
   TOGGLE_NAVIGATION_MOBILE,
   TOGGLE_MESSAGES,
   TOGGLE_NOTIFICATIONS,
-  CHECK_NEW_MESSAGES,
   CHECK_NEW_MESSAGES_SUCCESS,
-  CHECK_NEW_NOTIFICATIONS,
   CHECK_NEW_NOTIFICATIONS_SUCCESS,
+  CHECK_NEW_NOTIFICATIONS_ERROR,
+  GET_NEW_NOTIFICATIONS_SUCCESS,
+  GET_NEW_NOTIFICATIONS_ERROR,
 } from './constants';
 
 export const initialState = {
@@ -27,7 +28,9 @@ export const initialState = {
   userId: '',
   token: '',
   messages: [],
+  messageCount: 0,
   notifications: [],
+  notificationCount: 0,
   snackbars: [],
   error: '',
   isOpenNavigationMobile: false,
@@ -48,6 +51,16 @@ const appPageReducer = (state = initialState, action) =>
         break;
       case CHECK_NEW_NOTIFICATIONS_SUCCESS:
         draft.isNewNotifications = true;
+        draft.notificationCount = action.notificationCount;
+        break;
+      case CHECK_NEW_NOTIFICATIONS_ERROR:
+        draft.error = action.error;
+        break;
+      case GET_NEW_NOTIFICATIONS_SUCCESS:
+        draft.notifications = action.notifications;
+        break;
+      case GET_NEW_NOTIFICATIONS_ERROR:
+        draft.error = action.error;
         break;
       case TOGGLE_NAVIGATION_DESKTOP:
         draft.isOpenNavigationDesktop = !draft.isOpenNavigationDesktop;

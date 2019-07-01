@@ -13,6 +13,7 @@ import {
 } from 'containers/App/selectors';
 import { logoutErrorAction } from 'containers/App/actions';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
+import api from 'api';
 import {
   GET_NAME,
   GET_SURNAME,
@@ -30,7 +31,6 @@ import {
   GET_RECENT_TRANSACTIONS_RECIPIENT,
   GET_RECENT_TRANSACTIONS_SENDER,
 } from './constants';
-import api from 'api';
 import {
   getNameErrorAction,
   getSurnameAction,

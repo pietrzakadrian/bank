@@ -86,6 +86,9 @@ const settingsPageReducer = (state = initialState, action) =>
       case ENTER_NEW_NAME:
         draft.newName = action.name;
         break;
+      case ENTER_NEW_NAME_SUCCESS:
+        draft.name = draft.newName;
+        break;
       case ENTER_NEW_NAME_ERROR:
         draft.errorName = action.error;
         draft.isLoading = false;
@@ -99,6 +102,9 @@ const settingsPageReducer = (state = initialState, action) =>
         break;
       case ENTER_NEW_SURNAME:
         draft.newSurname = action.surname;
+        break;
+      case ENTER_NEW_SURNAME_SUCCESS:
+        draft.surname = draft.newSurname;
         break;
       case ENTER_NEW_SURNAME_ERROR:
         draft.errorSurname = action.error;
@@ -119,6 +125,9 @@ const settingsPageReducer = (state = initialState, action) =>
         break;
       case ENTER_NEW_EMAIL:
         draft.newEmail = action.email;
+        break;
+      case ENTER_NEW_EMAIL_SUCCESS:
+        draft.email = draft.newEmail;
         break;
       case ENTER_NEW_EMAIL_ERROR:
         draft.errorEmail = action.error;

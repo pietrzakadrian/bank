@@ -16,6 +16,7 @@ import NotificationsWrapper from './NotificationsWrapper';
 import TextWrapper from './TextWrapper';
 import messages from './messages';
 
+// todo
 function Notifications({ isOpenNotifications }) {
   return (
     <NotificationsWrapper open={isOpenNotifications}>

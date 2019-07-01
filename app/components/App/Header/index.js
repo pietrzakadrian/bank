@@ -19,6 +19,8 @@ import {
   makeIsOpenMessagesSelector,
   makeIsNewNotificationsSelector,
   makeIsNewMessagesSelector,
+  makeNotificationCountSelector,
+  makeMessageCountSelector,
 } from 'containers/App/selectors';
 import {
   toggleNavigationDesktopAction,
@@ -62,6 +64,8 @@ import Notifications from '../Notifications';
 function Header({
   children,
   location,
+  notificationCount,
+  messageCount,
   isOpenNavigationMobile,
   isOpenNavigationDesktop,
   isOpenNotifications,
@@ -122,14 +126,20 @@ function Header({
 
           <ButtonWrapper type="button" onClick={onToggleMessages}>
             {isNewMessages ? (
-              <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={1}>
+              <BadgeWrapper
+                classes={{ badge: 'badge' }}
+                badgeContent={messageCount > 9 ? '9+' : messageCount}
+              >
                 <MailActiveIcon className="icon" />
                 <ItemWrapper>
                   <FormattedMessage {...messages.headerItemMessagesTitle} />
                 </ItemWrapper>
               </BadgeWrapper>
             ) : (
-              <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={0}>
+              <BadgeWrapper
+                classes={{ badge: 'badge' }}
+                badgeContent={messageCount}
+              >
                 <MailOutlineIcon className="icon" />
                 <ItemWrapper>
                   <FormattedMessage {...messages.headerItemMessagesTitle} />
@@ -141,7 +151,10 @@ function Header({
 
           <ButtonWrapper type="button" onClick={onToggleNotifications}>
             {isNewNotifications ? (
-              <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={1}>
+              <BadgeWrapper
+                classes={{ badge: 'badge' }}
+                badgeContent={notificationCount > 9 ? '9+' : notificationCount}
+              >
                 <NotificationsActiveIcon className="icon" />
                 <ItemWrapper>
                   <FormattedMessage
@@ -150,7 +163,10 @@ function Header({
                 </ItemWrapper>
               </BadgeWrapper>
             ) : (
-              <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={0}>
+              <BadgeWrapper
+                classes={{ badge: 'badge' }}
+                badgeContent={notificationCount}
+              >
                 <NotificationsNoneIcon className="icon" />
                 <ItemWrapper>
                   <FormattedMessage
@@ -230,6 +246,8 @@ Header.propTypes = {
   isOpenMessages: PropTypes.bool,
   isNewNotifications: PropTypes.bool,
   isNewMessages: PropTypes.bool,
+  notificationCount: PropTypes.number,
+  messageCount: PropTypes.number,
   onToggleNavigationDesktop: PropTypes.func,
   onToggleNavigationMobile: PropTypes.func,
   onToggleMessages: PropTypes.func,
@@ -247,6 +265,8 @@ const mapStateToProps = createStructuredSelector({
   isOpenMessages: makeIsOpenMessagesSelector(),
   isNewNotifications: makeIsNewNotificationsSelector(),
   isNewMessages: makeIsNewMessagesSelector(),
+  notificationCount: makeNotificationCountSelector(),
+  messageCount: makeMessageCountSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
