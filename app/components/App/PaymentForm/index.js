@@ -22,6 +22,9 @@ import {
   makeTransferTitleSelector,
   makeIsSendAuthorizationKeySelector,
   makeCurrencySelector,
+  makeMessageSelector,
+  makeAuthorizationKeySelector,
+  makeSuggestionAuthorizationKeySelector,
 } from 'containers/PaymentPage/selectors';
 import ButtonBackWrapper from 'components/ButtonBackWrapper';
 import { connect } from 'react-redux';
@@ -45,27 +48,37 @@ import {
   enterAccountNumberAction,
   sendAuthorizationKeyAction,
   getCurrencyAction,
+  getAuthorizationKeyAction,
+  changeAuthorizationKeyAction,
+  enterAuthorizationKeyAction,
 } from 'containers/PaymentPage/actions';
 import Autosuggest from 'react-autosuggest';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/PaymentPage/reducer';
 import saga from 'containers/PaymentPage/saga';
+import TextWrapper from 'components/App/TextWrapper';
 import AutosuggestWrapper from './AutosuggestWrapper';
 import messages from './messages';
 import AutosuggestSuggestionsListWrapper from './AutosuggestSuggestionsListWrapper';
+import AutosuggestSuggestionsAccountNumberWrapper from './AutosuggestSuggestionsAccountNumberWrapper';
 import ContainerWrapper from '../ContainerWrapper';
 import ConfirmPaymentWrapper from './ConfirmPaymentWrapper';
+import FlatButtonWrapper from './FlatButtonWrapper';
+import SuggestionAuthorizationKeyWrapper from './SuggestionAuthorizationKeyWrapper';
 
 function PaymentForm({
   accountNumber,
   amountMoney,
   transferTitle,
   currency,
+  authorizationKey,
+  suggestionAuthorizationKey,
   activeStep,
   suggestions,
   isSendAuthorizationKey,
   isLoading,
+  message,
   error,
   onChangeAccountNumber,
   onEnterAccountNumber,
@@ -73,13 +86,16 @@ function PaymentForm({
   onEnterAmountMoney,
   onChangeTransferTitle,
   onEnterTransferTitle,
+  onChangeAuthorizationKey,
   onSendAuthorizationKey,
+  onEnterAuthorizationKey,
   handleStepBack,
   handleKeyDown,
   handleKeyPress,
   handleSuggestionsFetchRequested,
   handleSuggestionsClearRequested,
   handleCurrency,
+  handleAuthorizationKey,
 }) {
   useInjectSaga({ key: 'paymentPage', saga });
   useInjectReducer({ key: 'paymentPage', reducer });
@@ -111,14 +127,13 @@ function PaymentForm({
         <StepperMobile
           background="white"
           variant="dots"
-          dashboardPage
           steps={steps.length}
           position="static"
           activeStep={activeStep}
         />
       </StepperWrapper>
 
-      <form noValidate autoComplete="off">
+      <form noValidate autoComplete="off" onSubmit={onEnterAuthorizationKey}>
         {activeStep === 0 && (
           <Fragment>
             <LabelWrapper large>
@@ -197,7 +212,7 @@ function PaymentForm({
                   large
                   key={1}
                   onChange={onChangeTransferTitle}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyDown}
                   placeholder={placeholder}
                   type="text"
                   error={error}
@@ -226,7 +241,13 @@ function PaymentForm({
                 <FormattedMessage {...messages.stepAccountNumber} />
               </LabelWrapper>
 
-              <InputWrapper large key={1} value={accountNumber} readonly />
+              <InputWrapper
+                large
+                key={1}
+                readOnly
+                value={accountNumber}
+                onKeyDown={handleKeyDown}
+              />
             </div>
 
             <div>
@@ -237,8 +258,9 @@ function PaymentForm({
               <InputWrapper
                 large
                 key={2}
+                onKeyDown={handleKeyDown}
                 value={`${amountMoney} ${currency}`}
-                readonly
+                readOnly
               />
             </div>
 
@@ -247,7 +269,13 @@ function PaymentForm({
                 <FormattedMessage {...messages.stepTransferTitle} />
               </LabelWrapper>
 
-              <InputWrapper large key={3} value={transferTitle} readonly />
+              <InputWrapper
+                large
+                key={3}
+                value={transferTitle}
+                onKeyDown={handleKeyDown}
+                readOnly
+              />
             </div>
 
             <ButtonWrapper
@@ -260,18 +288,52 @@ function PaymentForm({
               <NavigateNextIcon />
             </ButtonWrapper>
 
-            {isSendAuthorizationKey && (
-              <ConfirmPaymentWrapper>
-                <InputWrapper key={4} />
+            {message && <TextWrapper large>{message}</TextWrapper>}
 
-                <ButtonWrapper
-                  margin="false"
-                  type="submit"
-                  disabled={isLoading}
-                >
-                  <FormattedMessage {...messages.inputMakePayment} />
-                </ButtonWrapper>
-              </ConfirmPaymentWrapper>
+            {isSendAuthorizationKey && (
+              <Fragment>
+                <ConfirmPaymentWrapper>
+                  <FormattedMessage {...messages.inputAuthorizationKey}>
+                    {placeholder => (
+                      <InputWrapper
+                        key={4}
+                        onChange={onChangeAuthorizationKey}
+                        onKeyDown={handleKeyDown}
+                        type="text"
+                        placeholder={placeholder}
+                        error={error}
+                      />
+                    )}
+                  </FormattedMessage>
+
+                  <ButtonWrapper
+                    margin="false"
+                    type="submit"
+                    onClick={onEnterAuthorizationKey}
+                    disabled={isLoading}
+                  >
+                    <FormattedMessage {...messages.inputMakePayment} />
+                  </ButtonWrapper>
+                </ConfirmPaymentWrapper>
+
+                <TextWrapper large>
+                  {suggestionAuthorizationKey ? (
+                    <Fragment>
+                      <FormattedMessage {...messages.yourCodeIs} />{' '}
+                      <SuggestionAuthorizationKeyWrapper>
+                        {suggestionAuthorizationKey}
+                      </SuggestionAuthorizationKeyWrapper>
+                    </Fragment>
+                  ) : (
+                    <FlatButtonWrapper
+                      type="button"
+                      onClick={handleAuthorizationKey}
+                    >
+                      <FormattedMessage {...messages.noEmailWithoutCode} />
+                    </FlatButtonWrapper>
+                  )}
+                </TextWrapper>
+              </Fragment>
             )}
           </ContainerWrapper>
         )}
@@ -308,12 +370,12 @@ function getSuggestionValue(suggestion) {
 function renderSuggestion(suggestion) {
   return (
     <div>
-      <div>
+      <AutosuggestSuggestionsAccountNumberWrapper>
         {suggestion.account_bill
           .toString()
           .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
           .trim()}
-      </div>
+      </AutosuggestSuggestionsAccountNumberWrapper>
       <AutosuggestSuggestionsListWrapper>
         {suggestion.user.name} {suggestion.user.surname}
       </AutosuggestSuggestionsListWrapper>
@@ -323,6 +385,8 @@ function renderSuggestion(suggestion) {
 
 PaymentForm.propTypes = {
   transferTitle: PropTypes.string,
+  authorizationKey: PropTypes.string,
+  suggestionAuthorizationKey: PropTypes.string,
   activeStep: PropTypes.number,
   currency: PropTypes.string,
   isLoading: PropTypes.bool,
@@ -333,22 +397,28 @@ PaymentForm.propTypes = {
   handleSuggestionsFetchRequested: PropTypes.func,
   handleSuggestionsClearRequested: PropTypes.func,
   handleCurrency: PropTypes.func,
+  handleAuthorizationKey: PropTypes.func,
   onChangeAccountNumber: PropTypes.func,
   onEnterAccountNumber: PropTypes.func,
   onChangeAmountMoney: PropTypes.func,
   onEnterAmountMoney: PropTypes.func,
   onChangeTransferTitle: PropTypes.func,
+  onChangeAuthorizationKey: PropTypes.func,
   onEnterTransferTitle: PropTypes.func,
   onSendAuthorizationKey: PropTypes.func,
+  onEnterAuthorizationKey: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   accountNumber: makeAccountNumberSelector(),
   amountMoney: makeAmountMoneySelector(),
   transferTitle: makeTransferTitleSelector(),
+  authorizationKey: makeAuthorizationKeySelector(),
+  suggestionAuthorizationKey: makeSuggestionAuthorizationKeySelector(),
   activeStep: makeActiveStepSelector(),
   isSendAuthorizationKey: makeIsSendAuthorizationKeySelector(),
   isLoading: makeIsLoadingSelector(),
+  message: makeMessageSelector(),
   error: makeErrorSelector(),
   currency: makeCurrencySelector(),
   suggestions: makeSuggestionsSelector(),
@@ -367,6 +437,11 @@ function mapDispatchToProps(dispatch) {
       dispatch(changeTransferTitleAction(e.target.value)),
     onEnterTransferTitle: transferTitle =>
       dispatch(enterTransferTitleAction(transferTitle)),
+    onChangeAuthorizationKey: e =>
+      dispatch(changeAuthorizationKeyAction(e.target.value)),
+    onEnterAuthorizationKey: (e, authorizationKey) =>
+      dispatch(enterAuthorizationKeyAction(authorizationKey)) &&
+      e.preventDefault(),
     onSendAuthorizationKey: () => dispatch(sendAuthorizationKeyAction()),
     handleSuggestionsFetchRequested: value =>
       dispatch(searchAccountBillsAction(value)),
@@ -375,6 +450,7 @@ function mapDispatchToProps(dispatch) {
     handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
     handleKeyDown: e => e.keyCode === 13 && e.preventDefault(),
     handleCurrency: () => dispatch(getCurrencyAction()),
+    handleAuthorizationKey: () => dispatch(getAuthorizationKeyAction()),
   };
 }
 

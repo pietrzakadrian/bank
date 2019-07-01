@@ -46,7 +46,9 @@ export const initialState = {
   amountMoney: '',
   transferTitle: '',
   authorizationKey: '',
+  suggestionAuthorizationKey: '',
   recipientId: '',
+  message: '',
   error: '',
   currency: '',
   activeStep: 0,
@@ -67,6 +69,9 @@ const paymentPageReducer = (state = initialState, action) =>
         break;
       case CHANGE_TRANSFER_TITLE:
         draft.transferTitle = action.transferTitle;
+        break;
+      case CHANGE_AUTHORIZATION_KEY:
+        draft.authorizationKey = action.authorizationKey;
         break;
       case SEARCH_ACCOUNT_BILLS:
         if (draft.accountNumber !== action.value && action.value.length <= 26) {
@@ -102,9 +107,13 @@ const paymentPageReducer = (state = initialState, action) =>
       case SEND_AUTHORIZATION_KEY_SUCCESS:
         draft.isSendAuthorizationKey = true;
         draft.isLoading = false;
+        draft.message = action.message;
         break;
       case GET_CURRENCY_SUCCESS:
         draft.currency = action.currency;
+        break;
+      case GET_AUTHORIZATION_KEY_SUCCESS:
+        draft.suggestionAuthorizationKey = action.suggestionAuthorizationKey;
         break;
       case PAYMENT_STEP_NEXT:
         draft.activeStep += 1;

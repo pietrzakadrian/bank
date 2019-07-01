@@ -14,11 +14,12 @@ const TextWrapper = styled.span`
   font-size: 13px;
   letter-spacing: 0.3px;
   width: 90%;
+  height: 16px;
   display: block;
   color: ${props => (props.error ? PRIMARY_RED : 'inherit')};
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-    width: 17rem;
+    width: ${props => (props.large ? '300px' : '17rem')};
   }
 `;
 

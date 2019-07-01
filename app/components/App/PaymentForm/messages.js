@@ -154,7 +154,7 @@ export default defineMessages({
   },
   yourCodeIs: {
     id: `${scope}.yourCodeIs`,
-    defaultMessage: 'Your code is:',
+    defaultMessage: 'Your authorization code is:',
   },
   searchInformation: {
     id: `${scope}.searchInformation`,

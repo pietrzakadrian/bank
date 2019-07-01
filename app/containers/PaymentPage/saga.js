@@ -16,6 +16,7 @@ import {
   SEND_AUTHORIZATION_KEY,
   ENTER_AUTHORIZATION_KEY,
   GET_CURRENCY,
+  GET_AUTHORIZATION_KEY,
 } from './constants';
 import {
   makeAccountNumberSelector,
@@ -24,6 +25,7 @@ import {
   makeRecipientIdSelector,
   makeAuthorizationKeySelector,
   makeCurrencySelector,
+  makeIsSendAuthorizationKeySelector,
 } from './selectors';
 import {
   searchAccountBillsSuccessAction,
@@ -42,6 +44,8 @@ import {
   makePaymentAction,
   getCurrencyErrorAction,
   getCurrencySuccessAction,
+  getAuthorizationKeyErrorAction,
+  getAuthorizationKeySuccessAction,
 } from './actions';
 
 export function* handleCurrency() {
@@ -205,7 +209,7 @@ export function* handleRegisterTransaction() {
 
     const { success } = response;
 
-    if (success) yield put(sendAuthorizationKeySuccessAction());
+    if (success) yield put(sendAuthorizationKeySuccessAction('success'));
   } catch (error) {
     yield put(sendAuthorizationKeyErrorAction(error));
   }
@@ -267,7 +271,47 @@ export function* handleConfirmTransaction() {
   }
 }
 
-// Individual exports for testing
+export function* handleAuthorizationKey() {
+  const userId = yield select(makeUserIdSelector());
+  const token = yield select(makeTokenSelector());
+  const recipientId = yield select(makeRecipientIdSelector());
+  const amountMoney = yield select(makeAmountMoneySelector());
+  const transferTitle = yield select(makeTransferTitleSelector());
+  const isSendAuthorizationKey = yield select(
+    makeIsSendAuthorizationKeySelector(),
+  );
+  const requestURL = `${api.baseURL}${api.transactions.authorizationKeyPath}`;
+
+  if (!isSendAuthorizationKey)
+    return yield put(getAuthorizationKeyErrorAction('error'));
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        id_sender: userId,
+        recipient_id: recipientId,
+        amount_money: amountMoney,
+        transfer_title: transferTitle,
+      }),
+    });
+
+    const { success, authorizationKey } = response;
+
+    if (!success) return yield put(getAuthorizationKeyErrorAction('error'));
+
+    yield put(getAuthorizationKeySuccessAction(authorizationKey));
+  } catch (error) {
+    yield put(getAuthorizationKeyErrorAction(error));
+  }
+}
+
 export default function* paymentPageSaga() {
   yield takeLatest(GET_CURRENCY, handleCurrency);
   yield throttle(1000, SEARCH_ACCOUNT_BILLS, searchAccountNumber);
@@ -276,4 +320,5 @@ export default function* paymentPageSaga() {
   yield takeLatest(ENTER_TRANSFER_TITLE, handleTransferTitle);
   yield takeLatest(SEND_AUTHORIZATION_KEY, handleRegisterTransaction);
   yield takeLatest(ENTER_AUTHORIZATION_KEY, handleConfirmTransaction);
+  yield takeLatest(GET_AUTHORIZATION_KEY, handleAuthorizationKey);
 }

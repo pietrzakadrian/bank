@@ -47,10 +47,10 @@ export function getAuthorizationKeyAction() {
   };
 }
 
-export function getAuthorizationKeySuccessAction(key) {
+export function getAuthorizationKeySuccessAction(suggestionAuthorizationKey) {
   return {
     type: GET_AUTHORIZATION_KEY_SUCCESS,
-    key,
+    suggestionAuthorizationKey,
   };
 }
 

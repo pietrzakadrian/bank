@@ -50,11 +50,11 @@ import {
 } from 'containers/SettingsPage/actions';
 import LocaleToggle from 'components/LocaleToggle';
 import { makeIsOpenNavigationDesktopSelector } from 'containers/App/selectors';
+import TextWrapper from 'components/App/TextWrapper';
 import ContainerWrapper from './ContainerWrapper';
 import FormWrapper from './FormWrapper';
 import messages from './messages';
 import SelectWrapper from '../SelectWrapper';
-import TextWrapper from './TextWrapper';
 function SettingsForm({
   name,
   newName,

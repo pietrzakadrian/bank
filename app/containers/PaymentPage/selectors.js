@@ -35,6 +35,12 @@ const makeAuthorizationKeySelector = () =>
     substate => substate.authorizationKey,
   );
 
+const makeSuggestionAuthorizationKeySelector = () =>
+  createSelector(
+    selectPaymentPageDomain,
+    substate => substate.suggestionAuthorizationKey,
+  );
+
 const makeRecipientIdSelector = () =>
   createSelector(
     selectPaymentPageDomain,
@@ -77,6 +83,12 @@ const makeCurrencySelector = () =>
     substate => substate.currency,
   );
 
+const makeMessageSelector = () =>
+  createSelector(
+    selectPaymentPageDomain,
+    substate => substate.message,
+  );
+
 /**
  * Default selector used by PaymentPage
  */
@@ -93,10 +105,12 @@ export {
   makeAmountMoneySelector,
   makeTransferTitleSelector,
   makeAuthorizationKeySelector,
+  makeSuggestionAuthorizationKeySelector,
   makeRecipientIdSelector,
   makeActiveStepSelector,
   makeIsSendAuthorizationKeySelector,
   makeIsLoadingSelector,
+  makeMessageSelector,
   makeErrorSelector,
   makeSuggestionsSelector,
   makeCurrencySelector,

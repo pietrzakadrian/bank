@@ -14,7 +14,7 @@ import {
 import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 
 const InputWrapper = styled.input`
-  background-color: ${props => (props.readonly ? PRIMARY_GREY : PRIMARY_LIGHT)};
+  background-color: ${props => (props.readOnly ? PRIMARY_GREY : PRIMARY_LIGHT)};
   padding: 10px;
   height: 37px;
   display: block;
