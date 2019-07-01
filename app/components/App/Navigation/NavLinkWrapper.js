@@ -26,7 +26,7 @@ const NavLinkWrapper = styled(NavLink)`
 
   &:hover {
     background-color: ${PRIMARY_GREY};
-    cursor: pointer;
+    cursor: ${props => (props.disabled ? 'auto' : 'pointer')};
   }
 
   &.active {

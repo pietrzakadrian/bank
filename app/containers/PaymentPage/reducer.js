@@ -47,10 +47,11 @@ export const initialState = {
   transferTitle: '',
   authorizationKey: '',
   recipientId: '',
-  activeStep: 0,
-  isLoading: false,
   error: '',
+  activeStep: 0,
   suggestions: [],
+  isLoading: false,
+  isSendAuthorizationKey: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -85,6 +86,13 @@ const paymentPageReducer = (state = initialState, action) =>
         break;
       case ENTER_ACCOUNT_NUMBER_SUCCESS:
         draft.recipientId = action.recipientId;
+        draft.isLoading = false;
+        break;
+      case SEND_AUTHORIZATION_KEY:
+        draft.isLoading = true;
+        break;
+      case SEND_AUTHORIZATION_KEY_SUCCESS:
+        draft.isSendAuthorizationKey = true;
         draft.isLoading = false;
         break;
       case PAYMENT_STEP_NEXT:

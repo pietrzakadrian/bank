@@ -65,6 +65,12 @@ const makeSuggestionsSelector = () =>
     substate => substate.suggestions,
   );
 
+const makeIsSendAuthorizationKeySelector = () =>
+  createSelector(
+    selectPaymentPageDomain,
+    substate => substate.isSendAuthorizationKey,
+  );
+
 /**
  * Default selector used by PaymentPage
  */
@@ -83,6 +89,7 @@ export {
   makeAuthorizationKeySelector,
   makeRecipientIdSelector,
   makeActiveStepSelector,
+  makeIsSendAuthorizationKeySelector,
   makeIsLoadingSelector,
   makeErrorSelector,
   makeSuggestionsSelector,

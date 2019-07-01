@@ -121,10 +121,10 @@ const GlobalStyle = createGlobalStyle`
 
   [disabled] {
     opacity: 0.3;
+    cursor: auto;
 
     &:hover {
       background-color: unset;
-      cursor: unset;
     }
   }
 

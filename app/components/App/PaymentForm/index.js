@@ -20,6 +20,7 @@ import {
   makeSuggestionsSelector,
   makeAmountMoneySelector,
   makeTransferTitleSelector,
+  makeIsSendAuthorizationKeySelector,
 } from 'containers/PaymentPage/selectors';
 import ButtonBackWrapper from 'components/ButtonBackWrapper';
 import { connect } from 'react-redux';
@@ -41,11 +42,13 @@ import {
   searchAccountBillsAction,
   clearAccountBillsAction,
   enterAccountNumberAction,
+  sendAuthorizationKeyAction,
 } from 'containers/PaymentPage/actions';
 import Autosuggest from 'react-autosuggest';
 import AutosuggestWrapper from './AutosuggestWrapper';
 import messages from './messages';
 import AutosuggestSuggestionsListWrapper from './AutosuggestSuggestionsListWrapper';
+import ContainerWrapper from '../ContainerWrapper';
 
 function PaymentForm({
   accountNumber,
@@ -53,6 +56,7 @@ function PaymentForm({
   transferTitle,
   activeStep,
   suggestions,
+  isSendAuthorizationKey,
   isLoading,
   error,
   onChangeAccountNumber,
@@ -61,6 +65,7 @@ function PaymentForm({
   onEnterAmountMoney,
   onChangeTransferTitle,
   onEnterTransferTitle,
+  onSendAuthorizationKey,
   handleStepBack,
   handleKeyDown,
   handleKeyPress,
@@ -198,6 +203,57 @@ function PaymentForm({
           </Fragment>
         )}
 
+        {activeStep === 3 && (
+          <ContainerWrapper>
+            <FormWrapper>
+              <div>
+                <LabelWrapper large>
+                  <FormattedMessage {...messages.stepAccountNumber} />
+                </LabelWrapper>
+
+                <InputWrapper large key={1} value={accountNumber} readonly />
+              </div>
+
+              <div>
+                <LabelWrapper large>
+                  <FormattedMessage {...messages.stepAmountOfMoney} />
+                </LabelWrapper>
+
+                <InputWrapper large key={2} value={amountMoney} readonly />
+              </div>
+
+              <div>
+                <LabelWrapper large>
+                  <FormattedMessage {...messages.stepTransferTitle} />
+                </LabelWrapper>
+
+                <InputWrapper large key={3} value={transferTitle} readonly />
+              </div>
+
+              <ButtonWrapper
+                large
+                type="button"
+                disabled={isLoading || isSendAuthorizationKey}
+                onClick={onSendAuthorizationKey}
+              >
+                <FormattedMessage {...messages.inputReceiveCode} />
+                <NavigateNextIcon />
+              </ButtonWrapper>
+
+              {isSendAuthorizationKey && (
+                <div>
+                  <InputWrapper key={4} />
+
+                  <ButtonWrapper type="button" disabled={isLoading}>
+                    <FormattedMessage {...messages.inputMakePayment} />
+                    <NavigateNextIcon />
+                  </ButtonWrapper>
+                </div>
+              )}
+            </FormWrapper>
+          </ContainerWrapper>
+        )}
+
         {activeStep !== 0 && steps.length - 1 && (
           <ButtonBackWrapper
             large
@@ -247,6 +303,7 @@ PaymentForm.propTypes = {
   transferTitle: PropTypes.string,
   activeStep: PropTypes.number,
   isLoading: PropTypes.bool,
+  isSendAuthorizationKey: PropTypes.bool,
   handleStepBack: PropTypes.func,
   handleKeyDown: PropTypes.func,
   handleKeyPress: PropTypes.func,
@@ -258,6 +315,7 @@ PaymentForm.propTypes = {
   onEnterAmountMoney: PropTypes.func,
   onChangeTransferTitle: PropTypes.func,
   onEnterTransferTitle: PropTypes.func,
+  onSendAuthorizationKey: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -265,6 +323,7 @@ const mapStateToProps = createStructuredSelector({
   amountMoney: makeAmountMoneySelector(),
   transferTitle: makeTransferTitleSelector(),
   activeStep: makeActiveStepSelector(),
+  isSendAuthorizationKey: makeIsSendAuthorizationKeySelector(),
   isLoading: makeIsLoadingSelector(),
   error: makeErrorSelector(),
   suggestions: makeSuggestionsSelector(),
@@ -283,12 +342,13 @@ function mapDispatchToProps(dispatch) {
       dispatch(changeTransferTitleAction(e.target.value)),
     onEnterTransferTitle: transferTitle =>
       dispatch(enterTransferTitleAction(transferTitle)),
+    onSendAuthorizationKey: () => dispatch(sendAuthorizationKeyAction()),
     handleSuggestionsFetchRequested: value =>
       dispatch(searchAccountBillsAction(value)),
     handleSuggestionsClearRequested: () => dispatch(clearAccountBillsAction()),
     handleStepBack: () => dispatch(stepBackAction()),
-    handleKeyPress: e => e.key === 13 && e.preventDefault(),
-    handleKeyDown: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
+    handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
+    handleKeyDown: e => e.keyCode === 13 && e.preventDefault(),
   };
 }
 

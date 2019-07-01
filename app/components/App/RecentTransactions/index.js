@@ -90,10 +90,12 @@ function RecentTransactions({
                 ) : (
                   <Fragment>
                     <TableCellWrapper>
-                      <div>
-                        <FormattedMessage {...messages.fromPayment} />
-                        {row.sender.name} {row.sender.surname}
-                      </div>
+                      <RecentTransitionsRecipientNameWrapper>
+                        <FormattedMessage {...messages.fromPayment} />{' '}
+                        <RecentTransitionsTitleWrapper>
+                          {row.sender.name} {row.sender.surname}
+                        </RecentTransitionsTitleWrapper>
+                      </RecentTransitionsRecipientNameWrapper>
                       <RecentTransitionsTitleWrapper>
                         {row.transfer_title}
                       </RecentTransitionsTitleWrapper>
