@@ -4,6 +4,7 @@
  *
  */
 import produce from 'immer';
+import { LOCATION_CHANGE } from 'connected-react-router';
 import {
   CHANGE_ACCOUNT_NUMBER,
   ENTER_ACCOUNT_NUMBER,
@@ -61,6 +62,21 @@ export const initialState = {
 const paymentPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case LOCATION_CHANGE:
+        draft.accountNumber = '';
+        draft.amountMoney = '';
+        draft.transferTitle = '';
+        draft.authorizationKey = '';
+        draft.suggestionAuthorizationKey = '';
+        draft.recipientId = '';
+        draft.message = '';
+        draft.error = '';
+        draft.currency = '';
+        draft.activeStep = 0;
+        draft.suggestions = [];
+        draft.isLoading = false;
+        draft.isSendAuthorizationKey = false;
+        break;
       case CHANGE_ACCOUNT_NUMBER:
         draft.accountNumber = action.value;
         draft.error = '';

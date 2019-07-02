@@ -13,18 +13,6 @@ export default defineMessages({
     id: `${scope}.changeName`,
     defaultMessage: 'Change name',
   },
-  errorChangeName: {
-    id: `${scope}.errorChangeName`,
-    defaultMessage: 'Your new name is incorrect.',
-  },
-  errorChangeSurname: {
-    id: `${scope}.errorChangeSurname`,
-    defaultMessage: 'Your new surname is incorrect.',
-  },
-  errorLenghtChangeSurname: {
-    id: `${scope}.errorLenghtChangeSurname`,
-    defaultMessage: 'Your new surname is too long.',
-  },
   errorLenghtChangeEmail: {
     id: `${scope}.errorLenghtChangeEmail`,
     defaultMessage: 'Your new email is too long.',

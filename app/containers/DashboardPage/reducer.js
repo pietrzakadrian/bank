@@ -88,21 +88,6 @@ export const initialState = {
 const dashboardPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case LOCATION_CHANGE:
-        draft.availableFunds = '';
-        draft.accountBills = '';
-        draft.savings = '';
-        draft.accountBalanceHistory = '';
-        draft.recentTransactionsSender = '';
-        draft.recentTransactionsRecipient = '';
-        draft.outgoingTransfersSum = '';
-        draft.incomingTransfersSum = '';
-        draft.currency = '';
-        draft.savings = '';
-        draft.rechartsColors = '';
-        draft.rechartsData = '';
-        draft.error = '';
-        break;
       case LOGOUT_SUCCESS:
         draft.name = '';
         draft.surname = '';
@@ -112,14 +97,13 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.lastFailedLogged = '';
         draft.availableFunds = '';
         draft.accountBills = '';
-        draft.savings = '';
         draft.accountBalanceHistory = '';
+        draft.savings = '';
         draft.recentTransactionsSender = '';
         draft.recentTransactionsRecipient = '';
         draft.outgoingTransfersSum = '';
         draft.incomingTransfersSum = '';
         draft.currency = '';
-        draft.rechartsProcent = '';
         draft.rechartsColors = '';
         draft.rechartsData = '';
         draft.error = '';
@@ -133,14 +117,13 @@ const dashboardPageReducer = (state = initialState, action) =>
         draft.lastFailedLogged = '';
         draft.availableFunds = '';
         draft.accountBills = '';
-        draft.savings = '';
         draft.accountBalanceHistory = '';
+        draft.savings = '';
         draft.recentTransactionsSender = '';
         draft.recentTransactionsRecipient = '';
         draft.outgoingTransfersSum = '';
         draft.incomingTransfersSum = '';
         draft.currency = '';
-        draft.savings = '';
         draft.rechartsColors = '';
         draft.rechartsData = '';
         draft.error = '';

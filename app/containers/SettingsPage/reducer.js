@@ -4,6 +4,7 @@
  *
  */
 import produce from 'immer';
+import { LOCATION_CHANGE } from 'connected-react-router';
 import {
   CHANGE_NEW_PASSWORD,
   ENTER_NEW_PASSWORD,
@@ -66,6 +67,21 @@ export const initialState = {
 const settingsPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case LOCATION_CHANGE:
+        draft.newPassword = '';
+        draft.newName = '';
+        draft.newSurname = '';
+        draft.newEmail = '';
+        draft.errorPassword = '';
+        draft.errorName = '';
+        draft.errorSurname = '';
+        draft.errorEmail = '';
+        draft.error = '';
+        draft.message = '';
+        draft.currencyMessage = '';
+        draft.isOpenAlert = false;
+        draft.isLoading = false;
+        break;
       case LOAD_USER_DATA:
         draft.isLoading = true;
         break;

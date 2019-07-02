@@ -113,18 +113,6 @@ export default defineMessages({
     id: `${scope}.saveDataSuccess`,
     defaultMessage: 'Changes have been saved.',
   },
-  1: {
-    id: `${scope}.USD`,
-    defaultMessage: 'USD',
-  },
-  2: {
-    id: `${scope}.PLN`,
-    defaultMessage: 'PLN',
-  },
-  3: {
-    id: `${scope}.EUR`,
-    defaultMessage: 'EUR',
-  },
   saveCurrencySuccess: {
     id: `${scope}.saveCurrencySuccess`,
     defaultMessage: 'The currency has been changed successfully.',
