@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
 import TextWrapper from './TextWrapper';
 import CopyrightWrapper from './CopyrightWrapper';
 
@@ -23,7 +22,5 @@ function Copyright() {
     </CopyrightWrapper>
   );
 }
-
-Copyright.propTypes = {};
 
 export default Copyright;
