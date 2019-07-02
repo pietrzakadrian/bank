@@ -187,9 +187,8 @@ export function closeSnackbarAction(key) {
   };
 }
 
-export function removeSnackbarAction(key) {
+export function removeSnackbarAction() {
   return {
     type: REMOVE_SNACKBAR,
-    key,
   };
 }

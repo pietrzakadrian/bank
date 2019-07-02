@@ -45,63 +45,63 @@ function Savings({
   getSavings,
   getRechartsColors,
   getRechartsData,
-  getRechartsProcent,
 }) {
   useInjectSaga({ key: 'dashboardPage', saga });
   useInjectReducer({ key: 'dashboardPage', reducer });
   useEffect(() => {
-    getSavings(),
-    getRechartsColors();
-    getRechartsData();
+    if (!savings) getSavings();
+    if (rechartsColors.length) getRechartsColors();
+    if (getRechartsData.length) getRechartsData();
   }, []);
 
   return (
     <HeavyWidgetWrapper>
-      {rechartsData &&
-      rechartsColors &&
-      (savings || savings === 0) ? (
-          <Fragment>
-            <HeavyWidgetLeftSide pie>
-              <HeavyWidgetHeader>
-                <FormattedMessage {...messages.savings} />
-              </HeavyWidgetHeader>
-              <HeavyWidgetJoin>
-                <HeavyWidgetMain>{savings}</HeavyWidgetMain>{' '}
-                <HeavyWidgetUnit>%</HeavyWidgetUnit>
-              </HeavyWidgetJoin>
-            </HeavyWidgetLeftSide>
-            <HeavyWidgetRightSide pie>
-              <PieChart width={200} height={200}>
-                <Pie
-                  data={rechartsData}
-                  dataKey="value"
-                  cx={100}
-                  cy={100}
-                  innerRadius={70}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  paddingAngle={0}
-                >
-                  {rechartsData.map((entry, index, id) => (
-                    <Cell
-                      key={id++}
-                      fill={rechartsColors[index % rechartsColors.length]}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
-            </HeavyWidgetRightSide>
-          </Fragment>
-        ) : (
-          <LoadingWrapper>
-            <LoadingCircular />
-          </LoadingWrapper>
-        )}
+      {rechartsData && rechartsColors && (savings || savings === 0) ? (
+        <Fragment>
+          <HeavyWidgetLeftSide pie>
+            <HeavyWidgetHeader>
+              <FormattedMessage {...messages.savings} />
+            </HeavyWidgetHeader>
+            <HeavyWidgetJoin>
+              <HeavyWidgetMain>{savings}</HeavyWidgetMain>{' '}
+              <HeavyWidgetUnit>%</HeavyWidgetUnit>
+            </HeavyWidgetJoin>
+          </HeavyWidgetLeftSide>
+          <HeavyWidgetRightSide pie>
+            <PieChart width={200} height={200}>
+              <Pie
+                data={rechartsData}
+                dataKey="value"
+                cx={100}
+                cy={100}
+                innerRadius={70}
+                outerRadius={80}
+                fill="#8884d8"
+                paddingAngle={0}
+              >
+                {rechartsData.map((entry, index, id) => (
+                  <Cell
+                    key={id++}
+                    fill={rechartsColors[index % rechartsColors.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </HeavyWidgetRightSide>
+        </Fragment>
+      ) : (
+        <LoadingWrapper>
+          <LoadingCircular />
+        </LoadingWrapper>
+      )}
     </HeavyWidgetWrapper>
   );
 }
 
 Savings.propTypes = {
+  savings: PropTypes.string,
+  rechartsColors: PropTypes.array,
+  rechartsData: PropTypes.array,
   getSavings: PropTypes.func,
   getRechartsColors: PropTypes.func,
   getRechartsData: PropTypes.func,

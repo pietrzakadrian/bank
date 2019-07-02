@@ -68,6 +68,8 @@ function SettingsForm({
   errorPassword,
   error,
   message,
+  currency,
+  currencyId,
   currencyMessage,
   isLoading,
   isOpenNavigationDesktop,
@@ -82,8 +84,8 @@ function SettingsForm({
   useInjectReducer({ key: 'settingsPage', reducer });
   useInjectSaga({ key: 'settingsPage', saga });
   useEffect(() => {
-    onLoadUserData();
-    onLoadCurrency();
+    if (!name || !surname || !email || !currencyId) onLoadUserData();
+    if (currency.length === 0) onLoadCurrency();
   }, []);
 
   return (
@@ -206,10 +208,19 @@ function SettingsForm({
 SettingsForm.propTypes = {
   name: PropTypes.string,
   newName: PropTypes.string,
+  errorName: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   surname: PropTypes.string,
+  newSurname: PropTypes.string,
+  errorSurname: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   email: PropTypes.string,
   newEmail: PropTypes.string,
-  message: PropTypes.string,
+  errorEmail: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  errorPassword: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  currency: PropTypes.array,
+  currencyId: PropTypes.number,
+  currencyMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   isLoading: PropTypes.bool,
   isOpenNavigationDesktop: PropTypes.bool,
   onLoadUserData: PropTypes.func,
@@ -223,6 +234,7 @@ SettingsForm.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   name: makeNameSelector(),
+
   surname: makeSurnameSelector(),
   email: makeEmailSelector(),
   newPassword: makeNewPasswordSelector(),

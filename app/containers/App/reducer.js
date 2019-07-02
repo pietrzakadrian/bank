@@ -149,9 +149,7 @@ const appPageReducer = (state = initialState, action) =>
         );
         break;
       case REMOVE_SNACKBAR:
-        draft.snackbars = draft.snackbars.filter(
-          snackbar => snackbar.key !== action.key,
-        );
+        draft.snackbars = [];
         break;
     }
   });

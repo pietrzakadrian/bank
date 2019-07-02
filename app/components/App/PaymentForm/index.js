@@ -101,7 +101,7 @@ function PaymentForm({
   useInjectSaga({ key: 'paymentPage', saga });
   useInjectReducer({ key: 'paymentPage', reducer });
   useEffect(() => {
-    handleCurrency();
+    if (!currency) handleCurrency();
   }, []);
 
   const steps = getSteps();
@@ -470,14 +470,14 @@ function mapDispatchToProps(dispatch) {
       dispatch(enterAuthorizationKeyAction(authorizationKey)) &&
       e.preventDefault(),
     onSendAuthorizationKey: () => dispatch(sendAuthorizationKeyAction()),
-    handleSuggestionsFetchRequested: value =>
+    handleSuggestionsFetchRequested: ({ value }) =>
       dispatch(searchAccountBillsAction(value)),
     handleSuggestionsClearRequested: () => dispatch(clearAccountBillsAction()),
     handleStepBack: () => dispatch(stepBackAction()),
-    handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
-    handleKeyDown: e => e.keyCode === 13 && e.preventDefault(),
     handleCurrency: () => dispatch(getCurrencyAction()),
     handleAuthorizationKey: () => dispatch(getAuthorizationKeyAction()),
+    handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
+    handleKeyDown: e => e.keyCode === 13 && e.preventDefault(),
   };
 }
 

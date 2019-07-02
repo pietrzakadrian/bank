@@ -59,6 +59,10 @@ const theme = createMuiTheme({
       main: `${SECONDARY_BLUE_LIGHT}`,
     },
   },
+  typography: {
+    useNextVariants: true,
+    suppressDeprecationWarnings: true,
+  },
 });
 
 const render = messages => {

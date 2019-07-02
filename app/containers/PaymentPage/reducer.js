@@ -5,6 +5,7 @@
  */
 import produce from 'immer';
 import { LOCATION_CHANGE } from 'connected-react-router';
+import { LOGOUT_SUCCESS, LOGOUT_ERROR } from 'containers/App/constants';
 import {
   CHANGE_ACCOUNT_NUMBER,
   ENTER_ACCOUNT_NUMBER,
@@ -34,10 +35,8 @@ import {
   MAKE_PAYMENT_ERROR,
   PAYMENT_STEP_NEXT,
   PAYMENT_STEP_BACK,
-  GET_CURRENCY,
   GET_CURRENCY_SUCCESS,
   GET_CURRENCY_ERROR,
-  GET_AUTHORIZATION_KEY,
   GET_AUTHORIZATION_KEY_SUCCESS,
   GET_AUTHORIZATION_KEY_ERROR,
 } from './constants';
@@ -62,6 +61,36 @@ export const initialState = {
 const paymentPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case LOGOUT_SUCCESS:
+        draft.accountNumber = '';
+        draft.amountMoney = '';
+        draft.transferTitle = '';
+        draft.authorizationKey = '';
+        draft.suggestionAuthorizationKey = '';
+        draft.recipientId = '';
+        draft.message = '';
+        draft.currency = '';
+        draft.error = '';
+        draft.activeStep = 0;
+        draft.suggestions = [];
+        draft.isLoading = false;
+        draft.isSendAuthorizationKey = false;
+        break;
+      case LOGOUT_ERROR:
+        draft.accountNumber = '';
+        draft.amountMoney = '';
+        draft.transferTitle = '';
+        draft.authorizationKey = '';
+        draft.suggestionAuthorizationKey = '';
+        draft.recipientId = '';
+        draft.message = '';
+        draft.currency = '';
+        draft.error = '';
+        draft.activeStep = 0;
+        draft.suggestions = [];
+        draft.isLoading = false;
+        draft.isSendAuthorizationKey = false;
+        break;
       case LOCATION_CHANGE:
         draft.accountNumber = '';
         draft.amountMoney = '';
@@ -71,7 +100,6 @@ const paymentPageReducer = (state = initialState, action) =>
         draft.recipientId = '';
         draft.message = '';
         draft.error = '';
-        draft.currency = '';
         draft.activeStep = 0;
         draft.suggestions = [];
         draft.isLoading = false;
@@ -133,6 +161,12 @@ const paymentPageReducer = (state = initialState, action) =>
         draft.error = action.error;
         draft.isLoading = false;
         break;
+      case ENTER_TRANSFER_TITLE:
+        draft.isLoading = true;
+        break;
+      case ENTER_TRANSFER_TITLE_SUCCESS:
+        draft.isLoading = false;
+        break;
       case ENTER_TRANSFER_TITLE_ERROR:
         draft.error = action.error;
         break;
@@ -159,6 +193,16 @@ const paymentPageReducer = (state = initialState, action) =>
         break;
       case GET_AUTHORIZATION_KEY_ERROR:
         draft.error = action.error;
+        break;
+      case ENTER_AUTHORIZATION_KEY:
+        draft.isLoading = true;
+        break;
+      case ENTER_AUTHORIZATION_KEY_SUCCESS:
+        draft.isLoading = false;
+        break;
+      case ENTER_AUTHORIZATION_KEY_ERROR:
+        draft.error = action.error;
+        draft.isLoading = false;
         break;
       case MAKE_PAYMENT:
         draft.isLoading = true;

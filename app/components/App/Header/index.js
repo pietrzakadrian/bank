@@ -222,8 +222,8 @@ function useOutsideWidgetDisabled(
   onToggleMessages,
   onToggleNotifications,
 ) {
-  function handleClickOutside(event) {
-    if (ref.current && !ref.current.contains(event.target)) {
+  function handleClickOutside() {
+    if (ref.current) {
       if (isOpenMessages) onToggleMessages();
       if (isOpenNotifications) onToggleNotifications();
     }

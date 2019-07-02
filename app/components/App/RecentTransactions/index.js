@@ -49,8 +49,9 @@ function RecentTransactions({
   useInjectSaga({ key: 'dashboardPage', saga });
   useInjectReducer({ key: 'dashboardPage', reducer });
   useEffect(() => {
-    getRecentTransactionsRecipient();
-    getRecentTransactionsSender();
+    if (recentTransactionsRecipient.length === 0)
+      getRecentTransactionsRecipient();
+    if (recentTransactionsSender.length === 0) getRecentTransactionsSender();
   }, []);
 
   let index = 0;
@@ -128,6 +129,9 @@ function sortingData(data) {
 }
 
 RecentTransactions.propTypes = {
+  userId: PropTypes.number,
+  recentTransactionsSender: PropTypes.array,
+  recentTransactionsRecipient: PropTypes.array,
   getRecentTransactionsRecipient: PropTypes.func,
   getRecentTransactionsSender: PropTypes.func,
 };

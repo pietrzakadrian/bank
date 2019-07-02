@@ -52,14 +52,14 @@ function AvailableFunds({
   useInjectSaga({ key: 'dashboardPage', saga });
   useInjectReducer({ key: 'dashboardPage', reducer });
   useEffect(() => {
-    getAvailableFunds();
-    getAccountBalanceHistory();
-    getCurrency();
+    if (!availableFunds) getAvailableFunds();
+    if (!currency) getCurrency();
+    if (accountBalanceHistory.length === 0) getAccountBalanceHistory();
   }, []);
 
   return (
     <HeavyWidgetWrapper>
-      {availableFunds && currency && accountBalanceHistory ? (
+      {availableFunds && currency && accountBalanceHistory.length ? (
         <Fragment>
           <HeavyWidgetLeftSide>
             <HeavyWidgetHeader>
@@ -96,6 +96,10 @@ function AvailableFunds({
 }
 
 AvailableFunds.propTypes = {
+  availableFunds: PropTypes.string,
+  accountBalanceHistory: PropTypes.array,
+  currency: PropTypes.string,
+  userId: PropTypes.number,
   getAvailableFunds: PropTypes.func,
   getAccountBalanceHistory: PropTypes.func,
   getCurrency: PropTypes.func,

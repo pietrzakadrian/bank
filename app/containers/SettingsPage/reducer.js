@@ -5,6 +5,7 @@
  */
 import produce from 'immer';
 import { LOCATION_CHANGE } from 'connected-react-router';
+import { LOGOUT_SUCCESS, LOGOUT_ERROR } from 'containers/App/constants';
 import {
   CHANGE_NEW_PASSWORD,
   ENTER_NEW_PASSWORD,
@@ -67,6 +68,48 @@ export const initialState = {
 const settingsPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case LOGOUT_SUCCESS:
+        draft.name = '';
+        draft.surname = '';
+        draft.email = '';
+        draft.newPassword = '';
+        draft.newName = '';
+        draft.newSurname = '';
+        draft.newEmail = '';
+        draft.errorPassword = '';
+        draft.errorName = '';
+        draft.errorSurname = '';
+        draft.errorEmail = '';
+        draft.error = '';
+        draft.message = '';
+        draft.currency = [];
+        draft.currencyId = 1;
+        draft.newCurrencyId = null;
+        draft.currencyMessage = '';
+        draft.isOpenAlert = false;
+        draft.isLoading = false;
+        break;
+      case LOGOUT_ERROR:
+        draft.name = '';
+        draft.surname = '';
+        draft.email = '';
+        draft.newPassword = '';
+        draft.newName = '';
+        draft.newSurname = '';
+        draft.newEmail = '';
+        draft.errorPassword = '';
+        draft.errorName = '';
+        draft.errorSurname = '';
+        draft.errorEmail = '';
+        draft.error = '';
+        draft.message = '';
+        draft.currency = [];
+        draft.currencyId = null;
+        draft.newCurrencyId = 1;
+        draft.currencyMessage = '';
+        draft.isOpenAlert = false;
+        draft.isLoading = false;
+        break;
       case LOCATION_CHANGE:
         draft.newPassword = '';
         draft.newName = '';

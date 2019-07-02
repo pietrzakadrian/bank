@@ -47,7 +47,7 @@ function AccountBills({
   useInjectSaga({ key: 'dashboardPage', saga });
   useInjectReducer({ key: 'dashboardPage', reducer });
   useEffect(() => {
-    getAccountBills();
+    if (!accountBills) getAccountBills();
   }, []);
 
   return (
@@ -92,6 +92,9 @@ function AccountBills({
 }
 
 AccountBills.propTypes = {
+  availableFunds: PropTypes.string,
+  accountBills: PropTypes.string,
+  currency: PropTypes.string,
   getAccountBills: PropTypes.func,
 };
 

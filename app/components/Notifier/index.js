@@ -37,7 +37,7 @@ class Notifier extends Component {
 
       if (newSnack.dismissed) {
         onCloseSnackbar(newSnack.key);
-        onRemoveSnackbar(newSnack.key);
+        onRemoveSnackbar();
       }
 
       if (!notExists) {
@@ -62,7 +62,7 @@ class Notifier extends Component {
           if (options.onClose) {
             options.onClose(event, reason, id);
           }
-          onRemoveSnackbar(id);
+          onRemoveSnackbar();
         },
       });
 
@@ -88,7 +88,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onRemoveSnackbar: key => dispatch(removeSnackbarAction(key)),
+    onRemoveSnackbar: () => dispatch(removeSnackbarAction()),
     onCloseSnackbar: key => dispatch(closeSnackbarAction(key)),
   };
 }

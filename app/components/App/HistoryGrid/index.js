@@ -60,7 +60,7 @@ function HistoryGrid({
   useInjectReducer({ key: 'historyPage', reducer });
   useInjectSaga({ key: 'historyPage', saga });
   useEffect(() => {
-    getGridData();
+    if (gridData.length === 0) getGridData();
   }, []);
 
   const formattedColumns = ['amount_money'];
