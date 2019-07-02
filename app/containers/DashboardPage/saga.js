@@ -67,6 +67,7 @@ import {
   getRechartsDataErrorAction,
   getCurrencyIdSuccessAction,
   getCurrencyIdErrorAction,
+  getSurnameErrorAction,
 } from './actions';
 import {
   makeRecentTransactionsSenderSelector,
@@ -116,7 +117,7 @@ export function* handleUserdata() {
       if (!name) yield put(getNameErrorAction('error'));
       else yield put(getNameSuccessAction(name));
 
-      if (!surname) yield put(getSurnameAction('error'));
+      if (!surname) yield put(getSurnameErrorAction('error'));
       else yield put(getSurnameSuccessAction(surname));
 
       if (!email) yield put(getEmailErrorAction('error'));

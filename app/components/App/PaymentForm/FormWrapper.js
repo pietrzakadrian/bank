@@ -5,12 +5,12 @@
  */
 
 import styled from 'styled-components';
-import { PRIMARY_GREY } from 'utils/colors';
+import { PRIMARY_LIGHT } from 'utils/colors';
 
-const FormWrapper = styled.main`
+const FormWrapper = styled.div`
   text-align: center;
   width: 100%;
-  background-color: ${PRIMARY_GREY};
+  background-color: ${PRIMARY_LIGHT};
   padding: 15px 0;
 `;
 

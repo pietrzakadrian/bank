@@ -6,12 +6,20 @@ import {
   makeUserIdSelector,
   makeTokenSelector,
   makeNotificationCountSelector,
+  makeIsOpenNotificationsSelector,
+  makeNotificationsSelector,
 } from 'containers/App/selectors';
 import { format } from 'date-fns';
 import request from 'utils/request';
 import decode from 'jwt-decode';
 import api from 'api';
-import { LOGOUT, IS_LOGGED, CHECK_NEW_NOTIFICATIONS } from './constants';
+import {
+  LOGOUT,
+  IS_LOGGED,
+  CHECK_NEW_NOTIFICATIONS,
+  UNSET_NEW_NOTIFICATIONS,
+  TOGGLE_NOTIFICATIONS,
+} from './constants';
 import {
   logoutErrorAction,
   logoutSuccessAction,
@@ -20,6 +28,9 @@ import {
   getNewNotificationsAction,
   getNewNotificationsSuccessAction,
   getNewNotificationsErrorAction,
+  unsetNewNotificationsErrorAction,
+  unsetNewNotificationsAction,
+  unsetNewNotificationsSuccessAction,
 } from './actions';
 
 export function* handleLogout() {
@@ -142,8 +153,41 @@ export function* getNewNotifications() {
   }
 }
 
+export function* handleNewNotifications() {
+  const isOpenNotifications = yield select(makeIsOpenNotificationsSelector());
+  const notifications = yield select(makeNotificationsSelector());
+  const token = yield select(makeTokenSelector());
+  const userId = yield select(makeUserIdSelector());
+  const requestURL = `${api.baseURL}${
+    api.additionals.unsetNotificationPath
+  }${userId}`;
+
+  if (isOpenNotifications && notifications.length) {
+    try {
+      yield put(unsetNewNotificationsAction());
+      const response = yield call(request, requestURL, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { success } = response;
+
+      if (!success) return yield put(unsetNewNotificationsErrorAction('error'));
+
+      yield put(unsetNewNotificationsSuccessAction());
+    } catch (error) {
+      yield put(unsetNewNotificationsErrorAction(error));
+    }
+  }
+}
+
 export default function* appPageSaga() {
   yield takeLatest(LOGOUT, handleLogout);
   yield takeLatest(IS_LOGGED, handleLogged);
   yield takeLatest(CHECK_NEW_NOTIFICATIONS, handleNotifications);
+  yield takeLatest(TOGGLE_NOTIFICATIONS, handleNewNotifications);
 }

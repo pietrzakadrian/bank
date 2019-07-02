@@ -26,6 +26,9 @@ import {
   GET_NEW_NOTIFICATIONS,
   GET_NEW_NOTIFICATIONS_SUCCESS,
   GET_NEW_NOTIFICATIONS_ERROR,
+  UNSET_NEW_NOTIFICATIONS,
+  UNSET_NEW_NOTIFICATIONS_SUCCESS,
+  UNSET_NEW_NOTIFICATIONS_ERROR,
 } from './constants';
 
 export function checkNewMessagesAction() {
@@ -83,7 +86,26 @@ export function getNewNotificationsSuccessAction(notifications) {
 
 export function getNewNotificationsErrorAction(error) {
   return {
-    type: GET_NEW_NOTIFICATIONS_SUCCESS,
+    type: GET_NEW_NOTIFICATIONS_ERROR,
+    error,
+  };
+}
+
+export function unsetNewNotificationsAction() {
+  return {
+    type: UNSET_NEW_NOTIFICATIONS,
+  };
+}
+
+export function unsetNewNotificationsSuccessAction() {
+  return {
+    type: UNSET_NEW_NOTIFICATIONS_SUCCESS,
+  };
+}
+
+export function unsetNewNotificationsErrorAction(error) {
+  return {
+    type: UNSET_NEW_NOTIFICATIONS_ERROR,
     error,
   };
 }

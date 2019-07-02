@@ -5,19 +5,15 @@
  */
 
 import styled from 'styled-components';
-import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
+import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 
 const ContainerWrapper = styled.div`
-  transition: all 0.5s ease;
+  position: relative;
+  margin: 0.625em auto;
+  width: 100%;
 
-  @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
-    display: ${props => !props.open && 'flex'};
-    justify-content: ${props => !props.open && 'space-evenly'};
-  }
-
-  @media screen and (min-width: 1050px) {
-    display: flex;
-    justify-content: space-evenly;
+  @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
+    max-width: 68.75em;
   }
 `;
 

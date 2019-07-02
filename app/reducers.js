@@ -13,6 +13,19 @@ import globalReducer from 'containers/App/reducer';
 const globalPersistConfig = {
   key: 'bank_global',
   storage: localForage,
+  blacklist: [
+    'isOpenNotifications',
+    'messages',
+    'messageCount',
+    'notifications',
+    'notificationCount',
+    'snackbars',
+    'error',
+    'isOpenNotifications',
+    'isOpenMessages',
+    'isNewNotifications',
+    'isNewMessages',
+  ],
 };
 
 const languagePersistConfig = {

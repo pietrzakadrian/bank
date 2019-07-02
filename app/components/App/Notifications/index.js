@@ -12,6 +12,7 @@ import { FormattedMessage } from 'react-intl';
 import {
   makeIsOpenNotificationsSelector,
   makeNotificationsSelector,
+  makeIsNewNotificationsSelector,
 } from 'containers/App/selectors';
 
 // Import Components
@@ -27,11 +28,14 @@ import NotificationWrapper from './NotificationWrapper';
 import AmountWrapper from './AmountWrapper';
 import DateWrapper from './DateWrapper';
 
-// todo
-function Notifications({ isOpenNotifications, notifications }) {
+function Notifications({
+  isOpenNotifications,
+  isNewNotifications,
+  notifications,
+}) {
   return (
     <NotificationsWrapper open={isOpenNotifications}>
-      {notifications ? (
+      {notifications.length ? (
         <Table>
           <TableBody>
             {notifications.map((notification, id) => (
@@ -62,11 +66,13 @@ function Notifications({ isOpenNotifications, notifications }) {
 
 Notifications.propTypes = {
   isOpenNotifications: PropTypes.bool,
+  isNewNotifications: PropTypes.bool,
   notifications: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
   isOpenNotifications: makeIsOpenNotificationsSelector(),
+  isNewNotifications: makeIsNewNotificationsSelector(),
   notifications: makeNotificationsSelector(),
 });
 

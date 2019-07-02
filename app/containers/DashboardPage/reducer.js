@@ -7,6 +7,11 @@ import produce from 'immer';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import { LOGOUT_SUCCESS, LOGOUT_ERROR } from 'containers/App/constants';
 import {
+  ENTER_NEW_NAME_SUCCESS,
+  ENTER_NEW_SURNAME_SUCCESS,
+  ENTER_NEW_EMAIL_SUCCESS,
+} from 'containers/SettingsPage/constants';
+import {
   GET_NAME,
   GET_NAME_SUCCESS,
   GET_NAME_ERROR,
@@ -235,6 +240,15 @@ const dashboardPageReducer = (state = initialState, action) =>
         break;
       case GET_SAVINGS_ERROR:
         draft.error = action.error;
+        break;
+      case ENTER_NEW_NAME_SUCCESS:
+        draft.name = '';
+        break;
+      case ENTER_NEW_SURNAME_SUCCESS:
+        draft.surname = '';
+        break;
+      case ENTER_NEW_EMAIL_SUCCESS:
+        draft.email = '';
         break;
     }
   });

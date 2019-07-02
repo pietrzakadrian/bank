@@ -4,6 +4,7 @@
  *
  */
 import produce, { setAutoFreeze } from 'immer';
+
 import {
   LOGGED_IN,
   LOGOUT,
@@ -21,6 +22,8 @@ import {
   CHECK_NEW_NOTIFICATIONS_ERROR,
   GET_NEW_NOTIFICATIONS_SUCCESS,
   GET_NEW_NOTIFICATIONS_ERROR,
+  UNSET_NEW_NOTIFICATIONS_SUCCESS,
+  UNSET_NEW_NOTIFICATIONS_ERROR,
 } from './constants';
 
 export const initialState = {
@@ -48,6 +51,12 @@ const appPageReducer = (state = initialState, action) =>
     switch (action.type) {
       case CHECK_NEW_MESSAGES_SUCCESS:
         draft.isNewMessages = true;
+        break;
+      case UNSET_NEW_NOTIFICATIONS_SUCCESS:
+        draft.notificationCount = 0;
+        break;
+      case UNSET_NEW_NOTIFICATIONS_ERROR:
+        draft.error = action.error;
         break;
       case CHECK_NEW_NOTIFICATIONS_SUCCESS:
         draft.isNewNotifications = true;

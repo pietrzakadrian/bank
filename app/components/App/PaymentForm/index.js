@@ -34,7 +34,6 @@ import LabelWrapper from 'components/LabelWrapper';
 import NavigateNextIcon from 'components/NavigateNextIcon';
 import NavigateBackIcon from 'components/NavigateBackIcon';
 import InputWrapper from 'components/InputWrapper';
-import FormWrapper from 'components/FormWrapper';
 import ButtonWrapper from 'components/ButtonWrapper';
 import {
   stepBackAction,
@@ -58,11 +57,12 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/PaymentPage/reducer';
 import saga from 'containers/PaymentPage/saga';
 import TextWrapper from 'components/App/TextWrapper';
+import FormWrapper from './FormWrapper';
 import AutosuggestWrapper from './AutosuggestWrapper';
 import messages from './messages';
 import AutosuggestSuggestionsListWrapper from './AutosuggestSuggestionsListWrapper';
 import AutosuggestSuggestionsAccountNumberWrapper from './AutosuggestSuggestionsAccountNumberWrapper';
-import ContainerWrapper from '../ContainerWrapper';
+import ContainerWrapper from './ContainerWrapper';
 import ConfirmPaymentWrapper from './ConfirmPaymentWrapper';
 import FlatButtonWrapper from './FlatButtonWrapper';
 import SuggestionAuthorizationKeyWrapper from './SuggestionAuthorizationKeyWrapper';
