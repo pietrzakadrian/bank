@@ -76,11 +76,13 @@ const appPageReducer = (state = initialState, action) =>
         draft.isOpenMessages = !draft.isOpenMessages;
         draft.isNewMessages = false;
         draft.isOpenNotifications = false;
+        draft.messageCount = 0;
         break;
       case TOGGLE_NOTIFICATIONS:
         draft.isOpenNotifications = !draft.isOpenNotifications;
         draft.isNewNotifications = false;
         draft.isOpenMessages = false;
+        draft.notificationCount = 0;
         break;
       case LOGGED_IN:
         draft.isLogged = true;

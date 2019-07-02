@@ -240,7 +240,6 @@ export function* handleConfirmTransaction() {
 
     const response = yield call(request, requestURL, {
       method: 'POST',
-      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -295,7 +294,6 @@ export function* handleAuthorizationKey() {
   try {
     const response = yield call(request, requestURL, {
       method: 'POST',
-      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',

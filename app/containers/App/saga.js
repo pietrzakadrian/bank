@@ -106,7 +106,6 @@ export function* getNewNotifications() {
 
     const response = yield call(request, requestURL, {
       method: 'POST',
-      credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -126,7 +125,7 @@ export function* getNewNotifications() {
       ({ getSenderdata, currency, ...newNotification }) => ({
         date_time: format(
           newNotification.date_time,
-          `${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
+          `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
         ),
         sender_name: `${getSenderdata.name} ${getSenderdata.surname}`,
         amount_money: `${newNotification.amount_money

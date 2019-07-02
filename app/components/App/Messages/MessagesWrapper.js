@@ -28,6 +28,10 @@ const MessagesWrapper = styled.div`
   left: 0;
   right: 0;
 
+  &:hover {
+    cursor: auto;
+  }
+
   &:before,
   &:after {
     bottom: 100%;
@@ -71,21 +75,21 @@ const MessagesWrapper = styled.div`
       margin-right: -7px;
       margin-left: auto;
     }
+  }
 
-    @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
-      width: 330px;
-      left: auto;
-      right: 76px;
+  @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
+    width: 330px;
+    left: auto;
+    right: 76px;
 
-      &:before,
-      &:after {
-        right: 112px;
-      }
+    &:before,
+    &:after {
+      right: 112px;
     }
+  }
 
-    @media screen and (min-width: 950px) {
-      right: 285px;
-    }
+  @media screen and (min-width: 950px) {
+    right: 285px;
   }
 `;
 

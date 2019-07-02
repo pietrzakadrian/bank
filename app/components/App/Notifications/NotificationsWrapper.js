@@ -5,7 +5,12 @@
  */
 
 import styled from 'styled-components';
-import { PRIMARY_LIGHT, BORDER_GREY_LIGHT, TRANSPARENT } from 'utils/colors';
+import {
+  PRIMARY_LIGHT,
+  BORDER_GREY_LIGHT,
+  TRANSPARENT,
+  SECONDARY_BACKGROUND_GREY,
+} from 'utils/colors';
 import {
   PHONE_LANDSCAPE_VIEWPORT_WIDTH,
   TABLET_VIEWPORT_WIDTH,
@@ -27,6 +32,10 @@ const NotificationsWrapper = styled.div`
   width: 100%;
   left: 0;
   right: 0;
+
+  &:hover {
+    cursor: auto;
+  }
 
   &:before,
   &:after {
@@ -71,20 +80,33 @@ const NotificationsWrapper = styled.div`
       margin-right: -7px;
       margin-left: auto;
     }
+  }
 
-    @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
-      width: 330px;
-      left: auto;
-      right: 29px;
+  @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
+    width: 330px;
+    left: auto;
+    right: 29px;
 
-      &:before,
-      &:after {
-        right: 112px;
-      }
+    &:before,
+    &:after {
+      right: 112px;
     }
+  }
 
-    @media screen and (min-width: 950px) {
-      right: 167px;
+  @media screen and (min-width: 950px) {
+    right: 167px;
+  }
+
+  table {
+    position: absolute;
+    top: 0;
+
+    td {
+      font-family: Lato;
+      &:hover {
+        background-color: ${SECONDARY_BACKGROUND_GREY}!important;
+        cursor: auto;
+      }
     }
   }
 `;
