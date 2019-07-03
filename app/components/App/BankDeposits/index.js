@@ -6,9 +6,13 @@
 
 import React from 'react';
 // import PropTypes from 'prop-types';
-import SoftWidgetWrapper from 'components/App/SoftWidget/SoftWidgetWrapper';
-import SoftWidgetHeader from 'components/App/SoftWidget/SoftWidgetHeader';
-import SoftWidgetHeaderAction from 'components/App/SoftWidget/SoftWidgetHeaderAction';
+
+import {
+  SoftWidgetHeader,
+  SoftWidgetWrapper,
+  SoftWidgetHeaderAction,
+} from 'components/App/SoftWidget';
+
 import WidgetContentDisabled from 'components/App/WidgetContentDisabled';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import { FormattedMessage } from 'react-intl';

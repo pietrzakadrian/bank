@@ -38,7 +38,7 @@ export default defineMessages({
     defaultMessage: 'Please try again in a moment',
   },
   loginAttemptError: {
-    id: `${scope}.serverError`,
+    id: `${scope}.loginAttemptError`,
     defaultMessage: 'Please enter the correct account pin or access code',
   },
 });

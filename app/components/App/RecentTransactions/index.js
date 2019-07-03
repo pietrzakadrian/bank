@@ -28,10 +28,9 @@ import {
 // Import Components
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
-import SoftWidgetHeader from 'components/App/SoftWidget/SoftWidgetHeader';
-import SoftWidgetWrapper from 'components/App/SoftWidget/SoftWidgetWrapper';
+import { SoftWidgetHeader, SoftWidgetWrapper } from 'components/App/SoftWidget';
 import LoadingWrapper from 'components/App/LoadingWrapper';
-import TableBodyWrapper from 'components/App/Table/TableBodyWrapper';
+import { TableBodyWrapper } from 'components/App/Table';
 import LoadingCircular from 'components/App/LoadingCircular';
 import TableCellWrapper from './TableCellWrapper';
 import RecentTransitionsSenderAmountWrapper from './RecentTransitionsSenderAmountWrapper';

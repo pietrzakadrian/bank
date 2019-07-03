@@ -28,12 +28,13 @@ import SwapVertIcon from '@material-ui/icons/SwapVert';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
-import SoftWidgetHeader from 'components/App/SoftWidget/SoftWidgetHeader';
-import SoftWidgetHeaderAction from 'components/App/SoftWidget/SoftWidgetHeaderAction';
-import SoftWidgetWrapper from 'components/App/SoftWidget/SoftWidgetWrapper';
+import {
+  SoftWidgetHeader,
+  SoftWidgetWrapper,
+  SoftWidgetHeaderAction,
+} from 'components/App/SoftWidget';
 import LoadingWrapper from 'components/App/LoadingWrapper';
-import TableCellRightSide from 'components/App/Table/TableCellRightSide';
-import TableCellLeftSide from 'components/App/Table/TableCellLeftSide';
+import { TableCellRightSide, TableCellLeftSide } from 'components/App/Table';
 import LoadingCircular from 'components/App/LoadingCircular';
 import TableCellWrapper from './TableCellWrapper';
 import AvailableFundsWrapper from './AvailableFundsWrapper';

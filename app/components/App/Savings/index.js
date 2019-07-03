@@ -28,13 +28,16 @@ import {
 // Import Components
 import { PieChart, Pie, Cell } from 'recharts';
 import LoadingCircular from 'components/App/LoadingCircular';
-import HeavyWidgetWrapper from 'components/App/HeavyWidget/HeavyWidgetWrapper';
-import HeavyWidgetLeftSide from 'components/App/HeavyWidget/HeavyWidgetLeftSide';
-import HeavyWidgetRightSide from 'components/App/HeavyWidget/HeavyWidgetRightSide';
-import HeavyWidgetJoin from 'components/App/HeavyWidget/HeavyWidgetJoin';
-import HeavyWidgetHeader from 'components/App/HeavyWidget/HeavyWidgetHeader';
-import HeavyWidgetMain from 'components/App/HeavyWidget/HeavyWidgetMain';
-import HeavyWidgetUnit from 'components/App/HeavyWidget/HeavyWidgetUnit';
+import {
+  HeavyWidgetWrapper,
+  HeavyWidgetHeader,
+  HeavyWidgetUnit,
+  HeavyWidgetMain,
+  HeavyWidgetJoin,
+  HeavyWidgetLeftSide,
+  HeavyWidgetRightSide,
+} from 'components/App/HeavyWidget';
+
 import LoadingWrapper from './LoadingWrapper';
 import messages from './messages';
 

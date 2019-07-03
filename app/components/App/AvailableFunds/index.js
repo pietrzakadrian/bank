@@ -28,13 +28,15 @@ import {
 import { makeUserIdSelector } from 'containers/App/selectors';
 
 // Import Components
-import HeavyWidgetWrapper from 'components/App/HeavyWidget/HeavyWidgetWrapper';
-import HeavyWidgetHeader from 'components/App/HeavyWidget/HeavyWidgetHeader';
-import HeavyWidgetMain from 'components/App/HeavyWidget/HeavyWidgetMain';
-import HeavyWidgetUnit from 'components/App/HeavyWidget/HeavyWidgetUnit';
-import HeavyWidgetJoin from 'components/App/HeavyWidget/HeavyWidgetJoin';
-import HeavyWidgetLeftSide from 'components/App/HeavyWidget/HeavyWidgetLeftSide';
-import HeavyWidgetRightSide from 'components/App/HeavyWidget/HeavyWidgetRightSide';
+import {
+  HeavyWidgetWrapper,
+  HeavyWidgetHeader,
+  HeavyWidgetUnit,
+  HeavyWidgetMain,
+  HeavyWidgetJoin,
+  HeavyWidgetLeftSide,
+  HeavyWidgetRightSide,
+} from 'components/App/HeavyWidget';
 import LoadingCircular from 'components/App/LoadingCircular';
 import Trend from 'react-trend';
 import LoadingWrapper from './LoadingWrapper';

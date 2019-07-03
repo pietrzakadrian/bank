@@ -42,7 +42,7 @@ export default defineMessages({
     defaultMessage: 'The authorization key has been sent',
   },
   emptyKeyIncorrect: {
-    id: `${scope}.errorKeyIncorrect`,
+    id: `${scope}.emptyKeyIncorrect`,
     defaultMessage: 'Please enter the authorization code',
   },
   errorKeyIncorrect: {
