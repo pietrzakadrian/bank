@@ -24,6 +24,10 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
+  input, select {
+    font-size: inherit;
+  }
+
   #app {
     background-color: ${PRIMARY_LIGHT};
     min-height: 100%;
