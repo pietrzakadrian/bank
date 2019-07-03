@@ -5,9 +5,10 @@
  */
 
 import React, { Fragment } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
 import { Responsive, WidthProvider } from 'react-grid-layout';
@@ -33,6 +34,7 @@ import messages from './messages';
 
 import reducer from './reducer';
 import saga from './saga';
+import { makeLayoutsSelector } from './selectors';
 
 export function DashboardPage() {
   useInjectReducer({ key: 'dashboardPage', reducer });
@@ -180,7 +182,36 @@ export function DashboardPage() {
   );
 }
 
-DashboardPage.propTypes = {};
+function getFromLS(key) {
+  let ls = {};
+  if (global.localStorage) {
+    try {
+      ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
+    } catch (e) {
+      /* Ignore */
+    }
+  }
+  return ls[key];
+}
+
+function saveToLS(key, value) {
+  if (global.localStorage) {
+    global.localStorage.setItem(
+      'rgl-8',
+      JSON.stringify({
+        [key]: value,
+      }),
+    );
+  }
+}
+
+DashboardPage.propTypes = {
+  layouts: PropTypes.object,
+};
+
+const mapStateToProps = createStructuredSelector({
+  layouts: makeLayoutsSelector(),
+});
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -189,7 +220,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const withConnect = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 );
 

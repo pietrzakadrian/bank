@@ -4,6 +4,8 @@
  *
  */
 
+export const CHANGE_LAYOUT = 'app/DashboardPage/CHANGE_LAYOUT';
+
 export const GET_NAME = 'app/DashboardPage/GET_NAME';
 export const GET_NAME_SUCCESS = 'app/DashboardPage/GET_NAME_SUCCESS';
 export const GET_NAME_ERROR = 'app/DashboardPage/GET_NAME_ERROR';
