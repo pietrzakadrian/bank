@@ -59,15 +59,7 @@ import {
   GET_RECHARTS_COLORS,
   GET_RECHARTS_COLORS_SUCCESS,
   GET_RECHARTS_COLORS_ERROR,
-  CHANGE_LAYOUT,
 } from './constants';
-
-export function changeLayoutAction(layouts) {
-  return {
-    type: CHANGE_LAYOUT,
-    layouts,
-  };
-}
 
 export function getNameAction() {
   return {

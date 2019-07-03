@@ -124,13 +124,6 @@ const makeRechartsDataSelector = () =>
     selectDashboardPageDomain,
     substate => substate.rechartsData,
   );
-
-const makeLayoutsSelector = () =>
-  createSelector(
-    selectDashboardPageDomain,
-    substate => substate.layouts,
-  );
-
 /**
  * Default selector used by DashboardPage
  */
@@ -162,5 +155,4 @@ export {
   makeRechartsColorsSelector,
   makeRechartsDataSelector,
   makeErrorSelector,
-  makeLayoutsSelector,
 };

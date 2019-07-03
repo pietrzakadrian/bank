@@ -4,7 +4,7 @@
  *
  */
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
@@ -31,16 +31,15 @@ import BankDeposits from 'components/App/BankDeposits';
 import BankCredits from 'components/App/BankCredits';
 import Copyright from 'components/App/Copyright';
 import messages from './messages';
-
 import reducer from './reducer';
 import saga from './saga';
-import { makeLayoutsSelector } from './selectors';
 
 export function DashboardPage() {
   useInjectReducer({ key: 'dashboardPage', reducer });
   useInjectSaga({ key: 'dashboardPage', saga });
 
   const ResponsiveGridLayout = WidthProvider(Responsive);
+  const originalLayouts = getFromLS('layouts') || {};
 
   return (
     <Fragment>
@@ -56,6 +55,8 @@ export function DashboardPage() {
         {matches => (
           <ContainerWrapper>
             <ResponsiveGridLayout
+              layouts={JSON.parse(JSON.stringify(originalLayouts))}
+              onLayoutChange={(layout, layouts) => saveToLS('layouts', layouts)}
               breakpoints={{
                 lg: 1100,
                 md: 900,
@@ -184,13 +185,9 @@ export function DashboardPage() {
 
 function getFromLS(key) {
   let ls = {};
-  if (global.localStorage) {
-    try {
-      ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
-    } catch (e) {
-      /* Ignore */
-    }
-  }
+  if (global.localStorage)
+    ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
+
   return ls[key];
 }
 
@@ -205,13 +202,7 @@ function saveToLS(key, value) {
   }
 }
 
-DashboardPage.propTypes = {
-  layouts: PropTypes.object,
-};
-
-const mapStateToProps = createStructuredSelector({
-  layouts: makeLayoutsSelector(),
-});
+DashboardPage.propTypes = {};
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -220,7 +211,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const withConnect = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 );
 

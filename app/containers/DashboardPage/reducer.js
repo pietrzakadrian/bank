@@ -49,7 +49,6 @@ import {
   GET_RECHARTS_COLORS_ERROR,
   GET_SAVINGS_SUCCESS,
   GET_SAVINGS_ERROR,
-  CHANGE_LAYOUT,
 } from './constants';
 
 export const initialState = {
@@ -72,16 +71,12 @@ export const initialState = {
   rechartsColors: [],
   rechartsData: [],
   error: '',
-  layouts: {},
 };
 
 /* eslint-disable default-case, no-param-reassign */
 const dashboardPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case CHANGE_LAYOUT:
-        draft.layouts = action.layouts;
-        break;
       case GET_NAME_SUCCESS:
         draft.name = action.name;
         break;
