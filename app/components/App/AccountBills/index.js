@@ -14,6 +14,7 @@ import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import LinkWrapper from 'components/App/LinkWrapper';
 import { makeUserIdSelector } from 'containers/App/selectors';
 import { getAccountBillsAction } from 'containers/DashboardPage/actions';
 import {
@@ -54,9 +55,11 @@ function AccountBills({
     <SoftWidgetWrapper>
       <SoftWidgetHeader>
         <FormattedMessage {...messages.bills} />
-        <SoftWidgetHeaderAction onMouseDown={e => e.stopPropagation()}>
-          <SwapVertIcon /> <FormattedMessage {...messages.makeTransferBtn} />
-        </SoftWidgetHeaderAction>
+        <LinkWrapper to="/payment">
+          <SoftWidgetHeaderAction onMouseDown={e => e.stopPropagation()}>
+            <SwapVertIcon /> <FormattedMessage {...messages.makeTransferBtn} />
+          </SoftWidgetHeaderAction>
+        </LinkWrapper>
       </SoftWidgetHeader>
       <Table>
         <TableBody>

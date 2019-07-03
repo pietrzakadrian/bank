@@ -77,10 +77,8 @@ export function* handleLogin() {
 
     yield put(enterLoginSuccessAction());
     yield put(stepNextAction());
-  } catch (err) {
-    yield put(
-      enterLoginErrorAction(<FormattedMessage {...messages.errorServer} />),
-    );
+  } catch (error) {
+    yield put(enterLoginErrorAction(error));
   }
 }
 
@@ -158,10 +156,8 @@ export function* loadCurrency() {
     // eslint-disable-next-line prefer-spread
     const currencyArray = [].concat.apply([], currencyData);
     yield put(loadCurrencySuccessAction(currencyArray));
-  } catch (err) {
-    yield put(
-      loadCurrencyErrorAction(<FormattedMessage {...messages.errorServer} />),
-    );
+  } catch (error) {
+    yield put(loadCurrencyErrorAction(error));
   }
 }
 
@@ -229,10 +225,8 @@ export function* handleEmail() {
 
     yield put(enterEmailSuccessAction());
     yield call(registerAttempt);
-  } catch (err) {
-    yield put(
-      enterEmailErrorAction(<FormattedMessage {...messages.errorServer} />),
-    );
+  } catch (error) {
+    yield put(enterEmailErrorAction(error));
   }
 }
 
@@ -257,7 +251,9 @@ function* registerAttempt() {
     !email ||
     !isDataProcessingAgreement
   )
-    return yield put(registerErrorAction('error'));
+    return yield put(
+      registerErrorAction(<FormattedMessage {...messages.errorServer} />),
+    );
 
   try {
     const response = yield call(request, requestURL, {
@@ -276,7 +272,10 @@ function* registerAttempt() {
       }),
     });
 
-    if (!response.success) return yield put(registerErrorAction('error'));
+    if (!response.success)
+      return yield put(
+        registerErrorAction(<FormattedMessage {...messages.errorServer} />),
+      );
 
     yield put(registerSuccessAction());
     yield put(
@@ -291,9 +290,7 @@ function* registerAttempt() {
     );
     yield put(push('/login'));
   } catch (error) {
-    yield put(
-      registerErrorAction(<FormattedMessage {...messages.errorServer} />),
-    );
+    yield put(registerErrorAction(error));
   }
 }
 

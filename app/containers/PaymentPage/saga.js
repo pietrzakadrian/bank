@@ -1,5 +1,6 @@
 import { select, call, put, takeLatest, throttle } from 'redux-saga/effects';
 import api from 'api';
+import React from 'react';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
 import {
@@ -8,6 +9,8 @@ import {
   makeIsOpenNavigationDesktopSelector,
 } from 'containers/App/selectors';
 import { enqueueSnackbarAction } from 'containers/App/actions';
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
 import {
   SEARCH_ACCOUNT_BILLS,
   ENTER_ACCOUNT_NUMBER,
@@ -79,10 +82,19 @@ export function* searchAccountNumber() {
   const limit = 26;
   const isNumber = /^\d+$/;
 
-  if (!accountNumber) return yield put(searchAccountBillsErrorAction('empty'));
+  if (!accountNumber)
+    return yield put(
+      searchAccountBillsErrorAction(
+        <FormattedMessage {...messages.errorAccountNumberEmpty} />,
+      ),
+    );
 
   if (!isNumber.test(accountNumber) || accountNumber.length > limit)
-    return yield put(searchAccountBillsErrorAction('error'));
+    return yield put(
+      searchAccountBillsErrorAction(
+        <FormattedMessage {...messages.errorAccountNumberValidate} />,
+      ),
+    );
 
   if (accountNumber.length !== limit) {
     try {
@@ -111,10 +123,19 @@ export function* handleAccountNumber() {
   const isNumber = /^\d+$/;
   const limit = 26;
 
-  if (!accountNumber) return yield put(enterAccountNumberErrorAction('empty'));
+  if (!accountNumber)
+    return yield put(
+      enterAccountNumberErrorAction(
+        <FormattedMessage {...messages.errorAccountNumberEmpty} />,
+      ),
+    );
 
   if (!isNumber.test(accountNumber) || accountNumber.length !== limit)
-    return yield put(enterAccountNumberErrorAction('error'));
+    return yield put(
+      enterAccountNumberErrorAction(
+        <FormattedMessage {...messages.errorAccountNumberValidate} />,
+      ),
+    );
 
   try {
     const response = yield call(request, requestURL, {
@@ -129,7 +150,11 @@ export function* handleAccountNumber() {
     const { recipientId, isAccountBill } = response;
 
     if (!isAccountBill)
-      return yield put(searchAccountBillsErrorAction('error'));
+      return yield put(
+        searchAccountBillsErrorAction(
+          <FormattedMessage {...messages.errorAccountNumberValidate} />,
+        ),
+      );
 
     yield put(enterAccountNumberSuccessAction(recipientId));
     yield put(stepNextAction());
@@ -145,10 +170,19 @@ export function* handleAmountMoney() {
   const requestURL = `${api.baseURL}${api.bills.isAmountMoneyPath}`;
   const isNumber = /^\d+$/;
 
-  if (!amountMoney) return yield put(enterAmountMoneyErrorAction('empty'));
+  if (!amountMoney)
+    return yield put(
+      enterAmountMoneyErrorAction(
+        <FormattedMessage {...messages.errorAmountOfMoneyEmpty} />,
+      ),
+    );
 
   if (!isNumber.test(amountMoney))
-    return yield put(enterAmountMoneyErrorAction('error'));
+    return yield put(
+      enterAmountMoneyErrorAction(
+        <FormattedMessage {...messages.errorAmountOfMoneyEmpty} />,
+      ),
+    );
 
   try {
     const response = yield call(request, requestURL, {
@@ -166,7 +200,12 @@ export function* handleAmountMoney() {
 
     const { isAmountMoney } = response;
 
-    if (!isAmountMoney) return yield put(enterAmountMoneyErrorAction('error'));
+    if (!isAmountMoney)
+      return yield put(
+        enterAmountMoneyErrorAction(
+          <FormattedMessage {...messages.errorAmountOfMoneyIncorrect} />,
+        ),
+      );
 
     yield put(enterAmountMoneySuccessAction());
     yield put(stepNextAction());
@@ -179,10 +218,19 @@ export function* handleTransferTitle() {
   const transferTitle = yield select(makeTransferTitleSelector());
   const limit = 255;
 
-  if (!transferTitle) return yield put(enterTransferTitleErrorAction('empty'));
+  if (!transferTitle)
+    return yield put(
+      enterTransferTitleErrorAction(
+        <FormattedMessage {...messages.errorTransferTitleIncorrect} />,
+      ),
+    );
 
   if (transferTitle.length > limit)
-    return yield put(enterTransferTitleErrorAction('error'));
+    return yield put(
+      enterTransferTitleErrorAction(
+        <FormattedMessage {...messages.errorTransferTitleLenght} />,
+      ),
+    );
 
   yield put(enterTransferTitleSuccessAction());
   yield put(stepNextAction());
@@ -214,7 +262,12 @@ export function* handleRegisterTransaction() {
 
     const { success } = response;
 
-    if (success) yield put(sendAuthorizationKeySuccessAction('success'));
+    if (success)
+      yield put(
+        sendAuthorizationKeySuccessAction(
+          <FormattedMessage {...messages.keyHasBeenSent} />,
+        ),
+      );
   } catch (error) {
     yield put(sendAuthorizationKeyErrorAction(error));
   }
@@ -233,7 +286,12 @@ export function* handleConfirmTransaction() {
   );
   const requestURL = `${api.baseURL}${api.transactions.confirmPath}`;
 
-  if (!authorizationKey) return yield put(makePaymentErrorAction('empty'));
+  if (!authorizationKey)
+    return yield put(
+      makePaymentErrorAction(
+        <FormattedMessage {...messages.emptyKeyIncorrect} />,
+      ),
+    );
 
   try {
     yield put(makePaymentAction());
@@ -256,14 +314,19 @@ export function* handleConfirmTransaction() {
 
     const { success } = response;
 
-    if (!success) return yield put(makePaymentErrorAction('error'));
+    if (!success)
+      return yield put(
+        makePaymentErrorAction(
+          <FormattedMessage {...messages.errorKeyIncorrect} />,
+        ),
+      );
 
     yield put(makePaymentSuccessAction());
     yield put(
       enqueueSnackbarAction({
         message: 'test',
         options: {
-          variant: 'success',
+          variant: <FormattedMessage {...messages.paymentHasBeenSent} />,
           autoHideDuration: 3500,
           className: IsOpenNavigationDesktop
             ? 'snackbar__provider--open-menu'
@@ -289,7 +352,11 @@ export function* handleAuthorizationKey() {
   const requestURL = `${api.baseURL}${api.transactions.authorizationKeyPath}`;
 
   if (!isSendAuthorizationKey)
-    return yield put(getAuthorizationKeyErrorAction('error'));
+    return yield put(
+      getAuthorizationKeyErrorAction(
+        <FormattedMessage {...messages.errorKeyServer} />,
+      ),
+    );
 
   try {
     const response = yield call(request, requestURL, {
@@ -309,7 +376,12 @@ export function* handleAuthorizationKey() {
 
     const { success, authorizationKey } = response;
 
-    if (!success) return yield put(getAuthorizationKeyErrorAction('error'));
+    if (!success)
+      return yield put(
+        getAuthorizationKeyErrorAction(
+          <FormattedMessage {...messages.errorKeyServer} />,
+        ),
+      );
 
     yield put(getAuthorizationKeySuccessAction(authorizationKey));
   } catch (error) {

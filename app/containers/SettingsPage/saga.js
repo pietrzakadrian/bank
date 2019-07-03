@@ -93,7 +93,11 @@ export function* handleUserData() {
         )[0];
 
         if (!name || !surname || !email || !transformAccountingData.currencyId)
-          return yield put(loadUserDataErrorAction('error'));
+          return yield put(
+            loadUserDataErrorAction(
+              <FormattedMessage {...messages.errorServer} />,
+            ),
+          );
 
         yield put(
           loadUserDataSuccessAction(

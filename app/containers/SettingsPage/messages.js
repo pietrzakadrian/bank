@@ -101,9 +101,9 @@ export default defineMessages({
     id: `${scope}.contactTheDeveloper`,
     defaultMessage: 'Contact the developer',
   },
-  reportError: {
+  errorServer: {
     id: `${scope}.reportError`,
-    defaultMessage: 'Report an error',
+    defaultMessage: 'Sorry, you unable to save data',
   },
   sendMessgeToAuthor: {
     id: `${scope}.sendMessgeToAuthor`,

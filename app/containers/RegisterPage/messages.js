@@ -98,4 +98,8 @@ export default defineMessages({
     defaultMessage:
       'Please confirm your consent to the processing of your personal data.',
   },
+  systemError: {
+    id: `${scope}.systemError`,
+    defaultMessage: 'Sorry, you unable to register account',
+  },
 });
