@@ -1,16 +1,4 @@
-import makeSelectLoginPage, { makeLoginSelector } from '../selectors';
-
-describe('makeSelectLoginPage', () => {
-  it('should select the loginPage state', () => {
-    const loginPageState = {
-      userData: {},
-    };
-    const mockedState = {
-      loginPage: loginPageState,
-    };
-    expect(makeSelectLoginPage(mockedState)).toEqual(loginPageState);
-  });
-});
+import { makeLoginSelector } from '../selectors';
 
 describe('makeLoginSelector', () => {
   const loginSelector = makeLoginSelector();

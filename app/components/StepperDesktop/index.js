@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+
 import styled from 'styled-components';
 import Stepper from '@material-ui/core/Stepper';
 import { PRIMARY_GREY, PRIMARY_LIGHT } from 'utils/colors';

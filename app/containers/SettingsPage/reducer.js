@@ -8,9 +8,6 @@ import { LOCATION_CHANGE } from 'connected-react-router';
 import { LOGOUT_SUCCESS, LOGOUT_ERROR } from 'containers/App/constants';
 import {
   CHANGE_NEW_PASSWORD,
-  ENTER_NEW_PASSWORD,
-  ENTER_NEW_PASSWORD_SUCCESS,
-  ENTER_NEW_PASSWORD_ERROR,
   CHANGE_NEW_NAME,
   ENTER_NEW_NAME,
   ENTER_NEW_NAME_SUCCESS,
@@ -31,13 +28,9 @@ import {
   ENTER_NEW_CURRENCY,
   ENTER_NEW_CURRENCY_SUCCESS,
   ENTER_NEW_CURRENCY_ERROR,
-  LOAD_USER_CURRENCY,
-  LOAD_USER_CURRENCY_SUCCESS,
-  LOAD_USER_CURRENCY_ERROR,
   LOAD_USER_DATA,
   LOAD_USER_DATA_SUCCESS,
   LOAD_USER_DATA_ERROR,
-  LOAD_CURRENCY,
   LOAD_CURRENCY_SUCCESS,
   LOAD_CURRENCY_ERROR,
 } from './constants';
@@ -135,6 +128,10 @@ const settingsPageReducer = (state = initialState, action) =>
         draft.currencyId = action.currencyId;
         draft.isLoading = false;
         break;
+      case LOAD_USER_DATA_ERROR:
+        draft.isLoading = false;
+        draft.error = action.error;
+        break;
       case CHANGE_NEW_NAME:
         draft.newName = action.name;
         draft.name = '';
@@ -201,6 +198,10 @@ const settingsPageReducer = (state = initialState, action) =>
         draft.isOpenAlert = false;
         draft.currencyMessage = action.message;
         break;
+      case ENTER_NEW_CURRENCY_ERROR:
+        draft.isLoading = false;
+        draft.error = action.error;
+        break;
       case SAVE_DATA:
         draft.isLoading = true;
         break;
@@ -214,6 +215,9 @@ const settingsPageReducer = (state = initialState, action) =>
         break;
       case LOAD_CURRENCY_SUCCESS:
         draft.currency = action.currency;
+        break;
+      case LOAD_CURRENCY_ERROR:
+        draft.error = action.error;
         break;
       case CHANGE_NEW_CURRENCY:
         draft.isOpenAlert = true;

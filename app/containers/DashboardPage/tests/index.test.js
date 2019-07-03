@@ -11,8 +11,8 @@ import { render } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 // import 'jest-dom/extend-expect'; // add some helpful assertions
 
+import { DEFAULT_LOCALE } from 'i18n';
 import { DashboardPage } from '../index';
-import { DEFAULT_LOCALE } from '../../../i18n';
 
 describe('<DashboardPage />', () => {
   /**

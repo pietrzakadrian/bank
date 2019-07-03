@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /**
  *
  * AccountBills
@@ -73,11 +74,11 @@ function AccountBills({
                 </TableCellWrapper>
                 <TableCellWrapper>
                   <TableCellRightSide>
-                      <AvailableFundsWrapper>
-                          {availableFunds}
+                    <AvailableFundsWrapper>
+                      {availableFunds}
                     </AvailableFundsWrapper>{' '}
                     <span>{currency}</span>
-                </TableCellRightSide>
+                  </TableCellRightSide>
                 </TableCellWrapper>
               </TableRow>
             ) : (
@@ -88,7 +89,7 @@ function AccountBills({
                   </LoadingWrapper>
                 </TableCellWrapper>
               </TableRow>
-          )}
+            )}
         </TableBody>
       </Table>
     </SoftWidgetWrapper>

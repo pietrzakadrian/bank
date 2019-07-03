@@ -11,8 +11,8 @@ import { render } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 // import 'jest-dom/extend-expect'; // add some helpful assertions
 
+import { DEFAULT_LOCALE } from 'i18n';
 import BankInformation from '../index';
-import { DEFAULT_LOCALE } from '../../../../i18n';
 
 describe('<BankInformation />', () => {
   it('Expect to not log errors in console', () => {
@@ -23,10 +23,6 @@ describe('<BankInformation />', () => {
       </IntlProvider>,
     );
     expect(spy).not.toHaveBeenCalled();
-  });
-
-  it('Expect to have additional unit tests specified', () => {
-    expect(true).toEqual(false);
   });
 
   /**

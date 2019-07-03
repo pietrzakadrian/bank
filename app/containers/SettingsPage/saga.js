@@ -57,14 +57,14 @@ import messages from './messages';
 export function* handleUserData() {
   const token = yield select(makeTokenSelector());
   const userId = yield select(makeUserIdSelector());
-  const name = yield select(makeNameSelector());
-  const surname = yield select(makeSurnameSelector());
-  const email = yield select(makeEmailSelector());
+  const userName = yield select(makeNameSelector());
+  const userSurname = yield select(makeSurnameSelector());
+  const userEmail = yield select(makeEmailSelector());
   const currencyId = yield select(makeCurrencyIdSelector());
   const requestUserData = `${api.baseURL}${api.users.userPath}${userId}`;
   const requestBillsData = `${api.baseURL}${api.bills.billsPath}${userId}`;
 
-  if ((!name && !surname && !email) || !currencyId) {
+  if ((!userName && !userSurname && !userEmail) || !currencyId) {
     try {
       const responseUserData = yield call(request, requestUserData, {
         method: 'GET',
@@ -111,7 +111,10 @@ export function* handleUserData() {
     } catch (error) {
       yield put(loadUserDataErrorAction(error));
     }
-  } else yield put(loadUserDataSuccessAction(name, surname, email, currencyId));
+  } else
+    yield put(
+      loadUserDataSuccessAction(userName, userSurname, userEmail, currencyId),
+    );
 }
 
 export function* handleCurrency() {

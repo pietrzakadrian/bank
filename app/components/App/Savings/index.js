@@ -57,6 +57,7 @@ function Savings({
     if (getRechartsData.length) getRechartsData();
   }, []);
 
+  let id = 0;
   return (
     <HeavyWidgetWrapper>
       {rechartsData && rechartsColors && (savings || savings === 0) ? (
@@ -82,7 +83,7 @@ function Savings({
                 fill="#8884d8"
                 paddingAngle={0}
               >
-                {rechartsData.map((entry, index, id) => (
+                {rechartsData.map((entry, index) => (
                   <Cell
                     key={id++}
                     fill={rechartsColors[index % rechartsColors.length]}

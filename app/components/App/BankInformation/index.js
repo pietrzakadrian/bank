@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
 
 import { HeavyWidgetWrapper } from 'components/App/HeavyWidget';
 import { FormattedMessage } from 'react-intl';
@@ -21,7 +20,5 @@ function BankInformation() {
     </HeavyWidgetWrapper>
   );
 }
-
-BankInformation.propTypes = {};
 
 export default BankInformation;

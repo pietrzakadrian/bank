@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 import {
@@ -6,8 +7,8 @@ import {
 } from 'containers/App/selectors';
 import { format } from 'date-fns';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
-import { GET_GRID_DATA, CHANGE_PAGE } from './constants';
 import api from 'api';
+import { GET_GRID_DATA, CHANGE_PAGE } from './constants';
 import { getGridDataErrorAction, getGridDataSuccessAction } from './actions';
 import { makePageSizeSelector, makeCurrentPageSelector } from './selectors';
 
@@ -55,7 +56,9 @@ export function* handleGridData() {
         `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
       ),
       transfer_title: gridData.transfer_title,
-      sender_name: `${gridData.getSenderdata.name} ${gridData.getSenderdata.surname}`,
+      sender_name: `${gridData.getSenderdata.name} ${
+        gridData.getSenderdata.surname
+      }`,
       account_bill:
         gridData.id_sender === userId
           ? gridData.getRecipientdata.bills[0].account_bill
@@ -66,7 +69,9 @@ export function* handleGridData() {
             .toString()
             .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
             .trim(),
-      recipient_name: `${gridData.getRecipientdata.name} ${gridData.getRecipientdata.surname}`,
+      recipient_name: `${gridData.getRecipientdata.name} ${
+        gridData.getRecipientdata.surname
+      }`,
     }));
 
     yield put(getGridDataSuccessAction(totalCount, transformGridData));

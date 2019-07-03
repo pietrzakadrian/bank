@@ -12,9 +12,9 @@ import { changeLocale } from 'containers/LanguageProvider/actions';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 
 // Import Components
+import { appLocales } from 'i18n';
 import Toggle from './Toggle';
 import messages from './messages';
-import { appLocales } from '../../i18n';
 
 export function LocaleToggle(props) {
   return (

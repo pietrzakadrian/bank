@@ -16,6 +16,8 @@ function AmountFormatter({ value }) {
   );
 }
 
-AmountFormatter.propTypes = {};
+AmountFormatter.propTypes = {
+  value: PropTypes.string,
+};
 
 export default AmountFormatter;

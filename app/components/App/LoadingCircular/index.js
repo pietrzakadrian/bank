@@ -11,6 +11,4 @@ function LoadingCircular() {
   return <LoadingWrapper />;
 }
 
-LoadingCircular.propTypes = {};
-
 export default LoadingCircular;

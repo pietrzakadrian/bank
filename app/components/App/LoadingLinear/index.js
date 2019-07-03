@@ -11,6 +11,4 @@ function LoadingLinear() {
   return <LoadingWrapper />;
 }
 
-LoadingLinear.propTypes = {};
-
 export default LoadingLinear;

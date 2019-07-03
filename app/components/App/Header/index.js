@@ -13,7 +13,6 @@ import ResizeObserver from 'react-resize-observer';
 import MediaQuery from 'react-responsive';
 import { FormattedMessage } from 'react-intl';
 import {
-  makeIsOpenNavigationMobileSelector,
   makeIsOpenNavigationDesktopSelector,
   makeIsOpenNotificationsSelector,
   makeIsOpenMessagesSelector,
@@ -66,7 +65,6 @@ function Header({
   location,
   notificationCount,
   messageCount,
-  isOpenNavigationMobile,
   isOpenNavigationDesktop,
   isOpenNotifications,
   isOpenMessages,
@@ -240,7 +238,6 @@ function useOutsideWidgetDisabled(
 Header.propTypes = {
   children: PropTypes.object,
   location: PropTypes.object,
-  isOpenNavigationMobile: PropTypes.bool,
   isOpenNavigationDesktop: PropTypes.bool,
   isOpenNotifications: PropTypes.bool,
   isOpenMessages: PropTypes.bool,
@@ -259,7 +256,6 @@ Header.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  isOpenNavigationMobile: makeIsOpenNavigationMobileSelector(),
   isOpenNavigationDesktop: makeIsOpenNavigationDesktopSelector(),
   isOpenNotifications: makeIsOpenNotificationsSelector(),
   isOpenMessages: makeIsOpenMessagesSelector(),

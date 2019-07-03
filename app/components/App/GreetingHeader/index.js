@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /**
  *
  * GreetingHeader
@@ -79,9 +80,9 @@ function GreetingHeader({
           format(new Date(), 'HH'),
           format(new Date(), 'A'),
         ) ? (
-            <FormattedMessage {...messages.greetingPm} />
-          ) : (
-            <FormattedMessage {...messages.greetingAm} />
+          <FormattedMessage {...messages.greetingPm} />
+        ) : (
+          <FormattedMessage {...messages.greetingAm} />
         )}
 
         <HeadlineNameWrapper>
@@ -90,21 +91,13 @@ function GreetingHeader({
       </TextWrapper>
       <TextWrapper>
         <FormattedMessage {...messages.lastSuccessfulLoginInformation} />{' '}
-        <time>
-          {
-            lastSuccessfulLogged || lastPresentLogged
-          }
-        </time>
+        <time>{lastSuccessfulLogged || lastPresentLogged}</time>
       </TextWrapper>
 
       {lastFailedLogged && (
         <TextWrapper lastFailedLogged={lastFailedLogged}>
           <FormattedMessage {...messages.lastFailedLoginInformation} />{' '}
-          <time>
-            {
-              lastFailedLogged
-            }
-          </time>
+          <time>{lastFailedLogged}</time>
         </TextWrapper>
       )}
     </HeadlineWrapper>

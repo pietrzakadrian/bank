@@ -33,7 +33,6 @@ import {
 } from './constants';
 import {
   getNameErrorAction,
-  getSurnameAction,
   getEmailErrorAction,
   getLastSuccessfulLoggedErrorAction,
   getLastPresentLoggedErrorAction,

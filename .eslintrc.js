@@ -35,6 +35,8 @@ module.exports = {
     'import/no-webpack-loader-syntax': 0,
     'import/prefer-default-export': 0,
     'consistent-return': 0,
+    camelcase: 0,
+    'no-plusplus': 0,
     indent: [
       2,
       2,

@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
 import {
   SoftWidgetHeader,
   SoftWidgetWrapper,
@@ -32,7 +31,5 @@ function BankCredits() {
     </SoftWidgetWrapper>
   );
 }
-
-BankCredits.propTypes = {};
 
 export default BankCredits;

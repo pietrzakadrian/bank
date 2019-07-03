@@ -17,7 +17,6 @@ import {
   LOGOUT,
   IS_LOGGED,
   CHECK_NEW_NOTIFICATIONS,
-  UNSET_NEW_NOTIFICATIONS,
   TOGGLE_NOTIFICATIONS,
 } from './constants';
 import {

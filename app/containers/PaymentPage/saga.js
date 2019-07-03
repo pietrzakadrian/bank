@@ -276,7 +276,7 @@ export function* handleRegisterTransaction() {
 export function* handleConfirmTransaction() {
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
-  const recipientId = yield select(makeRecipientIdSelector());
+  // const recipientId = yield select(makeRecipientIdSelector());
   const accountNumber = yield select(makeAccountNumberSelector());
   const amountMoney = yield select(makeAmountMoneySelector());
   const transferTitle = yield select(makeTransferTitleSelector());

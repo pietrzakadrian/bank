@@ -25,7 +25,6 @@ import {
   makeActiveStepSelector,
 } from 'containers/RegisterPage/selectors';
 import {
-  stepNextAction,
   stepBackAction,
   changeLoginAction,
   changePasswordAction,

@@ -411,6 +411,13 @@ function renderSuggestion(suggestion) {
 }
 
 PaymentForm.propTypes = {
+  accountNumber: PropTypes.string,
+  amountMoney: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  intl: PropTypes.object,
+  suggestions: PropTypes.array,
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   transferTitle: PropTypes.string,
   authorizationKey: PropTypes.string,
   suggestionAuthorizationKey: PropTypes.string,

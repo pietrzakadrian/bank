@@ -5,11 +5,7 @@
  */
 
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import Copyright from 'components/App/Copyright';
@@ -18,7 +14,6 @@ import { Helmet } from 'react-helmet';
 import Footer from 'components/Footer';
 import PaymentForm from 'components/App/PaymentForm';
 import Notifier from 'components/Notifier';
-import makeSelectPaymentPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
@@ -43,23 +38,4 @@ export function PaymentPage() {
   );
 }
 
-PaymentPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = createStructuredSelector({
-  paymentPage: makeSelectPaymentPage(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(PaymentPage);
+export default PaymentPage;

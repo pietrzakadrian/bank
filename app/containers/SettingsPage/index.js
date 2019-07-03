@@ -5,9 +5,7 @@
  */
 
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { compose } from 'redux';
 import { Helmet } from 'react-helmet';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -37,15 +35,4 @@ export function SettingsPage() {
   );
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(SettingsPage);
+export default SettingsPage;

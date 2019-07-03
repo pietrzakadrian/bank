@@ -5,11 +5,8 @@
  */
 
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { compose } from 'redux';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -201,17 +198,4 @@ function saveToLS(key, value) {
   }
 }
 
-DashboardPage.propTypes = {};
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(DashboardPage);
+export default DashboardPage;

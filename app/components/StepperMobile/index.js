@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+
 import styled from 'styled-components';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import { PRIMARY_GREY, PRIMARY_LIGHT } from 'utils/colors';
