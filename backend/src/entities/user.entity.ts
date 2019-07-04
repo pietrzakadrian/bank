@@ -1,11 +1,18 @@
-import bcrypt from 'bcryptjs';
-import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
+import bcrypt from "bcryptjs";
+import {
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn
+} from "typeorm";
 
 @Entity()
-@Unique(['email'])
+@Unique(["email", "login"])
 export class User {
-
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -17,6 +24,9 @@ export class User {
   @Column()
   email: string;
 
+  @Column("bigint")
+  login: number;
+
   @Column()
   password: string;
 
@@ -24,7 +34,13 @@ export class User {
   createdDate: Date;
 
   @UpdateDateColumn()
-  updatedDate: Date;
+  lastPresentLogged: Date;
+
+  @UpdateDateColumn()
+  lastSuccessfulLogged: Date;
+
+  @UpdateDateColumn()
+  lastFailedLogged: Date;
 
   async setPassword(newPassword: string) {
     this.password = await bcrypt.hash(newPassword, 10);
@@ -34,5 +50,4 @@ export class User {
   async encryptPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
-
 }

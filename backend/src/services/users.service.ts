@@ -1,9 +1,8 @@
-import { getManager, Repository } from 'typeorm';
-import { User } from '../entities/User';
-import { Logger, ILogger } from '../utils/logger';
+import { getManager, Repository } from "typeorm";
+import { User } from "../entities/user.entity";
+import { Logger, ILogger } from "../utils/logger";
 
 export class UserService {
-
   userRepository: Repository<User>;
   logger: ILogger;
 
@@ -23,7 +22,7 @@ export class UserService {
    * Inserts a new User into the database.
    */
   async insert(data: User): Promise<User> {
-    this.logger.info('Create a new user', data);
+    this.logger.info("Create a new user", data);
     const newUser = this.userRepository.create(data);
     return await this.userRepository.save(newUser);
   }
@@ -39,7 +38,7 @@ export class UserService {
    * Returns a user by given id
    */
   async getById(id: string | number): Promise<User> {
-    this.logger.info('Fetching user by id: ', id);
+    this.logger.info("Fetching user by id: ", id);
     if (id) {
       return await this.userRepository.findOne(id);
     }
@@ -56,7 +55,7 @@ export class UserService {
       }
     });
     if (users && users.length > 0) {
-      return users[0];  // typeorm find() returns array even if response is single object
+      return users[0]; // typeorm find() returns array even if response is single object
     } else {
       return undefined;
     }

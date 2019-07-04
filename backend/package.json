@@ -11,7 +11,8 @@
     "watch": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "tslint:fix": "tslint --fix src/**/*.{ts,js}",
-    "test": "NODE_ENV=test mocha -r ts-node/register src/tests/*.spec.ts --exit"
+    "test": "NODE_ENV=test mocha -r ts-node/register src/tests/*.spec.ts --exit",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "author": "V2X Network",
   "dependencies": {
@@ -54,6 +55,7 @@
     "nodemon": "^1.18.4",
     "rimraf": "^2.6.2",
     "ts-node": "^7.0.1",
+    "tsconfig-paths": "^3.8.0",
     "tslint": "^5.11.0",
     "typescript": "^2.9.1"
   }

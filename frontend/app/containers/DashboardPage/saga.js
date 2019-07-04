@@ -69,8 +69,6 @@ import {
   getSurnameErrorAction,
 } from './actions';
 import {
-  makeRecentTransactionsSenderSelector,
-  makeRecentTransactionsRecipientSelector,
   makeOutgoingTransfersSumSelector,
   makeIncomingTransfersSumSelector,
 } from './selectors';

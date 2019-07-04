@@ -1,16 +1,19 @@
-import jwt from 'jsonwebtoken';
-import passport from 'passport';
-import { ExtractJwt, Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt';
+import jwt from "jsonwebtoken";
+import passport from "passport";
+import {
+  ExtractJwt,
+  Strategy as JWTStrategy,
+  StrategyOptions
+} from "passport-jwt";
 
-import { Strategy } from 'passport';
-import config from '../config/config';
-import { User } from '../entities/User';
-import { UserService } from '../services/users.service';
+import { Strategy } from "passport";
+import config from "../config/config";
+import { User } from "../entities/user.entity";
+import { UserService } from "../services/users.service";
 
 const { auth } = config;
 
 export class AuthHandler {
-
   jwtOptions: StrategyOptions;
   superSecret = auth.secretKey;
 
@@ -25,7 +28,7 @@ export class AuthHandler {
    * initialize the Auth middleware & configure JWT strategy for Passport
    */
   initialize() {
-    passport.use('jwt', this.getStrategy());
+    passport.use("jwt", this.getStrategy());
     return passport.initialize();
   }
 
@@ -49,7 +52,6 @@ export class AuthHandler {
           id: user.id,
           email: user.email
         });
-
       } catch (err) {
         return next(null, false);
       }
@@ -60,7 +62,10 @@ export class AuthHandler {
    * Authentication handler. Call this on routes needs authentication
    */
   authenticate() {
-    return passport.authenticate('jwt', { session: false, failWithError: true });
+    return passport.authenticate("jwt", {
+      session: false,
+      failWithError: true
+    });
   }
 
   /**
@@ -68,14 +73,17 @@ export class AuthHandler {
    * @param user
    */
   generateToken(user: User): string {
-    const token = jwt.sign({
-      id: user.id,
-      email: user.email,
-    }, this.superSecret, {
-        expiresIn: '5d',
-      });
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email
+      },
+      this.superSecret,
+      {
+        expiresIn: "5d"
+      }
+    );
 
     return token;
-
   }
 }
