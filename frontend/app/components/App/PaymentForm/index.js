@@ -110,7 +110,10 @@ function PaymentForm({
     onChange: onChangeAccountNumber,
     maxLength: 26,
     onKeyPress: handleKeyPress,
-    onKeyDown: handleKeyDown,
+    onKeyDown: e =>
+      e.keyCode === 13 &&
+      onEnterAccountNumber(accountNumber) &&
+      e.preventDefault(),
     type: 'number',
     placeholder: intl.formatMessage({
       id: 'app.containers.PaymentPage.inputAccountNumber',
@@ -141,7 +144,7 @@ function PaymentForm({
       <form
         noValidate
         autoComplete="off"
-        onSubmit={e => onEnterAuthorizationKey(e, authorizationKey)}
+        onSubmit={() => onEnterAuthorizationKey(authorizationKey)}
       >
         {activeStep === 0 && (
           <Fragment>
@@ -191,7 +194,11 @@ function PaymentForm({
                   key={1}
                   onChange={onChangeAmountMoney}
                   onKeyPress={handleKeyPress}
-                  onKeyDown={handleKeyDown}
+                  onKeyDown={e =>
+                    e.keyCode === 13 &&
+                    onEnterAmountMoney(amountMoney) &&
+                    e.preventDefault()
+                  }
                   placeholder={placeholder}
                   type="number"
                   error={error}
@@ -229,7 +236,11 @@ function PaymentForm({
                   large
                   key={1}
                   onChange={onChangeTransferTitle}
-                  onKeyDown={handleKeyDown}
+                  onKeyDown={e =>
+                    e.keyCode === 13 &&
+                    onEnterTransferTitle(transferTitle) &&
+                    e.preventDefault()
+                  }
                   placeholder={placeholder}
                   type="text"
                   error={error}
@@ -319,7 +330,11 @@ function PaymentForm({
                       <InputWrapper
                         key={4}
                         onChange={onChangeAuthorizationKey}
-                        onKeyDown={handleKeyDown}
+                        onKeyDown={e =>
+                          e.keyCode === 13 &&
+                          onEnterAuthorizationKey(authorizationKey) &&
+                          e.preventDefault()
+                        }
                         type="text"
                         placeholder={placeholder}
                         error={error}
@@ -330,7 +345,7 @@ function PaymentForm({
                   <ButtonWrapper
                     margin="false"
                     type="submit"
-                    onClick={e => onEnterAuthorizationKey(e, authorizationKey)}
+                    onClick={() => onEnterAuthorizationKey(authorizationKey)}
                     disabled={isLoading}
                   >
                     <FormattedMessage {...messages.inputMakePayment} />
@@ -473,9 +488,8 @@ function mapDispatchToProps(dispatch) {
       dispatch(enterTransferTitleAction(transferTitle)),
     onChangeAuthorizationKey: e =>
       dispatch(changeAuthorizationKeyAction(e.target.value)),
-    onEnterAuthorizationKey: (e, authorizationKey) =>
-      dispatch(enterAuthorizationKeyAction(authorizationKey)) &&
-      e.preventDefault(),
+    onEnterAuthorizationKey: authorizationKey =>
+      dispatch(enterAuthorizationKeyAction(authorizationKey)),
     onSendAuthorizationKey: () => dispatch(sendAuthorizationKeyAction()),
     handleSuggestionsFetchRequested: ({ value }) =>
       dispatch(searchAccountBillsAction(value)),

@@ -84,7 +84,6 @@ function RegisterForm({
   onEnterEmail,
   toggleDataProcessingAgreement,
   onEnterCurrency,
-  handleKeyDown,
   handleKeyPress,
   handleStepBack,
 }) {
@@ -126,7 +125,11 @@ function RegisterForm({
                   value={login || ''}
                   error={error}
                   onChange={onChangeLogin}
-                  onKeyDown={handleKeyDown}
+                  onKeyDown={e =>
+                    e.keyCode === 13 &&
+                    onEnterLogin(login) &&
+                    e.preventDefault()
+                  }
                   onKeyPress={handleKeyPress}
                 />
               )}
@@ -160,7 +163,11 @@ function RegisterForm({
                   value={password || ''}
                   error={error}
                   onChange={onChangePassword}
-                  onKeyDown={handleKeyDown}
+                  onKeyDown={e =>
+                    e.keyCode === 13 &&
+                    onEnterPassword(password) &&
+                    e.preventDefault()
+                  }
                 />
               )}
             </FormattedMessage>
@@ -193,7 +200,9 @@ function RegisterForm({
                   value={name || ''}
                   error={error}
                   onChange={onChangeName}
-                  onKeyDown={handleKeyDown}
+                  onKeyDown={e =>
+                    e.keyCode === 13 && onEnterName(name) && e.preventDefault()
+                  }
                 />
               )}
             </FormattedMessage>
@@ -226,7 +235,11 @@ function RegisterForm({
                   value={surname || ''}
                   error={error}
                   onChange={onChangeSurname}
-                  onKeyDown={handleKeyDown}
+                  onKeyDown={e =>
+                    e.keyCode === 13 &&
+                    onEnterSurname(surname) &&
+                    e.preventDefault()
+                  }
                 />
               )}
             </FormattedMessage>
@@ -279,7 +292,11 @@ function RegisterForm({
                   value={email || ''}
                   error={error}
                   onChange={onChangeEmail}
-                  onKeyDown={handleKeyDown}
+                  onKeyDown={e =>
+                    e.keyCode === 13 &&
+                    onEnterEmail(email) &&
+                    e.preventDefault()
+                  }
                 />
               )}
             </FormattedMessage>
@@ -374,7 +391,6 @@ RegisterForm.propTypes = {
   onEnterCurrency: PropTypes.func,
   handleStepBack: PropTypes.func,
   handleKeyPress: PropTypes.func,
-  handleKeyDown: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -410,7 +426,6 @@ function mapDispatchToProps(dispatch) {
     onEnterCurrency: currencyId => dispatch(enterCurrencyAction(currencyId)),
     handleStepBack: () => dispatch(stepBackAction()),
     handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
-    handleKeyDown: e => e.keyCode === 13 && e.preventDefault(),
   };
 }
 
