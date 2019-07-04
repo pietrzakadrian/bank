@@ -7,11 +7,11 @@ import { ApiResponseError } from "../resources/interfaces/apiResponseError.inter
 import { UserService } from "../services/users.service";
 
 const { errors } = config;
-const signupRouter: Router = Router();
+const registerRouter: Router = Router();
 
-// on routes that end in /signup
+// on routes that end in /register
 // -----------------------------
-signupRouter
+registerRouter
   .route("/")
 
   .post(
@@ -19,14 +19,25 @@ signupRouter
       body("firstName").isLength({ min: 1 }),
       body("lastName").isLength({ min: 1 }),
       body("email").isEmail(),
-      body("password").isLength({ min: 6 })
+      body("login")
+        .isNumeric()
+        .isLength({ min: 1, max: 20 }),
+      body("password").isLength({ min: 1 }),
+      body("currencyId")
+        .isNumeric()
+        .isLength({ min: 1, max: 1 })
     ],
     async (req: Request, res: Response, next: NextFunction) => {
       const validationErrors = validationResult(req);
 
       if (validationErrors.isEmpty()) {
         const userService = new UserService();
+        // const billService = new BillService();
+        // const additionalService = new AdditionalService();
+        // const dateService = new DateService();
+
         await userService.instantiate(req.body);
+
         try {
           const response = await userService.insert(req.body);
           res.status(HttpStatus.OK).json({
@@ -52,4 +63,4 @@ signupRouter
     }
   );
 
-export default signupRouter;
+export default registerRouter;

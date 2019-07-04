@@ -5,7 +5,7 @@ import {
   UpdateDateColumn
 } from "typeorm";
 
-@Entity()
+@Entity({ name: "currency" })
 export class Currency {
   @PrimaryGeneratedColumn()
   id: number;

@@ -8,7 +8,7 @@ import {
 import { User } from "./user.entity";
 import { Currency } from "./currency.entity";
 
-@Entity()
+@Entity({ name: "bills" })
 @Unique(["accountBill"])
 export class Bill {
   @PrimaryGeneratedColumn()
