@@ -349,43 +349,56 @@ function* handleRecharts() {
   );
   const outgoingTransfersSum = yield select(makeOutgoingTransfersSumSelector());
   const incomingTransfersSum = yield select(makeIncomingTransfersSumSelector());
+  const zero = 0;
+
+  if (!incomingTransfersSum) 
+    console.log('incomingTransfersSum false', incomingTransfersSum);
+
+  if (!outgoingTransfersSum)
+     console.log('outgoingTransfersSum false', outgoingTransfersSum);
+  
 
   try {
-    if (recentTransactionsSender === 0 && recentTransactionsRecipient === 0) {
+    if (!incomingTransfersSum && !outgoingTransfersSum) {
       yield put(
         getRechartsColorsSuccessAction(JSON.parse(`["${BORDER_GREY_LIGHT}"]`)),
       );
       yield put(getRechartsDataSuccessAction([{ name: 'Group A', value: 1 }]));
-      yield put(getSavingsSuccessAction(0));
-    } else {
-      yield put(
-        getRechartsColorsSuccessAction(
-          JSON.parse(`["${PRIMARY_BLUE_LIGHT}", "${PRIMARY_RED}"]`),
-        ),
-      );
-
-      yield put(
-        getRechartsDataSuccessAction([
-          {
-            name: 'Group A',
-            value: incomingTransfersSum,
-          },
-          {
-            name: 'Group B',
-            value: outgoingTransfersSum,
-          },
-        ]),
-      );
-
-      const rechartsProcent =
-        (incomingTransfersSum * 100) /
-          (parseFloat(incomingTransfersSum) +
-            parseFloat(outgoingTransfersSum)) || 0;
-
-      yield put(
-        getSavingsSuccessAction(rechartsProcent.toFixed(1).replace('.', ',')),
-      );
+      return yield put(getSavingsSuccessAction(zero.toFixed(1).replace('.', ',')));
     }
+
+    yield put(
+      getRechartsDataSuccessAction([
+        {
+          name: 'Group A',
+          value: incomingTransfersSum,
+        },
+        {
+          name: 'Group B',
+          value: outgoingTransfersSum,
+        },
+      ]),
+    );
+
+    // ! todo zle liczy procenty
+    if (outgoingTransfersSum === incomingTransfersSum) {
+      yield put(
+        getRechartsColorsSuccessAction(JSON.parse(`["${PRIMARY_RED}"]`)),
+      );
+      yield put(getRechartsDataSuccessAction([{ name: 'Group A', value: 1 }]));
+      return yield put(getSavingsSuccessAction(zero.toFixed(1).replace('.', ',')));
+    }
+
+    yield put(
+      getRechartsColorsSuccessAction(
+        JSON.parse(`["${PRIMARY_BLUE_LIGHT}", "${PRIMARY_RED}"]`),
+      ),
+    );
+    const rechartsProcent = 100 - ((outgoingTransfersSum / 100 * incomingTransfersSum));
+    console.log(rechartsProcent);
+    return yield put(
+      getSavingsSuccessAction(rechartsProcent.toFixed(1).replace('.', ',')),
+    );
   } catch (error) {
     yield put(getRechartsColorsSuccessAction(error));
     yield put(getRechartsDataErrorAction(error));

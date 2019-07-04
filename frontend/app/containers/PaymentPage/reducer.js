@@ -6,6 +6,7 @@
 import produce from 'immer';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import { LOGOUT_SUCCESS, LOGOUT_ERROR } from 'containers/App/constants';
+import { ENTER_NEW_CURRENCY_SUCCESS } from 'containers/SettingsPage/constants';
 import {
   CHANGE_ACCOUNT_NUMBER,
   ENTER_ACCOUNT_NUMBER,
@@ -61,6 +62,9 @@ export const initialState = {
 const paymentPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case ENTER_NEW_CURRENCY_SUCCESS:
+        draft.currency = '';
+        break;
       case LOGOUT_SUCCESS:
         draft.accountNumber = '';
         draft.amountMoney = '';

@@ -281,7 +281,7 @@ export function* handleConfirmTransaction() {
   const amountMoney = yield select(makeAmountMoneySelector());
   const transferTitle = yield select(makeTransferTitleSelector());
   const authorizationKey = yield select(makeAuthorizationKeySelector());
-  const IsOpenNavigationDesktop = yield select(
+  const isOpenNavigationDesktop = yield select(
     makeIsOpenNavigationDesktopSelector(),
   );
   const requestURL = `${api.baseURL}${api.transactions.confirmPath}`;
@@ -324,11 +324,11 @@ export function* handleConfirmTransaction() {
     yield put(makePaymentSuccessAction());
     yield put(
       enqueueSnackbarAction({
-        message: 'test',
+        message: <FormattedMessage {...messages.paymentHasBeenSent} />,
         options: {
-          variant: <FormattedMessage {...messages.paymentHasBeenSent} />,
+          variant: 'success',
           autoHideDuration: 3500,
-          className: IsOpenNavigationDesktop
+          className: isOpenNavigationDesktop
             ? 'snackbar__provider--open-menu'
             : 'snackbar__provider--close-menu',
         },
