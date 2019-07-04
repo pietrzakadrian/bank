@@ -330,11 +330,6 @@ function PaymentForm({
                       <InputWrapper
                         key={4}
                         onChange={onChangeAuthorizationKey}
-                        onKeyDown={e =>
-                          e.keyCode === 13 &&
-                          onEnterAuthorizationKey(authorizationKey) &&
-                          e.preventDefault()
-                        }
                         type="text"
                         placeholder={placeholder}
                         error={error}
