@@ -341,52 +341,25 @@ function* getRecentTransactionsRecipient() {
 }
 
 function* handleRecharts() {
-  const recentTransactionsSender = yield select(
-    makeRecentTransactionsSenderSelector(),
-  );
-  const recentTransactionsRecipient = yield select(
-    makeRecentTransactionsRecipientSelector(),
-  );
   const outgoingTransfersSum = yield select(makeOutgoingTransfersSumSelector());
   const incomingTransfersSum = yield select(makeIncomingTransfersSumSelector());
+  const incomingRechartsProcent =
+    100 - (outgoingTransfersSum * 100) / incomingTransfersSum;
+  const outgoingRechartsProcent =
+    (outgoingTransfersSum * 100) / incomingTransfersSum;
   const zero = 0;
-
-  if (!incomingTransfersSum) 
-    console.log('incomingTransfersSum false', incomingTransfersSum);
-
-  if (!outgoingTransfersSum)
-     console.log('outgoingTransfersSum false', outgoingTransfersSum);
-  
 
   try {
     if (!incomingTransfersSum && !outgoingTransfersSum) {
       yield put(
         getRechartsColorsSuccessAction(JSON.parse(`["${BORDER_GREY_LIGHT}"]`)),
       );
+
       yield put(getRechartsDataSuccessAction([{ name: 'Group A', value: 1 }]));
-      return yield put(getSavingsSuccessAction(zero.toFixed(1).replace('.', ',')));
-    }
 
-    yield put(
-      getRechartsDataSuccessAction([
-        {
-          name: 'Group A',
-          value: incomingTransfersSum,
-        },
-        {
-          name: 'Group B',
-          value: outgoingTransfersSum,
-        },
-      ]),
-    );
-
-    // ! todo zle liczy procenty
-    if (outgoingTransfersSum === incomingTransfersSum) {
-      yield put(
-        getRechartsColorsSuccessAction(JSON.parse(`["${PRIMARY_RED}"]`)),
+      return yield put(
+        getSavingsSuccessAction(zero.toFixed(1).replace('.', ',')),
       );
-      yield put(getRechartsDataSuccessAction([{ name: 'Group A', value: 1 }]));
-      return yield put(getSavingsSuccessAction(zero.toFixed(1).replace('.', ',')));
     }
 
     yield put(
@@ -394,10 +367,24 @@ function* handleRecharts() {
         JSON.parse(`["${PRIMARY_BLUE_LIGHT}", "${PRIMARY_RED}"]`),
       ),
     );
-    const rechartsProcent = 100 - ((outgoingTransfersSum / 100 * incomingTransfersSum));
-    console.log(rechartsProcent);
+
+    yield put(
+      getRechartsDataSuccessAction([
+        {
+          name: 'Group A',
+          value: incomingRechartsProcent,
+        },
+        {
+          name: 'Group B',
+          value: outgoingRechartsProcent,
+        },
+      ]),
+    );
+
     return yield put(
-      getSavingsSuccessAction(rechartsProcent.toFixed(1).replace('.', ',')),
+      getSavingsSuccessAction(
+        incomingRechartsProcent.toFixed(1).replace('.', ','),
+      ),
     );
   } catch (error) {
     yield put(getRechartsColorsSuccessAction(error));

@@ -117,9 +117,7 @@ export function* searchAccountNumber() {
 export function* handleAccountNumber() {
   const accountNumber = yield select(makeAccountNumberSelector());
   const token = yield select(makeTokenSelector());
-  const requestURL = `${api.baseURL}${
-    api.bills.isAccountBillPath
-  }${accountNumber}`;
+  const requestURL = `${api.baseURL}${api.bills.isAccountBillPath}${accountNumber}`;
   const isNumber = /^\d+$/;
   const limit = 26;
 
@@ -168,16 +166,8 @@ export function* handleAmountMoney() {
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
   const requestURL = `${api.baseURL}${api.bills.isAmountMoneyPath}`;
-  const isNumber = /^\d+$/;
 
   if (!amountMoney)
-    return yield put(
-      enterAmountMoneyErrorAction(
-        <FormattedMessage {...messages.errorAmountOfMoneyEmpty} />,
-      ),
-    );
-
-  if (!isNumber.test(amountMoney))
     return yield put(
       enterAmountMoneyErrorAction(
         <FormattedMessage {...messages.errorAmountOfMoneyEmpty} />,
