@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
 import bcrypt from "bcryptjs";
 import config from "../config/config";
-import { ApiResponseError } from "../resources/interfaces/ApiResponseError.interface";
+import { ApiResponseError } from "../resources/interfaces/apiResponseError.interface";
 import { UserService } from "../services/users.service";
 import { body, validationResult } from "express-validator/check";
 

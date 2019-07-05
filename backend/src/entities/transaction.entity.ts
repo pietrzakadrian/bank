@@ -8,7 +8,7 @@ import {
 import { Bill } from "./bill.entity";
 import { Currency } from "./currency.entity";
 
-@Entity({ name: "transactions" })
+@Entity("transactions")
 export class Transaction {
   @PrimaryGeneratedColumn()
   id: number;
@@ -19,19 +19,19 @@ export class Transaction {
   @ManyToOne(type => Bill, recipient => recipient.user)
   recipient: Bill;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ nullable: false })
   createdDate: Date;
 
-  @Column("double")
+  @Column("double", { nullable: false })
   amountMoney: number;
 
   @ManyToOne(type => Currency, currency => currency.id)
   currency: Currency;
 
-  @Column()
+  @Column({ nullable: false })
   transferTitle: string;
 
-  @Column()
+  @Column({ nullable: false })
   authorizationKey: string;
 
   @Column("boolean", { default: 0 })

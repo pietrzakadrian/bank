@@ -8,7 +8,7 @@ import {
 import { User } from "./user.entity";
 import { Currency } from "./currency.entity";
 
-@Entity({ name: "bills" })
+@Entity("bills")
 @Unique(["accountBill"])
 export class Bill {
   @PrimaryGeneratedColumn()
@@ -17,10 +17,10 @@ export class Bill {
   @ManyToOne(type => User, user => user.id)
   user: User;
 
-  @Column("decimal")
+  @Column("decimal", { nullable: false })
   accountBill: number;
 
-  @Column("double", { default: 0 })
+  @Column("double", { default: 0, nullable: false })
   availableFunds: number;
 
   @ManyToOne(type => Currency, currency => currency.id)

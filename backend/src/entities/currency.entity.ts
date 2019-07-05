@@ -5,18 +5,18 @@ import {
   UpdateDateColumn
 } from "typeorm";
 
-@Entity({ name: "currency" })
+@Entity("currency")
 export class Currency {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  currency: string;
+  @Column({ nullable: false })
+  name: string;
 
-  @Column()
+  @Column({ nullable: false })
   exchangeRate: number;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ nullable: false })
   exchangeRateSyncDate: Date;
 
   @Column({ default: 0 })

@@ -9,38 +9,38 @@ import {
   UpdateDateColumn
 } from "typeorm";
 
-@Entity({ name: "users" })
+@Entity("users")
 @Unique(["email", "login"])
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
   firstName: string;
 
-  @Column()
+  @Column({ nullable: false })
   lastName: string;
 
-  @Column()
+  @Column({ nullable: false })
   email: string;
 
-  @Column("bigint")
+  @Column("bigint", { nullable: false })
   login: number;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ nullable: false })
   createdDate: Date;
 
-  @UpdateDateColumn()
-  lastPresentLogged: Date;
+  @UpdateDateColumn({ nullable: true })
+  lastPresentLoggedDate: Date;
 
-  @UpdateDateColumn()
-  lastSuccessfulLogged: Date;
+  @UpdateDateColumn({ nullable: true })
+  lastSuccessfulLoggedDate: Date;
 
-  @UpdateDateColumn()
-  lastFailedLogged: Date;
+  @UpdateDateColumn({ nullable: true })
+  lastFailedLoggedDate: Date;
 
   async setPassword(newPassword: string) {
     this.password = await bcrypt.hash(newPassword, 10);
