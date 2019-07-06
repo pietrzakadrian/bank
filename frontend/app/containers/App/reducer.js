@@ -11,7 +11,6 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_ERROR,
   ENQUEUE_SNACKBAR,
-  CLOSE_SNACKBAR,
   REMOVE_SNACKBAR,
   TOGGLE_NAVIGATION_DESKTOP,
   TOGGLE_NAVIGATION_MOBILE,
@@ -140,13 +139,6 @@ const appPageReducer = (state = initialState, action) =>
             ...action.snackbar,
           },
         ];
-        break;
-      case CLOSE_SNACKBAR:
-        draft.snackbars = draft.snackbars.map(snackbar =>
-          action.dismissAll || snackbar.key === action.key
-            ? { ...snackbar, dismissed: true }
-            : { ...snackbar },
-        );
         break;
       case REMOVE_SNACKBAR:
         draft.snackbars = [];

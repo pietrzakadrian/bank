@@ -61,12 +61,24 @@ import {
   GET_RECHARTS_COLORS_ERROR,
 } from './constants';
 
+/**
+ * Get user name, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_NAME
+ */
 export function getNameAction() {
   return {
     type: GET_NAME,
   };
 }
 
+/**
+ * Dispatched when user name are loaded by the request saga
+ *
+ * @param  {string} name The name
+ *
+ * @return {object} An action object with a type of GET_NAME_SUCCESS passing the repos
+ */
 export function getNameSuccessAction(name) {
   return {
     type: GET_NAME_SUCCESS,
@@ -74,6 +86,13 @@ export function getNameSuccessAction(name) {
   };
 }
 
+/**
+ * Dispatched when loading user name fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_NAME_ERROR passing the repos
+ */
 export function getNameErrorAction(error) {
   return {
     type: GET_NAME_ERROR,
@@ -81,12 +100,24 @@ export function getNameErrorAction(error) {
   };
 }
 
+/**
+ * Get user surname, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_SURNAME
+ */
 export function getSurnameAction() {
   return {
     type: GET_SURNAME,
   };
 }
 
+/**
+ * Dispatched when user surname are loaded by the request saga
+ *
+ * @param  {string} surname The surname
+ *
+ * @return {object} An action object with a type of GET_SURNAME_SUCCESS passing the repos
+ */
 export function getSurnameSuccessAction(surname) {
   return {
     type: GET_SURNAME_SUCCESS,
@@ -94,6 +125,13 @@ export function getSurnameSuccessAction(surname) {
   };
 }
 
+/**
+ * Dispatched when loading user surname fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_SURNAME_ERROR passing the repos
+ */
 export function getSurnameErrorAction(error) {
   return {
     type: GET_SURNAME_ERROR,
@@ -101,12 +139,24 @@ export function getSurnameErrorAction(error) {
   };
 }
 
+/**
+ * Get user email, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_EMAIL
+ */
 export function getEmailAction() {
   return {
     type: GET_EMAIL,
   };
 }
 
+/**
+ * Dispatched when user email are loaded by the request saga
+ *
+ * @param  {string} email The email
+ *
+ * @return {object} An action object with a type of GET_EMAIL_SUCCESS passing the repos
+ */
 export function getEmailSuccessAction(email) {
   return {
     type: GET_EMAIL_SUCCESS,
@@ -114,6 +164,13 @@ export function getEmailSuccessAction(email) {
   };
 }
 
+/**
+ * Dispatched when loading user email fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_EMAIL_ERROR passing the repos
+ */
 export function getEmailErrorAction(error) {
   return {
     type: GET_EMAIL_ERROR,
@@ -121,12 +178,24 @@ export function getEmailErrorAction(error) {
   };
 }
 
+/**
+ * Get user currency, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_CURRENCY
+ */
 export function getCurrencyAction() {
   return {
     type: GET_CURRENCY,
   };
 }
 
+/**
+ * Dispatched when user currency are loaded by the request saga
+ *
+ * @param  {string} currency The currency
+ *
+ * @return {object} An action object with a type of GET_CURRENCY_SUCCESS passing the repos
+ */
 export function getCurrencySuccessAction(currency) {
   return {
     type: GET_CURRENCY_SUCCESS,
@@ -134,6 +203,13 @@ export function getCurrencySuccessAction(currency) {
   };
 }
 
+/**
+ * Dispatched when loading user currency fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_CURRENCY_ERROR passing the repos
+ */
 export function getCurrencyErrorAction(error) {
   return {
     type: GET_CURRENCY_ERROR,
@@ -141,12 +217,24 @@ export function getCurrencyErrorAction(error) {
   };
 }
 
+/**
+ * Get user currency id, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_CURRENCY
+ */
 export function getCurrencyIdAction() {
   return {
     type: GET_CURRENCY_ID,
   };
 }
 
+/**
+ * Dispatched when user currency id are loaded by the request saga
+ *
+ * @param  {number} currencyId The currency id
+ *
+ * @return {object} An action object with a type of GET_CURRENCY_ID_SUCCESS passing the repos
+ */
 export function getCurrencyIdSuccessAction(currencyId) {
   return {
     type: GET_CURRENCY_ID_SUCCESS,
@@ -154,6 +242,13 @@ export function getCurrencyIdSuccessAction(currencyId) {
   };
 }
 
+/**
+ * Dispatched when loading user currency id fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_CURRENCY_ID_ERROR passing the repos
+ */
 export function getCurrencyIdErrorAction(error) {
   return {
     type: GET_CURRENCY_ID_ERROR,
@@ -161,12 +256,24 @@ export function getCurrencyIdErrorAction(error) {
   };
 }
 
+/**
+ * Get last present logged date of user, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_LAST_PRESENT_LOGGED
+ */
 export function getLastPresentLoggedAction() {
   return {
     type: GET_LAST_PRESENT_LOGGED,
   };
 }
 
+/**
+ * Dispatched when last present logged date of user are loaded by the request saga
+ *
+ * @param  {string} lastPresentLogged The last present logged date
+ *
+ * @return {object} An action object with a type of GET_LAST_PRESENT_LOGGED_SUCCESS passing the repos
+ */
 export function getLastPresentLoggedSuccessAction(lastPresentLogged) {
   return {
     type: GET_LAST_PRESENT_LOGGED_SUCCESS,
@@ -174,6 +281,13 @@ export function getLastPresentLoggedSuccessAction(lastPresentLogged) {
   };
 }
 
+/**
+ * Dispatched when loading last present logged date of user fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_LAST_PRESENT_LOGGED_ERROR passing the repos
+ */
 export function getLastPresentLoggedErrorAction(error) {
   return {
     type: GET_LAST_PRESENT_LOGGED_ERROR,
@@ -181,12 +295,24 @@ export function getLastPresentLoggedErrorAction(error) {
   };
 }
 
+/**
+ * Get last successful logged date of user, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_LAST_SUCCESSFUL_LOGGED
+ */
 export function getLastSuccessfulLoggedAction() {
   return {
     type: GET_LAST_SUCCESSFUL_LOGGED,
   };
 }
 
+/**
+ * Dispatched when last successful logged date of user are loaded by the request saga
+ *
+ * @param  {string} lastSuccessfulLogged The last successful logged date
+ *
+ * @return {object} An action object with a type of GET_LAST_SUCCESSFUL_LOGGED_SUCCESS passing the repos
+ */
 export function getLastSuccessfulLoggedSuccessAction(lastSuccessfulLogged) {
   return {
     type: GET_LAST_SUCCESSFUL_LOGGED_SUCCESS,
@@ -194,6 +320,13 @@ export function getLastSuccessfulLoggedSuccessAction(lastSuccessfulLogged) {
   };
 }
 
+/**
+ * Dispatched when loading last present logged date of user fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_LAST_SUCCESSFUL_LOGGED_ERROR passing the repos
+ */
 export function getLastSuccessfulLoggedErrorAction(error) {
   return {
     type: GET_LAST_SUCCESSFUL_LOGGED_ERROR,
@@ -201,12 +334,24 @@ export function getLastSuccessfulLoggedErrorAction(error) {
   };
 }
 
+/**
+ * Get last failed logged date of user, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_LAST_FAILED_LOGGED
+ */
 export function getLastFailedLoggedAction() {
   return {
     type: GET_LAST_FAILED_LOGGED,
   };
 }
 
+/**
+ * Dispatched when last failed logged date of user are loaded by the request saga
+ *
+ * @param  {string} lastFailedLogged The last failed logged date
+ *
+ * @return {object} An action object with a type of GET_LAST_FAILED_LOGGED_SUCCESS passing the repos
+ */
 export function getLastFailedLoggedSuccessAction(lastFailedLogged) {
   return {
     type: GET_LAST_FAILED_LOGGED_SUCCESS,
@@ -214,6 +359,13 @@ export function getLastFailedLoggedSuccessAction(lastFailedLogged) {
   };
 }
 
+/**
+ * Dispatched when loading last failed logged date of user fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_LAST_FAILED_LOGGED_ERROR passing the repos
+ */
 export function getLastFailedLoggedErrorAction(error) {
   return {
     type: GET_LAST_FAILED_LOGGED_ERROR,
@@ -221,12 +373,24 @@ export function getLastFailedLoggedErrorAction(error) {
   };
 }
 
+/**
+ * Get available funds of user, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_AVAILABLE_FUNDS
+ */
 export function getAvailableFundsAction() {
   return {
     type: GET_AVAILABLE_FUNDS,
   };
 }
 
+/**
+ * Dispatched when the available funds of user are loaded by the request saga
+ *
+ * @param  {string} availableFunds The available funds
+ *
+ * @return {object} An action object with a type of GET_AVAILABLE_FUNDS_SUCCESS passing the repos
+ */
 export function getAvailableFundsSuccessAction(availableFunds) {
   return {
     type: GET_AVAILABLE_FUNDS_SUCCESS,
@@ -234,6 +398,13 @@ export function getAvailableFundsSuccessAction(availableFunds) {
   };
 }
 
+/**
+ * Dispatched when loading the available funds of user fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_AVAILABLE_FUNDS_ERROR passing the repos
+ */
 export function getAvailableFundsErrorAction(error) {
   return {
     type: GET_AVAILABLE_FUNDS_ERROR,
@@ -241,12 +412,24 @@ export function getAvailableFundsErrorAction(error) {
   };
 }
 
+/**
+ * Get account bills of user, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_ACCOUNT_BILLS
+ */
 export function getAccountBillsAction() {
   return {
     type: GET_ACCOUNT_BILLS,
   };
 }
 
+/**
+ * Dispatched when the account bills of user are loaded by the request saga
+ *
+ * @param  {string} accountBills The account bills
+ *
+ * @return {object} An action object with a type of GET_ACCOUNT_BILLS_SUCCESS passing the repos
+ */
 export function getAccountBillsSuccessAction(accountBills) {
   return {
     type: GET_ACCOUNT_BILLS_SUCCESS,
@@ -254,6 +437,13 @@ export function getAccountBillsSuccessAction(accountBills) {
   };
 }
 
+/**
+ * Dispatched when loading the account bills of user fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_ACCOUNT_BILLS_ERROR passing the repos
+ */
 export function getAccountBillsErrorAction(error) {
   return {
     type: GET_ACCOUNT_BILLS_ERROR,
@@ -261,12 +451,24 @@ export function getAccountBillsErrorAction(error) {
   };
 }
 
+/**
+ * Get savings of user, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_SAVINGS
+ */
 export function getSavingsAction() {
   return {
     type: GET_SAVINGS,
   };
 }
 
+/**
+ * Dispatched when the savings of user are loaded by the request saga
+ *
+ * @param  {string} savings The savings
+ *
+ * @return {object} An action object with a type of GET_SAVINGS_SUCCESS passing the repos
+ */
 export function getSavingsSuccessAction(savings) {
   return {
     type: GET_SAVINGS_SUCCESS,
@@ -274,6 +476,13 @@ export function getSavingsSuccessAction(savings) {
   };
 }
 
+/**
+ * Dispatched when loading the savings fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_SAVINGS_ERROR passing the repos
+ */
 export function getSavingsErrorAction(error) {
   return {
     type: GET_SAVINGS_ERROR,
@@ -281,12 +490,24 @@ export function getSavingsErrorAction(error) {
   };
 }
 
+/**
+ * Get the account balance history of user, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_ACCOUNT_BALANCE_HISTORY
+ */
 export function getAccountBalanceHistoryAction() {
   return {
     type: GET_ACCOUNT_BALANCE_HISTORY,
   };
 }
 
+/**
+ * Dispatched when the account balance history of user are loaded by the request saga
+ *
+ * @param  {array} accountBalanceHistory The account balance history
+ *
+ * @return {object} An action object with a type of GET_SAVINGS_SUCCESS passing the repos
+ */
 export function getAccountBalanceHistorySuccessAction(accountBalanceHistory) {
   return {
     type: GET_ACCOUNT_BALANCE_HISTORY_SUCCESS,
@@ -294,6 +515,13 @@ export function getAccountBalanceHistorySuccessAction(accountBalanceHistory) {
   };
 }
 
+/**
+ * Dispatched when loading the account balance history of user fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_ACCOUNT_BALANCE_HISTORY_ERROR passing the repos
+ */
 export function getAccountBalanceHistoryErrorAction(error) {
   return {
     type: GET_ACCOUNT_BALANCE_HISTORY_ERROR,
@@ -301,12 +529,24 @@ export function getAccountBalanceHistoryErrorAction(error) {
   };
 }
 
+/**
+ * Get the recent transactions sender of user, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_RECENT_TRANSACTIONS_SENDER
+ */
 export function getRecentTransactionsSenderAction() {
   return {
     type: GET_RECENT_TRANSACTIONS_SENDER,
   };
 }
 
+/**
+ * Dispatched when the recent transactions sender of user are loaded by the request saga
+ *
+ * @param  {array} recentTransactionsSender The recent transactions sender
+ *
+ * @return {object} An action object with a type of GET_RECENT_TRANSACTIONS_SENDER_SUCCESS passing the repos
+ */
 export function getRecentTransactionsSenderSuccessAction(
   recentTransactionsSender,
 ) {
@@ -316,6 +556,13 @@ export function getRecentTransactionsSenderSuccessAction(
   };
 }
 
+/**
+ * Dispatched when loading the recent transactions sender of user fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_RECENT_TRANSACTIONS_SENDER_ERROR passing the repos
+ */
 export function getRecentTransactionsSenderErrorAction(error) {
   return {
     type: GET_RECENT_TRANSACTIONS_SENDER_ERROR,
@@ -323,12 +570,24 @@ export function getRecentTransactionsSenderErrorAction(error) {
   };
 }
 
+/**
+ * Get the recent transactions recipient of user, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_RECENT_TRANSACTIONS_RECIPIENT
+ */
 export function getRecentTransactionsRecipientAction() {
   return {
     type: GET_RECENT_TRANSACTIONS_RECIPIENT,
   };
 }
 
+/**
+ * Dispatched when the recent transactions recipient of user are loaded by the request saga
+ *
+ * @param  {array} recentTransactionsRecipient The recent transactions recipient
+ *
+ * @return {object} An action object with a type of GET_RECENT_TRANSACTIONS_RECIPIENT_SUCCESS passing the repos
+ */
 export function getRecentTransactionsRecipientSuccessAction(
   recentTransactionsRecipient,
 ) {
@@ -338,6 +597,13 @@ export function getRecentTransactionsRecipientSuccessAction(
   };
 }
 
+/**
+ * Dispatched when loading the recent transactions recipient of user fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_RECENT_TRANSACTIONS_RECIPIENT_ERROR passing the repos
+ */
 export function getRecentTransactionsRecipientErrorAction(error) {
   return {
     type: GET_RECENT_TRANSACTIONS_RECIPIENT_ERROR,
@@ -345,12 +611,24 @@ export function getRecentTransactionsRecipientErrorAction(error) {
   };
 }
 
+/**
+ * Get incoming transfers sum of user, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_INCOMING_TRANSFERS_SUM
+ */
 export function getIncomingTransfersSumAction() {
   return {
     type: GET_INCOMING_TRANSFERS_SUM,
   };
 }
 
+/**
+ * Dispatched when the incoming transfers sum of user are loaded by the request saga
+ *
+ * @param  {number} incomingTransfersSum The incoming transfers sum
+ *
+ * @return {object} An action object with a type of GET_INCOMING_TRANSFERS_SUM_SUCCESS passing the repos
+ */
 export function getIncomingTransfersSumSuccessAction(incomingTransfersSum) {
   return {
     type: GET_INCOMING_TRANSFERS_SUM_SUCCESS,
@@ -358,6 +636,13 @@ export function getIncomingTransfersSumSuccessAction(incomingTransfersSum) {
   };
 }
 
+/**
+ * Dispatched when loading the incoming transfers sum of user fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_INCOMING_TRANSFERS_SUM_ERROR passing the repos
+ */
 export function getIncomingTransfersSumErrorAction(error) {
   return {
     type: GET_INCOMING_TRANSFERS_SUM_ERROR,
@@ -365,12 +650,24 @@ export function getIncomingTransfersSumErrorAction(error) {
   };
 }
 
+/**
+ * Get outgoing transfers sum of user, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_OUTGOING_TRANSFERS_SUM
+ */
 export function getOutgoingTransfersSumAction() {
   return {
     type: GET_OUTGOING_TRANSFERS_SUM,
   };
 }
 
+/**
+ * Dispatched when the outgoing transfers sum of user are loaded by the request saga
+ *
+ * @param  {number} outgoingTransfersSum The outgoing transfers sum
+ *
+ * @return {object} An action object with a type of GET_OUTGOING_TRANSFERS_SUM_SUCCESS passing the repos
+ */
 export function getOutgoingTransfersSumSuccessAction(outgoingTransfersSum) {
   return {
     type: GET_OUTGOING_TRANSFERS_SUM_SUCCESS,
@@ -378,6 +675,13 @@ export function getOutgoingTransfersSumSuccessAction(outgoingTransfersSum) {
   };
 }
 
+/**
+ * Dispatched when loading the outgoing transfers sum of user fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_OUTGOING_TRANSFERS_SUM_ERROR passing the repos
+ */
 export function getOutgoingTransfersSumErrorAction(error) {
   return {
     type: GET_OUTGOING_TRANSFERS_SUM_ERROR,
@@ -385,12 +689,24 @@ export function getOutgoingTransfersSumErrorAction(error) {
   };
 }
 
+/**
+ * Get recharts data, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_RECHARTS_DATA
+ */
 export function getRechartsDataAction() {
   return {
     type: GET_RECHARTS_DATA,
   };
 }
 
+/**
+ * Dispatched when the recharts data are loaded by the request saga
+ *
+ * @param  {array} rechartsData The recharts data
+ *
+ * @return {object} An action object with a type of GET_RECHARTS_DATA_SUCCESS passing the repos
+ */
 export function getRechartsDataSuccessAction(rechartsData) {
   return {
     type: GET_RECHARTS_DATA_SUCCESS,
@@ -398,6 +714,13 @@ export function getRechartsDataSuccessAction(rechartsData) {
   };
 }
 
+/**
+ * Dispatched when loading the recharts data fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_RECHARTS_DATA_ERROR passing the repos
+ */
 export function getRechartsDataErrorAction(error) {
   return {
     type: GET_RECHARTS_DATA_ERROR,
@@ -405,12 +728,24 @@ export function getRechartsDataErrorAction(error) {
   };
 }
 
+/**
+ * Get recharts colors, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_RECHARTS_COLORS
+ */
 export function getRechartsColorsAction() {
   return {
     type: GET_RECHARTS_COLORS,
   };
 }
 
+/**
+ * Dispatched when the recharts colors are loaded by the request saga
+ *
+ * @param  {array} rechartsColors The recharts colors
+ *
+ * @return {object} An action object with a type of GET_RECHARTS_COLORS_SUCCESS passing the repos
+ */
 export function getRechartsColorsSuccessAction(rechartsColors) {
   return {
     type: GET_RECHARTS_COLORS_SUCCESS,
@@ -418,6 +753,13 @@ export function getRechartsColorsSuccessAction(rechartsColors) {
   };
 }
 
+/**
+ * Dispatched when loading the recharts colors fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_RECHARTS_COLORS_ERROR passing the repos
+ */
 export function getRechartsColorsErrorAction(error) {
   return {
     type: GET_RECHARTS_COLORS_ERROR,

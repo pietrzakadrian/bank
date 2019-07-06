@@ -11,7 +11,6 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_ERROR,
   ENQUEUE_SNACKBAR,
-  CLOSE_SNACKBAR,
   REMOVE_SNACKBAR,
   TOGGLE_NAVIGATION_DESKTOP,
   TOGGLE_NAVIGATION_MOBILE,
@@ -47,7 +46,7 @@ export function checkNewMessagesAction() {
  *
  * @param  {array} messages The messages data
  *
- * @return {object}      An action object with a type of CHECK_NEW_MESSAGES_SUCCESS passing the repos
+ * @return {object} An action object with a type of CHECK_NEW_MESSAGES_SUCCESS passing the repos
  */
 export function checkNewMessagesSuccessAction(messages) {
   return {
@@ -61,7 +60,7 @@ export function checkNewMessagesSuccessAction(messages) {
  *
  * @param  {object} error The error
  *
- * @return {object}      An action object with a type of CHECK_NEW_MESSAGES_ERROR passing the repos
+ * @return {object} An action object with a type of CHECK_NEW_MESSAGES_ERROR passing the repos
  */
 export function checkNewMessagesErrorAction(error) {
   return {
@@ -73,7 +72,7 @@ export function checkNewMessagesErrorAction(error) {
 /**
  * Check the new notifications, this action starts the request saga
  *
- * @return {object}     An action object with a type of CHECK_NEW_NOTIFICATIONS
+ * @return {object} An action object with a type of CHECK_NEW_NOTIFICATIONS
  */
 export function checkNewNotificationsAction() {
   return {
@@ -86,7 +85,7 @@ export function checkNewNotificationsAction() {
  *
  * @param  {number} notificationCount The messages data
  *
- * @return {object}      An action object with a type of CHECK_NEW_NOTIFICATIONS_SUCCESS passing the repos
+ * @return {object} An action object with a type of CHECK_NEW_NOTIFICATIONS_SUCCESS passing the repos
  */
 export function checkNewNotificationsSuccessAction(notificationCount) {
   return {
@@ -100,7 +99,7 @@ export function checkNewNotificationsSuccessAction(notificationCount) {
  *
  * @param  {object} error The error
  *
- * @return {object}      An action object with a type of CHECK_NEW_NOTIFICATIONS_ERROR passing the repos
+ * @return {object} An action object with a type of CHECK_NEW_NOTIFICATIONS_ERROR passing the repos
  */
 export function checkNewNotificationsErrorAction(error) {
   return {
@@ -125,7 +124,7 @@ export function getNewNotificationsAction() {
  *
  * @param  {array} notifications The notifications data
  *
- * @return {object}      An action object with a type of GET_NEW_NOTIFICATIONS_SUCCESS passing the repos
+ * @return {object} An action object with a type of GET_NEW_NOTIFICATIONS_SUCCESS passing the repos
  */
 export function getNewNotificationsSuccessAction(notifications) {
   return {
@@ -139,7 +138,7 @@ export function getNewNotificationsSuccessAction(notifications) {
  *
  * @param  {object} error The error
  *
- * @return {object}      An action object with a type of GET_NEW_NOTIFICATIONS_ERROR passing the repos
+ * @return {object} An action object with a type of GET_NEW_NOTIFICATIONS_ERROR passing the repos
  */
 export function getNewNotificationsErrorAction(error) {
   return {
@@ -162,7 +161,7 @@ export function unsetNewNotificationsAction() {
 /**
  * Dispatched when unset the new notifications are successed by the request saga
  *
- * @return {object}      An action object with a type of UNSET_NEW_NOTIFICATIONS_SUCCESS passing the repos
+ * @return {object} An action object with a type of UNSET_NEW_NOTIFICATIONS_SUCCESS passing the repos
  */
 export function unsetNewNotificationsSuccessAction() {
   return {
@@ -175,7 +174,7 @@ export function unsetNewNotificationsSuccessAction() {
  *
  * @param  {object} error The error
  *
- * @return {object}      An action object with a type of UNSET_NEW_NOTIFICATIONS_ERROR passing the repos
+ * @return {object} An action object with a type of UNSET_NEW_NOTIFICATIONS_ERROR passing the repos
  */
 export function unsetNewNotificationsErrorAction(error) {
   return {
@@ -291,6 +290,12 @@ export function toggleNotificationsAction() {
   };
 }
 
+/**
+ * Enqueue snackbar on the screen
+ * @param  {object} snackbar The snackbar
+ *
+ * @return {object} An action object with a type of TOGGLE_NOTIFICATIONS
+ */
 export function enqueueSnackbarAction(snackbar) {
   const key = snackbar.options && snackbar.options.key;
 
@@ -303,17 +308,8 @@ export function enqueueSnackbarAction(snackbar) {
   };
 }
 
-// todo: check if this action is use
-export function closeSnackbarAction(key) {
-  return {
-    type: CLOSE_SNACKBAR,
-    dismissAll: !key,
-    key,
-  };
-}
-
 /**
- * Remove snackbars from the screen
+ * Remove snackbar from the screen
  *
  * @return {object} An action object with a type of REMOVE_SNACKBAR
  */
