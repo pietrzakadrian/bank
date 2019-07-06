@@ -126,8 +126,8 @@ usersRouter
           }
 
           // now update the user attributes according to req body
-          if (req.body.firstName) user.firstName = req.body.firstName;
-          if (req.body.lastName) user.lastName = req.body.lastName;
+          if (req.body.firstName) user.name = req.body.name;
+          if (req.body.lastName) user.surname = req.body.surname;
           if (req.body.email) user.email = req.body.email;
           if (req.body.newPassword)
             await user.setPassword(req.body.newPassword);

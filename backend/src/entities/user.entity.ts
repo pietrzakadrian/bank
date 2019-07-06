@@ -12,7 +12,7 @@ import {
 @Entity("users")
 @Unique(["email", "login"])
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("rowid")
   id: number;
 
   @Column()

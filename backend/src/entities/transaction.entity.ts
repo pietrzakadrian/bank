@@ -14,10 +14,10 @@ export class Transaction {
   id: number;
 
   @ManyToOne(type => Bill, sender => sender.user, { nullable: false })
-  sender: Bill;
+  sender: number;
 
   @ManyToOne(type => Bill, recipient => recipient.user, { nullable: false })
-  recipient: Bill;
+  recipient: number;
 
   @CreateDateColumn()
   createdDate: Date;

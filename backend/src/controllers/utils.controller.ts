@@ -13,8 +13,8 @@ const utilsRouter: Router = Router();
 // todo: shouldn't go in production or it needs to be protected with some password/key in body etc
 utilsRouter.post("/first_account", async (req: Request, res: Response) => {
   let user = new User();
-  user.firstName = "Test";
-  user.lastName = "Account";
+  user.name = "Test";
+  user.surname = "Account";
   user.email = "test@v2x.network";
   user.password = "123456";
 

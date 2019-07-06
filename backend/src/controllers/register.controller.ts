@@ -5,6 +5,9 @@ import * as HttpStatus from "http-status-codes";
 import config from "../config/config";
 import { ApiResponseError } from "../resources/interfaces/apiResponseError.interface";
 import { UserService } from "../services/users.service";
+import { BillService } from "../services/bills.service";
+import { User } from "../entities/user.entity";
+import { getManager } from "typeorm";
 
 const { errors } = config;
 const registerRouter: Router = Router();
@@ -16,8 +19,8 @@ registerRouter
 
   .post(
     [
-      body("firstName").isLength({ min: 1 }),
-      body("lastName").isLength({ min: 1 }),
+      body("name").isLength({ min: 1 }),
+      body("surname").isLength({ min: 1 }),
       body("email").isEmail(),
       body("login")
         .isNumeric()
@@ -32,17 +35,20 @@ registerRouter
 
       if (validationErrors.isEmpty()) {
         const userService = new UserService();
-        // const billService = new BillService();
+        const billService = new BillService();
         // const additionalService = new AdditionalService();
-        // const dateService = new DateService();
+
+        const accountBill = await billService.generateAccountBill();
+        console.log("accountBill", accountBill);
 
         await userService.instantiate(req.body);
+        await billService.instantiate(req.body);
 
         try {
-          const response = await userService.insert(req.body);
+          await userService.insert(req.body);
+
           res.status(HttpStatus.OK).json({
-            success: true,
-            data: response
+            success: true
           });
         } catch (err) {
           // DB exception or some other exception while inserting user

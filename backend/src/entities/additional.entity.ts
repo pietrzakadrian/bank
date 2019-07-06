@@ -13,7 +13,7 @@ export class Additional {
   id: number;
 
   @ManyToOne(type => User, user => user.id, { nullable: false })
-  user: User;
+  user: Number;
 
   @Column({ length: 20000, default: "0,0" })
   accountBalanceHistory: string;

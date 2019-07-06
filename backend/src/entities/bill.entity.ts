@@ -15,10 +15,10 @@ export class Bill {
   id: number;
 
   @ManyToOne(type => User, user => user.id, { nullable: false })
-  user: User;
+  user: number;
 
-  @Column("decimal", { precision: 26, scale: 0 })
-  accountBill: number;
+  @Column({ length: 26 })
+  accountBill: string;
 
   @Column("double", { default: 0 })
   availableFunds: number;
