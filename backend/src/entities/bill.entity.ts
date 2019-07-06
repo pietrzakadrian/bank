@@ -14,15 +14,15 @@ export class Bill {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => User, user => user.id)
+  @ManyToOne(type => User, user => user.id, { nullable: false })
   user: User;
 
-  @Column("decimal", { nullable: false })
+  @Column("decimal", { precision: 26, scale: 0 })
   accountBill: number;
 
-  @Column("double", { default: 0, nullable: false })
+  @Column("double", { default: 0 })
   availableFunds: number;
 
-  @ManyToOne(type => Currency, currency => currency.id)
+  @ManyToOne(type => Currency, currency => currency.id, { nullable: false })
   currency: Currency;
 }

@@ -15,22 +15,22 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
-  firstName: string;
+  @Column()
+  name: string;
 
-  @Column({ nullable: false })
-  lastName: string;
+  @Column()
+  surname: string;
 
-  @Column({ nullable: false })
+  @Column()
   email: string;
 
-  @Column("bigint", { nullable: false })
+  @Column("bigint")
   login: number;
 
-  @Column({ nullable: false })
+  @Column()
   password: string;
 
-  @CreateDateColumn({ nullable: false })
+  @CreateDateColumn()
   createdDate: Date;
 
   @UpdateDateColumn({ nullable: true })

@@ -10,13 +10,13 @@ export class Currency {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
+  @Column()
   name: string;
 
-  @Column({ nullable: false })
+  @Column()
   exchangeRate: number;
 
-  @UpdateDateColumn({ nullable: false })
+  @UpdateDateColumn()
   exchangeRateSyncDate: Date;
 
   @Column({ default: 0 })

@@ -12,10 +12,10 @@ export class Additional {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => User, user => user.id)
+  @ManyToOne(type => User, user => user.id, { nullable: false })
   user: User;
 
-  @Column({ default: "0,0" })
+  @Column({ length: 20000, default: "0,0" })
   accountBalanceHistory: string;
 
   @Column("double", { default: 0 })
