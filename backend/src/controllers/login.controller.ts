@@ -2,69 +2,60 @@ import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
 import { body, validationResult } from "express-validator/check";
-import config from "../config/config";
-import { AuthHandler } from "../middlewares/authHandler.middleware";
+
+// Import Intefaces
 import { responseError } from "../resources/interfaces/responseError.interface";
+
+// Import Services
 import { UserService } from "../services/users.service";
 
+// Import Middlewares
+import { AuthHandler } from "../middlewares/authHandler.middleware";
+
 const loginRouter: Router = Router();
-const { errors } = config;
 
-// on routes that end in /login
-// -----------------------------
 loginRouter
-  .route("/")
-  .post(
-    [body("email").isEmail(), body("password").isLength({ min: 1 })],
-    async (req: Request, res: Response, next: NextFunction) => {
-      const validationErrors = validationResult(req);
-      if (validationErrors.isEmpty()) {
-        // no error
-        const userService = new UserService();
-        let user = await userService.getByEmail(req.body.email);
-        if (!user) {
-          res.status(HttpStatus.BAD_REQUEST).json({
-            success: false,
-            message: `${errors.emailNotFound}`
-          });
-          return;
-        }
+  .route("/login")
 
-        // now compare password
-        const isPasswordCorrect = await bcrypt.compare(
-          req.body.password,
-          user.password
-        );
-        // generate token and return
-        if (isPasswordCorrect) {
-          const authHandler = new AuthHandler();
-          const token = authHandler.generateToken(user);
-          res.status(HttpStatus.OK).json({
-            success: true,
-            token: token
-          });
-          return;
-        } else {
-          // incorrect password
-          const error: responseError = {
-            success: false,
-            code: HttpStatus.UNAUTHORIZED,
-            error: {
-              message: errors.incorrectPassword
-            }
-          };
-          next(error);
-          return;
-        }
-      } else {
-        // validation error
+  .post(
+    [
+      body("login")
+        .isNumeric()
+        .isLength({ min: 1, max: 20 }),
+      body("password").isLength({ min: 1, max: 255 })
+    ],
+
+    async (req: Request, res: Response, next: NextFunction) => {
+      const userService = new UserService();
+      const authHandler = new AuthHandler();
+
+      const validationErrors = validationResult(req);
+      const user = await userService.getByLogin(req.body.login);
+      const isPasswordCorrect = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
+
+      if (!user || !isPasswordCorrect || validationErrors) {
+        !isPasswordCorrect &&
+          (await userService.setLastFailedLoggedDate(req.body.login));
+
         const err: responseError = {
           success: false,
-          code: HttpStatus.BAD_REQUEST,
+          code: !isPasswordCorrect
+            ? HttpStatus.UNAUTHORIZED
+            : HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
         };
-        next(err);
+        return next(err);
       }
+
+      await userService.setLastPresentLoggedDate(req.body.login);
+      const token = authHandler.generateToken(user);
+      res.status(HttpStatus.OK).json({
+        success: true,
+        token
+      });
     }
   );
 

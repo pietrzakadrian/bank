@@ -1,24 +1,25 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator/check";
 import * as HttpStatus from "http-status-codes";
-
-import config from "../config/config";
-import { responseError } from "../resources/interfaces/responseError.interface";
-import { UserService } from "../services/users.service";
-import { User } from "../entities/user.entity";
 import { getManager } from "typeorm";
-import { Bill } from "../entities/bill.entity";
+
+// Import Intefaces
+import { responseError } from "../resources/interfaces/responseError.interface";
+
+// Import Services
+import { UserService } from "../services/users.service";
 import { BillService } from "../services/bills.service";
-import { Additional } from "../entities/additional.entity";
 import { AdditionalService } from "../services/additionals.service";
 
-const { errors } = config;
-const signupRouter: Router = Router();
+// Import Entity
+import { User } from "../entities/user.entity";
+import { Bill } from "../entities/bill.entity";
+import { Additional } from "../entities/additional.entity";
 
-// on routes that end in /signup
-// -----------------------------
-signupRouter
-  .route("/")
+const registerRouter: Router = Router();
+
+registerRouter
+  .route("/register")
 
   .post(
     [
@@ -32,6 +33,7 @@ signupRouter
         .isLength({ min: 1, max: 20 }),
       body("password").isLength({ min: 1, max: 255 })
     ],
+
     async (req: Request, res: Response, next: NextFunction) => {
       const userService = new UserService();
       const billService = new BillService();
@@ -41,7 +43,7 @@ signupRouter
       const isLogin = await userService.getByLogin(req.body.login);
       const isEmail = await userService.getByEmail(req.body.email);
 
-      if (isLogin || isEmail || !validationErrors.isEmpty()) {
+      if (isLogin || isEmail || validationErrors) {
         const error: responseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
@@ -78,15 +80,15 @@ signupRouter
         res.status(HttpStatus.OK).json({
           success: true
         });
-      } catch (err) {
-        const error: responseError = {
+      } catch (error) {
+        const err: responseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
-          error: err
+          error
         };
-        next(error);
+        next(err);
       }
     }
   );
 
-export default signupRouter;
+export default registerRouter;

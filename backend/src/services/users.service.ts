@@ -49,13 +49,13 @@ export class UserService {
    * Returns a user by email
    */
   async getByEmail(email: string): Promise<User | undefined> {
-    const users = await this.userRepository.find({
+    const user = await this.userRepository.find({
       where: {
         email: email
       }
     });
-    if (users && users.length > 0) {
-      return users[0];
+    if (user && user.length > 0) {
+      return user[0];
     } else {
       return undefined;
     }
@@ -65,13 +65,13 @@ export class UserService {
    * Returns a user by login
    */
   async getByLogin(login: number): Promise<User | undefined> {
-    const users = await this.userRepository.find({
+    const user = await this.userRepository.find({
       where: {
         login
       }
     });
-    if (users && users.length > 0) {
-      return users[0];
+    if (user && user.length > 0) {
+      return user[0];
     } else {
       return undefined;
     }
@@ -88,4 +88,62 @@ export class UserService {
       return Promise.reject(error);
     }
   }
+
+  /**
+   * Updates the last failed logged date
+   */
+  async setLastFailedLoggedDate(login: number): Promise<Object> {
+    try {
+      return await this.userRepository.update(
+        { login },
+        {
+          lastFailedLoggedDate: new Date()
+        }
+      );
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Updates the last present logged date
+   */
+  async setLastPresentLoggedDate(login: number): Promise<Object> {
+    try {
+      return await this.userRepository.update(
+        { login },
+        {
+          lastPresentLoggedDate: new Date()
+        }
+      );
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  // /**
+  //  * Updates the last succesful logged date
+  //  */
+  // async setLastSuccessfulLoggedDate(login: number): Promise<Object> {
+  //   try {
+  //     const user = await this.userRepository.findOne({
+  //       where: {
+  //         login
+  //       }
+  //     });
+
+  //     if (user) {
+  //       console.log("objuser", user);
+  //     }
+
+  //     // return await this.userRepository.update(
+  //     //   { login },
+  //     //   {
+  //     //     lastSuccessfulLoggedDate: user.lastPresentLoggedDate;
+  //     //   }
+  //     // );
+  //   } catch (error) {
+  //     return Promise.reject(error);
+  //   }
+  // }
 }
