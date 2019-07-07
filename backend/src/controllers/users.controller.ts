@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
 import bcrypt from "bcryptjs";
 import config from "../config/config";
-import { ApiResponseError } from "../resources/interfaces/apiResponseError.interface";
+import { responseError } from "../resources/interfaces/responseError.interface";
 import { UserService } from "../services/users.service";
 import { body, validationResult } from "express-validator/check";
 
@@ -24,12 +24,13 @@ usersRouter
         success: true,
         data: response
       });
-    } catch (err) {
-      const error: ApiResponseError = {
+    } catch (error) {
+      const err: responseError = {
+        success: false,
         code: HttpStatus.BAD_REQUEST,
-        errorObj: err
+        error
       };
-      next(error);
+      next(err);
     }
   });
 
@@ -56,12 +57,13 @@ usersRouter
         success: true,
         user: user
       });
-    } catch (err) {
-      const error: ApiResponseError = {
+    } catch (error) {
+      const err: responseError = {
+        success: false,
         code: HttpStatus.BAD_REQUEST,
-        errorObj: err
+        error
       };
-      next(error);
+      next(err);
     }
   })
 
@@ -105,14 +107,14 @@ usersRouter
               user.password
             );
             if (!isOldPasswordCorrect) {
-              const error: ApiResponseError = {
+              const err: responseError = {
+                success: false,
                 code: HttpStatus.BAD_REQUEST,
-                errorObj: {
+                error: {
                   message: errors.incorrectOldPassword
                 }
               };
-              next(error);
-              return;
+              return next(err);
             }
           } else if (
             (req.body.oldPassword && !req.body.newPassword) ||
@@ -139,17 +141,19 @@ usersRouter
           });
         } catch (err) {
           // db errors e.g. unique constraints etc
-          const error: ApiResponseError = {
+          const error: responseError = {
+            success: false,
             code: HttpStatus.BAD_REQUEST,
-            errorObj: err
+            error: err
           };
           next(error);
         }
       } else {
         // validation errors
-        const error: ApiResponseError = {
+        const error: responseError = {
+          success: false,
           code: HttpStatus.BAD_REQUEST,
-          errorsArray: validationErrors.array()
+          error: validationErrors.array()
         };
         next(error);
       }
@@ -180,13 +184,14 @@ usersRouter
         success: true,
         user: user
       });
-    } catch (err) {
+    } catch (error) {
       // db exception. example: wrong syntax of id e.g. special character
-      const error: ApiResponseError = {
+      const err: responseError = {
+        success: false,
         code: HttpStatus.BAD_REQUEST,
-        errorObj: err
+        error
       };
-      next(error);
+      next(err);
     }
   });
 

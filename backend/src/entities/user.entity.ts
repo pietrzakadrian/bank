@@ -12,7 +12,7 @@ import {
 @Entity("users")
 @Unique(["email", "login"])
 export class User {
-  @PrimaryGeneratedColumn("rowid")
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -33,13 +33,13 @@ export class User {
   @CreateDateColumn()
   createdDate: Date;
 
-  @UpdateDateColumn({ nullable: true })
+  @Column({ nullable: true })
   lastPresentLoggedDate: Date;
 
-  @UpdateDateColumn({ nullable: true })
+  @Column({ nullable: true })
   lastSuccessfulLoggedDate: Date;
 
-  @UpdateDateColumn({ nullable: true })
+  @Column({ nullable: true })
   lastFailedLoggedDate: Date;
 
   async setPassword(newPassword: string) {

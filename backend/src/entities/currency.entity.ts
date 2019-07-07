@@ -7,7 +7,7 @@ import {
 
 @Entity("currency")
 export class Currency {
-  @PrimaryGeneratedColumn("increment")
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()

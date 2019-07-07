@@ -3,70 +3,90 @@ import { body, validationResult } from "express-validator/check";
 import * as HttpStatus from "http-status-codes";
 
 import config from "../config/config";
-import { ApiResponseError } from "../resources/interfaces/apiResponseError.interface";
+import { responseError } from "../resources/interfaces/responseError.interface";
 import { UserService } from "../services/users.service";
-import { BillService } from "../services/bills.service";
 import { User } from "../entities/user.entity";
 import { getManager } from "typeorm";
+import { Bill } from "../entities/bill.entity";
+import { BillService } from "../services/bills.service";
+import { Additional } from "../entities/additional.entity";
+import { AdditionalService } from "../services/additionals.service";
 
 const { errors } = config;
-const registerRouter: Router = Router();
+const signupRouter: Router = Router();
 
-// on routes that end in /register
+// on routes that end in /signup
 // -----------------------------
-registerRouter
+signupRouter
   .route("/")
 
   .post(
     [
-      body("name").isLength({ min: 1 }),
-      body("surname").isLength({ min: 1 }),
-      body("email").isEmail(),
+      body("name").isLength({ min: 1, max: 255 }),
+      body("surname").isLength({ min: 1, max: 255 }),
+      body("email")
+        .isEmail()
+        .isLength({ min: 1, max: 255 }),
       body("login")
         .isNumeric()
         .isLength({ min: 1, max: 20 }),
-      body("password").isLength({ min: 1 }),
-      body("currencyId")
-        .isNumeric()
-        .isLength({ min: 1, max: 1 })
+      body("password").isLength({ min: 1, max: 255 })
     ],
     async (req: Request, res: Response, next: NextFunction) => {
+      const userService = new UserService();
+      const billService = new BillService();
+      const additionalService = new AdditionalService();
+
       const validationErrors = validationResult(req);
+      const isLogin = await userService.getByLogin(req.body.login);
+      const isEmail = await userService.getByEmail(req.body.email);
 
-      if (validationErrors.isEmpty()) {
-        const userService = new UserService();
-        const billService = new BillService();
-        // const additionalService = new AdditionalService();
-
-        const accountBill = await billService.generateAccountBill();
-        console.log("accountBill", accountBill);
-
-        await userService.instantiate(req.body);
-        await billService.instantiate(req.body);
-
-        try {
-          await userService.insert(req.body);
-
-          res.status(HttpStatus.OK).json({
-            success: true
-          });
-        } catch (err) {
-          // DB exception or some other exception while inserting user
-          const error: ApiResponseError = {
-            code: HttpStatus.BAD_REQUEST,
-            errorObj: err
-          };
-          next(error);
-        }
-      } else {
-        // validaiton error
-        const error: ApiResponseError = {
+      if (isLogin || isEmail || !validationErrors.isEmpty()) {
+        const error: responseError = {
+          success: false,
           code: HttpStatus.BAD_REQUEST,
-          errorsArray: validationErrors.array()
+          error: validationErrors.array()
+        };
+        return next(error);
+      }
+
+      try {
+        let user = new User();
+        user.name = req.body.name;
+        user.surname = req.body.surname;
+        user.email = req.body.email;
+        user.login = req.body.login;
+        user.password = req.body.password;
+        const userRepository = getManager().getRepository(User);
+        user = userRepository.create(user);
+        const newUser = await userService.insert(user);
+
+        let bill = new Bill();
+        bill.user = newUser.id;
+        bill.accountBill = await billService.generateAccountBill();
+        bill.currency = req.body.currencyId;
+        const billRepository = getManager().getRepository(Bill);
+        bill = billRepository.create(bill);
+        await billService.insert(bill);
+
+        let additional = new Additional();
+        additional.user = newUser.id;
+        const additionalRepository = getManager().getRepository(Additional);
+        additional = additionalRepository.create(additional);
+        await additionalService.insert(additional);
+
+        res.status(HttpStatus.OK).json({
+          success: true
+        });
+      } catch (err) {
+        const error: responseError = {
+          success: false,
+          code: HttpStatus.BAD_REQUEST,
+          error: err
         };
         next(error);
       }
     }
   );
 
-export default registerRouter;
+export default signupRouter;

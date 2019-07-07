@@ -46,11 +46,12 @@ export class BillService {
   /**
    * Generate unique account bill
    */
-  async generateAccountBill(): Promise<Bill | string> {
-    const randomPart = Math.floor(Math.random() * 10000000000);
-    const fixedPart = 221997;
+  async generateAccountBill(): Promise<string> {
+    const firstPart = Math.floor(100000000 + Math.random() * 900000000);
+    const secoundPart = Math.floor(100000000 + Math.random() * 900000000);
+    const thirdPart = 22199722;
 
-    const accountBill = `${randomPart}${randomPart}${fixedPart}`;
+    const accountBill = `${firstPart}${secoundPart}${thirdPart}`;
     const isAccountBill = await this.getByAccountBill(accountBill);
 
     return isAccountBill ? await this.generateAccountBill() : accountBill;

@@ -4,7 +4,7 @@ import * as HttpStatus from "http-status-codes";
 import { body, validationResult } from "express-validator/check";
 import config from "../config/config";
 import { AuthHandler } from "../middlewares/authHandler.middleware";
-import { ApiResponseError } from "../resources/interfaces/apiResponseError.interface";
+import { responseError } from "../resources/interfaces/responseError.interface";
 import { UserService } from "../services/users.service";
 
 const loginRouter: Router = Router();
@@ -46,9 +46,10 @@ loginRouter
           return;
         } else {
           // incorrect password
-          const error: ApiResponseError = {
+          const error: responseError = {
+            success: false,
             code: HttpStatus.UNAUTHORIZED,
-            errorObj: {
+            error: {
               message: errors.incorrectPassword
             }
           };
@@ -57,11 +58,12 @@ loginRouter
         }
       } else {
         // validation error
-        const error: ApiResponseError = {
+        const err: responseError = {
+          success: false,
           code: HttpStatus.BAD_REQUEST,
-          errorsArray: validationErrors.array()
+          error: validationErrors.array()
         };
-        next(error);
+        next(err);
       }
     }
   );

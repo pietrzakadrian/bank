@@ -55,7 +55,23 @@ export class UserService {
       }
     });
     if (users && users.length > 0) {
-      return users[0]; // typeorm find() returns array even if response is single object
+      return users[0];
+    } else {
+      return undefined;
+    }
+  }
+
+  /**
+   * Returns a user by login
+   */
+  async getByLogin(login: number): Promise<User | undefined> {
+    const users = await this.userRepository.find({
+      where: {
+        login
+      }
+    });
+    if (users && users.length > 0) {
+      return users[0];
     } else {
       return undefined;
     }
