@@ -1,4 +1,4 @@
-import { changeLocale } from '../actions';
+import { changeLocaleAction } from '../actions';
 
 import { CHANGE_LOCALE } from '../constants';
 
@@ -9,7 +9,7 @@ describe('LanguageProvider actions', () => {
         type: CHANGE_LOCALE,
         locale: 'de',
       };
-      expect(changeLocale('de')).toEqual(expected);
+      expect(changeLocaleAction('de')).toEqual(expected);
     });
   });
 });

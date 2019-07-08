@@ -8,7 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { changeLocale } from 'containers/LanguageProvider/actions';
+import { changeLocaleAction } from 'containers/LanguageProvider/actions';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 
 // Import Components
@@ -41,7 +41,7 @@ const mapStateToProps = createSelector(
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onLocaleToggle: evt => dispatch(changeLocale(evt.target.value)),
+    onLocaleToggle: evt => dispatch(changeLocaleAction(evt.target.value)),
     dispatch,
   };
 }
