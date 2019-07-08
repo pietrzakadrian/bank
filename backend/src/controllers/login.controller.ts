@@ -36,7 +36,7 @@ loginRouter
         user.password
       );
 
-      if (!user || !isPasswordCorrect || validationErrors) {
+      if (!user || !isPasswordCorrect || !validationErrors.isEmpty()) {
         !isPasswordCorrect &&
           (await userService.setLastFailedLoggedDate(req.body.login));
 
@@ -50,12 +50,21 @@ loginRouter
         return next(err);
       }
 
-      await userService.setLastPresentLoggedDate(req.body.login);
-      const token = authHandler.generateToken(user);
-      res.status(HttpStatus.OK).json({
-        success: true,
-        token
-      });
+      try {
+        await userService.setLastPresentLoggedDate(req.body.login);
+        const token = authHandler.generateToken(user);
+        res.status(HttpStatus.OK).json({
+          success: true,
+          token
+        });
+      } catch (error) {
+        const err: responseError = {
+          success: false,
+          code: HttpStatus.BAD_REQUEST,
+          error
+        };
+        next(err);
+      }
     }
   );
 

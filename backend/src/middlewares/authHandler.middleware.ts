@@ -40,7 +40,7 @@ export class AuthHandler {
       const userService = new UserService();
 
       try {
-        const user = await userService.getByEmail(jwt_payload.email); // todo: change to uuid ?
+        const user = await userService.getById(jwt_payload.id);
 
         // if user not found for this id
         if (!user) {
@@ -49,8 +49,7 @@ export class AuthHandler {
 
         // authentication passed
         return next(undefined, {
-          id: user.id,
-          email: user.email
+          id: user.id
         });
       } catch (err) {
         return next(null, false);
@@ -75,8 +74,7 @@ export class AuthHandler {
   generateToken(user: User): string {
     const token = jwt.sign(
       {
-        id: user.id,
-        email: user.email
+        id: user.id
       },
       this.superSecret,
       {

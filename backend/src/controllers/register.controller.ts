@@ -31,7 +31,10 @@ registerRouter
       body("login")
         .isNumeric()
         .isLength({ min: 1, max: 20 }),
-      body("password").isLength({ min: 1, max: 255 })
+      body("password").isLength({ min: 1, max: 255 }),
+      body("currencyId")
+        .isNumeric()
+        .isLength({ min: 1 })
     ],
 
     async (req: Request, res: Response, next: NextFunction) => {
@@ -43,7 +46,10 @@ registerRouter
       const isLogin = await userService.getByLogin(req.body.login);
       const isEmail = await userService.getByEmail(req.body.email);
 
-      if (isLogin || isEmail || validationErrors) {
+      if (isLogin || isEmail || !validationErrors.isEmpty()) {
+        console.log("isLogin", isLogin);
+        console.log("isEmail", isEmail);
+        console.log("validationErrors", validationErrors);
         const error: responseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,

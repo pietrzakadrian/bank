@@ -19,7 +19,7 @@ export class BillService {
   }
 
   /**
-   * Inserts a new User into the database.
+   * Inserts a new Bill into the database.
    */
   async insert(data: Bill): Promise<Bill> {
     this.logger.info("Create a new bill", data);

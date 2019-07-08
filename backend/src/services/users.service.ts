@@ -82,7 +82,7 @@ export class UserService {
    */
   async update(user: User): Promise<User | undefined> {
     try {
-      const updatedUser = await this.userRepository.save(user);
+      const updatedUser = await this.userRepository.update(user);
       return updatedUser;
     } catch (error) {
       return Promise.reject(error);
@@ -92,7 +92,7 @@ export class UserService {
   /**
    * Updates the last failed logged date
    */
-  async setLastFailedLoggedDate(login: number): Promise<Object> {
+  async setLastFailedLoggedDate(login: number): Promise<Object | undefined> {
     try {
       return await this.userRepository.update(
         { login },
@@ -108,7 +108,7 @@ export class UserService {
   /**
    * Updates the last present logged date
    */
-  async setLastPresentLoggedDate(login: number): Promise<Object> {
+  async setLastPresentLoggedDate(login: number): Promise<Object | undefined> {
     try {
       return await this.userRepository.update(
         { login },
@@ -121,29 +121,25 @@ export class UserService {
     }
   }
 
-  // /**
-  //  * Updates the last succesful logged date
-  //  */
-  // async setLastSuccessfulLoggedDate(login: number): Promise<Object> {
-  //   try {
-  //     const user = await this.userRepository.findOne({
-  //       where: {
-  //         login
-  //       }
-  //     });
+  /**
+   * Updates the last succesful logged date
+   */
+  async setLastSuccessfulLoggedDate(id: number): Promise<Object | undefined> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: {
+          id
+        }
+      });
 
-  //     if (user) {
-  //       console.log("objuser", user);
-  //     }
-
-  //     // return await this.userRepository.update(
-  //     //   { login },
-  //     //   {
-  //     //     lastSuccessfulLoggedDate: user.lastPresentLoggedDate;
-  //     //   }
-  //     // );
-  //   } catch (error) {
-  //     return Promise.reject(error);
-  //   }
-  // }
+      return await this.userRepository.update(
+        { id },
+        {
+          lastSuccessfulLoggedDate: user.lastPresentLoggedDate
+        }
+      );
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

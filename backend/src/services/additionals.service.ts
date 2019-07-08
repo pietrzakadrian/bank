@@ -12,17 +12,17 @@ export class AdditionalService {
   }
 
   /**
-   * Creates an instance of Bill.
+   * Creates an instance of Additional.
    */
   instantiate(data: Object): Additional | undefined {
     return this.additionalRepository.create(data);
   }
 
   /**
-   * Inserts a new User into the database.
+   * Inserts a new Additional into the database.
    */
   async insert(data: Additional): Promise<Additional> {
-    this.logger.info("Create a new bill", data);
+    this.logger.info("Create a new additional", data);
     const newAdditional = this.additionalRepository.create(data);
     return await this.additionalRepository.save(newAdditional);
   }
