@@ -148,65 +148,65 @@ usersRouter
         next(err);
       }
     }
-  )
-
-  .put(
-    [
-      param("id")
-        .isNumeric()
-        .isLength({ min: 1 }),
-      body("name")
-        .optional()
-        .isLength({ min: 1, max: 255 }),
-      body("surname")
-        .optional()
-        .isLength({ min: 1, max: 255 }),
-      body("email")
-        .optional()
-        .isEmail()
-        .isLength({ min: 1, max: 255 }),
-      body("password")
-        .optional()
-        .isLength({ min: 1, max: 255 })
-    ],
-    auth.authenticate(),
-
-    async (req: Request, res: Response, next: NextFunction) => {
-      const userService = new UserService();
-      const validationErrors = validationResult(req);
-
-      if (!validationErrors.isEmpty()) {
-        const err: responseError = {
-          success: false,
-          code: HttpStatus.BAD_REQUEST,
-          error: validationErrors.array()
-        };
-        return next(err);
-      }
-
-      try {
-        const updatedUser = await userService.getById(req.params.id);
-        const user = new User();
-        user.id = req.params.id;
-        user.login = updatedUser.login;
-        if (req.body.name) user.name = req.body.name;
-        if (req.body.surname) user.surname = req.body.surname;
-        if (req.body.email) user.email = req.body.email;
-        if (req.body.password) await user.setPassword(req.body.password);
-
-        await userService.update(user);
-        res.status(HttpStatus.OK).json({
-          success: true
-        });
-      } catch (error) {
-        const err: responseError = {
-          success: false,
-          code: HttpStatus.BAD_REQUEST,
-          error
-        };
-        next(err);
-      }
-    }
   );
+
+// .put(
+//   [
+//     param("id")
+//       .isNumeric()
+//       .isLength({ min: 1 }),
+//     body("name")
+//       .optional()
+//       .isLength({ min: 1, max: 255 }),
+//     body("surname")
+//       .optional()
+//       .isLength({ min: 1, max: 255 }),
+//     body("email")
+//       .optional()
+//       .isEmail()
+//       .isLength({ min: 1, max: 255 }),
+//     body("password")
+//       .optional()
+//       .isLength({ min: 1, max: 255 })
+//   ],
+//   auth.authenticate(),
+
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const userService = new UserService();
+//     const validationErrors = validationResult(req);
+
+//     if (!validationErrors.isEmpty()) {
+//       const err: responseError = {
+//         success: false,
+//         code: HttpStatus.BAD_REQUEST,
+//         error: validationErrors.array()
+//       };
+//       return next(err);
+//     }
+
+//     try {
+//       const updatedUser = await userService.getById(req.params.id);
+//       const user = new User();
+//       user.id = req.params.id;
+//       user.login = updatedUser.login;
+//       if (req.body.name) user.name = req.body.name;
+//       if (req.body.surname) user.surname = req.body.surname;
+//       if (req.body.email) user.email = req.body.email;
+//       if (req.body.password) await user.setPassword(req.body.password);
+
+//       await userService.update(user);
+//       res.status(HttpStatus.OK).json({
+//         success: true
+//       });
+//     } catch (error) {
+//       const err: responseError = {
+//         success: false,
+//         code: HttpStatus.BAD_REQUEST,
+//         error
+//       };
+//       next(err);
+//     }
+//   }
+// )
 
 export default usersRouter;

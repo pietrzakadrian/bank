@@ -28,6 +28,33 @@ export class BillService {
   }
 
   /**
+   * Returns a bill by given id
+   */
+  async getById(id: string | number): Promise<Bill> {
+    this.logger.info("Fetching bill by id: ", id);
+    if (id) {
+      return await this.billRepository.findOne(id);
+    }
+    return Promise.reject(false);
+  }
+
+  /**
+   * Returns a bill by userId
+   */
+  async getByUserId(id: number): Promise<Bill | undefined> {
+    const bill = await this.billRepository.find({
+      where: {
+        user: id
+      }
+    });
+    if (bill && bill.length > 0) {
+      return bill[0];
+    } else {
+      return undefined;
+    }
+  }
+
+  /**
    * Returns a bill by account bill
    */
   async getByAccountBill(accountBill: string): Promise<Bill | undefined> {

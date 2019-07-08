@@ -80,14 +80,14 @@ export class UserService {
   /**
    * Updates a user
    */
-  async update(user: User): Promise<User | undefined> {
-    try {
-      const updatedUser = await this.userRepository.update(user);
-      return updatedUser;
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  }
+  // async update(user: User): Promise<User | undefined> {
+  //   try {
+  //     const updatedUser = await this.userRepository.update(user);
+  //     return updatedUser;
+  //   } catch (error) {
+  //     return Promise.reject(error);
+  //   }
+  // }
 
   /**
    * Updates the last failed logged date

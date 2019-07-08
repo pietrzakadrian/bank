@@ -26,4 +26,31 @@ export class AdditionalService {
     const newAdditional = this.additionalRepository.create(data);
     return await this.additionalRepository.save(newAdditional);
   }
+
+  /**
+   * Returns a additional by given id
+   */
+  async getById(id: string | number): Promise<Additional> {
+    this.logger.info("Fetching additional by id: ", id);
+    if (id) {
+      return await this.additionalRepository.findOne(id);
+    }
+    return Promise.reject(false);
+  }
+
+  /**
+   * Returns a bill by userId
+   */
+  async getByUserId(id: number): Promise<Additional | undefined> {
+    const additional = await this.additionalRepository.find({
+      where: {
+        user: id
+      }
+    });
+    if (additional && additional.length > 0) {
+      return additional[0];
+    } else {
+      return undefined;
+    }
+  }
 }
