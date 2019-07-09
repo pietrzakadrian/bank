@@ -47,9 +47,6 @@ registerRouter
       const isEmail = await userService.getByEmail(req.body.email);
 
       if (isLogin || isEmail || !validationErrors.isEmpty()) {
-        console.log("isLogin", isLogin);
-        console.log("isEmail", isEmail);
-        console.log("validationErrors", validationErrors);
         const error: responseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
@@ -67,10 +64,13 @@ registerRouter
         user.password = req.body.password;
         const userRepository = getManager().getRepository(User);
         user = userRepository.create(user);
-        const newUser = await userService.insert(user);
+        await userService.insert(user);
+        const newUser = await getManager().save(user);
+
+        console.log("newUser", newUser);
 
         let bill = new Bill();
-        bill.user = newUser.id;
+        bill.user.id = newUser.id;
         bill.accountBill = await billService.generateAccountBill();
         bill.currency = req.body.currencyId;
         const billRepository = getManager().getRepository(Bill);

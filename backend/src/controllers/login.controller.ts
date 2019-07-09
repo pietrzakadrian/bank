@@ -37,15 +37,14 @@ loginRouter
       );
 
       if (!user || !isPasswordCorrect || !validationErrors.isEmpty()) {
-        !isPasswordCorrect &&
-          (await userService.setLastFailedLoggedDate(req.body.login));
+        if (!isPasswordCorrect)
+          await userService.setLastFailedLoggedDate(req.body.login);
 
         const err: responseError = {
           success: false,
           code: !isPasswordCorrect
             ? HttpStatus.UNAUTHORIZED
-            : HttpStatus.BAD_REQUEST,
-          error: validationErrors.array()
+            : HttpStatus.BAD_REQUEST
         };
         return next(err);
       }

@@ -7,6 +7,7 @@ import utilsRouter from "./controllers/utils.controller";
 import registerRouter from "./controllers/register.controller";
 import loginRouter from "./controllers/login.controller";
 import logoutRouter from "./controllers/logout.controller";
+import billsRouter from "./controllers/bills.controller";
 
 // Import Middlewares
 import { AuthHandler } from "./middlewares/authHandler.middleware";
@@ -16,10 +17,7 @@ const router: Router = Router();
 
 router.use("/Auth", [registerRouter, loginRouter, logoutRouter]);
 router.use("/users", usersRouter);
-// router.use("/bills", billsRouter);
-// router.use("/transactions", transactionsRouter);
-// router.use("/additionals", additionalsRouter);
-// router.use("/currency", currencyRouter);
+router.use("/bills", billsRouter);
 
 router.use("/utils", utilsRouter);
 

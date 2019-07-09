@@ -47,6 +47,9 @@ export class BillService {
         user: id
       }
     });
+
+    console.log(bill);
+
     if (bill && bill.length > 0) {
       return bill[0];
     } else {
