@@ -9,6 +9,7 @@ import loginRouter from "./controllers/login.controller";
 import logoutRouter from "./controllers/logout.controller";
 import billsRouter from "./controllers/bills.controller";
 import searchRouter from "./controllers/search.controller";
+
 // Import Middlewares
 import { AuthHandler } from "./middlewares/authHandler.middleware";
 

@@ -1,8 +1,9 @@
-import { getManager, Repository, Like } from "typeorm";
+import { getManager, Repository, Like, Not } from "typeorm";
 import { Bill } from "../entities/bill.entity";
 import { User } from "../entities/user.entity";
 import { Logger, ILogger } from "../utils/logger";
 import { Currency } from "../entities/currency.entity";
+import { UserService } from "./users.service";
 
 export class BillService {
   billRepository: Repository<Bill>;
@@ -45,7 +46,7 @@ export class BillService {
   /**
    * Returns a bill by userId
    */
-  async getByUserId(id: number): Promise<Bill | undefined> {
+  async getByUserId(id: string | number): Promise<Bill | undefined> {
     const bill = await this.billRepository.findOne({
       where: {
         user: id
@@ -63,18 +64,26 @@ export class BillService {
   }
 
   /**
-   * Returns a bill by account bill
+   * Returns a bills by account bill
    */
-  //todo: nie pozwol na wyszukanie swojego numeru konta
-  async getByAccountBill(accountBill: string): Promise<Bill | undefined> {
+  async getByAccountBill(
+    accountBill: string,
+    id?: number
+  ): Promise<Object | undefined> {
+    const userService = new UserService();
+    const user = await userService.getById(id);
+
     const bills = await this.billRepository.find({
+      select: ["accountBill"],
       where: {
-        accountBill: Like(`${accountBill}%`)
+        accountBill: Like(`${accountBill}%`),
+        user: Not(`${user.id}`)
       },
       relations: ["user"]
     });
+
     if (bills) {
-      return bills[0];
+      return bills;
     } else {
       return undefined;
     }
@@ -92,5 +101,22 @@ export class BillService {
     const isAccountBill = await this.getByAccountBill(accountBill);
 
     return isAccountBill ? await this.generateAccountBill() : accountBill;
+  }
+
+  /**
+   * Returns a bill by userId
+   */
+  async isAmountMoney(amountMoney: number, id: number): Promise<boolean> {
+    const bill = await this.billRepository.findOne({
+      where: {
+        user: id
+      }
+    });
+
+    if (bill.availableFunds >= amountMoney && amountMoney > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

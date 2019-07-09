@@ -30,7 +30,6 @@ searchRouter
 
     async (req: Request, res: Response, next: NextFunction) => {
       const billService = new BillService();
-
       const validationErrors = validationResult(req);
 
       if (!validationErrors.isEmpty()) {
@@ -44,15 +43,12 @@ searchRouter
 
       try {
         const accountBill = req.params.accountBill;
-        const bill = await billService.getByAccountBill(accountBill);
+        const userId = req.user.id;
+        const bills = await billService.getByAccountBill(accountBill, userId);
 
-        if (bill) {
+        if (bills) {
           res.status(HttpStatus.OK).json({
-            accountBill: bill.accountBill,
-            user: {
-              name: bill.user.name,
-              surname: bill.user.surname
-            }
+            bills
           });
         }
       } catch (error) {

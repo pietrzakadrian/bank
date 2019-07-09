@@ -19,11 +19,11 @@ const logoutRouter: Router = Router();
  * Logout User
  *
  * @Method PUT
- * @URL /api/auth/logout/:id
+ * @URL /api/auth/logout
  *
  */
 logoutRouter
-  .route("/logout/:id")
+  .route("/logout")
 
   .put(
     [
@@ -48,7 +48,8 @@ logoutRouter
       }
 
       try {
-        await userService.setLastSuccessfulLoggedDate(req.params.id);
+        const userId = req.user.id;
+        await userService.setLastSuccessfulLoggedDate(userId);
         res.status(HttpStatus.OK).json({
           success: true
         });

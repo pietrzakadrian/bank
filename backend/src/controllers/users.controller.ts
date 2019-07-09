@@ -123,19 +123,13 @@ usersRouter
  * Returns basic data about the user
  *
  * @Method GET
- * @URL /api/users/:id
+ * @URL /api/users/
  *
  */
 usersRouter
-  .route("/:id")
+  .route("/")
 
   .get(
-    [
-      param("id")
-        .exists()
-        .isNumeric()
-        .isLength({ min: 1 })
-    ],
     auth.authenticate(),
 
     async (req: Request, res: Response, next: NextFunction) => {
@@ -152,7 +146,8 @@ usersRouter
       }
 
       try {
-        const user = await userService.getById(req.params.id);
+        const userId = req.user.id;
+        const user = await userService.getById(userId);
 
         if (user) {
           res.status(HttpStatus.OK).json({
