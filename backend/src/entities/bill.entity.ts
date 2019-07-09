@@ -15,7 +15,7 @@ export class Bill {
   id: number;
 
   @ManyToOne(type => User, user => user.id, { nullable: false })
-  user: number; // todo: change User
+  user: User;
 
   @Column({ length: 26 })
   accountBill: string;

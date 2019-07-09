@@ -18,6 +18,13 @@ import { Additional } from "../entities/additional.entity";
 
 const registerRouter: Router = Router();
 
+/**
+ * Register User
+ *
+ * @Method POST
+ * @URL /api/auth/register
+ *
+ */
 registerRouter
   .route("/register")
 
@@ -34,7 +41,7 @@ registerRouter
       body("password").isLength({ min: 1, max: 255 }),
       body("currencyId")
         .isNumeric()
-        .isLength({ min: 1 })
+        .isLength({ min: 1, max: 1 })
     ],
 
     async (req: Request, res: Response, next: NextFunction) => {
@@ -43,6 +50,7 @@ registerRouter
       const additionalService = new AdditionalService();
 
       const validationErrors = validationResult(req);
+
       const isLogin = await userService.getByLogin(req.body.login);
       const isEmail = await userService.getByEmail(req.body.email);
 
@@ -62,23 +70,23 @@ registerRouter
         user.email = req.body.email;
         user.login = req.body.login;
         user.password = req.body.password;
+
         const userRepository = getManager().getRepository(User);
         user = userRepository.create(user);
-        await userService.insert(user);
-        const newUser = await getManager().save(user);
-
-        console.log("newUser", newUser);
+        user = await userService.insert(user);
 
         let bill = new Bill();
-        bill.user.id = newUser.id;
+        bill.user = userRepository.getId(user);
         bill.accountBill = await billService.generateAccountBill();
         bill.currency = req.body.currencyId;
+
         const billRepository = getManager().getRepository(Bill);
         bill = billRepository.create(bill);
         await billService.insert(bill);
 
         let additional = new Additional();
-        additional.user = newUser.id;
+        additional.user = userRepository.getId(user);
+
         const additionalRepository = getManager().getRepository(Additional);
         additional = additionalRepository.create(additional);
         await additionalService.insert(additional);

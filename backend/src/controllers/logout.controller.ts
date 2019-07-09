@@ -15,6 +15,13 @@ import { AuthHandler } from "../middlewares/authHandler.middleware";
 const auth = new AuthHandler();
 const logoutRouter: Router = Router();
 
+/**
+ * Logout User
+ *
+ * @Method PUT
+ * @URL /api/auth/logout/:id
+ *
+ */
 logoutRouter
   .route("/logout/:id")
 

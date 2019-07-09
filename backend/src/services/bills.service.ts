@@ -1,6 +1,8 @@
-import { getManager, Repository } from "typeorm";
+import { getManager, Repository, Like } from "typeorm";
 import { Bill } from "../entities/bill.entity";
+import { User } from "../entities/user.entity";
 import { Logger, ILogger } from "../utils/logger";
+import { Currency } from "../entities/currency.entity";
 
 export class BillService {
   billRepository: Repository<Bill>;
@@ -21,9 +23,11 @@ export class BillService {
   /**
    * Inserts a new Bill into the database.
    */
-  async insert(data: Bill): Promise<Bill> {
-    this.logger.info("Create a new bill", data);
-    const newBill = this.billRepository.create(data);
+  async insert(bill: Bill): Promise<Bill> {
+    this.logger.info("Create a new bill", bill);
+    const newBill = this.billRepository.create(bill);
+    console.log("newBill", newBill);
+
     return await this.billRepository.save(newBill);
   }
 
@@ -42,16 +46,17 @@ export class BillService {
    * Returns a bill by userId
    */
   async getByUserId(id: number): Promise<Bill | undefined> {
-    const bill = await this.billRepository.find({
+    const bill = await this.billRepository.findOne({
       where: {
         user: id
-      }
+      },
+      relations: ["user", "currency"]
     });
 
-    console.log(bill);
+    console.log();
 
-    if (bill && bill.length > 0) {
-      return bill[0];
+    if (bill) {
+      return bill;
     } else {
       return undefined;
     }
@@ -60,14 +65,16 @@ export class BillService {
   /**
    * Returns a bill by account bill
    */
+  //todo: nie pozwol na wyszukanie swojego numeru konta
   async getByAccountBill(accountBill: string): Promise<Bill | undefined> {
-    const bill = await this.billRepository.find({
+    const bills = await this.billRepository.find({
       where: {
-        accountBill
-      }
+        accountBill: Like(`${accountBill}%`)
+      },
+      relations: ["user"]
     });
-    if (bill && bill.length > 0) {
-      return bill[0];
+    if (bills) {
+      return bills[0];
     } else {
       return undefined;
     }

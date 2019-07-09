@@ -14,6 +14,13 @@ import { AuthHandler } from "../middlewares/authHandler.middleware";
 
 const loginRouter: Router = Router();
 
+/**
+ * Login User
+ *
+ * @Method POST
+ * @URL /api/auth/login
+ *
+ */
 loginRouter
   .route("/login")
 

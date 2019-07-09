@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  Unique,
+  JoinTable,
   ManyToOne
 } from "typeorm";
 import { User } from "./user.entity";
@@ -13,7 +13,7 @@ export class Additional {
   id: number;
 
   @ManyToOne(type => User, user => user.id, { nullable: false })
-  user: Number;
+  user: User;
 
   @Column({ length: 20000, default: "0,0" })
   accountBalanceHistory: string;

@@ -8,7 +8,7 @@ import registerRouter from "./controllers/register.controller";
 import loginRouter from "./controllers/login.controller";
 import logoutRouter from "./controllers/logout.controller";
 import billsRouter from "./controllers/bills.controller";
-
+import searchRouter from "./controllers/search.controller";
 // Import Middlewares
 import { AuthHandler } from "./middlewares/authHandler.middleware";
 
@@ -17,7 +17,7 @@ const router: Router = Router();
 
 router.use("/Auth", [registerRouter, loginRouter, logoutRouter]);
 router.use("/users", usersRouter);
-router.use("/bills", billsRouter);
+router.use("/bills", auth.authenticate(), [billsRouter, searchRouter]);
 
 router.use("/utils", utilsRouter);
 

@@ -3,35 +3,33 @@ import * as HttpStatus from "http-status-codes";
 import { param, validationResult } from "express-validator/check";
 
 // Import Services
-import { AdditionalService } from "../services/additionals.service";
 import { BillService } from "../services/bills.service";
 
 // Import Interfaces
 import { responseError } from "../resources/interfaces/responseError.interface";
 
-const billsRouter: Router = Router();
+const searchRouter: Router = Router();
 
 /**
- * Returns basic data about the user
+ * Returns the result of the search for the account bill
  *
  * @Method GET
- * @URL /api/bills/:id
+ * @URL /api/bills/:accountBill/search
  *
  */
-billsRouter
-  .route("/:id")
+searchRouter
+  .route("/:accountBill/search")
 
   .get(
     [
-      param("id")
+      param("accountBill")
         .exists()
         .isNumeric()
-        .isLength({ min: 1 })
+        .isLength({ min: 1, max: 26 })
     ],
 
     async (req: Request, res: Response, next: NextFunction) => {
       const billService = new BillService();
-      const additionalService = new AdditionalService();
 
       const validationErrors = validationResult(req);
 
@@ -45,22 +43,15 @@ billsRouter
       }
 
       try {
-        const userId = req.params.id;
-        const bill = await billService.getByUserId(userId);
-        const additional = await additionalService.getByUserId(userId);
+        const accountBill = req.params.accountBill;
+        const bill = await billService.getByAccountBill(accountBill);
 
-        if (bill && additional) {
+        if (bill) {
           res.status(HttpStatus.OK).json({
             accountBill: bill.accountBill,
-            availableFunds: bill.availableFunds,
-            currency: {
-              id: bill.currency.id,
-              name: bill.currency.name
-            },
-            additionals: {
-              accountBalanceHistory: additional.accountBalanceHistory,
-              incomingTransfersSum: additional.incomingTransfersSum,
-              outgoingTransfersSum: additional.outgoingTransfersSum
+            user: {
+              name: bill.user.name,
+              surname: bill.user.surname
             }
           });
         }
@@ -75,4 +66,4 @@ billsRouter
     }
   );
 
-export default billsRouter;
+export default searchRouter;

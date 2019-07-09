@@ -1,13 +1,14 @@
 import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
-import { responseError } from "../resources/interfaces/responseError.interface";
-import { UserService } from "../services/users.service";
 import { body, param, validationResult } from "express-validator/check";
 
 // Import Middlewares
 import { AuthHandler } from "../middlewares/authHandler.middleware";
-import { User } from "../entities/user.entity";
-import { getManager } from "typeorm";
+
+// Impoty Services
+import { UserService } from "../services/users.service";
+// Import Interfaces
+import { responseError } from "../resources/interfaces/responseError.interface";
 
 const auth = new AuthHandler();
 const usersRouter: Router = Router();
@@ -18,10 +19,9 @@ const usersRouter: Router = Router();
  * @Method GET
  * @URL /api/users/isLogin/:login
  *
- * @return {boolean}
  */
 usersRouter
-  .route("/isLogin/:login")
+  .route("/:login/isLogin")
 
   .get(
     [
@@ -70,12 +70,11 @@ usersRouter
  * Checks whether the email already exists
  *
  * @Method GET
- * @URL /api/users/isEmail/:email
+ * @URL /api/users/:email/isEmail
  *
- * @return {boolean}
  */
 usersRouter
-  .route("/isEmail/:email")
+  .route("/:email/isEmail")
 
   .get(
     [
@@ -126,7 +125,6 @@ usersRouter
  * @Method GET
  * @URL /api/users/:id
  *
- * @return {object}
  */
 usersRouter
   .route("/:id")
