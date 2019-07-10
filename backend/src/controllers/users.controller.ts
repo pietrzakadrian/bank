@@ -18,7 +18,7 @@ const usersRouter: Router = Router();
  * Checks whether the login already exists
  *
  * @Method GET
- * @URL /api/users/isLogin/:login
+ * @URL /api/users/:login/isLogin/
  *
  */
 usersRouter
@@ -124,7 +124,7 @@ usersRouter
  * Returns basic data about the user
  *
  * @Method GET
- * @URL /api/users/
+ * @URL /api/users
  *
  */
 usersRouter
@@ -135,16 +135,6 @@ usersRouter
 
     async (req: Request, res: Response, next: NextFunction) => {
       const userService = new UserService();
-      const validationErrors = validationResult(req);
-
-      if (!validationErrors.isEmpty()) {
-        const err: responseError = {
-          success: false,
-          code: HttpStatus.BAD_REQUEST,
-          error: validationErrors.array()
-        };
-        return next(err);
-      }
 
       try {
         const userId = req.user.id;

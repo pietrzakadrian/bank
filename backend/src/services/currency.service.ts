@@ -12,13 +12,9 @@ export class CurrencyService {
   }
 
   /**
-   * Returns a currency by given id
+   * Returns array of all currency from db
    */
-  async getById(id: string | number): Promise<Currency> {
-    this.logger.info("Fetching additional by id: ", id);
-    if (id) {
-      return await this.currencyRepository.findOne(id);
-    }
-    return Promise.reject(false);
+  async getAll(): Promise<Currency[]> {
+    return await this.currencyRepository.find();
   }
 }

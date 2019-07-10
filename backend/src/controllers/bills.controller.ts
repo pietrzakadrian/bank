@@ -25,17 +25,6 @@ billsRouter
     const billService = new BillService();
     const additionalService = new AdditionalService();
 
-    const validationErrors = validationResult(req);
-
-    if (!validationErrors.isEmpty()) {
-      const err: responseError = {
-        success: false,
-        code: HttpStatus.BAD_REQUEST,
-        error: validationErrors.array()
-      };
-      return next(err);
-    }
-
     try {
       const userId = req.user.id;
       const bill = await billService.getByUserId(userId);

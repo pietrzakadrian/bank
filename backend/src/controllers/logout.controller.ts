@@ -26,26 +26,10 @@ logoutRouter
   .route("/logout")
 
   .put(
-    [
-      param("id")
-        .isNumeric()
-        .isLength({ min: 1 })
-    ],
     auth.authenticate(),
 
     async (req: Request, res: Response, next: NextFunction) => {
       const userService = new UserService();
-
-      const validationErrors = validationResult(req);
-
-      if (!validationErrors.isEmpty()) {
-        const err: responseError = {
-          success: false,
-          code: HttpStatus.BAD_REQUEST,
-          error: validationErrors.array()
-        };
-        return next(err);
-      }
 
       try {
         const userId = req.user.id;
