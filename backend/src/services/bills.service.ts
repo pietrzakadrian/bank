@@ -1,4 +1,4 @@
-import { getManager, Repository, Like, Not } from "typeorm";
+import { getManager, Repository, Like, Not, getRepository } from "typeorm";
 import { Bill } from "../entities/bill.entity";
 import { User } from "../entities/user.entity";
 import { Logger, ILogger } from "../utils/logger";
@@ -27,8 +27,6 @@ export class BillService {
   async insert(bill: Bill): Promise<Bill> {
     this.logger.info("Create a new bill", bill);
     const newBill = this.billRepository.create(bill);
-    console.log("newBill", newBill);
-
     return await this.billRepository.save(newBill);
   }
 
@@ -47,14 +45,15 @@ export class BillService {
    * Returns a bill by userId
    */
   async getByUserId(id: string | number): Promise<Bill | undefined> {
+    const userService = new UserService();
+    const user = await userService.getById(id);
+
     const bill = await this.billRepository.findOne({
       where: {
-        user: id
+        user
       },
       relations: ["user", "currency"]
     });
-
-    console.log();
 
     if (bill) {
       return bill;
@@ -67,23 +66,33 @@ export class BillService {
    * Returns a bills by account bill
    */
   async getByAccountBill(
-    accountBill: string,
+    accountBill: number | string,
     id?: number
-  ): Promise<Object | undefined> {
+  ): Promise<Array<object> | undefined> {
     const userService = new UserService();
-    const user = await userService.getById(id);
+    const user = id ? await userService.getById(id) : undefined;
 
-    const bills = await this.billRepository.find({
+    const bills: Bill[] = await this.billRepository.find({
       select: ["accountBill"],
-      where: {
-        accountBill: Like(`${accountBill}%`),
-        user: Not(`${user.id}`)
-      },
+      where: [
+        {
+          accountBill: Like(`${accountBill}%`),
+          user: Not(`${user}`)
+        }
+      ],
       relations: ["user"]
     });
 
     if (bills) {
-      return bills;
+      const transformBills = bills.map(({ ...bill }) => ({
+        accountBill: bill.accountBill,
+        user: {
+          name: bill.user.name,
+          surname: bill.user.surname
+        }
+      }));
+
+      return transformBills;
     } else {
       return undefined;
     }
@@ -100,16 +109,21 @@ export class BillService {
     const accountBill = `${firstPart}${secoundPart}${thirdPart}`;
     const isAccountBill = await this.getByAccountBill(accountBill);
 
-    return isAccountBill ? await this.generateAccountBill() : accountBill;
+    return isAccountBill.length
+      ? await this.generateAccountBill()
+      : accountBill;
   }
 
   /**
    * Returns a bill by userId
    */
   async isAmountMoney(amountMoney: number, id: number): Promise<boolean> {
+    const userService = new UserService();
+    const user = userService.getById(id);
+
     const bill = await this.billRepository.findOne({
       where: {
-        user: id
+        user
       }
     });
 

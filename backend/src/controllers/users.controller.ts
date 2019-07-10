@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
-import { body, param, validationResult } from "express-validator/check";
+import { param, validationResult } from "express-validator/check";
 
 // Import Middlewares
 import { AuthHandler } from "../middlewares/authHandler.middleware";
 
 // Impoty Services
 import { UserService } from "../services/users.service";
+
 // Import Interfaces
 import { responseError } from "../resources/interfaces/responseError.interface";
 

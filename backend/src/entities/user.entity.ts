@@ -5,8 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  Unique,
-  UpdateDateColumn
+  Unique
 } from "typeorm";
 
 @Entity("users")

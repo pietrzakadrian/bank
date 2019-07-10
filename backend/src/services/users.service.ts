@@ -49,13 +49,13 @@ export class UserService {
    * Returns a user by email
    */
   async getByEmail(email: string): Promise<User | undefined> {
-    const user = await this.userRepository.find({
+    const user = await this.userRepository.findOne({
       where: {
         email: email
       }
     });
-    if (user && user.length > 0) {
-      return user[0];
+    if (user) {
+      return user;
     } else {
       return undefined;
     }
@@ -65,13 +65,13 @@ export class UserService {
    * Returns a user by login
    */
   async getByLogin(login: number): Promise<User | undefined> {
-    const user = await this.userRepository.find({
+    const user = await this.userRepository.findOne({
       where: {
         login
       }
     });
-    if (user && user.length > 0) {
-      return user[0];
+    if (user) {
+      return user;
     } else {
       return undefined;
     }

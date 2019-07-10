@@ -5,6 +5,8 @@ import {
   Unique,
   ManyToOne
 } from "typeorm";
+
+// Import Entities
 import { User } from "./user.entity";
 import { Currency } from "./currency.entity";
 

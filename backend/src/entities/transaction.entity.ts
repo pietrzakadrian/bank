@@ -6,6 +6,8 @@ import {
   CreateDateColumn,
   JoinTable
 } from "typeorm";
+
+// Import Entities
 import { Bill } from "./bill.entity";
 import { Currency } from "./currency.entity";
 

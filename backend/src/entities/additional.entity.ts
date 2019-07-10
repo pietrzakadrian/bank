@@ -1,10 +1,6 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  JoinTable,
-  ManyToOne
-} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+
+// Import Entities
 import { User } from "./user.entity";
 
 @Entity("additionals")
