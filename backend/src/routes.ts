@@ -10,6 +10,7 @@ import logoutRouter from "./controllers/logout.controller";
 import billsRouter from "./controllers/bills.controller";
 import searchRouter from "./controllers/search.controller";
 import currencyRouter from "./controllers/currency.controller";
+import notificationsRouter from "./controllers/notifications.controller";
 
 // Import Middlewares
 import { AuthHandler } from "./middlewares/authHandler.middleware";
@@ -20,6 +21,7 @@ const router: Router = Router();
 router.use("/Auth", [registerRouter, loginRouter, logoutRouter]);
 router.use("/users", usersRouter);
 router.use("/bills", auth.authenticate(), [billsRouter, searchRouter]);
+router.use("/additionals", auth.authenticate(), notificationsRouter);
 router.use("/currency", currencyRouter);
 
 router.use("/utils", utilsRouter);
