@@ -80,4 +80,57 @@ transactionsRouter
     }
   });
 
+/**
+ * Returns transfers gets by user
+ *
+ * @Method GET
+ * @URL /api/transactions/:offset
+ *
+ */
+transactionsRouter
+  .route("/:offset")
+
+  .get(
+    [
+      param("offset")
+        .exists()
+        .isNumeric()
+    ],
+
+    async (req: Request, res: Response, next: NextFunction) => {
+      const transactionService = new TransactionService();
+      const validationErrors = validationResult(req);
+      const userId = req.user.id;
+      const offset = req.params.offset;
+
+      if (!validationErrors.isEmpty()) {
+        const err: responseError = {
+          success: false,
+          code: HttpStatus.BAD_REQUEST,
+          error: validationErrors.array()
+        };
+        return next(err);
+      }
+
+      try {
+        const transactions = await transactionService.getTransactions(
+          userId,
+          offset
+        );
+
+        if (transactions)
+          return res.status(HttpStatus.OK).json({
+            transactions
+          });
+      } catch (error) {
+        const err: responseError = {
+          success: false,
+          code: HttpStatus.BAD_REQUEST,
+          error
+        };
+        next(err);
+      }
+    }
+  );
+
 export default transactionsRouter;
