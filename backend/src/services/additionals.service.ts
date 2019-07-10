@@ -1,6 +1,7 @@
 import { getManager, Repository } from "typeorm";
 import { Additional } from "../entities/additional.entity";
 import { Logger, ILogger } from "../utils/logger";
+import { UserService } from "./users.service";
 
 export class AdditionalService {
   additionalRepository: Repository<Additional>;
@@ -28,6 +29,26 @@ export class AdditionalService {
   }
 
   /**
+   * Unsets user's all notifications
+   */
+  async unsetNotifications(id: number): Promise<Object | undefined> {
+    const userService = new UserService();
+    const user = await userService.getById(id);
+
+    try {
+      return await this.additionalRepository.update(
+        { user },
+        {
+          notificationCount: 0,
+          notificationStatus: false
+        }
+      );
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
    * Returns a additional by given id
    */
   async getById(id: string | number): Promise<Additional> {
@@ -42,13 +63,16 @@ export class AdditionalService {
    * Returns a bill by userId
    */
   async getByUserId(id: number): Promise<Additional | undefined> {
-    const additional = await this.additionalRepository.find({
+    const userService = new UserService();
+    const user = await userService.getById(id);
+
+    const additional = await this.additionalRepository.findOne({
       where: {
-        user: id
+        user
       }
     });
-    if (additional && additional.length > 0) {
-      return additional[0];
+    if (additional) {
+      return additional;
     } else {
       return undefined;
     }

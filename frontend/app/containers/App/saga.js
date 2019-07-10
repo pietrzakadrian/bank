@@ -79,9 +79,7 @@ export function* handleLogged() {
 export function* handleNotifications() {
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
-  const requestURL = `${api.baseURL}${
-    api.additionals.isNotificationPath
-  }${userId}`;
+  const requestURL = `${api.baseURL}${api.additionals.isNotificationPath}${userId}`;
 
   try {
     const response = yield call(request, requestURL, {
@@ -157,9 +155,7 @@ export function* handleNewNotifications() {
   const notifications = yield select(makeNotificationsSelector());
   const token = yield select(makeTokenSelector());
   const userId = yield select(makeUserIdSelector());
-  const requestURL = `${api.baseURL}${
-    api.additionals.unsetNotificationPath
-  }${userId}`;
+  const requestURL = `${api.baseURL}${api.additionals.unsetNotificationPath}${userId}`;
 
   if (isOpenNotifications && notifications.length) {
     try {

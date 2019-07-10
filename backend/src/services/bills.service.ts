@@ -119,7 +119,7 @@ export class BillService {
    */
   async isAmountMoney(amountMoney: number, id: number): Promise<boolean> {
     const userService = new UserService();
-    const user = userService.getById(id);
+    const user = await userService.getById(id);
 
     const bill = await this.billRepository.findOne({
       where: {

@@ -29,11 +29,12 @@ notificationsRouter
 
     try {
       const userId = req.user.id;
-      const response = await additionalService.getByUserId(userId);
-      console.log("response", response);
+      const additional = await additionalService.getByUserId(userId);
 
-      const isNotification = response.notificationStatus;
-      const notificationCount = response.notificationCount;
+      console.log("additional", additional);
+
+      const isNotification = additional.notificationStatus;
+      const notificationCount = additional.notificationCount;
 
       if (isNotification)
         return res.status(HttpStatus.OK).json({
@@ -44,6 +45,38 @@ notificationsRouter
       res.status(HttpStatus.OK).json({
         isNotification: false
       });
+    } catch (error) {
+      const err: responseError = {
+        success: false,
+        code: HttpStatus.BAD_REQUEST,
+        error
+      };
+      next(err);
+    }
+  });
+
+/**
+ * Unsets all notifications
+ *
+ * @Method PUT
+ * @URL /api/additionals/notifications
+ *
+ */
+notificationsRouter
+  .route("/notifications")
+
+  .put(async (req: Request, res: Response, next: NextFunction) => {
+    const additionalService = new AdditionalService();
+
+    try {
+      const userId = req.user.id;
+      const additional = await additionalService.unsetNotifications(userId);
+
+      if (additional) {
+        res.status(HttpStatus.OK).json({
+          success: true
+        });
+      }
     } catch (error) {
       const err: responseError = {
         success: false,

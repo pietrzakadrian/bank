@@ -223,6 +223,7 @@ const paymentPageReducer = (state = initialState, action) =>
         break;
       case PAYMENT_STEP_BACK:
         draft.activeStep -= 1;
+        draft.isSendAuthorizationKey = false;
         draft.error = '';
         break;
     }
