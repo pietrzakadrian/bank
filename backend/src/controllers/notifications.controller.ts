@@ -87,4 +87,71 @@ notificationsRouter
     }
   });
 
+/**
+ * Get user's new notifications
+ *
+ * @Method GET
+ * @URL /api/additionals/notifications?:limit
+ *
+ */
+notificationsRouter
+  .route("/notifications/:limit")
+
+  .get(
+    [
+      param("limit")
+        .exists()
+        .isNumeric()
+    ],
+
+    async (req: Request, res: Response, next: NextFunction) => {
+      const additionalService = new AdditionalService();
+      const validationErrors = validationResult(req);
+
+      if (!validationErrors.isEmpty()) {
+        const err: responseError = {
+          success: false,
+          code: HttpStatus.BAD_REQUEST,
+          error: validationErrors.array()
+        };
+        return next(err);
+      }
+
+      try {
+        const userId = req.user.id;
+        const limit = req.params.limit;
+        const notifications = await additionalService.getNotifications(
+          userId,
+          limit
+        );
+
+        if (notifications) {
+          const transformNotifcations = notifications.map(
+            ({ ...notification }) => ({
+              amountMoney: notification.amountMoney,
+              currency: notification.currency.name,
+              createdDate: notification.createdDate,
+              sender: {
+                name: notification.sender.user.name,
+                surname: notification.sender.user.surname
+              }
+            })
+          );
+
+          res.status(HttpStatus.OK).json({
+            success: true,
+            transformNotifcations
+          });
+        }
+      } catch (error) {
+        const err: responseError = {
+          success: false,
+          code: HttpStatus.BAD_REQUEST,
+          error
+        };
+        next(err);
+      }
+    }
+  );
+
 export default notificationsRouter;
