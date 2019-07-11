@@ -8,6 +8,8 @@ import { BillService } from "../services/bills.service";
 
 // Import Interfaces
 import { responseError } from "../resources/interfaces/responseError.interface";
+import { getManager } from "typeorm";
+import { User } from "../entities/user.entity";
 
 const billsRouter: Router = Router();
 
@@ -89,12 +91,18 @@ billsRouter
       try {
         const accountBill = req.params.accountBill;
         const userId = req.user.id;
-        const bill = await billService.getByAccountBill(accountBill, userId);
+        const userRepository = getManager().getRepository(User);
+        const bills = await billService.getUsersByAccountBill(
+          accountBill,
+          userId
+        );
+        const recipient = await billService.getByAccountBill(accountBill);
+        const recipientId = userRepository.getId(recipient.user);
 
-        if (bill)
+        if (bills)
           return res.status(HttpStatus.OK).json({
             isAccountBill: true,
-            recipientId: bill
+            recipientId
           });
 
         res.status(HttpStatus.OK).json({

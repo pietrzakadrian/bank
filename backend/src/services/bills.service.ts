@@ -63,10 +63,30 @@ export class BillService {
   }
 
   /**
-   * Returns a bills by account bill
+   * Returns a bill by userId
    */
   async getByAccountBill(
-    accountBill: number | string,
+    accountBill: string | number
+  ): Promise<Bill | undefined> {
+    const bill = await this.billRepository.findOne({
+      where: {
+        accountBill
+      },
+      relations: ["user"]
+    });
+
+    if (bill) {
+      return bill;
+    } else {
+      return undefined;
+    }
+  }
+
+  /**
+   * Returns a bills by account bill
+   */
+  async getUsersByAccountBill(
+    accountBill: string,
     id?: number
   ): Promise<Array<object> | undefined> {
     const userService = new UserService();
@@ -107,7 +127,7 @@ export class BillService {
     const thirdPart = 22199722;
 
     const accountBill = `${firstPart}${secoundPart}${thirdPart}`;
-    const isAccountBill = await this.getByAccountBill(accountBill);
+    const isAccountBill = await this.getUsersByAccountBill(accountBill);
 
     return isAccountBill.length
       ? await this.generateAccountBill()

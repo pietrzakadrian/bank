@@ -44,7 +44,10 @@ searchRouter
       try {
         const accountBill = req.params.accountBill;
         const userId = req.user.id;
-        const bills = await billService.getByAccountBill(accountBill, userId);
+        const bills = await billService.getUsersByAccountBill(
+          accountBill,
+          userId
+        );
 
         if (bills) {
           res.status(HttpStatus.OK).json({

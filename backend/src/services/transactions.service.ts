@@ -13,6 +13,15 @@ export class TransactionService {
   }
 
   /**
+   * Creates a new Transaction into the database.
+   */
+  async insert(data: Transaction): Promise<Transaction> {
+    this.logger.info("Create a new transaction", data);
+    const newTransaction = this.transactionRepository.create(data);
+    return await this.transactionRepository.save(newTransaction);
+  }
+
+  /**
    * Returns the last four transactions sent by the user
    */
   async getSenderTransactions(id: number): Promise<Array<object> | undefined> {
@@ -170,5 +179,21 @@ export class TransactionService {
     } else {
       return undefined;
     }
+  }
+
+  /**
+   * Returns authorization key for payments
+   */
+  generateAuthorizationKey(): string {
+    let authorizationKey = "";
+    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    for (let i = 0; i < 5; i++) {
+      authorizationKey += possible.charAt(
+        Math.floor(Math.random() * possible.length)
+      );
+    }
+
+    return authorizationKey;
   }
 }
