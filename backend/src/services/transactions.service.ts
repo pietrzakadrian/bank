@@ -91,7 +91,7 @@ export class TransactionService {
   }
 
   /**
-   * Returns the last four transactions sent by the user
+   * Returns the last transactions sent by the user
    */
   async getTransactions(id: number, skip: number): Promise<object | undefined> {
     const userService = new UserService();
@@ -135,12 +135,38 @@ export class TransactionService {
             surname: transaction.recipient.user.surname,
             accountBill: transaction.recipient.accountBill
           }
-        }))
+        })),
+        { count: transactions[1] }
       ];
-
-      //todo: const number = transactions[1];
-
       return transformTransactions;
+    } else {
+      return undefined;
+    }
+  }
+
+  /**
+   * Returns the last transaction's key
+   */
+  async getAuthorizationKey(
+    senderId: number,
+    recipientId: number
+  ): Promise<Object | undefined> {
+    const userService = new UserService();
+    const sender = await userService.getById(senderId);
+    const recipient = await userService.getById(recipientId);
+
+    const transaction = await this.transactionRepository.findOne({
+      where: {
+        sender,
+        recipient
+      },
+      order: {
+        createdDate: "DESC"
+      }
+    });
+
+    if (transaction) {
+      return transaction.authorizationKey;
     } else {
       return undefined;
     }
