@@ -12,6 +12,7 @@ import currencyRouter from "./controllers/currency.controller";
 import notificationsRouter from "./controllers/notifications.controller";
 import transactionsRouter from "./controllers/transactions.controller";
 import createRouter from "./controllers/create.controller";
+import confirmRouter from "./controllers/confirm.controller";
 
 // Import Middlewares
 import { AuthHandler } from "./middlewares/authHandler.middleware";
@@ -24,7 +25,8 @@ router.use("/users", usersRouter);
 router.use("/bills", auth.authenticate(), [billsRouter, searchRouter]);
 router.use("/transactions", auth.authenticate(), [
   transactionsRouter,
-  createRouter
+  createRouter,
+  confirmRouter
 ]);
 router.use("/additionals", auth.authenticate(), notificationsRouter);
 router.use("/currency", currencyRouter);

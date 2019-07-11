@@ -2,6 +2,8 @@ import { getManager, Repository } from "typeorm";
 import { Logger, ILogger } from "../utils/logger";
 import { Transaction } from "../entities/transaction.entity";
 import { UserService } from "./users.service";
+import { User } from "../entities/user.entity";
+import { Currency } from "../entities/currency.entity";
 
 export class TransactionService {
   transactionRepository: Repository<Transaction>;
@@ -10,6 +12,38 @@ export class TransactionService {
   constructor() {
     this.logger = new Logger(__filename);
     this.transactionRepository = getManager().getRepository(Transaction);
+  }
+
+  /**
+   * Returns array of all users from db
+   */
+  async getOne(
+    amountMoney: number,
+    transferTitle: string,
+    authorizationKey: string,
+    sender: User,
+    recipient: User,
+    currency: Currency
+  ): Promise<Transaction> {
+    const transaction = await this.transactionRepository.findOne({
+      where: {
+        amountMoney,
+        transferTitle,
+        sender,
+        recipient,
+        authorizationKey,
+        authorizationStatus: false,
+        currency
+      },
+      order: {
+        createdDate: "DESC"
+      }
+    });
+
+    if (transaction) {
+      return transaction;
+    }
+    return Promise.reject(false);
   }
 
   /**
