@@ -11,7 +11,6 @@ import { AdditionalService } from "../services/additionals.service";
 // Import Interfaces
 import { responseError } from "../resources/interfaces/responseError.interface";
 
-const auth = new AuthHandler();
 const notificationsRouter: Router = Router();
 
 /**

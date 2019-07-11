@@ -11,7 +11,6 @@ import { TransactionService } from "../services/transactions.service";
 // Import Interfaces
 import { responseError } from "../resources/interfaces/responseError.interface";
 
-const auth = new AuthHandler();
 const transactionsRouter: Router = Router();
 
 /**

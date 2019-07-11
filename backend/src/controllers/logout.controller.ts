@@ -1,7 +1,5 @@
-import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
-import { validationResult, param } from "express-validator/check";
 
 // Import Intefaces
 import { responseError } from "../resources/interfaces/responseError.interface";
