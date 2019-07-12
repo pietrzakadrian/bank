@@ -81,9 +81,9 @@ confirmRouter
 
         if (
           userId === recipientId ||
+          registeredTransaction.authorizationKey !== authorizationKey ||
           !isAmountMoney ||
           !registeredTransaction ||
-          registeredTransaction.authorizationKey !== authorizationKey ||
           !validationErrors.isEmpty()
         ) {
           const err: responseError = {
