@@ -7,7 +7,7 @@ import { AdditionalService } from "../services/additionals.service";
 import { BillService } from "../services/bills.service";
 
 // Import Interfaces
-import { responseError } from "../resources/interfaces/responseError.interface";
+import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 import { getManager } from "typeorm";
 import { User } from "../entities/user.entity";
 
@@ -48,7 +48,7 @@ billsRouter
         });
       }
     } catch (error) {
-      const err: responseError = {
+      const err: ResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -80,7 +80,7 @@ billsRouter
       const validationErrors = validationResult(req);
 
       if (!validationErrors.isEmpty()) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -109,7 +109,7 @@ billsRouter
           isAccountBill: false
         });
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error
@@ -141,7 +141,7 @@ billsRouter
       const validationErrors = validationResult(req);
 
       if (!validationErrors.isEmpty()) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -161,7 +161,7 @@ billsRouter
           isAmountMoney
         });
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

@@ -6,7 +6,7 @@ import { param, validationResult } from "express-validator/check";
 import { BillService } from "../services/bills.service";
 
 // Import Interfaces
-import { responseError } from "../resources/interfaces/responseError.interface";
+import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 
 const searchRouter: Router = Router();
 
@@ -33,7 +33,7 @@ searchRouter
       const validationErrors = validationResult(req);
 
       if (!validationErrors.isEmpty()) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -55,7 +55,7 @@ searchRouter
           });
         }
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

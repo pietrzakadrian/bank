@@ -8,7 +8,7 @@ import { TransactionService } from "../services/transactions.service";
 import { BillService } from "../services/bills.service";
 
 // Import Interfaces
-import { responseError } from "../resources/interfaces/responseError.interface";
+import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 
 // Import Entities
 import { User } from "../entities/user.entity";
@@ -69,7 +69,7 @@ createRouter
           !isAmountMoney ||
           !validationErrors.isEmpty()
         ) {
-          const err: responseError = {
+          const err: ResponseError = {
             success: false,
             code: HttpStatus.BAD_REQUEST,
             error: validationErrors.array()
@@ -94,7 +94,7 @@ createRouter
           success: true
         });
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

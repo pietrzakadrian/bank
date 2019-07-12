@@ -1,9 +1,10 @@
-import { getManager, Repository, Like, Not, getRepository } from "typeorm";
+import { getManager, Repository, Like, Not } from "typeorm";
 import { Bill } from "../entities/bill.entity";
-import { User } from "../entities/user.entity";
 import { Logger, ILogger } from "../utils/logger";
 import { Currency } from "../entities/currency.entity";
 import { UserService } from "./users.service";
+import { Decimal } from "decimal.js";
+import { CurrencyService } from "./currency.service";
 
 export class BillService {
   billRepository: Repository<Bill>;
@@ -137,7 +138,7 @@ export class BillService {
   /**
    * Returns a bill by userId
    */
-  async isAmountMoney(amountMoney: number, id: number): Promise<boolean> {
+  async isAmountMoney(amountMoney: Decimal, id: number): Promise<boolean> {
     const userService = new UserService();
     const user = await userService.getById(id);
 
@@ -147,10 +148,107 @@ export class BillService {
       }
     });
 
-    if (bill.availableFunds >= amountMoney && amountMoney > 0) {
+    if (
+      bill.availableFunds.greaterThanOrEqualTo(amountMoney) &&
+      amountMoney.greaterThan(0)
+    ) {
       return true;
     } else {
       return false;
+    }
+  }
+
+  /**
+   * Returns substract Amount Money by userId
+   */
+  async subAmountMoney(amountMoney: Decimal, id: number) {
+    const userService = new UserService();
+    const user = await userService.getById(id);
+    const userId = user.id;
+
+    try {
+      const bill = await this.getByUserId(userId);
+
+      const availableFunds: Decimal = Decimal.sub(
+        bill.availableFunds,
+        amountMoney
+      );
+
+      return await this.billRepository.update(
+        { user },
+        {
+          availableFunds
+        }
+      );
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Returns add Amount Money by userId
+   */
+  async addAmountMoney(amountMoney: Decimal, id: number, currency: Currency) {
+    const userService = new UserService();
+    const currencyService = new CurrencyService();
+    const user = await userService.getById(id);
+    const userId = user.id;
+    const recipientCurrency = await currencyService.getByUserId(userId);
+    const recipientCurrencyMain = recipientCurrency.main;
+    const recipientExchangeRate = recipientCurrency.exchangeRate;
+
+    try {
+      const bill = await this.getByUserId(userId);
+
+      if (bill.currency === currency) {
+        const availableFunds: Decimal = Decimal.add(
+          bill.availableFunds,
+          amountMoney
+        );
+
+        return await this.billRepository.update(
+          { user },
+          {
+            availableFunds
+          }
+        );
+      }
+
+      if (recipientCurrencyMain) {
+        const convertedAmountMoney: Decimal = Decimal.div(
+          amountMoney,
+          recipientExchangeRate
+        );
+        const availableFunds: Decimal = Decimal.add(
+          bill.availableFunds,
+          convertedAmountMoney
+        );
+
+        return await this.billRepository.update(
+          { user },
+          {
+            availableFunds
+          }
+        );
+      }
+
+      const convertedAmountMoney: Decimal = Decimal.div(
+        amountMoney,
+        currency.exchangeRate
+      ).mul(recipientExchangeRate);
+      const availableFunds: Decimal = Decimal.add(
+        bill.availableFunds,
+        convertedAmountMoney
+      );
+
+      return await this.billRepository.update(
+        { user },
+        {
+          availableFunds
+        }
+      );
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
 }

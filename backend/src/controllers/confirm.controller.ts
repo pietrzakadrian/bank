@@ -8,7 +8,7 @@ import { TransactionService } from "../services/transactions.service";
 import { BillService } from "../services/bills.service";
 
 // Import Interfaces
-import { responseError } from "../resources/interfaces/responseError.interface";
+import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 
 // Import Entities
 import { User } from "../entities/user.entity";
@@ -69,7 +69,6 @@ confirmRouter
           amountMoney,
           userId
         );
-
         const registeredTransaction = await transactionService.getOne(
           amountMoney,
           transferTitle,
@@ -86,7 +85,7 @@ confirmRouter
           !registeredTransaction ||
           !validationErrors.isEmpty()
         ) {
-          const err: responseError = {
+          const err: ResponseError = {
             success: false,
             code: HttpStatus.BAD_REQUEST,
             error: validationErrors.array()
@@ -100,7 +99,7 @@ confirmRouter
           success: true
         });
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

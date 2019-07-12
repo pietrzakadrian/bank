@@ -4,7 +4,7 @@ import * as HttpStatus from "http-status-codes";
 import { getManager } from "typeorm";
 
 // Import Intefaces
-import { responseError } from "../resources/interfaces/responseError.interface";
+import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 
 // Import Services
 import { UserService } from "../services/users.service";
@@ -55,7 +55,7 @@ registerRouter
       const isEmail = await userService.getByEmail(req.body.email);
 
       if (isLogin || isEmail || !validationErrors.isEmpty()) {
-        const error: responseError = {
+        const error: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -95,7 +95,7 @@ registerRouter
           success: true
         });
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

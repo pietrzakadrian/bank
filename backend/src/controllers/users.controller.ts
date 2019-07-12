@@ -9,7 +9,7 @@ import { AuthHandler } from "../middlewares/authHandler.middleware";
 import { UserService } from "../services/users.service";
 
 // Import Interfaces
-import { responseError } from "../resources/interfaces/responseError.interface";
+import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 
 const auth = new AuthHandler();
 const usersRouter: Router = Router();
@@ -37,7 +37,7 @@ usersRouter
       const validationErrors = validationResult(req);
 
       if (!validationErrors.isEmpty()) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -57,7 +57,7 @@ usersRouter
           isLogin: false
         });
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error
@@ -90,7 +90,7 @@ usersRouter
       const validationErrors = validationResult(req);
 
       if (!validationErrors.isEmpty()) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -110,7 +110,7 @@ usersRouter
           isEmail: false
         });
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error
@@ -151,7 +151,7 @@ usersRouter
           });
         }
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

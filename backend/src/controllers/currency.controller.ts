@@ -4,7 +4,7 @@ import * as HttpStatus from "http-status-codes";
 import { validationResult, param } from "express-validator/check";
 
 // Import Intefaces
-import { responseError } from "../resources/interfaces/responseError.interface";
+import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 
 // Import Services
 import { CurrencyService } from "../services/currency.service";
@@ -35,7 +35,7 @@ currencyRouter
         currency
       });
     } catch (error) {
-      const err: responseError = {
+      const err: ResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error

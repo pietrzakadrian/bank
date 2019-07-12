@@ -9,7 +9,7 @@ import { AuthHandler } from "../middlewares/authHandler.middleware";
 import { AdditionalService } from "../services/additionals.service";
 
 // Import Interfaces
-import { responseError } from "../resources/interfaces/responseError.interface";
+import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 
 const notificationsRouter: Router = Router();
 
@@ -45,7 +45,7 @@ notificationsRouter
         isNotification: false
       });
     } catch (error) {
-      const err: responseError = {
+      const err: ResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -77,7 +77,7 @@ notificationsRouter
         });
       }
     } catch (error) {
-      const err: responseError = {
+      const err: ResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -108,7 +108,7 @@ notificationsRouter
       const validationErrors = validationResult(req);
 
       if (!validationErrors.isEmpty()) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -143,7 +143,7 @@ notificationsRouter
           });
         }
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

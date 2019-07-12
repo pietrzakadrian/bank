@@ -9,7 +9,7 @@ import { AuthHandler } from "../middlewares/authHandler.middleware";
 import { TransactionService } from "../services/transactions.service";
 
 // Import Interfaces
-import { responseError } from "../resources/interfaces/responseError.interface";
+import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 
 const transactionsRouter: Router = Router();
 
@@ -37,7 +37,7 @@ transactionsRouter
           senderTransactions
         });
     } catch (error) {
-      const err: responseError = {
+      const err: ResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -70,7 +70,7 @@ transactionsRouter
           recipientTransactions
         });
     } catch (error) {
-      const err: responseError = {
+      const err: ResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -103,7 +103,7 @@ transactionsRouter
       const offset = req.params.offset;
 
       if (!validationErrors.isEmpty()) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -122,7 +122,7 @@ transactionsRouter
             transactions
           });
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error
@@ -156,7 +156,7 @@ transactionsRouter
       const recipientId = req.params.id;
 
       if (!validationErrors.isEmpty()) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -176,7 +176,7 @@ transactionsRouter
             authorizationKey
           });
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

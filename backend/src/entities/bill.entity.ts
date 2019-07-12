@@ -23,7 +23,7 @@ export class Bill {
   accountBill: string;
 
   @Column("double", { default: 0 })
-  availableFunds: number;
+  availableFunds: Decimal;
 
   @ManyToOne(type => Currency, currency => currency.id, { nullable: false })
   currency: Currency;

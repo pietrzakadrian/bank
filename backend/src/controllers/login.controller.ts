@@ -4,7 +4,7 @@ import * as HttpStatus from "http-status-codes";
 import { body, validationResult } from "express-validator/check";
 
 // Import Intefaces
-import { responseError } from "../resources/interfaces/responseError.interface";
+import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 
 // Import Services
 import { UserService } from "../services/users.service";
@@ -47,7 +47,7 @@ loginRouter
         if (!isPasswordCorrect)
           await userService.setLastFailedLoggedDate(req.body.login);
 
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: !isPasswordCorrect
             ? HttpStatus.UNAUTHORIZED
@@ -64,7 +64,7 @@ loginRouter
           token
         });
       } catch (error) {
-        const err: responseError = {
+        const err: ResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error
