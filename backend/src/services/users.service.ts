@@ -1,6 +1,8 @@
 import { getManager, Repository } from "typeorm";
-import { User } from "../entities/user.entity";
 import { Logger, ILogger } from "../utils/logger";
+
+// Import Entities
+import { User } from "../entities/user.entity";
 
 export class UserService {
   userRepository: Repository<User>;

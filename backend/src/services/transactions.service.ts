@@ -1,9 +1,13 @@
 import { getManager, Repository } from "typeorm";
 import { Logger, ILogger } from "../utils/logger";
+
+// Import Entities
 import { Transaction } from "../entities/transaction.entity";
-import { UserService } from "./users.service";
 import { User } from "../entities/user.entity";
 import { Currency } from "../entities/currency.entity";
+
+// Import Services
+import { UserService } from "./users.service";
 
 export class TransactionService {
   transactionRepository: Repository<Transaction>;

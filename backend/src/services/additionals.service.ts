@@ -1,8 +1,12 @@
 import { getManager, Repository } from "typeorm";
+import { Logger, ILogger } from "../utils/logger";
+
+// Import Services
+import { UserService } from "./users.service";
+
+// Import Entities
 import { Additional } from "../entities/additional.entity";
 import { Transaction } from "../entities/transaction.entity";
-import { Logger, ILogger } from "../utils/logger";
-import { UserService } from "./users.service";
 
 export class AdditionalService {
   additionalRepository: Repository<Additional>;

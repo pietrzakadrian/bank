@@ -1,6 +1,8 @@
 import { getManager, Repository } from "typeorm";
-import { Currency } from "../entities/currency.entity";
 import { Logger, ILogger } from "../utils/logger";
+
+// Import Entities
+import { Currency } from "../entities/currency.entity";
 
 export class CurrencyService {
   currencyRepository: Repository<Currency>;

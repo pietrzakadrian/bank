@@ -93,6 +93,9 @@ confirmRouter
           return next(err);
         }
 
+        await billService.subAmountMoney(amountMoney, userId);
+        await billService.addAmountMoney(amountMoney, recipientId, currency);
+
         //todo: sub/add Available Funds
 
         return res.status(HttpStatus.OK).json({

@@ -1,10 +1,14 @@
 import { getManager, Repository, Like, Not } from "typeorm";
-import { Bill } from "../entities/bill.entity";
 import { Logger, ILogger } from "../utils/logger";
-import { Currency } from "../entities/currency.entity";
-import { UserService } from "./users.service";
 import { Decimal } from "decimal.js";
+
+// Import Services
 import { CurrencyService } from "./currency.service";
+import { UserService } from "./users.service";
+
+// Import Entities
+import { Currency } from "../entities/currency.entity";
+import { Bill } from "../entities/bill.entity";
 
 export class BillService {
   billRepository: Repository<Bill>;
@@ -194,8 +198,11 @@ export class BillService {
     const user = await userService.getById(id);
     const userId = user.id;
     const recipientCurrency = await currencyService.getByUserId(userId);
-    const recipientCurrencyMain = recipientCurrency.main;
+    const recipienCurrencyId = recipientCurrency.id;
     const recipientExchangeRate = recipientCurrency.exchangeRate;
+    const isCurrencyMain = await currencyService.isCurrencyMain(
+      recipienCurrencyId
+    );
 
     try {
       const bill = await this.getByUserId(userId);
@@ -214,7 +221,7 @@ export class BillService {
         );
       }
 
-      if (recipientCurrencyMain) {
+      if (isCurrencyMain) {
         const convertedAmountMoney: Decimal = Decimal.div(
           amountMoney,
           recipientExchangeRate
