@@ -80,7 +80,7 @@
     "ip": "1.1.5",
     "jwt-decode": "^2.2.0",
     "localforage": "^1.7.3",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "minimist": "1.2.0",
     "notistack": "^0.8.6",
     "prop-types": "15.7.2",
