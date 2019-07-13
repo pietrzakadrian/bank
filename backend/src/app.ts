@@ -17,6 +17,12 @@ import { CurrencyService } from "./services/currency.service";
 import { Currency } from "./entities/currency.entity";
 import { CurrencyCron } from "./crons/currency.cron";
 import cron from "cron";
+import { UserService } from "./services/users.service";
+import { User } from "./entities/user.entity";
+import { Bill } from "./entities/bill.entity";
+import { BillService } from "./services/bills.service";
+import { Additional } from "./entities/additional.entity";
+import { AdditionalService } from "./services/additionals.service";
 
 export class Application {
   app: express.Application;
@@ -54,7 +60,8 @@ export class Application {
     );
     await this.startServer();
     await this.setCurrencies();
-    this.runCrons();
+    await this.runCrons();
+    await this.createAdmin();
   };
 
   startServer(): Promise<boolean> {
@@ -69,6 +76,45 @@ export class Application {
         .on("error", nodeErrorHandler);
     });
   }
+
+  createAdmin = async () => {
+    const userService = new UserService();
+    const billService = new BillService();
+    const curencyService = new CurrencyService();
+    const additionalService = new AdditionalService();
+    const userRepository = getManager().getRepository(User);
+    const billRepository = getManager().getRepository(Bill);
+    const additionalRepository = getManager().getRepository(Additional);
+    const currency = await curencyService.getById(1);
+
+    try {
+      const admin = await userService.getByLogin(this.config.admin.login);
+      if (admin) return;
+
+      let user = new User();
+      user.name = this.config.admin.name;
+      user.surname = this.config.admin.surname;
+      user.email = this.config.admin.email;
+      user.login = this.config.admin.login;
+      user.password = this.config.admin.password;
+      user = userRepository.create(user);
+      user = await userService.insert(user);
+
+      let bill = new Bill();
+      bill.user = userRepository.getId(user);
+      bill.accountBill = await billService.generateAccountBill();
+      bill.currency = currency;
+      bill = billRepository.create(bill);
+      await billService.insert(bill);
+
+      let additional = new Additional();
+      additional.user = userRepository.getId(user);
+      additional = additionalRepository.create(additional);
+      await additionalService.insert(additional);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
 
   setCurrencies = async () => {
     const currencyService = new CurrencyService();

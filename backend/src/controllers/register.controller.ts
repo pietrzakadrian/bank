@@ -15,6 +15,7 @@ import { AdditionalService } from "../services/additionals.service";
 import { User } from "../entities/user.entity";
 import { Bill } from "../entities/bill.entity";
 import { Additional } from "../entities/additional.entity";
+import { CurrencyService } from "../services/currency.service";
 
 const registerRouter: Router = Router();
 
@@ -47,10 +48,9 @@ registerRouter
     async (req: Request, res: Response, next: NextFunction) => {
       const userService = new UserService();
       const billService = new BillService();
+      const currencyService = new CurrencyService();
       const additionalService = new AdditionalService();
-
       const validationErrors = validationResult(req);
-
       const isLogin = await userService.getByLogin(req.body.login);
       const isEmail = await userService.getByEmail(req.body.email);
 
@@ -64,6 +64,9 @@ registerRouter
       }
 
       try {
+        const currencyId = req.body.currencyId;
+        const currency = await currencyService.getById(currencyId);
+
         let user = new User();
         user.name = req.body.name;
         user.surname = req.body.surname;
@@ -78,7 +81,7 @@ registerRouter
         let bill = new Bill();
         bill.user = userRepository.getId(user);
         bill.accountBill = await billService.generateAccountBill();
-        bill.currency = req.body.currencyId;
+        bill.currency = currency;
 
         const billRepository = getManager().getRepository(Bill);
         bill = billRepository.create(bill);
