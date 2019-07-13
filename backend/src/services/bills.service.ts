@@ -9,6 +9,7 @@ import { UserService } from "./users.service";
 // Import Entities
 import { Currency } from "../entities/currency.entity";
 import { Bill } from "../entities/bill.entity";
+import { User } from "../entities/user.entity";
 
 export class BillService {
   billRepository: Repository<Bill>;
@@ -165,7 +166,7 @@ export class BillService {
   /**
    * Returns substract Amount Money by userId
    */
-  async subAmountMoney(amountMoney: Decimal, id: number) {
+  async subAmountMoney(amountMoney: Decimal, id: number): Promise<object> {
     const userService = new UserService();
     const user = await userService.getById(id);
     const userId = user.id;
@@ -192,7 +193,11 @@ export class BillService {
   /**
    * Returns add Amount Money by userId
    */
-  async addAmountMoney(amountMoney: Decimal, id: number, currency: Currency) {
+  async addAmountMoney(
+    amountMoney: Decimal,
+    id: number,
+    currency: Currency
+  ): Promise<object> {
     const userService = new UserService();
     const currencyService = new CurrencyService();
     const user = await userService.getById(id);
@@ -243,6 +248,7 @@ export class BillService {
         amountMoney,
         currency.exchangeRate
       ).mul(recipientExchangeRate);
+
       const availableFunds: Decimal = Decimal.add(
         bill.availableFunds,
         convertedAmountMoney

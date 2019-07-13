@@ -84,7 +84,7 @@ export class UserService {
    */
   // async update(user: User): Promise<User | undefined> {
   //   try {
-  //     const updatedUser = await this.userRepository.update(user);
+  //     const updatedUser = await this.userRepository.save(user);
   //     return updatedUser;
   //   } catch (error) {
   //     return Promise.reject(error);

@@ -14,6 +14,15 @@ export class CurrencyService {
   }
 
   /**
+   * Inserts a new Currency into the database.
+   */
+  async insert(currency: Currency): Promise<Currency> {
+    this.logger.info("Create a new currency", currency);
+    const newCurrency = this.currencyRepository.create(currency);
+    return await this.currencyRepository.save(newCurrency);
+  }
+
+  /**
    * Returns array of all currency from db
    */
   async getAll(): Promise<Currency[]> {

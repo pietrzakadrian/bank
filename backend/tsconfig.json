@@ -12,7 +12,8 @@
     "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*", "src/types/*"]
-    }
+    },
+    "lib": ["es2017", "dom"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]

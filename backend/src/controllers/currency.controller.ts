@@ -11,6 +11,8 @@ import { CurrencyService } from "../services/currency.service";
 
 // Import Middlewares
 import { AuthHandler } from "../middlewares/authHandler.middleware";
+import { Currency } from "../entities/currency.entity";
+import { getManager } from "typeorm";
 
 const auth = new AuthHandler();
 const currencyRouter: Router = Router();
@@ -33,6 +35,46 @@ currencyRouter
 
       res.status(HttpStatus.OK).json({
         currency
+      });
+    } catch (error) {
+      const err: ResponseError = {
+        success: false,
+        code: HttpStatus.BAD_REQUEST,
+        error
+      };
+      next(err);
+    }
+  });
+
+/**
+ * Returns sets all currencies
+ *
+ * @Method POST
+ * @URL /api/currency
+ *
+ */
+currencyRouter
+  .route("/")
+
+  .post(async (req: Request, res: Response, next: NextFunction) => {
+    const currencyRepository = getManager().getRepository(Currency);
+    const currencies = req.body;
+
+    try {
+      currencies.map(async (currency: Currency) => {
+        const currencyEntity = new Currency();
+        currencyEntity.name = currency.name;
+        currencyEntity.exchangeRate = currency.exchangeRate;
+        currencyEntity.exchangeRateSyncDate = currency.exchangeRateSyncDate;
+
+        await currencyRepository.update(
+          { name: currencyEntity.name },
+          currencyEntity
+        );
+      });
+
+      res.status(HttpStatus.OK).json({
+        success: true
       });
     } catch (error) {
       const err: ResponseError = {

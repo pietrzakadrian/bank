@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  CreateDateColumn
 } from "typeorm";
 
 @Entity("currency")
@@ -13,10 +13,10 @@ export class Currency {
   @Column()
   name: string;
 
-  @Column()
+  @Column("double", { default: 1 })
   exchangeRate: number;
 
-  @UpdateDateColumn()
+  @CreateDateColumn()
   exchangeRateSyncDate: Date;
 
   @Column({ default: 0 })

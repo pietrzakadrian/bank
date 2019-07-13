@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   JoinTable
 } from "typeorm";
+import { Decimal } from "decimal.js";
 
 // Import Entities
 import { Bill } from "./bill.entity";
@@ -28,7 +29,7 @@ export class Transaction {
   createdDate: Date;
 
   @Column("double")
-  amountMoney: number;
+  amountMoney: Decimal;
 
   @ManyToOne(type => Currency, currency => currency.id, { nullable: false })
   @JoinTable()

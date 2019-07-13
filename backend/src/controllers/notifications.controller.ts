@@ -29,9 +29,6 @@ notificationsRouter
     try {
       const userId = req.user.id;
       const additional = await additionalService.getByUserId(userId);
-
-      console.log("additional", additional);
-
       const isNotification = additional.notificationStatus;
       const notificationCount = additional.notificationCount;
 

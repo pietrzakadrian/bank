@@ -95,8 +95,15 @@ confirmRouter
 
         await billService.subAmountMoney(amountMoney, userId);
         await billService.addAmountMoney(amountMoney, recipientId, currency);
+        await transactionService.setTransferHistory(
+          user,
+          recipient,
+          amountMoney,
+          transferTitle,
+          authorizationKey
+        );
 
-        //todo: sub/add Available Funds
+        //todo: ...
 
         return res.status(HttpStatus.OK).json({
           success: true

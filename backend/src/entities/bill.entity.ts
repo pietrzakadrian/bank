@@ -5,6 +5,7 @@ import {
   Unique,
   ManyToOne
 } from "typeorm";
+import { Decimal } from "decimal.js";
 
 // Import Entities
 import { User } from "./user.entity";

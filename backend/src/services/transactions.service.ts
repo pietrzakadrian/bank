@@ -1,5 +1,6 @@
 import { getManager, Repository } from "typeorm";
 import { Logger, ILogger } from "../utils/logger";
+import { Decimal } from "decimal.js";
 
 // Import Entities
 import { Transaction } from "../entities/transaction.entity";
@@ -233,5 +234,32 @@ export class TransactionService {
     }
 
     return authorizationKey;
+  }
+
+  async setTransferHistory(
+    sender: User,
+    recipient: User,
+    amountMoney: Decimal,
+    transferTitle: string,
+    authorizationKey: string
+  ): Promise<object | undefined> {
+    try {
+      return await this.transactionRepository.update(
+        {
+          sender,
+          recipient,
+          amountMoney,
+          transferTitle,
+          authorizationKey,
+          authorizationStatus: false
+        },
+        {
+          authorizationStatus: true,
+          createdDate: new Date()
+        }
+      );
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 }

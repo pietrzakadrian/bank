@@ -5,8 +5,7 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
-import { createConnection } from "typeorm";
-
+import { createConnection, getManager } from "typeorm";
 import config from "./config/config";
 import { AuthHandler } from "./middlewares/authHandler.middleware";
 import genericErrorHandler from "./middlewares/genericErrorHandler.middleware";
@@ -14,17 +13,20 @@ import nodeErrorHandler from "./middlewares/nodeErrorHandler.middleware";
 import notFoundHandler from "./middlewares/notFoundHandler.middleware";
 import routes from "./routes";
 import { Logger, ILogger } from "./utils/logger";
+import { CurrencyService } from "./services/currency.service";
+import { Currency } from "./entities/currency.entity";
+import { CurrencyCron } from "./crons/currency.cron";
+import cron from "cron";
 
 export class Application {
   app: express.Application;
   config = config;
   logger: ILogger;
+  CronJob = cron.CronJob;
 
   constructor() {
     this.logger = new Logger(__filename);
     this.app = express();
-    this.app.locals.name = this.config.name;
-    this.app.locals.version = this.config.version;
 
     this.app.use(require("express-status-monitor")());
     this.app.use(cors());
@@ -51,6 +53,8 @@ export class Application {
       }`
     );
     await this.startServer();
+    await this.setCurrencies();
+    this.runCrons();
   };
 
   startServer(): Promise<boolean> {
@@ -65,4 +69,54 @@ export class Application {
         .on("error", nodeErrorHandler);
     });
   }
+
+  setCurrencies = async () => {
+    const currencyService = new CurrencyService();
+
+    try {
+      const currencies = await currencyService.getAll();
+      const currencyRepository = getManager().getRepository(Currency);
+      const newCurrencies = [
+        {
+          id: 1,
+          name: "USD"
+        },
+        {
+          id: 2,
+          name: "PLN",
+          main: true
+        },
+        {
+          id: 3,
+          name: "EUR"
+        }
+      ];
+
+      if (currencies.length)
+        return new CurrencyCron().setCurrenciesExchangeRates();
+
+      newCurrencies.map(async (newCurrency: Currency) => {
+        let currency = new Currency();
+        currency.id = newCurrency.id;
+        currency.name = newCurrency.name;
+        currency.main = newCurrency.main;
+        currency = currencyRepository.create(currency);
+        await currencyService.insert(currency);
+      });
+
+      return new CurrencyCron().setCurrenciesExchangeRates();
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  runCrons = () => {
+    new this.CronJob(
+      "0 0 */1 * * *",
+      () => new CurrencyCron().setCurrenciesExchangeRates(),
+      null,
+      true,
+      "Poland"
+    );
+  };
 }

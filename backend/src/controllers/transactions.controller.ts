@@ -2,14 +2,11 @@ import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
 import { param, validationResult } from "express-validator/check";
 
-// Import Middlewares
-import { AuthHandler } from "../middlewares/authHandler.middleware";
-
 // Impoty Services
 import { TransactionService } from "../services/transactions.service";
 
 // Import Interfaces
-import { ResponseError } from "../resources/interfaces/ResponseError.interface";
+import { ResponseError } from "../resources/interfaces/responseError.interface";
 
 const transactionsRouter: Router = Router();
 
