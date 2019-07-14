@@ -58,7 +58,7 @@ loginRouter
       }
 
       try {
-        await promotion(req);
+        await promotion(user);
         await userService.setLastPresentLoggedDate(user);
         const token = authHandler.generateToken(user);
         res.status(HttpStatus.OK).json({

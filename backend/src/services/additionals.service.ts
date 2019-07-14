@@ -5,6 +5,7 @@ import { Logger, ILogger } from "../utils/logger";
 import { UserService } from "./users.service";
 import { BillService } from "./bills.service";
 import { CurrencyService } from "./currency.service";
+import { TransactionService } from "./transactions.service";
 
 // Import Entities
 import { Additional } from "../entities/additional.entity";
@@ -94,10 +95,10 @@ export class AdditionalService {
    * Returns a additiona by User
    */
   async getByUser(user: User): Promise<Additional | undefined> {
-    const userId = this.userRepository.getId(user);
-
     try {
-      const additional = await this.additionalRepository.findOne(userId);
+      const additional = await this.additionalRepository.findOne({
+        where: user
+      });
 
       if (additional) {
         return additional;
@@ -146,6 +147,73 @@ export class AdditionalService {
       }
     } catch (error) {
       return Promise.reject(error);
+    }
+  }
+
+  async setWidetStatus(user: User) {
+    const transactionService = new TransactionService();
+    const currencyService = new CurrencyService();
+    const userId = this.userRepository.getId(user);
+    const today = new Date();
+    const previousMonth = new Date(new Date().setMonth(today.getMonth() - 1));
+
+    const transactions = await transactionService.getTransactions(
+      user,
+      null,
+      null,
+      previousMonth,
+      today
+    );
+
+    if (!transactions) return;
+
+    let transferExchangeRate: number = null;
+    let convertedAmountMoney: number = null;
+    let availableFunds: number = 0;
+    let accountBalanceHistory: string = "0";
+    let incomingTransfersSum: number = 0;
+    let outgoingTransfersSum: number = 0;
+    const userCurrency: Currency = await currencyService.getByUser(user);
+    const userCurrencyId: number = userCurrency.id;
+    const userExchangeRate: number = userCurrency.exchangeRate;
+    const isUserCurrencyMain: boolean = userCurrency.main;
+
+    for await (const transaction of transactions.reverse()) {
+      if (transaction.sender_id === userId) {
+        if (transaction.currency_id === userCurrencyId) {
+          outgoingTransfersSum += transaction.transaction_amountMoney;
+          availableFunds -= transaction.transaction_amountMoney;
+          accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+        } else {
+          transferExchangeRate = await currencyService.getExchangeRateById(
+            transaction.currency_id
+          );
+
+          if (isUserCurrencyMain) {
+            convertedAmountMoney = Decimal.div(
+              transaction.amount_money,
+              transferExchangeRate
+            ).toNumber();
+
+            outgoingTransfersSum += convertedAmountMoney;
+            availableFunds -= convertedAmountMoney;
+            accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+          } else {
+            convertedAmountMoney = Decimal.div(
+              transaction.amount_money,
+              transferExchangeRate
+            )
+              .mul(userExchangeRate)
+              .toNumber();
+
+            outgoingTransfersSum += convertedAmountMoney;
+            availableFunds -= convertedAmountMoney;
+            accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+          }
+        }
+      }
+
+      // if ()
     }
   }
 }

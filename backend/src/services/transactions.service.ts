@@ -146,7 +146,13 @@ export class TransactionService {
   /**
    * Returns the last transactions sent by the user
    */
-  async getTransactions(user: User, offset: number) {
+  async getTransactions(
+    user: User,
+    offset?: number,
+    limit?: number,
+    from?: Date,
+    to?: Date
+  ) {
     const userId = this.userRepository.getId(user);
 
     try {
@@ -154,47 +160,47 @@ export class TransactionService {
         .createQueryBuilder("transaction")
         .leftJoinAndSelect("transaction.currency", "currency")
         .leftJoinAndSelect("transaction.recipient", "recipientBill")
-        .leftJoinAndSelect("recipient.user", "recipient")
+        .leftJoinAndSelect("recipientBill.user", "recipient")
         .leftJoinAndSelect("transaction.sender", "senderBill")
-        .leftJoinAndSelect("sender.user", "sender")
+        .leftJoinAndSelect("senderBill.user", "sender")
         .where("transaction.authorizationStatus = :authorizationStatus", {
           authorizationStatus: true
         })
+        .andWhere("transaction.createdDate BETWEEN :from AND :to", { from, to })
         .andWhere("transaction.recipientId = :userId", { userId })
         .orWhere("transaction.senderId = :userId", { userId })
         .orderBy("transaction.createdDate", "DESC")
         .select([
           "transaction.createdDate",
           "transaction.amountMoney",
+          "currency.id",
           "currency.name",
           "senderBill.accountBill",
+          "sender.id",
           "sender.name",
           "sender.surname",
           "recipientBill.accountBill",
+          "recipient.id",
           "recipient.name",
           "recipient.surname"
         ])
-        .offset(offset)
-        .limit(12)
-        .getManyAndCount();
+        .offset(offset && offset)
+        .limit(limit && limit);
 
-      if (transactions) {
-        return transactions;
+      if (from && to) {
+        return transactions.execute();
       } else {
-        return undefined;
+        return transactions.getManyAndCount();
       }
     } catch (error) {
-      return Promise.reject(false);
+      return Promise.reject(error);
     }
   }
 
   /**
    * Returns the last transaction's key
    */
-  async getAuthorizationKey(
-    sender: User,
-    recipient: User
-  ): Promise<Transaction | undefined> {
+  async getAuthorizationKey(sender: User, recipient: User): Promise<string> {
     const senderId = this.userRepository.getId(sender);
     const recipientId = this.userRepository.getId(recipient);
 
@@ -210,12 +216,12 @@ export class TransactionService {
         .getOne();
 
       if (authorizationKey) {
-        return authorizationKey;
+        return authorizationKey.authorizationKey;
       } else {
         return undefined;
       }
     } catch (error) {
-      return Promise.reject(false);
+      return Promise.reject(error);
     }
   }
 

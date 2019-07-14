@@ -4,16 +4,20 @@ import { Logger, ILogger } from "../utils/logger";
 // Import Entities
 import { Currency } from "../entities/currency.entity";
 import { User } from "../entities/user.entity";
+import { Bill } from "../entities/bill.entity";
+import { BillService } from "./bills.service";
 
 export class CurrencyService {
   currencyRepository: Repository<Currency>;
   userRepository: Repository<User>;
+  billRepository: Repository<Bill>;
   logger: ILogger;
 
   constructor() {
     this.logger = new Logger(__filename);
     this.currencyRepository = getManager().getRepository(Currency);
     this.userRepository = getManager().getRepository(User);
+    this.billRepository = getManager().getRepository(Bill);
   }
 
   /**
@@ -45,38 +49,32 @@ export class CurrencyService {
   /**
    * Returns a additiona by userId
    */
-  async getByUser(user: User): Promise<Currency | undefined> {
+  async getByUser(user: User): Promise<Currency> {
     const userId = this.userRepository.getId(user);
 
     try {
-      const additional = await this.currencyRepository.findOne(userId);
+      let currencyBill = await this.billRepository
+        .createQueryBuilder("bill")
+        .leftJoinAndSelect("bill.currency", "currency")
+        .where("bill.userId = :userId", { userId })
+        .getOne();
 
-      if (additional) {
-        return additional;
+      if (currencyBill) {
+        return currencyBill.currency;
       } else {
         return undefined;
       }
     } catch (error) {
-      return Promise.reject(false);
+      return Promise.reject(error);
     }
   }
 
-  /**
-   * Returns a boolean that currency is main
-   */
-  async isCurrencyMain(currency: Currency): Promise<boolean> {
-    const currencyId = this.currencyRepository.getId(currency);
-
-    try {
-      const isCurrencyMain = await this.currencyRepository.findOne(currencyId);
-
-      if (isCurrencyMain) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      return Promise.reject(false);
+  // test
+  async getExchangeRateById(id: number) {
+    if (id) {
+      const currency = await this.currencyRepository.findOne(id);
+      return currency.exchangeRate;
     }
+    return Promise.reject(false);
   }
 }

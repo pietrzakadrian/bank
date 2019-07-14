@@ -13,6 +13,8 @@ import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 
 // Import Entities
 import { User } from "../entities/user.entity";
+import { Additional } from "../entities/additional.entity";
+import { Bill } from "../entities/bill.entity";
 
 const billsRouter: Router = Router();
 
@@ -32,9 +34,9 @@ billsRouter
     const userService = new UserService();
 
     try {
-      const user = await userService.getById(req.user.id);
-      const bill = await billService.getByUser(user);
-      const additional = await additionalService.getByUser(user);
+      const user: User = await userService.getById(req.user.id);
+      const bill: Bill = await billService.getByUser(user);
+      const additional: Additional = await additionalService.getByUser(user);
 
       if (user && bill && additional) {
         res.status(HttpStatus.OK).json({
@@ -84,7 +86,7 @@ billsRouter
       const userService = new UserService();
       const validationErrors = validationResult(req);
       const userRepository = getManager().getRepository(User);
-      const accountBill = req.params.accountBill;
+      const accountBill: string = req.params.accountBill;
 
       if (!validationErrors.isEmpty()) {
         const err: ResponseError = {
@@ -96,18 +98,14 @@ billsRouter
       }
 
       try {
-        const user = await userService.getById(req.user.id);
-        const bills = await billService.getUsersByAccountBill(
+        const user: User = await userService.getById(req.user.id);
+        const bills: Bill[] = await billService.getUsersByAccountBill(
           accountBill,
           user
         );
-        const recipient = await billService.getByAccountBill(accountBill);
-        const recipientId = userRepository.getId(recipient.user);
-
         if (bills)
           return res.status(HttpStatus.OK).json({
-            isAccountBill: true,
-            recipientId
+            isAccountBill: true
           });
 
         res.status(HttpStatus.OK).json({
@@ -145,7 +143,7 @@ billsRouter
       const billService = new BillService();
       const userService = new UserService();
       const validationErrors = validationResult(req);
-      const amountMoney = req.params.amountMoney;
+      const amountMoney: number = req.params.amountMoney;
 
       if (!validationErrors.isEmpty()) {
         const err: ResponseError = {
@@ -157,9 +155,9 @@ billsRouter
       }
 
       try {
-        const user = await userService.getById(req.user.id);
-        const isAmountMoney = await billService.isAmountMoney(
-          amountMoney,
+        const user: User = await userService.getById(req.user.id);
+        const isAmountMoney: boolean = await billService.isAmountMoney(
+          new Decimal(amountMoney),
           user
         );
         return res.status(HttpStatus.OK).json({

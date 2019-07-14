@@ -7,6 +7,7 @@ import { getManager } from "typeorm";
 import { TransactionService } from "../services/transactions.service";
 import { BillService } from "../services/bills.service";
 import { UserService } from "../services/users.service";
+import { CurrencyService } from "../services/currency.service";
 
 // Import Interfaces
 import { ResponseError } from "../resources/interfaces/ResponseError.interface";
@@ -14,6 +15,8 @@ import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 // Import Entities
 import { User } from "../entities/user.entity";
 import { Transaction } from "../entities/transaction.entity";
+import { Currency } from "../entities/currency.entity";
+import { Bill } from "../entities/bill.entity";
 
 const confirmRouter: Router = Router();
 
@@ -51,23 +54,24 @@ confirmRouter
       const transactionService = new TransactionService();
       const billService = new BillService();
       const userService = new UserService();
-      const userRepository = getManager().getRepository(User);
+      const currencyService = new CurrencyService();
       const transactionRepository = getManager().getRepository(Transaction);
       const validationErrors = validationResult(req);
-      const accountBill = req.body.accountBill;
-      const amountMoney = req.body.amountMoney;
-      const transferTitle = req.body.transferTitle;
+      const accountBill: string = req.body.accountBill;
+      const amountMoney: number = req.body.amountMoney;
+      const transferTitle: string = req.body.transferTitle;
 
       try {
-        const user = await userService.getById(req.user.id);
-        const userBill = await billService.getByUser(user);
-        const currency = userBill.currency;
-        const recipientBill = await billService.getByAccountBill(accountBill);
-        const recipient = recipientBill.user;
-        const recipientId = userRepository.getId(recipientBill.user);
-        const authorizationKey = req.body.authorizationKey;
-        const isAmountMoney = await billService.isAmountMoney(
-          amountMoney,
+        const user: User = await userService.getById(req.user.id);
+        const senderBill: Bill = await billService.getByUser(user);
+        const senderCurrency: Currency = await currencyService.getByUser(user);
+        const recipientBill: Bill = await billService.getByAccountBill(
+          accountBill
+        );
+        const recipient: User = recipientBill.user;
+        const authorizationKey: string = req.body.authorizationKey;
+        const isAmountMoney: boolean = await billService.isAmountMoney(
+          new Decimal(amountMoney),
           user
         );
         const registeredTransaction = await transactionService.getTransaction(
@@ -76,7 +80,7 @@ confirmRouter
           authorizationKey,
           user,
           recipient,
-          currency
+          senderCurrency
         );
 
         if (
@@ -95,13 +99,17 @@ confirmRouter
         }
 
         await billService.subAmountMoney(amountMoney, user);
-        await billService.addAmountMoney(amountMoney, recipient, currency);
+        await billService.addAmountMoney(
+          amountMoney,
+          recipient,
+          senderCurrency
+        );
 
         let transaction = new Transaction();
-        transaction.sender = userBill;
+        transaction.sender = senderBill;
         transaction.recipient = recipientBill;
         transaction.transferTitle = transferTitle;
-        transaction.currency = currency;
+        transaction.currency = senderCurrency;
         transaction.authorizationKey = authorizationKey;
         transaction.authorizationStatus = true;
         transaction.amountMoney = amountMoney;

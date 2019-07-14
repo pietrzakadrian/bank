@@ -50,15 +50,39 @@ export class UserService {
    * Returns a user by login
    */
   async getByLogin(login: string | number): Promise<User | undefined> {
-    const user = await this.userRepository.findOne({
-      where: {
-        login
+    try {
+      const user: User = await this.userRepository.findOne({
+        where: {
+          login
+        }
+      });
+      if (user) {
+        return user;
+      } else {
+        return undefined;
       }
-    });
-    if (user) {
-      return user;
-    } else {
-      return undefined;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Returns a user by email
+   */
+  async getByEmail(email: string): Promise<User | undefined> {
+    try {
+      const user: User = await this.userRepository.findOne({
+        where: {
+          email
+        }
+      });
+      if (user) {
+        return user;
+      } else {
+        return undefined;
+      }
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
 
@@ -66,7 +90,7 @@ export class UserService {
    * Updates the last failed logged date
    */
   async setLastFailedLoggedDate(user: User): Promise<object> {
-    const userId = this.userRepository.getId(user);
+    const userId: User = this.userRepository.getId(user);
 
     try {
       return await this.userRepository.update(userId, {
@@ -81,7 +105,7 @@ export class UserService {
    * Updates the last present logged date
    */
   async setLastPresentLoggedDate(user: User): Promise<object> {
-    const userId = this.userRepository.getId(user);
+    const userId: User = this.userRepository.getId(user);
 
     try {
       return await this.userRepository.update(userId, {
@@ -96,7 +120,7 @@ export class UserService {
    * Updates the last succesful logged date
    */
   async setLastSuccessfulLoggedDate(user: User): Promise<object> {
-    const userId = this.userRepository.getId(user);
+    const userId: User = this.userRepository.getId(user);
 
     try {
       return await this.userRepository.update(userId, {

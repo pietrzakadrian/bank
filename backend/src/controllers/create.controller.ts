@@ -6,6 +6,8 @@ import { getManager } from "typeorm";
 // Impoty Services
 import { TransactionService } from "../services/transactions.service";
 import { BillService } from "../services/bills.service";
+import { UserService } from "../services/users.service";
+import { CurrencyService } from "../services/currency.service";
 
 // Import Interfaces
 import { ResponseError } from "../resources/interfaces/ResponseError.interface";
@@ -13,6 +15,8 @@ import { ResponseError } from "../resources/interfaces/ResponseError.interface";
 // Import Entities
 import { User } from "../entities/user.entity";
 import { Transaction } from "../entities/transaction.entity";
+import { Bill } from "../entities/bill.entity";
+import { Currency } from "../entities/currency.entity";
 
 const createRouter: Router = Router();
 
@@ -45,27 +49,32 @@ createRouter
     async (req: Request, res: Response, next: NextFunction) => {
       const transactionService = new TransactionService();
       const billService = new BillService();
+      const userService = new UserService();
+      const currencyService = new CurrencyService();
       const userRepository = getManager().getRepository(User);
       const transactionRepository = getManager().getRepository(Transaction);
       const validationErrors = validationResult(req);
 
       try {
-        const userId = req.user.id;
-        const user = await billService.getByUserId(userId);
-        const accountBill = req.body.accountBill;
-        const amountMoney = req.body.amountMoney;
-        const currency = user.currency;
-        const transferTitle = req.body.transferTitle;
-        const recipient = await billService.getByAccountBill(accountBill);
-        const recipientId = userRepository.getId(recipient.user);
-        const authorizationKey = transactionService.generateAuthorizationKey();
-        const isAmountMoney = await billService.isAmountMoney(
-          amountMoney,
-          userId
+        const user: User = await userService.getById(req.user.id);
+        const userBill: Bill = await billService.getByUser(user);
+        const userAccountBill: string = userBill.accountBill;
+        const accountBill: string = req.body.accountBill;
+        const amountMoney: number = req.body.amountMoney;
+        const currency: Currency = await currencyService.getByUser(user);
+        const transferTitle: string = req.body.transferTitle;
+        const recipientBill: Bill = await billService.getByAccountBill(
+          accountBill
+        );
+        const recipientAccountBill: string = recipientBill.accountBill;
+        const authorizationKey: string = transactionService.generateAuthorizationKey();
+        const isAmountMoney: boolean = await billService.isAmountMoney(
+          new Decimal(amountMoney),
+          user
         );
 
         if (
-          userId === recipientId ||
+          userAccountBill === recipientAccountBill ||
           !isAmountMoney ||
           !validationErrors.isEmpty()
         ) {
@@ -83,8 +92,8 @@ createRouter
         transaction.transferTitle = transferTitle;
         transaction.authorizationKey = authorizationKey;
         transaction.authorizationStatus = false;
-        transaction.sender = user;
-        transaction.recipient = recipient;
+        transaction.sender = userBill;
+        transaction.recipient = recipientBill;
 
         transaction = transactionRepository.create(transaction);
         await transactionService.insert(transaction);

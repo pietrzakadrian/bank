@@ -7,6 +7,9 @@ import { TransactionService } from "../services/transactions.service";
 import { BillService } from "../services/bills.service";
 import { UserService } from "../services/users.service";
 
+// Import Entities
+import { User } from "../entities/user.entity";
+
 // Import Interfaces
 import { ResponseError } from "../resources/interfaces/responseError.interface";
 
@@ -25,7 +28,7 @@ transactionsRouter
   .get(async (req: Request, res: Response, next: NextFunction) => {
     const transactionService = new TransactionService();
     const userService = new UserService();
-    const user = await userService.getById(req.user.id);
+    const user: User = await userService.getById(req.user.id);
 
     try {
       const senderTransactions = await transactionService.getSenderTransactions(
@@ -59,7 +62,7 @@ transactionsRouter
   .get(async (req: Request, res: Response, next: NextFunction) => {
     const transactionService = new TransactionService();
     const userService = new UserService();
-    const user = await userService.getById(req.user.id);
+    const user: User = await userService.getById(req.user.id);
 
     try {
       const recipientTransactions = await transactionService.getRecipientTransactions(
@@ -101,8 +104,9 @@ transactionsRouter
       const transactionService = new TransactionService();
       const userService = new UserService();
       const validationErrors = validationResult(req);
-      const user = await userService.getById(req.user.id);
-      const offset = req.params.offset;
+      const user: User = await userService.getById(req.user.id);
+      const offset: number = req.params.offset;
+      const limit: number = 12;
 
       if (!validationErrors.isEmpty()) {
         const err: ResponseError = {
@@ -116,7 +120,8 @@ transactionsRouter
       try {
         const transactions = await transactionService.getTransactions(
           user,
-          offset
+          offset,
+          limit
         );
 
         if (transactions)
@@ -154,9 +159,9 @@ transactionsRouter
     async (req: Request, res: Response, next: NextFunction) => {
       const transactionService = new TransactionService();
       const userService = new UserService();
-      const sender = await userService.getById(req.user.id);
-      const recipient = await userService.getById(req.params.id);
       const validationErrors = validationResult(req);
+      const sender: User = await userService.getById(req.user.id);
+      const recipient: User = await userService.getById(req.params.id);
 
       if (!validationErrors.isEmpty()) {
         const err: ResponseError = {
@@ -168,7 +173,7 @@ transactionsRouter
       }
 
       try {
-        const authorizationKey = await transactionService.getAuthorizationKey(
+        const authorizationKey: string = await transactionService.getAuthorizationKey(
           sender,
           recipient
         );
@@ -176,7 +181,7 @@ transactionsRouter
         if (authorizationKey)
           return res.status(HttpStatus.OK).json({
             success: true,
-            authorizationKey: authorizationKey.authorizationKey
+            authorizationKey: authorizationKey
           });
       } catch (error) {
         const err: ResponseError = {
