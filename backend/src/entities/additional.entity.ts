@@ -14,10 +14,10 @@ export class Additional {
   @Column({ length: 20000, default: "0,0" })
   accountBalanceHistory: string;
 
-  @Column("double", { default: 0 })
+  @Column("decimal", { precision: 13, scale: 2, default: 0 })
   incomingTransfersSum: number;
 
-  @Column("double", { default: 0 })
+  @Column("decimal", { precision: 13, scale: 2, default: 0 })
   outgoingTransfersSum: number;
 
   @Column({ default: 0 })

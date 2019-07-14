@@ -23,6 +23,8 @@ import { Bill } from "./entities/bill.entity";
 import { BillService } from "./services/bills.service";
 import { Additional } from "./entities/additional.entity";
 import { AdditionalService } from "./services/additionals.service";
+import { Decimal } from "decimal.js";
+import promotion from "./middlewares/promotion.middleware";
 
 export class Application {
   app: express.Application;
@@ -58,6 +60,7 @@ export class Application {
         conn.options.database
       }`
     );
+
     await this.startServer();
     await this.setCurrencies();
     await this.runCrons();

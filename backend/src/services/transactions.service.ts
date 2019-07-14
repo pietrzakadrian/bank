@@ -1,54 +1,20 @@
 import { getManager, Repository } from "typeorm";
 import { Logger, ILogger } from "../utils/logger";
-import { Decimal } from "decimal.js";
 
 // Import Entities
 import { Transaction } from "../entities/transaction.entity";
 import { User } from "../entities/user.entity";
 import { Currency } from "../entities/currency.entity";
 
-// Import Services
-import { UserService } from "./users.service";
-
 export class TransactionService {
   transactionRepository: Repository<Transaction>;
+  userRepository: Repository<User>;
   logger: ILogger;
 
   constructor() {
     this.logger = new Logger(__filename);
     this.transactionRepository = getManager().getRepository(Transaction);
-  }
-
-  /**
-   * Returns array of all users from db
-   */
-  async getOne(
-    amountMoney: number,
-    transferTitle: string,
-    authorizationKey: string,
-    sender: User,
-    recipient: User,
-    currency: Currency
-  ): Promise<Transaction> {
-    const transaction = await this.transactionRepository.findOne({
-      where: {
-        amountMoney,
-        transferTitle,
-        sender,
-        recipient,
-        authorizationKey,
-        authorizationStatus: false,
-        currency
-      },
-      order: {
-        createdDate: "DESC"
-      }
-    });
-
-    if (transaction) {
-      return transaction;
-    }
-    return Promise.reject(false);
+    this.userRepository = getManager().getRepository(User);
   }
 
   /**
@@ -61,40 +27,79 @@ export class TransactionService {
   }
 
   /**
+   * Returns transaction
+   */
+  async getTransaction(
+    amountMoney: number,
+    transferTitle: string,
+    authorizationKey: string,
+    sender: User,
+    recipient: User,
+    currency: Currency
+  ): Promise<Transaction | undefined> {
+    try {
+      const transaction = await this.transactionRepository.findOne({
+        where: {
+          amountMoney,
+          transferTitle,
+          sender,
+          recipient,
+          authorizationKey,
+          authorizationStatus: false,
+          currency
+        },
+        order: {
+          createdDate: "DESC"
+        }
+      });
+
+      if (transaction) {
+        return transaction;
+      } else {
+        return undefined;
+      }
+    } catch (error) {
+      return Promise.reject(false);
+    }
+  }
+
+  /**
    * Returns the last four transactions sent by the user
    */
-  async getSenderTransactions(id: number): Promise<Array<object> | undefined> {
-    const userService = new UserService();
-    const sender = await userService.getById(id);
+  async getSenderTransactions(
+    user: User
+  ): Promise<Array<Transaction> | undefined> {
+    const userId = this.userRepository.getId(user);
 
-    const transactions = await this.transactionRepository.find({
-      take: 4,
-      where: {
-        sender,
-        authorizationStatus: true
-      },
-      relations: ["currency", "recipient", "recipient.user"],
-      order: {
-        createdDate: "DESC"
+    try {
+      const transactions = await this.transactionRepository
+        .createQueryBuilder("transaction")
+        .leftJoinAndSelect("transaction.currency", "currency")
+        .leftJoinAndSelect("transaction.recipient", "recipient")
+        .leftJoinAndSelect("recipient.user", "user")
+        .where("transaction.authorizationStatus = :authorizationStatus", {
+          authorizationStatus: true
+        })
+        .andWhere("transaction.senderId = :userId", { userId })
+        .orderBy("transaction.createdDate", "DESC")
+        .select([
+          "transaction.createdDate",
+          "transaction.amountMoney",
+          "transaction.transferTitle",
+          "currency.name",
+          "user.name",
+          "user.surname"
+        ])
+        .limit(4)
+        .execute();
+
+      if (transactions) {
+        return transactions;
+      } else {
+        return undefined;
       }
-    });
-
-    if (transactions) {
-      const transformTransactions = transactions.map(({ ...transaction }) => ({
-        createdDate: transaction.createdDate,
-        amountMoney: transaction.amountMoney,
-        transferTitle: transaction.transferTitle,
-        currency: transaction.currency.name,
-        recipient: {
-          id: transaction.recipient.id,
-          name: transaction.recipient.user.name,
-          surname: transaction.recipient.user.surname
-        }
-      }));
-
-      return transformTransactions;
-    } else {
-      return undefined;
+    } catch (error) {
+      return Promise.reject(false);
     }
   }
 
@@ -102,93 +107,84 @@ export class TransactionService {
    * Returns the last four transactions received to the user
    */
   async getRecipientTransactions(
-    id: number
-  ): Promise<Array<object> | undefined> {
-    const userService = new UserService();
-    const recipient = await userService.getById(id);
+    user: User
+  ): Promise<Array<Transaction> | undefined> {
+    const userId = this.userRepository.getId(user);
 
-    const transactions = await this.transactionRepository.find({
-      take: 4,
-      where: {
-        recipient,
-        authorizationStatus: true
-      },
-      relations: ["currency", "sender", "sender.user"],
-      order: {
-        createdDate: "DESC"
+    try {
+      const transactions = await this.transactionRepository
+        .createQueryBuilder("transaction")
+        .leftJoinAndSelect("transaction.currency", "currency")
+        .leftJoinAndSelect("transaction.sender", "sender")
+        .leftJoinAndSelect("sender.user", "user")
+        .where("transaction.authorizationStatus = :authorizationStatus", {
+          authorizationStatus: true
+        })
+        .andWhere("transaction.recipientId = :userId", { userId })
+        .orderBy("transaction.createdDate", "DESC")
+        .select([
+          "transaction.createdDate",
+          "transaction.amountMoney",
+          "transaction.transferTitle",
+          "currency.name",
+          "user.name",
+          "user.surname"
+        ])
+        .limit(4)
+        .execute();
+
+      if (transactions) {
+        return transactions;
+      } else {
+        return undefined;
       }
-    });
-
-    if (transactions) {
-      const transformTransactions = transactions.map(({ ...transaction }) => ({
-        createdDate: transaction.createdDate,
-        amountMoney: transaction.amountMoney,
-        transferTitle: transaction.transferTitle,
-        currency: transaction.currency.name,
-        sender: {
-          id: transaction.sender.id,
-          name: transaction.sender.user.name,
-          surname: transaction.sender.user.surname
-        }
-      }));
-
-      return transformTransactions;
-    } else {
-      return undefined;
+    } catch (error) {
+      return Promise.reject(false);
     }
   }
 
   /**
    * Returns the last transactions sent by the user
    */
-  async getTransactions(id: number, skip: number): Promise<object | undefined> {
-    const userService = new UserService();
-    const user = await userService.getById(id);
+  async getTransactions(user: User, offset: number) {
+    const userId = this.userRepository.getId(user);
 
-    const transactions = await this.transactionRepository.findAndCount({
-      skip,
-      take: 12,
-      where: [
-        { sender: user, authorizationStatus: true },
-        { recipient: user, authorizationStatus: true }
-      ],
-      relations: [
-        "currency",
-        "recipient",
-        "recipient.user",
-        "sender",
-        "sender.user"
-      ],
-      order: {
-        createdDate: "DESC"
+    try {
+      const transactions = await this.transactionRepository
+        .createQueryBuilder("transaction")
+        .leftJoinAndSelect("transaction.currency", "currency")
+        .leftJoinAndSelect("transaction.recipient", "recipientBill")
+        .leftJoinAndSelect("recipient.user", "recipient")
+        .leftJoinAndSelect("transaction.sender", "senderBill")
+        .leftJoinAndSelect("sender.user", "sender")
+        .where("transaction.authorizationStatus = :authorizationStatus", {
+          authorizationStatus: true
+        })
+        .andWhere("transaction.recipientId = :userId", { userId })
+        .orWhere("transaction.senderId = :userId", { userId })
+        .orderBy("transaction.createdDate", "DESC")
+        .select([
+          "transaction.createdDate",
+          "transaction.amountMoney",
+          "currency.name",
+          "senderBill.accountBill",
+          "sender.name",
+          "sender.surname",
+          "recipientBill.accountBill",
+          "recipient.name",
+          "recipient.surname"
+        ])
+        .offset(offset)
+        .limit(12)
+        .getManyAndCount();
+
+      if (transactions) {
+        return transactions;
+      } else {
+        return undefined;
       }
-    });
-
-    if (transactions) {
-      const transformTransactions = [
-        transactions[0].map(({ ...transaction }) => ({
-          amountMoney: transaction.amountMoney,
-          currency: transaction.currency.name,
-          createdData: transaction.createdDate,
-          transferTitle: transaction.transferTitle,
-          sender: {
-            id: transaction.sender.user.id,
-            name: transaction.sender.user.name,
-            surname: transaction.sender.user.surname,
-            accountBill: transaction.sender.accountBill
-          },
-          recipient: {
-            id: transaction.recipient.user.id,
-            name: transaction.recipient.user.name,
-            surname: transaction.recipient.user.surname,
-            accountBill: transaction.recipient.accountBill
-          }
-        })),
-        { count: transactions[1] }
-      ];
-      return transformTransactions;
-    } else {
-      return undefined;
+    } catch (error) {
+      return Promise.reject(false);
     }
   }
 
@@ -196,27 +192,30 @@ export class TransactionService {
    * Returns the last transaction's key
    */
   async getAuthorizationKey(
-    senderId: number,
-    recipientId: number
-  ): Promise<Object | undefined> {
-    const userService = new UserService();
-    const sender = await userService.getById(senderId);
-    const recipient = await userService.getById(recipientId);
+    sender: User,
+    recipient: User
+  ): Promise<Transaction | undefined> {
+    const senderId = this.userRepository.getId(sender);
+    const recipientId = this.userRepository.getId(recipient);
 
-    const transaction = await this.transactionRepository.findOne({
-      where: {
-        sender,
-        recipient
-      },
-      order: {
-        createdDate: "DESC"
+    try {
+      const authorizationKey = await this.transactionRepository
+        .createQueryBuilder("transaction")
+        .where("transaction.senderId = :senderId", {
+          senderId
+        })
+        .andWhere("transaction.recipientId = :recipientId", { recipientId })
+        .select("transaction.authorizationKey")
+        .orderBy("transaction.createdDate", "DESC")
+        .getOne();
+
+      if (authorizationKey) {
+        return authorizationKey;
+      } else {
+        return undefined;
       }
-    });
-
-    if (transaction) {
-      return transaction.authorizationKey;
-    } else {
-      return undefined;
+    } catch (error) {
+      return Promise.reject(false);
     }
   }
 
@@ -236,28 +235,24 @@ export class TransactionService {
     return authorizationKey;
   }
 
-  async setTransferHistory(
-    sender: User,
-    recipient: User,
-    amountMoney: Decimal,
-    transferTitle: string,
-    authorizationKey: string
-  ): Promise<object | undefined> {
+  /**
+   * Returns boolean that user has already benefited from the promotion
+   */
+  async hasPromotion(user: User): Promise<boolean> {
     try {
-      return await this.transactionRepository.update(
-        {
-          sender,
-          recipient,
-          amountMoney,
-          transferTitle,
-          authorizationKey,
-          authorizationStatus: false
-        },
-        {
-          authorizationStatus: true,
-          createdDate: new Date()
+      const hasPromotion = await this.transactionRepository.findOne({
+        where: {
+          recipient: user,
+          authorizationKey: `PROMO10`,
+          authorizationStatus: true
         }
-      );
+      });
+
+      if (hasPromotion) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
       return Promise.reject(error);
     }

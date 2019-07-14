@@ -6,6 +6,7 @@ import { getManager } from "typeorm";
 // Impoty Services
 import { TransactionService } from "../services/transactions.service";
 import { BillService } from "../services/bills.service";
+import { UserService } from "../services/users.service";
 
 // Import Interfaces
 import { ResponseError } from "../resources/interfaces/ResponseError.interface";
@@ -49,27 +50,27 @@ confirmRouter
     async (req: Request, res: Response, next: NextFunction) => {
       const transactionService = new TransactionService();
       const billService = new BillService();
+      const userService = new UserService();
       const userRepository = getManager().getRepository(User);
       const transactionRepository = getManager().getRepository(Transaction);
       const validationErrors = validationResult(req);
+      const accountBill = req.body.accountBill;
+      const amountMoney = req.body.amountMoney;
+      const transferTitle = req.body.transferTitle;
 
       try {
-        const userId = req.user.id;
-        const userBill = await billService.getByUserId(userId);
-        const user = userBill.user;
-        const accountBill = req.body.accountBill;
-        const amountMoney = req.body.amountMoney;
+        const user = await userService.getById(req.user.id);
+        const userBill = await billService.getByUser(user);
         const currency = userBill.currency;
-        const transferTitle = req.body.transferTitle;
         const recipientBill = await billService.getByAccountBill(accountBill);
         const recipient = recipientBill.user;
         const recipientId = userRepository.getId(recipientBill.user);
         const authorizationKey = req.body.authorizationKey;
         const isAmountMoney = await billService.isAmountMoney(
           amountMoney,
-          userId
+          user
         );
-        const registeredTransaction = await transactionService.getOne(
+        const registeredTransaction = await transactionService.getTransaction(
           amountMoney,
           transferTitle,
           authorizationKey,
@@ -79,7 +80,7 @@ confirmRouter
         );
 
         if (
-          userId === recipientId ||
+          user === recipient ||
           registeredTransaction.authorizationKey !== authorizationKey ||
           !isAmountMoney ||
           !registeredTransaction ||
@@ -93,17 +94,19 @@ confirmRouter
           return next(err);
         }
 
-        await billService.subAmountMoney(amountMoney, userId);
-        await billService.addAmountMoney(amountMoney, recipientId, currency);
-        await transactionService.setTransferHistory(
-          user,
-          recipient,
-          amountMoney,
-          transferTitle,
-          authorizationKey
-        );
+        await billService.subAmountMoney(amountMoney, user);
+        await billService.addAmountMoney(amountMoney, recipient, currency);
 
-        //todo: ...
+        let transaction = new Transaction();
+        transaction.sender = userBill;
+        transaction.recipient = recipientBill;
+        transaction.transferTitle = transferTitle;
+        transaction.currency = currency;
+        transaction.authorizationKey = authorizationKey;
+        transaction.authorizationStatus = true;
+        transaction.amountMoney = amountMoney;
+        transaction = transactionRepository.create(transaction);
+        await transactionService.insert(transaction);
 
         return res.status(HttpStatus.OK).json({
           success: true

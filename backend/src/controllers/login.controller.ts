@@ -12,6 +12,9 @@ import { UserService } from "../services/users.service";
 // Import Middlewares
 import { AuthHandler } from "../middlewares/authHandler.middleware";
 
+// Import Middlewares
+import promotion from "../middlewares/promotion.middleware";
+
 const loginRouter: Router = Router();
 
 /**
@@ -35,7 +38,6 @@ loginRouter
     async (req: Request, res: Response, next: NextFunction) => {
       const userService = new UserService();
       const authHandler = new AuthHandler();
-
       const validationErrors = validationResult(req);
       const user = await userService.getByLogin(req.body.login);
       const isPasswordCorrect = await bcrypt.compare(
@@ -44,8 +46,7 @@ loginRouter
       );
 
       if (!user || !isPasswordCorrect || !validationErrors.isEmpty()) {
-        if (!isPasswordCorrect)
-          await userService.setLastFailedLoggedDate(req.body.login);
+        if (!isPasswordCorrect) await userService.setLastFailedLoggedDate(user);
 
         const err: ResponseError = {
           success: false,
@@ -57,7 +58,8 @@ loginRouter
       }
 
       try {
-        await userService.setLastPresentLoggedDate(req.body.login);
+        await promotion(req);
+        await userService.setLastPresentLoggedDate(user);
         const token = authHandler.generateToken(user);
         res.status(HttpStatus.OK).json({
           success: true,

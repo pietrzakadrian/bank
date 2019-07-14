@@ -3,14 +3,17 @@ import { Logger, ILogger } from "../utils/logger";
 
 // Import Entities
 import { Currency } from "../entities/currency.entity";
+import { User } from "../entities/user.entity";
 
 export class CurrencyService {
   currencyRepository: Repository<Currency>;
+  userRepository: Repository<User>;
   logger: ILogger;
 
   constructor() {
     this.logger = new Logger(__filename);
     this.currencyRepository = getManager().getRepository(Currency);
+    this.userRepository = getManager().getRepository(User);
   }
 
   /**
@@ -33,7 +36,6 @@ export class CurrencyService {
    * Returns a currency by given id
    */
   async getById(id: string | number): Promise<Currency> {
-    this.logger.info("Fetching user by id: ", id);
     if (id) {
       return await this.currencyRepository.findOne(id);
     }
@@ -43,56 +45,38 @@ export class CurrencyService {
   /**
    * Returns a additiona by userId
    */
-  async getByUserId(id: number): Promise<Currency | undefined> {
-    const userService = new CurrencyService();
-    const user = await userService.getById(id);
+  async getByUser(user: User): Promise<Currency | undefined> {
+    const userId = this.userRepository.getId(user);
 
-    const additional = await this.currencyRepository.findOne({
-      where: {
-        user
+    try {
+      const additional = await this.currencyRepository.findOne(userId);
+
+      if (additional) {
+        return additional;
+      } else {
+        return undefined;
       }
-    });
-    if (additional) {
-      return additional;
-    } else {
-      return undefined;
+    } catch (error) {
+      return Promise.reject(false);
     }
-  }
-
-  /**
-   * Returns a currency exchange rate by given id
-   */
-  async getExchangeRate(id: number | string): Promise<number> {
-    const currencyService = new CurrencyService();
-
-    const currency = await this.currencyRepository.findOne({
-      where: {
-        currency: await currencyService.getById(id)
-      }
-    });
-
-    if (currency) {
-      return currency.exchangeRate;
-    }
-    return Promise.reject(false);
   }
 
   /**
    * Returns a boolean that currency is main
    */
-  async isCurrencyMain(id: number | string): Promise<boolean> {
-    const currencyService = new CurrencyService();
+  async isCurrencyMain(currency: Currency): Promise<boolean> {
+    const currencyId = this.currencyRepository.getId(currency);
 
-    const currency = await this.currencyRepository.findOne({
-      where: {
-        currency: await currencyService.getById(id)
+    try {
+      const isCurrencyMain = await this.currencyRepository.findOne(currencyId);
+
+      if (isCurrencyMain) {
+        return true;
+      } else {
+        return false;
       }
-    });
-
-    if (currency.main) {
-      return true;
-    } else {
-      return false;
+    } catch (error) {
+      return Promise.reject(false);
     }
   }
 }

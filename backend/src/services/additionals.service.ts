@@ -1,22 +1,28 @@
-import { getManager, Repository } from "typeorm";
+import { getManager, Repository, Between } from "typeorm";
 import { Logger, ILogger } from "../utils/logger";
 
 // Import Services
 import { UserService } from "./users.service";
+import { BillService } from "./bills.service";
+import { CurrencyService } from "./currency.service";
 
 // Import Entities
 import { Additional } from "../entities/additional.entity";
 import { Transaction } from "../entities/transaction.entity";
+import { User } from "../entities/user.entity";
+import { Currency } from "../entities/currency.entity";
 
 export class AdditionalService {
   additionalRepository: Repository<Additional>;
   transactionRepository: Repository<Transaction>;
+  userRepository: Repository<User>;
   logger: ILogger;
 
   constructor() {
     this.logger = new Logger(__filename);
     this.additionalRepository = getManager().getRepository(Additional);
     this.transactionRepository = getManager().getRepository(Transaction);
+    this.userRepository = getManager().getRepository(User);
   }
 
   /**
@@ -38,10 +44,7 @@ export class AdditionalService {
   /**
    * Unsets user's all notifications
    */
-  async unsetNotifications(id: number): Promise<Object | undefined> {
-    const userService = new UserService();
-    const user = await userService.getById(id);
-
+  async unsetNotifications(user: User): Promise<object> {
     try {
       return await this.additionalRepository.update(
         { user },
@@ -50,6 +53,27 @@ export class AdditionalService {
           notificationStatus: false
         }
       );
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Returns boolean that user has a new notifiations
+   */
+  async isNotification(user: User): Promise<Additional> {
+    const userId = this.userRepository.getId(user);
+
+    try {
+      const isNotification = await this.additionalRepository
+        .createQueryBuilder("additional")
+        .where("additional.userId = :senderId", {
+          userId
+        })
+        .select("additional.notificationStatus")
+        .getOne();
+
+      return isNotification;
     } catch (error) {
       return Promise.reject(error);
     }
@@ -67,21 +91,21 @@ export class AdditionalService {
   }
 
   /**
-   * Returns a additiona by userId
+   * Returns a additiona by User
    */
-  async getByUserId(id: number): Promise<Additional | undefined> {
-    const userService = new UserService();
-    const user = await userService.getById(id);
+  async getByUser(user: User): Promise<Additional | undefined> {
+    const userId = this.userRepository.getId(user);
 
-    const additional = await this.additionalRepository.findOne({
-      where: {
-        user
+    try {
+      const additional = await this.additionalRepository.findOne(userId);
+
+      if (additional) {
+        return additional;
+      } else {
+        return undefined;
       }
-    });
-    if (additional) {
-      return additional;
-    } else {
-      return undefined;
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
 
@@ -89,28 +113,39 @@ export class AdditionalService {
    * Returns user's new notification's
    */
   async getNotifications(
-    id: number,
-    take: number
+    recipient: User,
+    limit: number
   ): Promise<Array<Transaction> | undefined> {
-    const userService = new UserService();
-    const recipient = await userService.getById(id);
+    const recipientId = this.userRepository.getId(recipient);
 
-    const transactions = await this.transactionRepository.find({
-      take,
-      where: {
-        recipient,
-        authorizationStatus: true
-      },
-      relations: ["currency", "sender", "sender.user"],
-      order: {
-        createdDate: "DESC"
+    try {
+      const transactions = await this.transactionRepository
+        .createQueryBuilder("transaction")
+        .leftJoinAndSelect("transaction.currency", "currency")
+        .leftJoinAndSelect("transaction.sender", "sender")
+        .leftJoinAndSelect("sender.user", "user")
+        .select([
+          "transaction.createdDate",
+          "transaction.amountMoney",
+          "currency.name",
+          "user.name",
+          "user.surname"
+        ])
+        .where("transaction.recipientId = :recipientId", { recipientId })
+        .andWhere("transaction.authorizationStatus = :authorizationStatus", {
+          authorizationStatus: true
+        })
+        .orderBy("transaction.createdDate", "DESC")
+        .limit(limit)
+        .execute();
+
+      if (transactions) {
+        return transactions;
+      } else {
+        return undefined;
       }
-    });
-
-    if (transactions) {
-      return transactions;
-    } else {
-      return undefined;
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
 }

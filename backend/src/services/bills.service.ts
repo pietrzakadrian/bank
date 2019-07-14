@@ -13,11 +13,13 @@ import { User } from "../entities/user.entity";
 
 export class BillService {
   billRepository: Repository<Bill>;
+  userRepository: Repository<User>;
   logger: ILogger;
 
   constructor() {
     this.logger = new Logger(__filename);
     this.billRepository = getManager().getRepository(Bill);
+    this.userRepository = getManager().getRepository(User);
   }
 
   /**
@@ -50,17 +52,11 @@ export class BillService {
   /**
    * Returns a bill by userId
    */
-  async getByUserId(id: string | number): Promise<Bill | undefined> {
-    const userService = new UserService();
-    const user = await userService.getById(id);
-
+  async getByUser(user: User): Promise<Bill | undefined> {
     const bill = await this.billRepository.findOne({
-      where: {
-        user
-      },
+      where: { user },
       relations: ["user", "currency"]
     });
-
     if (bill) {
       return bill;
     } else {
@@ -75,9 +71,7 @@ export class BillService {
     accountBill: string | number
   ): Promise<Bill | undefined> {
     const bill = await this.billRepository.findOne({
-      where: {
-        accountBill
-      },
+      where: { accountBill },
       relations: ["user"]
     });
 
@@ -93,34 +87,28 @@ export class BillService {
    */
   async getUsersByAccountBill(
     accountBill: string,
-    id?: number
-  ): Promise<Array<object> | undefined> {
-    const userService = new UserService();
-    const user = id ? await userService.getById(id) : undefined;
+    user?: User
+  ): Promise<Array<Bill> | undefined> {
+    const userId = user ? this.userRepository.getId(user) : undefined;
 
-    const bills: Bill[] = await this.billRepository.find({
-      select: ["accountBill"],
-      where: [
-        {
-          accountBill: Like(`${accountBill}%`),
-          user: Not(`${user}`)
-        }
-      ],
-      relations: ["user"]
-    });
+    try {
+      const bills = await this.billRepository
+        .createQueryBuilder("bill")
+        .leftJoinAndSelect("bill.user", "user")
+        .where("bill.accountBill LIKE :accountBill", {
+          accountBill: `${accountBill}%`
+        })
+        .andWhere("bill.userId != :userId", { userId: userId ? userId : 0 })
+        .select(["bill.accountBill", "user.name", "user.surname"])
+        .execute();
 
-    if (bills) {
-      const transformBills = bills.map(({ ...bill }) => ({
-        accountBill: bill.accountBill,
-        user: {
-          name: bill.user.name,
-          surname: bill.user.surname
-        }
-      }));
-
-      return transformBills;
-    } else {
-      return undefined;
+      if (bills) {
+        return bills;
+      } else {
+        return undefined;
+      }
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
 
@@ -143,18 +131,17 @@ export class BillService {
   /**
    * Returns a bill by userId
    */
-  async isAmountMoney(amountMoney: Decimal, id: number): Promise<boolean> {
-    const userService = new UserService();
-    const user = await userService.getById(id);
-
+  async isAmountMoney(amountMoney: Decimal, user: User): Promise<boolean> {
     const bill = await this.billRepository.findOne({
       where: {
         user
       }
     });
 
+    const availableFunds = new Decimal(bill.availableFunds);
+
     if (
-      bill.availableFunds.greaterThanOrEqualTo(amountMoney) &&
+      availableFunds.greaterThanOrEqualTo(amountMoney) &&
       amountMoney.greaterThan(0)
     ) {
       return true;
@@ -166,18 +153,14 @@ export class BillService {
   /**
    * Returns substract Amount Money by userId
    */
-  async subAmountMoney(amountMoney: Decimal, id: number): Promise<object> {
-    const userService = new UserService();
-    const user = await userService.getById(id);
-    const userId = user.id;
-
+  async subAmountMoney(amountMoney: Decimal, user: User): Promise<object> {
     try {
-      const bill = await this.getByUserId(userId);
+      const bill = await this.getByUser(user);
 
-      const availableFunds: Decimal = Decimal.sub(
+      const availableFunds = Decimal.sub(
         bill.availableFunds,
         amountMoney
-      );
+      ).toNumber();
 
       return await this.billRepository.update(
         { user },
@@ -194,29 +177,25 @@ export class BillService {
    * Returns add Amount Money by userId
    */
   async addAmountMoney(
-    amountMoney: Decimal,
-    id: number,
+    amountMoney: number,
+    user: User,
     currency: Currency
   ): Promise<object> {
-    const userService = new UserService();
     const currencyService = new CurrencyService();
-    const user = await userService.getById(id);
-    const userId = user.id;
-    const recipientCurrency = await currencyService.getByUserId(userId);
-    const recipienCurrencyId = recipientCurrency.id;
+    const recipientCurrency = await currencyService.getByUser(user);
     const recipientExchangeRate = recipientCurrency.exchangeRate;
     const isCurrencyMain = await currencyService.isCurrencyMain(
-      recipienCurrencyId
+      recipientCurrency
     );
 
     try {
-      const bill = await this.getByUserId(userId);
+      const bill = await this.getByUser(user);
 
       if (bill.currency === currency) {
-        const availableFunds: Decimal = Decimal.add(
+        const availableFunds = Decimal.add(
           bill.availableFunds,
           amountMoney
-        );
+        ).toNumber();
 
         return await this.billRepository.update(
           { user },
@@ -231,10 +210,10 @@ export class BillService {
           amountMoney,
           recipientExchangeRate
         );
-        const availableFunds: Decimal = Decimal.add(
+        const availableFunds = Decimal.add(
           bill.availableFunds,
           convertedAmountMoney
-        );
+        ).toNumber();
 
         return await this.billRepository.update(
           { user },
@@ -249,10 +228,10 @@ export class BillService {
         currency.exchangeRate
       ).mul(recipientExchangeRate);
 
-      const availableFunds: Decimal = Decimal.add(
+      const availableFunds = Decimal.add(
         bill.availableFunds,
         convertedAmountMoney
-      );
+      ).toNumber();
 
       return await this.billRepository.update(
         { user },

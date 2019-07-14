@@ -4,6 +4,8 @@ import { param, validationResult } from "express-validator/check";
 
 // Impoty Services
 import { TransactionService } from "../services/transactions.service";
+import { BillService } from "../services/bills.service";
+import { UserService } from "../services/users.service";
 
 // Import Interfaces
 import { ResponseError } from "../resources/interfaces/responseError.interface";
@@ -22,11 +24,12 @@ transactionsRouter
 
   .get(async (req: Request, res: Response, next: NextFunction) => {
     const transactionService = new TransactionService();
-    const userId = req.user.id;
+    const userService = new UserService();
+    const user = await userService.getById(req.user.id);
 
     try {
       const senderTransactions = await transactionService.getSenderTransactions(
-        userId
+        user
       );
 
       if (senderTransactions)
@@ -55,11 +58,12 @@ transactionsRouter
 
   .get(async (req: Request, res: Response, next: NextFunction) => {
     const transactionService = new TransactionService();
-    const userId = req.user.id;
+    const userService = new UserService();
+    const user = await userService.getById(req.user.id);
 
     try {
       const recipientTransactions = await transactionService.getRecipientTransactions(
-        userId
+        user
       );
 
       if (recipientTransactions)
@@ -95,8 +99,9 @@ transactionsRouter
 
     async (req: Request, res: Response, next: NextFunction) => {
       const transactionService = new TransactionService();
+      const userService = new UserService();
       const validationErrors = validationResult(req);
-      const userId = req.user.id;
+      const user = await userService.getById(req.user.id);
       const offset = req.params.offset;
 
       if (!validationErrors.isEmpty()) {
@@ -110,7 +115,7 @@ transactionsRouter
 
       try {
         const transactions = await transactionService.getTransactions(
-          userId,
+          user,
           offset
         );
 
@@ -148,9 +153,10 @@ transactionsRouter
 
     async (req: Request, res: Response, next: NextFunction) => {
       const transactionService = new TransactionService();
+      const userService = new UserService();
+      const sender = await userService.getById(req.user.id);
+      const recipient = await userService.getById(req.params.id);
       const validationErrors = validationResult(req);
-      const userId = req.user.id;
-      const recipientId = req.params.id;
 
       if (!validationErrors.isEmpty()) {
         const err: ResponseError = {
@@ -163,14 +169,14 @@ transactionsRouter
 
       try {
         const authorizationKey = await transactionService.getAuthorizationKey(
-          userId,
-          recipientId
+          sender,
+          recipient
         );
 
         if (authorizationKey)
           return res.status(HttpStatus.OK).json({
             success: true,
-            authorizationKey
+            authorizationKey: authorizationKey.authorizationKey
           });
       } catch (error) {
         const err: ResponseError = {

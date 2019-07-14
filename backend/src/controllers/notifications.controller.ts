@@ -7,6 +7,7 @@ import { AuthHandler } from "../middlewares/authHandler.middleware";
 
 // Impoty Services
 import { AdditionalService } from "../services/additionals.service";
+import { UserService } from "../services/users.service";
 
 // Import Interfaces
 import { ResponseError } from "../resources/interfaces/ResponseError.interface";
@@ -17,7 +18,7 @@ const notificationsRouter: Router = Router();
  * Checks whether the login already exists
  *
  * @Method GET
- * @URL /api/additionals/notifications/isNotification
+ * @URL /api/additionals/notifications/isNotifications
  *
  */
 notificationsRouter
@@ -25,10 +26,11 @@ notificationsRouter
 
   .get(async (req: Request, res: Response, next: NextFunction) => {
     const additionalService = new AdditionalService();
+    const userService = new UserService();
 
     try {
-      const userId = req.user.id;
-      const additional = await additionalService.getByUserId(userId);
+      const user = await userService.getById(req.user.id);
+      const additional = await additionalService.getByUser(user);
       const isNotification = additional.notificationStatus;
       const notificationCount = additional.notificationCount;
 
@@ -39,7 +41,7 @@ notificationsRouter
         });
 
       res.status(HttpStatus.OK).json({
-        isNotification: false
+        isNotification
       });
     } catch (error) {
       const err: ResponseError = {
@@ -102,7 +104,9 @@ notificationsRouter
 
     async (req: Request, res: Response, next: NextFunction) => {
       const additionalService = new AdditionalService();
+      const userService = new UserService();
       const validationErrors = validationResult(req);
+      const limit = req.params.limit;
 
       if (!validationErrors.isEmpty()) {
         const err: ResponseError = {
@@ -114,29 +118,16 @@ notificationsRouter
       }
 
       try {
-        const userId = req.user.id;
-        const limit = req.params.limit;
+        const user = await userService.getById(req.user.id);
         const notifications = await additionalService.getNotifications(
-          userId,
+          user,
           limit
         );
 
         if (notifications) {
-          const transformNotifcations = notifications.map(
-            ({ ...notification }) => ({
-              amountMoney: notification.amountMoney,
-              currency: notification.currency.name,
-              createdDate: notification.createdDate,
-              sender: {
-                name: notification.sender.user.name,
-                surname: notification.sender.user.surname
-              }
-            })
-          );
-
           res.status(HttpStatus.OK).json({
             success: true,
-            transformNotifcations
+            notifications
           });
         }
       } catch (error) {

@@ -30,8 +30,8 @@ logoutRouter
       const userService = new UserService();
 
       try {
-        const userId = req.user.id;
-        await userService.setLastSuccessfulLoggedDate(userId);
+        const user = await userService.getById(req.user.id);
+        await userService.setLastSuccessfulLoggedDate(user);
 
         res.status(HttpStatus.OK).json({
           success: true

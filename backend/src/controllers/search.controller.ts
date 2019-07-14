@@ -4,6 +4,7 @@ import { param, validationResult } from "express-validator/check";
 
 // Import Services
 import { BillService } from "../services/bills.service";
+import { UserService } from "../services/users.service";
 
 // Import Interfaces
 import { ResponseError } from "../resources/interfaces/ResponseError.interface";
@@ -30,7 +31,9 @@ searchRouter
 
     async (req: Request, res: Response, next: NextFunction) => {
       const billService = new BillService();
+      const userService = new UserService();
       const validationErrors = validationResult(req);
+      const accountBill = req.params.accountBill;
 
       if (!validationErrors.isEmpty()) {
         const err: ResponseError = {
@@ -42,11 +45,10 @@ searchRouter
       }
 
       try {
-        const accountBill = req.params.accountBill;
-        const userId = req.user.id;
+        const user = await userService.getById(req.user.id);
         const bills = await billService.getUsersByAccountBill(
           accountBill,
-          userId
+          user
         );
 
         if (bills) {

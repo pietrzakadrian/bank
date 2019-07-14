@@ -40,7 +40,6 @@ export class UserService {
    * Returns a user by given id
    */
   async getById(id: string | number): Promise<User> {
-    this.logger.info("Fetching user by id: ", id);
     if (id) {
       return await this.userRepository.findOne(id);
     }
@@ -48,25 +47,9 @@ export class UserService {
   }
 
   /**
-   * Returns a user by email
-   */
-  async getByEmail(email: string): Promise<User | undefined> {
-    const user = await this.userRepository.findOne({
-      where: {
-        email: email
-      }
-    });
-    if (user) {
-      return user;
-    } else {
-      return undefined;
-    }
-  }
-
-  /**
    * Returns a user by login
    */
-  async getByLogin(login: number): Promise<User | undefined> {
+  async getByLogin(login: string | number): Promise<User | undefined> {
     const user = await this.userRepository.findOne({
       where: {
         login
@@ -80,28 +63,15 @@ export class UserService {
   }
 
   /**
-   * Updates a user
-   */
-  // async update(user: User): Promise<User | undefined> {
-  //   try {
-  //     const updatedUser = await this.userRepository.save(user);
-  //     return updatedUser;
-  //   } catch (error) {
-  //     return Promise.reject(error);
-  //   }
-  // }
-
-  /**
    * Updates the last failed logged date
    */
-  async setLastFailedLoggedDate(login: number): Promise<Object | undefined> {
+  async setLastFailedLoggedDate(user: User): Promise<object> {
+    const userId = this.userRepository.getId(user);
+
     try {
-      return await this.userRepository.update(
-        { login },
-        {
-          lastFailedLoggedDate: new Date()
-        }
-      );
+      return await this.userRepository.update(userId, {
+        lastFailedLoggedDate: new Date()
+      });
     } catch (error) {
       return Promise.reject(error);
     }
@@ -110,14 +80,13 @@ export class UserService {
   /**
    * Updates the last present logged date
    */
-  async setLastPresentLoggedDate(login: number): Promise<Object | undefined> {
+  async setLastPresentLoggedDate(user: User): Promise<object> {
+    const userId = this.userRepository.getId(user);
+
     try {
-      return await this.userRepository.update(
-        { login },
-        {
-          lastPresentLoggedDate: new Date()
-        }
-      );
+      return await this.userRepository.update(userId, {
+        lastPresentLoggedDate: new Date()
+      });
     } catch (error) {
       return Promise.reject(error);
     }
@@ -126,20 +95,13 @@ export class UserService {
   /**
    * Updates the last succesful logged date
    */
-  async setLastSuccessfulLoggedDate(id: number): Promise<Object | undefined> {
-    try {
-      const user = await this.userRepository.findOne({
-        where: {
-          id
-        }
-      });
+  async setLastSuccessfulLoggedDate(user: User): Promise<object> {
+    const userId = this.userRepository.getId(user);
 
-      return await this.userRepository.update(
-        { id },
-        {
-          lastSuccessfulLoggedDate: user.lastPresentLoggedDate
-        }
-      );
+    try {
+      return await this.userRepository.update(userId, {
+        lastSuccessfulLoggedDate: user.lastPresentLoggedDate
+      });
     } catch (error) {
       return Promise.reject(error);
     }
