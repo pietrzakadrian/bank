@@ -6,8 +6,12 @@ import { param, validationResult } from "express-validator/check";
 import { BillService } from "../services/bills.service";
 import { UserService } from "../services/users.service";
 
+// Import Entities
+import { User } from "../entities/user.entity";
+import { Bill } from "../entities/bill.entity";
+
 // Import Interfaces
-import { ResponseError } from "../resources/interfaces/ResponseError.interface";
+import { IResponseError } from "../resources/interfaces/IResponseError.interface";
 
 const searchRouter: Router = Router();
 
@@ -33,10 +37,10 @@ searchRouter
       const billService = new BillService();
       const userService = new UserService();
       const validationErrors = validationResult(req);
-      const accountBill = req.params.accountBill;
+      const accountBill: string = req.params.accountBill;
 
       if (!validationErrors.isEmpty()) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -45,8 +49,8 @@ searchRouter
       }
 
       try {
-        const user = await userService.getById(req.user.id);
-        const bills = await billService.getUsersByAccountBill(
+        const user: User = await userService.getById(req.user.id);
+        const bills: Bill[] = await billService.getUsersByAccountBill(
           accountBill,
           user
         );
@@ -57,7 +61,7 @@ searchRouter
           });
         }
       } catch (error) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

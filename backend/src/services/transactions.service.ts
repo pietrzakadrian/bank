@@ -153,8 +153,7 @@ export class TransactionService {
     limit?: number,
     from?: Date,
     to?: Date
-  ) {
-    const billService = new BillService();
+  ): Promise<[Transaction[], number] | Promise<Array<object>> | object> {
     const userId = this.userRepository.getId(user);
 
     try {

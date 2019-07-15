@@ -4,13 +4,16 @@ import * as HttpStatus from "http-status-codes";
 import { body, validationResult } from "express-validator/check";
 
 // Import Intefaces
-import { ResponseError } from "../resources/interfaces/ResponseError.interface";
+import { IResponseError } from "../resources/interfaces/IResponseError.interface";
 
 // Import Services
 import { UserService } from "../services/users.service";
 
 // Import Middlewares
 import { AuthHandler } from "../middlewares/authHandler.middleware";
+
+// Import Entities
+import { User } from "../entities/user.entity";
 
 // Import Middlewares
 import promotion from "../middlewares/promotion.middleware";
@@ -39,8 +42,8 @@ loginRouter
       const userService = new UserService();
       const authHandler = new AuthHandler();
       const validationErrors = validationResult(req);
-      const user = await userService.getByLogin(req.body.login);
-      const isPasswordCorrect = await bcrypt.compare(
+      const user: User = await userService.getByLogin(req.body.login);
+      const isPasswordCorrect: boolean = await bcrypt.compare(
         req.body.password,
         user.password
       );
@@ -48,7 +51,7 @@ loginRouter
       if (!user || !isPasswordCorrect || !validationErrors.isEmpty()) {
         if (!isPasswordCorrect) await userService.setLastFailedLoggedDate(user);
 
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: !isPasswordCorrect
             ? HttpStatus.UNAUTHORIZED
@@ -60,13 +63,13 @@ loginRouter
       try {
         await promotion(user);
         await userService.setLastPresentLoggedDate(user);
-        const token = authHandler.generateToken(user);
+        const token: string = authHandler.generateToken(user);
         res.status(HttpStatus.OK).json({
           success: true,
           token
         });
       } catch (error) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

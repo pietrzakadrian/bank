@@ -1,16 +1,22 @@
 import { getManager, Repository } from "typeorm";
 import { Logger, ILogger } from "../utils/logger";
+import { Decimal } from "decimal.js";
 
 // Import Entities
 import { Currency } from "../entities/currency.entity";
 import { User } from "../entities/user.entity";
 import { Bill } from "../entities/bill.entity";
+import { Additional } from "../entities/additional.entity";
+
+// Import Services
 import { BillService } from "./bills.service";
+import { AdditionalService } from "./additionals.service";
 
 export class CurrencyService {
   currencyRepository: Repository<Currency>;
   userRepository: Repository<User>;
   billRepository: Repository<Bill>;
+  additionalRepository: Repository<Additional>;
   logger: ILogger;
 
   constructor() {
@@ -18,6 +24,7 @@ export class CurrencyService {
     this.currencyRepository = getManager().getRepository(Currency);
     this.userRepository = getManager().getRepository(User);
     this.billRepository = getManager().getRepository(Bill);
+    this.additionalRepository = getManager().getRepository(Additional);
   }
 
   /**
@@ -47,10 +54,10 @@ export class CurrencyService {
   }
 
   /**
-   * Returns a additiona by userId
+   * Returns a additional by userId
    */
   async getByUser(user: User): Promise<Currency> {
-    const userId = this.userRepository.getId(user);
+    const userId: number = this.userRepository.getId(user);
 
     try {
       let currencyBill = await this.billRepository
@@ -69,12 +76,94 @@ export class CurrencyService {
     }
   }
 
-  // test
-  async getExchangeRateById(id: number) {
+  /**
+   * Returns a currency exchange rate by id
+   */
+  async getExchangeRateById(id: number): Promise<number> {
     if (id) {
-      const currency = await this.currencyRepository.findOne(id);
+      const currency: Currency = await this.currencyRepository.findOne(id);
       return currency.exchangeRate;
     }
     return Promise.reject(false);
+  }
+
+  async setExchangeRate(user: User, currency: Currency): Promise<object> {
+    const additionalService = new AdditionalService();
+    const billService = new BillService();
+    const userAdditional: Additional = await additionalService.getByUser(user);
+    const userId: number = this.userRepository.getId(user);
+    const userCurrencyExchangeRate: number = await this.getExchangeRateById(
+      userId
+    );
+    const isUserNewCurrencyMain: boolean = currency.main;
+    const newCurrencyExchangeRate: number = currency.exchangeRate;
+    const userIncomingTransfersSum: number = await userAdditional.incomingTransfersSum;
+    const userOutgoingTransfersSum: number = await userAdditional.outgoingTransfersSum;
+    const userBill: Bill = await billService.getByUser(user);
+    const userAvailableFunds: number = userBill.availableFunds;
+
+    if (isUserNewCurrencyMain) {
+      const convertedAmountMoney: number = Decimal.div(
+        userAvailableFunds,
+        userCurrencyExchangeRate
+      ).toNumber();
+      const convertedIncomingTransfersSum: number = Decimal.div(
+        userIncomingTransfersSum,
+        userCurrencyExchangeRate
+      ).toNumber();
+      const convertedOutgoingTransfersSum: number = Decimal.div(
+        userOutgoingTransfersSum,
+        userCurrencyExchangeRate
+      ).toNumber();
+
+      return new Promise((_resolve, _reject) => {
+        this.additionalRepository.update(
+          { user },
+          {
+            incomingTransfersSum: convertedIncomingTransfersSum,
+            outgoingTransfersSum: convertedOutgoingTransfersSum
+          }
+        ),
+          this.billRepository.update(
+            { user },
+            { availableFunds: convertedAmountMoney }
+          );
+      });
+    }
+
+    const convertedAmountMoney: number = Decimal.div(
+      userAvailableFunds,
+      userCurrencyExchangeRate
+    )
+      .mul(newCurrencyExchangeRate)
+      .toNumber();
+
+    const convertedIncomingTransfersSum: number = Decimal.div(
+      userIncomingTransfersSum,
+      userCurrencyExchangeRate
+    )
+      .mul(newCurrencyExchangeRate)
+      .toNumber();
+
+    const convertedOutgoingTransfersSum: number = Decimal.div(
+      userOutgoingTransfersSum,
+      userCurrencyExchangeRate
+    )
+      .mul(newCurrencyExchangeRate)
+      .toNumber();
+
+    return new Promise((_resolve, _reject) => {
+      this.additionalRepository.update(
+        { user },
+        {
+          incomingTransfersSum: convertedIncomingTransfersSum,
+          outgoingTransfersSum: convertedOutgoingTransfersSum
+        }
+      ),
+        this.billRepository.update(
+          { user },
+          { availableFunds: convertedAmountMoney }
+        );
+    });
   }
 }

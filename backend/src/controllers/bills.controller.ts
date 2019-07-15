@@ -9,7 +9,7 @@ import { BillService } from "../services/bills.service";
 import { UserService } from "../services/users.service";
 
 // Import Interfaces
-import { ResponseError } from "../resources/interfaces/ResponseError.interface";
+import { IResponseError } from "../resources/interfaces/IResponseError.interface";
 
 // Import Entities
 import { User } from "../entities/user.entity";
@@ -54,7 +54,7 @@ billsRouter
         });
       }
     } catch (error) {
-      const err: ResponseError = {
+      const err: IResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -89,7 +89,7 @@ billsRouter
       const accountBill: string = req.params.accountBill;
 
       if (!validationErrors.isEmpty()) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -112,7 +112,7 @@ billsRouter
           isAccountBill: false
         });
       } catch (error) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error
@@ -146,7 +146,7 @@ billsRouter
       const amountMoney: number = req.params.amountMoney;
 
       if (!validationErrors.isEmpty()) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -164,7 +164,7 @@ billsRouter
           isAmountMoney
         });
       } catch (error) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

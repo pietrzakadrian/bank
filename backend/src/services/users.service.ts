@@ -30,6 +30,18 @@ export class UserService {
   }
 
   /**
+   * Updates a user
+   */
+  async update(user: User): Promise<User | undefined> {
+    try {
+      const updatedUser = await this.userRepository.save(user);
+      return updatedUser;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
    * Returns array of all users from db
    */
   async getAll(): Promise<User[]> {

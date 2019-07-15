@@ -10,7 +10,7 @@ import { UserService } from "../services/users.service";
 import { CurrencyService } from "../services/currency.service";
 
 // Import Interfaces
-import { ResponseError } from "../resources/interfaces/ResponseError.interface";
+import { IResponseError } from "../resources/interfaces/IResponseError.interface";
 
 // Import Entities
 import { User } from "../entities/user.entity";
@@ -78,7 +78,7 @@ createRouter
           !isAmountMoney ||
           !validationErrors.isEmpty()
         ) {
-          const err: ResponseError = {
+          const err: IResponseError = {
             success: false,
             code: HttpStatus.BAD_REQUEST,
             error: validationErrors.array()
@@ -103,7 +103,7 @@ createRouter
           success: true
         });
       } catch (error) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

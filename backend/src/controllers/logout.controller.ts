@@ -2,10 +2,13 @@ import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
 
 // Import Intefaces
-import { ResponseError } from "../resources/interfaces/ResponseError.interface";
+import { IResponseError } from "../resources/interfaces/IResponseError.interface";
 
 // Import Services
 import { UserService } from "../services/users.service";
+
+// Import Entities
+import { User } from "../entities/user.entity";
 
 // Import Middlewares
 import { AuthHandler } from "../middlewares/authHandler.middleware";
@@ -30,14 +33,14 @@ logoutRouter
       const userService = new UserService();
 
       try {
-        const user = await userService.getById(req.user.id);
+        const user: User = await userService.getById(req.user.id);
         await userService.setLastSuccessfulLoggedDate(user);
 
         res.status(HttpStatus.OK).json({
           success: true
         });
       } catch (error) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

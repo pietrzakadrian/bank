@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
 import bcrypt from "bcryptjs";
 import config from "../config/config";
-import { ResponseError } from "../resources/interfaces/ResponseError.interface";
+import { IResponseError } from "../resources/interfaces/IResponseError.interface";
 import { UserService } from "../services/users.service";
 import { body, validationResult } from "express-validator/check";
 
@@ -25,7 +25,7 @@ usersRouter
         data: response
       });
     } catch (error) {
-      const err: ResponseError = {
+      const err: IResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -58,7 +58,7 @@ usersRouter
         user: user
       });
     } catch (error) {
-      const err: ResponseError = {
+      const err: IResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -107,7 +107,7 @@ usersRouter
               user.password
             );
             if (!isOldPasswordCorrect) {
-              const err: ResponseError = {
+              const err: IResponseError = {
                 success: false,
                 code: HttpStatus.BAD_REQUEST,
                 error: {
@@ -141,7 +141,7 @@ usersRouter
           });
         } catch (err) {
           // db errors e.g. unique constraints etc
-          const error: ResponseError = {
+          const error: IResponseError = {
             success: false,
             code: HttpStatus.BAD_REQUEST,
             error: err
@@ -150,7 +150,7 @@ usersRouter
         }
       } else {
         // validation errors
-        const error: ResponseError = {
+        const error: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -186,7 +186,7 @@ usersRouter
       });
     } catch (error) {
       // db exception. example: wrong syntax of id e.g. special character
-      const err: ResponseError = {
+      const err: IResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error

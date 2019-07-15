@@ -4,14 +4,14 @@ import { param, validationResult } from "express-validator/check";
 
 // Impoty Services
 import { TransactionService } from "../services/transactions.service";
-import { BillService } from "../services/bills.service";
-import { UserService } from "../services/users.service";
 
 // Import Entities
 import { User } from "../entities/user.entity";
+import { Transaction } from "../entities/transaction.entity";
+import { UserService } from "../services/users.service";
 
 // Import Interfaces
-import { ResponseError } from "../resources/interfaces/responseError.interface";
+import { IResponseError } from "../resources/interfaces/IResponseError.interface";
 
 const transactionsRouter: Router = Router();
 
@@ -31,7 +31,7 @@ transactionsRouter
     const user: User = await userService.getById(req.user.id);
 
     try {
-      const senderTransactions = await transactionService.getSenderTransactions(
+      const senderTransactions: Transaction[] = await transactionService.getSenderTransactions(
         user
       );
 
@@ -40,7 +40,7 @@ transactionsRouter
           senderTransactions
         });
     } catch (error) {
-      const err: ResponseError = {
+      const err: IResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -65,7 +65,7 @@ transactionsRouter
     const user: User = await userService.getById(req.user.id);
 
     try {
-      const recipientTransactions = await transactionService.getRecipientTransactions(
+      const recipientTransactions: Transaction[] = await transactionService.getRecipientTransactions(
         user
       );
 
@@ -74,7 +74,7 @@ transactionsRouter
           recipientTransactions
         });
     } catch (error) {
-      const err: ResponseError = {
+      const err: IResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -109,7 +109,7 @@ transactionsRouter
       const limit: number = 12;
 
       if (!validationErrors.isEmpty()) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -129,7 +129,7 @@ transactionsRouter
             transactions
           });
       } catch (error) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error
@@ -164,7 +164,7 @@ transactionsRouter
       const recipient: User = await userService.getById(req.params.id);
 
       if (!validationErrors.isEmpty()) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -184,7 +184,7 @@ transactionsRouter
             authorizationKey: authorizationKey
           });
       } catch (error) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

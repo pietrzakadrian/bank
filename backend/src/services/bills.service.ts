@@ -165,6 +165,18 @@ export class BillService {
   }
 
   /**
+   * Updates a bill
+   */
+  async update(bill: Bill): Promise<User | undefined> {
+    try {
+      const updatedBill = await this.userRepository.save(bill);
+      return updatedBill;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
    * Returns substract Amount Money by userId
    */
   async subAmountMoney(amountMoney: number, user: User): Promise<object> {

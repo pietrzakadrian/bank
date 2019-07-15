@@ -8,9 +8,10 @@ import { TransactionService } from "../services/transactions.service";
 import { BillService } from "../services/bills.service";
 import { UserService } from "../services/users.service";
 import { CurrencyService } from "../services/currency.service";
+import { AdditionalService } from "../services/additionals.service";
 
 // Import Interfaces
-import { ResponseError } from "../resources/interfaces/ResponseError.interface";
+import { IResponseError } from "../resources/interfaces/IResponseError.interface";
 
 // Import Entities
 import { User } from "../entities/user.entity";
@@ -55,6 +56,7 @@ confirmRouter
       const billService = new BillService();
       const userService = new UserService();
       const currencyService = new CurrencyService();
+      const additionalService = new AdditionalService();
       const transactionRepository = getManager().getRepository(Transaction);
       const validationErrors = validationResult(req);
       const accountBill: string = req.body.accountBill;
@@ -90,7 +92,7 @@ confirmRouter
           !registeredTransaction ||
           !validationErrors.isEmpty()
         ) {
-          const err: ResponseError = {
+          const err: IResponseError = {
             success: false,
             code: HttpStatus.BAD_REQUEST,
             error: validationErrors.array()
@@ -116,11 +118,14 @@ confirmRouter
         transaction = transactionRepository.create(transaction);
         await transactionService.insert(transaction);
 
+        await additionalService.setWidgetStatus(user);
+        await additionalService.setWidgetStatus(recipient);
+
         return res.status(HttpStatus.OK).json({
           success: true
         });
       } catch (error) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

@@ -4,7 +4,7 @@ import { getManager } from "typeorm";
 
 import { User } from "../entities/user.entity";
 import { AuthHandler } from "../middlewares/authHandler.middleware";
-import { ResponseError } from "../resources/interfaces/ResponseError.interface";
+import { IResponseError } from "../resources/interfaces/IResponseError.interface";
 import { UserService } from "../services/users.service";
 
 const auth = new AuthHandler();
@@ -47,7 +47,7 @@ utilsRouter.get(
         message: "Authentication error. Unable to find user!"
       });
     } catch (error) {
-      const err: ResponseError = {
+      const err: IResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error

@@ -2,15 +2,17 @@ import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
 import { param, validationResult } from "express-validator/check";
 
-// Import Middlewares
-import { AuthHandler } from "../middlewares/authHandler.middleware";
-
 // Impoty Services
 import { AdditionalService } from "../services/additionals.service";
 import { UserService } from "../services/users.service";
 
+// Import Entities
+import { User } from "../entities/user.entity";
+import { Additional } from "../entities/additional.entity";
+import { Transaction } from "../entities/transaction.entity";
+
 // Import Interfaces
-import { ResponseError } from "../resources/interfaces/ResponseError.interface";
+import { IResponseError } from "../resources/interfaces/IResponseError.interface";
 
 const notificationsRouter: Router = Router();
 
@@ -29,10 +31,10 @@ notificationsRouter
     const userService = new UserService();
 
     try {
-      const user = await userService.getById(req.user.id);
-      const additional = await additionalService.getByUser(user);
-      const isNotification = additional.notificationStatus;
-      const notificationCount = additional.notificationCount;
+      const user: User = await userService.getById(req.user.id);
+      const additional: Additional = await additionalService.getByUser(user);
+      const isNotification: boolean = additional.notificationStatus;
+      const notificationCount: number = additional.notificationCount;
 
       if (isNotification)
         return res.status(HttpStatus.OK).json({
@@ -44,7 +46,7 @@ notificationsRouter
         isNotification
       });
     } catch (error) {
-      const err: ResponseError = {
+      const err: IResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -65,10 +67,11 @@ notificationsRouter
 
   .put(async (req: Request, res: Response, next: NextFunction) => {
     const additionalService = new AdditionalService();
+    const userService = new UserService();
 
     try {
-      const userId = req.user.id;
-      const additional = await additionalService.unsetNotifications(userId);
+      const user: User = await userService.getById(req.user.id);
+      const additional = await additionalService.unsetNotifications(user);
 
       if (additional) {
         res.status(HttpStatus.OK).json({
@@ -76,7 +79,7 @@ notificationsRouter
         });
       }
     } catch (error) {
-      const err: ResponseError = {
+      const err: IResponseError = {
         success: false,
         code: HttpStatus.BAD_REQUEST,
         error
@@ -106,10 +109,10 @@ notificationsRouter
       const additionalService = new AdditionalService();
       const userService = new UserService();
       const validationErrors = validationResult(req);
-      const limit = req.params.limit;
+      const limit: number = req.params.limit;
 
       if (!validationErrors.isEmpty()) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -118,8 +121,8 @@ notificationsRouter
       }
 
       try {
-        const user = await userService.getById(req.user.id);
-        const notifications = await additionalService.getNotifications(
+        const user: User = await userService.getById(req.user.id);
+        const notifications: Transaction[] = await additionalService.getNotifications(
           user,
           limit
         );
@@ -131,7 +134,7 @@ notificationsRouter
           });
         }
       } catch (error) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error

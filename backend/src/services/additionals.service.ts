@@ -188,9 +188,7 @@ export class AdditionalService {
             transaction.transaction_amountMoney
           );
 
-          console.log("outgoingTransfersSum1", outgoingTransfersSum);
-
-          availableFunds -= transaction.transaction_amountMoney;
+          availableFunds -= parseFloat(transaction.transaction_amountMoney);
           accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
         } else {
           transferExchangeRate = await currencyService.getExchangeRateById(
@@ -203,7 +201,6 @@ export class AdditionalService {
               transferExchangeRate;
 
             outgoingTransfersSum += convertedAmountMoney;
-            console.log("outgoingTransfersSum2", outgoingTransfersSum);
             availableFunds -= convertedAmountMoney;
             accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
           } else {
@@ -213,7 +210,6 @@ export class AdditionalService {
               userExchangeRate;
 
             outgoingTransfersSum += convertedAmountMoney;
-            console.log("outgoingTransfersSum3", outgoingTransfersSum);
             availableFunds -= convertedAmountMoney;
             accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
           }
@@ -222,7 +218,9 @@ export class AdditionalService {
 
       if (transaction.recipient_id === userId) {
         if (transaction.currency_id === userCurrencyId) {
-          incomingTransfersSum += transaction.transaction_amountMoney;
+          incomingTransfersSum += parseFloat(
+            transaction.transaction_amountMoney
+          );
 
           availableFunds += parseFloat(transaction.transaction_amountMoney);
           accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
@@ -252,10 +250,6 @@ export class AdditionalService {
         }
       }
     }
-
-    console.log("accountBalanceHistory", accountBalanceHistory);
-    console.log("outgoingTransfersSum", outgoingTransfersSum);
-    console.log("incomingTransfersSum", incomingTransfersSum);
 
     return await this.additionalRepository.update(
       { user },

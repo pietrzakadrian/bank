@@ -4,7 +4,7 @@ import * as HttpStatus from "http-status-codes";
 import { getManager } from "typeorm";
 
 // Import Intefaces
-import { ResponseError } from "../resources/interfaces/ResponseError.interface";
+import { IResponseError } from "../resources/interfaces/IResponseError.interface";
 
 // Import Services
 import { UserService } from "../services/users.service";
@@ -16,6 +16,7 @@ import { User } from "../entities/user.entity";
 import { Bill } from "../entities/bill.entity";
 import { Additional } from "../entities/additional.entity";
 import { CurrencyService } from "../services/currency.service";
+import { Currency } from "../entities/currency.entity";
 
 const registerRouter: Router = Router();
 
@@ -51,11 +52,11 @@ registerRouter
       const currencyService = new CurrencyService();
       const additionalService = new AdditionalService();
       const validationErrors = validationResult(req);
-      const isLogin = await userService.getByLogin(req.body.login);
-      const isEmail = await userService.getByEmail(req.body.email);
+      const isLogin: User = await userService.getByLogin(req.body.login);
+      const isEmail: User = await userService.getByEmail(req.body.email);
 
       if (isLogin || isEmail || !validationErrors.isEmpty()) {
-        const error: ResponseError = {
+        const error: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error: validationErrors.array()
@@ -64,8 +65,8 @@ registerRouter
       }
 
       try {
-        const currencyId = req.body.currencyId;
-        const currency = await currencyService.getById(currencyId);
+        const currencyId: number = req.body.currencyId;
+        const currency: Currency = await currencyService.getById(currencyId);
 
         let user = new User();
         user.name = req.body.name;
@@ -98,7 +99,7 @@ registerRouter
           success: true
         });
       } catch (error) {
-        const err: ResponseError = {
+        const err: IResponseError = {
           success: false,
           code: HttpStatus.BAD_REQUEST,
           error
