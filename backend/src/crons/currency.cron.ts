@@ -27,7 +27,13 @@ export class CurrencyCron {
     try {
       return await axios.post(
         `http://${this.config.host}:${this.config.port}/api/currency`,
-        transformExchangeRateSyncDate
+        transformExchangeRateSyncDate,
+        {
+          auth: {
+            username: `${this.config.admin.login}`,
+            password: `${this.config.admin.password}`
+          }
+        }
       );
     } catch (error) {
       return Promise.reject(error);

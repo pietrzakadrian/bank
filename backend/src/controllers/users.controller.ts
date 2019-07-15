@@ -138,7 +138,7 @@ usersRouter
   .route("/")
 
   .get(
-    auth.authenticate(),
+    auth.authenticate("jwt"),
 
     async (req: Request, res: Response, next: NextFunction) => {
       const userService = new UserService();
@@ -196,7 +196,7 @@ usersRouter
         .optional()
         .isNumeric()
     ],
-    auth.authenticate(),
+    auth.authenticate("jwt"),
 
     async (req: Request, res: Response, next: NextFunction) => {
       const userService = new UserService();

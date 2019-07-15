@@ -14,6 +14,7 @@ import { AuthHandler } from "../middlewares/authHandler.middleware";
 import { Currency } from "../entities/currency.entity";
 import { getManager } from "typeorm";
 
+const auth = new AuthHandler();
 const currencyRouter: Router = Router();
 
 /**
@@ -55,34 +56,38 @@ currencyRouter
 currencyRouter
   .route("/")
 
-  .post(async (req: Request, res: Response, next: NextFunction) => {
-    const currencyRepository = getManager().getRepository(Currency);
-    const currencies: Currency[] = req.body;
+  .post(
+    auth.authenticate("basic"),
 
-    try {
-      currencies.map(async (currency: Currency) => {
-        const currencyEntity = new Currency();
-        currencyEntity.name = currency.name;
-        currencyEntity.exchangeRate = currency.exchangeRate;
-        currencyEntity.exchangeRateSyncDate = currency.exchangeRateSyncDate;
+    async (req: Request, res: Response, next: NextFunction) => {
+      const currencyRepository = getManager().getRepository(Currency);
+      const currencies: Currency[] = req.body;
 
-        await currencyRepository.update(
-          { name: currencyEntity.name },
-          currencyEntity
-        );
-      });
+      try {
+        currencies.map(async (currency: Currency) => {
+          const currencyEntity = new Currency();
+          currencyEntity.name = currency.name;
+          currencyEntity.exchangeRate = currency.exchangeRate;
+          currencyEntity.exchangeRateSyncDate = currency.exchangeRateSyncDate;
 
-      res.status(HttpStatus.OK).json({
-        success: true
-      });
-    } catch (error) {
-      const err: IResponseError = {
-        success: false,
-        code: HttpStatus.BAD_REQUEST,
-        error
-      };
-      next(err);
+          await currencyRepository.update(
+            { name: currencyEntity.name },
+            currencyEntity
+          );
+        });
+
+        res.status(HttpStatus.OK).json({
+          success: true
+        });
+      } catch (error) {
+        const err: IResponseError = {
+          success: false,
+          code: HttpStatus.BAD_REQUEST,
+          error
+        };
+        next(err);
+      }
     }
-  });
+  );
 
 export default currencyRouter;

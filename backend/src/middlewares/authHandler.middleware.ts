@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import passport from "passport";
+import { BasicStrategy } from "passport-http";
 import {
   ExtractJwt,
   Strategy as JWTStrategy,
@@ -11,11 +12,12 @@ import config from "../config/config";
 import { User } from "../entities/user.entity";
 import { UserService } from "../services/users.service";
 
-const { auth } = config;
+const { auth, admin } = config;
 
 export class AuthHandler {
   jwtOptions: StrategyOptions;
   superSecret = auth.secretKey;
+  BasicStrategy: BasicStrategy;
 
   constructor() {
     this.jwtOptions = {
@@ -28,14 +30,15 @@ export class AuthHandler {
    * initialize the Auth middleware & configure JWT strategy for Passport
    */
   initialize() {
-    passport.use("jwt", this.getStrategy());
+    passport.use("jwt", this.getJWTStrategy());
+    passport.use("basic", this.getBasicStategy());
     return passport.initialize();
   }
 
   /**
    * configure & return the JWT strategy for passport
    */
-  getStrategy(): Strategy {
+  getJWTStrategy(): Strategy {
     return new JWTStrategy(this.jwtOptions, async (jwt_payload, next) => {
       const userService = new UserService();
 
@@ -57,14 +60,35 @@ export class AuthHandler {
     });
   }
 
+  getBasicStategy(): Strategy {
+    return new BasicStrategy(function(username, password, done) {
+      if (
+        username.valueOf() === `${admin.login}` &&
+        password.valueOf() === `${admin.password}`
+      ) {
+        return done(null, true);
+      } else {
+        return done(null, false);
+      }
+    });
+  }
+
   /**
    * Authentication handler. Call this on routes needs authentication
    */
-  authenticate() {
-    return passport.authenticate("jwt", {
-      session: false,
-      failWithError: true
-    });
+  authenticate(option: string) {
+    if (option === "jwt") {
+      return passport.authenticate("jwt", {
+        session: false,
+        failWithError: true
+      });
+    }
+
+    if (option === "basic") {
+      return passport.authenticate("basic", {
+        session: false
+      });
+    }
   }
 
   /**

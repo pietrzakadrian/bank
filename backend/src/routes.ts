@@ -22,13 +22,13 @@ const router: Router = Router();
 
 router.use("/Auth", [registerRouter, loginRouter, logoutRouter]);
 router.use("/users", usersRouter);
-router.use("/bills", auth.authenticate(), [billsRouter, searchRouter]);
-router.use("/transactions", auth.authenticate(), [
+router.use("/bills", auth.authenticate("jwt"), [billsRouter, searchRouter]);
+router.use("/transactions", auth.authenticate("jwt"), [
   transactionsRouter,
   createRouter,
   confirmRouter
 ]);
-router.use("/additionals", auth.authenticate(), notificationsRouter);
+router.use("/additionals", auth.authenticate("jwt"), notificationsRouter);
 router.use("/currency", currencyRouter);
 
 router.use("/utils", utilsRouter);
