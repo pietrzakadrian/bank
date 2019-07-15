@@ -5,6 +5,7 @@ import { Logger, ILogger } from "../utils/logger";
 import { Transaction } from "../entities/transaction.entity";
 import { User } from "../entities/user.entity";
 import { Currency } from "../entities/currency.entity";
+import { BillService } from "./bills.service";
 
 export class TransactionService {
   transactionRepository: Repository<Transaction>;
@@ -153,6 +154,7 @@ export class TransactionService {
     from?: Date,
     to?: Date
   ) {
+    const billService = new BillService();
     const userId = this.userRepository.getId(user);
 
     try {

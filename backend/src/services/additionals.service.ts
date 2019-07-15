@@ -1,5 +1,6 @@
 import { getManager, Repository, Between } from "typeorm";
 import { Logger, ILogger } from "../utils/logger";
+import { Decimal } from "decimal.js";
 
 // Import Services
 import { UserService } from "./users.service";
@@ -63,7 +64,7 @@ export class AdditionalService {
    * Returns boolean that user has a new notifiations
    */
   async isNotification(user: User): Promise<Additional> {
-    const userId = this.userRepository.getId(user);
+    const userId: number = this.userRepository.getId(user);
 
     try {
       const isNotification = await this.additionalRepository
@@ -96,7 +97,7 @@ export class AdditionalService {
    */
   async getByUser(user: User): Promise<Additional | undefined> {
     try {
-      const additional = await this.additionalRepository.findOne({
+      const additional: Additional = await this.additionalRepository.findOne({
         where: user
       });
 
@@ -117,7 +118,7 @@ export class AdditionalService {
     recipient: User,
     limit: number
   ): Promise<Array<Transaction> | undefined> {
-    const recipientId = this.userRepository.getId(recipient);
+    const recipientId: number = this.userRepository.getId(recipient);
 
     try {
       const transactions = await this.transactionRepository
@@ -150,12 +151,14 @@ export class AdditionalService {
     }
   }
 
-  async setWidetStatus(user: User) {
+  async setWidgetStatus(user: User): Promise<object> {
     const transactionService = new TransactionService();
     const currencyService = new CurrencyService();
-    const userId = this.userRepository.getId(user);
-    const today = new Date();
-    const previousMonth = new Date(new Date().setMonth(today.getMonth() - 1));
+    const userId: number = this.userRepository.getId(user);
+    const today: Date = new Date();
+    const previousMonth: Date = new Date(
+      new Date().setMonth(today.getMonth() - 1)
+    );
 
     const transactions = await transactionService.getTransactions(
       user,
@@ -181,7 +184,12 @@ export class AdditionalService {
     for await (const transaction of transactions.reverse()) {
       if (transaction.sender_id === userId) {
         if (transaction.currency_id === userCurrencyId) {
-          outgoingTransfersSum += transaction.transaction_amountMoney;
+          outgoingTransfersSum += parseFloat(
+            transaction.transaction_amountMoney
+          );
+
+          console.log("outgoingTransfersSum1", outgoingTransfersSum);
+
           availableFunds -= transaction.transaction_amountMoney;
           accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
         } else {
@@ -190,30 +198,68 @@ export class AdditionalService {
           );
 
           if (isUserCurrencyMain) {
-            convertedAmountMoney = Decimal.div(
-              transaction.amount_money,
-              transferExchangeRate
-            ).toNumber();
+            convertedAmountMoney =
+              parseFloat(transaction.transaction_amountMoney) /
+              transferExchangeRate;
 
             outgoingTransfersSum += convertedAmountMoney;
+            console.log("outgoingTransfersSum2", outgoingTransfersSum);
             availableFunds -= convertedAmountMoney;
             accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
           } else {
-            convertedAmountMoney = Decimal.div(
-              transaction.amount_money,
-              transferExchangeRate
-            )
-              .mul(userExchangeRate)
-              .toNumber();
+            convertedAmountMoney =
+              (parseFloat(transaction.transaction_amountMoney) /
+                transferExchangeRate) *
+              userExchangeRate;
 
             outgoingTransfersSum += convertedAmountMoney;
+            console.log("outgoingTransfersSum3", outgoingTransfersSum);
             availableFunds -= convertedAmountMoney;
             accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
           }
         }
       }
 
-      // if ()
+      if (transaction.recipient_id === userId) {
+        if (transaction.currency_id === userCurrencyId) {
+          incomingTransfersSum += transaction.transaction_amountMoney;
+
+          availableFunds += parseFloat(transaction.transaction_amountMoney);
+          accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+        } else {
+          transferExchangeRate = await currencyService.getExchangeRateById(
+            transaction.currency_id
+          );
+
+          if (isUserCurrencyMain) {
+            convertedAmountMoney =
+              parseFloat(transaction.transaction_amountMoney) /
+              transferExchangeRate;
+
+            incomingTransfersSum += convertedAmountMoney;
+            availableFunds += convertedAmountMoney;
+            accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+          } else {
+            convertedAmountMoney =
+              (parseFloat(transaction.transaction_amountMoney) /
+                transferExchangeRate) *
+              userExchangeRate;
+
+            incomingTransfersSum += convertedAmountMoney;
+            availableFunds += convertedAmountMoney;
+            accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
+          }
+        }
+      }
     }
+
+    console.log("accountBalanceHistory", accountBalanceHistory);
+    console.log("outgoingTransfersSum", outgoingTransfersSum);
+    console.log("incomingTransfersSum", incomingTransfersSum);
+
+    return await this.additionalRepository.update(
+      { user },
+      { accountBalanceHistory, outgoingTransfersSum, incomingTransfersSum }
+    );
   }
 }

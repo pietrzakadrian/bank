@@ -51,7 +51,8 @@ export default async function promotion(user: User) {
     transaction = transactionRepository.create(transaction);
     await transactionService.insert(transaction);
 
-    await additionalService.setWidetStatus(user);
+    await additionalService.setWidgetStatus(user);
+    await additionalService.setWidgetStatus(sender);
   } catch (error) {
     return Promise.reject(error);
   }
