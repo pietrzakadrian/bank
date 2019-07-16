@@ -14,6 +14,7 @@ import { AuthHandler } from "../middlewares/authHandler.middleware";
 import { UserService } from "../services/users.service";
 import { BillService } from "../services/bills.service";
 import { CurrencyService } from "../services/currency.service";
+import { AdditionalService } from "../services/additionals.service";
 
 // Import Interfaces
 import { IResponseError } from "../resources/interfaces/IResponseError.interface";
@@ -206,6 +207,7 @@ usersRouter
       const userService = new UserService();
       const billService = new BillService();
       const currencyService = new CurrencyService();
+      const additionalService = new AdditionalService();
       const validationErrors = validationResult(req);
 
       if (!validationErrors.isEmpty()) {
@@ -238,16 +240,17 @@ usersRouter
         }
 
         if (req.body.currencyId) {
-          const userBill: Bill = await billService.getByUser(user);
           const userCurrency: Currency = await currencyService.getByUser(user);
           const newCurrency: Currency = await currencyService.getById(
             req.body.currencyId
           );
 
+          await userService.update(user);
+
           if (req.body.currencyId !== userCurrency.id) {
-            userBill.currency = newCurrency;
             await currencyService.setExchangeRate(user, newCurrency);
-            await billService.update(userBill);
+            await currencyService.setCurrency(user, newCurrency);
+            await additionalService.setWidgetStatus(user);
           } else {
             const err: IResponseError = {
               success: false,
@@ -257,7 +260,6 @@ usersRouter
             return next(err);
           }
         }
-        await userService.update(user);
 
         res.status(HttpStatus.OK).json({
           success: true

@@ -181,7 +181,7 @@ export class AdditionalService {
     const userExchangeRate: number = userCurrency.exchangeRate;
     const isUserCurrencyMain: boolean = userCurrency.main;
 
-    for await (const transaction of transactions.reverse()) {
+    for await (const transaction of transactions) {
       if (transaction.sender_id === userId) {
         if (transaction.currency_id === userCurrencyId) {
           outgoingTransfersSum += parseFloat(

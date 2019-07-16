@@ -169,7 +169,6 @@ export class TransactionService {
         })
         .andWhere("transaction.recipientId = :userId", { userId })
         .orWhere("transaction.senderId = :userId", { userId })
-        .orderBy("transaction.createdDate", "DESC")
         .select([
           "transaction.createdDate",
           "transaction.amountMoney",
@@ -191,6 +190,7 @@ export class TransactionService {
             from,
             to
           })
+          .orderBy("transaction.createdDate", "ASC")
           .execute();
       }
 
@@ -198,6 +198,7 @@ export class TransactionService {
         return transactions
           .offset(offset)
           .limit(limit)
+          .orderBy("transaction.createdDate", "DESC")
           .getManyAndCount();
       }
     } catch (error) {
