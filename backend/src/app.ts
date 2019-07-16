@@ -2,6 +2,7 @@ import "reflect-metadata";
 
 import bodyParser from "body-parser";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
 import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -23,8 +24,7 @@ import { Bill } from "./entities/bill.entity";
 import { BillService } from "./services/bills.service";
 import { Additional } from "./entities/additional.entity";
 import { AdditionalService } from "./services/additionals.service";
-import { Decimal } from "decimal.js";
-import promotion from "./middlewares/promotion.middleware";
+import * as swaggerDocument from "./utils/swagger/swagger.json";
 
 export class Application {
   app: express.Application;
@@ -49,6 +49,11 @@ export class Application {
     this.app.use(new AuthHandler().initialize());
 
     this.app.use("/api", routes);
+    this.app.use(
+      "/api-docs",
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument)
+    );
     this.app.use(genericErrorHandler);
     this.app.use(notFoundHandler);
   }

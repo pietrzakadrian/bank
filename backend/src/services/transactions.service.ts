@@ -153,9 +153,7 @@ export class TransactionService {
     limit?: number,
     from?: Date,
     to?: Date
-  ): Promise<
-    [Transaction[], number] | Promise<Array<object>> | object | string
-  > {
+  ) {
     const userId = this.userRepository.getId(user);
 
     try {
@@ -194,14 +192,16 @@ export class TransactionService {
             to
           })
           .execute();
-      } else {
+      }
+
+      if (limit) {
         return transactions
           .offset(offset)
           .limit(limit)
           .getManyAndCount();
       }
     } catch (error) {
-      return Promise.reject(error);
+      return Promise.reject(false);
     }
   }
 

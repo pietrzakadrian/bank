@@ -1,0 +1,1084 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.1.0",
+    "title": "Bank Application",
+    "contact": {
+      "email": "contact@pietrzakadrian.com"
+    }
+  },
+  "host": "bank.pietrzakadrian.com",
+  "schemes": ["https", "http"],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "User Authorization"
+    },
+    {
+      "name": "Users",
+      "description": "User data"
+    },
+    {
+      "name": "Bills",
+      "description": "Bills data"
+    },
+    {
+      "name": "Transactions",
+      "description": "Transactions data"
+    },
+    {
+      "name": "Additionals",
+      "description": "Additionals data"
+    },
+    {
+      "name": "Currency",
+      "description": "Currency data"
+    }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Create user",
+        "description": "",
+        "operationId": "register",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Register"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login user",
+        "description": "",
+        "operationId": "login",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "put": {
+        "tags": ["Auth"],
+        "summary": "Logout user",
+        "description": "",
+        "operationId": "logout",
+        "produces": ["application/json"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Returns user's data",
+        "description": "",
+        "operationId": "getsUser",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/getUserdata"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Updates user's data",
+        "description": "",
+        "operationId": "setsUser",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/users/{login}/isLogin": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Returns boolean that login exist",
+        "description": "",
+        "operationId": "isLogin",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "boolean",
+            "schema": {
+              "$ref": "#/definitions/isLogin"
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{email}/isEmail": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Returns boolean that email exist",
+        "description": "",
+        "operationId": "isEmail",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "boolean",
+            "schema": {
+              "$ref": "#/definitions/isEmail"
+            }
+          }
+        }
+      }
+    },
+    "/api/bills": {
+      "get": {
+        "tags": ["Bills"],
+        "summary": "Returns user's bills data",
+        "description": "",
+        "operationId": "getsBills",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "$ref": "#/definitions/getBillsdata"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/bills/{accountBill}/search": {
+      "get": {
+        "tags": ["Bills"],
+        "summary": "Returns all of users account bills",
+        "description": "",
+        "operationId": "getsSearchBills",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "accountBill",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "$ref": "#/definitions/SearchBills"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/bills/{accountBill}/isAccountBill": {
+      "get": {
+        "tags": ["Bills"],
+        "summary": "Returns boolean that account bill exist",
+        "description": "",
+        "operationId": "isAccountBill",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "accountBill",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "boolean",
+            "schema": {
+              "$ref": "#/definitions/isAccountBill"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/bills/{amountMoney}/isAmountMoney": {
+      "get": {
+        "tags": ["Bills"],
+        "summary": "Returns boolean that User has enough exist available funds",
+        "description": "",
+        "operationId": "isAmountMoney",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "amountMoney",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "boolean",
+            "schema": {
+              "$ref": "#/definitions/isAmountMoney"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/transactions/{offset}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Returns user's transactions",
+        "description": "",
+        "operationId": "getTransactions",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "path",
+            "description": "not required!",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "$ref": "#/definitions/getTransactions"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/transactions/sender": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Returns user's as sender transactions",
+        "description": "",
+        "operationId": "getSTransactions",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "$ref": "#/definitions/getSenderTransactions"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/transactions/recipient": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Returns user's as recipient transactions",
+        "description": "",
+        "operationId": "getRTransactions",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "$ref": "#/definitions/getRecipientTransactions"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/transactions/{id}/key": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Returns user's as recipient transactions",
+        "description": "",
+        "operationId": "key",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "$ref": "#/definitions/getTransactionKey"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/transactions/create": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Create a transaction",
+        "description": "",
+        "operationId": "create",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateTransaction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/transactions/confirm": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Confirm a transaction",
+        "description": "",
+        "operationId": "confirm",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfirmTransaction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/additionals/notifications": {
+      "put": {
+        "tags": ["Additionals"],
+        "summary": "Unsets user's notifications",
+        "description": "",
+        "operationId": "unsetnoti",
+        "produces": ["application/json"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful"
+          }
+        }
+      }
+    },
+    "/api/additionals/notifications/{limit}": {
+      "get": {
+        "tags": ["Additionals"],
+        "summary": "Returns user's notifications",
+        "description": "",
+        "operationId": "returnsnotifications",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "$ref": "#/definitions/getNotifications"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/additionals/notifications/isNotification": {
+      "get": {
+        "tags": ["Additionals"],
+        "summary": "Returns boolean that user has new notifications",
+        "description": "",
+        "operationId": "isNotification",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "$ref": "#/definitions/isNotification"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/currency": {
+      "get": {
+        "tags": ["Currency"],
+        "summary": "Returns all currencies data",
+        "description": "",
+        "operationId": "rCurrency",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "$ref": "#/definitions/getCurrency"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Currency"],
+        "summary": "Updates all currencies data",
+        "description": "",
+        "operationId": "sCurrency",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/setCurrency"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic"
+    },
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "Register": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "login": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "password": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "currencyId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Login": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "getUserdata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "lastSuccessfulLoggedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastPresentLoggedDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastFailedLoggedDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "getBillsdata": {
+      "type": "object",
+      "properties": {
+        "accountBill": {
+          "type": "string"
+        },
+        "availableFunds": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "additionals": {
+          "type": "object",
+          "properties": {
+            "accountBalanceHistory": {
+              "type": "string"
+            },
+            "incomingTransfersSum": {
+              "type": "string"
+            },
+            "outgoingTransfersSum": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "SearchBills": {
+      "type": "object",
+      "properties": {
+        "bills": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "bill_accountBill": {
+                "type": "string"
+              },
+              "user_id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "user_name": {
+                "type": "string"
+              },
+              "user_surname": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "UpdateUser": {
+      "type": "object",
+      "properties": {
+        "currencyId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "isLogin": {
+      "type": "object",
+      "properties": {
+        "isLogin": {
+          "type": "boolean"
+        }
+      }
+    },
+    "isEmail": {
+      "type": "object",
+      "properties": {
+        "isEmail": {
+          "type": "boolean"
+        }
+      }
+    },
+    "isAccountBill": {
+      "type": "object",
+      "properties": {
+        "isAccountBill": {
+          "type": "boolean"
+        }
+      }
+    },
+    "isAmountMoney": {
+      "type": "object",
+      "properties": {
+        "isAmountMoney": {
+          "type": "boolean"
+        }
+      }
+    },
+    "isNotification": {
+      "type": "object",
+      "properties": {
+        "isNotification": {
+          "type": "boolean"
+        },
+        "notificationCount": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "getTransactions": {
+      "type": "object",
+      "properties": {
+        "transactions": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "createdDate": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "amountMoney": {
+                  "type": "number"
+                },
+                "currency": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "recipient": {
+                  "type": "object",
+                  "properties": {
+                    "accountBill": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "format": "int64"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "surname": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "sender": {
+                  "type": "object",
+                  "properties": {
+                    "accountBill": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "format": "int64"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "surname": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "getSenderTransactions": {
+      "type": "object",
+      "properties": {
+        "senderTransactions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "transaction_createdDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "transaction_amountMoney": {
+                "type": "string"
+              },
+              "transaction_transferTitle": {
+                "type": "string"
+              },
+              "currency_name": {
+                "type": "string"
+              },
+              "user_name": {
+                "type": "string"
+              },
+              "user_surname": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "getRecipientTransactions": {
+      "type": "object",
+      "properties": {
+        "recipientTransactions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "transaction_createdDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "transaction_amountMoney": {
+                "type": "string"
+              },
+              "transaction_transferTitle": {
+                "type": "string"
+              },
+              "currency_name": {
+                "type": "string"
+              },
+              "user_name": {
+                "type": "string"
+              },
+              "user_surname": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "getTransactionKey": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "authorizationKey": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateTransaction": {
+      "type": "object",
+      "properties": {
+        "accountBill": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "amountMoney": {
+          "type": "number"
+        },
+        "transferTitle": {
+          "type": "string"
+        }
+      }
+    },
+    "ConfirmTransaction": {
+      "type": "object",
+      "properties": {
+        "accountBill": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "amountMoney": {
+          "type": "number"
+        },
+        "transferTitle": {
+          "type": "string"
+        },
+        "authorizationKey": {
+          "type": "string"
+        }
+      }
+    },
+    "getNotifications": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "notifications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "transaction_createdDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "transaction_amountMoney": {
+                "type": "string"
+              },
+              "currency_name": {
+                "type": "string"
+              },
+              "user_name": {
+                "type": "string"
+              },
+              "user_surname": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "setCurrency": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "exchangeRate": {
+          "type": "number"
+        },
+        "exchangeRateSyncDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "getCurrency": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "name": {
+                "type": "string"
+              },
+              "exchangeRate": {
+                "type": "number"
+              },
+              "exchangeRateSyncDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "main": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "GitHub repository",
+    "url": "https://github.com/pietrzakadrian/bank"
+  }
+}

@@ -91,12 +91,12 @@ transactionsRouter
  *
  */
 transactionsRouter
-  .route("/:offset")
+  .route("/:offset?")
 
   .get(
     [
       param("offset")
-        .exists()
+        .optional()
         .isNumeric()
     ],
 
@@ -105,7 +105,7 @@ transactionsRouter
       const userService = new UserService();
       const validationErrors = validationResult(req);
       const user: User = await userService.getById(req.user.id);
-      const offset: number = req.params.offset;
+      const offset: number = req.params.offset || 0;
       const limit: number = 12;
 
       if (!validationErrors.isEmpty()) {
@@ -183,6 +183,10 @@ transactionsRouter
             success: true,
             authorizationKey: authorizationKey
           });
+
+        return res.status(HttpStatus.OK).json({
+          success: false
+        });
       } catch (error) {
         const err: IResponseError = {
           success: false,
