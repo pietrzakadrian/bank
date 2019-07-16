@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
 import { param, validationResult } from "express-validator/check";
 import { getManager } from "typeorm";
+import { Decimal } from "decimal.js";
 
 // Import Services
 import { AdditionalService } from "../services/additionals.service";
@@ -103,7 +104,8 @@ billsRouter
           accountBill,
           user
         );
-        if (bills)
+
+        if (bills.length)
           return res.status(HttpStatus.OK).json({
             isAccountBill: true
           });

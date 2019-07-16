@@ -32,8 +32,14 @@ registerRouter
 
   .post(
     [
-      body("name").isLength({ min: 1, max: 255 }),
-      body("surname").isLength({ min: 1, max: 255 }),
+      body("name")
+        .isLength({ min: 1, max: 255 })
+        .isAlpha()
+        .isString(),
+      body("surname")
+        .isLength({ min: 1, max: 255 })
+        .isAlpha()
+        .isString(),
       body("email")
         .isEmail()
         .isLength({ min: 1, max: 255 }),

@@ -153,7 +153,9 @@ export class TransactionService {
     limit?: number,
     from?: Date,
     to?: Date
-  ): Promise<[Transaction[], number] | Promise<Array<object>> | object> {
+  ): Promise<
+    [Transaction[], number] | Promise<Array<object>> | object | string
+  > {
     const userId = this.userRepository.getId(user);
 
     try {
@@ -167,7 +169,6 @@ export class TransactionService {
         .where("transaction.authorizationStatus = :authorizationStatus", {
           authorizationStatus: true
         })
-        .andWhere("transaction.createdDate BETWEEN :from AND :to", { from, to })
         .andWhere("transaction.recipientId = :userId", { userId })
         .orWhere("transaction.senderId = :userId", { userId })
         .orderBy("transaction.createdDate", "DESC")
@@ -184,14 +185,20 @@ export class TransactionService {
           "recipient.id",
           "recipient.name",
           "recipient.surname"
-        ])
-        .offset(offset && offset)
-        .limit(limit && limit);
+        ]);
 
       if (from && to) {
-        return transactions.execute();
+        return transactions
+          .andWhere("transaction.createdDate BETWEEN :from AND :to", {
+            from,
+            to
+          })
+          .execute();
       } else {
-        return transactions.getManyAndCount();
+        return transactions
+          .offset(offset)
+          .limit(limit)
+          .getManyAndCount();
       }
     } catch (error) {
       return Promise.reject(error);

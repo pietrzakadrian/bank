@@ -163,20 +163,20 @@ transactionsRouter
       const sender: User = await userService.getById(req.user.id);
       const recipient: User = await userService.getById(req.params.id);
 
-      if (!validationErrors.isEmpty()) {
-        const err: IResponseError = {
-          success: false,
-          code: HttpStatus.BAD_REQUEST,
-          error: validationErrors.array()
-        };
-        return next(err);
-      }
-
       try {
         const authorizationKey: string = await transactionService.getAuthorizationKey(
           sender,
           recipient
         );
+
+        if (!validationErrors.isEmpty() || !authorizationKey) {
+          const err: IResponseError = {
+            success: false,
+            code: HttpStatus.BAD_REQUEST,
+            error: validationErrors.array()
+          };
+          return next(err);
+        }
 
         if (authorizationKey)
           return res.status(HttpStatus.OK).json({

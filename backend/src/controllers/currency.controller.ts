@@ -56,7 +56,7 @@ currencyRouter
 currencyRouter
   .route("/")
 
-  .post(
+  .patch(
     auth.authenticate("basic"),
 
     async (req: Request, res: Response, next: NextFunction) => {

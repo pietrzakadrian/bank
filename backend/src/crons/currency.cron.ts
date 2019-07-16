@@ -25,7 +25,7 @@ export class CurrencyCron {
     }));
 
     try {
-      return await axios.post(
+      return await axios.patch(
         `http://${this.config.host}:${this.config.port}/api/currency`,
         transformExchangeRateSyncDate,
         {

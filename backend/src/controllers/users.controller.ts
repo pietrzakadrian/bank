@@ -182,9 +182,13 @@ usersRouter
     [
       body("name")
         .optional()
+        .isString()
+        .isAlpha()
         .isLength({ min: 1 }),
       body("surname")
         .optional()
+        .isString()
+        .isAlpha()
         .isLength({ min: 1 }),
       body("email")
         .optional()
@@ -217,21 +221,41 @@ usersRouter
         const user: User = await userService.getById(req.user.id);
 
         if (req.body.name) user.name = req.body.name;
-        if (req.body.surnname) user.surname = req.body.surname;
-        if (req.body.email) user.email = req.body.email;
+        if (req.body.surname) user.surname = req.body.surname;
         if (req.body.password) await user.setPassword(req.body.password);
+
+        if (req.body.email) {
+          const isEmail: User = await userService.getByEmail(req.body.email);
+          if (!isEmail) user.email = req.body.email;
+          else {
+            const err: IResponseError = {
+              success: false,
+              code: HttpStatus.BAD_REQUEST,
+              error: validationErrors.array()
+            };
+            return next(err);
+          }
+        }
+
         if (req.body.currencyId) {
+          const userBill: Bill = await billService.getByUser(user);
           const userCurrency: Currency = await currencyService.getByUser(user);
           const newCurrency: Currency = await currencyService.getById(
             req.body.currencyId
           );
-          const userBill: Bill = await billService.getByUser(user);
-          userBill.currency = newCurrency;
 
-          if (req.body.currencyId === userCurrency.id) return;
-
-          await currencyService.setExchangeRate(user, newCurrency);
-          await billService.update(userBill);
+          if (req.body.currencyId !== userCurrency.id) {
+            userBill.currency = newCurrency;
+            await currencyService.setExchangeRate(user, newCurrency);
+            await billService.update(userBill);
+          } else {
+            const err: IResponseError = {
+              success: false,
+              code: HttpStatus.BAD_REQUEST,
+              error: validationErrors.array()
+            };
+            return next(err);
+          }
         }
         await userService.update(user);
 
