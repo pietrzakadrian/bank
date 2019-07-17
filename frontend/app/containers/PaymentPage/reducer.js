@@ -49,6 +49,8 @@ export const initialState = {
   authorizationKey: '',
   suggestionAuthorizationKey: '',
   recipientId: '',
+  recipientName: '',
+  recipientSurname: '',
   message: '',
   error: '',
   currency: '',
@@ -72,6 +74,8 @@ const paymentPageReducer = (state = initialState, action) =>
         draft.authorizationKey = '';
         draft.suggestionAuthorizationKey = '';
         draft.recipientId = '';
+        draft.recipientName = '';
+        draft.recipientSurname = '';
         draft.message = '';
         draft.currency = '';
         draft.error = '';
@@ -87,6 +91,8 @@ const paymentPageReducer = (state = initialState, action) =>
         draft.authorizationKey = '';
         draft.suggestionAuthorizationKey = '';
         draft.recipientId = '';
+        draft.recipientName = '';
+        draft.recipientSurname = '';
         draft.message = '';
         draft.currency = '';
         draft.error = '';
@@ -102,6 +108,8 @@ const paymentPageReducer = (state = initialState, action) =>
         draft.authorizationKey = '';
         draft.suggestionAuthorizationKey = '';
         draft.recipientId = '';
+        draft.recipientName = '';
+        draft.recipientSurname = '';
         draft.message = '';
         draft.error = '';
         draft.activeStep = 0;
@@ -110,7 +118,12 @@ const paymentPageReducer = (state = initialState, action) =>
         draft.isSendAuthorizationKey = false;
         break;
       case CHANGE_ACCOUNT_NUMBER:
-        draft.accountNumber = action.value;
+        if (draft.accountNumber) {
+          draft.accountNumber = action.value.accountNumber;
+          draft.recipientId = action.value.recipientId;
+          draft.recipientName = action.value.recipientName;
+          draft.recipientSurname = action.value.recipientSurname;
+        } else draft.accountNumber = action.value;
         draft.error = '';
         break;
       case CHANGE_AMOUNT_MONEY:

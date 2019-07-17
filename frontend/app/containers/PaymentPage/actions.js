@@ -116,6 +116,7 @@ export function clearAccountBillsAction() {
 }
 
 export function enterAccountNumberAction(value) {
+  console.log('vale', value);
   return {
     type: ENTER_ACCOUNT_NUMBER,
     value,

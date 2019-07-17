@@ -401,27 +401,33 @@ function getSteps() {
 }
 
 function getSuggestionValue(suggestion) {
-  return suggestion.account_bill;
+  const userData = {
+    accountNumber: suggestion.bill_accountBill,
+    recipientId: suggestion.user_id,
+    recipientName: suggestion.user_name,
+    recipientSurname: suggestion.user_surname,
+  };
+  return userData;
 }
 
 function renderSuggestion(suggestion) {
   return (
     <div>
       <AutosuggestSuggestionsAccountNumberWrapper>
-        {suggestion.account_bill
+        {suggestion.bill_accountBill
           .toString()
           .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
           .trim()}
       </AutosuggestSuggestionsAccountNumberWrapper>
       <AutosuggestSuggestionsListWrapper>
-        {suggestion.user.name} {suggestion.user.surname}
+        {suggestion.user_name} {suggestion.user_surname}
       </AutosuggestSuggestionsListWrapper>
     </div>
   );
 }
 
 PaymentForm.propTypes = {
-  accountNumber: PropTypes.string,
+  accountNumber: PropTypes.object,
   amountMoney: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

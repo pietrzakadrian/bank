@@ -82,7 +82,7 @@ export function* handleCurrency() {
 export function* searchAccountNumber() {
   const accountBill = yield select(makeAccountNumberSelector());
   const token = yield select(makeTokenSelector());
-  api.accountBill(accountBill);
+  api.accountBill = accountBill;
   const requestURL = api.searchPath;
   const limit = 26;
   const isNumber = /^\d+$/;
@@ -112,7 +112,8 @@ export function* searchAccountNumber() {
         },
       });
 
-      if (response) yield put(searchAccountBillsSuccessAction(response));
+      const { bills } = response;
+      if (response) yield put(searchAccountBillsSuccessAction(bills));
     } catch (error) {
       yield put(searchAccountBillsErrorAction(error));
     }
@@ -122,7 +123,7 @@ export function* searchAccountNumber() {
 export function* handleAccountNumber() {
   const accountBill = yield select(makeAccountNumberSelector());
   const token = yield select(makeTokenSelector());
-  api.accountBill(accountBill);
+  api.accountBill = accountBill;
   const requestURL = api.isAccountBillPath;
   const isNumber = /^\d+$/;
   const limit = 26;
@@ -170,7 +171,8 @@ export function* handleAccountNumber() {
 export function* handleAmountMoney() {
   const amountMoney = yield select(makeAmountMoneySelector());
   const token = yield select(makeTokenSelector());
-  const requestURL = api.amountMoney(amountMoney) && api.isAmountMoneyPath;
+  api.amountMoney = amountMoney;
+  const requestURL = api.isAmountMoneyPath;
 
   if (!amountMoney)
     return yield put(
@@ -332,7 +334,7 @@ export function* handleAuthorizationKey() {
   const isSendAuthorizationKey = yield select(
     makeIsSendAuthorizationKeySelector(),
   );
-  api.id(recipientId);
+  api.id = recipientId;
   const requestURL = api.authorizationKeyPath;
 
   if (!isSendAuthorizationKey)

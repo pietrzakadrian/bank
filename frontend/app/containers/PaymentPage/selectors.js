@@ -47,6 +47,18 @@ const makeRecipientIdSelector = () =>
     substate => substate.recipientId,
   );
 
+const makeRecipientNameSelector = () =>
+  createSelector(
+    selectPaymentPageDomain,
+    substate => substate.recipientName,
+  );
+
+const makeRecipientSurnameSelector = () =>
+  createSelector(
+    selectPaymentPageDomain,
+    substate => substate.recipientSurname,
+  );
+
 const makeActiveStepSelector = () =>
   createSelector(
     selectPaymentPageDomain,
@@ -107,6 +119,8 @@ export {
   makeAuthorizationKeySelector,
   makeSuggestionAuthorizationKeySelector,
   makeRecipientIdSelector,
+  makeRecipientNameSelector,
+  makeRecipientSurnameSelector,
   makeActiveStepSelector,
   makeIsSendAuthorizationKeySelector,
   makeIsLoadingSelector,
