@@ -1,11 +1,15 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import decode from 'jwt-decode';
+
+// Import Selectors
 import {
   makeIsLoggedSelector,
   makeUserIdSelector,
   makeTokenSelector,
 } from 'containers/App/selectors';
+
+// Import Constants
 import { IS_LOGGED } from './constants';
 
 export function* handleLogged() {

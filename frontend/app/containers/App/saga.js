@@ -1,6 +1,11 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
+import { format } from 'date-fns';
+import request from 'utils/request';
+import decode from 'jwt-decode';
+import api from 'api';
+
+// Import Selectors
 import {
   makeIsLoggedSelector,
   makeUserIdSelector,
@@ -9,16 +14,9 @@ import {
   makeIsOpenNotificationsSelector,
   makeNotificationsSelector,
 } from 'containers/App/selectors';
-import { format } from 'date-fns';
-import request from 'utils/request';
-import decode from 'jwt-decode';
-import api from 'api';
-import {
-  LOGOUT,
-  IS_LOGGED,
-  CHECK_NEW_NOTIFICATIONS,
-  TOGGLE_NOTIFICATIONS,
-} from './constants';
+import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
+
+// Import Actions
 import {
   logoutErrorAction,
   logoutSuccessAction,
@@ -32,11 +30,19 @@ import {
   unsetNewNotificationsSuccessAction,
 } from './actions';
 
+// Import Constants
+import {
+  LOGOUT,
+  IS_LOGGED,
+  CHECK_NEW_NOTIFICATIONS,
+  TOGGLE_NOTIFICATIONS,
+} from './constants';
+
 export function* handleLogout() {
   const isLogged = yield select(makeIsLoggedSelector());
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
-  const requestURL = `${api.baseURL}${api.users.logoutPath}${userId}`;
+  const requestURL = api.logoutPath;
 
   if (!isLogged || !userId || !token) return yield put(push('/'));
 
@@ -77,9 +83,8 @@ export function* handleLogged() {
 }
 
 export function* handleNotifications() {
-  const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
-  const requestURL = `${api.baseURL}${api.additionals.isNotificationPath}${userId}`;
+  const requestURL = api.isNotificationPath;
 
   try {
     const response = yield call(request, requestURL, {
@@ -103,44 +108,39 @@ export function* handleNotifications() {
 }
 
 export function* getNewNotifications() {
-  const userId = yield select(makeUserIdSelector());
   const locale = yield select(makeSelectLocale());
   const token = yield select(makeTokenSelector());
   const notificationCount = yield select(makeNotificationCountSelector());
-  const requestURL = `${api.baseURL}${api.additionals.newNotificationPath}`;
-
+  api.offset = notificationCount;
+  const requestURL = api.notificationsPath;
   try {
     yield put(getNewNotificationsAction());
 
     const response = yield call(request, requestURL, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        userId,
-        notificationCount,
-      }),
     });
 
-    const { success, result } = response;
+    const { success, notifications } = response;
 
     if (!success) return yield put(getNewNotificationsErrorAction('error'));
 
-    const transformNewNotifications = result.map(
-      ({ getSenderdata, currency, ...newNotification }) => ({
+    const transformNewNotifications = notifications.map(
+      ({ ...newNotification }) => ({
         date_time: format(
-          newNotification.date_time,
+          newNotification.transaction_createdDate,
           `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
         ),
-        sender_name: `${getSenderdata.name} ${getSenderdata.surname}`,
-        amount_money: `${newNotification.amount_money
+        sender_name: `${newNotification.user_name} ${newNotification.user_surname}`,
+        amount_money: `${newNotification.transaction_amountMoney
           .toFixed(2)
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-          .replace('.', ',')} ${currency.currency}`,
+          .replace('.', ',')} ${newNotification.currency_name}`,
       }),
     );
 
@@ -154,8 +154,7 @@ export function* handleNewNotifications() {
   const isOpenNotifications = yield select(makeIsOpenNotificationsSelector());
   const notifications = yield select(makeNotificationsSelector());
   const token = yield select(makeTokenSelector());
-  const userId = yield select(makeUserIdSelector());
-  const requestURL = `${api.baseURL}${api.additionals.unsetNotificationPath}${userId}`;
+  const requestURL = api.notificationsPath;
 
   if (isOpenNotifications && notifications.length) {
     try {

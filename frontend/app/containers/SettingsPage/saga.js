@@ -1,25 +1,35 @@
+import React from 'react';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
+import api from 'api';
+import { FormattedMessage } from 'react-intl';
+import messages from 'containers/SettingsPage/messages';
+
+// Import Selectors
 import {
   makeTokenSelector,
   makeUserIdSelector,
 } from 'containers/App/selectors';
-import api from 'api';
 import {
   makeNameSelector,
   makeSurnameSelector,
   makeEmailSelector,
   makeCurrencyIdSelector,
 } from 'containers/DashboardPage/selectors';
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import { enterSurnameSuccessAction } from 'containers/RegisterPage/actions';
 import {
-  LOAD_USER_DATA,
-  LOAD_CURRENCY,
-  SAVE_DATA,
-  ENTER_NEW_CURRENCY,
-} from './constants';
+  makeNewNameSelector,
+  makeNewSurnameSelector,
+  makeNewPasswordSelector,
+  makeNewEmailSelector,
+  makeErrorNameSelector,
+  makeErrorSurnameSelector,
+  makeErrorPasswordSelector,
+  makeErrorEmailSelector,
+  makeNewCurrencyIdSelector,
+} from 'containers/SettingsPage/selectors';
+
+// Import Actions
+import { enterSurnameSuccessAction } from 'containers/RegisterPage/actions';
 import {
   loadUserDataSuccessAction,
   loadUserDataErrorAction,
@@ -40,19 +50,15 @@ import {
   saveDataSuccessAction,
   enterNewCurrencyErrorAction,
   enterNewCurrencySuccessAction,
-} from './actions';
+} from 'containers/SettingsPage/actions';
+
+// Import Constants
 import {
-  makeNewNameSelector,
-  makeNewSurnameSelector,
-  makeNewPasswordSelector,
-  makeNewEmailSelector,
-  makeErrorNameSelector,
-  makeErrorSurnameSelector,
-  makeErrorPasswordSelector,
-  makeErrorEmailSelector,
-  makeNewCurrencyIdSelector,
-} from './selectors';
-import messages from './messages';
+  LOAD_USER_DATA,
+  LOAD_CURRENCY,
+  SAVE_DATA,
+  ENTER_NEW_CURRENCY,
+} from 'containers/SettingsPage/constants';
 
 export function* handleUserData() {
   const token = yield select(makeTokenSelector());
@@ -61,8 +67,8 @@ export function* handleUserData() {
   const userSurname = yield select(makeSurnameSelector());
   const userEmail = yield select(makeEmailSelector());
   const currencyId = yield select(makeCurrencyIdSelector());
-  const requestUserData = `${api.baseURL}${api.users.userPath}${userId}`;
-  const requestBillsData = `${api.baseURL}${api.bills.billsPath}${userId}`;
+  const requestUserData = api.usersPath;
+  const requestBillsData = api.billsPath;
 
   if ((!userName && !userSurname && !userEmail) || !currencyId) {
     try {
@@ -88,9 +94,9 @@ export function* handleUserData() {
         const { name, surname, email } = responseUserData.user;
         const transformAccountingData = responseBillsData.map(
           ({ ...accountingData }) => ({
-            currencyId: accountingData.currency.id,
+            currencyId: accountingData.currency.name,
           }),
-        )[0];
+        );
 
         if (!name || !surname || !email || !transformAccountingData.currencyId)
           return yield put(
@@ -119,7 +125,7 @@ export function* handleUserData() {
 
 export function* handleCurrency() {
   const token = yield select(makeTokenSelector());
-  const requestURL = `${api.baseURL}${api.currency.currencyPath}`;
+  const requestURL = api.currencyPath;
 
   try {
     const response = yield call(request, requestURL, {
@@ -145,15 +151,16 @@ export function* handleSaveData() {
   let surname = yield select(makeNewSurnameSelector());
   let password = yield select(makeNewPasswordSelector());
   let email = yield select(makeNewEmailSelector());
+  let currencyId = yield select(makeNewCurrencyIdSelector());
   const token = yield select(makeTokenSelector());
-  const userId = yield select(makeUserIdSelector());
-  const requestURL = `${api.baseURL}${api.users.userPath}${userId}`;
+  const requestURL = api.usersPath;
 
   yield all([
     name ? call(handleName) : (name = null),
     surname ? call(handleSurname) : (surname = null),
     password ? call(handlePassword) : (password = null),
     email ? call(handleEmail) : (email = null),
+    currencyId ? call(handleChangeCurrency) : (currencyId = null),
   ]);
 
   const errorName = yield select(makeErrorNameSelector());
@@ -169,7 +176,7 @@ export function* handleSaveData() {
   if (!errorName && !errorSurname && !errorPassword && !errorEmail) {
     try {
       const response = yield call(request, requestURL, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -180,6 +187,7 @@ export function* handleSaveData() {
           surname: surname || null,
           password: password || null,
           email: email || null,
+          currencyId: currencyId || null,
         }),
       });
 
@@ -277,7 +285,8 @@ function* handlePassword() {
 
 function* handleEmail() {
   const email = yield select(makeNewEmailSelector());
-  const requestURL = `${api.baseURL}${api.users.isEmailPath}${email}`;
+  api.email(email);
+  const requestURL = api.isEmailPath;
   const isEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   const limit = 255;
 

@@ -1,35 +1,125 @@
+/* eslint-disable no-underscore-dangle */
+
 const api = {
-  baseURL: 'https://bank.pietrzakadrian.com',
-  users: {
-    userPath: '/api/users/',
-    registerPath: '/api/users/register/',
-    loginPath: '/api/users/login/',
-    logoutPath: '/api/users/logout/',
-    isLoginPath: '/api/users/isLogin/',
-    isEmailPath: '/api/users/isEmail/',
-    setCurrencyPath: '/api/users/setCurrency/',
+  BASE_URL: 'http://localhost:8000',
+  AUTH_PATH: '/api/auth/',
+  USERS_PATH: '/api/users',
+  BILLS_PATH: '/api/bills',
+  TRANSACTIONS_PATH: '/api/transactions',
+  CURRENCY_PATH: '/api/currency',
+  ADDITIONALS_PATH: '/api/additionals',
+  _login: undefined,
+  _email: undefined,
+  _accountBill: undefined,
+  _amountMoney: undefined,
+  _id: undefined,
+  _offset: undefined,
+  _limit: undefined,
+
+  get loginPath() {
+    return `${this.BASE_URL}${this.AUTH_PATH}/login`;
   },
-  bills: {
-    billsPath: '/api/bills/',
-    searchPath: '/api/bills/search/',
-    isAccountBillPath: '/api/bills/isAccountBill/',
-    isAmountMoneyPath: '/api/bills/isAmountMoney/',
+
+  get registerPath() {
+    return `${this.BASE_URL}${this.AUTH_PATH}/register`;
   },
-  transactions: {
-    confirmPath: '/api/transactions/confirm/',
-    registerPath: '/api/transactions/register/',
-    getTransactionsPath: '/api/transactions/getTransactions/',
-    recipientPath: '/api/transactions/recipient/',
-    senderPath: '/api/transactions/sender/',
-    authorizationKeyPath: '/api/transactions/authorizationKey/',
+
+  get logoutPath() {
+    return `${this.BASE_URL}${this.AUTH_PATH}/logout`;
   },
-  currency: {
-    currencyPath: '/api/currency/',
+
+  get usersPath() {
+    return `${this.BASE_URL}${this.USERS_PATH}`;
   },
-  additionals: {
-    isNotificationPath: '/api/additionals/isNotification/',
-    newNotificationPath: '/api/additionals/newNotification/',
-    unsetNotificationPath: '/api/additionals/unsetNotification/',
+
+  set login(login) {
+    this._login = login;
+  },
+
+  get isLoginPath() {
+    return `${this.BASE_URL}${this.USERS_PATH}/${this._login}/isLogin`;
+  },
+
+  set email(email) {
+    this._email = email;
+  },
+
+  get isEmailPath() {
+    return `${this.BASE_URL}${this.USERS_PATH}/${this._email}/isEmail`;
+  },
+
+  get billsPath() {
+    return `${this.BASE_URL}${this.BILLS_PATH}`;
+  },
+
+  set accountBill(accountBill) {
+    this._accountBill = accountBill;
+  },
+
+  get searchPath() {
+    return `${this.BASE_URL}${this.BILLS_PATH}/${this._accountBill}/search`;
+  },
+
+  get isAccountBillPath() {
+    return `${this.BASE_URL}${this.BILLS_PATH}/${this._accountBill}/isAccountBill`;
+  },
+
+  set amountMoney(amountMoney) {
+    this._amountMoney = amountMoney;
+  },
+
+  get isAmountMoneyPath() {
+    return `${this.BASE_URL}${this.BILLS_PATH}/${this._amountMoney}/isAmountMoney`;
+  },
+
+  set limit(limit) {
+    this._limit = limit;
+  },
+
+  get transactionsPath() {
+    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/${this._limit &&
+      this._limit}`;
+  },
+
+  get confirmPath() {
+    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/confirm`;
+  },
+
+  get createPath() {
+    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/create`;
+  },
+
+  get recipientPath() {
+    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/recipient`;
+  },
+
+  get senderPath() {
+    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/sender`;
+  },
+
+  set id(id) {
+    this._id = id;
+  },
+
+  get authorizationKeyPath() {
+    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/${this._id}/key`;
+  },
+
+  get currencyPath() {
+    return `${this.BASE_URL}${this.CURRENCY_PATH}`;
+  },
+
+  set offset(offset) {
+    this._offset = offset;
+  },
+
+  get notificationsPath() {
+    return `${this.BASE_URL}${this.ADDITIONALS_PATH}/notifications${this
+      ._offset && this._offset}`;
+  },
+
+  get isNotificationPath() {
+    return `${this.BASE_URL}${this.ADDITIONALS_PATH}/notifications/isNotification`;
   },
 };
 

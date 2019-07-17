@@ -3,24 +3,10 @@ import api from 'api';
 import React from 'react';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
-import {
-  makeTokenSelector,
-  makeUserIdSelector,
-  makeIsOpenNavigationDesktopSelector,
-} from 'containers/App/selectors';
-import { enqueueSnackbarAction } from 'containers/App/actions';
 import { FormattedMessage } from 'react-intl';
-import messages from './messages';
-import {
-  SEARCH_ACCOUNT_BILLS,
-  ENTER_ACCOUNT_NUMBER,
-  ENTER_AMOUNT_MONEY,
-  ENTER_TRANSFER_TITLE,
-  SEND_AUTHORIZATION_KEY,
-  ENTER_AUTHORIZATION_KEY,
-  GET_CURRENCY,
-  GET_AUTHORIZATION_KEY,
-} from './constants';
+import messages from 'containers/PaymentPage/messages';
+
+// Import Selectors
 import {
   makeAccountNumberSelector,
   makeAmountMoneySelector,
@@ -28,7 +14,14 @@ import {
   makeRecipientIdSelector,
   makeAuthorizationKeySelector,
   makeIsSendAuthorizationKeySelector,
-} from './selectors';
+} from 'containers/PaymentPage/selectors';
+import {
+  makeTokenSelector,
+  makeIsOpenNavigationDesktopSelector,
+} from 'containers/App/selectors';
+
+// Import Actions
+import { enqueueSnackbarAction } from 'containers/App/actions';
 import {
   searchAccountBillsSuccessAction,
   searchAccountBillsErrorAction,
@@ -50,10 +43,21 @@ import {
   getAuthorizationKeySuccessAction,
 } from './actions';
 
+// Import Constants
+import {
+  SEARCH_ACCOUNT_BILLS,
+  ENTER_ACCOUNT_NUMBER,
+  ENTER_AMOUNT_MONEY,
+  ENTER_TRANSFER_TITLE,
+  SEND_AUTHORIZATION_KEY,
+  ENTER_AUTHORIZATION_KEY,
+  GET_CURRENCY,
+  GET_AUTHORIZATION_KEY,
+} from './constants';
+
 export function* handleCurrency() {
   const token = yield select(makeTokenSelector());
-  const userId = yield select(makeUserIdSelector());
-  const requestURL = `${api.baseURL}${api.bills.billsPath}${userId}`;
+  const requestURL = api.billsPath;
 
   try {
     const response = yield call(request, requestURL, {
@@ -67,7 +71,7 @@ export function* handleCurrency() {
 
     if (!response) return yield put(getCurrencyErrorAction('error'));
 
-    const { currency } = response[0].currency;
+    const { currency } = response.currency.name;
 
     yield put(getCurrencySuccessAction(currency));
   } catch (error) {
@@ -76,27 +80,28 @@ export function* handleCurrency() {
 }
 
 export function* searchAccountNumber() {
-  const accountNumber = yield select(makeAccountNumberSelector());
+  const accountBill = yield select(makeAccountNumberSelector());
   const token = yield select(makeTokenSelector());
-  const requestURL = `${api.baseURL}${api.bills.searchPath}${accountNumber}`;
+  api.accountBill(accountBill);
+  const requestURL = api.searchPath;
   const limit = 26;
   const isNumber = /^\d+$/;
 
-  if (!accountNumber)
+  if (!accountBill)
     return yield put(
       searchAccountBillsErrorAction(
         <FormattedMessage {...messages.errorAccountNumberEmpty} />,
       ),
     );
 
-  if (!isNumber.test(accountNumber) || accountNumber.length > limit)
+  if (!isNumber.test(accountBill) || accountBill.length > limit)
     return yield put(
       searchAccountBillsErrorAction(
         <FormattedMessage {...messages.errorAccountNumberValidate} />,
       ),
     );
 
-  if (accountNumber.length !== limit) {
+  if (accountBill.length !== limit) {
     try {
       const response = yield call(request, requestURL, {
         method: 'GET',
@@ -115,20 +120,21 @@ export function* searchAccountNumber() {
 }
 
 export function* handleAccountNumber() {
-  const accountNumber = yield select(makeAccountNumberSelector());
+  const accountBill = yield select(makeAccountNumberSelector());
   const token = yield select(makeTokenSelector());
-  const requestURL = `${api.baseURL}${api.bills.isAccountBillPath}${accountNumber}`;
+  api.accountBill(accountBill);
+  const requestURL = api.isAccountBillPath;
   const isNumber = /^\d+$/;
   const limit = 26;
 
-  if (!accountNumber)
+  if (!accountBill)
     return yield put(
       enterAccountNumberErrorAction(
         <FormattedMessage {...messages.errorAccountNumberEmpty} />,
       ),
     );
 
-  if (!isNumber.test(accountNumber) || accountNumber.length !== limit)
+  if (!isNumber.test(accountBill) || accountBill.length !== limit)
     return yield put(
       enterAccountNumberErrorAction(
         <FormattedMessage {...messages.errorAccountNumberValidate} />,
@@ -145,7 +151,7 @@ export function* handleAccountNumber() {
       },
     });
 
-    const { recipientId, isAccountBill } = response;
+    const { isAccountBill } = response;
 
     if (!isAccountBill)
       return yield put(
@@ -154,7 +160,7 @@ export function* handleAccountNumber() {
         ),
       );
 
-    yield put(enterAccountNumberSuccessAction(recipientId));
+    // yield put(enterAccountNumberSuccessAction(recipientId));
     yield put(stepNextAction());
   } catch (error) {
     yield put(enterAccountNumberErrorAction(error));
@@ -163,9 +169,8 @@ export function* handleAccountNumber() {
 
 export function* handleAmountMoney() {
   const amountMoney = yield select(makeAmountMoneySelector());
-  const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
-  const requestURL = `${api.baseURL}${api.bills.isAmountMoneyPath}`;
+  const requestURL = api.amountMoney(amountMoney) && api.isAmountMoneyPath;
 
   if (!amountMoney)
     return yield put(
@@ -176,16 +181,12 @@ export function* handleAmountMoney() {
 
   try {
     const response = yield call(request, requestURL, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        id_sender: userId,
-        amount_money: amountMoney,
-      }),
     });
 
     const { isAmountMoney } = response;
@@ -227,12 +228,11 @@ export function* handleTransferTitle() {
 }
 
 export function* handleRegisterTransaction() {
-  const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
-  const accountNumber = yield select(makeAccountNumberSelector());
+  const accountBill = yield select(makeAccountNumberSelector());
   const amountMoney = yield select(makeAmountMoneySelector());
   const transferTitle = yield select(makeTransferTitleSelector());
-  const requestURL = `${api.baseURL}${api.transactions.registerPath}`;
+  const requestURL = api.createPath;
 
   try {
     const response = yield call(request, requestURL, {
@@ -243,10 +243,9 @@ export function* handleRegisterTransaction() {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        id_sender: userId,
-        account_bill: accountNumber,
-        amount_money: amountMoney,
-        transfer_title: transferTitle,
+        accountBill,
+        amountMoney,
+        transferTitle,
       }),
     });
 
@@ -264,17 +263,15 @@ export function* handleRegisterTransaction() {
 }
 
 export function* handleConfirmTransaction() {
-  const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
-  // const recipientId = yield select(makeRecipientIdSelector());
-  const accountNumber = yield select(makeAccountNumberSelector());
+  const accountBill = yield select(makeAccountNumberSelector());
   const amountMoney = yield select(makeAmountMoneySelector());
   const transferTitle = yield select(makeTransferTitleSelector());
   const authorizationKey = yield select(makeAuthorizationKeySelector());
   const isOpenNavigationDesktop = yield select(
     makeIsOpenNavigationDesktopSelector(),
   );
-  const requestURL = `${api.baseURL}${api.transactions.confirmPath}`;
+  const requestURL = api.confirmPath;
 
   if (!authorizationKey)
     return yield put(
@@ -294,11 +291,10 @@ export function* handleConfirmTransaction() {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        id_sender: userId,
-        account_bill: accountNumber,
-        amount_money: amountMoney,
-        transfer_title: transferTitle,
-        authorization_key: authorizationKey,
+        accountBill,
+        amountMoney,
+        transferTitle,
+        authorizationKey,
       }),
     });
 
@@ -331,15 +327,13 @@ export function* handleConfirmTransaction() {
 }
 
 export function* handleAuthorizationKey() {
-  const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
   const recipientId = yield select(makeRecipientIdSelector());
-  const amountMoney = yield select(makeAmountMoneySelector());
-  const transferTitle = yield select(makeTransferTitleSelector());
   const isSendAuthorizationKey = yield select(
     makeIsSendAuthorizationKeySelector(),
   );
-  const requestURL = `${api.baseURL}${api.transactions.authorizationKeyPath}`;
+  api.id(recipientId);
+  const requestURL = api.authorizationKeyPath;
 
   if (!isSendAuthorizationKey)
     return yield put(
@@ -350,18 +344,12 @@ export function* handleAuthorizationKey() {
 
   try {
     const response = yield call(request, requestURL, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        id_sender: userId,
-        recipient_id: recipientId,
-        amount_money: amountMoney,
-        transfer_title: transferTitle,
-      }),
     });
 
     const { success, authorizationKey } = response;

@@ -6,10 +6,7 @@
 
 import { Component } from 'react';
 import { makeSnackbarsSelector } from 'containers/App/selectors';
-import {
-  removeSnackbarAction,
-  closeSnackbarAction,
-} from 'containers/App/actions';
+import { removeSnackbarAction } from 'containers/App/actions';
 import PropTypes from 'prop-types';
 import { withSnackbar } from 'notistack';
 import { connect } from 'react-redux';
@@ -23,7 +20,7 @@ class Notifier extends Component {
     this.displayed = [...this.displayed, id];
   };
 
-  shouldComponentUpdate({ snackbars, onCloseSnackbar, onRemoveSnackbar }) {
+  shouldComponentUpdate({ snackbars, onRemoveSnackbar }) {
     if (!snackbars.length) {
       this.displayed = [];
       return false;
@@ -35,10 +32,7 @@ class Notifier extends Component {
     for (let i = 0; i < snackbars.length; i += 1) {
       const newSnack = snackbars[i];
 
-      if (newSnack.dismissed) {
-        onCloseSnackbar(newSnack.key);
-        onRemoveSnackbar();
-      }
+      if (newSnack.dismissed) onRemoveSnackbar();
 
       if (!notExists) {
         notExists =
@@ -79,7 +73,6 @@ Notifier.propTypes = {
   snackbars: PropTypes.array,
   enqueueSnackbar: PropTypes.func,
   onRemoveSnackbar: PropTypes.func,
-  onCloseSnackbar: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -89,7 +82,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     onRemoveSnackbar: () => dispatch(removeSnackbarAction()),
-    onCloseSnackbar: key => dispatch(closeSnackbarAction(key)),
   };
 }
 

@@ -2,35 +2,28 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
 import { format } from 'date-fns';
+import api from 'api';
+
+// Import Utils
 import {
   BORDER_GREY_LIGHT,
   PRIMARY_BLUE_LIGHT,
   PRIMARY_RED,
 } from 'utils/colors';
+
+// Import Selectors
 import {
   makeUserIdSelector,
   makeTokenSelector,
 } from 'containers/App/selectors';
-import { logoutErrorAction } from 'containers/App/actions';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
-import api from 'api';
 import {
-  GET_NAME,
-  GET_SURNAME,
-  GET_LAST_PRESENT_LOGGED,
-  GET_LAST_SUCCESSFUL_LOGGED,
-  GET_LAST_FAILED_LOGGED,
-  GET_EMAIL,
-  GET_AVAILABLE_FUNDS,
-  GET_ACCOUNT_BALANCE_HISTORY,
-  GET_CURRENCY,
-  GET_RECHARTS_DATA,
-  GET_RECHARTS_COLORS,
-  GET_SAVINGS,
-  GET_ACCOUNT_BILLS,
-  GET_RECENT_TRANSACTIONS_RECIPIENT,
-  GET_RECENT_TRANSACTIONS_SENDER,
-} from './constants';
+  makeOutgoingTransfersSumSelector,
+  makeIncomingTransfersSumSelector,
+} from 'containers/DashboardPage/selectors';
+
+// Import Actions
+import { logoutErrorAction } from 'containers/App/actions';
 import {
   getNameErrorAction,
   getEmailErrorAction,
@@ -68,16 +61,30 @@ import {
   getCurrencyIdErrorAction,
   getSurnameErrorAction,
 } from './actions';
+
+// Import Constants
 import {
-  makeOutgoingTransfersSumSelector,
-  makeIncomingTransfersSumSelector,
-} from './selectors';
+  GET_NAME,
+  GET_SURNAME,
+  GET_LAST_PRESENT_LOGGED,
+  GET_LAST_SUCCESSFUL_LOGGED,
+  GET_LAST_FAILED_LOGGED,
+  GET_EMAIL,
+  GET_AVAILABLE_FUNDS,
+  GET_ACCOUNT_BALANCE_HISTORY,
+  GET_CURRENCY,
+  GET_RECHARTS_DATA,
+  GET_RECHARTS_COLORS,
+  GET_SAVINGS,
+  GET_ACCOUNT_BILLS,
+  GET_RECENT_TRANSACTIONS_RECIPIENT,
+  GET_RECENT_TRANSACTIONS_SENDER,
+} from './constants';
 
 export function* handleUserdata() {
-  const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
   const locale = yield select(makeSelectLocale());
-  const requestURL = `${api.baseURL}${api.users.userPath}${userId}`;
+  const requestURL = api.usersPath;
 
   try {
     const response = yield call(request, requestURL, {
@@ -94,20 +101,20 @@ export function* handleUserdata() {
         name,
         surname,
         email,
-        last_present_logged,
-        last_successful_logged,
-        last_failed_logged,
-      } = response.user;
+        lastPresentLoggedDate,
+        lastSuccessfulLoggedDate,
+        lastFailedLoggedDate,
+      } = response;
       const lastPresentLogged = format(
-        last_present_logged,
+        lastPresentLoggedDate,
         `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
       );
       const lastSuccessfulLogged = format(
-        last_successful_logged,
+        lastSuccessfulLoggedDate,
         `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
       );
       const lastFailedLogged = format(
-        last_failed_logged,
+        lastFailedLoggedDate,
         `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
       );
 
@@ -139,9 +146,8 @@ export function* handleUserdata() {
 }
 
 export function* handleAccountingData() {
-  const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
-  const requestURL = `${api.baseURL}${api.bills.billsPath}${userId}`;
+  const requestURL = api.billsPath;
 
   try {
     const response = yield call(request, requestURL, {
@@ -153,30 +159,13 @@ export function* handleAccountingData() {
       },
     });
 
-    if (response) {
-      const transformAccountingData = response.map(({ ...accountingData }) => ({
-        accountBill: accountingData.account_bill,
-        currency: accountingData.currency.currency,
-        currencyId: accountingData.currency.id,
-        availableFunds: accountingData.available_funds,
-        additionals: {
-          accountBalanceHistory:
-            accountingData.additionals[0].account_balance_history,
-          incomingTransfersSum:
-            accountingData.additionals[0].incoming_transfers_sum,
-          outgoingTransfersSum:
-            accountingData.additionals[0].outgoing_transfers_sum,
-        },
-      }))[0];
+    const { availableFunds, accountBill, currency, additionals } = response;
 
-      if (
-        transformAccountingData.availableFunds ||
-        transformAccountingData.availableFunds === 0
-      )
+    if (response) {
+      if (availableFunds || availableFunds === 0)
         yield put(
           getAvailableFundsSuccessAction(
-            transformAccountingData.availableFunds
-              .toFixed(2)
+            availableFunds
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
               .replace('.', ','),
@@ -184,10 +173,10 @@ export function* handleAccountingData() {
         );
       else yield put(getAvailableFundsErrorAction('error'));
 
-      if (transformAccountingData.accountBill)
+      if (accountBill)
         yield put(
           getAccountBillsSuccessAction(
-            transformAccountingData.accountBill
+            accountBill
               .toString()
               .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
               .trim(),
@@ -195,44 +184,38 @@ export function* handleAccountingData() {
         );
       else yield put(getAccountBillsErrorAction('error'));
 
-      if (transformAccountingData.additionals.accountBalanceHistory)
+      if (additionals.accountBalanceHistory)
         yield put(
           getAccountBalanceHistorySuccessAction(
-            JSON.parse(
-              `[${transformAccountingData.additionals.accountBalanceHistory}]`,
-            ),
+            JSON.parse(`[${additionals.accountBalanceHistory}]`),
           ),
         );
       else getAccountBalanceHistoryErrorAction('error');
 
-      if (transformAccountingData.currency)
-        yield put(getCurrencySuccessAction(transformAccountingData.currency));
+      if (currency.name) yield put(getCurrencySuccessAction(currency.name));
       else yield put(getCurrencyErrorAction('error'));
 
-      if (transformAccountingData.currencyId)
-        yield put(
-          getCurrencyIdSuccessAction(transformAccountingData.currencyId),
-        );
+      if (currency.id) yield put(getCurrencyIdSuccessAction(currency.id));
       else yield put(getCurrencyIdErrorAction('error'));
 
       if (
-        transformAccountingData.additionals.incomingTransfersSum ||
-        transformAccountingData.additionals.incomingTransfersSum === 0
+        additionals.incomingTransfersSum ||
+        additionals.incomingTransfersSum === 0
       )
         yield put(
           getIncomingTransfersSumSuccessAction(
-            transformAccountingData.additionals.incomingTransfersSum,
+            additionals.incomingTransfersSum,
           ),
         );
       else yield put(getIncomingTransfersSumErrorAction('error'));
 
       if (
-        transformAccountingData.additionals.outgoingTransfersSum ||
-        transformAccountingData.additionals.outgoingTransfersSum === 0
+        additionals.outgoingTransfersSum ||
+        additionals.outgoingTransfersSum === 0
       )
         yield put(
           getOutgoingTransfersSumSuccessAction(
-            transformAccountingData.additionals.outgoingTransfersSum,
+            additionals.outgoingTransfersSum,
           ),
         );
       else yield put(getOutgoingTransfersSumErrorAction('error'));
@@ -254,7 +237,7 @@ export function* handleRecentTransactions() {
 function* getRecentTransactionsSender() {
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
-  const requestURL = `${api.baseURL}${api.transactions.senderPath}${userId}`;
+  const requestURL = api.senderPath;
 
   try {
     const response = yield call(request, requestURL, {
@@ -267,22 +250,23 @@ function* getRecentTransactionsSender() {
     });
 
     if (response) {
-      const recentTransactionsSender = response.map(({ ...transaction }) => ({
-        id_sender: transaction.id_sender,
-        amount_money: `-${transaction.amount_money
-          .toFixed(2)
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-          .replace('.', ',')}`,
-        recipient: {
-          id: transaction.id_recipient,
-          name: transaction.getRecipientdata.name,
-          surname: transaction.getRecipientdata.surname,
-        },
-        currency: transaction.currency.currency,
-        transfer_title: transaction.transfer_title,
-        date_time: transaction.date_time,
-      }));
+      const recentTransactionsSender = response.senderTransactions.map(
+        ({ ...transaction }) => ({
+          id_sender: userId,
+          amount_money: `-${transaction.transaction_amountMoney
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+            .replace('.', ',')}`,
+          recipient: {
+            id: transaction.user_id,
+            name: transaction.user_name,
+            surname: transaction.user_surname,
+          },
+          currency: transaction.currency_name,
+          transfer_title: transaction.transaction_transferTitle,
+          date_time: transaction.transaction_createdDate,
+        }),
+      );
 
       yield put(
         getRecentTransactionsSenderSuccessAction(recentTransactionsSender),
@@ -296,7 +280,7 @@ function* getRecentTransactionsSender() {
 function* getRecentTransactionsRecipient() {
   const userId = yield select(makeUserIdSelector());
   const token = yield select(makeTokenSelector());
-  const requestURL = `${api.baseURL}${api.transactions.recipientPath}${userId}`;
+  const requestURL = api.recipientPath;
 
   try {
     const response = yield call(request, requestURL, {
@@ -308,22 +292,21 @@ function* getRecentTransactionsRecipient() {
       },
     });
     if (response) {
-      const recentTransactionsRecipient = response.map(
+      const recentTransactionsRecipient = response.recipientTransactions.map(
         ({ ...transaction }) => ({
-          amount_money: transaction.amount_money
-            .toFixed(2)
+          amount_money: transaction.transaction_amountMoney
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
             .replace('.', ','),
           sender: {
-            id: transaction.id_sender,
-            name: transaction.getSenderdata.name,
-            surname: transaction.getSenderdata.surname,
+            id: transaction.user_id,
+            name: transaction.user_name,
+            surname: transaction.user_surname,
           },
-          date_time: transaction.date_time,
-          currency: transaction.currency.currency,
-          id_recipient: transaction.id_recipient,
-          transfer_title: transaction.transfer_title,
+          date_time: transaction.transaction_createdDate,
+          currency: transaction.currency_name,
+          id_recipient: userId,
+          transfer_title: transaction.transaction_transferTitle,
         }),
       );
 

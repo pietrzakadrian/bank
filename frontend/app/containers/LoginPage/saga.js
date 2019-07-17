@@ -4,16 +4,22 @@ import { FormattedMessage } from 'react-intl';
 import decode from 'jwt-decode';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
+import api from 'api';
+import messages from 'containers/LoginPage/messages';
+
+// Import Selectors
 import {
   makeIsLoggedSelector,
   makeUserIdSelector,
   makeTokenSelector,
 } from 'containers/App/selectors';
+import {
+  makeLoginSelector,
+  makePasswordSelector,
+} from 'containers/LoginPage/selectors';
+
+// Import Actions
 import { loggedInAction } from 'containers/App/actions';
-import api from 'api';
-import messages from './messages';
-import { makeLoginSelector, makePasswordSelector } from './selectors';
-import { ENTER_LOGIN, ENTER_PASSWORD, IS_LOGGED } from './constants';
 import {
   enterLoginSuccessAction,
   enterLoginErrorAction,
@@ -24,6 +30,9 @@ import {
   loginSuccessAction,
   loginErrorAction,
 } from './actions';
+
+// Import Constants
+import { ENTER_LOGIN, ENTER_PASSWORD, IS_LOGGED } from './constants';
 
 export function* handleLogged() {
   const isLogged = yield select(makeIsLoggedSelector());
@@ -42,7 +51,8 @@ export function* handleLogged() {
 
 export function* handleLogin() {
   const login = yield select(makeLoginSelector());
-  const requestURL = `${api.baseURL}${api.users.isLoginPath}${login}`;
+  api.login = login;
+  const requestURL = api.isLoginPath;
   const isNumber = /^\d+$/;
   const limit = 20;
 
@@ -50,7 +60,7 @@ export function* handleLogin() {
     return yield put(
       enterLoginErrorAction(<FormattedMessage {...messages.loginEmpty} />),
     );
-  if (!isNumber.test(login) || login.length >= limit)
+  if (!isNumber.test(login) || login.length > limit)
     return yield put(
       enterLoginErrorAction(<FormattedMessage {...messages.loginError} />),
     );
@@ -95,7 +105,7 @@ export function* handlePassword() {
 function* loginAttempt() {
   const login = yield select(makeLoginSelector());
   const password = yield select(makePasswordSelector());
-  const requestURL = `${api.baseURL}${api.users.loginPath}`;
+  const requestURL = api.loginPath;
 
   if (!login || !password)
     return yield put(

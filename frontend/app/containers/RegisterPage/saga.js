@@ -4,14 +4,15 @@ import { FormattedMessage } from 'react-intl';
 import { push } from 'connected-react-router';
 import request from 'utils/request';
 import decode from 'jwt-decode';
+import api from 'api';
+import messages from 'containers/RegisterPage/messages';
+
+// Import Selectors
 import {
   makeIsLoggedSelector,
   makeUserIdSelector,
   makeTokenSelector,
 } from 'containers/App/selectors';
-import { enqueueSnackbarAction } from 'containers/App/actions';
-import api from 'api';
-import messages from './messages';
 import {
   makeLoginSelector,
   makePasswordSelector,
@@ -20,7 +21,10 @@ import {
   makeCurrencyIdSelector,
   makeEmailSelector,
   makeIsDataProcessingAgreementSelector,
-} from './selectors';
+} from 'containers/RegisterPage/selectors';
+
+// Import Actions
+import { enqueueSnackbarAction } from 'containers/App/actions';
 import {
   stepNextAction,
   enterLoginErrorAction,
@@ -40,7 +44,9 @@ import {
   errorDataProcessingAgreementAction,
   registerErrorAction,
   registerSuccessAction,
-} from './actions';
+} from 'containers/RegisterPage/actions';
+
+// Import Constants
 import {
   ENTER_LOGIN,
   ENTER_PASSWORD,
@@ -54,7 +60,8 @@ import {
 
 export function* handleLogin() {
   const login = yield select(makeLoginSelector());
-  const requestURL = `${api.baseURL}${api.users.isLoginPath}${login}`;
+  api.login = login;
+  const requestURL = api.isLoginPath;
   const isNumber = /^\d+$/;
   const limit = 20;
 
@@ -142,7 +149,7 @@ export function* handleSurname() {
 }
 
 export function* loadCurrency() {
-  const requestURL = `${api.baseURL}${api.currency.currencyPath}`;
+  const requestURL = api.currencyPath;
 
   try {
     const response = yield call(request, requestURL);
@@ -152,7 +159,7 @@ export function* loadCurrency() {
         loadCurrencyErrorAction(<FormattedMessage {...messages.errorServer} />),
       );
 
-    const currencyData = response.map(({ ...rest }) => [rest.id]);
+    const currencyData = response.currency.map(({ ...rest }) => [rest.id]);
     // eslint-disable-next-line prefer-spread
     const currencyArray = [].concat.apply([], currencyData);
     yield put(loadCurrencySuccessAction(currencyArray));
@@ -179,7 +186,8 @@ export function* handleEmail() {
   const isDataProcessingAgreement = yield select(
     makeIsDataProcessingAgreementSelector(),
   );
-  const requestURL = `${api.baseURL}${api.users.isEmailPath}${email}`;
+  api.email = email;
+  const requestURL = api.isEmailPath;
   const isEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   const limit = 255;
 
@@ -240,7 +248,7 @@ function* registerAttempt() {
     makeIsDataProcessingAgreementSelector(),
   );
   const email = yield select(makeEmailSelector());
-  const requestURL = `${api.baseURL}${api.users.registerPath}`;
+  const requestURL = api.registerPath;
 
   if (
     !login ||

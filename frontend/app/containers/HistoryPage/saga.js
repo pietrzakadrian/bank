@@ -1,16 +1,22 @@
 /* eslint-disable prettier/prettier */
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
+import { format } from 'date-fns';
+import api from 'api';
+
+// Import Selectors
 import {
   makeUserIdSelector,
   makeTokenSelector,
 } from 'containers/App/selectors';
-import { format } from 'date-fns';
+import { makePageSizeSelector, makeCurrentPageSelector } from 'containers/HistoryPage/selectors';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
-import api from 'api';
+
+// Import Constants
 import { GET_GRID_DATA, CHANGE_PAGE } from './constants';
+
+// Import Actions
 import { getGridDataErrorAction, getGridDataSuccessAction } from './actions';
-import { makePageSizeSelector, makeCurrentPageSelector } from './selectors';
 
 export function* handleGridData() {
   const userId = yield select(makeUserIdSelector());
@@ -18,59 +24,56 @@ export function* handleGridData() {
   const locale = yield select(makeSelectLocale());
   const pageSize = yield select(makePageSizeSelector());
   const currentPage = yield select(makeCurrentPageSelector());
-  const requestURL = `${api.baseURL}${api.transactions.getTransactionsPath}`;
   const offset = pageSize * currentPage;
+  api.offset(offset);
+  const requestURL = api.transactionsPath;
+
 
   try {
     const response = yield call(request, requestURL, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        userId,
-        offset,
-      }),
     });
 
     if (response.error) return yield put(getGridDataErrorAction('error'));
 
-    const totalCount = response.count;
-    const transformGridData = response.rows.map(({ ...gridData }) => ({
+    const totalCount = response[1];
+    const transformGridData = response.transactions.map(({ ...gridData }) => ({
       amount_money:
-        gridData.id_sender === userId
-          ? `-${gridData.amount_money
+        gridData.sender.user.id === userId
+          ? `-${gridData.amountMoney
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+            .replace('.', ',')} ${gridData.currency.name}`
+          : `${gridData.amountMoney
             .toFixed(2)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-            .replace('.', ',')} ${gridData.currency.currency}`
-          : `${gridData.amount_money
-            .toFixed(2)
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-            .replace('.', ',')} ${gridData.currency.currency}`,
+            .replace('.', ',')} ${gridData.currency.name}`,
       date_time: format(
-        gridData.date_time,
+        gridData.createdDate,
         `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
       ),
-      transfer_title: gridData.transfer_title,
-      sender_name: `${gridData.getSenderdata.name} ${
-        gridData.getSenderdata.surname
+      transfer_title: gridData.transferTitle,
+      sender_name: `${gridData.sender.user.name} ${
+        gridData.sender.user.surname
       }`,
       account_bill:
-        gridData.id_sender === userId
-          ? gridData.getRecipientdata.bills[0].account_bill
-            .toString()
-            .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-            .trim()
-          : gridData.getSenderdata.bills[0].account_bill
-            .toString()
-            .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-            .trim(),
-      recipient_name: `${gridData.getRecipientdata.name} ${
-        gridData.getRecipientdata.surname
+      gridData.sender.user.id === userId
+        ? gridData.recipient.accountBill
+          .toString()
+          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+          .trim()
+        : gridData.sender.accountBill
+          .toString()
+          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+          .trim(),
+      recipient_name: `${gridData.recipient.user.name} ${
+        gridData.recipient.user.surname
       }`,
     }));
 

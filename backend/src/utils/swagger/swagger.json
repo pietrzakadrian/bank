@@ -825,7 +825,10 @@
                   "format": "date-time"
                 },
                 "amountMoney": {
-                  "type": "number"
+                  "type": "string"
+                },
+                "transferTitle": {
+                  "type": "string"
                 },
                 "currency": {
                   "type": "object",
@@ -888,6 +891,10 @@
               }
             }
           }
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
@@ -917,6 +924,10 @@
               },
               "user_surname": {
                 "type": "string"
+              },
+              "user_id": {
+                "type": "integer",
+                "format": "int64"
               }
             }
           }
@@ -949,6 +960,10 @@
               },
               "user_surname": {
                 "type": "string"
+              },
+              "user_id": {
+                "type": "integer",
+                "format": "int64"
               }
             }
           }

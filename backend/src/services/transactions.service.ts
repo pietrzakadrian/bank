@@ -89,7 +89,8 @@ export class TransactionService {
           "transaction.transferTitle",
           "currency.name",
           "user.name",
-          "user.surname"
+          "user.surname",
+          "user.id"
         ])
         .limit(4)
         .execute();
@@ -129,7 +130,8 @@ export class TransactionService {
           "transaction.transferTitle",
           "currency.name",
           "user.name",
-          "user.surname"
+          "user.surname",
+          "user.id"
         ])
         .limit(4)
         .execute();
@@ -172,6 +174,7 @@ export class TransactionService {
         .select([
           "transaction.createdDate",
           "transaction.amountMoney",
+          "transaction.transferTitle",
           "currency.id",
           "currency.name",
           "senderBill.accountBill",
