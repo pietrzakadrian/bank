@@ -80,6 +80,17 @@ describe("Users", () => {
           done();
         });
     });
+
+    it("should be able to return a false if login doesn't exist", done => {
+      chai
+        .request(app)
+        .get(`/api/users/111132134/isLogin`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.isLogin.should.equal(false);
+          done();
+        });
+    });
   });
 
   describe("GET /api/users/{email}/isEmail", () => {
@@ -90,6 +101,17 @@ describe("Users", () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.isEmail.should.equal(true);
+          done();
+        });
+    });
+
+    it("should be able to return a false if email doesn't exist", done => {
+      chai
+        .request(app)
+        .get(`/api/users/112@122.com/isEmail`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.isEmail.should.equal(false);
           done();
         });
     });
