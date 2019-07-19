@@ -5,13 +5,7 @@ import chaiHttp = require("chai-http");
 
 chai.use(chaiHttp);
 const should = chai.should();
-import { app, authToken } from "./tests-helper";
-import config from "../config/config";
-
-const userToLogin = {
-  login: config.admin.login,
-  password: `${config.admin.password}`
-};
+import { app, authToken } from "./helpers/tests-helper";
 
 describe("Bills", () => {
   describe("GET /api/bills", () => {

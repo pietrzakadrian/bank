@@ -5,7 +5,7 @@ import chaiHttp = require("chai-http");
 
 chai.use(chaiHttp);
 const should = chai.should();
-import { app } from "./tests-helper";
+import { app } from "./helpers/tests-helper";
 
 const userToRegister = {
   name: "Adrian",

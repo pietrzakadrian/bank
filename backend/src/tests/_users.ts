@@ -3,7 +3,7 @@ import 'mocha';
 import chai from 'chai';
 import chaiHttp = require('chai-http');
 
-import { app, authToken, testUserId } from './tests-helper';
+import { app, authToken, testUserId } from './helpers/tests-helper';
 import errors from '../assets/i18n/en/errors';
 
 chai.use(chaiHttp);

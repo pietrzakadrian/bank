@@ -1,10 +1,10 @@
-import { Application } from "../app";
+import { Application } from "../../app";
 import express from "express";
 import chai from "chai";
 import chaiHttp = require("chai-http");
 import { before } from "mocha";
 import "mocha";
-import config from "../config/config";
+import config from "../../config/config";
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -25,8 +25,5 @@ before(async () => {
     .post("/api/auth/login")
     .send({ login: config.admin.login, password: `${config.admin.password}` });
   authToken = "Bearer " + response.body.token;
-
-  console.log("authToken", authToken);
-
   console.info("## Starting tests...");
 });

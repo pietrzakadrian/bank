@@ -5,7 +5,7 @@ import chaiHttp = require("chai-http");
 
 chai.use(chaiHttp);
 const should = chai.should();
-import { app, authToken } from "./tests-helper";
+import { app, authToken } from "./helpers/tests-helper";
 
 describe("Logout", () => {
   describe("PUT /api/auth/logout", () => {

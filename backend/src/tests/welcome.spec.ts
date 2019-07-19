@@ -3,7 +3,7 @@ import "mocha";
 import chai from "chai";
 import chaiHttp = require("chai-http");
 
-import { app } from "./tests-helper";
+import { app } from "./helpers/tests-helper";
 
 chai.use(chaiHttp);
 const should = chai.should();
