@@ -26,5 +26,7 @@ before(async () => {
     .send({ login: config.admin.login, password: `${config.admin.password}` });
   authToken = "Bearer " + response.body.token;
 
+  console.log("authToken", authToken);
+
   console.info("## Starting tests...");
 });
