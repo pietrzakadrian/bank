@@ -73,11 +73,9 @@ notificationsRouter
       const user: User = await userService.getById(req.user.id);
       const additional = await additionalService.unsetNotifications(user);
 
-      if (additional) {
-        res.status(HttpStatus.OK).json({
-          success: true
-        });
-      }
+      res.status(HttpStatus.OK).json({
+        success: true
+      });
     } catch (error) {
       const err: IResponseError = {
         success: false,
@@ -92,7 +90,7 @@ notificationsRouter
  * Get user's new notifications
  *
  * @Method GET
- * @URL /api/additionals/notifications?:limit
+ * @URL /api/additionals/notifications/:limit
  *
  */
 notificationsRouter

@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
 import { param, validationResult } from "express-validator/check";
-import { getManager } from "typeorm";
 import { Decimal } from "decimal.js";
 
 // Import Services
@@ -86,7 +85,6 @@ billsRouter
       const billService = new BillService();
       const userService = new UserService();
       const validationErrors = validationResult(req);
-      const userRepository = getManager().getRepository(User);
       const accountBill: string = req.params.accountBill;
 
       if (!validationErrors.isEmpty()) {

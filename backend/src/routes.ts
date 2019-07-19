@@ -30,6 +30,5 @@ router.use("/transactions", auth.authenticate("jwt"), [
 ]);
 router.use("/additionals", auth.authenticate("jwt"), notificationsRouter);
 router.use("/currency", currencyRouter);
-// router.use("/tests", auth.authenticate("basic"), testsRouter);
 
 export default router;
