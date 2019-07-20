@@ -5,7 +5,7 @@ import { Logger, ILogger } from "../utils/logger";
 import { Transaction } from "../entities/transaction.entity";
 import { User } from "../entities/user.entity";
 import { Currency } from "../entities/currency.entity";
-import { BillService } from "./bills.service";
+import { Bill } from "../entities/bill.entity";
 
 export class TransactionService {
   transactionRepository: Repository<Transaction>;
@@ -25,6 +25,20 @@ export class TransactionService {
     this.logger.info("Create a new transaction", data);
     const newTransaction = this.transactionRepository.create(data);
     return await this.transactionRepository.save(newTransaction);
+  }
+
+  /**
+   * Updates a transaction
+   */
+  async update(transaction: Transaction): Promise<Transaction | undefined> {
+    try {
+      const updatedTransaction = await this.transactionRepository.save(
+        transaction
+      );
+      return updatedTransaction;
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   /**

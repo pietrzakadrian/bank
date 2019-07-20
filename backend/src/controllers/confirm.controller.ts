@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
 import { body, validationResult } from "express-validator/check";
 import { getManager } from "typeorm";
+import { Decimal } from "decimal.js";
 
 // Impoty Services
 import { TransactionService } from "../services/transactions.service";
@@ -65,7 +66,6 @@ confirmRouter
 
       try {
         const user: User = await userService.getById(req.user.id);
-        const senderBill: Bill = await billService.getByUser(user);
         const senderCurrency: Currency = await currencyService.getByUser(user);
         const recipientBill: Bill = await billService.getByAccountBill(
           accountBill
@@ -107,16 +107,8 @@ confirmRouter
           senderCurrency
         );
 
-        let transaction = new Transaction();
-        transaction.sender = senderBill;
-        transaction.recipient = recipientBill;
-        transaction.transferTitle = transferTitle;
-        transaction.currency = senderCurrency;
-        transaction.authorizationKey = authorizationKey;
-        transaction.authorizationStatus = true;
-        transaction.amountMoney = amountMoney;
-        transaction = transactionRepository.create(transaction);
-        await transactionService.insert(transaction);
+        registeredTransaction.authorizationStatus = true;
+        await transactionRepository.save(registeredTransaction);
 
         await additionalService.setWidgetStatus(user);
         await additionalService.setWidgetStatus(recipient);

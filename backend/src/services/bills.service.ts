@@ -74,7 +74,6 @@ export class BillService {
    * Returns a bill by account Bill
    */
   async getByAccountBill(accountBill: string): Promise<Bill | undefined> {
-    console.log(accountBill);
     try {
       const bill: Bill = await this.billRepository.findOne({
         where: { accountBill },
@@ -82,7 +81,6 @@ export class BillService {
       });
 
       if (bill) {
-        console.log(bill);
         return bill;
       } else {
         return undefined;

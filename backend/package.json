@@ -42,7 +42,6 @@
     "winston": "^3.1.0"
   },
   "devDependencies": {
-    "@types/swagger-ui-express": "^3.0.1",
     "@types/axios": "^0.14.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/bluebird": "^3.0.37",
@@ -64,6 +63,7 @@
     "@types/passport": "^0.4.6",
     "@types/passport-http": "^0.3.8",
     "@types/passport-jwt": "^3.0.1",
+    "@types/swagger-ui-express": "^3.0.1",
     "@types/winston": "^2.4.4",
     "chai": "^4.1.2",
     "chai-http": "^4.2.0",

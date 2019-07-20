@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import * as HttpStatus from "http-status-codes";
 import { body, validationResult } from "express-validator/check";
 import { getManager } from "typeorm";
+import { Decimal } from "decimal.js";
 
 // Impoty Services
 import { TransactionService } from "../services/transactions.service";
@@ -62,22 +63,15 @@ createRouter
         const amountMoney: number = req.body.amountMoney;
         const currency: Currency = await currencyService.getByUser(user);
         const transferTitle: string = req.body.transferTitle;
-
-        console.log("ok");
-
         const recipientBill: Bill = await billService.getByAccountBill(
           `${accountBill}`
         );
-
-        console.log("recipientBill", recipientBill);
         const recipientAccountBill: string = recipientBill.accountBill;
         const authorizationKey: string = transactionService.generateAuthorizationKey();
         const isAmountMoney: boolean = await billService.isAmountMoney(
           new Decimal(amountMoney),
           user
         );
-
-        console.log("OKK");
 
         if (
           userAccountBill === recipientAccountBill ||
