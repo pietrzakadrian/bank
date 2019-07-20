@@ -427,7 +427,6 @@ function renderSuggestion(suggestion) {
 }
 
 PaymentForm.propTypes = {
-  accountNumber: PropTypes.object,
   amountMoney: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

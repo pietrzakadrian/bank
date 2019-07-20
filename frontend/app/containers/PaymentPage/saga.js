@@ -71,9 +71,9 @@ export function* handleCurrency() {
 
     if (!response) return yield put(getCurrencyErrorAction('error'));
 
-    const { currency } = response.currency.name;
+    const { currency } = response;
 
-    yield put(getCurrencySuccessAction(currency));
+    yield put(getCurrencySuccessAction(currency.name));
   } catch (error) {
     yield put(getCurrencyErrorAction(error));
   }

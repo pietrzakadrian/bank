@@ -91,14 +91,10 @@ export function* handleUserData() {
       });
 
       if (responseUserData && responseBillsData) {
-        const { name, surname, email } = responseUserData.user;
-        const transformAccountingData = responseBillsData.map(
-          ({ ...accountingData }) => ({
-            currencyId: accountingData.currency.name,
-          }),
-        );
+        const { name, surname, email } = responseUserData;
+        const userCurrencyId = responseBillsData.currency.id;
 
-        if (!name || !surname || !email || !transformAccountingData.currencyId)
+        if (!name || !surname || !email || !userCurrencyId)
           return yield put(
             loadUserDataErrorAction(
               <FormattedMessage {...messages.errorServer} />,
@@ -106,12 +102,7 @@ export function* handleUserData() {
           );
 
         yield put(
-          loadUserDataSuccessAction(
-            name,
-            surname,
-            email,
-            transformAccountingData.currencyId,
-          ),
+          loadUserDataSuccessAction(name, surname, email, userCurrencyId),
         );
       }
     } catch (error) {
@@ -137,8 +128,11 @@ export function* handleCurrency() {
       },
     });
 
+    console.log(response);
+
     if (response) {
-      const transformCurrency = response.map(item => item.id);
+      const { currency } = response;
+      const transformCurrency = currency.map(item => item.id);
       yield put(loadCurrencySuccessAction(transformCurrency));
     }
   } catch (error) {

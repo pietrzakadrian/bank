@@ -1,35 +1,35 @@
 /* eslint-disable no-underscore-dangle */
+const BASE_URL = 'http://localhost:8000';
+const AUTH_PATH = '/api/auth';
+const USERS_PATH = '/api/users';
+const BILLS_PATH = '/api/bills';
+const TRANSACTIONS_PATH = '/api/transactions';
+const CURRENCY_PATH = '/api/currency';
+const ADDITIONALS_PATH = '/api/additionals';
 
 const api = {
-  BASE_URL: 'http://localhost:8000',
-  AUTH_PATH: '/api/auth/',
-  USERS_PATH: '/api/users',
-  BILLS_PATH: '/api/bills',
-  TRANSACTIONS_PATH: '/api/transactions',
-  CURRENCY_PATH: '/api/currency',
-  ADDITIONALS_PATH: '/api/additionals',
-  _login: undefined,
-  _email: undefined,
-  _accountBill: undefined,
-  _amountMoney: undefined,
-  _id: undefined,
-  _offset: undefined,
-  _limit: undefined,
+  _login: '',
+  _email: '',
+  _accountBill: '',
+  _amountMoney: '',
+  _id: '',
+  _offset: '',
+  _limit: '',
 
   get loginPath() {
-    return `${this.BASE_URL}${this.AUTH_PATH}/login`;
+    return `${BASE_URL}${AUTH_PATH}/login`;
   },
 
   get registerPath() {
-    return `${this.BASE_URL}${this.AUTH_PATH}/register`;
+    return `${BASE_URL}${AUTH_PATH}/register`;
   },
 
   get logoutPath() {
-    return `${this.BASE_URL}${this.AUTH_PATH}/logout`;
+    return `${BASE_URL}${AUTH_PATH}/logout`;
   },
 
   get usersPath() {
-    return `${this.BASE_URL}${this.USERS_PATH}`;
+    return `${BASE_URL}${USERS_PATH}`;
   },
 
   set login(login) {
@@ -37,7 +37,7 @@ const api = {
   },
 
   get isLoginPath() {
-    return `${this.BASE_URL}${this.USERS_PATH}/${this._login}/isLogin`;
+    return `${BASE_URL}${USERS_PATH}/${this._login}/isLogin`;
   },
 
   set email(email) {
@@ -45,11 +45,11 @@ const api = {
   },
 
   get isEmailPath() {
-    return `${this.BASE_URL}${this.USERS_PATH}/${this._email}/isEmail`;
+    return `${BASE_URL}${USERS_PATH}/${this._email}/isEmail`;
   },
 
   get billsPath() {
-    return `${this.BASE_URL}${this.BILLS_PATH}`;
+    return `${BASE_URL}${BILLS_PATH}`;
   },
 
   set accountBill(accountBill) {
@@ -57,11 +57,11 @@ const api = {
   },
 
   get searchPath() {
-    return `${this.BASE_URL}${this.BILLS_PATH}/${this._accountBill}/search`;
+    return `${BASE_URL}${BILLS_PATH}/${this._accountBill}/search`;
   },
 
   get isAccountBillPath() {
-    return `${this.BASE_URL}${this.BILLS_PATH}/${this._accountBill}/isAccountBill`;
+    return `${BASE_URL}${BILLS_PATH}/${this._accountBill}/isAccountBill`;
   },
 
   set amountMoney(amountMoney) {
@@ -69,7 +69,7 @@ const api = {
   },
 
   get isAmountMoneyPath() {
-    return `${this.BASE_URL}${this.BILLS_PATH}/${this._amountMoney}/isAmountMoney`;
+    return `${BASE_URL}${BILLS_PATH}/${this._amountMoney}/isAmountMoney`;
   },
 
   set limit(limit) {
@@ -77,24 +77,23 @@ const api = {
   },
 
   get transactionsPath() {
-    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/${this._limit &&
-      this._limit}`;
+    return `${BASE_URL}${TRANSACTIONS_PATH}/${this._limit && this._limit}`;
   },
 
   get confirmPath() {
-    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/confirm`;
+    return `${BASE_URL}${TRANSACTIONS_PATH}/confirm`;
   },
 
   get createPath() {
-    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/create`;
+    return `${BASE_URL}${TRANSACTIONS_PATH}/create`;
   },
 
   get recipientPath() {
-    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/recipient`;
+    return `${BASE_URL}${TRANSACTIONS_PATH}/recipient`;
   },
 
   get senderPath() {
-    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/sender`;
+    return `${BASE_URL}${TRANSACTIONS_PATH}/sender`;
   },
 
   set id(id) {
@@ -102,11 +101,11 @@ const api = {
   },
 
   get authorizationKeyPath() {
-    return `${this.BASE_URL}${this.TRANSACTIONS_PATH}/${this._id}/key`;
+    return `${BASE_URL}${TRANSACTIONS_PATH}/${this._id}/key`;
   },
 
   get currencyPath() {
-    return `${this.BASE_URL}${this.CURRENCY_PATH}`;
+    return `${BASE_URL}${CURRENCY_PATH}`;
   },
 
   set offset(offset) {
@@ -114,12 +113,12 @@ const api = {
   },
 
   get notificationsPath() {
-    return `${this.BASE_URL}${this.ADDITIONALS_PATH}/notifications${this
-      ._offset && this._offset}`;
+    return `${BASE_URL}${ADDITIONALS_PATH}/notifications${this._offset &&
+      this._offset}`;
   },
 
   get isNotificationPath() {
-    return `${this.BASE_URL}${this.ADDITIONALS_PATH}/notifications/isNotification`;
+    return `${BASE_URL}${ADDITIONALS_PATH}/notifications/isNotification`;
   },
 };
 

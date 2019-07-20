@@ -25,9 +25,8 @@ export function* handleGridData() {
   const pageSize = yield select(makePageSizeSelector());
   const currentPage = yield select(makeCurrentPageSelector());
   const offset = pageSize * currentPage;
-  api.offset(offset);
+  api.offset = offset;
   const requestURL = api.transactionsPath;
-
 
   try {
     const response = yield call(request, requestURL, {
@@ -41,8 +40,8 @@ export function* handleGridData() {
 
     if (response.error) return yield put(getGridDataErrorAction('error'));
 
-    const totalCount = response[1];
-    const transformGridData = response.transactions.map(({ ...gridData }) => ({
+    const totalCount = response.transactions[1];
+    const transformGridData = response.transactions[0].map(({ ...gridData }) => ({
       amount_money:
         gridData.sender.user.id === userId
           ? `-${gridData.amountMoney
