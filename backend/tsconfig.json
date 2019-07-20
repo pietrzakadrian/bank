@@ -14,7 +14,7 @@
     "paths": {
       "*": ["node_modules/*", "src/types/*"]
     },
-    "lib": ["es2017", "dom"]
+    "lib": ["es2017.object", "dom"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]

@@ -34,7 +34,7 @@ createRouter
     [
       body("accountBill")
         .exists()
-        .isNumeric()
+        .isString()
         .isLength({ min: 26, max: 26 }),
       body("amountMoney")
         .exists()
@@ -51,7 +51,6 @@ createRouter
       const billService = new BillService();
       const userService = new UserService();
       const currencyService = new CurrencyService();
-      const userRepository = getManager().getRepository(User);
       const transactionRepository = getManager().getRepository(Transaction);
       const validationErrors = validationResult(req);
 
@@ -63,15 +62,22 @@ createRouter
         const amountMoney: number = req.body.amountMoney;
         const currency: Currency = await currencyService.getByUser(user);
         const transferTitle: string = req.body.transferTitle;
+
+        console.log("ok");
+
         const recipientBill: Bill = await billService.getByAccountBill(
-          accountBill
+          `${accountBill}`
         );
+
+        console.log("recipientBill", recipientBill);
         const recipientAccountBill: string = recipientBill.accountBill;
         const authorizationKey: string = transactionService.generateAuthorizationKey();
         const isAmountMoney: boolean = await billService.isAmountMoney(
           new Decimal(amountMoney),
           user
         );
+
+        console.log("OKK");
 
         if (
           userAccountBill === recipientAccountBill ||

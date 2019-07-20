@@ -71,11 +71,10 @@ export class BillService {
   }
 
   /**
-   * Returns a bill by userId
+   * Returns a bill by account Bill
    */
-  async getByAccountBill(
-    accountBill: string | number
-  ): Promise<Bill | undefined> {
+  async getByAccountBill(accountBill: string): Promise<Bill | undefined> {
+    console.log(accountBill);
     try {
       const bill: Bill = await this.billRepository.findOne({
         where: { accountBill },
@@ -83,6 +82,7 @@ export class BillService {
       });
 
       if (bill) {
+        console.log(bill);
         return bill;
       } else {
         return undefined;
@@ -177,7 +177,7 @@ export class BillService {
   }
 
   /**
-   * Returns substract Amount Money by userId
+   * Returns substract Amount Money by User
    */
   async subAmountMoney(amountMoney: number, user: User): Promise<object> {
     try {
@@ -198,7 +198,7 @@ export class BillService {
   }
 
   /**
-   * Returns add Amount Money by userId
+   * Returns add Amount Money by User
    */
   async addAmountMoney(
     amountMoney: number,

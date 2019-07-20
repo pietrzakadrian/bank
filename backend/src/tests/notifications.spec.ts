@@ -9,7 +9,7 @@ import { app, authToken } from "./helpers/tests-helper";
 import config from "../config/config";
 
 describe("Notifications", () => {
-  describe("PUT /​api​/additionals​/notifications", () => {
+  describe("PUT /api/additionals/notifications", () => {
     it("should be able to unsets user's notifications", done => {
       chai
         .request(app)
@@ -35,7 +35,7 @@ describe("Notifications", () => {
     });
   });
 
-  describe("GET /​api​/additionals​/notifications/{offset}", () => {
+  describe("GET /api/additionals/notifications/{offset}", () => {
     it("should not able to unsets user's notifications without token", done => {
       chai
         .request(app)
@@ -62,7 +62,7 @@ describe("Notifications", () => {
     });
   });
 
-  describe("GET /​api​/additionals​/notifications/isNotification", () => {
+  describe("GET /api/additionals/notifications/isNotification", () => {
     it("should be able to return boolean that notification exists", done => {
       chai
         .request(app)
@@ -73,6 +73,17 @@ describe("Notifications", () => {
           res.should.have.status(200);
           res.body.should.have.property("isNotification");
           res.body.isNotification.should.to.be.an("boolean");
+          done();
+        });
+    });
+
+    it("should not able to return boolean that notification exists without token", done => {
+      chai
+        .request(app)
+        .get("/api/additionals/notifications/isNotification")
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.success.should.equal(false);
           done();
         });
     });
