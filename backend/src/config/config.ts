@@ -1,15 +1,10 @@
 import * as dotenv from "dotenv";
 
-import errors from "../assets/i18n/en/errors";
-import messages from "../assets/i18n/en/messages";
-
 dotenv.config();
 
 const isTestEnvironment = process.env.NODE_ENV === "test";
 
 export default {
-  errors,
-  messages,
   name: "V2X Core",
   version: "1.0",
   host: process.env.APP_HOST || "127.0.0.1",

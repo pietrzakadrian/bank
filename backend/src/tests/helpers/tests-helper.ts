@@ -12,7 +12,6 @@ const should = chai.should();
 let application: Application; // instance of our Application class
 export let app: express.Application; // express app
 export let authToken: string;
-export let testUserId: string;
 
 before(async () => {
   application = await new Application();
@@ -25,8 +24,6 @@ before(async () => {
     .post("/api/auth/login")
     .send({ login: config.admin.login, password: `${config.admin.password}` });
   authToken = "Bearer " + response.body.token;
-
-  console.log(authToken);
 
   console.info("## Starting tests...");
 });

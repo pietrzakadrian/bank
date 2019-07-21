@@ -7,7 +7,7 @@
 import styled from 'styled-components';
 import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 
-const ContainerWrapper = styled.main`
+const ContainerWrapper = styled.div`
   position: relative;
   margin: 0.625em auto;
   width: 100%;

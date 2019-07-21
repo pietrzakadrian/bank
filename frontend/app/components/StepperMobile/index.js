@@ -2,17 +2,15 @@
 
 import styled from 'styled-components';
 import MobileStepper from '@material-ui/core/MobileStepper';
-import { PRIMARY_GREY, PRIMARY_LIGHT } from 'utils/colors';
-import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
+import { PRIMARY_LIGHT } from 'utils/colors';
 
 const StepperMobile = styled(MobileStepper)`
   &&& {
-    background-color: ${props =>
-      props.background === 'white' ? PRIMARY_LIGHT : PRIMARY_GREY};
+    background-color: ${PRIMARY_LIGHT};
     display: flex;
     justify-content: center;
 
-    @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
+    @media screen and (min-width: 880px) {
       display: none;
     }
   }

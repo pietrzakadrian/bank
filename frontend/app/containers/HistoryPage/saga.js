@@ -49,7 +49,6 @@ export function* handleGridData() {
             .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
             .replace('.', ',')} ${gridData.currency.name}`
           : `${gridData.amountMoney
-            .toFixed(2)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
             .replace('.', ',')} ${gridData.currency.name}`,

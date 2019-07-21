@@ -54,7 +54,7 @@ function Footer() {
         )}
       </FooterTitleWrapper>
 
-      <FooterTextWrapper>
+      <FooterTextWrapper header>
         <ErrorOutlineIcon />
         <FormattedMessage {...messages.footerInfo1} />
       </FooterTextWrapper>

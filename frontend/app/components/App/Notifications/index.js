@@ -6,7 +6,7 @@
 
 import React, { Fragment } from 'react';
 import { createStructuredSelector } from 'reselect';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
 // Import Components

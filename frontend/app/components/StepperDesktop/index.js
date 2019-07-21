@@ -2,16 +2,14 @@
 
 import styled from 'styled-components';
 import Stepper from '@material-ui/core/Stepper';
-import { PRIMARY_GREY, PRIMARY_LIGHT } from 'utils/colors';
-import { TABLET_VIEWPORT_WIDTH } from 'utils/rwd';
+import { PRIMARY_LIGHT } from 'utils/colors';
 
 const StepperDesktop = styled(Stepper)`
   &&& {
-    background-color: ${props =>
-      props.background === 'white' ? PRIMARY_LIGHT : PRIMARY_GREY};
+    background-color: ${PRIMARY_LIGHT};
     display: none;
 
-    @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
+    @media screen and (min-width: 880px) {
       display: flex;
     }
 

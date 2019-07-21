@@ -116,16 +116,22 @@ export function clearAccountBillsAction() {
 }
 
 export function enterAccountNumberAction(value) {
-  console.log('vale', value);
   return {
     type: ENTER_ACCOUNT_NUMBER,
     value,
   };
 }
 
-export function enterAccountNumberSuccessAction() {
+export function enterAccountNumberSuccessAction(
+  recipientId,
+  recipientName,
+  recipientSurname,
+) {
   return {
     type: ENTER_ACCOUNT_NUMBER_SUCCESS,
+    recipientId,
+    recipientName,
+    recipientSurname,
   };
 }
 

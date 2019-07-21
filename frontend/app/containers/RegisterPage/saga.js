@@ -292,7 +292,7 @@ function* registerAttempt() {
         options: {
           key: new Date().getTime() + Math.random(),
           variant: 'success',
-          autoHideDuration: 3000,
+          autoHideDuration: 20000,
         },
       }),
     );

@@ -93,16 +93,13 @@ export class BillService {
   /**
    * Returns a bills by account bill
    */
-  async getUsersByAccountBill(
-    accountBill: string,
-    user?: User
-  ): Promise<Array<Bill> | undefined> {
+  async getUsersByAccountBill(accountBill: string, user?: User) {
     const userId: User | undefined = user
       ? this.userRepository.getId(user)
       : undefined;
 
     try {
-      const bills: Bill[] | undefined = await this.billRepository
+      const bills = await this.billRepository
         .createQueryBuilder("bill")
         .leftJoinAndSelect("bill.user", "user")
         .where("bill.accountBill LIKE :accountBill", {

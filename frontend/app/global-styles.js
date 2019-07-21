@@ -157,23 +157,29 @@ const GlobalStyle = createGlobalStyle`
   .snackbar__provider,
   .snackbar__provider--open-menu,
   .snackbar__provider--close-menu {
+    left: 0!important;
+    right: 0!important;
+    bottom: 0!important;
+
     div {
       background-color: ${SECONDARY_BLUE_LIGHT}!important;
-    }
-  }
-  
-  @media screen and (max-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-    .snackbar__provider, .snackbar__provider--open-menu  {
-      left: 0!important;
-      right: 0!important;
-      bottom: 0!important;
     }
   }
   
   @media screen and (min-width: ${TABLET_VIEWPORT_WIDTH}) {
     .snackbar__provider--open-menu {
       left: 280px!important; 
+      bottom: 20px!important;
       position: absolute; 
+    }
+  }
+
+  @media screen and (min-width: 960px) {
+    .snackbar__provider,
+    .snackbar__provider--close-menu {
+      left: 24px!important;
+      right: auto!important;
+      bottom: 20px!important;
     }
   }
 `;

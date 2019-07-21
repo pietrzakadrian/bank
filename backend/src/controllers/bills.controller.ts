@@ -98,14 +98,17 @@ billsRouter
 
       try {
         const user: User = await userService.getById(req.user.id);
-        const bills: Bill[] = await billService.getUsersByAccountBill(
+        const bills = await billService.getUsersByAccountBill(
           accountBill,
           user
         );
 
         if (bills.length)
           return res.status(HttpStatus.OK).json({
-            isAccountBill: true
+            isAccountBill: true,
+            recipientId: bills[0].user_id,
+            recipientName: bills[0].user_name,
+            recipientSurname: bills[0].user_surname
           });
 
         res.status(HttpStatus.OK).json({

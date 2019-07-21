@@ -124,7 +124,7 @@ export default function RegisterForm() {
   const steps = getSteps();
 
   return (
-    <FormWrapper>
+    <Fragment>
       <StepperWrapper>
         <StepperDesktop activeStep={activeStep}>
           {steps.map(label => (
@@ -142,244 +142,248 @@ export default function RegisterForm() {
         />
       </StepperWrapper>
 
-      <form noValidate autoComplete="off">
-        {activeStep === 0 && (
-          <Fragment>
-            <LabelWrapper>
-              <FormattedMessage {...messages.idNumber} />
-            </LabelWrapper>
-
-            <FormattedMessage {...messages.inputNumber}>
-              {placeholder => (
-                <InputWrapper
-                  key={1}
-                  placeholder={placeholder}
-                  type="number"
-                  max="20"
-                  value={login || ''}
-                  error={error}
-                  onChange={onChangeLogin}
-                  onKeyDown={e =>
-                    e.keyCode === 13 &&
-                    onEnterLogin(login) &&
-                    e.preventDefault()
-                  }
-                  onKeyPress={handleKeyPress}
-                />
-              )}
-            </FormattedMessage>
-
-            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
-
-            <ButtonWrapper
-              type="button"
-              onClick={() => onEnterLogin(login)}
-              disabled={isLoading}
-            >
-              <FormattedMessage {...messages.nextText} />
-              <NavigateNextIcon />
-            </ButtonWrapper>
-          </Fragment>
-        )}
-
-        {activeStep === 1 && (
-          <Fragment>
-            <LabelWrapper>
-              <FormattedMessage {...messages.password} />
-            </LabelWrapper>
-
-            <FormattedMessage {...messages.inputPassword}>
-              {placeholder => (
-                <InputWrapper
-                  key={2}
-                  placeholder={placeholder}
-                  type="password"
-                  value={password || ''}
-                  error={error}
-                  onChange={onChangePassword}
-                  onKeyDown={e =>
-                    e.keyCode === 13 &&
-                    onEnterPassword(password) &&
-                    e.preventDefault()
-                  }
-                />
-              )}
-            </FormattedMessage>
-
-            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
-
-            <ButtonWrapper
-              type="button"
-              onClick={() => onEnterPassword(password)}
-              disabled={isLoading}
-            >
-              <FormattedMessage {...messages.nextText} />
-              <NavigateNextIcon />
-            </ButtonWrapper>
-          </Fragment>
-        )}
-
-        {activeStep === 2 && (
-          <Fragment>
-            <LabelWrapper>
-              <FormattedMessage {...messages.name} />
-            </LabelWrapper>
-
-            <FormattedMessage {...messages.inputName}>
-              {placeholder => (
-                <InputWrapper
-                  key={3}
-                  placeholder={placeholder}
-                  type="text"
-                  value={name || ''}
-                  error={error}
-                  onChange={onChangeName}
-                  onKeyDown={e =>
-                    e.keyCode === 13 && onEnterName(name) && e.preventDefault()
-                  }
-                />
-              )}
-            </FormattedMessage>
-
-            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
-
-            <ButtonWrapper
-              type="button"
-              onClick={() => onEnterName(name)}
-              disabled={isLoading}
-            >
-              <FormattedMessage {...messages.nextText} />
-              <NavigateNextIcon />
-            </ButtonWrapper>
-          </Fragment>
-        )}
-
-        {activeStep === 3 && (
-          <Fragment>
-            <LabelWrapper>
-              <FormattedMessage {...messages.surname} />
-            </LabelWrapper>
-
-            <FormattedMessage {...messages.inputSurname}>
-              {placeholder => (
-                <InputWrapper
-                  key={4}
-                  placeholder={placeholder}
-                  type="text"
-                  value={surname || ''}
-                  error={error}
-                  onChange={onChangeSurname}
-                  onKeyDown={e =>
-                    e.keyCode === 13 &&
-                    onEnterSurname(surname) &&
-                    e.preventDefault()
-                  }
-                />
-              )}
-            </FormattedMessage>
-
-            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
-
-            <ButtonWrapper
-              type="button"
-              onClick={() => onEnterSurname(surname)}
-              disabled={isLoading}
-            >
-              <FormattedMessage {...messages.nextText} />
-              <NavigateNextIcon />
-            </ButtonWrapper>
-          </Fragment>
-        )}
-
-        {activeStep === 4 && (
-          <Fragment>
-            <LabelWrapper>
-              <FormattedMessage {...messages.currency} />
-            </LabelWrapper>
-            <CurrencyToggle />
-
-            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
-
-            <ButtonWrapper
-              type="button"
-              onClick={() => onEnterCurrency(currencyId)}
-              disabled={isLoading}
-            >
-              <FormattedMessage {...messages.nextText} />
-              <NavigateNextIcon />
-            </ButtonWrapper>
-          </Fragment>
-        )}
-
-        {activeStep === 5 && (
-          <Fragment>
-            <LabelWrapper>
-              <FormattedMessage {...messages.emailAddress} />
-            </LabelWrapper>
-
-            <FormattedMessage {...messages.inputEmail}>
-              {placeholder => (
-                <InputWrapper
-                  key={5}
-                  placeholder={placeholder}
-                  type="text"
-                  value={email || ''}
-                  error={error}
-                  onChange={onChangeEmail}
-                  onKeyDown={e =>
-                    e.keyCode === 13 &&
-                    onEnterEmail(email) &&
-                    e.preventDefault()
-                  }
-                />
-              )}
-            </FormattedMessage>
-
-            {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
-
-            <CheckboxWrapper>
-              <Checkbox
-                checked={isDataProcessingAgreement}
-                onClick={onToggleDataProcessingAgreement}
-                color="primary"
-              />
-
-              <TextWrapper>
-                <FormattedMessage {...messages.checkboxRodo} />
-              </TextWrapper>
-            </CheckboxWrapper>
-
-            {errorDataProcessingAgreement && (
-              <LabelWrapper error={errorDataProcessingAgreement}>
-                {errorDataProcessingAgreement}
+      <FormWrapper>
+        <form noValidate autoComplete="off">
+          {activeStep === 0 && (
+            <Fragment>
+              <LabelWrapper>
+                <FormattedMessage {...messages.idNumber} />
               </LabelWrapper>
-            )}
 
-            <InformationWrapper>
-              <FormattedMessage {...messages.textEmailNeed} />
-            </InformationWrapper>
+              <FormattedMessage {...messages.inputNumber}>
+                {placeholder => (
+                  <InputWrapper
+                    key={1}
+                    placeholder={placeholder}
+                    type="number"
+                    max="20"
+                    value={login || ''}
+                    error={error}
+                    onChange={onChangeLogin}
+                    onKeyDown={e =>
+                      e.keyCode === 13 &&
+                      onEnterLogin(login) &&
+                      e.preventDefault()
+                    }
+                    onKeyPress={handleKeyPress}
+                  />
+                )}
+              </FormattedMessage>
 
-            <ButtonWrapper
+              {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
+
+              <ButtonWrapper
+                type="button"
+                onClick={() => onEnterLogin(login)}
+                disabled={isLoading}
+              >
+                <FormattedMessage {...messages.nextText} />
+                <NavigateNextIcon />
+              </ButtonWrapper>
+            </Fragment>
+          )}
+
+          {activeStep === 1 && (
+            <Fragment>
+              <LabelWrapper>
+                <FormattedMessage {...messages.password} />
+              </LabelWrapper>
+
+              <FormattedMessage {...messages.inputPassword}>
+                {placeholder => (
+                  <InputWrapper
+                    key={2}
+                    placeholder={placeholder}
+                    type="password"
+                    value={password || ''}
+                    error={error}
+                    onChange={onChangePassword}
+                    onKeyDown={e =>
+                      e.keyCode === 13 &&
+                      onEnterPassword(password) &&
+                      e.preventDefault()
+                    }
+                  />
+                )}
+              </FormattedMessage>
+
+              {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
+
+              <ButtonWrapper
+                type="button"
+                onClick={() => onEnterPassword(password)}
+                disabled={isLoading}
+              >
+                <FormattedMessage {...messages.nextText} />
+                <NavigateNextIcon />
+              </ButtonWrapper>
+            </Fragment>
+          )}
+
+          {activeStep === 2 && (
+            <Fragment>
+              <LabelWrapper>
+                <FormattedMessage {...messages.name} />
+              </LabelWrapper>
+
+              <FormattedMessage {...messages.inputName}>
+                {placeholder => (
+                  <InputWrapper
+                    key={3}
+                    placeholder={placeholder}
+                    type="text"
+                    value={name || ''}
+                    error={error}
+                    onChange={onChangeName}
+                    onKeyDown={e =>
+                      e.keyCode === 13 &&
+                      onEnterName(name) &&
+                      e.preventDefault()
+                    }
+                  />
+                )}
+              </FormattedMessage>
+
+              {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
+
+              <ButtonWrapper
+                type="button"
+                onClick={() => onEnterName(name)}
+                disabled={isLoading}
+              >
+                <FormattedMessage {...messages.nextText} />
+                <NavigateNextIcon />
+              </ButtonWrapper>
+            </Fragment>
+          )}
+
+          {activeStep === 3 && (
+            <Fragment>
+              <LabelWrapper>
+                <FormattedMessage {...messages.surname} />
+              </LabelWrapper>
+
+              <FormattedMessage {...messages.inputSurname}>
+                {placeholder => (
+                  <InputWrapper
+                    key={4}
+                    placeholder={placeholder}
+                    type="text"
+                    value={surname || ''}
+                    error={error}
+                    onChange={onChangeSurname}
+                    onKeyDown={e =>
+                      e.keyCode === 13 &&
+                      onEnterSurname(surname) &&
+                      e.preventDefault()
+                    }
+                  />
+                )}
+              </FormattedMessage>
+
+              {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
+
+              <ButtonWrapper
+                type="button"
+                onClick={() => onEnterSurname(surname)}
+                disabled={isLoading}
+              >
+                <FormattedMessage {...messages.nextText} />
+                <NavigateNextIcon />
+              </ButtonWrapper>
+            </Fragment>
+          )}
+
+          {activeStep === 4 && (
+            <Fragment>
+              <LabelWrapper>
+                <FormattedMessage {...messages.currency} />
+              </LabelWrapper>
+              <CurrencyToggle />
+
+              {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
+
+              <ButtonWrapper
+                type="button"
+                onClick={() => onEnterCurrency(currencyId)}
+                disabled={isLoading}
+              >
+                <FormattedMessage {...messages.nextText} />
+                <NavigateNextIcon />
+              </ButtonWrapper>
+            </Fragment>
+          )}
+
+          {activeStep === 5 && (
+            <Fragment>
+              <LabelWrapper>
+                <FormattedMessage {...messages.emailAddress} />
+              </LabelWrapper>
+
+              <FormattedMessage {...messages.inputEmail}>
+                {placeholder => (
+                  <InputWrapper
+                    key={5}
+                    placeholder={placeholder}
+                    type="text"
+                    value={email || ''}
+                    error={error}
+                    onChange={onChangeEmail}
+                    onKeyDown={e =>
+                      e.keyCode === 13 &&
+                      onEnterEmail(email) &&
+                      e.preventDefault()
+                    }
+                  />
+                )}
+              </FormattedMessage>
+
+              {error && <LabelWrapper error={error}>{error}</LabelWrapper>}
+
+              <CheckboxWrapper>
+                <Checkbox
+                  checked={isDataProcessingAgreement}
+                  onClick={onToggleDataProcessingAgreement}
+                  color="primary"
+                />
+
+                <TextWrapper>
+                  <FormattedMessage {...messages.checkboxRodo} />
+                </TextWrapper>
+              </CheckboxWrapper>
+
+              {errorDataProcessingAgreement && (
+                <LabelWrapper error={errorDataProcessingAgreement}>
+                  {errorDataProcessingAgreement}
+                </LabelWrapper>
+              )}
+
+              <InformationWrapper>
+                <FormattedMessage {...messages.textEmailNeed} />
+              </InformationWrapper>
+
+              <ButtonWrapper
+                type="button"
+                onClick={() => onEnterEmail(email)}
+                disabled={isLoading}
+              >
+                <FormattedMessage {...messages.createAnAccount} />
+              </ButtonWrapper>
+            </Fragment>
+          )}
+
+          {activeStep !== 0 && steps.length - 1 && (
+            <ButtonBackWrapper
               type="button"
-              onClick={() => onEnterEmail(email)}
+              onClick={handleStepBack}
               disabled={isLoading}
             >
-              <FormattedMessage {...messages.createAnAccount} />
-            </ButtonWrapper>
-          </Fragment>
-        )}
-
-        {activeStep !== 0 && steps.length - 1 && (
-          <ButtonBackWrapper
-            type="button"
-            onClick={handleStepBack}
-            disabled={isLoading}
-          >
-            <NavigateBackIcon />
-            <FormattedMessage {...messages.backText} />
-          </ButtonBackWrapper>
-        )}
-      </form>
-    </FormWrapper>
+              <NavigateBackIcon />
+              <FormattedMessage {...messages.backText} />
+            </ButtonBackWrapper>
+          )}
+        </form>
+      </FormWrapper>
+    </Fragment>
   );
 }

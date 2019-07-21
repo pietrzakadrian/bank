@@ -155,6 +155,9 @@ const paymentPageReducer = produce((draft, action) => {
       break;
     case ENTER_ACCOUNT_NUMBER_SUCCESS:
       draft.isLoading = false;
+      draft.recipientId = action.recipientId;
+      draft.recipientName = action.recipientName;
+      draft.recipientSurname = action.recipientSurname;
       break;
     case ENTER_ACCOUNT_NUMBER_ERROR:
       draft.error = action.error;

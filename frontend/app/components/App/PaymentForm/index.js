@@ -5,6 +5,7 @@
  */
 
 import React, { Fragment, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -185,9 +186,9 @@ function PaymentForm({ intl }) {
   }, []);
 
   return (
-    <FormWrapper background="white">
+    <Fragment>
       <StepperWrapper>
-        <StepperDesktop background="white" activeStep={activeStep}>
+        <StepperDesktop activeStep={activeStep}>
           {steps.map(label => (
             <Step key={label}>
               <StepLabel>{label}</StepLabel>
@@ -196,263 +197,281 @@ function PaymentForm({ intl }) {
         </StepperDesktop>
 
         <StepperMobile
-          background="white"
           variant="dots"
           steps={steps.length}
           position="static"
           activeStep={activeStep}
         />
       </StepperWrapper>
-
-      <form
-        noValidate
-        autoComplete="off"
-        onSubmit={() => onEnterAuthorizationKey(authorizationKey)}
-      >
-        {activeStep === 0 && (
-          <Fragment>
-            <LabelWrapper large>
-              <FormattedMessage {...messages.stepAccountNumber} />
-            </LabelWrapper>
-
-            <AutosuggestWrapper error={error}>
-              <Autosuggest
-                suggestions={suggestions}
-                onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
-                onSuggestionsClearRequested={handleSuggestionsClearRequested}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                inputProps={inputProps}
-              />
-            </AutosuggestWrapper>
-
-            {error && (
-              <LabelWrapper large error={error}>
-                {error}
-              </LabelWrapper>
-            )}
-
-            <ButtonWrapper
-              large
-              type="button"
-              disabled={isLoading}
-              onClick={() => onEnterAccountNumber(accountNumber)}
-            >
-              <FormattedMessage {...messages.nextText} />
-              <NavigateNextIcon />
-            </ButtonWrapper>
-          </Fragment>
-        )}
-
-        {activeStep === 1 && (
-          <Fragment>
-            <LabelWrapper large>
-              <FormattedMessage {...messages.stepAmountOfMoney} />
-            </LabelWrapper>
-
-            <FormattedMessage {...messages.inputAmountOfMoney}>
-              {placeholder => (
-                <InputWrapper
-                  large
-                  key={1}
-                  onChange={onChangeAmountMoney}
-                  onKeyPress={handleKeyPress}
-                  onKeyDown={e =>
-                    e.keyCode === 13 &&
-                    onEnterAmountMoney(amountMoney) &&
-                    e.preventDefault()
-                  }
-                  placeholder={placeholder}
-                  type="number"
-                  error={error}
-                />
-              )}
-            </FormattedMessage>
-
-            {error && (
-              <LabelWrapper large error={error}>
-                {error}
-              </LabelWrapper>
-            )}
-
-            <ButtonWrapper
-              large
-              type="button"
-              disabled={isLoading}
-              onClick={() => onEnterAmountMoney(amountMoney)}
-            >
-              <FormattedMessage {...messages.nextText} />
-              <NavigateNextIcon />
-            </ButtonWrapper>
-          </Fragment>
-        )}
-
-        {activeStep === 2 && (
-          <Fragment>
-            <LabelWrapper large>
-              <FormattedMessage {...messages.stepTransferTitle} />
-            </LabelWrapper>
-
-            <FormattedMessage {...messages.inputTransferTitle}>
-              {placeholder => (
-                <InputWrapper
-                  large
-                  key={1}
-                  onChange={onChangeTransferTitle}
-                  onKeyDown={e =>
-                    e.keyCode === 13 &&
-                    onEnterTransferTitle(transferTitle) &&
-                    e.preventDefault()
-                  }
-                  placeholder={placeholder}
-                  type="text"
-                  error={error}
-                />
-              )}
-            </FormattedMessage>
-
-            {error && (
-              <LabelWrapper large error={error}>
-                {error}
-              </LabelWrapper>
-            )}
-
-            <ButtonWrapper
-              large
-              type="button"
-              disabled={isLoading}
-              onClick={() => onEnterTransferTitle(transferTitle)}
-            >
-              <FormattedMessage {...messages.nextText} />
-              <NavigateNextIcon />
-            </ButtonWrapper>
-          </Fragment>
-        )}
-
-        {activeStep === 3 && (
-          <ContainerWrapper>
-            <div>
+      <FormWrapper>
+        <form
+          noValidate
+          autoComplete="off"
+          onSubmit={() => onEnterAuthorizationKey(authorizationKey)}
+        >
+          {activeStep === 0 && (
+            <Fragment>
               <LabelWrapper large>
                 <FormattedMessage {...messages.stepAccountNumber} />
               </LabelWrapper>
 
-              <InputWrapper
-                large
-                key={1}
-                readOnly
-                value={accountNumber}
-                onKeyDown={handleKeyDown}
-              />
-            </div>
+              <AutosuggestWrapper error={error}>
+                <Autosuggest
+                  suggestions={suggestions}
+                  onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={handleSuggestionsClearRequested}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={inputProps}
+                />
+              </AutosuggestWrapper>
 
-            <div>
+              {error && (
+                <LabelWrapper large error={error}>
+                  {error}
+                </LabelWrapper>
+              )}
+
+              <ButtonWrapper
+                large
+                type="button"
+                disabled={isLoading}
+                onClick={() => onEnterAccountNumber(accountNumber)}
+              >
+                <FormattedMessage {...messages.nextText} />
+                <NavigateNextIcon />
+              </ButtonWrapper>
+            </Fragment>
+          )}
+
+          {activeStep === 1 && (
+            <Fragment>
               <LabelWrapper large>
                 <FormattedMessage {...messages.stepAmountOfMoney} />
               </LabelWrapper>
 
-              <InputWrapper
-                large
-                key={2}
-                onKeyDown={handleKeyDown}
-                value={`${amountMoney} ${currency}`}
-                readOnly
-              />
-            </div>
+              <FormattedMessage {...messages.inputAmountOfMoney}>
+                {placeholder => (
+                  <InputWrapper
+                    large
+                    key={1}
+                    onChange={onChangeAmountMoney}
+                    onKeyPress={handleKeyPress}
+                    onKeyDown={e =>
+                      e.keyCode === 13 &&
+                      onEnterAmountMoney(amountMoney) &&
+                      e.preventDefault()
+                    }
+                    placeholder={placeholder}
+                    type="number"
+                    error={error}
+                  />
+                )}
+              </FormattedMessage>
 
-            <div>
+              {error && (
+                <LabelWrapper large error={error}>
+                  {error}
+                </LabelWrapper>
+              )}
+
+              <ButtonWrapper
+                large
+                type="button"
+                disabled={isLoading}
+                onClick={() => onEnterAmountMoney(amountMoney)}
+              >
+                <FormattedMessage {...messages.nextText} />
+                <NavigateNextIcon />
+              </ButtonWrapper>
+            </Fragment>
+          )}
+
+          {activeStep === 2 && (
+            <Fragment>
               <LabelWrapper large>
                 <FormattedMessage {...messages.stepTransferTitle} />
               </LabelWrapper>
 
-              <InputWrapper
-                large
-                key={3}
-                value={transferTitle}
-                onKeyDown={handleKeyDown}
-                readOnly
-              />
-            </div>
+              <FormattedMessage {...messages.inputTransferTitle}>
+                {placeholder => (
+                  <InputWrapper
+                    large
+                    key={1}
+                    onChange={onChangeTransferTitle}
+                    onKeyDown={e =>
+                      e.keyCode === 13 &&
+                      onEnterTransferTitle(transferTitle) &&
+                      e.preventDefault()
+                    }
+                    placeholder={placeholder}
+                    type="text"
+                    error={error}
+                  />
+                )}
+              </FormattedMessage>
 
-            <ButtonWrapper
+              {error && (
+                <LabelWrapper large error={error}>
+                  {error}
+                </LabelWrapper>
+              )}
+
+              <ButtonWrapper
+                large
+                type="button"
+                disabled={isLoading}
+                onClick={() => onEnterTransferTitle(transferTitle)}
+              >
+                <FormattedMessage {...messages.nextText} />
+                <NavigateNextIcon />
+              </ButtonWrapper>
+            </Fragment>
+          )}
+
+          {activeStep === 3 && (
+            <ContainerWrapper>
+              <div>
+                <LabelWrapper large>
+                  <FormattedMessage {...messages.stepAccountNumber} />
+                </LabelWrapper>
+
+                <InputWrapper
+                  large
+                  key={1}
+                  readOnly
+                  value={accountNumber}
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
+
+              <div>
+                <LabelWrapper large>
+                  <FormattedMessage {...messages.stepAmountOfMoney} />
+                </LabelWrapper>
+
+                <InputWrapper
+                  large
+                  key={2}
+                  onKeyDown={handleKeyDown}
+                  value={`${amountMoney} ${currency}`}
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <LabelWrapper large>
+                  <FormattedMessage {...messages.stepTransferTitle} />
+                </LabelWrapper>
+
+                <InputWrapper
+                  large
+                  key={3}
+                  value={transferTitle}
+                  onKeyDown={handleKeyDown}
+                  readOnly
+                />
+              </div>
+
+              <ButtonWrapper
+                large
+                type="button"
+                disabled={isLoading || isSendAuthorizationKey}
+                onClick={onSendAuthorizationKey}
+              >
+                <FormattedMessage {...messages.inputReceiveCode} />
+                <NavigateNextIcon />
+              </ButtonWrapper>
+
+              {message && <TextWrapper large>{message}</TextWrapper>}
+
+              {isSendAuthorizationKey && (
+                <Fragment>
+                  <ConfirmPaymentWrapper>
+                    <FormattedMessage {...messages.inputAuthorizationKey}>
+                      {placeholder => (
+                        <InputWrapper
+                          key={4}
+                          onChange={onChangeAuthorizationKey}
+                          type="text"
+                          placeholder={placeholder}
+                          error={error}
+                        />
+                      )}
+                    </FormattedMessage>
+
+                    <ButtonWrapper
+                      margin="false"
+                      type="submit"
+                      onClick={() => onEnterAuthorizationKey(authorizationKey)}
+                      disabled={isLoading}
+                    >
+                      <FormattedMessage {...messages.inputMakePayment} />
+                    </ButtonWrapper>
+                  </ConfirmPaymentWrapper>
+
+                  {error && (
+                    <LabelWrapper large error={error}>
+                      {error}
+                    </LabelWrapper>
+                  )}
+
+                  <TextWrapper large>
+                    {suggestionAuthorizationKey ? (
+                      <Fragment>
+                        <FormattedMessage {...messages.yourCodeIs} />{' '}
+                        <SuggestionAuthorizationKeyWrapper>
+                          {suggestionAuthorizationKey}
+                        </SuggestionAuthorizationKeyWrapper>
+                      </Fragment>
+                    ) : (
+                      <FlatButtonWrapper
+                        type="button"
+                        onClick={handleAuthorizationKey}
+                      >
+                        <FormattedMessage {...messages.noEmailWithoutCode} />
+                      </FlatButtonWrapper>
+                    )}
+                  </TextWrapper>
+                </Fragment>
+              )}
+            </ContainerWrapper>
+          )}
+
+          {activeStep !== 0 && steps.length - 1 && (
+            <ButtonBackWrapper
               large
               type="button"
-              disabled={isLoading || isSendAuthorizationKey}
-              onClick={onSendAuthorizationKey}
+              onClick={handleStepBack}
+              disabled={isLoading}
             >
-              <FormattedMessage {...messages.inputReceiveCode} />
-              <NavigateNextIcon />
-            </ButtonWrapper>
-
-            {message && <TextWrapper large>{message}</TextWrapper>}
-
-            {isSendAuthorizationKey && (
-              <Fragment>
-                <ConfirmPaymentWrapper>
-                  <FormattedMessage {...messages.inputAuthorizationKey}>
-                    {placeholder => (
-                      <InputWrapper
-                        key={4}
-                        onChange={onChangeAuthorizationKey}
-                        type="text"
-                        placeholder={placeholder}
-                        error={error}
-                      />
-                    )}
-                  </FormattedMessage>
-
-                  <ButtonWrapper
-                    margin="false"
-                    type="submit"
-                    onClick={() => onEnterAuthorizationKey(authorizationKey)}
-                    disabled={isLoading}
-                  >
-                    <FormattedMessage {...messages.inputMakePayment} />
-                  </ButtonWrapper>
-                </ConfirmPaymentWrapper>
-
-                {error && (
-                  <LabelWrapper large error={error}>
-                    {error}
-                  </LabelWrapper>
-                )}
-
-                <TextWrapper large>
-                  {suggestionAuthorizationKey ? (
-                    <Fragment>
-                      <FormattedMessage {...messages.yourCodeIs} />{' '}
-                      <SuggestionAuthorizationKeyWrapper>
-                        {suggestionAuthorizationKey}
-                      </SuggestionAuthorizationKeyWrapper>
-                    </Fragment>
-                  ) : (
-                    <FlatButtonWrapper
-                      type="button"
-                      onClick={handleAuthorizationKey}
-                    >
-                      <FormattedMessage {...messages.noEmailWithoutCode} />
-                    </FlatButtonWrapper>
-                  )}
-                </TextWrapper>
-              </Fragment>
-            )}
-          </ContainerWrapper>
-        )}
-
-        {activeStep !== 0 && steps.length - 1 && (
-          <ButtonBackWrapper
-            large
-            type="button"
-            onClick={handleStepBack}
-            disabled={isLoading}
-          >
-            <NavigateBackIcon />
-            <FormattedMessage {...messages.backText} />
-          </ButtonBackWrapper>
-        )}
-      </form>
-    </FormWrapper>
+              <NavigateBackIcon />
+              <FormattedMessage {...messages.backText} />
+            </ButtonBackWrapper>
+          )}
+        </form>
+      </FormWrapper>
+    </Fragment>
   );
 }
+
+getSuggestionValue.propTypes = {
+  suggestion: PropTypes.shape({
+    bill_accountBill: PropTypes.string.isRequired,
+    user_id: PropTypes.number.isRequired,
+    user_name: PropTypes.string.isRequired,
+    user_surname: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+renderSuggestion.propTypes = {
+  suggestion: PropTypes.shape({
+    bill_accountBill: PropTypes.string.isRequired,
+    user_id: PropTypes.number.isRequired,
+    user_name: PropTypes.string.isRequired,
+    user_surname: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 PaymentForm.propTypes = {
   intl: intlShape.isRequired,

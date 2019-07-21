@@ -32,8 +32,6 @@ import messages from './messages';
 // Import Utils
 import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 
-const key = 'dashboardPage';
-
 function getFromLS(key) {
   let ls = {};
   if (global.localStorage)
@@ -54,8 +52,8 @@ function saveToLS(key, value) {
 }
 
 export default function DashboardPage() {
-  useInjectReducer({ key, reducer });
-  useInjectSaga({ key, saga });
+  useInjectReducer({ key: 'dashboardPage', reducer });
+  useInjectSaga({ key: 'dashboardPage', saga });
 
   const ResponsiveGridLayout = WidthProvider(Responsive);
   const originalLayouts = getFromLS('layouts') || {};

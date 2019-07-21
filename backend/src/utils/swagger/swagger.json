@@ -787,6 +787,16 @@
       "properties": {
         "isAccountBill": {
           "type": "boolean"
+        },
+        "recipientId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "recipientName": {
+          "type": "string"
+        },
+        "recipientSurname": {
+          "type": "string"
         }
       }
     },

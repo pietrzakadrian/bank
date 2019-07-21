@@ -152,7 +152,12 @@ export function* handleAccountNumber() {
       },
     });
 
-    const { isAccountBill } = response;
+    const {
+      isAccountBill,
+      recipientId,
+      recipientName,
+      recipientSurname,
+    } = response;
 
     if (!isAccountBill)
       return yield put(
@@ -161,7 +166,13 @@ export function* handleAccountNumber() {
         ),
       );
 
-    yield put(enterAccountNumberSuccessAction());
+    yield put(
+      enterAccountNumberSuccessAction(
+        recipientId,
+        recipientName,
+        recipientSurname,
+      ),
+    );
     yield put(stepNextAction());
   } catch (error) {
     yield put(enterAccountNumberErrorAction(error));

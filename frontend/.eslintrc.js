@@ -22,7 +22,9 @@ module.exports = {
       jsx: true,
     },
   },
+
   rules: {
+    'import/order': 0,
     'prettier/prettier': ['error', prettierOptions],
     'arrow-body-style': [2, 'as-needed'],
     'class-methods-use-this': 0,
