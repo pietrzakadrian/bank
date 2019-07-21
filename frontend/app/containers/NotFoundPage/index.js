@@ -17,7 +17,7 @@ import FormWrapper from 'components/FormWrapper';
 import TextWrapper from './TextWrapper';
 import messages from './messages';
 
-export function NotFoundPage() {
+export default function NotFoundPage() {
   return (
     <Fragment>
       <FormattedMessage {...messages.helmetNotFoundPageTitle}>
@@ -44,5 +44,3 @@ export function NotFoundPage() {
     </Fragment>
   );
 }
-
-export default NotFoundPage;

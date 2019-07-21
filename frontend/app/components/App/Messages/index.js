@@ -5,18 +5,25 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { makeIsOpenMessagesSelector } from 'containers/App/selectors';
 
 // Import Components
 import MessagesWrapper from './MessagesWrapper';
 import TextWrapper from './TextWrapper';
 import messages from './messages';
 
-function Messages({ isOpenMessages }) {
+// Import Selectors
+import { makeIsOpenMessagesSelector } from 'containers/App/selectors';
+
+const stateSelector = createStructuredSelector({
+  isOpenMessages: makeIsOpenMessagesSelector(),
+});
+
+export default function Messages() {
+  const { isOpenMessages } = useSelector(stateSelector);
+
   return (
     <MessagesWrapper open={isOpenMessages}>
       <TextWrapper>
@@ -25,13 +32,3 @@ function Messages({ isOpenMessages }) {
     </MessagesWrapper>
   );
 }
-
-Messages.propTypes = {
-  isOpenMessages: PropTypes.bool,
-};
-
-const mapStateToProps = createStructuredSelector({
-  isOpenMessages: makeIsOpenMessagesSelector(),
-});
-
-export default connect(mapStateToProps)(Messages);

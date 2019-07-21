@@ -5,10 +5,12 @@
  */
 
 import React from 'react';
+
+// Import Components
 import TextWrapper from './TextWrapper';
 import CopyrightWrapper from './CopyrightWrapper';
 
-function Copyright() {
+export default function Copyright() {
   return (
     <CopyrightWrapper>
       &copy; 2019{' '}
@@ -22,5 +24,3 @@ function Copyright() {
     </CopyrightWrapper>
   );
 }
-
-export default Copyright;

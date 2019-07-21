@@ -9,19 +9,20 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import reducer from './reducer';
+import saga from './saga';
 
 // Import Components
 import ContainerWrapper from 'components/App/ContainerWrapper';
 import HistoryGrid from 'components/App/HistoryGrid';
 import Copyright from 'components/App/Copyright';
-
-import reducer from './reducer';
-import saga from './saga';
 import messages from './messages';
 
-export function HistoryPage() {
-  useInjectReducer({ key: 'historyPage', reducer });
-  useInjectSaga({ key: 'historyPage', saga });
+const key = 'historyPage';
+
+export default function HistoryPage() {
+  useInjectReducer({ key, reducer });
+  useInjectSaga({ key, saga });
 
   return (
     <Fragment>
@@ -36,5 +37,3 @@ export function HistoryPage() {
     </Fragment>
   );
 }
-
-export default HistoryPage;

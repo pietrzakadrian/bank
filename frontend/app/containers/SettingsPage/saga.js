@@ -128,8 +128,6 @@ export function* handleCurrency() {
       },
     });
 
-    console.log(response);
-
     if (response) {
       const { currency } = response;
       const transformCurrency = currency.map(item => item.id);
@@ -154,7 +152,7 @@ export function* handleSaveData() {
     surname ? call(handleSurname) : (surname = null),
     password ? call(handlePassword) : (password = null),
     email ? call(handleEmail) : (email = null),
-    currencyId ? call(handleChangeCurrency) : (currencyId = null),
+    currencyId || (currencyId = null),
   ]);
 
   const errorName = yield select(makeErrorNameSelector());
@@ -162,7 +160,7 @@ export function* handleSaveData() {
   const errorPassword = yield select(makeErrorPasswordSelector());
   const errorEmail = yield select(makeErrorEmailSelector());
 
-  if (!name && !surname && !password && !email)
+  if (!name && !surname && !password && !email && !currencyId)
     return yield put(
       saveDataErrorAction(<FormattedMessage {...messages.saveDataEmpty} />),
     );
@@ -177,11 +175,11 @@ export function* handleSaveData() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          name: name || null,
-          surname: surname || null,
-          password: password || null,
-          email: email || null,
-          currencyId: currencyId || null,
+          name: name && name,
+          surname: surname && surname,
+          password: password && password,
+          email: email && email,
+          currencyId: currencyId && currencyId,
         }),
       });
 
@@ -324,41 +322,9 @@ function* handleEmail() {
   }
 }
 
-export function* handleChangeCurrency() {
-  const token = yield select(makeTokenSelector());
-  const userId = yield select(makeUserIdSelector());
-  const requestURL = `${api.baseURL}${api.users.setCurrencyPath}${userId}`;
-  const currencyId = yield select(makeNewCurrencyIdSelector());
-
-  try {
-    const response = yield call(request, requestURL, {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        currencyId,
-      }),
-    });
-
-    if (response.success) {
-      yield put(
-        enterNewCurrencySuccessAction(
-          <FormattedMessage {...messages.saveCurrencySuccess} />,
-        ),
-      );
-    }
-  } catch (error) {
-    yield put(enterNewCurrencyErrorAction(error));
-  }
-}
-
 // Individual exports for testing
 export default function* settingsPageSaga() {
   yield takeLatest(LOAD_USER_DATA, handleUserData);
   yield takeLatest(LOAD_CURRENCY, handleCurrency);
-  yield takeLatest(SAVE_DATA, handleSaveData);
-  yield takeLatest(ENTER_NEW_CURRENCY, handleChangeCurrency);
+  yield takeLatest([SAVE_DATA, ENTER_NEW_CURRENCY], handleSaveData);
 }

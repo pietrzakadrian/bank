@@ -5,13 +5,9 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { makeIsOpenNavigationMobileSelector } from 'containers/App/selectors';
-import { toggleNavigationMobileAction } from 'containers/App/actions';
 
 // Import Components
 import CardIcon from '@material-ui/icons/CreditCard';
@@ -26,7 +22,22 @@ import Ul from './Ul';
 import TextWrapper from './TextWrapper';
 import messages from './messages';
 
-function Navigation({ isOpenNavigationMobile, onToggleNavigationMobile }) {
+// Import Actions
+import { toggleNavigationMobileAction } from 'containers/App/actions';
+
+// Import Selectors
+import { makeIsOpenNavigationMobileSelector } from 'containers/App/selectors';
+
+const stateSelector = createStructuredSelector({
+  isOpenNavigationMobile: makeIsOpenNavigationMobileSelector(),
+});
+
+export default function Navigation() {
+  const dispatch = useDispatch();
+  const onToggleNavigationMobile = () =>
+    dispatch(toggleNavigationMobileAction());
+  const { isOpenNavigationMobile } = useSelector(stateSelector);
+
   return (
     <nav>
       <Ul>
@@ -114,26 +125,3 @@ function Navigation({ isOpenNavigationMobile, onToggleNavigationMobile }) {
     </nav>
   );
 }
-
-Navigation.propTypes = {
-  location: PropTypes.object,
-  isOpenNavigationMobile: PropTypes.bool,
-  onToggleNavigationMobile: PropTypes.func,
-};
-
-const mapStateToProps = createStructuredSelector({
-  isOpenNavigationMobile: makeIsOpenNavigationMobileSelector(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onToggleNavigationMobile: () => dispatch(toggleNavigationMobileAction()),
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(Navigation);

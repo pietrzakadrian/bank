@@ -5,14 +5,12 @@ import { body, param, validationResult } from "express-validator/check";
 // Import Entities
 import { Currency } from "../entities/currency.entity";
 import { User } from "../entities/user.entity";
-import { Bill } from "../entities/bill.entity";
 
 // Import Middlewares
 import { AuthHandler } from "../middlewares/authHandler.middleware";
 
 // Impoty Services
 import { UserService } from "../services/users.service";
-import { BillService } from "../services/bills.service";
 import { CurrencyService } from "../services/currency.service";
 import { AdditionalService } from "../services/additionals.service";
 
@@ -182,30 +180,29 @@ usersRouter
   .patch(
     [
       body("name")
-        .optional()
+        .optional({ nullable: true })
         .isString()
         .isAlpha()
         .isLength({ min: 1 }),
       body("surname")
-        .optional()
+        .optional({ nullable: true })
         .isString()
         .isAlpha()
         .isLength({ min: 1 }),
       body("email")
-        .optional()
+        .optional({ nullable: true })
         .isEmail(),
       body("password")
-        .optional()
+        .optional({ nullable: true })
         .isLength({ min: 1 }),
       body("currencyId")
-        .optional()
+        .optional({ nullable: true })
         .isNumeric()
     ],
     auth.authenticate("jwt"),
 
     async (req: Request, res: Response, next: NextFunction) => {
       const userService = new UserService();
-      const billService = new BillService();
       const currencyService = new CurrencyService();
       const additionalService = new AdditionalService();
       const validationErrors = validationResult(req);
@@ -218,6 +215,8 @@ usersRouter
         };
         return next(err);
       }
+
+      console.log();
 
       try {
         const user: User = await userService.getById(req.user.id);

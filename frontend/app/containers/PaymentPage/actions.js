@@ -123,10 +123,9 @@ export function enterAccountNumberAction(value) {
   };
 }
 
-export function enterAccountNumberSuccessAction(recipientId) {
+export function enterAccountNumberSuccessAction() {
   return {
     type: ENTER_ACCOUNT_NUMBER_SUCCESS,
-    recipientId,
   };
 }
 

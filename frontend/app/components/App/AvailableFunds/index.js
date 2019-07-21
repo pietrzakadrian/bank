@@ -5,27 +5,13 @@
  */
 
 import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import saga from 'containers/DashboardPage/saga';
-import { PRIMARY_BLUE_LIGHT } from 'utils/colors';
 import reducer from 'containers/DashboardPage/reducer';
-import {
-  makeAvailableFundsSelector,
-  makeAccountBalanceHistorySelector,
-  makeCurrencySelector,
-} from 'containers/DashboardPage/selectors';
-import {
-  getAvailableFundsAction,
-  getAccountBalanceHistoryAction,
-  getCurrencyAction,
-} from 'containers/DashboardPage/actions';
-import { makeUserIdSelector } from 'containers/App/selectors';
+import saga from 'containers/DashboardPage/saga';
 
 // Import Components
 import {
@@ -42,16 +28,46 @@ import Trend from 'react-trend';
 import LoadingWrapper from './LoadingWrapper';
 import messages from './messages';
 
-function AvailableFunds({
-  availableFunds,
-  accountBalanceHistory,
-  currency,
-  getAvailableFunds,
-  getAccountBalanceHistory,
-  getCurrency,
-}) {
-  useInjectSaga({ key: 'dashboardPage', saga });
-  useInjectReducer({ key: 'dashboardPage', reducer });
+// Import Utils
+import { PRIMARY_BLUE_LIGHT } from 'utils/colors';
+
+// Import Actions
+import {
+  getAvailableFundsAction,
+  getAccountBalanceHistoryAction,
+  getCurrencyAction,
+} from 'containers/DashboardPage/actions';
+
+// Import Selectors
+import { makeUserIdSelector } from 'containers/App/selectors';
+import {
+  makeAvailableFundsSelector,
+  makeAccountBalanceHistorySelector,
+  makeCurrencySelector,
+} from 'containers/DashboardPage/selectors';
+
+const stateSelector = createStructuredSelector({
+  availableFunds: makeAvailableFundsSelector(),
+  accountBalanceHistory: makeAccountBalanceHistorySelector(),
+  currency: makeCurrencySelector(),
+  userId: makeUserIdSelector(),
+});
+
+const key = 'dashboardPage';
+
+export default function AvailableFunds() {
+  const dispatch = useDispatch();
+  const getAvailableFunds = () => dispatch(getAvailableFundsAction());
+  const getAccountBalanceHistory = () =>
+    dispatch(getAccountBalanceHistoryAction());
+  const getCurrency = () => dispatch(getCurrencyAction());
+  const { availableFunds, accountBalanceHistory, currency } = useSelector(
+    stateSelector,
+  );
+
+  useInjectSaga({ key, saga });
+  useInjectReducer({ key, reducer });
+
   useEffect(() => {
     if (!availableFunds) getAvailableFunds();
     if (!currency) getCurrency();
@@ -95,34 +111,3 @@ function AvailableFunds({
     </HeavyWidgetWrapper>
   );
 }
-
-AvailableFunds.propTypes = {
-  availableFunds: PropTypes.string,
-  accountBalanceHistory: PropTypes.array,
-  currency: PropTypes.string,
-  getAvailableFunds: PropTypes.func,
-  getAccountBalanceHistory: PropTypes.func,
-  getCurrency: PropTypes.func,
-};
-
-const mapStateToProps = createStructuredSelector({
-  availableFunds: makeAvailableFundsSelector(),
-  accountBalanceHistory: makeAccountBalanceHistorySelector(),
-  currency: makeCurrencySelector(),
-  userId: makeUserIdSelector(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getAvailableFunds: () => dispatch(getAvailableFundsAction()),
-    getAccountBalanceHistory: () => dispatch(getAccountBalanceHistoryAction()),
-    getCurrency: () => dispatch(getCurrencyAction()),
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(AvailableFunds);

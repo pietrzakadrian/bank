@@ -5,36 +5,39 @@
  */
 
 import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { useSelector, useDispatch } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
+import reducer from 'containers/PaymentPage/reducer';
+import saga from 'containers/PaymentPage/saga';
+
+// Import Components
+import Autosuggest from 'react-autosuggest';
 import StepperWrapper from 'components/StepperWrapper';
 import StepperDesktop from 'components/StepperDesktop';
 import StepperMobile from 'components/StepperMobile';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import {
-  makeAccountNumberSelector,
-  makeActiveStepSelector,
-  makeIsLoadingSelector,
-  makeErrorSelector,
-  makeSuggestionsSelector,
-  makeAmountMoneySelector,
-  makeTransferTitleSelector,
-  makeIsSendAuthorizationKeySelector,
-  makeCurrencySelector,
-  makeMessageSelector,
-  makeAuthorizationKeySelector,
-  makeSuggestionAuthorizationKeySelector,
-} from 'containers/PaymentPage/selectors';
-import ButtonBackWrapper from 'components/ButtonBackWrapper';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
 import LabelWrapper from 'components/LabelWrapper';
 import NavigateNextIcon from 'components/NavigateNextIcon';
 import NavigateBackIcon from 'components/NavigateBackIcon';
 import InputWrapper from 'components/InputWrapper';
 import ButtonWrapper from 'components/ButtonWrapper';
+import ButtonBackWrapper from 'components/ButtonBackWrapper';
+import TextWrapper from 'components/App/TextWrapper';
+import FormWrapper from './FormWrapper';
+import AutosuggestWrapper from './AutosuggestWrapper';
+import messages from './messages';
+import AutosuggestSuggestionsListWrapper from './AutosuggestSuggestionsListWrapper';
+import AutosuggestSuggestionsAccountNumberWrapper from './AutosuggestSuggestionsAccountNumberWrapper';
+import ContainerWrapper from './ContainerWrapper';
+import ConfirmPaymentWrapper from './ConfirmPaymentWrapper';
+import FlatButtonWrapper from './FlatButtonWrapper';
+import SuggestionAuthorizationKeyWrapper from './SuggestionAuthorizationKeyWrapper';
+
+// Import Actions
 import {
   stepBackAction,
   changeAccountNumberAction,
@@ -51,59 +54,112 @@ import {
   changeAuthorizationKeyAction,
   enterAuthorizationKeyAction,
 } from 'containers/PaymentPage/actions';
-import Autosuggest from 'react-autosuggest';
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/PaymentPage/reducer';
-import saga from 'containers/PaymentPage/saga';
-import TextWrapper from 'components/App/TextWrapper';
-import FormWrapper from './FormWrapper';
-import AutosuggestWrapper from './AutosuggestWrapper';
-import messages from './messages';
-import AutosuggestSuggestionsListWrapper from './AutosuggestSuggestionsListWrapper';
-import AutosuggestSuggestionsAccountNumberWrapper from './AutosuggestSuggestionsAccountNumberWrapper';
-import ContainerWrapper from './ContainerWrapper';
-import ConfirmPaymentWrapper from './ConfirmPaymentWrapper';
-import FlatButtonWrapper from './FlatButtonWrapper';
-import SuggestionAuthorizationKeyWrapper from './SuggestionAuthorizationKeyWrapper';
 
-function PaymentForm({
-  accountNumber,
-  amountMoney,
-  transferTitle,
-  currency,
-  authorizationKey,
-  suggestionAuthorizationKey,
-  activeStep,
-  suggestions,
-  isSendAuthorizationKey,
-  isLoading,
-  message,
-  error,
-  intl,
-  onChangeAccountNumber,
-  onEnterAccountNumber,
-  onChangeAmountMoney,
-  onEnterAmountMoney,
-  onChangeTransferTitle,
-  onEnterTransferTitle,
-  onChangeAuthorizationKey,
-  onSendAuthorizationKey,
-  onEnterAuthorizationKey,
-  handleStepBack,
-  handleKeyDown,
-  handleKeyPress,
-  handleSuggestionsFetchRequested,
-  handleSuggestionsClearRequested,
-  handleCurrency,
-  handleAuthorizationKey,
-}) {
-  useInjectSaga({ key: 'paymentPage', saga });
-  useInjectReducer({ key: 'paymentPage', reducer });
-  useEffect(() => {
-    if (!currency) handleCurrency();
-  }, []);
+// Import Selectors
+import {
+  makeAccountNumberSelector,
+  makeActiveStepSelector,
+  makeIsLoadingSelector,
+  makeErrorSelector,
+  makeSuggestionsSelector,
+  makeAmountMoneySelector,
+  makeTransferTitleSelector,
+  makeIsSendAuthorizationKeySelector,
+  makeCurrencySelector,
+  makeMessageSelector,
+  makeAuthorizationKeySelector,
+  makeSuggestionAuthorizationKeySelector,
+} from 'containers/PaymentPage/selectors';
 
+const stateSelector = createStructuredSelector({
+  accountNumber: makeAccountNumberSelector(),
+  amountMoney: makeAmountMoneySelector(),
+  transferTitle: makeTransferTitleSelector(),
+  authorizationKey: makeAuthorizationKeySelector(),
+  suggestionAuthorizationKey: makeSuggestionAuthorizationKeySelector(),
+  activeStep: makeActiveStepSelector(),
+  isSendAuthorizationKey: makeIsSendAuthorizationKeySelector(),
+  isLoading: makeIsLoadingSelector(),
+  message: makeMessageSelector(),
+  error: makeErrorSelector(),
+  currency: makeCurrencySelector(),
+  suggestions: makeSuggestionsSelector(),
+});
+
+const key = 'paymentPage';
+
+function getSteps() {
+  return [
+    <FormattedMessage key={1} {...messages.stepAccountNumber} />,
+    <FormattedMessage key={2} {...messages.stepAmountOfMoney} />,
+    <FormattedMessage key={3} {...messages.stepTransferTitle} />,
+    <FormattedMessage key={4} {...messages.stepConfirmTheData} />,
+  ];
+}
+
+function getSuggestionValue(suggestion) {
+  return suggestion.bill_accountBill;
+}
+
+function renderSuggestion(suggestion) {
+  return (
+    <div>
+      <AutosuggestSuggestionsAccountNumberWrapper>
+        {suggestion.bill_accountBill
+          .toString()
+          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
+          .trim()}
+      </AutosuggestSuggestionsAccountNumberWrapper>
+      <AutosuggestSuggestionsListWrapper>
+        {suggestion.user_name} {suggestion.user_surname}
+      </AutosuggestSuggestionsListWrapper>
+    </div>
+  );
+}
+
+function PaymentForm({ intl }) {
+  const dispatch = useDispatch();
+  const onChangeAccountNumber = (e, { newValue }) =>
+    dispatch(changeAccountNumberAction(newValue));
+  const onChangeAmountMoney = e =>
+    dispatch(changeAmountMoneyAction(e.target.value));
+  const onEnterAccountNumber = accountNumber =>
+    dispatch(enterAccountNumberAction(accountNumber));
+  const onEnterAmountMoney = amountMoney =>
+    dispatch(enterAmountMoneyAction(amountMoney));
+  const onChangeTransferTitle = e =>
+    dispatch(changeTransferTitleAction(e.target.value));
+  const onEnterTransferTitle = transferTitle =>
+    dispatch(enterTransferTitleAction(transferTitle));
+  const onChangeAuthorizationKey = e =>
+    dispatch(changeAuthorizationKeyAction(e.target.value));
+  const onEnterAuthorizationKey = authorizationKey =>
+    dispatch(enterAuthorizationKeyAction(authorizationKey));
+  const onSendAuthorizationKey = () => dispatch(sendAuthorizationKeyAction());
+  const handleSuggestionsFetchRequested = ({ value }) =>
+    dispatch(searchAccountBillsAction(value));
+  const handleSuggestionsClearRequested = () =>
+    dispatch(clearAccountBillsAction());
+  const handleStepBack = () => dispatch(stepBackAction());
+  const handleCurrency = () => dispatch(getCurrencyAction());
+  const handleAuthorizationKey = () => dispatch(getAuthorizationKeyAction());
+  const handleKeyPress = e =>
+    (e.key === 'E' || e.key === 'e') && e.preventDefault();
+  const handleKeyDown = e => e.keyCode === 13 && e.preventDefault();
+  const {
+    accountNumber,
+    amountMoney,
+    transferTitle,
+    currency,
+    authorizationKey,
+    suggestionAuthorizationKey,
+    activeStep,
+    suggestions,
+    isSendAuthorizationKey,
+    isLoading,
+    message,
+    error,
+  } = useSelector(stateSelector);
   const steps = getSteps();
   const inputProps = {
     value: accountNumber,
@@ -120,6 +176,13 @@ function PaymentForm({
       defaultMessage: 'Search for the account number...',
     }),
   };
+
+  useInjectSaga({ key, saga });
+  useInjectReducer({ key, reducer });
+
+  useEffect(() => {
+    if (!currency) handleCurrency();
+  }, []);
 
   return (
     <FormWrapper background="white">
@@ -391,123 +454,8 @@ function PaymentForm({
   );
 }
 
-function getSteps() {
-  return [
-    <FormattedMessage key={1} {...messages.stepAccountNumber} />,
-    <FormattedMessage key={2} {...messages.stepAmountOfMoney} />,
-    <FormattedMessage key={3} {...messages.stepTransferTitle} />,
-    <FormattedMessage key={4} {...messages.stepConfirmTheData} />,
-  ];
-}
-
-function getSuggestionValue(suggestion) {
-  const userData = {
-    accountNumber: suggestion.bill_accountBill,
-    recipientId: suggestion.user_id,
-    recipientName: suggestion.user_name,
-    recipientSurname: suggestion.user_surname,
-  };
-  return userData;
-}
-
-function renderSuggestion(suggestion) {
-  return (
-    <div>
-      <AutosuggestSuggestionsAccountNumberWrapper>
-        {suggestion.bill_accountBill
-          .toString()
-          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-          .trim()}
-      </AutosuggestSuggestionsAccountNumberWrapper>
-      <AutosuggestSuggestionsListWrapper>
-        {suggestion.user_name} {suggestion.user_surname}
-      </AutosuggestSuggestionsListWrapper>
-    </div>
-  );
-}
-
 PaymentForm.propTypes = {
-  amountMoney: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  intl: PropTypes.object,
-  suggestions: PropTypes.array,
-  message: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  transferTitle: PropTypes.string,
-  authorizationKey: PropTypes.string,
-  suggestionAuthorizationKey: PropTypes.string,
-  activeStep: PropTypes.number,
-  currency: PropTypes.string,
-  isLoading: PropTypes.bool,
-  isSendAuthorizationKey: PropTypes.bool,
-  handleStepBack: PropTypes.func,
-  handleKeyDown: PropTypes.func,
-  handleKeyPress: PropTypes.func,
-  handleSuggestionsFetchRequested: PropTypes.func,
-  handleSuggestionsClearRequested: PropTypes.func,
-  handleCurrency: PropTypes.func,
-  handleAuthorizationKey: PropTypes.func,
-  onChangeAccountNumber: PropTypes.func,
-  onEnterAccountNumber: PropTypes.func,
-  onChangeAmountMoney: PropTypes.func,
-  onEnterAmountMoney: PropTypes.func,
-  onChangeTransferTitle: PropTypes.func,
-  onChangeAuthorizationKey: PropTypes.func,
-  onEnterTransferTitle: PropTypes.func,
-  onSendAuthorizationKey: PropTypes.func,
-  onEnterAuthorizationKey: PropTypes.func,
+  intl: intlShape.isRequired,
 };
 
-const mapStateToProps = createStructuredSelector({
-  accountNumber: makeAccountNumberSelector(),
-  amountMoney: makeAmountMoneySelector(),
-  transferTitle: makeTransferTitleSelector(),
-  authorizationKey: makeAuthorizationKeySelector(),
-  suggestionAuthorizationKey: makeSuggestionAuthorizationKeySelector(),
-  activeStep: makeActiveStepSelector(),
-  isSendAuthorizationKey: makeIsSendAuthorizationKeySelector(),
-  isLoading: makeIsLoadingSelector(),
-  message: makeMessageSelector(),
-  error: makeErrorSelector(),
-  currency: makeCurrencySelector(),
-  suggestions: makeSuggestionsSelector(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onChangeAccountNumber: (e, { newValue }) =>
-      dispatch(changeAccountNumberAction(newValue)),
-    onChangeAmountMoney: e => dispatch(changeAmountMoneyAction(e.target.value)),
-    onEnterAccountNumber: accountNumber =>
-      dispatch(enterAccountNumberAction(accountNumber)),
-    onEnterAmountMoney: amountMoney =>
-      dispatch(enterAmountMoneyAction(amountMoney)),
-    onChangeTransferTitle: e =>
-      dispatch(changeTransferTitleAction(e.target.value)),
-    onEnterTransferTitle: transferTitle =>
-      dispatch(enterTransferTitleAction(transferTitle)),
-    onChangeAuthorizationKey: e =>
-      dispatch(changeAuthorizationKeyAction(e.target.value)),
-    onEnterAuthorizationKey: authorizationKey =>
-      dispatch(enterAuthorizationKeyAction(authorizationKey)),
-    onSendAuthorizationKey: () => dispatch(sendAuthorizationKeyAction()),
-    handleSuggestionsFetchRequested: ({ value }) =>
-      dispatch(searchAccountBillsAction(value)),
-    handleSuggestionsClearRequested: () => dispatch(clearAccountBillsAction()),
-    handleStepBack: () => dispatch(stepBackAction()),
-    handleCurrency: () => dispatch(getCurrencyAction()),
-    handleAuthorizationKey: () => dispatch(getAuthorizationKeyAction()),
-    handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
-    handleKeyDown: e => e.keyCode === 13 && e.preventDefault(),
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(
-  withConnect,
-  injectIntl,
-)(PaymentForm);
+export default injectIntl(PaymentForm);

@@ -5,13 +5,10 @@
  */
 
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
-import { makeSelectLocation } from 'containers/App/selectors';
-import { compose } from 'redux';
 
 // Import Components
 import ErrorOutlineIcon from './ErrorOutlineIcon';
@@ -21,10 +18,18 @@ import FooterTextWrapper from './FooterTextWrapper';
 import FooterAlertWrapper from './FooterAlertWrapper';
 import ButtonWrapper from './ButtonWrapper';
 import PrivacyWrapper from './PrivacyWrapper';
-
 import messages from './messages';
 
-function Footer({ location }) {
+// Import Selectors
+import { makeSelectLocation } from 'containers/App/selectors';
+
+const stateSelector = createStructuredSelector({
+  location: makeSelectLocation(),
+});
+
+function Footer() {
+  const { location } = useSelector(stateSelector);
+
   return (
     <FooterWrapper>
       <FooterTitleWrapper location={location.pathname}>
@@ -84,14 +89,4 @@ function Footer({ location }) {
   );
 }
 
-Footer.propTypes = {
-  location: PropTypes.object,
-};
-
-const mapStateToProps = createStructuredSelector({
-  location: makeSelectLocation(),
-});
-
-const withConnect = connect(mapStateToProps);
-
-export default compose(withConnect)(withRouter(Footer));
+export default withRouter(Footer);

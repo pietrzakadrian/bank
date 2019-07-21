@@ -61,185 +61,178 @@ export const initialState = {
 };
 
 /* eslint-disable default-case, no-param-reassign */
-const paymentPageReducer = (state = initialState, action) =>
-  produce(state, draft => {
-    switch (action.type) {
-      case ENTER_NEW_CURRENCY_SUCCESS:
-        draft.currency = '';
-        break;
-      case LOGOUT_SUCCESS:
-        draft.accountNumber = '';
-        draft.amountMoney = '';
-        draft.transferTitle = '';
-        draft.authorizationKey = '';
-        draft.suggestionAuthorizationKey = '';
-        draft.recipientId = '';
-        draft.recipientName = '';
-        draft.recipientSurname = '';
-        draft.message = '';
-        draft.currency = '';
-        draft.error = '';
-        draft.activeStep = 0;
-        draft.suggestions = [];
-        draft.isLoading = false;
-        draft.isSendAuthorizationKey = false;
-        break;
-      case LOGOUT_ERROR:
-        draft.accountNumber = '';
-        draft.amountMoney = '';
-        draft.transferTitle = '';
-        draft.authorizationKey = '';
-        draft.suggestionAuthorizationKey = '';
-        draft.recipientId = '';
-        draft.recipientName = '';
-        draft.recipientSurname = '';
-        draft.message = '';
-        draft.currency = '';
-        draft.error = '';
-        draft.activeStep = 0;
-        draft.suggestions = [];
-        draft.isLoading = false;
-        draft.isSendAuthorizationKey = false;
-        break;
-      case LOCATION_CHANGE:
-        draft.accountNumber = '';
-        draft.amountMoney = '';
-        draft.transferTitle = '';
-        draft.authorizationKey = '';
-        draft.suggestionAuthorizationKey = '';
-        draft.recipientId = '';
-        draft.recipientName = '';
-        draft.recipientSurname = '';
-        draft.message = '';
-        draft.error = '';
-        draft.activeStep = 0;
-        draft.suggestions = [];
-        draft.isLoading = false;
-        draft.isSendAuthorizationKey = false;
-        break;
-      case CHANGE_ACCOUNT_NUMBER:
-        if (draft.accountNumber) {
-          draft.accountNumber = action.value.accountNumber;
-          draft.recipientId = action.value.recipientId;
-          draft.recipientName = action.value.recipientName;
-          draft.recipientSurname = action.value.recipientSurname;
-        } else draft.accountNumber = action.value;
-        draft.error = '';
-        break;
-      case CHANGE_AMOUNT_MONEY:
-        draft.amountMoney = action.amountMoney;
-        draft.error = '';
-        break;
-      case CHANGE_TRANSFER_TITLE:
-        draft.transferTitle = action.transferTitle;
-        draft.error = '';
-        break;
-      case CHANGE_AUTHORIZATION_KEY:
-        draft.authorizationKey = action.authorizationKey;
-        draft.error = '';
-        break;
-      case SEARCH_ACCOUNT_BILLS:
-        if (draft.accountNumber !== action.value) {
-          draft.suggestions = action.value;
-          draft.isLoading = true;
-        }
-        break;
-      case SEARCH_ACCOUNT_BILLS_SUCCESS:
-        draft.suggestions = action.suggestions;
-        draft.isLoading = false;
-        break;
-      case SEARCH_ACCOUNT_BILLS_ERROR:
-        draft.error = action.error;
-        draft.isLoading = false;
-        break;
-      case CLEAR_ACCOUNT_BILLS:
-        draft.suggestions = [];
-        break;
-      case ENTER_ACCOUNT_NUMBER:
+const paymentPageReducer = produce((draft, action) => {
+  switch (action.type) {
+    case ENTER_NEW_CURRENCY_SUCCESS:
+      draft.currency = '';
+      break;
+    case LOGOUT_SUCCESS:
+      draft.accountNumber = '';
+      draft.amountMoney = '';
+      draft.transferTitle = '';
+      draft.authorizationKey = '';
+      draft.suggestionAuthorizationKey = '';
+      draft.recipientId = '';
+      draft.recipientName = '';
+      draft.recipientSurname = '';
+      draft.message = '';
+      draft.currency = '';
+      draft.error = '';
+      draft.activeStep = 0;
+      draft.suggestions = [];
+      draft.isLoading = false;
+      draft.isSendAuthorizationKey = false;
+      break;
+    case LOGOUT_ERROR:
+      draft.accountNumber = '';
+      draft.amountMoney = '';
+      draft.transferTitle = '';
+      draft.authorizationKey = '';
+      draft.suggestionAuthorizationKey = '';
+      draft.recipientId = '';
+      draft.recipientName = '';
+      draft.recipientSurname = '';
+      draft.message = '';
+      draft.currency = '';
+      draft.error = '';
+      draft.activeStep = 0;
+      draft.suggestions = [];
+      draft.isLoading = false;
+      draft.isSendAuthorizationKey = false;
+      break;
+    case LOCATION_CHANGE:
+      draft.accountNumber = '';
+      draft.amountMoney = '';
+      draft.transferTitle = '';
+      draft.authorizationKey = '';
+      draft.suggestionAuthorizationKey = '';
+      draft.recipientId = '';
+      draft.recipientName = '';
+      draft.recipientSurname = '';
+      draft.message = '';
+      draft.error = '';
+      draft.activeStep = 0;
+      draft.suggestions = [];
+      draft.isLoading = false;
+      draft.isSendAuthorizationKey = false;
+      break;
+    case CHANGE_ACCOUNT_NUMBER:
+      draft.accountNumber = action.value;
+      draft.error = '';
+      break;
+    case CHANGE_AMOUNT_MONEY:
+      draft.amountMoney = action.amountMoney;
+      draft.error = '';
+      break;
+    case CHANGE_TRANSFER_TITLE:
+      draft.transferTitle = action.transferTitle;
+      draft.error = '';
+      break;
+    case CHANGE_AUTHORIZATION_KEY:
+      draft.authorizationKey = action.authorizationKey;
+      draft.error = '';
+      break;
+    case SEARCH_ACCOUNT_BILLS:
+      if (draft.accountNumber !== action.value) {
+        draft.suggestions = action.value;
         draft.isLoading = true;
-        draft.accountNumber = action.value;
-        break;
-      case ENTER_ACCOUNT_NUMBER_SUCCESS:
-        draft.recipientId = action.recipientId;
-        draft.isLoading = false;
-        break;
-      case ENTER_ACCOUNT_NUMBER_ERROR:
-        draft.error = action.error;
-        draft.isLoading = false;
-        break;
-      case ENTER_AMOUNT_MONEY:
-        draft.isLoading = true;
-        draft.amountMoney = action.amountMoney;
-        break;
-      case ENTER_AMOUNT_MONEY_SUCCESS:
-        draft.isLoading = false;
-        break;
-      case ENTER_AMOUNT_MONEY_ERROR:
-        draft.error = action.error;
-        draft.isLoading = false;
-        break;
-      case ENTER_TRANSFER_TITLE:
-        draft.isLoading = true;
-        break;
-      case ENTER_TRANSFER_TITLE_SUCCESS:
-        draft.isLoading = false;
-        break;
-      case ENTER_TRANSFER_TITLE_ERROR:
-        draft.error = action.error;
-        break;
-      case SEND_AUTHORIZATION_KEY:
-        draft.isLoading = true;
-        break;
-      case SEND_AUTHORIZATION_KEY_SUCCESS:
-        draft.isSendAuthorizationKey = true;
-        draft.isLoading = false;
-        draft.message = action.message;
-        break;
-      case SEND_AUTHORIZATION_KEY_ERROR:
-        draft.error = action.error;
-        draft.isLoading = false;
-        break;
-      case GET_CURRENCY_SUCCESS:
-        draft.currency = action.currency;
-        break;
-      case GET_CURRENCY_ERROR:
-        draft.error = action.error;
-        break;
-      case GET_AUTHORIZATION_KEY_SUCCESS:
-        draft.suggestionAuthorizationKey = action.suggestionAuthorizationKey;
-        break;
-      case GET_AUTHORIZATION_KEY_ERROR:
-        draft.error = action.error;
-        break;
-      case ENTER_AUTHORIZATION_KEY:
-        draft.isLoading = true;
-        break;
-      case ENTER_AUTHORIZATION_KEY_SUCCESS:
-        draft.isLoading = false;
-        break;
-      case ENTER_AUTHORIZATION_KEY_ERROR:
-        draft.error = action.error;
-        draft.isLoading = false;
-        break;
-      case MAKE_PAYMENT:
-        draft.isLoading = true;
-        break;
-      case MAKE_PAYMENT_SUCCESS:
-        draft.isLoading = false;
-        break;
-      case MAKE_PAYMENT_ERROR:
-        draft.error = action.error;
-        draft.isLoading = false;
-        break;
-      case PAYMENT_STEP_NEXT:
-        draft.activeStep += 1;
-        break;
-      case PAYMENT_STEP_BACK:
-        draft.activeStep -= 1;
-        draft.isSendAuthorizationKey = false;
-        draft.error = '';
-        break;
-    }
-  });
+      }
+      break;
+    case SEARCH_ACCOUNT_BILLS_SUCCESS:
+      draft.suggestions = action.suggestions;
+      draft.isLoading = false;
+      break;
+    case SEARCH_ACCOUNT_BILLS_ERROR:
+      draft.error = action.error;
+      draft.isLoading = false;
+      break;
+    case CLEAR_ACCOUNT_BILLS:
+      draft.suggestions = [];
+      break;
+    case ENTER_ACCOUNT_NUMBER:
+      draft.isLoading = true;
+      draft.accountNumber = action.value;
+      break;
+    case ENTER_ACCOUNT_NUMBER_SUCCESS:
+      draft.isLoading = false;
+      break;
+    case ENTER_ACCOUNT_NUMBER_ERROR:
+      draft.error = action.error;
+      draft.isLoading = false;
+      break;
+    case ENTER_AMOUNT_MONEY:
+      draft.isLoading = true;
+      draft.amountMoney = action.amountMoney;
+      break;
+    case ENTER_AMOUNT_MONEY_SUCCESS:
+      draft.isLoading = false;
+      break;
+    case ENTER_AMOUNT_MONEY_ERROR:
+      draft.error = action.error;
+      draft.isLoading = false;
+      break;
+    case ENTER_TRANSFER_TITLE:
+      draft.isLoading = true;
+      break;
+    case ENTER_TRANSFER_TITLE_SUCCESS:
+      draft.isLoading = false;
+      break;
+    case ENTER_TRANSFER_TITLE_ERROR:
+      draft.error = action.error;
+      break;
+    case SEND_AUTHORIZATION_KEY:
+      draft.isLoading = true;
+      break;
+    case SEND_AUTHORIZATION_KEY_SUCCESS:
+      draft.isSendAuthorizationKey = true;
+      draft.isLoading = false;
+      draft.message = action.message;
+      break;
+    case SEND_AUTHORIZATION_KEY_ERROR:
+      draft.error = action.error;
+      draft.isLoading = false;
+      break;
+    case GET_CURRENCY_SUCCESS:
+      draft.currency = action.currency;
+      break;
+    case GET_CURRENCY_ERROR:
+      draft.error = action.error;
+      break;
+    case GET_AUTHORIZATION_KEY_SUCCESS:
+      draft.suggestionAuthorizationKey = action.suggestionAuthorizationKey;
+      break;
+    case GET_AUTHORIZATION_KEY_ERROR:
+      draft.error = action.error;
+      break;
+    case ENTER_AUTHORIZATION_KEY:
+      draft.isLoading = true;
+      break;
+    case ENTER_AUTHORIZATION_KEY_SUCCESS:
+      draft.isLoading = false;
+      break;
+    case ENTER_AUTHORIZATION_KEY_ERROR:
+      draft.error = action.error;
+      draft.isLoading = false;
+      break;
+    case MAKE_PAYMENT:
+      draft.isLoading = true;
+      break;
+    case MAKE_PAYMENT_SUCCESS:
+      draft.isLoading = false;
+      break;
+    case MAKE_PAYMENT_ERROR:
+      draft.error = action.error;
+      draft.isLoading = false;
+      break;
+    case PAYMENT_STEP_NEXT:
+      draft.activeStep += 1;
+      break;
+    case PAYMENT_STEP_BACK:
+      draft.activeStep -= 1;
+      draft.isSendAuthorizationKey = false;
+      draft.error = '';
+      break;
+  }
+}, initialState);
 
 export default paymentPageReducer;

@@ -5,14 +5,9 @@
  */
 
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import {
-  makeIsOpenNotificationsSelector,
-  makeNotificationsSelector,
-} from 'containers/App/selectors';
 
 // Import Components
 import Table from '@material-ui/core/Table';
@@ -27,8 +22,21 @@ import NotificationWrapper from './NotificationWrapper';
 import AmountWrapper from './AmountWrapper';
 import DateWrapper from './DateWrapper';
 
-function Notifications({ isOpenNotifications, notifications }) {
+//  Import Selectors
+import {
+  makeIsOpenNotificationsSelector,
+  makeNotificationsSelector,
+} from 'containers/App/selectors';
+
+const stateSelector = createStructuredSelector({
+  isOpenNotifications: makeIsOpenNotificationsSelector(),
+  notifications: makeNotificationsSelector(),
+});
+
+export default function Notifications() {
+  const { isOpenNotifications, notifications } = useSelector(stateSelector);
   let id = 0;
+
   return (
     <NotificationsWrapper open={isOpenNotifications}>
       {notifications.length ? (
@@ -59,15 +67,3 @@ function Notifications({ isOpenNotifications, notifications }) {
     </NotificationsWrapper>
   );
 }
-
-Notifications.propTypes = {
-  isOpenNotifications: PropTypes.bool,
-  notifications: PropTypes.array,
-};
-
-const mapStateToProps = createStructuredSelector({
-  isOpenNotifications: makeIsOpenNotificationsSelector(),
-  notifications: makeNotificationsSelector(),
-});
-
-export default connect(mapStateToProps)(Notifications);

@@ -8,19 +8,23 @@ import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import Copyright from 'components/App/Copyright';
-import ContainerWrapper from 'components/App/ContainerWrapper';
 import { Helmet } from 'react-helmet';
-import Footer from 'components/Footer';
-import PaymentForm from 'components/App/PaymentForm';
-import Notifier from 'components/Notifier';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
-export function PaymentPage() {
-  useInjectReducer({ key: 'paymentPage', reducer });
-  useInjectSaga({ key: 'paymentPage', saga });
+// Import Components
+import Footer from 'components/Footer';
+import PaymentForm from 'components/App/PaymentForm';
+import Notifier from 'components/Notifier';
+import Copyright from 'components/App/Copyright';
+import ContainerWrapper from 'components/App/ContainerWrapper';
+
+const key = 'paymentPage';
+
+export default function PaymentPage() {
+  useInjectReducer({ key, reducer });
+  useInjectSaga({ key, saga });
 
   return (
     <Fragment>
@@ -37,5 +41,3 @@ export function PaymentPage() {
     </Fragment>
   );
 }
-
-export default PaymentPage;

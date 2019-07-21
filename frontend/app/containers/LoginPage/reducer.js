@@ -30,65 +30,64 @@ export const initialState = {
 };
 
 /* eslint-disable default-case, no-param-reassign */
-const loginPageReducer = (state = initialState, action) =>
-  produce(state, draft => {
-    switch (action.type) {
-      case CHANGE_LOGIN:
-        draft.login = action.login;
-        draft.error = '';
-        break;
-      case ENTER_LOGIN:
-        draft.isLoading = true;
-        break;
-      case ENTER_LOGIN_SUCCESS:
-        draft.isLoading = false;
-        break;
-      case ENTER_LOGIN_ERROR:
-        draft.error = action.error;
-        draft.isLoading = false;
-        break;
-      case CHANGE_PASSWORD:
-        draft.password = action.password;
-        draft.error = '';
-        break;
-      case ENTER_PASSWORD:
-        draft.isLoading = true;
-        break;
-      case ENTER_PASSWORD_SUCCESS:
-        draft.isLoading = false;
-        break;
-      case ENTER_PASSWORD_ERROR:
-        draft.error = action.error;
-        draft.isLoading = false;
-        break;
-      case LOGIN:
-        draft.login = action.login;
-        draft.password = action.password;
-        draft.isLoading = true;
-        break;
-      case LOGIN_SUCCESS:
-        draft.isLoading = false;
-        break;
-      case LOGIN_ERROR:
-        draft.error = action.error;
-        draft.isLoading = false;
-        break;
-      case STEP_NEXT:
-        draft.activeStep += 1;
-        draft.error = '';
-        break;
-      case STEP_BACK:
-        draft.activeStep -= 1;
-        draft.error = '';
-        break;
-      case LOCATION_CHANGE:
-        draft.login = '';
-        draft.password = '';
-        draft.error = '';
-        draft.activeStep = 0;
-        draft.isLoading = false;
-        break;
-    }
-  });
+const loginPageReducer = produce((draft, action) => {
+  switch (action.type) {
+    case CHANGE_LOGIN:
+      draft.login = action.login;
+      draft.error = '';
+      break;
+    case ENTER_LOGIN:
+      draft.isLoading = true;
+      break;
+    case ENTER_LOGIN_SUCCESS:
+      draft.isLoading = false;
+      break;
+    case ENTER_LOGIN_ERROR:
+      draft.error = action.error;
+      draft.isLoading = false;
+      break;
+    case CHANGE_PASSWORD:
+      draft.password = action.password;
+      draft.error = '';
+      break;
+    case ENTER_PASSWORD:
+      draft.isLoading = true;
+      break;
+    case ENTER_PASSWORD_SUCCESS:
+      draft.isLoading = false;
+      break;
+    case ENTER_PASSWORD_ERROR:
+      draft.error = action.error;
+      draft.isLoading = false;
+      break;
+    case LOGIN:
+      draft.login = action.login;
+      draft.password = action.password;
+      draft.isLoading = true;
+      break;
+    case LOGIN_SUCCESS:
+      draft.isLoading = false;
+      break;
+    case LOGIN_ERROR:
+      draft.error = action.error;
+      draft.isLoading = false;
+      break;
+    case STEP_NEXT:
+      draft.activeStep += 1;
+      draft.error = '';
+      break;
+    case STEP_BACK:
+      draft.activeStep -= 1;
+      draft.error = '';
+      break;
+    case LOCATION_CHANGE:
+      draft.login = '';
+      draft.password = '';
+      draft.error = '';
+      draft.activeStep = 0;
+      draft.isLoading = false;
+      break;
+  }
+}, initialState);
 
 export default loginPageReducer;

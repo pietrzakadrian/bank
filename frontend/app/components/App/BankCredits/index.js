@@ -5,6 +5,9 @@
  */
 
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
+// Import Components
 import {
   SoftWidgetHeader,
   SoftWidgetWrapper,
@@ -12,11 +15,9 @@ import {
 } from 'components/App/SoftWidget';
 import WidgetContentDisabled from 'components/App/WidgetContentDisabled';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-
-import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
-function BankCredits() {
+export default function BankCredits() {
   return (
     <SoftWidgetWrapper>
       <SoftWidgetHeader>
@@ -31,5 +32,3 @@ function BankCredits() {
     </SoftWidgetWrapper>
   );
 }
-
-export default BankCredits;

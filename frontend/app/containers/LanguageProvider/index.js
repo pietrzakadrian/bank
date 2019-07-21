@@ -8,17 +8,28 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { IntlProvider } from 'react-intl';
+
+// Import Selectors
 import { makeSelectLocale } from './selectors';
 
-export function LanguageProvider(props) {
+const stateSelector = createSelector(
+  makeSelectLocale(),
+  locale => ({
+    locale,
+  }),
+);
+
+export default function LanguageProvider(props) {
+  const { locale } = useSelector(stateSelector);
+
   return (
     <IntlProvider
-      locale={props.locale}
-      key={props.locale}
-      messages={props.messages[props.locale]}
+      locale={locale}
+      key={locale}
+      messages={props.messages[locale]}
     >
       {React.Children.only(props.children)}
     </IntlProvider>
@@ -26,25 +37,6 @@ export function LanguageProvider(props) {
 }
 
 LanguageProvider.propTypes = {
-  locale: PropTypes.string,
   messages: PropTypes.object,
   children: PropTypes.element.isRequired,
 };
-
-const mapStateToProps = createSelector(
-  makeSelectLocale(),
-  locale => ({
-    locale,
-  }),
-);
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(LanguageProvider);

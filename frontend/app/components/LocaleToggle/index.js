@@ -5,48 +5,38 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { changeLocaleAction } from 'containers/LanguageProvider/actions';
-import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { appLocales } from 'i18n';
 
 // Import Components
-import { appLocales } from 'i18n';
 import Toggle from './Toggle';
 import messages from './messages';
 
-export function LocaleToggle(props) {
-  return (
-    <Toggle
-      value={props.locale}
-      values={appLocales}
-      messages={messages}
-      onToggle={props.onLocaleToggle}
-    />
-  );
-}
+// Import Actions
+import { changeLocaleAction } from 'containers/LanguageProvider/actions';
 
-LocaleToggle.propTypes = {
-  onLocaleToggle: PropTypes.func,
-  locale: PropTypes.string,
-};
+// Import Selectors
+import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 
-const mapStateToProps = createSelector(
+const stateSelector = createSelector(
   makeSelectLocale(),
   locale => ({
     locale,
   }),
 );
 
-export function mapDispatchToProps(dispatch) {
-  return {
-    onLocaleToggle: evt => dispatch(changeLocaleAction(evt.target.value)),
-    dispatch,
-  };
-}
+export default function LocaleToggle() {
+  const dispatch = useDispatch();
+  const onLocaleToggle = evt => dispatch(changeLocaleAction(evt.target.value));
+  const { locale } = useSelector(stateSelector);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(LocaleToggle);
+  return (
+    <Toggle
+      value={locale}
+      values={appLocales}
+      messages={messages}
+      onToggle={onLocaleToggle}
+    />
+  );
+}

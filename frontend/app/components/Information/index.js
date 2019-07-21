@@ -12,7 +12,7 @@ import InformationWrapper from './InformationWrapper';
 import MessageWrapper from './MessageWrapper';
 import messages from './messages';
 
-function Information() {
+export default function Information() {
   return (
     <InformationWrapper>
       <MessageWrapper>
@@ -21,5 +21,3 @@ function Information() {
     </InformationWrapper>
   );
 }
-
-export default Information;

@@ -161,7 +161,7 @@ export function* handleAccountNumber() {
         ),
       );
 
-    // yield put(enterAccountNumberSuccessAction(recipientId));
+    yield put(enterAccountNumberSuccessAction());
     yield put(stepNextAction());
   } catch (error) {
     yield put(enterAccountNumberErrorAction(error));

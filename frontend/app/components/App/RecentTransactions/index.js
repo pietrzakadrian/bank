@@ -5,25 +5,14 @@
  */
 
 import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import saga from 'containers/DashboardPage/saga';
-import reducer from 'containers/DashboardPage/reducer';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { format } from 'date-fns';
 import { FormattedMessage } from 'react-intl';
-import { makeUserIdSelector } from 'containers/App/selectors';
-import {
-  makeRecentTransactionsRecipientSelector,
-  makeRecentTransactionsSenderSelector,
-} from 'containers/DashboardPage/selectors';
-import {
-  getRecentTransactionsRecipientAction,
-  getRecentTransactionsSenderAction,
-} from 'containers/DashboardPage/actions';
+import saga from 'containers/DashboardPage/saga';
+import reducer from 'containers/DashboardPage/reducer';
 
 // Import Components
 import Table from '@material-ui/core/Table';
@@ -38,15 +27,48 @@ import RecentTransitionsRecipientNameWrapper from './RecentTransitionsRecipientN
 import RecentTransitionsTitleWrapper from './RecentTransitionsTitleWrapper';
 import messages from './messages';
 
-function RecentTransactions({
-  recentTransactionsRecipient,
-  recentTransactionsSender,
-  userId,
-  getRecentTransactionsRecipient,
-  getRecentTransactionsSender,
-}) {
-  useInjectSaga({ key: 'dashboardPage', saga });
-  useInjectReducer({ key: 'dashboardPage', reducer });
+// Import Actions
+import {
+  getRecentTransactionsRecipientAction,
+  getRecentTransactionsSenderAction,
+} from 'containers/DashboardPage/actions';
+
+// Import Selectors
+import {
+  makeRecentTransactionsRecipientSelector,
+  makeRecentTransactionsSenderSelector,
+} from 'containers/DashboardPage/selectors';
+import { makeUserIdSelector } from 'containers/App/selectors';
+
+const stateSelector = createStructuredSelector({
+  recentTransactionsRecipient: makeRecentTransactionsRecipientSelector(),
+  recentTransactionsSender: makeRecentTransactionsSenderSelector(),
+  userId: makeUserIdSelector(),
+});
+
+const key = 'dashboardPage';
+
+function sortingData(data) {
+  return data
+    .sort((a, b) => Date.parse(b.date_time) - Date.parse(a.date_time))
+    .slice(0, 4);
+}
+
+export default function RecentTransactions() {
+  const dispatch = useDispatch();
+  const getRecentTransactionsRecipient = () =>
+    dispatch(getRecentTransactionsRecipientAction());
+  const getRecentTransactionsSender = () =>
+    dispatch(getRecentTransactionsSenderAction());
+  const {
+    recentTransactionsRecipient,
+    recentTransactionsSender,
+    userId,
+  } = useSelector(stateSelector);
+
+  useInjectSaga({ key, saga });
+  useInjectReducer({ key, reducer });
+
   useEffect(() => {
     if (recentTransactionsRecipient.length === 0)
       getRecentTransactionsRecipient();
@@ -120,39 +142,3 @@ function RecentTransactions({
     </SoftWidgetWrapper>
   );
 }
-
-function sortingData(data) {
-  return data
-    .sort((a, b) => Date.parse(b.date_time) - Date.parse(a.date_time))
-    .slice(0, 4);
-}
-
-RecentTransactions.propTypes = {
-  userId: PropTypes.number,
-  recentTransactionsSender: PropTypes.array,
-  recentTransactionsRecipient: PropTypes.array,
-  getRecentTransactionsRecipient: PropTypes.func,
-  getRecentTransactionsSender: PropTypes.func,
-};
-
-const mapStateToProps = createStructuredSelector({
-  recentTransactionsRecipient: makeRecentTransactionsRecipientSelector(),
-  recentTransactionsSender: makeRecentTransactionsSenderSelector(),
-  userId: makeUserIdSelector(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getRecentTransactionsRecipient: () =>
-      dispatch(getRecentTransactionsRecipientAction()),
-    getRecentTransactionsSender: () =>
-      dispatch(getRecentTransactionsSenderAction()),
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(RecentTransactions);

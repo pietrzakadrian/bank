@@ -5,13 +5,14 @@
  */
 
 import React from 'react';
-
-import { HeavyWidgetWrapper } from 'components/App/HeavyWidget';
 import { FormattedMessage } from 'react-intl';
+
+// Import Components
+import { HeavyWidgetWrapper } from 'components/App/HeavyWidget';
 import TextWrapper from './TextWrapper';
 import messages from './messages';
 
-function BankInformation() {
+export default function BankInformation() {
   return (
     <HeavyWidgetWrapper>
       <TextWrapper>
@@ -20,5 +21,3 @@ function BankInformation() {
     </HeavyWidgetWrapper>
   );
 }
-
-export default BankInformation;

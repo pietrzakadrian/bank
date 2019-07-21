@@ -7,15 +7,19 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
-import { TABLET_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 import { FormattedMessage } from 'react-intl';
+
+// Import Components
 import DetailContainerWrapper from './DetailContainerWrapper';
 import HeaderDetailWrapper from './HeaderDetailWrapper';
 import MainDetailWrapper from './MainDetailWrapper';
-import messages from './messages';
 import ItemDetailWrapper from './ItemDetailWrapper';
+import messages from './messages';
 
-function GridDetailContainer({ row }) {
+// Import Utils
+import { TABLET_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
+
+export default function GridDetailContainer({ row }) {
   const { sender_name, recipient_name, account_bill, transfer_title } = row;
 
   return (
@@ -67,7 +71,12 @@ function GridDetailContainer({ row }) {
 }
 
 GridDetailContainer.propTypes = {
-  row: PropTypes.object.isRequired,
+  row: PropTypes.shape({
+    account_bill: PropTypes.string.isRequired,
+    amount_money: PropTypes.string.isRequired,
+    date_time: PropTypes.string.isRequired,
+    recipient_name: PropTypes.string.isRequired,
+    sender_name: PropTypes.string.isRequired,
+    transfer_title: PropTypes.string.isRequired,
+  }).isRequired,
 };
-
-export default GridDetailContainer;

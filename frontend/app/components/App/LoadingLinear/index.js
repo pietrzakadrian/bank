@@ -7,8 +7,6 @@
 import React from 'react';
 import LoadingWrapper from './LoadingWrapper';
 
-function LoadingLinear() {
+export default function LoadingLinear() {
   return <LoadingWrapper />;
 }
-
-export default LoadingLinear;

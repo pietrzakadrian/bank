@@ -7,13 +7,14 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { Responsive, WidthProvider } from 'react-grid-layout';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import MediaQuery from 'react-responsive';
-import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
+import reducer from './reducer';
+import saga from './saga';
 
 // Import Components
+import { Responsive, WidthProvider } from 'react-grid-layout';
 import GreetingHeader from 'components/App/GreetingHeader';
 import ContainerWrapper from 'components/App/ContainerWrapper';
 import AvailableFunds from 'components/App/AvailableFunds';
@@ -27,12 +28,34 @@ import BankDeposits from 'components/App/BankDeposits';
 import BankCredits from 'components/App/BankCredits';
 import Copyright from 'components/App/Copyright';
 import messages from './messages';
-import reducer from './reducer';
-import saga from './saga';
 
-export function DashboardPage() {
-  useInjectReducer({ key: 'dashboardPage', reducer });
-  useInjectSaga({ key: 'dashboardPage', saga });
+// Import Utils
+import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
+
+const key = 'dashboardPage';
+
+function getFromLS(key) {
+  let ls = {};
+  if (global.localStorage)
+    ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
+
+  return ls[key];
+}
+
+function saveToLS(key, value) {
+  if (global.localStorage) {
+    global.localStorage.setItem(
+      'rgl-8',
+      JSON.stringify({
+        [key]: value,
+      }),
+    );
+  }
+}
+
+export default function DashboardPage() {
+  useInjectReducer({ key, reducer });
+  useInjectSaga({ key, saga });
 
   const ResponsiveGridLayout = WidthProvider(Responsive);
   const originalLayouts = getFromLS('layouts') || {};
@@ -178,24 +201,3 @@ export function DashboardPage() {
     </Fragment>
   );
 }
-
-function getFromLS(key) {
-  let ls = {};
-  if (global.localStorage)
-    ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
-
-  return ls[key];
-}
-
-function saveToLS(key, value) {
-  if (global.localStorage) {
-    global.localStorage.setItem(
-      'rgl-8',
-      JSON.stringify({
-        [key]: value,
-      }),
-    );
-  }
-}
-
-export default DashboardPage;

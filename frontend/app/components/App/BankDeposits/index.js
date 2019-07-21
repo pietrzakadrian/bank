@@ -5,19 +5,19 @@
  */
 
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
+// Import Components
 import {
   SoftWidgetHeader,
   SoftWidgetWrapper,
   SoftWidgetHeaderAction,
 } from 'components/App/SoftWidget';
-
 import WidgetContentDisabled from 'components/App/WidgetContentDisabled';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
-import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
-function BankDeposits() {
+export default function BankDeposits() {
   return (
     <SoftWidgetWrapper>
       <SoftWidgetHeader>
@@ -32,5 +32,3 @@ function BankDeposits() {
     </SoftWidgetWrapper>
   );
 }
-
-export default BankDeposits;

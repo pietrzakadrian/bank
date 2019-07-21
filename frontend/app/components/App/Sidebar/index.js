@@ -5,20 +5,9 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
 import MediaQuery from 'react-responsive';
-import {
-  makeIsOpenNavigationMobileSelector,
-  makeIsOpenNavigationDesktopSelector,
-} from 'containers/App/selectors';
-import {
-  toggleNavigationDesktopAction,
-  toggleNavigationMobileAction,
-} from 'containers/App/actions';
-import { TOGGLE_TOOLBAR_VIEWPORT_WIDTH } from 'utils/rwd';
 
 // Import Components
 import Divider from '@material-ui/core/Divider';
@@ -29,12 +18,36 @@ import Navigation from 'components/App/Navigation';
 import HeaderWrapper from './HeaderWrapper';
 import DrawerWrapper from './DrawerWrapper';
 
-function Sidebar({
-  isOpenNavigationDesktop,
-  isOpenNavigationMobile,
-  onToggleNavigationDesktop,
-  onToggleNavigationMobile,
-}) {
+// Import Utils
+import { TOGGLE_TOOLBAR_VIEWPORT_WIDTH } from 'utils/rwd';
+
+// Import Actions
+import {
+  toggleNavigationDesktopAction,
+  toggleNavigationMobileAction,
+} from 'containers/App/actions';
+
+// Import Selectors
+import {
+  makeIsOpenNavigationMobileSelector,
+  makeIsOpenNavigationDesktopSelector,
+} from 'containers/App/selectors';
+
+const stateSelector = createStructuredSelector({
+  isOpenNavigationMobile: makeIsOpenNavigationMobileSelector(),
+  isOpenNavigationDesktop: makeIsOpenNavigationDesktopSelector(),
+});
+
+export default function Sidebar() {
+  const dispatch = useDispatch();
+  const onToggleNavigationDesktop = () =>
+    dispatch(toggleNavigationDesktopAction());
+  const onToggleNavigationMobile = () =>
+    dispatch(toggleNavigationMobileAction());
+  const { isOpenNavigationDesktop, isOpenNavigationMobile } = useSelector(
+    stateSelector,
+  );
+
   return (
     <MediaQuery minWidth={TOGGLE_TOOLBAR_VIEWPORT_WIDTH}>
       {matches => (
@@ -61,29 +74,3 @@ function Sidebar({
     </MediaQuery>
   );
 }
-
-Sidebar.propTypes = {
-  isOpenNavigationMobile: PropTypes.bool,
-  isOpenNavigationDesktop: PropTypes.bool,
-  onToggleNavigationDesktop: PropTypes.func,
-  onToggleNavigationMobile: PropTypes.func,
-};
-
-const mapStateToProps = createStructuredSelector({
-  isOpenNavigationMobile: makeIsOpenNavigationMobileSelector(),
-  isOpenNavigationDesktop: makeIsOpenNavigationDesktopSelector(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onToggleNavigationDesktop: () => dispatch(toggleNavigationDesktopAction()),
-    onToggleNavigationMobile: () => dispatch(toggleNavigationMobileAction()),
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(Sidebar);

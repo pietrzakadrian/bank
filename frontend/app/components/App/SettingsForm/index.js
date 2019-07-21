@@ -5,20 +5,40 @@
  */
 
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/SettingsPage/saga';
 import reducer from 'containers/SettingsPage/reducer';
+
+// Import Components
 import LabelWrapper from 'components/LabelWrapper';
 import InputWrapper from 'components/InputWrapper';
 import ButtonWrapper from 'components/ButtonWrapper';
 import CurrencyToggle from 'components/App/CurrencyToggle';
 import CurrencyAlert from 'components/App/CurrencyAlert';
+import LocaleToggle from 'components/LocaleToggle';
+import TextWrapper from 'components/App/TextWrapper';
+import ContainerWrapper from './ContainerWrapper';
+import FormWrapper from './FormWrapper';
+import SelectWrapper from '../SelectWrapper';
+import messages from './messages';
+
+// Import Actions
+import {
+  changeNewNameAction,
+  changeNewSurnameAction,
+  changeNewPasswordAction,
+  changeNewEmailAction,
+  saveDataAction,
+  loadUserDataAction,
+  loadCurrencyAction,
+} from 'containers/SettingsPage/actions';
+
+// Import Selectors
+import { makeIsOpenNavigationDesktopSelector } from 'containers/App/selectors';
 import {
   makeNameSelector,
   makeSurnameSelector,
@@ -39,50 +59,64 @@ import {
   makeErrorSelector,
   makeIsLoadingSelector,
 } from 'containers/SettingsPage/selectors';
-import {
-  changeNewNameAction,
-  changeNewSurnameAction,
-  changeNewPasswordAction,
-  changeNewEmailAction,
-  saveDataAction,
-  loadUserDataAction,
-  loadCurrencyAction,
-} from 'containers/SettingsPage/actions';
-import LocaleToggle from 'components/LocaleToggle';
-import { makeIsOpenNavigationDesktopSelector } from 'containers/App/selectors';
-import TextWrapper from 'components/App/TextWrapper';
-import ContainerWrapper from './ContainerWrapper';
-import FormWrapper from './FormWrapper';
-import messages from './messages';
-import SelectWrapper from '../SelectWrapper';
-function SettingsForm({
-  name,
-  newName,
-  errorName,
-  surname,
-  newSurname,
-  errorSurname,
-  email,
-  newEmail,
-  errorEmail,
-  errorPassword,
-  error,
-  message,
-  currency,
-  currencyId,
-  currencyMessage,
-  isLoading,
-  isOpenNavigationDesktop,
-  onLoadUserData,
-  onLoadCurrency,
-  onChangeName,
-  onChangeSurname,
-  onChangePassword,
-  onChangeEmail,
-  onSaveData,
-}) {
-  useInjectReducer({ key: 'settingsPage', reducer });
-  useInjectSaga({ key: 'settingsPage', saga });
+
+const stateSelector = createStructuredSelector({
+  name: makeNameSelector(),
+  surname: makeSurnameSelector(),
+  email: makeEmailSelector(),
+  newPassword: makeNewPasswordSelector(),
+  newName: makeNewNameSelector(),
+  newSurname: makeNewSurnameSelector(),
+  newEmail: makeNewEmailSelector(),
+  errorPassword: makeErrorPasswordSelector(),
+  errorName: makeErrorNameSelector(),
+  errorSurname: makeErrorSurnameSelector(),
+  errorEmail: makeErrorEmailSelector(),
+  error: makeErrorSelector(),
+  message: makeMessageSelector(),
+  currency: makeCurrencySelector(),
+  currencyId: makeCurrencyIdSelector(),
+  currencyMessage: makeCurrencyMessageSelector(),
+  isOpenAlert: makeIsOpenAlertSelector(),
+  isLoading: makeIsLoadingSelector(),
+  isOpenNavigationDesktop: makeIsOpenNavigationDesktopSelector(),
+});
+
+const key = 'settingsPage';
+
+export default function SettingsForm() {
+  const dispatch = useDispatch();
+  const onChangeName = e => dispatch(changeNewNameAction(e.target.value));
+  const onChangeSurname = e => dispatch(changeNewSurnameAction(e.target.value));
+  const onChangePassword = e =>
+    dispatch(changeNewPasswordAction(e.target.value));
+  const onChangeEmail = e => dispatch(changeNewEmailAction(e.target.value));
+  const onSaveData = e => dispatch(saveDataAction()) && e.preventDefault();
+  const onLoadUserData = () => dispatch(loadUserDataAction());
+  const onLoadCurrency = () => dispatch(loadCurrencyAction());
+  const {
+    name,
+    newName,
+    errorName,
+    surname,
+    newSurname,
+    errorSurname,
+    email,
+    newEmail,
+    errorEmail,
+    errorPassword,
+    error,
+    message,
+    currency,
+    currencyId,
+    currencyMessage,
+    isLoading,
+    isOpenNavigationDesktop,
+  } = useSelector(stateSelector);
+
+  useInjectReducer({ key, reducer });
+  useInjectSaga({ key, saga });
+
   useEffect(() => {
     if (!name || !surname || !email || !currencyId) onLoadUserData();
     if (currency.length === 0) onLoadCurrency();
@@ -204,72 +238,3 @@ function SettingsForm({
     </ContainerWrapper>
   );
 }
-
-SettingsForm.propTypes = {
-  name: PropTypes.string,
-  newName: PropTypes.string,
-  errorName: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  surname: PropTypes.string,
-  newSurname: PropTypes.string,
-  errorSurname: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  email: PropTypes.string,
-  newEmail: PropTypes.string,
-  errorEmail: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  errorPassword: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  message: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  currency: PropTypes.array,
-  currencyId: PropTypes.number,
-  currencyMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  isLoading: PropTypes.bool,
-  isOpenNavigationDesktop: PropTypes.bool,
-  onLoadUserData: PropTypes.func,
-  onLoadCurrency: PropTypes.func,
-  onChangeName: PropTypes.func,
-  onChangeSurname: PropTypes.func,
-  onChangePassword: PropTypes.func,
-  onChangeEmail: PropTypes.func,
-  onSaveData: PropTypes.func,
-};
-
-const mapStateToProps = createStructuredSelector({
-  name: makeNameSelector(),
-
-  surname: makeSurnameSelector(),
-  email: makeEmailSelector(),
-  newPassword: makeNewPasswordSelector(),
-  newName: makeNewNameSelector(),
-  newSurname: makeNewSurnameSelector(),
-  newEmail: makeNewEmailSelector(),
-  errorPassword: makeErrorPasswordSelector(),
-  errorName: makeErrorNameSelector(),
-  errorSurname: makeErrorSurnameSelector(),
-  errorEmail: makeErrorEmailSelector(),
-  error: makeErrorSelector(),
-  message: makeMessageSelector(),
-  currency: makeCurrencySelector(),
-  currencyId: makeCurrencyIdSelector(),
-  currencyMessage: makeCurrencyMessageSelector(),
-  isOpenAlert: makeIsOpenAlertSelector(),
-  isLoading: makeIsLoadingSelector(),
-  isOpenNavigationDesktop: makeIsOpenNavigationDesktopSelector(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onChangeName: e => dispatch(changeNewNameAction(e.target.value)),
-    onChangeSurname: e => dispatch(changeNewSurnameAction(e.target.value)),
-    onChangePassword: e => dispatch(changeNewPasswordAction(e.target.value)),
-    onChangeEmail: e => dispatch(changeNewEmailAction(e.target.value)),
-    onSaveData: e => dispatch(saveDataAction()) && e.preventDefault(),
-    onLoadUserData: () => dispatch(loadUserDataAction()),
-    onLoadCurrency: () => dispatch(loadCurrencyAction()),
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(SettingsForm);

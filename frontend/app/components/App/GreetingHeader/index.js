@@ -6,22 +6,22 @@
  */
 
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { format } from 'date-fns';
-import {
-  makeNameSelector,
-  makeSurnameSelector,
-  makeEmailSelector,
-  makeLastSuccessfulLoggedSelector,
-  makeLastPresentLoggedSelector,
-  makeLastFailedLoggedSelector,
-} from 'containers/DashboardPage/selectors';
+import saga from 'containers/DashboardPage/saga';
+import reducer from 'containers/DashboardPage/reducer';
+
+// Import Components
+import HeadlineWrapper from './HeadlineWrapper';
+import HeadlineNameWrapper from './HeadlineNameWrapper';
+import TextWrapper from './TextWrapper';
+import messages from './messages';
+
+// Import Actions
 import {
   getNameAction,
   getSurnameAction,
@@ -30,33 +30,62 @@ import {
   getLastFailedLoggedAction,
   getEmailAction,
 } from 'containers/DashboardPage/actions';
-import saga from 'containers/DashboardPage/saga';
-import reducer from 'containers/DashboardPage/reducer';
+
+// Import Selectors
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
+import {
+  makeNameSelector,
+  makeSurnameSelector,
+  makeEmailSelector,
+  makeLastSuccessfulLoggedSelector,
+  makeLastPresentLoggedSelector,
+  makeLastFailedLoggedSelector,
+} from 'containers/DashboardPage/selectors';
 
-// Import Components
-import HeadlineWrapper from './HeadlineWrapper';
-import HeadlineNameWrapper from './HeadlineNameWrapper';
-import TextWrapper from './TextWrapper';
-import messages from './messages';
+const stateSelector = createStructuredSelector({
+  name: makeNameSelector(),
+  surname: makeSurnameSelector(),
+  email: makeEmailSelector(),
+  locale: makeSelectLocale(),
+  lastPresentLogged: makeLastPresentLoggedSelector(),
+  lastSuccessfulLogged: makeLastSuccessfulLoggedSelector(),
+  lastFailedLogged: makeLastFailedLoggedSelector(),
+});
 
-function GreetingHeader({
-  name,
-  surname,
-  email,
-  locale,
-  lastSuccessfulLogged,
-  lastPresentLogged,
-  lastFailedLogged,
-  getName,
-  getSurname,
-  getEmail,
-  getLastPresentLogged,
-  getLastSuccessfulLogged,
-  getLastFailedLogged,
-}) {
-  useInjectSaga({ key: 'dashboardPage', saga });
-  useInjectReducer({ key: 'dashboardPage', reducer });
+const key = 'dashboardPage';
+
+function isGreetingEvening(locale, hh, HH, A) {
+  if (
+    (locale === 'en' && (hh >= 7 && A === 'PM')) ||
+    (hh <= 5 && A === 'AM') ||
+    (locale !== 'en' && (HH >= 19 || HH <= 5))
+  )
+    return true;
+  return false;
+}
+
+export default function GreetingHeader() {
+  const dispatch = useDispatch();
+  const getName = () => dispatch(getNameAction());
+  const getSurname = () => dispatch(getSurnameAction());
+  const getEmail = () => dispatch(getEmailAction());
+  const getLastPresentLogged = () => dispatch(getLastPresentLoggedAction());
+  const getLastSuccessfulLogged = () =>
+    dispatch(getLastSuccessfulLoggedAction());
+  const getLastFailedLogged = () => dispatch(getLastFailedLoggedAction());
+  const {
+    name,
+    surname,
+    email,
+    locale,
+    lastPresentLogged,
+    lastSuccessfulLogged,
+    lastFailedLogged,
+  } = useSelector(stateSelector);
+
+  useInjectSaga({ key, saga });
+  useInjectReducer({ key, reducer });
+
   useEffect(() => {
     if (!name) getName();
     if (!surname) getSurname();
@@ -103,57 +132,3 @@ function GreetingHeader({
     </HeadlineWrapper>
   );
 }
-
-function isGreetingEvening(locale, hh, HH, A) {
-  if (
-    (locale === 'en' && (hh >= 7 && A === 'PM')) ||
-    (hh <= 5 && A === 'AM') ||
-    (locale !== 'en' && (HH >= 19 || HH <= 5))
-  )
-    return true;
-  return false;
-}
-
-GreetingHeader.propTypes = {
-  name: PropTypes.string,
-  surname: PropTypes.string,
-  email: PropTypes.string,
-  locale: PropTypes.string,
-  lastSuccessfulLogged: PropTypes.string,
-  lastPresentLogged: PropTypes.string,
-  lastFailedLogged: PropTypes.string,
-  getName: PropTypes.func,
-  getSurname: PropTypes.func,
-  getEmail: PropTypes.func,
-  getLastPresentLogged: PropTypes.func,
-  getLastSuccessfulLogged: PropTypes.func,
-  getLastFailedLogged: PropTypes.func,
-};
-
-const mapStateToProps = createStructuredSelector({
-  name: makeNameSelector(),
-  surname: makeSurnameSelector(),
-  email: makeEmailSelector(),
-  locale: makeSelectLocale(),
-  lastPresentLogged: makeLastPresentLoggedSelector(),
-  lastSuccessfulLogged: makeLastSuccessfulLoggedSelector(),
-  lastFailedLogged: makeLastFailedLoggedSelector(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getName: () => dispatch(getNameAction()),
-    getSurname: () => dispatch(getSurnameAction()),
-    getEmail: () => dispatch(getEmailAction()),
-    getLastPresentLogged: () => dispatch(getLastPresentLoggedAction()),
-    getLastSuccessfulLogged: () => dispatch(getLastSuccessfulLoggedAction()),
-    getLastFailedLogged: () => dispatch(getLastFailedLoggedAction()),
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(GreetingHeader);

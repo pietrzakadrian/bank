@@ -5,40 +5,9 @@
  */
 
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import {
-  makeIsLoadingSelector,
-  makeNameSelector,
-  makePasswordSelector,
-  makeLoginSelector,
-  makeSurnameSelector,
-  makeEmailSelector,
-  makeErrorSelector,
-  makeCurrencySelector,
-  makeCurrencyIdSelector,
-  makeIsDataProcessingAgreementSelector,
-  makeErrorDataProcessingAgreementSelector,
-  makeActiveStepSelector,
-} from 'containers/RegisterPage/selectors';
-import {
-  stepBackAction,
-  changeLoginAction,
-  changePasswordAction,
-  enterLoginAction,
-  enterPasswordAction,
-  changeNameAction,
-  enterNameAction,
-  changeSurnameAction,
-  enterSurnameAction,
-  changeEmailAction,
-  enterEmailAction,
-  toggleDataProcessingAgreementAction,
-  enterCurrencyAction,
-} from 'containers/RegisterPage/actions';
 
 // Import Components
 import Step from '@material-ui/core/Step';
@@ -60,33 +29,98 @@ import CheckboxWrapper from './CheckboxWrapper';
 import TextWrapper from './TextWrapper';
 import messages from './messages';
 
-function RegisterForm({
-  login,
-  password,
-  name,
-  surname,
-  email,
-  error,
-  currencyId,
-  isDataProcessingAgreement,
-  errorDataProcessingAgreement,
-  isLoading,
-  activeStep,
-  onChangeLogin,
-  onEnterLogin,
-  onChangePassword,
-  onEnterPassword,
-  onChangeName,
-  onEnterName,
-  onChangeSurname,
-  onEnterSurname,
-  onChangeEmail,
-  onEnterEmail,
-  toggleDataProcessingAgreement,
-  onEnterCurrency,
-  handleKeyPress,
-  handleStepBack,
-}) {
+// Import Actions
+import {
+  stepBackAction,
+  changeLoginAction,
+  changePasswordAction,
+  enterLoginAction,
+  enterPasswordAction,
+  changeNameAction,
+  enterNameAction,
+  changeSurnameAction,
+  enterSurnameAction,
+  changeEmailAction,
+  enterEmailAction,
+  toggleDataProcessingAgreementAction,
+  enterCurrencyAction,
+} from 'containers/RegisterPage/actions';
+
+// Import Selectors
+import {
+  makeIsLoadingSelector,
+  makeNameSelector,
+  makePasswordSelector,
+  makeLoginSelector,
+  makeSurnameSelector,
+  makeEmailSelector,
+  makeErrorSelector,
+  makeCurrencySelector,
+  makeCurrencyIdSelector,
+  makeIsDataProcessingAgreementSelector,
+  makeErrorDataProcessingAgreementSelector,
+  makeActiveStepSelector,
+} from 'containers/RegisterPage/selectors';
+
+const stateSelector = createStructuredSelector({
+  login: makeLoginSelector(),
+  password: makePasswordSelector(),
+  name: makeNameSelector(),
+  surname: makeSurnameSelector(),
+  email: makeEmailSelector(),
+  error: makeErrorSelector(),
+  currency: makeCurrencySelector(),
+  currencyId: makeCurrencyIdSelector(),
+  isDataProcessingAgreement: makeIsDataProcessingAgreementSelector(),
+  errorDataProcessingAgreement: makeErrorDataProcessingAgreementSelector(),
+  isLoading: makeIsLoadingSelector(),
+  activeStep: makeActiveStepSelector(),
+});
+
+function getSteps() {
+  return [
+    <FormattedMessage {...messages.idNumber} />,
+    <FormattedMessage {...messages.password} />,
+    <FormattedMessage {...messages.name} />,
+    <FormattedMessage {...messages.surname} />,
+    <FormattedMessage {...messages.currency} />,
+    <FormattedMessage {...messages.emailAddress} />,
+  ];
+}
+
+export default function RegisterForm() {
+  const dispatch = useDispatch();
+  const onChangeLogin = e =>
+    dispatch(changeLoginAction(parseInt(e.target.value, 10)));
+  const onEnterLogin = login => dispatch(enterLoginAction(parseInt(login, 10)));
+  const onChangePassword = e => dispatch(changePasswordAction(e.target.value));
+  const onEnterPassword = password => dispatch(enterPasswordAction(password));
+  const onChangeName = e => dispatch(changeNameAction(e.target.value));
+  const onEnterName = name => dispatch(enterNameAction(name));
+  const onChangeSurname = e => dispatch(changeSurnameAction(e.target.value));
+  const onEnterSurname = surname => dispatch(enterSurnameAction(surname));
+  const onChangeEmail = e => dispatch(changeEmailAction(e.target.value));
+  const onEnterEmail = email => dispatch(enterEmailAction(email));
+  const onToggleDataProcessingAgreement = () =>
+    dispatch(toggleDataProcessingAgreementAction());
+  const onEnterCurrency = currencyId =>
+    dispatch(enterCurrencyAction(currencyId));
+  const handleStepBack = () => dispatch(stepBackAction());
+  const handleKeyPress = e =>
+    (e.key === 'E' || e.key === 'e') && e.preventDefault();
+  const {
+    login,
+    password,
+    name,
+    surname,
+    email,
+    error,
+    currencyId,
+    isDataProcessingAgreement,
+    errorDataProcessingAgreement,
+    isLoading,
+    activeStep,
+  } = useSelector(stateSelector);
   const steps = getSteps();
 
   return (
@@ -306,7 +340,7 @@ function RegisterForm({
             <CheckboxWrapper>
               <Checkbox
                 checked={isDataProcessingAgreement}
-                onClick={toggleDataProcessingAgreement}
+                onClick={onToggleDataProcessingAgreement}
                 color="primary"
               />
 
@@ -349,89 +383,3 @@ function RegisterForm({
     </FormWrapper>
   );
 }
-
-function getSteps() {
-  return [
-    <FormattedMessage {...messages.idNumber} />,
-    <FormattedMessage {...messages.password} />,
-    <FormattedMessage {...messages.name} />,
-    <FormattedMessage {...messages.surname} />,
-    <FormattedMessage {...messages.currency} />,
-    <FormattedMessage {...messages.emailAddress} />,
-  ];
-}
-
-RegisterForm.propTypes = {
-  login: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  password: PropTypes.string,
-  name: PropTypes.string,
-  surname: PropTypes.string,
-  email: PropTypes.string,
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  currency: PropTypes.array,
-  currencyId: PropTypes.number,
-  isDataProcessingAgreement: PropTypes.bool,
-  errorDataProcessingAgreement: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
-  isLoading: PropTypes.bool,
-  activeStep: PropTypes.number,
-  onChangeLogin: PropTypes.func,
-  onEnterLogin: PropTypes.func,
-  onChangePassword: PropTypes.func,
-  onEnterPassword: PropTypes.func,
-  onChangeName: PropTypes.func,
-  onEnterName: PropTypes.func,
-  onChangeSurname: PropTypes.func,
-  onEnterSurname: PropTypes.func,
-  onChangeEmail: PropTypes.func,
-  onEnterEmail: PropTypes.func,
-  toggleDataProcessingAgreement: PropTypes.func,
-  onEnterCurrency: PropTypes.func,
-  handleStepBack: PropTypes.func,
-  handleKeyPress: PropTypes.func,
-};
-
-const mapStateToProps = createStructuredSelector({
-  login: makeLoginSelector(),
-  password: makePasswordSelector(),
-  name: makeNameSelector(),
-  surname: makeSurnameSelector(),
-  email: makeEmailSelector(),
-  error: makeErrorSelector(),
-  currency: makeCurrencySelector(),
-  currencyId: makeCurrencyIdSelector(),
-  isDataProcessingAgreement: makeIsDataProcessingAgreementSelector(),
-  errorDataProcessingAgreement: makeErrorDataProcessingAgreementSelector(),
-  isLoading: makeIsLoadingSelector(),
-  activeStep: makeActiveStepSelector(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onChangeLogin: e =>
-      dispatch(changeLoginAction(parseInt(e.target.value, 10))),
-    onEnterLogin: login => dispatch(enterLoginAction(parseInt(login, 10))),
-    onChangePassword: e => dispatch(changePasswordAction(e.target.value)),
-    onEnterPassword: password => dispatch(enterPasswordAction(password)),
-    onChangeName: e => dispatch(changeNameAction(e.target.value)),
-    onEnterName: name => dispatch(enterNameAction(name)),
-    onChangeSurname: e => dispatch(changeSurnameAction(e.target.value)),
-    onEnterSurname: surname => dispatch(enterSurnameAction(surname)),
-    onChangeEmail: e => dispatch(changeEmailAction(e.target.value)),
-    onEnterEmail: email => dispatch(enterEmailAction(email)),
-    toggleDataProcessingAgreement: () =>
-      dispatch(toggleDataProcessingAgreementAction()),
-    onEnterCurrency: currencyId => dispatch(enterCurrencyAction(currencyId)),
-    handleStepBack: () => dispatch(stepBackAction()),
-    handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(RegisterForm);

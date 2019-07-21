@@ -5,25 +5,13 @@
  */
 
 import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import { FormattedMessage } from 'react-intl';
 import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
-import { FormattedMessage } from 'react-intl';
-import {
-  getRechartsColorsAction,
-  getRechartsDataAction,
-  getSavingsAction,
-} from 'containers/DashboardPage/actions';
-import {
-  makeRechartsColorsSelector,
-  makeRechartsDataSelector,
-  makeSavingsSelector,
-} from 'containers/DashboardPage/selectors';
 
 // Import Components
 import { PieChart, Pie, Cell } from 'recharts';
@@ -37,27 +25,48 @@ import {
   HeavyWidgetLeftSide,
   HeavyWidgetRightSide,
 } from 'components/App/HeavyWidget';
-
 import LoadingWrapper from './LoadingWrapper';
 import messages from './messages';
 
-function Savings({
-  savings,
-  rechartsColors,
-  rechartsData,
-  getSavings,
-  getRechartsColors,
-  getRechartsData,
-}) {
-  useInjectSaga({ key: 'dashboardPage', saga });
-  useInjectReducer({ key: 'dashboardPage', reducer });
+// Import Actions
+import {
+  getRechartsColorsAction,
+  getRechartsDataAction,
+  getSavingsAction,
+} from 'containers/DashboardPage/actions';
+
+// Import Selectors
+import {
+  makeRechartsColorsSelector,
+  makeRechartsDataSelector,
+  makeSavingsSelector,
+} from 'containers/DashboardPage/selectors';
+
+const stateSelector = createStructuredSelector({
+  savings: makeSavingsSelector(),
+  rechartsColors: makeRechartsColorsSelector(),
+  rechartsData: makeRechartsDataSelector(),
+});
+
+const key = 'dashboardPage';
+
+export default function Savings() {
+  const dispatch = useDispatch();
+  const getSavings = () => dispatch(getSavingsAction());
+  const getRechartsColors = () => dispatch(getRechartsColorsAction());
+  const getRechartsData = () => dispatch(getRechartsDataAction());
+  const { savings, rechartsColors, rechartsData } = useSelector(stateSelector);
+  let id = 0;
+
+  useInjectSaga({ key, saga });
+  useInjectReducer({ key, reducer });
+
   useEffect(() => {
     if (!savings) getSavings();
     if (rechartsColors.length) getRechartsColors();
     if (getRechartsData.length) getRechartsData();
   }, []);
 
-  let id = 0;
   return (
     <HeavyWidgetWrapper>
       {rechartsData && rechartsColors && (savings || savings === 0) ? (
@@ -101,33 +110,3 @@ function Savings({
     </HeavyWidgetWrapper>
   );
 }
-
-Savings.propTypes = {
-  savings: PropTypes.string,
-  rechartsColors: PropTypes.array,
-  rechartsData: PropTypes.array,
-  getSavings: PropTypes.func,
-  getRechartsColors: PropTypes.func,
-  getRechartsData: PropTypes.func,
-};
-
-const mapStateToProps = createStructuredSelector({
-  savings: makeSavingsSelector(),
-  rechartsColors: makeRechartsColorsSelector(),
-  rechartsData: makeRechartsDataSelector(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getSavings: () => dispatch(getSavingsAction()),
-    getRechartsColors: () => dispatch(getRechartsColorsAction()),
-    getRechartsData: () => dispatch(getRechartsDataAction()),
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(Savings);

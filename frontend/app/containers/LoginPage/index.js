@@ -5,13 +5,13 @@
  */
 
 import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import reducer from './reducer';
+import saga from './saga';
 
 // Import Components
 import Header from 'components/Header';
@@ -19,15 +19,21 @@ import Subheader from 'components/Subheader';
 import Information from 'components/Information';
 import Footer from 'components/Footer';
 import LoginForm from 'components/LoginForm';
-import { isLoggedAction } from './actions';
+
 import messages from './messages';
 
-import reducer from './reducer';
-import saga from './saga';
+// Import Actions
+import { isLoggedAction } from './actions';
 
-export function LoginPage({ isLogged }) {
-  useInjectReducer({ key: 'loginPage', reducer });
-  useInjectSaga({ key: 'loginPage', saga });
+const key = 'loginPage';
+
+export default function LoginPage() {
+  const dispatch = useDispatch();
+  const isLogged = () => dispatch(isLoggedAction());
+
+  useInjectReducer({ key, reducer });
+  useInjectSaga({ key, saga });
+
   useEffect(() => {
     isLogged();
   }, []);
@@ -50,20 +56,3 @@ export function LoginPage({ isLogged }) {
     </Fragment>
   );
 }
-
-LoginPage.propTypes = {
-  isLogged: PropTypes.func,
-};
-
-function mapDispatchToProps(dispatch) {
-  return {
-    isLogged: () => dispatch(isLoggedAction()),
-  };
-}
-
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(LoginPage);

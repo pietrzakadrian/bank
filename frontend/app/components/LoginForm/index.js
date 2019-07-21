@@ -5,25 +5,9 @@
  */
 
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import {
-  makeLoginSelector,
-  makePasswordSelector,
-  makeErrorSelector,
-  makeActiveStepSelector,
-  makeIsLoadingSelector,
-} from 'containers/LoginPage/selectors';
-import {
-  changeLoginAction,
-  changePasswordAction,
-  enterLoginAction,
-  enterPasswordAction,
-  stepBackAction,
-} from 'containers/LoginPage/actions';
 
 // Import Components
 import FormWrapper from 'components/FormWrapper';
@@ -33,23 +17,52 @@ import ButtonWrapper from 'components/ButtonWrapper';
 import ButtonBackWrapper from 'components/ButtonBackWrapper';
 import NavigateNextIcon from 'components/NavigateNextIcon';
 import NavigateBackIcon from 'components/NavigateBackIcon';
-
 import messages from './messages';
 
-function LoginForm({
-  login,
-  password,
-  error,
-  activeStep,
-  isLoading,
-  onChangeLogin,
-  onChangePassword,
-  onEnterLogin,
-  onEnterPassword,
-  handleStepBack,
-  handleKeyDown,
-  handleKeyPress,
-}) {
+// Import Actions
+import {
+  changeLoginAction,
+  changePasswordAction,
+  enterLoginAction,
+  enterPasswordAction,
+  stepBackAction,
+} from 'containers/LoginPage/actions';
+
+// Import Selectors
+import {
+  makeLoginSelector,
+  makePasswordSelector,
+  makeErrorSelector,
+  makeActiveStepSelector,
+  makeIsLoadingSelector,
+} from 'containers/LoginPage/selectors';
+
+const stateSelector = createStructuredSelector({
+  login: makeLoginSelector(),
+  password: makePasswordSelector(),
+  error: makeErrorSelector(),
+  activeStep: makeActiveStepSelector(),
+  isLoading: makeIsLoadingSelector(),
+});
+
+export default function LoginForm() {
+  const dispatch = useDispatch();
+  const onChangeLogin = e =>
+    dispatch(changeLoginAction(parseInt(e.target.value, 10)));
+  const onChangePassword = e => dispatch(changePasswordAction(e.target.value));
+  const onEnterLogin = login => dispatch(enterLoginAction(parseInt(login, 10)));
+  const onEnterPassword = password => dispatch(enterPasswordAction(password));
+  const handleStepBack = () => dispatch(stepBackAction());
+  const handleKeyPress = e =>
+    (e.key === 'E' || e.key === 'e') && e.preventDefault();
+  const handleKeyDown = (e, password) =>
+    e.key === 'Enter' &&
+    (e.preventDefault(),
+    !password ? dispatch(enterLoginAction()) : dispatch(enterPasswordAction()));
+  const { login, password, error, activeStep, isLoading } = useSelector(
+    stateSelector,
+  );
+
   return (
     <FormWrapper>
       <form noValidate autoComplete="off">
@@ -129,51 +142,3 @@ function LoginForm({
     </FormWrapper>
   );
 }
-
-LoginForm.propTypes = {
-  login: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  password: PropTypes.string,
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  activeStep: PropTypes.number,
-  isLoading: PropTypes.bool,
-  onChangeLogin: PropTypes.func,
-  onChangePassword: PropTypes.func,
-  onEnterLogin: PropTypes.func,
-  onEnterPassword: PropTypes.func,
-  handleStepBack: PropTypes.func,
-  handleKeyDown: PropTypes.func,
-  handleKeyPress: PropTypes.func,
-};
-
-const mapStateToProps = createStructuredSelector({
-  login: makeLoginSelector(),
-  password: makePasswordSelector(),
-  error: makeErrorSelector(),
-  activeStep: makeActiveStepSelector(),
-  isLoading: makeIsLoadingSelector(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onChangeLogin: e =>
-      dispatch(changeLoginAction(parseInt(e.target.value, 10))),
-    onChangePassword: e => dispatch(changePasswordAction(e.target.value)),
-    onEnterLogin: login => dispatch(enterLoginAction(parseInt(login, 10))),
-    onEnterPassword: password => dispatch(enterPasswordAction(password)),
-    handleStepBack: () => dispatch(stepBackAction()),
-    handleKeyPress: e => (e.key === 'E' || e.key === 'e') && e.preventDefault(),
-    handleKeyDown: (e, password) =>
-      e.key === 'Enter' &&
-      (e.preventDefault(),
-      !password
-        ? dispatch(enterLoginAction())
-        : dispatch(enterPasswordAction())),
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(LoginForm);

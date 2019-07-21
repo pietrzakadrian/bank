@@ -5,13 +5,13 @@
  */
 
 import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import reducer from './reducer';
+import saga from './saga';
 
 // Import Components
 import Header from 'components/Header';
@@ -22,13 +22,19 @@ import Footer from 'components/Footer';
 import Notifier from 'components/Notifier';
 import messages from './messages';
 
-import reducer from './reducer';
-import saga from './saga';
+// Import Actions
 import { loadCurrencyAction, isLoggedAction } from './actions';
 
-export function RegisterPage({ isLogged, getCurrency }) {
-  useInjectReducer({ key: 'registerPage', reducer });
-  useInjectSaga({ key: 'registerPage', saga });
+const key = 'registerPage';
+
+export default function RegisterPage() {
+  const dispatch = useDispatch();
+  const isLogged = () => dispatch(isLoggedAction());
+  const getCurrency = () => dispatch(loadCurrencyAction());
+
+  useInjectReducer({ key, reducer });
+  useInjectSaga({ key, saga });
+
   useEffect(() => {
     isLogged();
     getCurrency();
@@ -52,22 +58,3 @@ export function RegisterPage({ isLogged, getCurrency }) {
     </Fragment>
   );
 }
-
-RegisterPage.propTypes = {
-  isLogged: PropTypes.func,
-  getCurrency: PropTypes.func,
-};
-
-function mapDispatchToProps(dispatch) {
-  return {
-    isLogged: () => dispatch(isLoggedAction()),
-    getCurrency: () => dispatch(loadCurrencyAction()),
-  };
-}
-
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(RegisterPage);

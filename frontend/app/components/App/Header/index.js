@@ -5,38 +5,14 @@
  */
 
 import React, { Fragment, useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { FormattedMessage } from 'react-intl';
+import { useInjectSaga } from 'utils/injectSaga';
 import PropTypes from 'prop-types';
 import ResizeObserver from 'react-resize-observer';
 import MediaQuery from 'react-responsive';
-import { FormattedMessage } from 'react-intl';
-import {
-  makeIsOpenNavigationDesktopSelector,
-  makeIsOpenNotificationsSelector,
-  makeIsOpenMessagesSelector,
-  makeIsNewNotificationsSelector,
-  makeIsNewMessagesSelector,
-  makeNotificationCountSelector,
-  makeMessageCountSelector,
-} from 'containers/App/selectors';
-import {
-  toggleNavigationDesktopAction,
-  toggleNavigationMobileAction,
-  logoutAction,
-  toggleMessagesAction,
-  toggleNotificationsAction,
-  isLoggedAction,
-  checkNewMessagesAction,
-  checkNewNotificationsAction,
-} from 'containers/App/actions';
-import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/App/saga';
-import {
-  TOGGLE_TOOLBAR_VIEWPORT_WIDTH,
-  HIDDEN_TOOLBAR_TITLE_VIEWPORT_WIDTH,
-} from 'utils/rwd';
 
 // Import Components
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
@@ -60,47 +36,106 @@ import messages from './messages';
 import BadgeWrapper from './BadgeWrapper';
 import Notifications from '../Notifications';
 
-function Header({
-  children,
-  location,
-  notificationCount,
-  messageCount,
-  isOpenNavigationDesktop,
-  isOpenNotifications,
-  isOpenMessages,
-  isNewNotifications,
-  isNewMessages,
-  onToggleNavigationDesktop,
-  onToggleNavigationMobile,
-  onToggleMessages,
-  onToggleNotifications,
-  onLogout,
-  isLogged,
-  onCheckNewNotifications,
-  onCheckNewMessages,
-}) {
-  useInjectSaga({ key: 'appPage', saga });
+// Import Utils
+import {
+  TOGGLE_TOOLBAR_VIEWPORT_WIDTH,
+  HIDDEN_TOOLBAR_TITLE_VIEWPORT_WIDTH,
+} from 'utils/rwd';
+
+// Import Actions
+import {
+  toggleNavigationDesktopAction,
+  toggleNavigationMobileAction,
+  logoutAction,
+  toggleMessagesAction,
+  toggleNotificationsAction,
+  isLoggedAction,
+  checkNewMessagesAction,
+  checkNewNotificationsAction,
+} from 'containers/App/actions';
+
+// Import Selectors
+import {
+  makeIsOpenNavigationDesktopSelector,
+  makeIsOpenNotificationsSelector,
+  makeIsOpenMessagesSelector,
+  makeIsNewNotificationsSelector,
+  makeIsNewMessagesSelector,
+  makeNotificationCountSelector,
+  makeMessageCountSelector,
+} from 'containers/App/selectors';
+
+const stateSelector = createStructuredSelector({
+  isOpenNavigationDesktop: makeIsOpenNavigationDesktopSelector(),
+  isOpenNotifications: makeIsOpenNotificationsSelector(),
+  isOpenMessages: makeIsOpenMessagesSelector(),
+  isNewNotifications: makeIsNewNotificationsSelector(),
+  isNewMessages: makeIsNewMessagesSelector(),
+  notificationCount: makeNotificationCountSelector(),
+  messageCount: makeMessageCountSelector(),
+});
+
+const key = 'dashboardPage';
+const title = {
+  '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
+  '/payment': <FormattedMessage {...messages.paymentTitle} />,
+  '/history': <FormattedMessage {...messages.historyTitle} />,
+  '/settings': <FormattedMessage {...messages.settingsTitle} />,
+};
+
+function useOutsideWidgetDisabled(ref) {
+  const dispatch = useDispatch();
+  const onToggleMessages = () => dispatch(toggleMessagesAction());
+  const onToggleNotifications = () => dispatch(toggleNotificationsAction());
+  const { isOpenMessages, isOpenNotifications, messageCount } = useSelector(
+    stateSelector,
+  );
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
+
+  function handleClickOutside() {
+    if (ref.current) {
+      if (isOpenMessages) onToggleMessages();
+      if (isOpenNotifications) onToggleNotifications();
+    }
+  }
+}
+
+export default function Header({ children, location }) {
+  const refWrapper = useRef(null);
+  const dispatch = useDispatch();
+  const onToggleNavigationDesktop = () =>
+    dispatch(toggleNavigationDesktopAction());
+  const onToggleNavigationMobile = () =>
+    dispatch(toggleNavigationMobileAction());
+  const onLogout = () => dispatch(logoutAction());
+  const isLogged = () => dispatch(isLoggedAction());
+  const onToggleMessages = () => dispatch(toggleMessagesAction());
+  const onToggleNotifications = () => dispatch(toggleNotificationsAction());
+  const onCheckNewNotifications = () => dispatch(checkNewNotificationsAction());
+  const onCheckNewMessages = () => dispatch(checkNewMessagesAction());
+  const {
+    notificationCount,
+    messageCount,
+    isOpenNavigationDesktop,
+    isNewMessages,
+    isNewNotifications,
+  } = useSelector(stateSelector);
+
+  useInjectSaga({ key, saga });
+
   useEffect(() => {
     isLogged();
     onCheckNewNotifications();
     onCheckNewMessages();
   }, []);
 
-  const refWrapper = useRef(null);
-  const title = {
-    '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
-    '/payment': <FormattedMessage {...messages.paymentTitle} />,
-    '/history': <FormattedMessage {...messages.historyTitle} />,
-    '/settings': <FormattedMessage {...messages.settingsTitle} />,
-  };
-
-  useOutsideWidgetDisabled(
-    refWrapper,
-    isOpenMessages,
-    isOpenNotifications,
-    onToggleMessages,
-    onToggleNotifications,
-  );
+  useOutsideWidgetDisabled(refWrapper);
 
   return (
     <Fragment>
@@ -213,74 +248,23 @@ function Header({
   );
 }
 
-function useOutsideWidgetDisabled(
-  ref,
-  isOpenMessages,
-  isOpenNotifications,
-  onToggleMessages,
-  onToggleNotifications,
-) {
-  function handleClickOutside() {
-    if (ref.current) {
-      if (isOpenMessages) onToggleMessages();
-      if (isOpenNotifications) onToggleNotifications();
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  });
-}
-
-Header.propTypes = {
-  children: PropTypes.object,
-  location: PropTypes.object,
-  isOpenNavigationDesktop: PropTypes.bool,
-  isOpenNotifications: PropTypes.bool,
-  isOpenMessages: PropTypes.bool,
-  isNewNotifications: PropTypes.bool,
-  isNewMessages: PropTypes.bool,
-  notificationCount: PropTypes.number,
-  messageCount: PropTypes.number,
-  onToggleNavigationDesktop: PropTypes.func,
-  onToggleNavigationMobile: PropTypes.func,
-  onToggleMessages: PropTypes.func,
-  onToggleNotifications: PropTypes.func,
-  onLogout: PropTypes.func,
-  isLogged: PropTypes.func,
-  onCheckNewNotifications: PropTypes.func,
-  onCheckNewMessages: PropTypes.func,
+useOutsideWidgetDisabled.propTypes = {
+  ref: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.elementType }),
+  ]),
 };
 
-const mapStateToProps = createStructuredSelector({
-  isOpenNavigationDesktop: makeIsOpenNavigationDesktopSelector(),
-  isOpenNotifications: makeIsOpenNotificationsSelector(),
-  isOpenMessages: makeIsOpenMessagesSelector(),
-  isNewNotifications: makeIsNewNotificationsSelector(),
-  isNewMessages: makeIsNewMessagesSelector(),
-  notificationCount: makeNotificationCountSelector(),
-  messageCount: makeMessageCountSelector(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onToggleNavigationDesktop: () => dispatch(toggleNavigationDesktopAction()),
-    onToggleNavigationMobile: () => dispatch(toggleNavigationMobileAction()),
-    onToggleMessages: () => dispatch(toggleMessagesAction()),
-    onToggleNotifications: () => dispatch(toggleNotificationsAction()),
-    onLogout: () => dispatch(logoutAction()),
-    isLogged: () => dispatch(isLoggedAction()),
-    onCheckNewNotifications: () => dispatch(checkNewNotificationsAction()),
-    onCheckNewMessages: () => dispatch(checkNewMessagesAction()),
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(Header);
+Header.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    key: PropTypes.string.isRequired,
+    search: PropTypes.string,
+    state: PropTypes.object,
+    hash: PropTypes.string,
+  }),
+};

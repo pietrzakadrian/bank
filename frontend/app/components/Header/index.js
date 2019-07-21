@@ -12,7 +12,7 @@ import ImageWrapper from './ImageWrapper';
 import Logo from './Logo';
 import Icon from './Icon';
 
-function Header() {
+export default function Header() {
   return (
     <HeaderWrapper>
       <ImageWrapper>
@@ -24,5 +24,3 @@ function Header() {
     </HeaderWrapper>
   );
 }
-
-export default Header;

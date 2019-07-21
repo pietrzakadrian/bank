@@ -17,7 +17,7 @@ import FormWrapper from 'components/FormWrapper';
 import TextWrapper from './TextWrapper';
 import messages from './messages';
 
-export function PrivacyPage() {
+export default function PrivacyPage() {
   return (
     <Fragment>
       <FormattedMessage {...messages.helmetPrivacyTitle}>
@@ -52,5 +52,3 @@ export function PrivacyPage() {
     </Fragment>
   );
 }
-
-export default PrivacyPage;
