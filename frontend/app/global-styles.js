@@ -24,8 +24,9 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
-  input, select {
+  input, select, button, textarea {
     font-size: inherit;
+    font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
   #app {

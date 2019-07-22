@@ -1,7 +1,5 @@
-import config from '../config/config';
-import {Logger} from '../utils/logger';
-
-const { errors } = config;
+import config from "../config/config";
+import { Logger } from "../utils/logger";
 
 /**
  * Node startup error handler.
@@ -10,16 +8,13 @@ const { errors } = config;
  * @returns <void>
  */
 export default function nodeErrorHandler(err: NodeJS.ErrnoException): void {
-  const logger = new Logger(__filename);
   switch (err.code) {
-    case 'EACCES':
-      logger.error(errors.portRequiresPrivilege);
+    case "EACCES":
       process.exit(1);
 
       break;
 
-    case 'EADDRINUSE':
-      logger.error(errors.portInUse);
+    case "EADDRINUSE":
       process.exit(1);
 
       break;

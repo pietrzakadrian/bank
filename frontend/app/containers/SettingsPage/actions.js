@@ -100,10 +100,11 @@ export function enterNewCurrencyAction(currencyId) {
   };
 }
 
-export function enterNewCurrencySuccessAction(message) {
+export function enterNewCurrencySuccessAction(message, newCurrencyId) {
   return {
     type: ENTER_NEW_CURRENCY_SUCCESS,
     message,
+    newCurrencyId,
   };
 }
 

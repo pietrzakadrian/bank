@@ -26,9 +26,7 @@ import {
 } from './constants';
 
 export const initialState = {
-  isLogged: false,
   userId: '',
-  token: '',
   messages: [],
   messageCount: 0,
   notifications: [],
@@ -92,16 +90,12 @@ const appPageReducer = produce((draft, action) => {
       draft.notificationCount = 0;
       break;
     case LOGGED_IN:
-      draft.isLogged = true;
       draft.userId = action.userId;
-      draft.token = action.token;
       break;
     case LOGOUT:
-      draft.isLogged = true;
       draft.error = '';
       break;
     case LOGOUT_SUCCESS:
-      draft.isLogged = false;
       draft.userId = '';
       draft.token = '';
       draft.error = '';
@@ -116,7 +110,6 @@ const appPageReducer = produce((draft, action) => {
       draft.isNewMessages = false;
       break;
     case LOGOUT_ERROR:
-      draft.isLogged = false;
       draft.userId = '';
       draft.token = '';
       draft.error = '';

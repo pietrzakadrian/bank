@@ -41,6 +41,7 @@ export default class AuthService {
 
   getUserId() {
     const token = decode(this.getToken());
+    console.log(token.id)
     return token.id;
   }
 }

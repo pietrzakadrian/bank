@@ -5,6 +5,8 @@ import request from 'utils/request';
 import { push } from 'connected-react-router';
 import api from 'api';
 import messages from 'containers/LoginPage/messages';
+
+// Import Services
 import AuthService from 'services/auth.service';
 
 // Import Selectors
@@ -24,9 +26,11 @@ import {
   loginSuccessAction,
   loginErrorAction,
 } from './actions';
+import { loggedInAction } from 'containers/App/actions';
 
 // Import Constants
 import { ENTER_LOGIN, ENTER_PASSWORD, IS_LOGGED } from './constants';
+
 
 export function* handleLogged() {
   const auth = new AuthService();
@@ -119,8 +123,10 @@ function* loginAttempt() {
       );
 
     yield put(enterPasswordSuccessAction());
-    yield put(loginSuccessAction());
     auth.setToken(response.token);
+    const userId = auth.getUserId();
+    yield put(loginSuccessAction());
+    yield put(loggedInAction(userId));
     yield put(push('/dashboard'));
   } catch (error) {
     yield put(loginErrorAction(<FormattedMessage {...messages.serverError} />));

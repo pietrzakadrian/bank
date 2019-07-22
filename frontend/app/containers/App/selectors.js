@@ -102,7 +102,6 @@ const makeSelectLocation = () =>
   );
 
 export {
-  makeIsLoggedSelector,
   makeUserIdSelector,
   makeTokenSelector,
   makeSelectLocation,

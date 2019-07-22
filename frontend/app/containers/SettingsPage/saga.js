@@ -5,11 +5,9 @@ import api from 'api';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/SettingsPage/messages';
 
-// Import Selectors
-import {
-  makeTokenSelector,
-  makeUserIdSelector,
-} from 'containers/App/selectors';
+// Import Services
+import AuthService from 'services/auth.service';
+
 import {
   makeNameSelector,
   makeSurnameSelector,
@@ -48,8 +46,6 @@ import {
   enterNewEmailSuccessAction,
   enterNewPasswordSuccessAction,
   saveDataSuccessAction,
-  enterNewCurrencyErrorAction,
-  enterNewCurrencySuccessAction,
 } from 'containers/SettingsPage/actions';
 
 // Import Constants
@@ -59,10 +55,11 @@ import {
   SAVE_DATA,
   ENTER_NEW_CURRENCY,
 } from 'containers/SettingsPage/constants';
+import { enterNewCurrencySuccessAction } from './actions';
 
 export function* handleUserData() {
-  const token = yield select(makeTokenSelector());
-  const userId = yield select(makeUserIdSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const userName = yield select(makeNameSelector());
   const userSurname = yield select(makeSurnameSelector());
   const userEmail = yield select(makeEmailSelector());
@@ -115,7 +112,8 @@ export function* handleUserData() {
 }
 
 export function* handleCurrency() {
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const requestURL = api.currencyPath;
 
   try {
@@ -144,7 +142,8 @@ export function* handleSaveData() {
   let password = yield select(makeNewPasswordSelector());
   let email = yield select(makeNewEmailSelector());
   let currencyId = yield select(makeNewCurrencyIdSelector());
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const requestURL = api.usersPath;
 
   yield all([
@@ -188,6 +187,7 @@ export function* handleSaveData() {
         if (name) yield put(enterNewNameSuccessAction(name));
         if (surname) yield put(enterSurnameSuccessAction(surname));
         if (password) yield put(enterNewPasswordSuccessAction(password));
+        if (currencyId) return yield put(enterNewCurrencySuccessAction(<FormattedMessage {...messages.saveCurrencySuccess} />, currencyId));
 
         yield put(
           saveDataSuccessAction(
@@ -277,7 +277,7 @@ function* handlePassword() {
 
 function* handleEmail() {
   const email = yield select(makeNewEmailSelector());
-  api.email(email);
+  api.email = email;
   const requestURL = api.isEmailPath;
   const isEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   const limit = 255;
@@ -302,8 +302,9 @@ function* handleEmail() {
 
   try {
     const response = yield call(request, requestURL);
+    const { isEmail } = response;
 
-    if (!response.isEmail) {
+    if (!isEmail) {
       return true;
     }
 

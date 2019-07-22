@@ -5,6 +5,7 @@ import request from 'utils/request';
 import { push } from 'connected-react-router';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/PaymentPage/messages';
+import AuthService from 'services/auth.service';
 
 // Import Selectors
 import {
@@ -56,7 +57,8 @@ import {
 } from './constants';
 
 export function* handleCurrency() {
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const requestURL = api.billsPath;
 
   try {
@@ -80,8 +82,9 @@ export function* handleCurrency() {
 }
 
 export function* searchAccountNumber() {
+  const auth = new AuthService();
+  const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
-  const token = yield select(makeTokenSelector());
   api.accountBill = accountBill;
   const requestURL = api.searchPath;
   const limit = 26;
@@ -121,8 +124,9 @@ export function* searchAccountNumber() {
 }
 
 export function* handleAccountNumber() {
+  const auth = new AuthService();
+  const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
-  const token = yield select(makeTokenSelector());
   api.accountBill = accountBill;
   const requestURL = api.isAccountBillPath;
   const isNumber = /^\d+$/;
@@ -180,8 +184,9 @@ export function* handleAccountNumber() {
 }
 
 export function* handleAmountMoney() {
+  const auth = new AuthService();
+  const token = auth.getToken();
   const amountMoney = yield select(makeAmountMoneySelector());
-  const token = yield select(makeTokenSelector());
   api.amountMoney = amountMoney;
   const requestURL = api.isAmountMoneyPath;
 
@@ -241,7 +246,8 @@ export function* handleTransferTitle() {
 }
 
 export function* handleRegisterTransaction() {
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
   const amountMoney = yield select(makeAmountMoneySelector());
   const transferTitle = yield select(makeTransferTitleSelector());
@@ -276,7 +282,8 @@ export function* handleRegisterTransaction() {
 }
 
 export function* handleConfirmTransaction() {
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
   const amountMoney = yield select(makeAmountMoneySelector());
   const transferTitle = yield select(makeTransferTitleSelector());
@@ -340,7 +347,8 @@ export function* handleConfirmTransaction() {
 }
 
 export function* handleAuthorizationKey() {
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const recipientId = yield select(makeRecipientIdSelector());
   const isSendAuthorizationKey = yield select(
     makeIsSendAuthorizationKeySelector(),

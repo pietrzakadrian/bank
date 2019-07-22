@@ -96,8 +96,8 @@ const settingsPageReducer = produce((draft, action) => {
       draft.error = '';
       draft.message = '';
       draft.currency = [];
-      draft.currencyId = null;
-      draft.newCurrencyId = 1;
+      draft.currencyId = 1;
+      draft.newCurrencyId = null;
       draft.currencyMessage = '';
       draft.isOpenAlert = false;
       draft.isLoading = false;
@@ -115,6 +115,7 @@ const settingsPageReducer = produce((draft, action) => {
       draft.message = '';
       draft.currencyMessage = '';
       draft.isOpenAlert = false;
+      draft.newCurrencyId = null;
       draft.isLoading = false;
       break;
     case LOAD_USER_DATA:
@@ -193,9 +194,10 @@ const settingsPageReducer = produce((draft, action) => {
       break;
     case ENTER_NEW_CURRENCY_SUCCESS:
       draft.isLoading = false;
-      draft.currencyId = draft.newCurrencyId;
+      draft.currencyId = action.newCurrencyId;
       draft.isOpenAlert = false;
       draft.currencyMessage = action.message;
+      draft.newCurrencyId = null;
       break;
     case ENTER_NEW_CURRENCY_ERROR:
       draft.isLoading = false;
@@ -207,7 +209,6 @@ const settingsPageReducer = produce((draft, action) => {
     case SAVE_DATA_SUCCESS:
       draft.isLoading = false;
       draft.message = action.message;
-      draft.isOpenAlert = false;
       break;
     case SAVE_DATA_ERROR:
       draft.isLoading = false;

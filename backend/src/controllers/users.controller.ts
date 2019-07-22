@@ -216,7 +216,7 @@ usersRouter
         return next(err);
       }
 
-      console.log();
+      console.log("teest");
 
       try {
         const user: User = await userService.getById(req.user.id);
@@ -244,8 +244,6 @@ usersRouter
             req.body.currencyId
           );
 
-          await userService.update(user);
-
           if (req.body.currencyId !== userCurrency.id) {
             await currencyService.setExchangeRate(user, newCurrency);
             await currencyService.setCurrency(user, newCurrency);
@@ -259,6 +257,8 @@ usersRouter
             return next(err);
           }
         }
+
+        await userService.update(user);
 
         res.status(HttpStatus.OK).json({
           success: true
