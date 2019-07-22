@@ -5,7 +5,7 @@
  */
 
 import React, { Fragment, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { useInjectSaga } from 'utils/injectSaga';

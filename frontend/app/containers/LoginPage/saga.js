@@ -1,25 +1,19 @@
 import React from 'react';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { FormattedMessage } from 'react-intl';
-import decode from 'jwt-decode';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
 import api from 'api';
 import messages from 'containers/LoginPage/messages';
+import AuthService from 'services/auth.service';
 
 // Import Selectors
-import {
-  makeIsLoggedSelector,
-  makeUserIdSelector,
-  makeTokenSelector,
-} from 'containers/App/selectors';
 import {
   makeLoginSelector,
   makePasswordSelector,
 } from 'containers/LoginPage/selectors';
 
 // Import Actions
-import { loggedInAction } from 'containers/App/actions';
 import {
   enterLoginSuccessAction,
   enterLoginErrorAction,
@@ -35,18 +29,10 @@ import {
 import { ENTER_LOGIN, ENTER_PASSWORD, IS_LOGGED } from './constants';
 
 export function* handleLogged() {
-  const isLogged = yield select(makeIsLoggedSelector());
-  const userId = yield select(makeUserIdSelector());
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const isLogged = auth.loggedIn();
 
-  if (
-    isLogged &&
-    userId &&
-    token &&
-    decode(token).exp > new Date().getTime() / 1000
-  ) {
-    return yield put(push('/dashboard'));
-  }
+  if (isLogged) return yield put(push('/dashboard'));
 }
 
 export function* handleLogin() {
@@ -106,6 +92,7 @@ function* loginAttempt() {
   const login = yield select(makeLoginSelector());
   const password = yield select(makePasswordSelector());
   const requestURL = api.loginPath;
+  const auth = new AuthService();
 
   if (!login || !password)
     return yield put(
@@ -133,7 +120,7 @@ function* loginAttempt() {
 
     yield put(enterPasswordSuccessAction());
     yield put(loginSuccessAction());
-    yield put(loggedInAction(decode(response.token).id, response.token));
+    auth.setToken(response.token);
     yield put(push('/dashboard'));
   } catch (error) {
     yield put(loginErrorAction(<FormattedMessage {...messages.serverError} />));

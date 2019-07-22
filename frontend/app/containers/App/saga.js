@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import request from 'utils/request';
 import decode from 'jwt-decode';
 import api from 'api';
+import AuthService from 'services/auth.service';
 
 // Import Selectors
 import {
@@ -39,12 +40,9 @@ import {
 } from './constants';
 
 export function* handleLogout() {
-  const isLogged = yield select(makeIsLoggedSelector());
-  const userId = yield select(makeUserIdSelector());
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const requestURL = api.logoutPath;
-
-  if (!isLogged || !userId || !token) return yield put(push('/'));
 
   try {
     const response = yield call(request, requestURL, {
@@ -58,32 +56,30 @@ export function* handleLogout() {
 
     if (response.success) {
       yield put(logoutSuccessAction());
+      auth.unsetToken();
       return yield put(push('/'));
     }
   } catch (error) {
     yield put(logoutErrorAction(error));
+    auth.unsetToken();
     yield put(push('/'));
   }
 }
 
 export function* handleLogged() {
-  const isLogged = yield select(makeIsLoggedSelector());
-  const userId = yield select(makeUserIdSelector());
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const isLogged = auth.loggedIn();
 
-  if (
-    !isLogged ||
-    !userId ||
-    !token ||
-    decode(token).exp < new Date().getTime() / 1000
-  ) {
+  if (!isLogged) {
     yield put(logoutSuccessAction());
+    auth.unsetToken();
     return yield put(push('/'));
   }
 }
 
 export function* handleNotifications() {
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const requestURL = api.isNotificationPath;
 
   try {
@@ -109,7 +105,8 @@ export function* handleNotifications() {
 
 export function* getNewNotifications() {
   const locale = yield select(makeSelectLocale());
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const notificationCount = yield select(makeNotificationCountSelector());
   api.offset = notificationCount;
   const requestURL = api.notificationsPath;
@@ -153,7 +150,8 @@ export function* getNewNotifications() {
 export function* handleNewNotifications() {
   const isOpenNotifications = yield select(makeIsOpenNotificationsSelector());
   const notifications = yield select(makeNotificationsSelector());
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const requestURL = api.notificationsPath;
 
   if (isOpenNotifications && notifications.length) {

@@ -3,6 +3,7 @@ import request from 'utils/request';
 import { push } from 'connected-react-router';
 import { format } from 'date-fns';
 import api from 'api';
+import AuthService from 'services/auth.service';
 
 // Import Utils
 import {
@@ -82,7 +83,8 @@ import {
 } from './constants';
 
 export function* handleUserdata() {
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const locale = yield select(makeSelectLocale());
   const requestURL = api.usersPath;
 
@@ -146,7 +148,8 @@ export function* handleUserdata() {
 }
 
 export function* handleAccountingData() {
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
   const requestURL = api.billsPath;
 
   try {
@@ -235,8 +238,9 @@ export function* handleRecentTransactions() {
 }
 
 function* getRecentTransactionsSender() {
-  const userId = yield select(makeUserIdSelector());
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
+  const userId = auth.getUserId();
   const requestURL = api.senderPath;
 
   try {
@@ -278,8 +282,9 @@ function* getRecentTransactionsSender() {
 }
 
 function* getRecentTransactionsRecipient() {
-  const userId = yield select(makeUserIdSelector());
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
+  const userId = auth.getUserId();
   const requestURL = api.recipientPath;
 
   try {

@@ -1,28 +1,15 @@
-import { put, select, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import decode from 'jwt-decode';
-
-// Import Selectors
-import {
-  makeIsLoggedSelector,
-  makeUserIdSelector,
-  makeTokenSelector,
-} from 'containers/App/selectors';
+import AuthService from 'services/auth.service';
 
 // Import Constants
 import { IS_LOGGED } from './constants';
 
 export function* handleLogged() {
-  const isLogged = yield select(makeIsLoggedSelector());
-  const userId = yield select(makeUserIdSelector());
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const isLogged = auth.loggedIn();
 
-  if (
-    isLogged &&
-    userId &&
-    token &&
-    decode(token).exp > new Date().getTime() / 1000
-  ) {
+  if (isLogged) {
     return yield put(push('/dashboard'));
   }
 

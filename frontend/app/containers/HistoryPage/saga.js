@@ -3,12 +3,9 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 import { format } from 'date-fns';
 import api from 'api';
+import AuthService from 'services/auth.service';
 
 // Import Selectors
-import {
-  makeUserIdSelector,
-  makeTokenSelector,
-} from 'containers/App/selectors';
 import { makePageSizeSelector, makeCurrentPageSelector } from 'containers/HistoryPage/selectors';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 
@@ -18,9 +15,11 @@ import { GET_GRID_DATA, CHANGE_PAGE } from './constants';
 // Import Actions
 import { getGridDataErrorAction, getGridDataSuccessAction } from './actions';
 
+
 export function* handleGridData() {
-  const userId = yield select(makeUserIdSelector());
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const token = auth.getToken();
+  const userId = auth.getUserId();
   const locale = yield select(makeSelectLocale());
   const pageSize = yield select(makePageSizeSelector());
   const currentPage = yield select(makeCurrentPageSelector());

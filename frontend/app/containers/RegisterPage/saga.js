@@ -3,16 +3,10 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { FormattedMessage } from 'react-intl';
 import { push } from 'connected-react-router';
 import request from 'utils/request';
-import decode from 'jwt-decode';
 import api from 'api';
 import messages from 'containers/RegisterPage/messages';
 
 // Import Selectors
-import {
-  makeIsLoggedSelector,
-  makeUserIdSelector,
-  makeTokenSelector,
-} from 'containers/App/selectors';
 import {
   makeLoginSelector,
   makePasswordSelector,
@@ -57,6 +51,7 @@ import {
   ENTER_EMAIL,
   IS_LOGGED,
 } from './constants';
+import AuthService from 'services/auth.service';
 
 export function* handleLogin() {
   const login = yield select(makeLoginSelector());
@@ -303,18 +298,10 @@ function* registerAttempt() {
 }
 
 export function* handleLogged() {
-  const isLogged = yield select(makeIsLoggedSelector());
-  const userId = yield select(makeUserIdSelector());
-  const token = yield select(makeTokenSelector());
+  const auth = new AuthService();
+  const isLogged = auth.loggedIn();
 
-  if (
-    isLogged &&
-    userId &&
-    token &&
-    decode(token).exp > new Date().getTime() / 1000
-  ) {
-    return yield put(push('/dashboard'));
-  }
+  if (isLogged) return yield put(push('/dashboard'));
 }
 
 export default function* registerPageSaga() {
