@@ -55,7 +55,7 @@ import {
   SAVE_DATA,
   ENTER_NEW_CURRENCY,
 } from 'containers/SettingsPage/constants';
-import { enterNewCurrencySuccessAction } from './actions';
+import { enterNewCurrencySuccessAction, enterNewSurnameSuccessAction } from './actions';
 
 export function* handleUserData() {
   const auth = new AuthService();
@@ -67,7 +67,7 @@ export function* handleUserData() {
   const requestUserData = api.usersPath;
   const requestBillsData = api.billsPath;
 
-  if ((!userName && !userSurname && !userEmail) || !currencyId) {
+  if ((!userName || !userSurname || !userEmail) || !currencyId) {
     try {
       const responseUserData = yield call(request, requestUserData, {
         method: 'GET',
@@ -185,7 +185,7 @@ export function* handleSaveData() {
       if (response.success) {
         if (email) yield put(enterNewEmailSuccessAction(email));
         if (name) yield put(enterNewNameSuccessAction(name));
-        if (surname) yield put(enterSurnameSuccessAction(surname));
+        if (surname) yield put(enterNewSurnameSuccessAction(surname));
         if (password) yield put(enterNewPasswordSuccessAction(password));
         if (currencyId) return yield put(enterNewCurrencySuccessAction(<FormattedMessage {...messages.saveCurrencySuccess} />, currencyId));
 

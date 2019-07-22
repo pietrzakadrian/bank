@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest, takeMaybe } from 'redux-saga/effects';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
 import { format } from 'date-fns';
@@ -12,11 +12,6 @@ import {
   PRIMARY_RED,
 } from 'utils/colors';
 
-// Import Selectors
-import {
-  makeUserIdSelector,
-  makeTokenSelector,
-} from 'containers/App/selectors';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 import {
   makeOutgoingTransfersSumSelector,
@@ -87,6 +82,8 @@ export function* handleUserdata() {
   const token = auth.getToken();
   const locale = yield select(makeSelectLocale());
   const requestURL = api.usersPath;
+
+  console.log('wchodze tu?');
 
   try {
     const response = yield call(request, requestURL, {
@@ -380,15 +377,8 @@ function* handleRecharts() {
 }
 
 export default function* dashboardPageSaga() {
-  yield takeLatest(
-    GET_NAME ||
-      GET_SURNAME ||
-      GET_EMAIL ||
-      GET_LAST_FAILED_LOGGED ||
-      GET_LAST_PRESENT_LOGGED ||
-      GET_LAST_SUCCESSFUL_LOGGED,
-    handleUserdata,
-  );
+  yield  takeLatest(GET_NAME || GET_SURNAME || GET_EMAIL || GET_LAST_FAILED_LOGGED || GET_LAST_PRESENT_LOGGED || GET_LAST_SUCCESSFUL_LOGGED, handleUserdata);
+
   yield takeLatest(
     GET_AVAILABLE_FUNDS ||
       GET_ACCOUNT_BILLS ||
@@ -399,6 +389,7 @@ export default function* dashboardPageSaga() {
       GET_SAVINGS,
     handleAccountingData,
   );
+  
   yield takeLatest(
     GET_RECENT_TRANSACTIONS_RECIPIENT || GET_RECENT_TRANSACTIONS_SENDER,
     handleRecentTransactions,

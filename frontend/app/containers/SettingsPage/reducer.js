@@ -103,6 +103,10 @@ const settingsPageReducer = produce((draft, action) => {
       draft.isLoading = false;
       break;
     case LOCATION_CHANGE:
+      draft.name = '';
+      draft.surname = '';
+      draft.email = '';
+      draft.newCurrencyId = null;
       draft.newPassword = '';
       draft.newName = '';
       draft.newSurname = '';
@@ -143,7 +147,7 @@ const settingsPageReducer = produce((draft, action) => {
       draft.newName = action.name;
       break;
     case ENTER_NEW_NAME_SUCCESS:
-      draft.name = draft.newName;
+      draft.name = '';
       break;
     case ENTER_NEW_NAME_ERROR:
       draft.errorName = action.error;
@@ -160,7 +164,7 @@ const settingsPageReducer = produce((draft, action) => {
       draft.newSurname = action.surname;
       break;
     case ENTER_NEW_SURNAME_SUCCESS:
-      draft.surname = draft.newSurname;
+      draft.surname = '';
       break;
     case ENTER_NEW_SURNAME_ERROR:
       draft.errorSurname = action.error;
@@ -183,7 +187,7 @@ const settingsPageReducer = produce((draft, action) => {
       draft.newEmail = action.email;
       break;
     case ENTER_NEW_EMAIL_SUCCESS:
-      draft.email = draft.newEmail;
+      draft.email = '';
       break;
     case ENTER_NEW_EMAIL_ERROR:
       draft.errorEmail = action.error;
