@@ -77,13 +77,11 @@ const makeMessageCountSelector = () =>
     globalState => globalState.messageCount,
   );
 
-
 const makeIsLoggedSelector = () =>
-createSelector(
-  selectGlobal,
-  globalState => globalState.isLogged,
-);
-
+  createSelector(
+    selectGlobal,
+    globalState => globalState.isLogged,
+  );
 
 const makeSelectLocation = () =>
   createSelector(
@@ -105,5 +103,5 @@ export {
   makeIsNewNotificationsSelector,
   makeNotificationCountSelector,
   makeMessageCountSelector,
-  makeIsLoggedSelector
+  makeIsLoggedSelector,
 };

@@ -4,8 +4,6 @@
  *
  */
 
-export const CHANGE_LAYOUT = 'app/DashboardPage/CHANGE_LAYOUT';
-
 export const GET_NAME = 'app/DashboardPage/GET_NAME';
 export const GET_NAME_SUCCESS = 'app/DashboardPage/GET_NAME_SUCCESS';
 export const GET_NAME_ERROR = 'app/DashboardPage/GET_NAME_ERROR';
@@ -69,7 +67,6 @@ export const GET_ACCOUNT_BALANCE_HISTORY_ERROR =
 
 export const GET_SAVINGS = 'app/DashboardPage/GET_SAVINGS';
 export const GET_SAVINGS_SUCCESS = 'app/DashboardPage/GET_SAVINGS_SUCCESS';
-export const GET_SAVINGS_ERROR = 'app/DashboardPage/GET_SAVINGS_ERROR';
 
 export const GET_RECENT_TRANSACTIONS_SENDER =
   'app/DashboardPage/GET_RECENT_TRANSACTIONS_SENDER';
@@ -108,5 +105,3 @@ export const GET_RECHARTS_COLORS_ERROR =
 export const GET_RECHARTS_DATA = 'app/DashboardPage/GET_RECHARTS_DATA';
 export const GET_RECHARTS_DATA_SUCCESS =
   'app/DashboardPage/GET_RECHARTS_DATA_SUCCESS';
-export const GET_RECHARTS_DATA_ERROR =
-  'app/DashboardPage/GET_RECHARTS_DATA_ERROR';

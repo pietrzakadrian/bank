@@ -2,9 +2,11 @@ import React from 'react';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { FormattedMessage } from 'react-intl';
 import { push } from 'connected-react-router';
+import messages from 'containers/RegisterPage/messages';
+
+// Import Utils
 import request from 'utils/request';
 import ApiEndpoint from 'utils/api';
-import messages from 'containers/RegisterPage/messages';
 
 // Import Services
 import AuthService from 'services/auth.service';
@@ -54,7 +56,6 @@ import {
   ENTER_EMAIL,
   IS_LOGGED,
 } from './constants';
-
 
 export function* handleLogin() {
   const api = new ApiEndpoint();
@@ -153,7 +154,7 @@ export function* loadCurrency() {
   try {
     const response = yield call(request, requestURL);
     const currencyData = response.currency.map(({ ...rest }) => [rest.id]);
-    
+
     // eslint-disable-next-line prefer-spread
     const currencyArray = [].concat.apply([], currencyData);
     yield put(loadCurrencySuccessAction(currencyArray));
@@ -276,8 +277,10 @@ function* registerAttempt() {
     });
 
     const { success } = response;
-    if (!success) return yield put(
-        registerErrorAction(<FormattedMessage {...messages.errorServer} />));
+    if (!success)
+      return yield put(
+        registerErrorAction(<FormattedMessage {...messages.errorServer} />),
+      );
 
     yield put(registerSuccessAction());
     yield put(

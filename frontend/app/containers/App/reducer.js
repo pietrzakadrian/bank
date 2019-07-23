@@ -7,7 +7,6 @@ import produce, { setAutoFreeze } from 'immer';
 
 import {
   LOGGED_IN,
-  IS_LOGGED,
   IS_LOGGED_SUCCESS,
   IS_LOGGED_ERROR,
   LOGOUT,
@@ -94,7 +93,7 @@ const appPageReducer = produce((draft, action) => {
     case LOGGED_IN:
       draft.isLogged = true;
       break;
-      case IS_LOGGED_SUCCESS:
+    case IS_LOGGED_SUCCESS:
       draft.isLogged = true;
       break;
     case IS_LOGGED_ERROR:

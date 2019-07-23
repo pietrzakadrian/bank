@@ -25,7 +25,7 @@ const globalPersistConfig = {
     'isOpenMessages',
     'isNewNotifications',
     'isNewMessages',
-    'isLogged'
+    'isLogged',
   ],
 };
 

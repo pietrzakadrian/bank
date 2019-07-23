@@ -1,5 +1,4 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
 import { format } from 'date-fns';
 
 // Import Services
@@ -21,7 +20,6 @@ import {
 } from 'containers/DashboardPage/selectors';
 
 // Import Actions
-import { logoutErrorAction } from 'containers/App/actions';
 import {
   getNameErrorAction,
   getEmailErrorAction,
@@ -47,14 +45,12 @@ import {
   getRechartsColorsSuccessAction,
   getRechartsDataSuccessAction,
   getSavingsSuccessAction,
-  getSavingsErrorAction,
   getIncomingTransfersSumSuccessAction,
   getIncomingTransfersSumErrorAction,
   getOutgoingTransfersSumSuccessAction,
   getOutgoingTransfersSumErrorAction,
   getAccountBillsSuccessAction,
   getAccountBillsErrorAction,
-  getRechartsDataErrorAction,
   getCurrencyIdSuccessAction,
   getCurrencyIdErrorAction,
   getSurnameErrorAction,
@@ -96,48 +92,48 @@ export function* handleUserdata() {
       },
     });
 
-      const {
-        name,
-        surname,
-        email,
-        lastPresentLoggedDate,
-        lastSuccessfulLoggedDate,
-        lastFailedLoggedDate,
-      } = response;
+    const {
+      name,
+      surname,
+      email,
+      lastPresentLoggedDate,
+      lastSuccessfulLoggedDate,
+      lastFailedLoggedDate,
+    } = response;
 
-      const formatLastPresentLoggedDate = format(
-        lastPresentLoggedDate,
-        `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
+    const formatLastPresentLoggedDate = format(
+      lastPresentLoggedDate,
+      `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
+    );
+    const formatLastSuccessfulLoggedDate = format(
+      lastSuccessfulLoggedDate,
+      `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
+    );
+    const formatLastFailedLoggedDate = format(
+      lastFailedLoggedDate,
+      `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
+    );
+
+    yield put(getNameSuccessAction(name));
+    yield put(getSurnameSuccessAction(surname));
+    yield put(getEmailSuccessAction(email));
+    if (lastPresentLoggedDate !== null)
+      yield put(getLastPresentLoggedSuccessAction(formatLastPresentLoggedDate));
+
+    if (lastSuccessfulLoggedDate !== null)
+      yield put(
+        getLastSuccessfulLoggedSuccessAction(formatLastSuccessfulLoggedDate),
       );
-      const formatLastSuccessfulLoggedDate = format(
-        lastSuccessfulLoggedDate,
-        `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
-      );
-      const formatLastFailedLoggedDate = format(
-        lastFailedLoggedDate,
-        `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
-      );
 
-      if (!name) yield put(getNameErrorAction('error'));
-      else yield put(getNameSuccessAction(name));
-
-      if (!surname) yield put(getSurnameErrorAction('error'));
-      else yield put(getSurnameSuccessAction(surname));
-
-      if (!email) yield put(getEmailErrorAction('error'));
-      else yield put(getEmailSuccessAction(email));
-
-      if (lastPresentLoggedDate === null) yield put(getLastPresentLoggedErrorAction('error'));
-      else yield put(getLastPresentLoggedSuccessAction(formatLastPresentLoggedDate));
-
-      if (lastSuccessfulLoggedDate === null) yield put(getLastSuccessfulLoggedErrorAction('error'));
-      else yield put(getLastSuccessfulLoggedSuccessAction(formatLastSuccessfulLoggedDate));
-
-      if (lastFailedLoggedDate === null) yield put(getLastFailedLoggedErrorAction('error'));
-      else yield put(getLastFailedLoggedSuccessAction(formatLastFailedLoggedDate));
+    if (lastFailedLoggedDate !== null)
+      yield put(getLastFailedLoggedSuccessAction(formatLastFailedLoggedDate));
   } catch (error) {
-    yield put(logoutErrorAction(error));
-    yield put(push('/'));
+    yield put(getNameErrorAction(error));
+    yield put(getSurnameErrorAction(error));
+    yield put(getEmailErrorAction(error));
+    yield put(getLastPresentLoggedErrorAction(error));
+    yield put(getLastSuccessfulLoggedErrorAction(error));
+    yield put(getLastFailedLoggedErrorAction(error));
   }
 }
 
@@ -159,63 +155,55 @@ export function* handleAccountingData() {
 
     const { availableFunds, accountBill, currency, additionals } = response;
 
-      if (availableFunds || availableFunds === 0)
-        yield put(
-          getAvailableFundsSuccessAction(
-            availableFunds
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-              .replace('.', ','),
-          ),
-        );
-      else yield put(getAvailableFundsErrorAction('error'));
+    if (availableFunds || availableFunds === 0)
+      yield put(
+        getAvailableFundsSuccessAction(
+          availableFunds
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+            .replace('.', ','),
+        ),
+      );
+    else yield put(getAvailableFundsErrorAction('error'));
 
-      if (accountBill)
-        yield put(
-          getAccountBillsSuccessAction(
-            accountBill
+    if (accountBill)
+      yield put(
+        getAccountBillsSuccessAction(
+          accountBill.replace(/(^\d{2}|\d{4})+?/g, '$1 ').trim(),
+        ),
+      );
+    else yield put(getAccountBillsErrorAction('error'));
 
-              .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-              .trim(),
-          ),
-        );
-      else yield put(getAccountBillsErrorAction('error'));
+    if (additionals.accountBalanceHistory)
+      yield put(
+        getAccountBalanceHistorySuccessAction(
+          JSON.parse(`[${additionals.accountBalanceHistory}]`),
+        ),
+      );
+    else getAccountBalanceHistoryErrorAction('error');
 
-      if (additionals.accountBalanceHistory)
-        yield put(
-          getAccountBalanceHistorySuccessAction(
-            JSON.parse(`[${additionals.accountBalanceHistory}]`),
-          ),
-        );
-      else getAccountBalanceHistoryErrorAction('error');
+    if (currency.name) yield put(getCurrencySuccessAction(currency.name));
+    else yield put(getCurrencyErrorAction('error'));
 
-      if (currency.name) yield put(getCurrencySuccessAction(currency.name));
-      else yield put(getCurrencyErrorAction('error'));
+    if (currency.id) yield put(getCurrencyIdSuccessAction(currency.id));
+    else yield put(getCurrencyIdErrorAction('error'));
 
-      if (currency.id) yield put(getCurrencyIdSuccessAction(currency.id));
-      else yield put(getCurrencyIdErrorAction('error'));
+    if (
+      additionals.incomingTransfersSum ||
+      additionals.incomingTransfersSum === 0
+    )
+      yield put(
+        getIncomingTransfersSumSuccessAction(additionals.incomingTransfersSum),
+      );
+    else yield put(getIncomingTransfersSumErrorAction('error'));
 
-      if (
-        additionals.incomingTransfersSum ||
-        additionals.incomingTransfersSum === 0
-      )
-        yield put(
-          getIncomingTransfersSumSuccessAction(
-            additionals.incomingTransfersSum,
-          ),
-        );
-      else yield put(getIncomingTransfersSumErrorAction('error'));
-
-      if (
-        additionals.outgoingTransfersSum ||
-        additionals.outgoingTransfersSum === 0
-      )
-        yield put(
-          getOutgoingTransfersSumSuccessAction(
-            additionals.outgoingTransfersSum,
-          ),
-        );
-      else yield put(getOutgoingTransfersSumErrorAction('error'));
-    
+    if (
+      additionals.outgoingTransfersSum ||
+      additionals.outgoingTransfersSum === 0
+    )
+      yield put(
+        getOutgoingTransfersSumSuccessAction(additionals.outgoingTransfersSum),
+      );
+    else yield put(getOutgoingTransfersSumErrorAction('error'));
 
     yield call(handleRecharts);
   } catch (error) {
@@ -249,22 +237,22 @@ function* getRecentTransactionsSender() {
 
     const { senderTransactions } = response;
     const transformSenderTransactions = senderTransactions.map(
-        ({ ...transaction }) => ({
-          id_sender: userId,
-          amount_money: `-${transaction.transaction_amountMoney
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-            .replace('.', ',')}`,
-          recipient: {
-            id: transaction.user_id,
-            name: transaction.user_name,
-            surname: transaction.user_surname,
-          },
-          currency: transaction.currency_name,
-          transfer_title: transaction.transaction_transferTitle,
-          date_time: transaction.transaction_createdDate,
-        }),
-      );
+      ({ ...transaction }) => ({
+        id_sender: userId,
+        amount_money: `-${transaction.transaction_amountMoney
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+          .replace('.', ',')}`,
+        recipient: {
+          id: transaction.user_id,
+          name: transaction.user_name,
+          surname: transaction.user_surname,
+        },
+        currency: transaction.currency_name,
+        transfer_title: transaction.transaction_transferTitle,
+        date_time: transaction.transaction_createdDate,
+      }),
+    );
 
     yield put(
       getRecentTransactionsSenderSuccessAction(transformSenderTransactions),
@@ -293,30 +281,29 @@ function* getRecentTransactionsRecipient() {
 
     const { recipientTransactions } = response;
 
-      const transformRecipientTransactions = recipientTransactions.map(
-        ({ ...transaction }) => ({
-          amount_money: transaction.transaction_amountMoney
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-            .replace('.', ','),
-          sender: {
-            id: transaction.user_id,
-            name: transaction.user_name,
-            surname: transaction.user_surname,
-          },
-          date_time: transaction.transaction_createdDate,
-          currency: transaction.currency_name,
-          id_recipient: userId,
-          transfer_title: transaction.transaction_transferTitle,
-        }),
-      );
+    const transformRecipientTransactions = recipientTransactions.map(
+      ({ ...transaction }) => ({
+        amount_money: transaction.transaction_amountMoney
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+          .replace('.', ','),
+        sender: {
+          id: transaction.user_id,
+          name: transaction.user_name,
+          surname: transaction.user_surname,
+        },
+        date_time: transaction.transaction_createdDate,
+        currency: transaction.currency_name,
+        id_recipient: userId,
+        transfer_title: transaction.transaction_transferTitle,
+      }),
+    );
 
-      yield put(
-        getRecentTransactionsRecipientSuccessAction(
-          transformRecipientTransactions,
-        ),
-      );
-
+    yield put(
+      getRecentTransactionsRecipientSuccessAction(
+        transformRecipientTransactions,
+      ),
+    );
   } catch (error) {
     yield put(getRecentTransactionsRecipientErrorAction(error));
   }
@@ -331,43 +318,43 @@ function* handleRecharts() {
     (outgoingTransfersSum * 100) / incomingTransfersSum;
   const zero = 0;
 
-    if (!incomingTransfersSum && !outgoingTransfersSum) {
-      yield put(
-        getRechartsColorsSuccessAction(JSON.parse(`["${BORDER_GREY_LIGHT}"]`)),
-      );
-
-      yield put(getRechartsDataSuccessAction([{ name: 'Group A', value: 1 }]));
-
-      return yield put(
-        getSavingsSuccessAction(zero.toFixed(1).replace('.', ',')),
-      );
-    }
-
+  if (!incomingTransfersSum && !outgoingTransfersSum) {
     yield put(
-      getRechartsColorsSuccessAction(
-        JSON.parse(`["${PRIMARY_BLUE_LIGHT}", "${PRIMARY_RED}"]`),
-      ),
+      getRechartsColorsSuccessAction(JSON.parse(`["${BORDER_GREY_LIGHT}"]`)),
     );
 
-    yield put(
-      getRechartsDataSuccessAction([
-        {
-          name: 'Group A',
-          value: incomingRechartsProcent,
-        },
-        {
-          name: 'Group B',
-          value: outgoingRechartsProcent,
-        },
-      ]),
-    );
+    yield put(getRechartsDataSuccessAction([{ name: 'Group A', value: 1 }]));
 
     return yield put(
-      getSavingsSuccessAction(
-        incomingRechartsProcent.toFixed(1).replace('.', ','),
-      ),
+      getSavingsSuccessAction(zero.toFixed(1).replace('.', ',')),
     );
   }
+
+  yield put(
+    getRechartsColorsSuccessAction(
+      JSON.parse(`["${PRIMARY_BLUE_LIGHT}", "${PRIMARY_RED}"]`),
+    ),
+  );
+
+  yield put(
+    getRechartsDataSuccessAction([
+      {
+        name: 'Group A',
+        value: incomingRechartsProcent,
+      },
+      {
+        name: 'Group B',
+        value: outgoingRechartsProcent,
+      },
+    ]),
+  );
+
+  return yield put(
+    getSavingsSuccessAction(
+      incomingRechartsProcent.toFixed(1).replace('.', ','),
+    ),
+  );
+}
 
 export default function* dashboardPageSaga() {
   yield takeLatest(

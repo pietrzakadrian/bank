@@ -76,7 +76,6 @@ export default function GreetingHeader() {
   const {
     name,
     surname,
-    email,
     locale,
     lastPresentLogged,
     lastSuccessfulLogged,
@@ -87,11 +86,13 @@ export default function GreetingHeader() {
   useInjectReducer({ key, reducer });
 
   useEffect(() => {
-    if (!name) getName();
-    if (!surname) getSurname();
-    if (!email) getEmail();
-    if (!lastPresentLogged) getLastPresentLogged();
-    if (!lastSuccessfulLogged && lastSuccessfulLogged !== null) getLastSuccessfulLogged();
+    getName();
+    getSurname();
+    getEmail();
+    if (!lastPresentLogged && lastPresentLogged !== null)
+      getLastPresentLogged();
+    if (!lastSuccessfulLogged && lastSuccessfulLogged !== null)
+      getLastSuccessfulLogged();
     if (!lastFailedLogged && lastFailedLogged !== null) getLastFailedLogged();
   }, []);
 

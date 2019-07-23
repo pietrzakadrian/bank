@@ -89,9 +89,7 @@ function useOutsideWidgetDisabled(ref) {
   const dispatch = useDispatch();
   const onToggleMessages = () => dispatch(toggleMessagesAction());
   const onToggleNotifications = () => dispatch(toggleNotificationsAction());
-  const { isOpenMessages, isOpenNotifications, messageCount } = useSelector(
-    stateSelector,
-  );
+  const { isOpenMessages, isOpenNotifications } = useSelector(stateSelector);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -129,14 +127,14 @@ export default function Header({ children, location }) {
     isNewMessages,
     isNewNotifications,
   } = useSelector(stateSelector);
-  
+
   useInjectSaga({ key, saga });
 
   useEffect(() => {
     if (!isLogged) onCheckUserLogged();
     else {
-        onCheckNewNotifications();
-        onCheckNewMessages();
+      onCheckNewNotifications();
+      onCheckNewMessages();
     }
   }, [isLogged]);
 

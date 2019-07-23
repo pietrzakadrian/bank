@@ -109,7 +109,7 @@ const registerPageReducer = produce((draft, action) => {
       draft.error = '';
       break;
     case ENTER_SURNAME:
-      draft.name = action.surname.trim();
+      draft.surname = action.surname.trim();
       draft.isLoading = true;
       break;
     case ENTER_SURNAME_SUCCESS:

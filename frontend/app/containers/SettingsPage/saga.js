@@ -127,10 +127,10 @@ export function* handleCurrency() {
         Authorization: `Bearer ${token}`,
       },
     });
-    
-      const { currency } = response;
-      const transformCurrency = currency.map(item => item.id);
-      yield put(loadCurrencySuccessAction(transformCurrency));
+
+    const { currency } = response;
+    const transformCurrency = currency.map(item => item.id);
+    yield put(loadCurrencySuccessAction(transformCurrency));
   } catch (error) {
     yield put(loadCurrencyErrorAction(error));
   }
@@ -146,7 +146,6 @@ export function* handleSaveData() {
   let password = yield select(makeNewPasswordSelector());
   let email = yield select(makeNewEmailSelector());
   let currencyId = yield select(makeNewCurrencyIdSelector());
-
 
   yield all([
     name ? call(handleName) : (name = null),
@@ -310,11 +309,8 @@ function* handleEmail() {
 
   try {
     const response = yield call(request, requestURL);
-    const { isEmail } = response;
 
-    if (!isEmail) {
-      return true;
-    }
+    if (!response.isEmail) return true;
 
     yield put(
       enterNewEmailErrorAction(

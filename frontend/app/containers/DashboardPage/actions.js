@@ -34,7 +34,6 @@ import {
   GET_ACCOUNT_BALANCE_HISTORY_ERROR,
   GET_SAVINGS,
   GET_SAVINGS_SUCCESS,
-  GET_SAVINGS_ERROR,
   GET_RECENT_TRANSACTIONS_SENDER,
   GET_RECENT_TRANSACTIONS_SENDER_SUCCESS,
   GET_RECENT_TRANSACTIONS_SENDER_ERROR,
@@ -55,7 +54,6 @@ import {
   GET_CURRENCY_ID_ERROR,
   GET_RECHARTS_DATA,
   GET_RECHARTS_DATA_SUCCESS,
-  GET_RECHARTS_DATA_ERROR,
   GET_RECHARTS_COLORS,
   GET_RECHARTS_COLORS_SUCCESS,
   GET_RECHARTS_COLORS_ERROR,
@@ -477,20 +475,6 @@ export function getSavingsSuccessAction(savings) {
 }
 
 /**
- * Dispatched when loading the savings fails
- *
- * @param  {object} error The error
- *
- * @return {object} An action object with a type of GET_SAVINGS_ERROR passing the repos
- */
-export function getSavingsErrorAction(error) {
-  return {
-    type: GET_SAVINGS_ERROR,
-    error,
-  };
-}
-
-/**
  * Get the account balance history of user, this action starts the request saga
  *
  * @return {object} An action object with a type of GET_ACCOUNT_BALANCE_HISTORY
@@ -711,20 +695,6 @@ export function getRechartsDataSuccessAction(rechartsData) {
   return {
     type: GET_RECHARTS_DATA_SUCCESS,
     rechartsData,
-  };
-}
-
-/**
- * Dispatched when loading the recharts data fails
- *
- * @param  {object} error The error
- *
- * @return {object} An action object with a type of GET_RECHARTS_DATA_ERROR passing the repos
- */
-export function getRechartsDataErrorAction(error) {
-  return {
-    type: GET_RECHARTS_DATA_ERROR,
-    error,
   };
 }
 

@@ -56,7 +56,7 @@ export function* handleLogout() {
 
     const { success } = response;
     if (!success) return yield put(logoutErrorAction('error'));
-    
+
     yield put(logoutSuccessAction());
     auth.unsetToken();
     yield put(push('/'));
@@ -99,7 +99,7 @@ export function* handleNotifications() {
     if (!isNotification) return;
 
     yield put(checkNewNotificationsSuccessAction(notificationCount));
-    yield put(getNewNotificationsAction());    
+    yield put(getNewNotificationsAction());
   } catch (error) {
     yield put(checkNewNotificationsErrorAction(error));
   }
@@ -124,7 +124,8 @@ export function* getNewNotifications() {
     });
 
     const { success, notifications } = response;
-    if (!success || !notifications) return yield put(getNewNotificationsErrorAction('error'));
+    if (!success || !notifications)
+      return yield put(getNewNotificationsErrorAction('error'));
 
     const transformNewNotifications = notifications.map(
       ({ ...newNotification }) => ({
@@ -152,33 +153,32 @@ export function* handleNewNotifications() {
   const notificationCount = yield select(makeNotificationCountSelector());
 
   if (!notificationCount) return;
-  
+
   try {
     yield put(unsetNewNotificationsAction());
-    
+
     const response = yield call(request, requestURL, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
-        },
-      });
+      },
+    });
 
-      const { success } = response;
-      if (!success) return yield put(unsetNewNotificationsErrorAction('error'));
+    const { success } = response;
+    if (!success) return yield put(unsetNewNotificationsErrorAction('error'));
 
-      yield put(unsetNewNotificationsSuccessAction());
-    } catch (error) {
-      yield put(unsetNewNotificationsErrorAction(error));
-    }
+    yield put(unsetNewNotificationsSuccessAction());
+  } catch (error) {
+    yield put(unsetNewNotificationsErrorAction(error));
+  }
 }
 
 export default function* appPageSaga() {
   yield takeLatest(LOGOUT, handleLogout);
   yield takeLatest(IS_LOGGED, handleLogged);
   yield takeLatest(CHECK_NEW_NOTIFICATIONS, handleNotifications);
-  yield takeLatest(GET_NEW_NOTIFICATIONS, getNewNotifications)
+  yield takeLatest(GET_NEW_NOTIFICATIONS, getNewNotifications);
   yield takeLatest(TOGGLE_NOTIFICATIONS, handleNewNotifications);
-
 }

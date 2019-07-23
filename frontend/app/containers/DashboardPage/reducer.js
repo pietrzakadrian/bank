@@ -6,12 +6,7 @@
 import produce from 'immer';
 import { LOGOUT_SUCCESS, LOGOUT_ERROR } from 'containers/App/constants';
 import { MAKE_PAYMENT_SUCCESS } from 'containers/PaymentPage/constants';
-import {
-  ENTER_NEW_NAME_SUCCESS,
-  ENTER_NEW_SURNAME_SUCCESS,
-  ENTER_NEW_EMAIL_SUCCESS,
-  ENTER_NEW_CURRENCY_SUCCESS,
-} from 'containers/SettingsPage/constants';
+import { ENTER_NEW_CURRENCY_SUCCESS } from 'containers/SettingsPage/constants';
 import {
   GET_NAME_SUCCESS,
   GET_NAME_ERROR,
@@ -44,11 +39,9 @@ import {
   GET_CURRENCY_ID_SUCCESS,
   GET_CURRENCY_ID_ERROR,
   GET_RECHARTS_DATA_SUCCESS,
-  GET_RECHARTS_DATA_ERROR,
   GET_RECHARTS_COLORS_SUCCESS,
   GET_RECHARTS_COLORS_ERROR,
   GET_SAVINGS_SUCCESS,
-  GET_SAVINGS_ERROR,
 } from './constants';
 
 export const initialState = {
@@ -170,9 +163,6 @@ const dashboardPageReducer = produce((draft, action) => {
     case GET_RECHARTS_DATA_SUCCESS:
       draft.rechartsData = action.rechartsData;
       break;
-    case GET_RECHARTS_DATA_ERROR:
-      draft.error = action.error;
-      break;
     case GET_RECHARTS_COLORS_SUCCESS:
       draft.rechartsColors = action.rechartsColors;
       break;
@@ -181,18 +171,6 @@ const dashboardPageReducer = produce((draft, action) => {
       break;
     case GET_SAVINGS_SUCCESS:
       draft.savings = action.savings;
-      break;
-    case GET_SAVINGS_ERROR:
-      draft.error = action.error;
-      break;
-    case ENTER_NEW_NAME_SUCCESS:
-      draft.name = '';
-      break;
-    case ENTER_NEW_SURNAME_SUCCESS:
-      draft.surname = '';
-      break;
-    case ENTER_NEW_EMAIL_SUCCESS:
-      draft.email = '';
       break;
     case ENTER_NEW_CURRENCY_SUCCESS:
       draft.currency = '';

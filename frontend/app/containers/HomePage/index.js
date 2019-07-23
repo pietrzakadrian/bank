@@ -5,36 +5,23 @@
  */
 
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { useDispatch } from 'react-redux';
 import { useInjectSaga } from 'utils/injectSaga';
+
+// Import Actions
 import { isLoggedAction } from './actions';
 
 import saga from './saga';
 
-export function HomePage({ isLogged }) {
+export default function HomePage() {
+  const dispatch = useDispatch();
+  const isLogged = () => dispatch(isLoggedAction());
+
   useInjectSaga({ key: 'homePage', saga });
+
   useEffect(() => {
     isLogged();
   }, []);
 
   return null;
 }
-
-HomePage.propTypes = {
-  isLogged: PropTypes.func,
-};
-
-function mapDispatchToProps(dispatch) {
-  return {
-    isLogged: () => dispatch(isLoggedAction()),
-  };
-}
-
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
-
-export default compose(withConnect)(HomePage);

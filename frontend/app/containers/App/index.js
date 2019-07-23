@@ -9,9 +9,7 @@
 
 import React, { Fragment } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { useInjectSaga } from 'utils/injectSaga';
 import GlobalStyle from 'global-styles';
-import saga from './saga';
 
 // Import Containers
 import HomePage from 'containers/HomePage/Loadable';

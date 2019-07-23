@@ -20,10 +20,7 @@ import {
   makeAuthorizationKeySelector,
   makeIsSendAuthorizationKeySelector,
 } from 'containers/PaymentPage/selectors';
-import {
-  makeTokenSelector,
-  makeIsOpenNavigationDesktopSelector,
-} from 'containers/App/selectors';
+import { makeIsOpenNavigationDesktopSelector } from 'containers/App/selectors';
 
 // Import Actions
 import { enqueueSnackbarAction } from 'containers/App/actions';
@@ -172,7 +169,6 @@ export function* handleAccountNumber() {
         ),
       );
 
- 
     yield put(
       enterAccountNumberSuccessAction(
         recipientId,
@@ -275,11 +271,11 @@ export function* handleRegisterTransaction() {
     const { success } = response;
     if (!success) return yield put(sendAuthorizationKeyErrorAction('error'));
 
-      yield put(
-        sendAuthorizationKeySuccessAction(
-          <FormattedMessage {...messages.keyHasBeenSent} />,
-        ),
-      );
+    yield put(
+      sendAuthorizationKeySuccessAction(
+        <FormattedMessage {...messages.keyHasBeenSent} />,
+      ),
+    );
   } catch (error) {
     yield put(sendAuthorizationKeyErrorAction(error));
   }

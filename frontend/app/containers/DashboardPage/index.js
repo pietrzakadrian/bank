@@ -7,11 +7,7 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
 import MediaQuery from 'react-responsive';
-import reducer from './reducer';
-import saga from './saga';
 
 // Import Components
 import { Responsive, WidthProvider } from 'react-grid-layout';
@@ -52,9 +48,6 @@ function saveToLS(key, value) {
 }
 
 export default function DashboardPage() {
-  useInjectReducer({ key: 'dashboardPage', reducer });
-  useInjectSaga({ key: 'dashboardPage', saga });
-
   const ResponsiveGridLayout = WidthProvider(Responsive);
   const originalLayouts = getFromLS('layouts') || {};
 

@@ -61,11 +61,9 @@ export default function RecentTransactions() {
     dispatch(getRecentTransactionsRecipientAction());
   const getRecentTransactionsSender = () =>
     dispatch(getRecentTransactionsSenderAction());
-  const {
-    recentTransactionsRecipient,
-    recentTransactionsSender,
-  } = useSelector(stateSelector);
-
+  const { recentTransactionsRecipient, recentTransactionsSender } = useSelector(
+    stateSelector,
+  );
 
   useInjectSaga({ key, saga });
   useInjectReducer({ key, reducer });
