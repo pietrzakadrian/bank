@@ -1,5 +1,5 @@
 import { select, call, put, takeLatest, throttle } from 'redux-saga/effects';
-import api from 'api';
+import ApiEndpoint from 'utils/api';
 import React from 'react';
 import request from 'utils/request';
 import { push } from 'connected-react-router';

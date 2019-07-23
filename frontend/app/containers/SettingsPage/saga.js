@@ -1,7 +1,7 @@
 import React from 'react';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
-import api from 'api';
+import ApiEndpoint from 'utils/api';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/SettingsPage/messages';
 
@@ -27,7 +27,6 @@ import {
 } from 'containers/SettingsPage/selectors';
 
 // Import Actions
-import { enterSurnameSuccessAction } from 'containers/RegisterPage/actions';
 import {
   loadUserDataSuccessAction,
   loadUserDataErrorAction,
@@ -43,8 +42,10 @@ import {
   enterNewEmailErrorAction,
   saveDataErrorAction,
   enterNewNameSuccessAction,
+  enterNewSurnameSuccessAction,
   enterNewEmailSuccessAction,
   enterNewPasswordSuccessAction,
+  enterNewCurrencySuccessAction,
   saveDataSuccessAction,
 } from 'containers/SettingsPage/actions';
 
@@ -55,7 +56,6 @@ import {
   SAVE_DATA,
   ENTER_NEW_CURRENCY,
 } from 'containers/SettingsPage/constants';
-import { enterNewCurrencySuccessAction, enterNewSurnameSuccessAction } from './actions';
 
 export function* handleUserData() {
   const auth = new AuthService();
@@ -67,7 +67,7 @@ export function* handleUserData() {
   const requestUserData = api.usersPath;
   const requestBillsData = api.billsPath;
 
-  if ((!userName || !userSurname || !userEmail) || !currencyId) {
+  if (!userName || !userSurname || !userEmail || !currencyId) {
     try {
       const responseUserData = yield call(request, requestUserData, {
         method: 'GET',
@@ -187,7 +187,13 @@ export function* handleSaveData() {
         if (name) yield put(enterNewNameSuccessAction(name));
         if (surname) yield put(enterNewSurnameSuccessAction(surname));
         if (password) yield put(enterNewPasswordSuccessAction(password));
-        if (currencyId) return yield put(enterNewCurrencySuccessAction(<FormattedMessage {...messages.saveCurrencySuccess} />, currencyId));
+        if (currencyId)
+          return yield put(
+            enterNewCurrencySuccessAction(
+              <FormattedMessage {...messages.saveCurrencySuccess} />,
+              currencyId,
+            ),
+          );
 
         yield put(
           saveDataSuccessAction(

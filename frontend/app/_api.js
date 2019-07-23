@@ -113,7 +113,7 @@ const api = {
   },
 
   get notificationsPath() {
-    return `${BASE_URL}${ADDITIONALS_PATH}/notifications${this._offset &&
+    return `${BASE_URL}${ADDITIONALS_PATH}/notifications/${this._offset &&
       this._offset}`;
   },
 

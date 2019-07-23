@@ -2,7 +2,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 import { format } from 'date-fns';
-import api from 'api';
+import ApiEndpoint from 'utils/api';
 import AuthService from 'services/auth.service';
 
 // Import Selectors

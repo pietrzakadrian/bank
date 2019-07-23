@@ -1,8 +1,10 @@
-import { all, call, put, select, takeLatest, takeMaybe } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
 import { format } from 'date-fns';
-import api from 'api';
+import ApiEndpoint from 'utils/api';
+
+// Import Services
 import AuthService from 'services/auth.service';
 
 // Import Utils
@@ -79,11 +81,10 @@ import {
 
 export function* handleUserdata() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
   const locale = yield select(makeSelectLocale());
-  const requestURL = api.usersPath;
-
-  console.log('wchodze tu?');
+  const requestURL = api.getUsersPath();
 
   try {
     const response = yield call(request, requestURL, {
@@ -146,8 +147,9 @@ export function* handleUserdata() {
 
 export function* handleAccountingData() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
-  const requestURL = api.billsPath;
+  const requestURL = api.getBillsPath();
 
   try {
     const response = yield call(request, requestURL, {
@@ -236,9 +238,10 @@ export function* handleRecentTransactions() {
 
 function* getRecentTransactionsSender() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
   const userId = auth.getUserId();
-  const requestURL = api.senderPath;
+  const requestURL = api.getSenderPath();
 
   try {
     const response = yield call(request, requestURL, {
@@ -280,9 +283,10 @@ function* getRecentTransactionsSender() {
 
 function* getRecentTransactionsRecipient() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
   const userId = auth.getUserId();
-  const requestURL = api.recipientPath;
+  const requestURL = api.getRecipientPath();
 
   try {
     const response = yield call(request, requestURL, {
@@ -377,7 +381,15 @@ function* handleRecharts() {
 }
 
 export default function* dashboardPageSaga() {
-  yield  takeLatest(GET_NAME || GET_SURNAME || GET_EMAIL || GET_LAST_FAILED_LOGGED || GET_LAST_PRESENT_LOGGED || GET_LAST_SUCCESSFUL_LOGGED, handleUserdata);
+  yield takeLatest(
+    GET_NAME ||
+      GET_SURNAME ||
+      GET_EMAIL ||
+      GET_LAST_FAILED_LOGGED ||
+      GET_LAST_PRESENT_LOGGED ||
+      GET_LAST_SUCCESSFUL_LOGGED,
+    handleUserdata,
+  );
 
   yield takeLatest(
     GET_AVAILABLE_FUNDS ||
@@ -389,7 +401,7 @@ export default function* dashboardPageSaga() {
       GET_SAVINGS,
     handleAccountingData,
   );
-  
+
   yield takeLatest(
     GET_RECENT_TRANSACTIONS_RECIPIENT || GET_RECENT_TRANSACTIONS_SENDER,
     handleRecentTransactions,

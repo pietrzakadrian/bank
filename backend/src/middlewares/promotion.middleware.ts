@@ -53,6 +53,7 @@ export default async function promotion(user: User) {
 
     await additionalService.setWidgetStatus(user);
     await additionalService.setWidgetStatus(sender);
+    await additionalService.setNotification(user);
   } catch (error) {
     return Promise.reject(error);
   }

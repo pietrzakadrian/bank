@@ -112,6 +112,7 @@ confirmRouter
 
         await additionalService.setWidgetStatus(user);
         await additionalService.setWidgetStatus(recipient);
+        await additionalService.setNotification(recipient);
 
         return res.status(HttpStatus.OK).json({
           success: true

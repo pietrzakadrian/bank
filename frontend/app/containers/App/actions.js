@@ -197,8 +197,6 @@ export function isLoggedAction() {
 /**
  * User login to the application, this is the global action
  *
- * @param  {number} userId The userId
- *
  * @return {object} An action object with a type of LOGGED_IN
  */
 export function loggedInAction(userId) {

@@ -3,7 +3,7 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { FormattedMessage } from 'react-intl';
 import { push } from 'connected-react-router';
 import request from 'utils/request';
-import api from 'api';
+import ApiEndpoint from 'utils/api';
 import messages from 'containers/RegisterPage/messages';
 
 // Import Selectors
@@ -287,7 +287,7 @@ function* registerAttempt() {
         options: {
           key: new Date().getTime() + Math.random(),
           variant: 'success',
-          autoHideDuration: 20000,
+          autoHideDuration: 3000,
         },
       }),
     );

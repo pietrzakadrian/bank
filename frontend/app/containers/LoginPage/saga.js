@@ -3,7 +3,7 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { FormattedMessage } from 'react-intl';
 import request from 'utils/request';
 import { push } from 'connected-react-router';
-import api from 'api';
+import ApiEndpoint from 'utils/api';
 import messages from 'containers/LoginPage/messages';
 
 // Import Services
@@ -31,7 +31,6 @@ import { loggedInAction } from 'containers/App/actions';
 // Import Constants
 import { ENTER_LOGIN, ENTER_PASSWORD, IS_LOGGED } from './constants';
 
-
 export function* handleLogged() {
   const auth = new AuthService();
   const isLogged = auth.loggedIn();
@@ -40,9 +39,9 @@ export function* handleLogged() {
 }
 
 export function* handleLogin() {
+  const api = new ApiEndpoint();
   const login = yield select(makeLoginSelector());
-  api.login = login;
-  const requestURL = api.isLoginPath;
+  const requestURL = api.getIsLoginPath(login);
   const isNumber = /^\d+$/;
   const limit = 20;
 
@@ -93,10 +92,11 @@ export function* handlePassword() {
 }
 
 function* loginAttempt() {
+  const api = new ApiEndpoint();
+  const auth = new AuthService();
   const login = yield select(makeLoginSelector());
   const password = yield select(makePasswordSelector());
-  const requestURL = api.loginPath;
-  const auth = new AuthService();
+  const requestURL = api.getLoginPath();
 
   if (!login || !password)
     return yield put(

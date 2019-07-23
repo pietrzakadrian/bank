@@ -26,7 +26,6 @@ import {
 } from './constants';
 
 export const initialState = {
-  userId: '',
   messages: [],
   messageCount: 0,
   notifications: [],
@@ -97,7 +96,6 @@ const appPageReducer = produce((draft, action) => {
       break;
     case LOGOUT_SUCCESS:
       draft.userId = '';
-      draft.token = '';
       draft.error = '';
       draft.messages = [];
       draft.notifications = [];
@@ -111,7 +109,6 @@ const appPageReducer = produce((draft, action) => {
       break;
     case LOGOUT_ERROR:
       draft.userId = '';
-      draft.token = '';
       draft.error = '';
       draft.messages = [];
       draft.notifications = [];

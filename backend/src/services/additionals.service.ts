@@ -112,7 +112,7 @@ export class AdditionalService {
   }
 
   /**
-   * Returns user's new notification's
+   * Returns user's new notifications
    */
   async getNotifications(
     recipient: User,
@@ -255,5 +255,36 @@ export class AdditionalService {
       { user },
       { accountBalanceHistory, outgoingTransfersSum, incomingTransfersSum }
     );
+  }
+
+  /**
+   * Sets user's new notification
+   */
+  async setNotification(user: User): Promise<object> {
+    try {
+      const userAdditional: Additional = await this.additionalRepository.findOne(
+        {
+          where: {
+            user
+          }
+        }
+      );
+
+      console.log("userAdditional", userAdditional);
+      if (!userAdditional) return;
+
+      const notificationCount: number = userAdditional.notificationCount;
+
+      return await this.additionalRepository.update(
+        { user },
+        {
+          notificationCount: notificationCount + 1,
+          notificationStatus: true
+        }
+      );
+    } catch (error) {
+      console.log("error", error);
+      return Promise.reject(error);
+    }
   }
 }

@@ -2,15 +2,11 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { format } from 'date-fns';
 import request from 'utils/request';
-import decode from 'jwt-decode';
-import api from 'api';
+import ApiEndpoint from 'utils/api';
 import AuthService from 'services/auth.service';
 
 // Import Selectors
 import {
-  makeIsLoggedSelector,
-  makeUserIdSelector,
-  makeTokenSelector,
   makeNotificationCountSelector,
   makeIsOpenNotificationsSelector,
   makeNotificationsSelector,
@@ -41,8 +37,9 @@ import {
 
 export function* handleLogout() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
-  const requestURL = api.logoutPath;
+  const requestURL = api.getLogoutPath();
 
   try {
     const response = yield call(request, requestURL, {
@@ -79,8 +76,9 @@ export function* handleLogged() {
 
 export function* handleNotifications() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
-  const requestURL = api.isNotificationPath;
+  const requestURL = api.getIsNotificationPath();
 
   try {
     const response = yield call(request, requestURL, {
@@ -96,6 +94,8 @@ export function* handleNotifications() {
 
     if (isNotification) {
       yield put(checkNewNotificationsSuccessAction(notificationCount));
+
+      console.log('isNotification', isNotification);
       yield call(getNewNotifications);
     }
   } catch (error) {
@@ -106,10 +106,11 @@ export function* handleNotifications() {
 export function* getNewNotifications() {
   const locale = yield select(makeSelectLocale());
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
   const notificationCount = yield select(makeNotificationCountSelector());
-  api.offset = notificationCount;
-  const requestURL = api.notificationsPath;
+  const requestURL = api.getNotificationsPath(notificationCount);
+
   try {
     yield put(getNewNotificationsAction());
 
@@ -134,12 +135,12 @@ export function* getNewNotifications() {
         ),
         sender_name: `${newNotification.user_name} ${newNotification.user_surname}`,
         amount_money: `${newNotification.transaction_amountMoney
-          .toFixed(2)
-          .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
           .replace('.', ',')} ${newNotification.currency_name}`,
       }),
     );
+
+    console.log('transformNewNotifications', transformNewNotifications);
 
     yield put(getNewNotificationsSuccessAction(transformNewNotifications));
   } catch (error) {
@@ -151,8 +152,9 @@ export function* handleNewNotifications() {
   const isOpenNotifications = yield select(makeIsOpenNotificationsSelector());
   const notifications = yield select(makeNotificationsSelector());
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
-  const requestURL = api.notificationsPath;
+  const requestURL = api.getNotificationsPath();
 
   if (isOpenNotifications && notifications.length) {
     try {
@@ -181,5 +183,5 @@ export default function* appPageSaga() {
   yield takeLatest(LOGOUT, handleLogout);
   yield takeLatest(IS_LOGGED, handleLogged);
   yield takeLatest(CHECK_NEW_NOTIFICATIONS, handleNotifications);
-  yield takeLatest(TOGGLE_NOTIFICATIONS, handleNewNotifications);
+  // yield takeLatest(TOGGLE_NOTIFICATIONS, handleNewNotifications);
 }
