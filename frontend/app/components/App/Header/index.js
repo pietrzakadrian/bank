@@ -56,6 +56,7 @@ import {
 
 // Import Selectors
 import {
+  makeIsLoggedSelector,
   makeIsOpenNavigationDesktopSelector,
   makeIsOpenNotificationsSelector,
   makeIsOpenMessagesSelector,
@@ -66,6 +67,7 @@ import {
 } from 'containers/App/selectors';
 
 const stateSelector = createStructuredSelector({
+  isLogged: makeIsLoggedSelector(),
   isOpenNavigationDesktop: makeIsOpenNavigationDesktopSelector(),
   isOpenNotifications: makeIsOpenNotificationsSelector(),
   isOpenMessages: makeIsOpenMessagesSelector(),
@@ -75,7 +77,7 @@ const stateSelector = createStructuredSelector({
   messageCount: makeMessageCountSelector(),
 });
 
-const key = 'dashboardPage';
+const key = 'appPage';
 const title = {
   '/dashboard': <FormattedMessage {...messages.dashboardTitle} />,
   '/payment': <FormattedMessage {...messages.paymentTitle} />,
@@ -114,26 +116,29 @@ export default function Header({ children, location }) {
   const onToggleNavigationMobile = () =>
     dispatch(toggleNavigationMobileAction());
   const onLogout = () => dispatch(logoutAction());
-  const isLogged = () => dispatch(isLoggedAction());
+  const onCheckUserLogged = () => dispatch(isLoggedAction());
   const onToggleMessages = () => dispatch(toggleMessagesAction());
   const onToggleNotifications = () => dispatch(toggleNotificationsAction());
   const onCheckNewNotifications = () => dispatch(checkNewNotificationsAction());
   const onCheckNewMessages = () => dispatch(checkNewMessagesAction());
   const {
+    isLogged,
     notificationCount,
     messageCount,
     isOpenNavigationDesktop,
     isNewMessages,
     isNewNotifications,
   } = useSelector(stateSelector);
-
+  
   useInjectSaga({ key, saga });
 
   useEffect(() => {
-    isLogged();
-    onCheckNewNotifications();
-    onCheckNewMessages();
-  }, []);
+    if (!isLogged) onCheckUserLogged();
+    else {
+        onCheckNewNotifications();
+        onCheckNewMessages();
+    }
+  }, [isLogged]);
 
   useOutsideWidgetDisabled(refWrapper);
 
@@ -262,7 +267,7 @@ Header.propTypes = {
   ]),
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
-    key: PropTypes.string.isRequired,
+    key: PropTypes.string,
     search: PropTypes.string,
     state: PropTypes.object,
     hash: PropTypes.string,

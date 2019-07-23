@@ -118,10 +118,6 @@ export default function SettingsForm() {
   useInjectSaga({ key, saga });
 
   useEffect(() => {
-    console.log('name', name);
-    console.log('surname', surname);
-    console.log('email', email);
-    console.log('currencyId', currencyId);
     if (!name || !surname || !email || !currencyId) onLoadUserData();
     if (currency.length === 0) onLoadCurrency();
   }, []);

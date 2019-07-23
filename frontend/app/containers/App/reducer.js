@@ -7,6 +7,9 @@ import produce, { setAutoFreeze } from 'immer';
 
 import {
   LOGGED_IN,
+  IS_LOGGED,
+  IS_LOGGED_SUCCESS,
+  IS_LOGGED_ERROR,
   LOGOUT,
   LOGOUT_SUCCESS,
   LOGOUT_ERROR,
@@ -26,6 +29,7 @@ import {
 } from './constants';
 
 export const initialState = {
+  isLogged: false,
   messages: [],
   messageCount: 0,
   notifications: [],
@@ -49,6 +53,7 @@ const appPageReducer = produce((draft, action) => {
       break;
     case UNSET_NEW_NOTIFICATIONS_SUCCESS:
       draft.notificationCount = 0;
+      draft.isNewNotifications = false;
       break;
     case UNSET_NEW_NOTIFICATIONS_ERROR:
       draft.error = action.error;
@@ -84,19 +89,23 @@ const appPageReducer = produce((draft, action) => {
       break;
     case TOGGLE_NOTIFICATIONS:
       draft.isOpenNotifications = !draft.isOpenNotifications;
-      draft.isNewNotifications = false;
       draft.isOpenMessages = false;
-      draft.notificationCount = 0;
       break;
     case LOGGED_IN:
-      draft.userId = action.userId;
+      draft.isLogged = true;
+      break;
+      case IS_LOGGED_SUCCESS:
+      draft.isLogged = true;
+      break;
+    case IS_LOGGED_ERROR:
+      draft.isLogged = false;
       break;
     case LOGOUT:
       draft.error = '';
       break;
     case LOGOUT_SUCCESS:
-      draft.userId = '';
       draft.error = '';
+      draft.isLogged = false;
       draft.messages = [];
       draft.notifications = [];
       draft.snackbars = [];
@@ -108,11 +117,11 @@ const appPageReducer = produce((draft, action) => {
       draft.isNewMessages = false;
       break;
     case LOGOUT_ERROR:
-      draft.userId = '';
       draft.error = '';
       draft.messages = [];
       draft.notifications = [];
       draft.snackbars = [];
+      draft.isLogged = false;
       draft.isOpenNavigationMobile = false;
       draft.isOpenNavigationDesktop = true;
       draft.isOpenNotifications = false;

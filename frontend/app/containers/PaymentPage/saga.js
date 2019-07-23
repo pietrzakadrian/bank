@@ -1,10 +1,14 @@
 import { select, call, put, takeLatest, throttle } from 'redux-saga/effects';
-import ApiEndpoint from 'utils/api';
 import React from 'react';
-import request from 'utils/request';
 import { push } from 'connected-react-router';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/PaymentPage/messages';
+
+// Import Utils
+import request from 'utils/request';
+import ApiEndpoint from 'utils/api';
+
+// Import Services
 import AuthService from 'services/auth.service';
 
 // Import Selectors
@@ -58,8 +62,9 @@ import {
 
 export function* handleCurrency() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
-  const requestURL = api.billsPath;
+  const requestURL = api.getBillsPath();
 
   try {
     const response = yield call(request, requestURL, {
@@ -71,10 +76,7 @@ export function* handleCurrency() {
       },
     });
 
-    if (!response) return yield put(getCurrencyErrorAction('error'));
-
     const { currency } = response;
-
     yield put(getCurrencySuccessAction(currency.name));
   } catch (error) {
     yield put(getCurrencyErrorAction(error));
@@ -83,10 +85,10 @@ export function* handleCurrency() {
 
 export function* searchAccountNumber() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
-  api.accountBill = accountBill;
-  const requestURL = api.searchPath;
+  const requestURL = api.getSearchPath(accountBill);
   const limit = 26;
   const isNumber = /^\d+$/;
 
@@ -116,7 +118,7 @@ export function* searchAccountNumber() {
       });
 
       const { bills } = response;
-      if (response) yield put(searchAccountBillsSuccessAction(bills));
+      yield put(searchAccountBillsSuccessAction(bills));
     } catch (error) {
       yield put(searchAccountBillsErrorAction(error));
     }
@@ -125,10 +127,10 @@ export function* searchAccountNumber() {
 
 export function* handleAccountNumber() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
-  api.accountBill = accountBill;
-  const requestURL = api.isAccountBillPath;
+  const requestURL = api.getIsAccountBillPath(accountBill);
   const isNumber = /^\d+$/;
   const limit = 26;
 
@@ -170,6 +172,7 @@ export function* handleAccountNumber() {
         ),
       );
 
+ 
     yield put(
       enterAccountNumberSuccessAction(
         recipientId,
@@ -185,10 +188,10 @@ export function* handleAccountNumber() {
 
 export function* handleAmountMoney() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
   const amountMoney = yield select(makeAmountMoneySelector());
-  api.amountMoney = amountMoney;
-  const requestURL = api.isAmountMoneyPath;
+  const requestURL = api.getIsAmountMoneyPath(amountMoney);
 
   if (!amountMoney)
     return yield put(
@@ -247,11 +250,12 @@ export function* handleTransferTitle() {
 
 export function* handleRegisterTransaction() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
   const amountMoney = yield select(makeAmountMoneySelector());
   const transferTitle = yield select(makeTransferTitleSelector());
-  const requestURL = api.createPath;
+  const requestURL = api.getCreatePath();
 
   try {
     const response = yield call(request, requestURL, {
@@ -269,8 +273,8 @@ export function* handleRegisterTransaction() {
     });
 
     const { success } = response;
+    if (!success) return yield put(sendAuthorizationKeyErrorAction('error'));
 
-    if (success)
       yield put(
         sendAuthorizationKeySuccessAction(
           <FormattedMessage {...messages.keyHasBeenSent} />,
@@ -283,6 +287,7 @@ export function* handleRegisterTransaction() {
 
 export function* handleConfirmTransaction() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
   const amountMoney = yield select(makeAmountMoneySelector());
@@ -291,7 +296,7 @@ export function* handleConfirmTransaction() {
   const isOpenNavigationDesktop = yield select(
     makeIsOpenNavigationDesktopSelector(),
   );
-  const requestURL = api.confirmPath;
+  const requestURL = api.getConfirmPath();
 
   if (!authorizationKey)
     return yield put(
@@ -348,13 +353,13 @@ export function* handleConfirmTransaction() {
 
 export function* handleAuthorizationKey() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
   const recipientId = yield select(makeRecipientIdSelector());
   const isSendAuthorizationKey = yield select(
     makeIsSendAuthorizationKeySelector(),
   );
-  api.id = recipientId;
-  const requestURL = api.authorizationKeyPath;
+  const requestURL = api.getAuthorizationKeyPath(recipientId);
 
   if (!isSendAuthorizationKey)
     return yield put(

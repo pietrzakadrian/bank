@@ -58,14 +58,15 @@ import {
 } from 'containers/SettingsPage/constants';
 
 export function* handleUserData() {
+  const api = new ApiEndpoint();
   const auth = new AuthService();
   const token = auth.getToken();
   const userName = yield select(makeNameSelector());
   const userSurname = yield select(makeSurnameSelector());
   const userEmail = yield select(makeEmailSelector());
   const currencyId = yield select(makeCurrencyIdSelector());
-  const requestUserData = api.usersPath;
-  const requestBillsData = api.billsPath;
+  const requestUserData = api.getUsersPath();
+  const requestBillsData = api.getBillsPath();
 
   if (!userName || !userSurname || !userEmail || !currencyId) {
     try {
@@ -113,8 +114,9 @@ export function* handleUserData() {
 
 export function* handleCurrency() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
-  const requestURL = api.currencyPath;
+  const requestURL = api.getCurrencyPath();
 
   try {
     const response = yield call(request, requestURL, {
@@ -125,26 +127,26 @@ export function* handleCurrency() {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    if (response) {
+    
       const { currency } = response;
       const transformCurrency = currency.map(item => item.id);
       yield put(loadCurrencySuccessAction(transformCurrency));
-    }
   } catch (error) {
     yield put(loadCurrencyErrorAction(error));
   }
 }
 
 export function* handleSaveData() {
+  const auth = new AuthService();
+  const api = new ApiEndpoint();
+  const token = auth.getToken();
+  const requestURL = api.getUsersPath();
   let name = yield select(makeNewNameSelector());
   let surname = yield select(makeNewSurnameSelector());
   let password = yield select(makeNewPasswordSelector());
   let email = yield select(makeNewEmailSelector());
   let currencyId = yield select(makeNewCurrencyIdSelector());
-  const auth = new AuthService();
-  const token = auth.getToken();
-  const requestURL = api.usersPath;
+
 
   yield all([
     name ? call(handleName) : (name = null),
@@ -282,9 +284,9 @@ function* handlePassword() {
 }
 
 function* handleEmail() {
+  const api = new ApiEndpoint();
   const email = yield select(makeNewEmailSelector());
-  api.email = email;
-  const requestURL = api.isEmailPath;
+  const requestURL = api.getIsEmailPath(email);
   const isEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   const limit = 255;
 

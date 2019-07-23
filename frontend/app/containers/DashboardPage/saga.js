@@ -1,8 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-import request from 'utils/request';
 import { push } from 'connected-react-router';
 import { format } from 'date-fns';
-import ApiEndpoint from 'utils/api';
 
 // Import Services
 import AuthService from 'services/auth.service';
@@ -13,6 +11,8 @@ import {
   PRIMARY_BLUE_LIGHT,
   PRIMARY_RED,
 } from 'utils/colors';
+import ApiEndpoint from 'utils/api';
+import request from 'utils/request';
 
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 import {
@@ -96,7 +96,6 @@ export function* handleUserdata() {
       },
     });
 
-    if (response) {
       const {
         name,
         surname,
@@ -105,15 +104,16 @@ export function* handleUserdata() {
         lastSuccessfulLoggedDate,
         lastFailedLoggedDate,
       } = response;
-      const lastPresentLogged = format(
+
+      const formatLastPresentLoggedDate = format(
         lastPresentLoggedDate,
         `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
       );
-      const lastSuccessfulLogged = format(
+      const formatLastSuccessfulLoggedDate = format(
         lastSuccessfulLoggedDate,
         `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
       );
-      const lastFailedLogged = format(
+      const formatLastFailedLoggedDate = format(
         lastFailedLoggedDate,
         `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
       );
@@ -127,18 +127,14 @@ export function* handleUserdata() {
       if (!email) yield put(getEmailErrorAction('error'));
       else yield put(getEmailSuccessAction(email));
 
-      if (!lastPresentLogged)
-        yield put(getLastPresentLoggedErrorAction('error'));
-      else yield put(getLastPresentLoggedSuccessAction(lastPresentLogged));
+      if (lastPresentLoggedDate === null) yield put(getLastPresentLoggedErrorAction('error'));
+      else yield put(getLastPresentLoggedSuccessAction(formatLastPresentLoggedDate));
 
-      if (!lastSuccessfulLogged)
-        yield put(getLastSuccessfulLoggedErrorAction('error'));
-      else
-        yield put(getLastSuccessfulLoggedSuccessAction(lastSuccessfulLogged));
+      if (lastSuccessfulLoggedDate === null) yield put(getLastSuccessfulLoggedErrorAction('error'));
+      else yield put(getLastSuccessfulLoggedSuccessAction(formatLastSuccessfulLoggedDate));
 
-      if (!lastFailedLogged) yield put(getLastFailedLoggedErrorAction('error'));
-      else yield put(getLastFailedLoggedSuccessAction(lastFailedLogged));
-    }
+      if (lastFailedLoggedDate === null) yield put(getLastFailedLoggedErrorAction('error'));
+      else yield put(getLastFailedLoggedSuccessAction(formatLastFailedLoggedDate));
   } catch (error) {
     yield put(logoutErrorAction(error));
     yield put(push('/'));
@@ -163,12 +159,10 @@ export function* handleAccountingData() {
 
     const { availableFunds, accountBill, currency, additionals } = response;
 
-    if (response) {
       if (availableFunds || availableFunds === 0)
         yield put(
           getAvailableFundsSuccessAction(
             availableFunds
-              .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
               .replace('.', ','),
           ),
@@ -179,7 +173,7 @@ export function* handleAccountingData() {
         yield put(
           getAccountBillsSuccessAction(
             accountBill
-              .toString()
+
               .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
               .trim(),
           ),
@@ -221,7 +215,7 @@ export function* handleAccountingData() {
           ),
         );
       else yield put(getOutgoingTransfersSumErrorAction('error'));
-    }
+    
 
     yield call(handleRecharts);
   } catch (error) {
@@ -253,8 +247,8 @@ function* getRecentTransactionsSender() {
       },
     });
 
-    if (response) {
-      const recentTransactionsSender = response.senderTransactions.map(
+    const { senderTransactions } = response;
+    const transformSenderTransactions = senderTransactions.map(
         ({ ...transaction }) => ({
           id_sender: userId,
           amount_money: `-${transaction.transaction_amountMoney
@@ -272,10 +266,9 @@ function* getRecentTransactionsSender() {
         }),
       );
 
-      yield put(
-        getRecentTransactionsSenderSuccessAction(recentTransactionsSender),
-      );
-    } else yield put(getRecentTransactionsSenderErrorAction('error'));
+    yield put(
+      getRecentTransactionsSenderSuccessAction(transformSenderTransactions),
+    );
   } catch (error) {
     yield put(getRecentTransactionsSenderErrorAction(error));
   }
@@ -297,8 +290,10 @@ function* getRecentTransactionsRecipient() {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (response) {
-      const recentTransactionsRecipient = response.recipientTransactions.map(
+
+    const { recipientTransactions } = response;
+
+      const transformRecipientTransactions = recipientTransactions.map(
         ({ ...transaction }) => ({
           amount_money: transaction.transaction_amountMoney
             .toString()
@@ -318,12 +313,12 @@ function* getRecentTransactionsRecipient() {
 
       yield put(
         getRecentTransactionsRecipientSuccessAction(
-          recentTransactionsRecipient,
+          transformRecipientTransactions,
         ),
       );
-    } else yield put(getRecentTransactionsRecipientErrorAction('error'));
+
   } catch (error) {
-    yield put(getRecentTransactionsSenderErrorAction(error));
+    yield put(getRecentTransactionsRecipientErrorAction(error));
   }
 }
 
@@ -336,7 +331,6 @@ function* handleRecharts() {
     (outgoingTransfersSum * 100) / incomingTransfersSum;
   const zero = 0;
 
-  try {
     if (!incomingTransfersSum && !outgoingTransfersSum) {
       yield put(
         getRechartsColorsSuccessAction(JSON.parse(`["${BORDER_GREY_LIGHT}"]`)),
@@ -373,12 +367,7 @@ function* handleRecharts() {
         incomingRechartsProcent.toFixed(1).replace('.', ','),
       ),
     );
-  } catch (error) {
-    yield put(getRechartsColorsSuccessAction(error));
-    yield put(getRechartsDataErrorAction(error));
-    yield put(getSavingsErrorAction(error));
   }
-}
 
 export default function* dashboardPageSaga() {
   yield takeLatest(

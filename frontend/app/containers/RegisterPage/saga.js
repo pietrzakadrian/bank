@@ -6,6 +6,9 @@ import request from 'utils/request';
 import ApiEndpoint from 'utils/api';
 import messages from 'containers/RegisterPage/messages';
 
+// Import Services
+import AuthService from 'services/auth.service';
+
 // Import Selectors
 import {
   makeLoginSelector,
@@ -51,12 +54,12 @@ import {
   ENTER_EMAIL,
   IS_LOGGED,
 } from './constants';
-import AuthService from 'services/auth.service';
+
 
 export function* handleLogin() {
+  const api = new ApiEndpoint();
   const login = yield select(makeLoginSelector());
-  api.login = login;
-  const requestURL = api.isLoginPath;
+  const requestURL = api.getIsLoginPath(login);
   const isNumber = /^\d+$/;
   const limit = 20;
 
@@ -144,17 +147,13 @@ export function* handleSurname() {
 }
 
 export function* loadCurrency() {
-  const requestURL = api.currencyPath;
+  const api = new ApiEndpoint();
+  const requestURL = api.getCurrencyPath();
 
   try {
     const response = yield call(request, requestURL);
-
-    if (!response)
-      return yield put(
-        loadCurrencyErrorAction(<FormattedMessage {...messages.errorServer} />),
-      );
-
     const currencyData = response.currency.map(({ ...rest }) => [rest.id]);
+    
     // eslint-disable-next-line prefer-spread
     const currencyArray = [].concat.apply([], currencyData);
     yield put(loadCurrencySuccessAction(currencyArray));
@@ -177,12 +176,12 @@ export function* handleCurrency() {
 }
 
 export function* handleEmail() {
+  const api = new ApiEndpoint();
   const email = yield select(makeEmailSelector());
   const isDataProcessingAgreement = yield select(
     makeIsDataProcessingAgreementSelector(),
   );
-  api.email = email;
-  const requestURL = api.isEmailPath;
+  const requestURL = api.getIsEmailPath(email);
   const isEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   const limit = 255;
 
@@ -234,6 +233,7 @@ export function* handleEmail() {
 }
 
 function* registerAttempt() {
+  const api = new ApiEndpoint();
   const login = yield select(makeLoginSelector());
   const password = yield select(makePasswordSelector());
   const name = yield select(makeNameSelector());
@@ -243,7 +243,7 @@ function* registerAttempt() {
     makeIsDataProcessingAgreementSelector(),
   );
   const email = yield select(makeEmailSelector());
-  const requestURL = api.registerPath;
+  const requestURL = api.getRegisterPath();
 
   if (
     !login ||
@@ -275,10 +275,9 @@ function* registerAttempt() {
       }),
     });
 
-    if (!response.success)
-      return yield put(
-        registerErrorAction(<FormattedMessage {...messages.errorServer} />),
-      );
+    const { success } = response;
+    if (!success) return yield put(
+        registerErrorAction(<FormattedMessage {...messages.errorServer} />));
 
     yield put(registerSuccessAction());
     yield put(

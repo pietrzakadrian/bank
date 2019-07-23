@@ -39,7 +39,6 @@ import {
 } from 'containers/DashboardPage/actions';
 
 // Import Selectors
-import { makeUserIdSelector } from 'containers/App/selectors';
 import {
   makeAvailableFundsSelector,
   makeAccountBalanceHistorySelector,
@@ -50,7 +49,6 @@ const stateSelector = createStructuredSelector({
   availableFunds: makeAvailableFundsSelector(),
   accountBalanceHistory: makeAccountBalanceHistorySelector(),
   currency: makeCurrencySelector(),
-  userId: makeUserIdSelector(),
 });
 
 const key = 'dashboardPage';

@@ -1,10 +1,12 @@
 import React from 'react';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { FormattedMessage } from 'react-intl';
-import request from 'utils/request';
 import { push } from 'connected-react-router';
-import ApiEndpoint from 'utils/api';
 import messages from 'containers/LoginPage/messages';
+
+// Import Utils
+import ApiEndpoint from 'utils/api';
+import request from 'utils/request';
 
 // Import Services
 import AuthService from 'services/auth.service';
@@ -124,9 +126,8 @@ function* loginAttempt() {
 
     yield put(enterPasswordSuccessAction());
     auth.setToken(response.token);
-    const userId = auth.getUserId();
     yield put(loginSuccessAction());
-    yield put(loggedInAction(userId));
+    yield put(loggedInAction());
     yield put(push('/dashboard'));
   } catch (error) {
     yield put(loginErrorAction(<FormattedMessage {...messages.serverError} />));

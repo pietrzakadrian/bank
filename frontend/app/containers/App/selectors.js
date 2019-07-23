@@ -5,24 +5,6 @@ const selectGlobal = state => state.global || initialState;
 
 const selectRouter = state => state.router;
 
-const makeIsLoggedSelector = () =>
-  createSelector(
-    selectGlobal,
-    globalState => globalState.isLogged,
-  );
-
-const makeUserIdSelector = () =>
-  createSelector(
-    selectGlobal,
-    globalState => globalState.userId,
-  );
-
-const makeTokenSelector = () =>
-  createSelector(
-    selectGlobal,
-    globalState => globalState.token,
-  );
-
 const makeNotificationsSelector = () =>
   createSelector(
     selectGlobal,
@@ -95,6 +77,14 @@ const makeMessageCountSelector = () =>
     globalState => globalState.messageCount,
   );
 
+
+const makeIsLoggedSelector = () =>
+createSelector(
+  selectGlobal,
+  globalState => globalState.isLogged,
+);
+
+
 const makeSelectLocation = () =>
   createSelector(
     selectRouter,
@@ -102,8 +92,6 @@ const makeSelectLocation = () =>
   );
 
 export {
-  makeUserIdSelector,
-  makeTokenSelector,
   makeSelectLocation,
   makeNotificationsSelector,
   makeMessagesSelector,
@@ -117,4 +105,5 @@ export {
   makeIsNewNotificationsSelector,
   makeNotificationCountSelector,
   makeMessageCountSelector,
+  makeIsLoggedSelector
 };

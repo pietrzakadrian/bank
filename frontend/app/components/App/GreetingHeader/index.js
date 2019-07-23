@@ -91,8 +91,8 @@ export default function GreetingHeader() {
     if (!surname) getSurname();
     if (!email) getEmail();
     if (!lastPresentLogged) getLastPresentLogged();
-    if (!lastSuccessfulLogged) getLastSuccessfulLogged();
-    if (!lastFailedLogged) getLastFailedLogged();
+    if (!lastSuccessfulLogged && lastSuccessfulLogged !== null) getLastSuccessfulLogged();
+    if (!lastFailedLogged && lastFailedLogged !== null) getLastFailedLogged();
   }, []);
 
   return (

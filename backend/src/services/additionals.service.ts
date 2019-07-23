@@ -270,7 +270,6 @@ export class AdditionalService {
         }
       );
 
-      console.log("userAdditional", userAdditional);
       if (!userAdditional) return;
 
       const notificationCount: number = userAdditional.notificationCount;
@@ -283,7 +282,6 @@ export class AdditionalService {
         }
       );
     } catch (error) {
-      console.log("error", error);
       return Promise.reject(error);
     }
   }

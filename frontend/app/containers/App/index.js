@@ -27,11 +27,7 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 // Import Components
 import Header from 'components/App/Header';
 
-const key = 'appPage';
-
 export default function App() {
-  useInjectSaga({ key, saga });
-
   return (
     <Fragment>
       <Switch>

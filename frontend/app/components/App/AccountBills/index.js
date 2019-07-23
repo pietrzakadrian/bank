@@ -36,7 +36,6 @@ import messages from './messages';
 import { getAccountBillsAction } from 'containers/DashboardPage/actions';
 
 // Import Selectors
-import { makeUserIdSelector } from 'containers/App/selectors';
 import {
   makeAvailableFundsSelector,
   makeAccountBillsSelector,
@@ -47,7 +46,6 @@ const stateSelector = createStructuredSelector({
   availableFunds: makeAvailableFundsSelector(),
   accountBills: makeAccountBillsSelector(),
   currency: makeCurrencySelector(),
-  userId: makeUserIdSelector(),
 });
 
 const key = 'dashboardPage';

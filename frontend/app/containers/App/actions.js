@@ -28,6 +28,8 @@ import {
   UNSET_NEW_NOTIFICATIONS,
   UNSET_NEW_NOTIFICATIONS_SUCCESS,
   UNSET_NEW_NOTIFICATIONS_ERROR,
+  IS_LOGGED_SUCCESS,
+  IS_LOGGED_ERROR,
 } from './constants';
 
 /**
@@ -195,14 +197,38 @@ export function isLoggedAction() {
 }
 
 /**
+* TODO
+ * Check user is logged, this action starts the request saga
+ *
+ * @return {object} An action object with a type of IS_LOGGED
+ */
+ export function isLoggedSuccessAction() {
+  return {
+    type: IS_LOGGED_SUCCESS,
+  };
+}
+
+/**
+* TODO
+ * Check user is logged, this action starts the request saga
+ *
+ * @return {object} An action object with a type of IS_LOGGED
+ */
+ export function isLoggedErroAction() {
+  return {
+    type: IS_LOGGED_ERROR,
+  };
+}
+
+/**
+
  * User login to the application, this is the global action
  *
  * @return {object} An action object with a type of LOGGED_IN
  */
-export function loggedInAction(userId) {
+export function loggedInAction() {
   return {
     type: LOGGED_IN,
-    userId,
   };
 }
 

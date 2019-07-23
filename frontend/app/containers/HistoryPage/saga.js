@@ -1,9 +1,13 @@
 /* eslint-disable prettier/prettier */
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-import request from 'utils/request';
 import { format } from 'date-fns';
-import ApiEndpoint from 'utils/api';
+
+// Import Services
 import AuthService from 'services/auth.service';
+
+// Import Utils
+import ApiEndpoint from 'utils/api';
+import request from 'utils/request';
 
 // Import Selectors
 import { makePageSizeSelector, makeCurrentPageSelector } from 'containers/HistoryPage/selectors';
@@ -18,14 +22,14 @@ import { getGridDataErrorAction, getGridDataSuccessAction } from './actions';
 
 export function* handleGridData() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const token = auth.getToken();
   const userId = auth.getUserId();
   const locale = yield select(makeSelectLocale());
   const pageSize = yield select(makePageSizeSelector());
   const currentPage = yield select(makeCurrentPageSelector());
   const offset = pageSize * currentPage;
-  api.offset = offset;
-  const requestURL = api.transactionsPath;
+  const requestURL = api.getTransactionsPath(offset);
 
   try {
     const response = yield call(request, requestURL, {
@@ -37,10 +41,9 @@ export function* handleGridData() {
       },
     });
 
-    if (response.error) return yield put(getGridDataErrorAction('error'));
-
-    const totalCount = response.transactions[1];
-    const transformGridData = response.transactions[0].map(({ ...gridData }) => ({
+    const { transactions } = response;
+    const totalCount = transactions[1];
+    const transformGridData = transactions[0].map(({ ...gridData }) => ({
       amount_money:
         gridData.sender.user.id === userId
           ? `-${gridData.amountMoney

@@ -215,9 +215,7 @@ usersRouter
         };
         return next(err);
       }
-
-      console.log("teest");
-
+      
       try {
         const user: User = await userService.getById(req.user.id);
 

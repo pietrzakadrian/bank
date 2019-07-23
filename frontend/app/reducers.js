@@ -11,7 +11,7 @@ import languageProviderReducer from 'containers/LanguageProvider/reducer';
 import globalReducer from 'containers/App/reducer';
 
 const globalPersistConfig = {
-  key: 'bank_global',
+  key: 'bankapp_global',
   storage: localForage,
   blacklist: [
     'isOpenNotifications',
@@ -25,11 +25,12 @@ const globalPersistConfig = {
     'isOpenMessages',
     'isNewNotifications',
     'isNewMessages',
+    'isLogged'
   ],
 };
 
 const languagePersistConfig = {
-  key: 'bank_language',
+  key: 'bankapp_language',
   storage: localForage,
 };
 

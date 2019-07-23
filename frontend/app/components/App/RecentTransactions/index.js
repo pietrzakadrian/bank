@@ -10,6 +10,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { format } from 'date-fns';
+import AuthService from 'services/auth.service';
 import { FormattedMessage } from 'react-intl';
 import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
@@ -38,12 +39,10 @@ import {
   makeRecentTransactionsRecipientSelector,
   makeRecentTransactionsSenderSelector,
 } from 'containers/DashboardPage/selectors';
-import { makeUserIdSelector } from 'containers/App/selectors';
 
 const stateSelector = createStructuredSelector({
   recentTransactionsRecipient: makeRecentTransactionsRecipientSelector(),
   recentTransactionsSender: makeRecentTransactionsSenderSelector(),
-  userId: makeUserIdSelector(),
 });
 
 const key = 'dashboardPage';
@@ -55,6 +54,8 @@ function sortingData(data) {
 }
 
 export default function RecentTransactions() {
+  const auth = new AuthService();
+  const userId = auth.getUserId();
   const dispatch = useDispatch();
   const getRecentTransactionsRecipient = () =>
     dispatch(getRecentTransactionsRecipientAction());
@@ -63,8 +64,8 @@ export default function RecentTransactions() {
   const {
     recentTransactionsRecipient,
     recentTransactionsSender,
-    userId,
   } = useSelector(stateSelector);
+
 
   useInjectSaga({ key, saga });
   useInjectReducer({ key, reducer });
