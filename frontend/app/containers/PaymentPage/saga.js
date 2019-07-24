@@ -88,23 +88,22 @@ export function* searchAccountNumber() {
   const requestURL = api.getSearchPath(accountBill.replace(/ /g, ''));
   const limit = 32;
 
-  if (accountBill.length !== limit && accountBill.length < limit) {
-    try {
-      const response = yield call(request, requestURL, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  if (accountBill.length === limit || accountBill.length > limit) return;
 
-      const { bills } = response;
-      yield put(searchAccountBillsSuccessAction(bills));
-    } catch (error) {
-      console.log(error);
-      yield put(searchAccountBillsErrorAction(error));
-    }
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const { bills } = response;
+    yield put(searchAccountBillsSuccessAction(bills));
+  } catch (error) {
+    yield put(searchAccountBillsErrorAction(error));
   }
 }
 
