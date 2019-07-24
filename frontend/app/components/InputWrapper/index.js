@@ -25,7 +25,7 @@ const InputWrapper = styled.input`
     ${props => (props.error ? PRIMARY_RED : PRIMARY_BORDER_GREY)};
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-    width: ${props => (props.large ? '300px' : '17rem')};
+    width: ${props => (props.large ? '315px' : '17rem')};
   }
 `;
 

@@ -411,7 +411,7 @@ function PaymentForm({ intl }) {
                   large
                   key={3}
                   readOnly
-                  value={accountNumber}
+                  value={accountNumber.replace(/(^\d{2}|\d{4})+?/g, '$1 ')}
                   onKeyDown={handleKeyDown}
                 />
               </div>

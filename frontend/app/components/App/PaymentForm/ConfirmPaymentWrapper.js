@@ -15,7 +15,7 @@ const ConfirmPaymentWrapper = styled.div`
   justify-content: space-between;
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-    width: 300px;
+    width: 315px;
   }
 
   input {

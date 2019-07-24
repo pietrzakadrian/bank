@@ -88,7 +88,12 @@ export function* searchAccountNumber() {
   const requestURL = api.getSearchPath(accountBill.replace(/ /g, ''));
   const limit = 32;
 
-  if (accountBill.length === limit || accountBill.length > limit) return;
+  if (
+    !accountBill ||
+    accountBill.length === limit ||
+    accountBill.length > limit
+  )
+    return;
 
   try {
     const response = yield call(request, requestURL, {

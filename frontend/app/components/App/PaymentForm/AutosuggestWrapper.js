@@ -31,7 +31,7 @@ const AutosuggestWrapper = styled.div`
           ${props => (props.error ? PRIMARY_RED : PRIMARY_BORDER_GREY)};
 
         @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-          width: 300px;
+          width: 315px;
         }
       }
 
@@ -55,7 +55,7 @@ const AutosuggestWrapper = styled.div`
         width: 90%;
 
         @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-          width: 300px;
+          width: 315px;
           max-height: 90px;
         }
 
