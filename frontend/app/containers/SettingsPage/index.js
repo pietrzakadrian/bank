@@ -10,7 +10,6 @@ import { Helmet } from 'react-helmet';
 
 // Import Selectors
 import ContainerWrapper from 'components/App/ContainerWrapper';
-import Copyright from 'components/App/Copyright';
 import SettingsForm from 'components/App/SettingsForm';
 import messages from './messages';
 
@@ -24,8 +23,6 @@ export default function SettingsPage() {
       <ContainerWrapper>
         <SettingsForm />
       </ContainerWrapper>
-
-      <Copyright />
     </Fragment>
   );
 }

@@ -50,12 +50,13 @@ const AutosuggestWrapper = styled.div`
         margin-right: auto;
         left: 0;
         right: 0;
-        max-height: 90px;
+        max-height: 280px;
         overflow-y: auto;
         width: 90%;
 
         @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
           width: 300px;
+          max-height: 90px;
         }
 
         .react-autosuggest__suggestion {

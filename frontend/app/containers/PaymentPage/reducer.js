@@ -182,6 +182,7 @@ const paymentPageReducer = produce((draft, action) => {
       break;
     case ENTER_TRANSFER_TITLE_ERROR:
       draft.error = action.error;
+      draft.isLoading = false;
       break;
     case SEND_AUTHORIZATION_KEY:
       draft.isLoading = true;

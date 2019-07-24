@@ -14,6 +14,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import NotificationContainer from './NotificationContainer';
 import NotificationsWrapper from './NotificationsWrapper';
 import TextWrapper from './TextWrapper';
 import SenderWrapper from './SenderWrapper';
@@ -40,6 +41,7 @@ export default function Notifications() {
   return (
     <NotificationsWrapper open={isOpenNotifications}>
       {notifications.length ? (
+        <NotificationContainer>
         <Table>
           <TableBody>
             {notifications.map(notification => (
@@ -59,6 +61,7 @@ export default function Notifications() {
             ))}
           </TableBody>
         </Table>
+        </NotificationContainer>
       ) : (
         <TextWrapper>
           <FormattedMessage {...messages.noNotifications} />

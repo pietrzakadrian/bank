@@ -12,6 +12,9 @@ const CopyrightWrapper = styled.section`
   font-weight: 400;
   font-size: 13.5px;
   color: ${PRIMARY_BORDER_GREY};
+  position: absolute;
+  bottom: 8.750px;
+  right: 24px;
 `;
 
 export default CopyrightWrapper;

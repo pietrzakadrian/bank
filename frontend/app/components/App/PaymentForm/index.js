@@ -15,7 +15,9 @@ import reducer from 'containers/PaymentPage/reducer';
 import saga from 'containers/PaymentPage/saga';
 
 // Import Components
-import Autosuggest from 'react-autosuggest';
+import * as Autosuggest from 'react-autosuggest';
+import AutosuggestHighlightMatch from "autosuggest-highlight/umd/match";
+import AutosuggestHighlightParse from "autosuggest-highlight/umd/parse";
 import StepperWrapper from 'components/StepperWrapper';
 import StepperDesktop from 'components/StepperDesktop';
 import StepperMobile from 'components/StepperMobile';
@@ -24,12 +26,14 @@ import StepLabel from '@material-ui/core/StepLabel';
 import LabelWrapper from 'components/LabelWrapper';
 import NavigateNextIcon from 'components/NavigateNextIcon';
 import NavigateBackIcon from 'components/NavigateBackIcon';
+import SearchIcon from 'components/SearchIcon';
 import InputWrapper from 'components/InputWrapper';
 import ButtonWrapper from 'components/ButtonWrapper';
 import ButtonBackWrapper from 'components/ButtonBackWrapper';
 import TextWrapper from 'components/App/TextWrapper';
 import FormWrapper from './FormWrapper';
 import AutosuggestWrapper from './AutosuggestWrapper';
+import AutosuggestInputWrapper from './AutosuggestInputWrapper';
 import messages from './messages';
 import AutosuggestSuggestionsListWrapper from './AutosuggestSuggestionsListWrapper';
 import AutosuggestSuggestionsAccountNumberWrapper from './AutosuggestSuggestionsAccountNumberWrapper';
@@ -102,15 +106,26 @@ function getSuggestionValue(suggestion) {
   return suggestion.bill_accountBill;
 }
 
-function renderSuggestion(suggestion) {
+function renderSuggestion(suggestion, { query }) {
+  const suggestionText = `${suggestion.bill_accountBill.toString()
+    .replace(/(^\d{2}|\d{4})+?/g, '$1 ')}`;
+  const matches = AutosuggestHighlightMatch(suggestionText, query);
+  const parts = AutosuggestHighlightParse(suggestionText, matches);
+
+  console.log(parts);
+
   return (
     <div>
-      <AutosuggestSuggestionsAccountNumberWrapper>
-        {suggestion.bill_accountBill
-          .toString()
-          .replace(/(^\d{2}|\d{4})+?/g, '$1 ')
-          .trim()}
-      </AutosuggestSuggestionsAccountNumberWrapper>
+      {
+          parts.map((part, index) => {
+            const className = part.highlight ? 'highlight' : null;
+
+            return (
+              <AutosuggestSuggestionsAccountNumberWrapper className={className} key={index}>{part.text}</AutosuggestSuggestionsAccountNumberWrapper>
+            );
+          })
+      }
+  
       <AutosuggestSuggestionsListWrapper>
         {suggestion.user_name} {suggestion.user_surname}
       </AutosuggestSuggestionsListWrapper>
@@ -118,16 +133,25 @@ function renderSuggestion(suggestion) {
   );
 }
 
+function renderInputComponent(inputProps) {
+  return (
+    <AutosuggestInputWrapper>
+        <input {...inputProps} />
+        <SearchIcon />
+    </AutosuggestInputWrapper>
+  )
+}
+
 function PaymentForm({ intl }) {
   const dispatch = useDispatch();
   const onChangeAccountNumber = (e, { newValue }) =>
     dispatch(changeAccountNumberAction(newValue));
   const onChangeAmountMoney = e =>
-    dispatch(changeAmountMoneyAction(e.target.value));
+    dispatch(changeAmountMoneyAction(parseFloat(e.target.value)));
   const onEnterAccountNumber = accountNumber =>
     dispatch(enterAccountNumberAction(accountNumber));
   const onEnterAmountMoney = amountMoney =>
-    dispatch(enterAmountMoneyAction(amountMoney));
+    dispatch(enterAmountMoneyAction(parseFloat(amountMoney).toFixed(2)));
   const onChangeTransferTitle = e =>
     dispatch(changeTransferTitleAction(e.target.value));
   const onEnterTransferTitle = transferTitle =>
@@ -167,10 +191,12 @@ function PaymentForm({ intl }) {
     onChange: onChangeAccountNumber,
     maxLength: 26,
     onKeyPress: handleKeyPress,
-    onKeyDown: e =>
+    onKeyDown: e => {
       e.keyCode === 13 &&
       onEnterAccountNumber(accountNumber) &&
-      e.preventDefault(),
+      e.target.value.replace(/(^\d{2}|\d{4})+?/g, '$1 '),
+      e.preventDefault()
+    },
     type: 'number',
     placeholder: intl.formatMessage({
       id: 'app.containers.PaymentPage.inputAccountNumber',
@@ -182,7 +208,7 @@ function PaymentForm({ intl }) {
   useInjectReducer({ key, reducer });
 
   useEffect(() => {
-    if (!currency) handleCurrency();
+    handleCurrency();
   }, []);
 
   return (
@@ -203,11 +229,12 @@ function PaymentForm({ intl }) {
           activeStep={activeStep}
         />
       </StepperWrapper>
+      
       <FormWrapper>
         <form
           noValidate
           autoComplete="off"
-          onSubmit={() => onEnterAuthorizationKey(authorizationKey)}
+          onSubmit={(e) => onEnterAuthorizationKey(authorizationKey) && e.preventDefault()}
         >
           {activeStep === 0 && (
             <Fragment>
@@ -222,6 +249,7 @@ function PaymentForm({ intl }) {
                   onSuggestionsClearRequested={handleSuggestionsClearRequested}
                   getSuggestionValue={getSuggestionValue}
                   renderSuggestion={renderSuggestion}
+                  renderInputComponent={renderInputComponent}
                   inputProps={inputProps}
                 />
               </AutosuggestWrapper>
@@ -256,6 +284,7 @@ function PaymentForm({ intl }) {
                     large
                     key={1}
                     onChange={onChangeAmountMoney}
+                    value={amountMoney || ''}
                     onKeyPress={handleKeyPress}
                     onKeyDown={e =>
                       e.keyCode === 13 &&
@@ -297,7 +326,7 @@ function PaymentForm({ intl }) {
                 {placeholder => (
                   <InputWrapper
                     large
-                    key={1}
+                    key={2}
                     onChange={onChangeTransferTitle}
                     onKeyDown={e =>
                       e.keyCode === 13 &&
@@ -305,6 +334,7 @@ function PaymentForm({ intl }) {
                       e.preventDefault()
                     }
                     placeholder={placeholder}
+                    value={transferTitle || ''}
                     type="text"
                     error={error}
                   />
@@ -338,9 +368,9 @@ function PaymentForm({ intl }) {
 
                 <InputWrapper
                   large
-                  key={1}
+                  key={3}
                   readOnly
-                  value={accountNumber}
+                  value={accountNumber.replace(/(^\d{2}|\d{4})+?/g, '$1 ')}
                   onKeyDown={handleKeyDown}
                 />
               </div>
@@ -352,9 +382,10 @@ function PaymentForm({ intl }) {
 
                 <InputWrapper
                   large
-                  key={2}
+                  key={4}
                   onKeyDown={handleKeyDown}
-                  value={`${amountMoney} ${currency}`}
+                  value={`${amountMoney.toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ').replace('.', ',')} ${currency}`}
                   readOnly
                 />
               </div>
@@ -366,7 +397,7 @@ function PaymentForm({ intl }) {
 
                 <InputWrapper
                   large
-                  key={3}
+                  key={5}
                   value={transferTitle}
                   onKeyDown={handleKeyDown}
                   readOnly
@@ -391,7 +422,7 @@ function PaymentForm({ intl }) {
                     <FormattedMessage {...messages.inputAuthorizationKey}>
                       {placeholder => (
                         <InputWrapper
-                          key={4}
+                          key={6}
                           onChange={onChangeAuthorizationKey}
                           type="text"
                           placeholder={placeholder}

@@ -115,6 +115,7 @@ export function* searchAccountNumber() {
       });
 
       const { bills } = response;
+      console.log('bills', bills)
       yield put(searchAccountBillsSuccessAction(bills));
     } catch (error) {
       yield put(searchAccountBillsErrorAction(error));

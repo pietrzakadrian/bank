@@ -97,19 +97,11 @@ const NotificationsWrapper = styled.div`
     right: 167px;
   }
 
-  table {
-    position: absolute;
-    top: 0;
 
-    td {
-      padding: 8px 14px;
-      font-family: Lato;
-      &:hover {
-        background-color: ${SECONDARY_BACKGROUND_GREY}!important;
-        cursor: auto;
-      }
-    }
+
+    
   }
+
 `;
 
 export default NotificationsWrapper;

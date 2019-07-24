@@ -7,9 +7,12 @@
 import styled from 'styled-components';
 import { PRIMARY_DARK } from 'utils/colors';
 
-const AutosuggestSuggestionsAccountNumberWrapper = styled.div`
+const AutosuggestSuggestionsAccountNumberWrapper = styled.span`
   color: ${PRIMARY_DARK};
-  font-weight: normal;
+
+  &.highlight {
+    font-weight: normal;
+  }
 `;
 
 export default AutosuggestSuggestionsAccountNumberWrapper;

@@ -17,7 +17,6 @@ import messages from './messages';
 import Footer from 'components/Footer';
 import PaymentForm from 'components/App/PaymentForm';
 import Notifier from 'components/Notifier';
-import Copyright from 'components/App/Copyright';
 import ContainerWrapper from 'components/App/ContainerWrapper';
 
 const key = 'paymentPage';
@@ -36,7 +35,6 @@ export default function PaymentPage() {
         <PaymentForm />
       </ContainerWrapper>
       <Footer />
-      <Copyright />
       <Notifier />
     </Fragment>
   );

@@ -33,6 +33,7 @@ const GlobalStyle = createGlobalStyle`
     background-color: ${PRIMARY_LIGHT};
     min-height: 100%;
     min-width: 100%;
+    position: relative;
   }
 
   div {
@@ -171,6 +172,7 @@ const GlobalStyle = createGlobalStyle`
     .snackbar__provider--open-menu {
       left: 280px!important; 
       bottom: 20px!important;
+      right: auto!important;
       position: absolute; 
     }
   }

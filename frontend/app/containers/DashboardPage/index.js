@@ -22,7 +22,6 @@ import RecentTransactions from 'components/App/RecentTransactions';
 import BankCards from 'components/App/BankCards';
 import BankDeposits from 'components/App/BankDeposits';
 import BankCredits from 'components/App/BankCredits';
-import Copyright from 'components/App/Copyright';
 import messages from './messages';
 
 // Import Utils
@@ -188,7 +187,6 @@ export default function DashboardPage() {
           </ContainerWrapper>
         )}
       </MediaQuery>
-      <Copyright />
     </Fragment>
   );
 }

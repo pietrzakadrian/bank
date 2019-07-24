@@ -19,7 +19,6 @@ import { GET_GRID_DATA, CHANGE_PAGE } from './constants';
 // Import Actions
 import { getGridDataErrorAction, getGridDataSuccessAction } from './actions';
 
-
 export function* handleGridData() {
   const auth = new AuthService();
   const api = new ApiEndpoint();

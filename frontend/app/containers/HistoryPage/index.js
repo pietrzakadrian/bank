@@ -11,7 +11,6 @@ import { FormattedMessage } from 'react-intl';
 // Import Components
 import ContainerWrapper from 'components/App/ContainerWrapper';
 import HistoryGrid from 'components/App/HistoryGrid';
-import Copyright from 'components/App/Copyright';
 import messages from './messages';
 
 export default function HistoryPage() {
@@ -24,7 +23,6 @@ export default function HistoryPage() {
       <ContainerWrapper>
         <HistoryGrid />
       </ContainerWrapper>
-      <Copyright />
     </Fragment>
   );
 }
