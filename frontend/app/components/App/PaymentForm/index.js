@@ -16,8 +16,9 @@ import saga from 'containers/PaymentPage/saga';
 
 // Import Components
 import * as Autosuggest from 'react-autosuggest';
-import AutosuggestHighlightMatch from "autosuggest-highlight/umd/match";
-import AutosuggestHighlightParse from "autosuggest-highlight/umd/parse";
+import AutosuggestHighlightMatch from 'autosuggest-highlight/umd/match';
+import AutosuggestHighlightParse from 'autosuggest-highlight/umd/parse';
+import MaskedInput from 'react-text-mask';
 import StepperWrapper from 'components/StepperWrapper';
 import StepperDesktop from 'components/StepperDesktop';
 import StepperMobile from 'components/StepperMobile';
@@ -107,25 +108,27 @@ function getSuggestionValue(suggestion) {
 }
 
 function renderSuggestion(suggestion, { query }) {
-  const suggestionText = `${suggestion.bill_accountBill.toString()
+  const suggestionText = `${suggestion.bill_accountBill
+    .toString()
     .replace(/(^\d{2}|\d{4})+?/g, '$1 ')}`;
   const matches = AutosuggestHighlightMatch(suggestionText, query);
   const parts = AutosuggestHighlightParse(suggestionText, matches);
 
-  console.log(parts);
-
   return (
     <div>
-      {
-          parts.map((part, index) => {
-            const className = part.highlight ? 'highlight' : null;
+      {parts.map((part, index) => {
+        const className = part.highlight ? 'highlight' : null;
 
-            return (
-              <AutosuggestSuggestionsAccountNumberWrapper className={className} key={index}>{part.text}</AutosuggestSuggestionsAccountNumberWrapper>
-            );
-          })
-      }
-  
+        return (
+          <AutosuggestSuggestionsAccountNumberWrapper
+            className={className}
+            key={index}
+          >
+            {part.text}
+          </AutosuggestSuggestionsAccountNumberWrapper>
+        );
+      })}
+
       <AutosuggestSuggestionsListWrapper>
         {suggestion.user_name} {suggestion.user_surname}
       </AutosuggestSuggestionsListWrapper>
@@ -136,10 +139,49 @@ function renderSuggestion(suggestion, { query }) {
 function renderInputComponent(inputProps) {
   return (
     <AutosuggestInputWrapper>
-        <input {...inputProps} />
-        <SearchIcon />
+      <MaskedInput
+        ref={inputProps.ref || null}
+        {...inputProps}
+        guide={false}
+        mask={[
+          /\d/,
+          /\d/,
+          ' ',
+          /\d/,
+          /\d/,
+          /\d/,
+          /\d/,
+          ' ',
+          /\d/,
+          /\d/,
+          /\d/,
+          /\d/,
+          ' ',
+          /\d/,
+          /\d/,
+          /\d/,
+          /\d/,
+          ' ',
+          /\d/,
+          /\d/,
+          /\d/,
+          /\d/,
+          ' ',
+          /\d/,
+          /\d/,
+          /\d/,
+          /\d/,
+          ' ',
+          /\d/,
+          /\d/,
+          /\d/,
+          /\d/,
+        ]}
+      />
+
+      <SearchIcon />
     </AutosuggestInputWrapper>
-  )
+  );
 }
 
 function PaymentForm({ intl }) {
@@ -189,15 +231,11 @@ function PaymentForm({ intl }) {
   const inputProps = {
     value: accountNumber,
     onChange: onChangeAccountNumber,
-    maxLength: 26,
     onKeyPress: handleKeyPress,
-    onKeyDown: e => {
+    onKeyDown: e =>
       e.keyCode === 13 &&
       onEnterAccountNumber(accountNumber) &&
-      e.target.value.replace(/(^\d{2}|\d{4})+?/g, '$1 '),
-      e.preventDefault()
-    },
-    type: 'number',
+      e.preventDefault(),
     placeholder: intl.formatMessage({
       id: 'app.containers.PaymentPage.inputAccountNumber',
       defaultMessage: 'Search for the account number...',
@@ -229,12 +267,14 @@ function PaymentForm({ intl }) {
           activeStep={activeStep}
         />
       </StepperWrapper>
-      
+
       <FormWrapper>
         <form
           noValidate
           autoComplete="off"
-          onSubmit={(e) => onEnterAuthorizationKey(authorizationKey) && e.preventDefault()}
+          onSubmit={e =>
+            onEnterAuthorizationKey(authorizationKey) && e.preventDefault()
+          }
         >
           {activeStep === 0 && (
             <Fragment>
@@ -251,6 +291,7 @@ function PaymentForm({ intl }) {
                   renderSuggestion={renderSuggestion}
                   renderInputComponent={renderInputComponent}
                   inputProps={inputProps}
+                  focusInputOnSuggestionClick={false}
                 />
               </AutosuggestWrapper>
 
@@ -370,7 +411,7 @@ function PaymentForm({ intl }) {
                   large
                   key={3}
                   readOnly
-                  value={accountNumber.replace(/(^\d{2}|\d{4})+?/g, '$1 ')}
+                  value={accountNumber}
                   onKeyDown={handleKeyDown}
                 />
               </div>
@@ -384,8 +425,10 @@ function PaymentForm({ intl }) {
                   large
                   key={4}
                   onKeyDown={handleKeyDown}
-                  value={`${amountMoney.toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ').replace('.', ',')} ${currency}`}
+                  value={`${amountMoney
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                    .replace('.', ',')} ${currency}`}
                   readOnly
                 />
               </div>

@@ -13,6 +13,7 @@ const WidgetContentDisabled = styled.main`
   align-items: center;
   height: 195px;
   text-align: center;
+  font-size: 14.5px;
 `;
 
 export default WidgetContentDisabled;

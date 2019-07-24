@@ -99,6 +99,7 @@
     "react-resize-observer": "^1.1.1",
     "react-responsive": "^7.0.0",
     "react-router-dom": "5.0.1",
+    "react-text-mask": "^5.4.3",
     "react-trend": "^1.2.5",
     "recharts": "^1.6.2",
     "redux": "4.0.2",

@@ -85,25 +85,10 @@ export function* searchAccountNumber() {
   const api = new ApiEndpoint();
   const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
-  const requestURL = api.getSearchPath(accountBill);
-  const limit = 26;
-  const isNumber = /^\d+$/;
+  const requestURL = api.getSearchPath(accountBill.replace(/ /g, ''));
+  const limit = 32;
 
-  if (!accountBill)
-    return yield put(
-      searchAccountBillsErrorAction(
-        <FormattedMessage {...messages.errorAccountNumberEmpty} />,
-      ),
-    );
-
-  if (!isNumber.test(accountBill) || accountBill.length > limit)
-    return yield put(
-      searchAccountBillsErrorAction(
-        <FormattedMessage {...messages.errorAccountNumberValidate} />,
-      ),
-    );
-
-  if (accountBill.length !== limit) {
+  if (accountBill.length !== limit && accountBill.length < limit) {
     try {
       const response = yield call(request, requestURL, {
         method: 'GET',
@@ -115,9 +100,9 @@ export function* searchAccountNumber() {
       });
 
       const { bills } = response;
-      console.log('bills', bills)
       yield put(searchAccountBillsSuccessAction(bills));
     } catch (error) {
+      console.log(error);
       yield put(searchAccountBillsErrorAction(error));
     }
   }
@@ -128,23 +113,7 @@ export function* handleAccountNumber() {
   const api = new ApiEndpoint();
   const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
-  const requestURL = api.getIsAccountBillPath(accountBill);
-  const isNumber = /^\d+$/;
-  const limit = 26;
-
-  if (!accountBill)
-    return yield put(
-      enterAccountNumberErrorAction(
-        <FormattedMessage {...messages.errorAccountNumberEmpty} />,
-      ),
-    );
-
-  if (!isNumber.test(accountBill) || accountBill.length !== limit)
-    return yield put(
-      enterAccountNumberErrorAction(
-        <FormattedMessage {...messages.errorAccountNumberValidate} />,
-      ),
-    );
+  const requestURL = api.getIsAccountBillPath(accountBill.replace(/ /g, ''));
 
   try {
     const response = yield call(request, requestURL, {
