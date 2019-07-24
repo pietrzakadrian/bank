@@ -65,6 +65,7 @@ import {
   makeNotificationCountSelector,
   makeMessageCountSelector,
 } from 'containers/App/selectors';
+import Copyright from '../Copyright';
 
 const stateSelector = createStructuredSelector({
   isLogged: makeIsLoggedSelector(),
@@ -247,6 +248,7 @@ export default function Header({ children, location }) {
           }
         }}
       />
+      <Copyright />
     </Fragment>
   );
 }
