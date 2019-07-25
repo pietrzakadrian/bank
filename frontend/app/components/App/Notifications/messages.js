@@ -23,7 +23,7 @@ export default defineMessages({
   },
   numberOfNotifications: {
     id: `${scope}.numberOfNotifications`,
-    defaultMessage: 'Number of notifications:',
+    defaultMessage: 'New notifications:',
   },
   markAsRead: {
     id: `${scope}.markAsRead`,

@@ -4,7 +4,7 @@
  *
  */
 
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
@@ -25,6 +25,7 @@ import Logo from 'images/icon.png';
 import Sidebar from 'components/App/Sidebar';
 import Messages from 'components/App/Messages';
 import AppBarWrapper from './AppBarWrapper';
+import WidgetContainer from './WidgetContainer';
 import ToolbarWrapper from './ToolbarWrapper';
 import HamburgerWrapper from './HamburgerWrapper';
 import TitleWrapper from './TitleWrapper';
@@ -86,7 +87,29 @@ const title = {
   '/settings': <FormattedMessage {...messages.settingsTitle} />,
 };
 
+function useOutsideWidget(ref) {
+  const dispatch = useDispatch();
+  const onToggleMessages = () => dispatch(toggleMessagesAction());
+  const onToggleNotifications = () => dispatch(toggleNotificationsAction());
+  const { isOpenMessages, isOpenNotifications } = useSelector(stateSelector);
+
+  function handleClickOutside(event) {
+    if (ref.current && !ref.current.contains(event.target)) {
+      if (isOpenMessages) onToggleMessages();
+      if (isOpenNotifications) onToggleNotifications();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
+}
+
 export default function Header({ children, location }) {
+  const widgetRef = useRef(null);
   const dispatch = useDispatch();
   const onToggleNavigationDesktop = () =>
     dispatch(toggleNavigationDesktopAction());
@@ -108,6 +131,7 @@ export default function Header({ children, location }) {
   } = useSelector(stateSelector);
 
   useInjectSaga({ key, saga });
+  useOutsideWidget(widgetRef);
 
   useEffect(() => {
     if (!isLogged) onCheckUserLogged();
@@ -137,66 +161,70 @@ export default function Header({ children, location }) {
             {title[location.pathname]}
           </TitleWrapper>
 
-          <ButtonWrapper type="button" onClick={onToggleMessages}>
-            {isNewMessages ? (
-              <BadgeWrapper
-                classes={{ badge: 'badge' }}
-                badgeContent={messageCount > 9 ? '9+' : messageCount}
-              >
-                <MailActiveIcon className="icon" />
-                <ItemWrapper>
-                  <FormattedMessage {...messages.headerItemMessagesTitle} />
-                </ItemWrapper>
-              </BadgeWrapper>
-            ) : (
-              <BadgeWrapper
-                classes={{ badge: 'badge' }}
-                badgeContent={messageCount}
-              >
-                <MailOutlineIcon className="icon" />
-                <ItemWrapper>
-                  <FormattedMessage {...messages.headerItemMessagesTitle} />
-                </ItemWrapper>
-              </BadgeWrapper>
-            )}
-            <Messages />
-          </ButtonWrapper>
+          <WidgetContainer ref={widgetRef}>
+            <ButtonWrapper type="button" onClick={onToggleMessages}>
+              {isNewMessages ? (
+                <BadgeWrapper
+                  classes={{ badge: 'badge' }}
+                  badgeContent={messageCount > 9 ? '9+' : messageCount}
+                >
+                  <MailActiveIcon className="icon" />
+                  <ItemWrapper>
+                    <FormattedMessage {...messages.headerItemMessagesTitle} />
+                  </ItemWrapper>
+                </BadgeWrapper>
+              ) : (
+                <BadgeWrapper
+                  classes={{ badge: 'badge' }}
+                  badgeContent={messageCount}
+                >
+                  <MailOutlineIcon className="icon" />
+                  <ItemWrapper>
+                    <FormattedMessage {...messages.headerItemMessagesTitle} />
+                  </ItemWrapper>
+                </BadgeWrapper>
+              )}
+              <Messages />
+            </ButtonWrapper>
 
-          <ButtonWrapper type="button" onClick={onToggleNotifications}>
-            {isNewNotifications ? (
-              <BadgeWrapper
-                classes={{ badge: 'badge' }}
-                badgeContent={notificationCount > 9 ? '9+' : notificationCount}
-              >
-                <NotificationsActiveIcon className="icon" />
-                <ItemWrapper>
-                  <FormattedMessage
-                    {...messages.headerItemNotificationsTitle}
-                  />
-                </ItemWrapper>
-              </BadgeWrapper>
-            ) : (
-              <BadgeWrapper
-                classes={{ badge: 'badge' }}
-                badgeContent={notificationCount}
-              >
-                <NotificationsNoneIcon className="icon" />
-                <ItemWrapper>
-                  <FormattedMessage
-                    {...messages.headerItemNotificationsTitle}
-                  />
-                </ItemWrapper>
-              </BadgeWrapper>
-            )}
-            <Notifications />
-          </ButtonWrapper>
+            <ButtonWrapper type="button" onClick={onToggleNotifications}>
+              {isNewNotifications ? (
+                <BadgeWrapper
+                  classes={{ badge: 'badge' }}
+                  badgeContent={
+                    notificationCount > 9 ? '9+' : notificationCount
+                  }
+                >
+                  <NotificationsActiveIcon className="icon" />
+                  <ItemWrapper>
+                    <FormattedMessage
+                      {...messages.headerItemNotificationsTitle}
+                    />
+                  </ItemWrapper>
+                </BadgeWrapper>
+              ) : (
+                <BadgeWrapper
+                  classes={{ badge: 'badge' }}
+                  badgeContent={notificationCount}
+                >
+                  <NotificationsNoneIcon className="icon" />
+                  <ItemWrapper>
+                    <FormattedMessage
+                      {...messages.headerItemNotificationsTitle}
+                    />
+                  </ItemWrapper>
+                </BadgeWrapper>
+              )}
+              <Notifications />
+            </ButtonWrapper>
 
-          <ButtonWrapper type="button" onClick={onLogout}>
-            <ExitToAppIcon className="icon" />
-            <ItemWrapper>
-              <FormattedMessage {...messages.headerItemLogoutTitle} />
-            </ItemWrapper>
-          </ButtonWrapper>
+            <ButtonWrapper type="button" onClick={onLogout}>
+              <ExitToAppIcon className="icon" />
+              <ItemWrapper>
+                <FormattedMessage {...messages.headerItemLogoutTitle} />
+              </ItemWrapper>
+            </ButtonWrapper>
+          </WidgetContainer>
 
           <LogoWrapper src={Logo} alt="Bank Application" />
         </ToolbarWrapper>

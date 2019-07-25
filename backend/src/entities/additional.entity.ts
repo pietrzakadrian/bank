@@ -25,4 +25,10 @@ export class Additional {
 
   @Column({ default: 0 })
   notificationCount: number;
+
+  @Column({ default: 0 })
+  messageStatus: boolean;
+
+  @Column({ default: 0 })
+  messageCount: number;
 }
