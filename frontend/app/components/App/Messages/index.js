@@ -25,7 +25,7 @@ export default function Messages() {
   const { isOpenMessages } = useSelector(stateSelector);
 
   return (
-    <MessagesWrapper open={isOpenMessages}>
+    <MessagesWrapper open={isOpenMessages} onClick={e => e.stopPropagation()}>
       <TextWrapper>
         <FormattedMessage {...messages.noMessages} />
       </TextWrapper>

@@ -4,17 +4,17 @@
  *
  */
 
-import React, { Fragment, useEffect, useRef } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 import { useInjectSaga } from 'utils/injectSaga';
 import PropTypes from 'prop-types';
-import ResizeObserver from 'react-resize-observer';
 import MediaQuery from 'react-responsive';
 import saga from 'containers/App/saga';
 
 // Import Components
+import ResizeObserver from 'react-resize-observer';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import MailActiveIcon from '@material-ui/icons/Mail';
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
@@ -86,29 +86,7 @@ const title = {
   '/settings': <FormattedMessage {...messages.settingsTitle} />,
 };
 
-function useOutsideWidgetDisabled(ref) {
-  const dispatch = useDispatch();
-  const onToggleMessages = () => dispatch(toggleMessagesAction());
-  const onToggleNotifications = () => dispatch(toggleNotificationsAction());
-  const { isOpenMessages, isOpenNotifications } = useSelector(stateSelector);
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  });
-
-  function handleClickOutside() {
-    if (ref.current) {
-      if (isOpenMessages) onToggleMessages();
-      if (isOpenNotifications) onToggleNotifications();
-    }
-  }
-}
-
 export default function Header({ children, location }) {
-  const refWrapper = useRef(null);
   const dispatch = useDispatch();
   const onToggleNavigationDesktop = () =>
     dispatch(toggleNavigationDesktopAction());
@@ -139,11 +117,9 @@ export default function Header({ children, location }) {
     }
   }, [isLogged]);
 
-  useOutsideWidgetDisabled(refWrapper);
-
   return (
     <Fragment>
-      <AppBarWrapper ref={refWrapper} open={isOpenNavigationDesktop}>
+      <AppBarWrapper open={isOpenNavigationDesktop}>
         <ToolbarWrapper open={isOpenNavigationDesktop}>
           <MediaQuery minWidth={TOGGLE_TOOLBAR_VIEWPORT_WIDTH}>
             {matches => (
@@ -252,13 +228,6 @@ export default function Header({ children, location }) {
     </Fragment>
   );
 }
-
-useOutsideWidgetDisabled.propTypes = {
-  ref: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.elementType }),
-  ]),
-};
 
 Header.propTypes = {
   children: PropTypes.oneOfType([

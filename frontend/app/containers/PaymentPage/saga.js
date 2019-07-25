@@ -365,7 +365,7 @@ export function* handleAuthorizationKey() {
 
 export default function* paymentPageSaga() {
   yield takeLatest(GET_CURRENCY, handleCurrency);
-  yield throttle(1000, SEARCH_ACCOUNT_BILLS, searchAccountNumber);
+  yield throttle(700, SEARCH_ACCOUNT_BILLS, searchAccountNumber);
   yield takeLatest(ENTER_ACCOUNT_NUMBER, handleAccountNumber);
   yield takeLatest(ENTER_AMOUNT_MONEY, handleAmountMoney);
   yield takeLatest(ENTER_TRANSFER_TITLE, handleTransferTitle);

@@ -4,12 +4,13 @@
  *
  */
 
- import styled from 'styled-components';
- import { SECONDARY_BACKGROUND_GREY } from 'utils/colors';
+import styled from 'styled-components';
+import { SECONDARY_BACKGROUND_GREY } from 'utils/colors';
 
- const NotificationContainer = styled.div`
+const NotificationContainer = styled.div`
     overflow-y: auto;
-    height: 115px;
+    height: 139px;
+    width: 100%;
 
     table {
         td {
@@ -21,6 +22,5 @@
           }
         }
  `;
- 
- export default NotificationContainer;
- 
+
+export default NotificationContainer;

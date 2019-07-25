@@ -28,6 +28,7 @@ import {
   UNSET_NEW_NOTIFICATIONS,
   UNSET_NEW_NOTIFICATIONS_SUCCESS,
   UNSET_NEW_NOTIFICATIONS_ERROR,
+  UNSET_MANUAL_NEW_NOTIFICATIONS,
   IS_LOGGED_SUCCESS,
   IS_LOGGED_ERROR,
 } from './constants';
@@ -182,6 +183,17 @@ export function unsetNewNotificationsErrorAction(error) {
   return {
     type: UNSET_NEW_NOTIFICATIONS_ERROR,
     error,
+  };
+}
+
+/**
+ * Unset the new notifications from manual click
+ *
+ * @return {object} An action object with a type of UNSET_MANUAL_NEW_NOTIFICATIONS
+ */
+export function unsetManualNewNotificationsAction() {
+  return {
+    type: UNSET_MANUAL_NEW_NOTIFICATIONS,
   };
 }
 

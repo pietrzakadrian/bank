@@ -21,4 +21,12 @@ export default defineMessages({
     id: `${scope}.worth`,
     defaultMessage: 'worth',
   },
+  numberOfNotifications: {
+    id: `${scope}.numberOfNotifications`,
+    defaultMessage: 'Number of notifications:',
+  },
+  markAsRead: {
+    id: `${scope}.markAsRead`,
+    defaultMessage: 'Mark as read',
+  },
 });

@@ -25,6 +25,7 @@ import {
   GET_NEW_NOTIFICATIONS_ERROR,
   UNSET_NEW_NOTIFICATIONS_SUCCESS,
   UNSET_NEW_NOTIFICATIONS_ERROR,
+  UNSET_MANUAL_NEW_NOTIFICATIONS,
 } from './constants';
 
 export const initialState = {
@@ -56,6 +57,9 @@ const appPageReducer = produce((draft, action) => {
       break;
     case UNSET_NEW_NOTIFICATIONS_ERROR:
       draft.error = action.error;
+      break;
+    case UNSET_MANUAL_NEW_NOTIFICATIONS:
+      draft.notifications = [];
       break;
     case CHECK_NEW_NOTIFICATIONS_SUCCESS:
       draft.isNewNotifications = true;

@@ -15,10 +15,10 @@ const MessagesWrapper = styled.div`
   background: ${PRIMARY_LIGHT};
   border: 1.3px solid ${BORDER_GREY_LIGHT};
   border-radius: 2px;
-  height: 119px;
+  height: 139px;
   z-index: 9999;
   top: 55px;
-  box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.06);
+  box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.22);
   display: ${props => (props.open ? 'flex' : 'none')};
   align-items: center;
   text-align: center;
