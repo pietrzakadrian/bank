@@ -36,6 +36,8 @@ messagesRouter
       const isMessage: boolean = additional.messageStatus;
       const messageCount: number = additional.messageCount;
 
+      console.log(messageCount);
+
       if (isMessage)
         return res.status(HttpStatus.OK).json({
           isMessage,
@@ -43,7 +45,8 @@ messagesRouter
         });
 
       res.status(HttpStatus.OK).json({
-        isMessage
+        isMessage,
+        messageCount
       });
     } catch (error) {
       const err: IResponseError = {

@@ -55,13 +55,15 @@ export function checkNewMessagesAction() {
  * Dispatched when the new messages are loaded by the request saga
  *
  * @param  {number} messageCount The messages data
+ * @param  {boolean} isNewMessage The boolean that new message
  *
  * @return {object} An action object with a type of CHECK_NEW_MESSAGES_SUCCESS passing the repos
  */
-export function checkNewMessagesSuccessAction(messageCount) {
+export function checkNewMessagesSuccessAction(messageCount, isNewMessage = true) {
   return {
     type: CHECK_NEW_MESSAGES_SUCCESS,
     messageCount,
+    isNewMessage,
   };
 }
 

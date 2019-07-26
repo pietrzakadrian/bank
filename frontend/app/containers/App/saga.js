@@ -155,7 +155,15 @@ export function* getNewNotifications() {
   }
 }
 
-export function* getNewMessages() {}
+export function* getNewMessages() {
+  const welcomeMessage = [{
+    senderName: 'Adrian',
+    senderSurname: 'Pietrzak',
+    createdDate: new Date()
+  }]
+
+  yield put(getNewMessagesSuccessAction(welcomeMessage));
+}
 
 export function* handleNewNotifications() {
   const auth = new AuthService();
@@ -204,9 +212,9 @@ export function* handleMessages() {
     });
 
     const { isMessage, messageCount } = response;
-    if (!isMessage) return;
+    if (!isMessage) yield put(checkNewMessagesSuccessAction(messageCount, false));
+    else yield put(checkNewMessagesSuccessAction(messageCount));
 
-    yield put(checkNewMessagesSuccessAction(messageCount));
     yield put(getNewMessagesAction());
   } catch (error) {
     console.log(error)
