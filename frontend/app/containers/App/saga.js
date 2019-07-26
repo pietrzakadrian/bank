@@ -30,7 +30,10 @@ import {
   isLoggedErroAction,
   checkNewMessagesErrorAction,
   getNewMessagesAction,
+  unsetNewMessagesAction,
+  unsetNewMessagesSuccessAction,
   unsetNewMessagesErrorAction,
+
 } from './actions';
 
 // Import Constants
@@ -215,7 +218,7 @@ export function* handleNewMessages() {
   const auth = new AuthService();
   const api = new ApiEndpoint();
   const token = auth.getToken();
-  const requestURL = api.getNotificationsPath();
+  const requestURL = api.getMessagesPath();
   const messageCount = yield select(makeMessageCountSelector());
 
   if (!messageCount) return;
@@ -237,6 +240,7 @@ export function* handleNewMessages() {
 
     yield put(unsetNewMessagesSuccessAction());
   } catch (error) {
+    console.log(error)
     yield put(unsetNewMessagesErrorAction(error));
   }
 }

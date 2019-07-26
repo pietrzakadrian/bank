@@ -69,8 +69,7 @@ export default function RecentTransactions() {
   useInjectReducer({ key, reducer });
 
   useEffect(() => {
-    if (recentTransactionsRecipient.length === 0)
-      getRecentTransactionsRecipient();
+    if (recentTransactionsRecipient.length === 0) getRecentTransactionsRecipient();
     if (recentTransactionsSender.length === 0) getRecentTransactionsSender();
   }, []);
 

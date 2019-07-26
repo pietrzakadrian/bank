@@ -18,7 +18,7 @@ import { Currency } from "../entities/currency.entity";
 /**
  * performs dependencies of the promotion
  */
-export default async function promotion(user: User) {
+export default async function enablePromotion(user: User) {
   try {
     const userService = new UserService();
     const billService = new BillService();

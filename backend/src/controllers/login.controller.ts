@@ -16,7 +16,8 @@ import { AuthHandler } from "../middlewares/authHandler.middleware";
 import { User } from "../entities/user.entity";
 
 // Import Middlewares
-import promotion from "../middlewares/promotion.middleware";
+import enablePromotion from "../middlewares/promotion.middleware";
+import enableWelcomeMessage from "../middlewares/welcomeMessage.middleware";
 
 const loginRouter: Router = Router();
 
@@ -61,7 +62,9 @@ loginRouter
       }
 
       try {
-        await promotion(user);
+        await enablePromotion(user);
+        await enableWelcomeMessage(user);
+
         await userService.setLastPresentLoggedDate(user);
         const token: string = authHandler.generateToken(user);
         res.status(HttpStatus.OK).json({

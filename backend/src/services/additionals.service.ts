@@ -68,7 +68,6 @@ export class AdditionalService {
       return await this.additionalRepository.update(
         { user },
         {
-          messageCount: 0,
           messageStatus: false
         }
       );
@@ -277,6 +276,57 @@ export class AdditionalService {
           notificationStatus: true
         }
       );
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Sets user's new message
+   */
+  async setMessage(user: User): Promise<object> {
+    try {
+      const userAdditional: Additional = await this.additionalRepository.findOne(
+        {
+          where: {
+            user
+          }
+        }
+      );
+
+      if (!userAdditional) return;
+
+      const messageCount: number = userAdditional.messageCount;
+
+      return await this.additionalRepository.update(
+        { user },
+        {
+          messageCount: messageCount + 1,
+          messageStatus: true
+        }
+      );
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Returns boolean that user has already message
+   */
+  async hasMessage(user: User): Promise<boolean> {
+    try {
+      const hasMessage = await this.additionalRepository.findOne({
+        where: {
+          user,
+          messageCount: 1
+        }
+      });
+
+      if (hasMessage) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
       return Promise.reject(error);
     }
