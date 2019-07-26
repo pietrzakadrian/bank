@@ -56,19 +56,20 @@ export default function Notifications() {
       onClick={e => e.stopPropagation()}
     >
       {notifications.length ? (
+        <Fragment>
+                  <WidgetBeamWrapper>
+                  <WidgetBeamCounter>
+                    <FormattedMessage {...messages.numberOfNotifications} />{' '}
+                    {notifications.length}
+                  </WidgetBeamCounter>
+                  <WidgetBeamButton
+                    type="button"
+                    onClick={onManualUnsetNotifications}
+                  >
+                    <FormattedMessage {...messages.markAsRead} />
+                  </WidgetBeamButton>
+                </WidgetBeamWrapper>
         <NotificationContainer>
-          <WidgetBeamWrapper>
-            <WidgetBeamCounter>
-              <FormattedMessage {...messages.numberOfNotifications} />{' '}
-              {notifications.length}
-            </WidgetBeamCounter>
-            <WidgetBeamButton
-              type="button"
-              onClick={onManualUnsetNotifications}
-            >
-              <FormattedMessage {...messages.markAsRead} />
-            </WidgetBeamButton>
-          </WidgetBeamWrapper>
           <Table>
             <TableBody>
               {notifications.map(notification => (
@@ -93,6 +94,7 @@ export default function Notifications() {
             </TableBody>
           </Table>
         </NotificationContainer>
+        </Fragment>
       ) : (
         <TextWrapper>
           <FormattedMessage {...messages.noNotifications} />

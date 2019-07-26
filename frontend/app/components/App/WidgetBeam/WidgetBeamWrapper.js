@@ -13,6 +13,7 @@ const WidgetBeamWrapper = styled.div`
   align-items: center;
   border-bottom: 1px solid ${BORDER_GREY_LIGHT};
   padding: 5.5px 14px;
+  width: 100%;
 `;
 
 export default WidgetBeamWrapper;

@@ -61,21 +61,17 @@ export class AdditionalService {
   }
 
   /**
-   * Returns boolean that user has a new notifiations
+   * Unsets user's all messagess
    */
-  async isNotification(user: User): Promise<Additional> {
-    const userId: number = this.userRepository.getId(user);
-
+  async unsetMessages(user: User): Promise<object> {
     try {
-      const isNotification = await this.additionalRepository
-        .createQueryBuilder("additional")
-        .where("additional.userId = :senderId", {
-          userId
-        })
-        .select("additional.notificationStatus")
-        .getOne();
-
-      return isNotification;
+      return await this.additionalRepository.update(
+        { user },
+        {
+          messageCount: 0,
+          messageStatus: false
+        }
+      );
     } catch (error) {
       return Promise.reject(error);
     }

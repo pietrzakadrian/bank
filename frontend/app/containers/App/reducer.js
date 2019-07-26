@@ -19,13 +19,19 @@ import {
   TOGGLE_MESSAGES,
   TOGGLE_NOTIFICATIONS,
   CHECK_NEW_MESSAGES_SUCCESS,
+  CHECK_NEW_MESSAGES_ERROR,
   CHECK_NEW_NOTIFICATIONS_SUCCESS,
   CHECK_NEW_NOTIFICATIONS_ERROR,
   GET_NEW_NOTIFICATIONS_SUCCESS,
   GET_NEW_NOTIFICATIONS_ERROR,
+  GET_NEW_MESSAGES_SUCCESS,
+  GET_NEW_MESSAGES_ERROR,
   UNSET_NEW_NOTIFICATIONS_SUCCESS,
   UNSET_NEW_NOTIFICATIONS_ERROR,
+  UNSET_NEW_MESSAGES_SUCCESS,
+  UNSET_NEW_MESSAGES_ERROR,
   UNSET_MANUAL_NEW_NOTIFICATIONS,
+  UNSET_MANUAL_NEW_MESSAGES
 } from './constants';
 
 export const initialState = {
@@ -50,6 +56,10 @@ const appPageReducer = produce((draft, action) => {
   switch (action.type) {
     case CHECK_NEW_MESSAGES_SUCCESS:
       draft.isNewMessages = true;
+      draft.messageCount = action.messageCount;
+      break;
+    case CHECK_NEW_MESSAGES_ERROR:
+      draft.error = action.error;
       break;
     case UNSET_NEW_NOTIFICATIONS_SUCCESS:
       draft.notificationCount = 0;
@@ -60,6 +70,16 @@ const appPageReducer = produce((draft, action) => {
       break;
     case UNSET_MANUAL_NEW_NOTIFICATIONS:
       draft.notifications = [];
+      break;
+    case UNSET_NEW_MESSAGES_SUCCESS:
+      draft.messageCount = 0;
+      draft.isNewMessages = false;
+      break;
+    case UNSET_NEW_MESSAGES_ERROR:
+      draft.error = action.error;
+      break;
+    case UNSET_MANUAL_NEW_MESSAGES:
+      draft.messages = [];
       break;
     case CHECK_NEW_NOTIFICATIONS_SUCCESS:
       draft.isNewNotifications = true;
@@ -74,6 +94,12 @@ const appPageReducer = produce((draft, action) => {
     case GET_NEW_NOTIFICATIONS_ERROR:
       draft.error = action.error;
       break;
+      case GET_NEW_MESSAGES_SUCCESS:
+      draft.messages = action.messages;
+      break;
+    case GET_NEW_MESSAGES_ERROR:
+      draft.error = action.error;
+      break;
     case TOGGLE_NAVIGATION_DESKTOP:
       draft.isOpenNavigationDesktop = !draft.isOpenNavigationDesktop;
       draft.isOpenMessages = false;
@@ -86,9 +112,7 @@ const appPageReducer = produce((draft, action) => {
       break;
     case TOGGLE_MESSAGES:
       draft.isOpenMessages = !draft.isOpenMessages;
-      draft.isNewMessages = false;
       draft.isOpenNotifications = false;
-      draft.messageCount = 0;
       break;
     case TOGGLE_NOTIFICATIONS:
       draft.isOpenNotifications = !draft.isOpenNotifications;

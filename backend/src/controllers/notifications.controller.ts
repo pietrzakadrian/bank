@@ -20,7 +20,7 @@ const notificationsRouter: Router = Router();
  * Checks whether the login already exists
  *
  * @Method GET
- * @URL /api/additionals/notifications/isNotifications
+ * @URL /api/additionals/notifications/isNotification
  *
  */
 notificationsRouter
@@ -71,7 +71,7 @@ notificationsRouter
 
     try {
       const user: User = await userService.getById(req.user.id);
-      const additional = await additionalService.unsetNotifications(user);
+      await additionalService.unsetNotifications(user);
 
       res.status(HttpStatus.OK).json({
         success: true

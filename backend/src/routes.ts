@@ -12,7 +12,7 @@ import notificationsRouter from "./controllers/notifications.controller";
 import transactionsRouter from "./controllers/transactions.controller";
 import createRouter from "./controllers/create.controller";
 import confirmRouter from "./controllers/confirm.controller";
-// import testsRouter from "./controllers/tests.controller";
+import messagesRouter from "./controllers/messages.controller";
 
 // Import Middlewares
 import { AuthHandler } from "./middlewares/authHandler.middleware";
@@ -28,7 +28,10 @@ router.use("/transactions", auth.authenticate("jwt"), [
   createRouter,
   confirmRouter
 ]);
-router.use("/additionals", auth.authenticate("jwt"), notificationsRouter);
+router.use("/additionals", auth.authenticate("jwt"), [
+  notificationsRouter,
+  messagesRouter
+]);
 router.use("/currency", currencyRouter);
 
 export default router;

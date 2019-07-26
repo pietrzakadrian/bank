@@ -6,6 +6,8 @@
 
 import {
   IS_LOGGED,
+  IS_LOGGED_SUCCESS,
+  IS_LOGGED_ERROR,
   LOGGED_IN,
   LOGOUT,
   LOGOUT_SUCCESS,
@@ -28,9 +30,14 @@ import {
   UNSET_NEW_NOTIFICATIONS,
   UNSET_NEW_NOTIFICATIONS_SUCCESS,
   UNSET_NEW_NOTIFICATIONS_ERROR,
+  GET_NEW_MESSAGES,
+  GET_NEW_MESSAGES_SUCCESS,
+  GET_NEW_MESSAGES_ERROR,
+  UNSET_NEW_MESSAGES,
+  UNSET_NEW_MESSAGES_SUCCESS,
+  UNSET_NEW_MESSAGES_ERROR,
   UNSET_MANUAL_NEW_NOTIFICATIONS,
-  IS_LOGGED_SUCCESS,
-  IS_LOGGED_ERROR,
+  UNSET_MANUAL_NEW_MESSAGES,
 } from './constants';
 
 /**
@@ -47,14 +54,14 @@ export function checkNewMessagesAction() {
 /**
  * Dispatched when the new messages are loaded by the request saga
  *
- * @param  {array} messages The messages data
+ * @param  {number} messageCount The messages data
  *
  * @return {object} An action object with a type of CHECK_NEW_MESSAGES_SUCCESS passing the repos
  */
-export function checkNewMessagesSuccessAction(messages) {
+export function checkNewMessagesSuccessAction(messageCount) {
   return {
     type: CHECK_NEW_MESSAGES_SUCCESS,
-    messages,
+    messageCount,
   };
 }
 
@@ -151,6 +158,45 @@ export function getNewNotificationsErrorAction(error) {
 }
 
 /**
+ * Get the new messages, this action starts the request saga
+ *
+ * @return {object} An action object with a type of GET_NEW_MESSAGES
+ */
+ export function getNewMessagesAction() {
+  return {
+    type: GET_NEW_MESSAGES,
+  };
+}
+
+/**
+ * Dispatched when the new messages are loaded by the request saga
+ *
+ * @param  {array} messages The messages data
+ *
+ * @return {object} An action object with a type of GET_NEW_MESSAGES_SUCCESS passing the repos
+ */
+export function getNewMessagesSuccessAction(messages) {
+  return {
+    type: GET_NEW_MESSAGES_SUCCESS,
+    messages,
+  };
+}
+
+/**
+ * Dispatched when loading the new messages fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of GET_NEW_MESSAGES_ERROR passing the repos
+ */
+export function getNewMessagesErrorAction(error) {
+  return {
+    type: GET_NEW_MESSAGES_ERROR,
+    error,
+  };
+}
+
+/**
  * Unset the new notifications, this action starts the request saga
  *
  * @return {object} An action object with a type of UNSET_NEW_NOTIFICATIONS
@@ -187,6 +233,42 @@ export function unsetNewNotificationsErrorAction(error) {
 }
 
 /**
+ * Unset the new messages, this action starts the request saga
+ *
+ * @return {object} An action object with a type of UNSET_NEW_MESSAGES
+ */
+ export function unsetNewMessagesAction() {
+  return {
+    type: UNSET_NEW_MESSAGES,
+  };
+}
+
+/**
+ * Dispatched when unset the new messages are successed by the request saga
+ *
+ * @return {object} An action object with a type of UNSET_NEW_MESSAGES_SUCCESS passing the repos
+ */
+export function unsetNewMessagesSuccessAction() {
+  return {
+    type: UNSET_NEW_MESSAGES_SUCCESS,
+  };
+}
+
+/**
+ * Dispatched when unset the new messages fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object} An action object with a type of UNSET_NEW_MESSAGES_ERROR passing the repos
+ */
+export function unsetNewMessagesErrorAction(error) {
+  return {
+    type: UNSET_NEW_MESSAGES_ERROR,
+    error,
+  };
+}
+
+/**
  * Unset the new notifications from manual click
  *
  * @return {object} An action object with a type of UNSET_MANUAL_NEW_NOTIFICATIONS
@@ -194,6 +276,17 @@ export function unsetNewNotificationsErrorAction(error) {
 export function unsetManualNewNotificationsAction() {
   return {
     type: UNSET_MANUAL_NEW_NOTIFICATIONS,
+  };
+}
+
+/**
+ * Unset the new messages from manual click
+ *
+ * @return {object} An action object with a type of UNSET_MANUAL_NEW_MESSAGES
+ */
+ export function unsetManualNewMessagesAction() {
+  return {
+    type: UNSET_MANUAL_NEW_MESSAGES,
   };
 }
 

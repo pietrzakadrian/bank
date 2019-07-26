@@ -25,7 +25,7 @@ import LoadingCircular from 'components/App/LoadingCircular';
 import TableCellWrapper from './TableCellWrapper';
 import RecentTransitionsSenderAmountWrapper from './RecentTransitionsSenderAmountWrapper';
 import RecentTransitionsRecipientNameWrapper from './RecentTransitionsRecipientNameWrapper';
-import RecentTransitionsTitleWrapper from './RecentTransitionsTitleWrapper';
+import RecentTransitionsWrapper from './RecentTransitionsWrapper';
 import messages from './messages';
 
 // Import Actions
@@ -95,11 +95,11 @@ export default function RecentTransactions() {
                     <TableCellWrapper recent="true">
                       <RecentTransitionsRecipientNameWrapper>
                         <FormattedMessage {...messages.toPayment} />{' '}
-                        <RecentTransitionsTitleWrapper>
+                        <RecentTransitionsWrapper>
                           {row.recipient.name} {row.recipient.surname}
-                        </RecentTransitionsTitleWrapper>
+                        </RecentTransitionsWrapper>
                       </RecentTransitionsRecipientNameWrapper>
-                      <div>{row.transfer_title}</div>
+                      <RecentTransitionsWrapper title="true">{row.transfer_title}</RecentTransitionsWrapper>
                     </TableCellWrapper>
                     <TableCellWrapper>
                       <div>{format(row.date_time, `DD.MM.YYYY`)}</div>
@@ -113,19 +113,19 @@ export default function RecentTransactions() {
                     <TableCellWrapper>
                       <RecentTransitionsRecipientNameWrapper>
                         <FormattedMessage {...messages.fromPayment} />{' '}
-                        <RecentTransitionsTitleWrapper>
+                        <RecentTransitionsWrapper>
                           {row.sender.name} {row.sender.surname}
-                        </RecentTransitionsTitleWrapper>
+                        </RecentTransitionsWrapper>
                       </RecentTransitionsRecipientNameWrapper>
-                      <RecentTransitionsTitleWrapper>
+                      <RecentTransitionsWrapper title="true">
                         {row.transfer_title}
-                      </RecentTransitionsTitleWrapper>
+                      </RecentTransitionsWrapper>
                     </TableCellWrapper>
                     <TableCellWrapper>
                       <div>{format(row.date_time, `DD.MM.YYYY`)}</div>
-                      <div>
+                      <RecentTransitionsSenderAmountWrapper>
                         {row.amount_money} {row.currency}
-                      </div>
+                      </RecentTransitionsSenderAmountWrapper>
                     </TableCellWrapper>
                   </Fragment>
                 )}

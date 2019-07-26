@@ -10,7 +10,7 @@ import ApiEndpoint from 'utils/api';
 import AuthService from 'services/auth.service';
 
 // Import Selectors
-import { makeNotificationCountSelector } from 'containers/App/selectors';
+import { makeNotificationCountSelector, makeMessageCountSelector } from 'containers/App/selectors';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 
 // Import Actions
@@ -19,6 +19,7 @@ import {
   logoutSuccessAction,
   checkNewNotificationsSuccessAction,
   checkNewNotificationsErrorAction,
+  checkNewMessagesSuccessAction,
   getNewNotificationsAction,
   getNewNotificationsSuccessAction,
   getNewNotificationsErrorAction,
@@ -27,6 +28,9 @@ import {
   unsetNewNotificationsSuccessAction,
   isLoggedSuccessAction,
   isLoggedErroAction,
+  checkNewMessagesErrorAction,
+  getNewMessagesAction,
+  unsetNewMessagesErrorAction,
 } from './actions';
 
 // Import Constants
@@ -36,6 +40,9 @@ import {
   CHECK_NEW_NOTIFICATIONS,
   TOGGLE_NOTIFICATIONS,
   GET_NEW_NOTIFICATIONS,
+  CHECK_NEW_MESSAGES,
+  GET_NEW_MESSAGES,
+  TOGGLE_MESSAGES,
 } from './constants';
 
 export function* handleLogout() {
@@ -145,6 +152,8 @@ export function* getNewNotifications() {
   }
 }
 
+export function* getNewMessages() {}
+
 export function* handleNewNotifications() {
   const auth = new AuthService();
   const api = new ApiEndpoint();
@@ -175,10 +184,70 @@ export function* handleNewNotifications() {
   }
 }
 
+export function* handleMessages() {
+  const auth = new AuthService();
+  const api = new ApiEndpoint();
+  const token = auth.getToken();
+  const requestURL = api.getIsMessagePath();
+
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const { isMessage, messageCount } = response;
+    if (!isMessage) return;
+
+    yield put(checkNewMessagesSuccessAction(messageCount));
+    yield put(getNewMessagesAction());
+  } catch (error) {
+    console.log(error)
+    yield put(checkNewMessagesErrorAction(error));
+  }
+}
+
+export function* handleNewMessages() {
+  const auth = new AuthService();
+  const api = new ApiEndpoint();
+  const token = auth.getToken();
+  const requestURL = api.getNotificationsPath();
+  const messageCount = yield select(makeMessageCountSelector());
+
+  if (!messageCount) return;
+
+  try {
+    yield put(unsetNewMessagesAction());
+
+    const response = yield call(request, requestURL, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const { success } = response;
+    if (!success) return yield put(unsetNewMessagesErrorAction('error'));
+
+    yield put(unsetNewMessagesSuccessAction());
+  } catch (error) {
+    yield put(unsetNewMessagesErrorAction(error));
+  }
+}
+
 export default function* appPageSaga() {
   yield takeLatest(LOGOUT, handleLogout);
   yield takeLatest(IS_LOGGED, handleLogged);
   yield takeLatest(CHECK_NEW_NOTIFICATIONS, handleNotifications);
+  yield takeLatest(CHECK_NEW_MESSAGES, handleMessages);
   yield takeLatest(GET_NEW_NOTIFICATIONS, getNewNotifications);
+  yield takeLatest(GET_NEW_MESSAGES, getNewMessages);
   yield takeLatest(TOGGLE_NOTIFICATIONS, handleNewNotifications);
+  yield takeLatest(TOGGLE_MESSAGES, handleNewMessages);
 }

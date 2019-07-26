@@ -26,7 +26,9 @@ export default class ApiEndpoint {
     this.getAuthorizationKeyPath = this.getAuthorizationKeyPath.bind(this);
     this.getCurrencyPath = this.getCurrencyPath.bind(this);
     this.getNotificationsPath = this.getNotificationsPath.bind(this);
+    this.getMessagesPath = this.getMessagesPath.bind(this);
     this.getIsNotificationPath = this.getIsNotificationPath.bind(this);
+    this.getIsMessagePath = this.getIsMessagePath.bind(this);
   }
 
   getLoginPath() {
@@ -103,5 +105,13 @@ export default class ApiEndpoint {
 
   getIsNotificationPath() {
     return `${BASE_URL}${ADDITIONALS_PATH}/notifications/isNotification`;
+  }
+
+  getMessagesPath() {
+    return `${BASE_URL}${ADDITIONALS_PATH}/messages`;
+  }
+
+  getIsMessagePath() {
+    return `${BASE_URL}${ADDITIONALS_PATH}/messages/isMessage`;
   }
 }
