@@ -11,10 +11,11 @@ import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 const RecentTransitionsRecipientNameWrapper = styled.div`
   max-height: 20px;
   overflow: hidden;
-  white-space: nowrap; 
+  white-space: nowrap;
+  width: 100%;
   max-width: 100px;
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
 
   span:nth-child(2) {
     color: ${PRIMARY_BLUE_DARK};

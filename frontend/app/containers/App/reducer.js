@@ -18,6 +18,7 @@ import {
   TOGGLE_NAVIGATION_MOBILE,
   TOGGLE_MESSAGES,
   TOGGLE_NOTIFICATIONS,
+  TOGGLE_MESSAGE_MODAL,
   CHECK_NEW_MESSAGES_SUCCESS,
   CHECK_NEW_MESSAGES_ERROR,
   CHECK_NEW_NOTIFICATIONS_SUCCESS,
@@ -31,13 +32,14 @@ import {
   UNSET_NEW_MESSAGES_SUCCESS,
   UNSET_NEW_MESSAGES_ERROR,
   UNSET_MANUAL_NEW_NOTIFICATIONS,
-  UNSET_MANUAL_NEW_MESSAGES
+  UNSET_MANUAL_NEW_MESSAGES,
 } from './constants';
 
 export const initialState = {
   isLogged: false,
   messages: [],
   messageCount: 0,
+  createdDate: '',
   notifications: [],
   notificationCount: 0,
   snackbars: [],
@@ -46,6 +48,7 @@ export const initialState = {
   isOpenNavigationDesktop: true,
   isOpenNotifications: false,
   isOpenMessages: false,
+  isOpenMossageModal: false,
   isNewNotifications: false,
   isNewMessages: false,
 };
@@ -93,7 +96,7 @@ const appPageReducer = produce((draft, action) => {
     case GET_NEW_NOTIFICATIONS_ERROR:
       draft.error = action.error;
       break;
-      case GET_NEW_MESSAGES_SUCCESS:
+    case GET_NEW_MESSAGES_SUCCESS:
       draft.messages = action.messages;
       break;
     case GET_NEW_MESSAGES_ERROR:
@@ -116,6 +119,9 @@ const appPageReducer = produce((draft, action) => {
     case TOGGLE_NOTIFICATIONS:
       draft.isOpenNotifications = !draft.isOpenNotifications;
       draft.isOpenMessages = false;
+      break;
+    case TOGGLE_MESSAGE_MODAL:
+      draft.isOpenMossageModal = !draft.isOpenMossageModal;
       break;
     case LOGGED_IN:
       draft.isLogged = true;
@@ -141,6 +147,7 @@ const appPageReducer = produce((draft, action) => {
       draft.isOpenMessages = false;
       draft.isNewNotifications = false;
       draft.isNewMessages = false;
+      draft.isOpenMossageModal = false;
       break;
     case LOGOUT_ERROR:
       draft.error = '';
@@ -154,6 +161,7 @@ const appPageReducer = produce((draft, action) => {
       draft.isOpenMessages = false;
       draft.isNewNotifications = false;
       draft.isNewMessages = false;
+      draft.isOpenMossageModal = false;
       break;
     case ENQUEUE_SNACKBAR:
       draft.snackbars = [

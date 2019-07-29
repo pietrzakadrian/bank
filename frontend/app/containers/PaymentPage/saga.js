@@ -43,6 +43,7 @@ import {
   getCurrencySuccessAction,
   getAuthorizationKeyErrorAction,
   getAuthorizationKeySuccessAction,
+  getLastAssociatedTransactionAction,
 } from './actions';
 
 // Import Constants
@@ -118,6 +119,13 @@ export function* handleAccountNumber() {
   const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
   const requestURL = api.getIsAccountBillPath(accountBill.replace(/ /g, ''));
+
+  if (!accountBill)
+    return yield put(
+      enterAccountNumberErrorAction(
+        <FormattedMessage {...messages.errorAccountNumberEmpty} />,
+      ),
+    );
 
   try {
     const response = yield call(request, requestURL, {

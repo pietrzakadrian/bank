@@ -13,6 +13,7 @@ const HeavyWidgetLeftSide = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  text-align: left;
 `;
 
 export default HeavyWidgetLeftSide;

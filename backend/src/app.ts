@@ -1,5 +1,4 @@
 import "reflect-metadata";
-
 import bodyParser from "body-parser";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
@@ -8,23 +7,33 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { createConnection, getManager } from "typeorm";
 import config from "./config/config";
+import routes from "./routes";
+import cron from "cron";
+
+// Import Services
+import { AdditionalService } from "./services/additionals.service";
+import { UserService } from "./services/users.service";
+import { CurrencyService } from "./services/currency.service";
+import { BillService } from "./services/bills.service";
+
+// Import Entities
+import { Currency } from "./entities/currency.entity";
+import { User } from "./entities/user.entity";
+import { Bill } from "./entities/bill.entity";
+import { Additional } from "./entities/additional.entity";
+
+// Import Utils
+import * as swaggerDocument from "./utils/swagger/swagger.json";
+import { Logger, ILogger } from "./utils/logger";
+
+// Import Crons
+import { CurrencyCron } from "./crons/currency.cron";
+
+// Import Middlewares
 import { AuthHandler } from "./middlewares/authHandler.middleware";
 import genericErrorHandler from "./middlewares/genericErrorHandler.middleware";
 import nodeErrorHandler from "./middlewares/nodeErrorHandler.middleware";
 import notFoundHandler from "./middlewares/notFoundHandler.middleware";
-import routes from "./routes";
-import { Logger, ILogger } from "./utils/logger";
-import { CurrencyService } from "./services/currency.service";
-import { Currency } from "./entities/currency.entity";
-import { CurrencyCron } from "./crons/currency.cron";
-import cron from "cron";
-import { UserService } from "./services/users.service";
-import { User } from "./entities/user.entity";
-import { Bill } from "./entities/bill.entity";
-import { BillService } from "./services/bills.service";
-import { Additional } from "./entities/additional.entity";
-import { AdditionalService } from "./services/additionals.service";
-import * as swaggerDocument from "./utils/swagger/swagger.json";
 
 export class Application {
   app: express.Application;
@@ -68,7 +77,7 @@ export class Application {
 
     await this.startServer();
     await this.setCurrencies();
-    await this.runCrons();
+    await this.setupCrons();
     await this.createAdmin();
   };
 
@@ -126,25 +135,15 @@ export class Application {
 
   setCurrencies = async () => {
     const currencyService = new CurrencyService();
+    const currencyRepository = getManager().getRepository(Currency);
+    const newCurrencies: Array<object> = [
+      { id: 1, name: "USD" },
+      { id: 2, name: "PLN", main: true },
+      { id: 3, name: "EUR" }
+    ];
 
     try {
       const currencies = await currencyService.getAll();
-      const currencyRepository = getManager().getRepository(Currency);
-      const newCurrencies = [
-        {
-          id: 1,
-          name: "USD"
-        },
-        {
-          id: 2,
-          name: "PLN",
-          main: true
-        },
-        {
-          id: 3,
-          name: "EUR"
-        }
-      ];
 
       if (currencies.length)
         return new CurrencyCron().setCurrenciesExchangeRates();
@@ -164,7 +163,7 @@ export class Application {
     }
   };
 
-  runCrons = () => {
+  setupCrons = () => {
     new this.CronJob(
       "0 0 */1 * * *",
       () => new CurrencyCron().setCurrenciesExchangeRates(),

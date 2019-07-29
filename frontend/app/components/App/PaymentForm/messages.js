@@ -161,4 +161,12 @@ export default defineMessages({
     defaultMessage:
       '* You can search for the account number by entering subsequent digits',
   },
+  fromPayment: {
+    id: `${scope}.fromPayment`,
+    defaultMessage: 'from',
+  },
+  toPayment: {
+    id: `${scope}.toPayment`,
+    defaultMessage: 'to',
+  },
 });

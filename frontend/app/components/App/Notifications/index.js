@@ -17,11 +17,11 @@ import TableRow from '@material-ui/core/TableRow';
 import NotificationContainer from './NotificationContainer';
 import NotificationsWrapper from './NotificationsWrapper';
 import TextWrapper from './TextWrapper';
-import SenderWrapper from './SenderWrapper';
+import SenderWrapper from 'components/App/SenderWrapper';
 import messages from './messages';
 import NotificationWrapper from './NotificationWrapper';
-import AmountWrapper from './AmountWrapper';
-import DateWrapper from './DateWrapper';
+import AmountWrapper from 'components/App/AmountWrapper';
+import DateWrapper from 'components/App/DateWrapper';
 import {
   WidgetBeamWrapper,
   WidgetBeamCounter,
@@ -48,8 +48,6 @@ export default function Notifications() {
     dispatch(unsetManualNewNotificationsAction());
   const { isOpenNotifications, notifications } = useSelector(stateSelector);
 
-  let id = 0;
-
   return (
     <NotificationsWrapper
       open={isOpenNotifications}
@@ -57,43 +55,40 @@ export default function Notifications() {
     >
       {notifications.length ? (
         <Fragment>
-                  <WidgetBeamWrapper>
-                  <WidgetBeamCounter>
-                    <FormattedMessage {...messages.numberOfNotifications} />{' '}
-                    {notifications.length}
-                  </WidgetBeamCounter>
-                  <WidgetBeamButton
-                    type="button"
-                    onClick={onManualUnsetNotifications}
-                  >
-                    <FormattedMessage {...messages.markAsRead} />
-                  </WidgetBeamButton>
-                </WidgetBeamWrapper>
-        <NotificationContainer>
-          <Table>
-            <TableBody>
-              {notifications.map(notification => (
-                <TableRow key={id++}>
-                  <Fragment>
-                    <TableCell>
-                      <NotificationWrapper>
-                        <FormattedMessage {...messages.getTrasnfer} />{' '}
-                        <SenderWrapper>
-                          {notification.sender_name}
-                        </SenderWrapper>{' '}
-                        <FormattedMessage {...messages.worth} />{' '}
-                        <AmountWrapper>
-                          {notification.amount_money}
-                        </AmountWrapper>
-                        <DateWrapper>{notification.date_time}</DateWrapper>
-                      </NotificationWrapper>
-                    </TableCell>
-                  </Fragment>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </NotificationContainer>
+          <WidgetBeamWrapper>
+            <WidgetBeamCounter>
+              <FormattedMessage {...messages.numberOfNotifications} />{' '}
+              {notifications.length}
+            </WidgetBeamCounter>
+            <WidgetBeamButton onClick={onManualUnsetNotifications}>
+              <FormattedMessage {...messages.markAsRead} />
+            </WidgetBeamButton>
+          </WidgetBeamWrapper>
+          <NotificationContainer>
+            <Table>
+              <TableBody>
+                {notifications.map((notification, index) => (
+                  <TableRow key={index++}>
+                    <Fragment>
+                      <TableCell>
+                        <NotificationWrapper>
+                          <FormattedMessage {...messages.getTrasnfer} />{' '}
+                          <SenderWrapper>
+                            {notification.sender_name}
+                          </SenderWrapper>{' '}
+                          <FormattedMessage {...messages.worth} />{' '}
+                          <AmountWrapper>
+                            {notification.amount_money}
+                          </AmountWrapper>
+                          <DateWrapper>{notification.date_time}</DateWrapper>
+                        </NotificationWrapper>
+                      </TableCell>
+                    </Fragment>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </NotificationContainer>
         </Fragment>
       ) : (
         <TextWrapper>

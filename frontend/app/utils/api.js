@@ -29,6 +29,9 @@ export default class ApiEndpoint {
     this.getMessagesPath = this.getMessagesPath.bind(this);
     this.getIsNotificationPath = this.getIsNotificationPath.bind(this);
     this.getIsMessagePath = this.getIsMessagePath.bind(this);
+    this.getLastAssociatedTransactionPath = this.getLastAssociatedTransactionPath.bind(
+      this,
+    );
   }
 
   getLoginPath() {
@@ -93,6 +96,10 @@ export default class ApiEndpoint {
 
   getAuthorizationKeyPath(id) {
     return `${BASE_URL}${TRANSACTIONS_PATH}/${id}/key`;
+  }
+
+  getLastAssociatedTransactionPath(id) {
+    return `${BASE_URL}${TRANSACTIONS_PATH}/${id}/transaction`;
   }
 
   getCurrencyPath() {

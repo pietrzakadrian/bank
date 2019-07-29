@@ -7,7 +7,7 @@
 import styled from 'styled-components';
 import { PRIMARY_BLUE_LIGHT } from 'utils/colors';
 
-const WidgetBeamButton = styled.button`
+const WidgetBeamButton = styled.div`
   font-size: 12.5px;
   color: ${PRIMARY_BLUE_LIGHT};
   padding: 0;

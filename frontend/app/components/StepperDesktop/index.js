@@ -6,6 +6,7 @@ import { PRIMARY_LIGHT } from 'utils/colors';
 
 const StepperDesktop = styled(Stepper)`
   &&& {
+    text-align: center;
     background-color: ${PRIMARY_LIGHT};
     display: none;
 

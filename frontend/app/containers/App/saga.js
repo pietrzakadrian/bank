@@ -1,6 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { format } from 'date-fns';
+import differenceInYears from 'date-fns/difference_in_years';
 
 // Import Utils
 import request from 'utils/request';
@@ -10,7 +11,10 @@ import ApiEndpoint from 'utils/api';
 import AuthService from 'services/auth.service';
 
 // Import Selectors
-import { makeNotificationCountSelector, makeMessageCountSelector } from 'containers/App/selectors';
+import {
+  makeNotificationCountSelector,
+  makeMessageCountSelector,
+} from 'containers/App/selectors';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 
 // Import Actions
@@ -33,7 +37,7 @@ import {
   unsetNewMessagesAction,
   unsetNewMessagesSuccessAction,
   unsetNewMessagesErrorAction,
-
+  getNewMessagesSuccessAction,
 } from './actions';
 
 // Import Constants
@@ -141,7 +145,7 @@ export function* getNewNotifications() {
       ({ ...newNotification }) => ({
         date_time: format(
           newNotification.transaction_createdDate,
-          `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
+          `DD.MM.YYYY, ${locale === 'en' ? 'hh:mm A' : 'HH:mm'}`,
         ),
         sender_name: `${newNotification.user_name} ${newNotification.user_surname}`,
         amount_money: `${newNotification.transaction_amountMoney
@@ -153,16 +157,6 @@ export function* getNewNotifications() {
   } catch (error) {
     yield put(getNewNotificationsErrorAction(error));
   }
-}
-
-export function* getNewMessages() {
-  const welcomeMessage = [{
-    senderName: 'Adrian',
-    senderSurname: 'Pietrzak',
-    createdDate: new Date()
-  }]
-
-  yield put(getNewMessagesSuccessAction(welcomeMessage));
 }
 
 export function* handleNewNotifications() {
@@ -212,12 +206,10 @@ export function* handleMessages() {
     });
 
     const { isMessage, messageCount } = response;
-    if (!isMessage) yield put(checkNewMessagesSuccessAction(messageCount, false));
-    else yield put(checkNewMessagesSuccessAction(messageCount));
+    yield put(checkNewMessagesSuccessAction(messageCount, isMessage));
 
     yield put(getNewMessagesAction());
   } catch (error) {
-    console.log(error)
     yield put(checkNewMessagesErrorAction(error));
   }
 }
@@ -248,9 +240,28 @@ export function* handleNewMessages() {
 
     yield put(unsetNewMessagesSuccessAction());
   } catch (error) {
-    console.log(error)
     yield put(unsetNewMessagesErrorAction(error));
   }
+}
+
+export function* getNewMessages() {
+  const locale = yield select(makeSelectLocale());
+  const auth = new AuthService();
+  const userId = auth.getUserId();
+
+  const message = [
+    {
+      senderName: 'Adrian Pietrzak',
+      createdDate: format(
+        new Date(),
+        `DD.MM.YYYY, ${locale === 'en' ? 'hh:mm A' : 'HH:mm'}`,
+      ),
+      userId,
+      authorYo: differenceInYears(new Date(), new Date(1997, 9, 16)),
+    },
+  ];
+
+  return yield put(getNewMessagesSuccessAction(message));
 }
 
 export default function* appPageSaga() {

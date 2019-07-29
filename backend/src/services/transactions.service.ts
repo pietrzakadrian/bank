@@ -1,4 +1,4 @@
-import { getManager, Repository } from "typeorm";
+import { getManager, Repository, Brackets } from "typeorm";
 import { Logger, ILogger } from "../utils/logger";
 
 // Import Entities
@@ -183,8 +183,14 @@ export class TransactionService {
         .where("transaction.authorizationStatus = :authorizationStatus", {
           authorizationStatus: true
         })
-        .andWhere("transaction.recipientId = :userId", { userId })
-        .orWhere("transaction.senderId = :userId", { userId })
+        .andWhere(
+          new Brackets(qb => {
+            qb.where("transaction.recipientId = :userId", { userId }).orWhere(
+              "transaction.senderId = :userId",
+              { userId }
+            );
+          })
+        )
         .select([
           "transaction.createdDate",
           "transaction.amountMoney",
@@ -243,6 +249,67 @@ export class TransactionService {
 
       if (authorizationKey) {
         return authorizationKey.authorizationKey;
+      } else {
+        return undefined;
+      }
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Returns the last transaction asociated with recipient
+   */
+  async getLastAssociatedTransaction(
+    sender: User,
+    recipient: User
+  ): Promise<Array<object>> {
+    const senderId = this.userRepository.getId(sender);
+    const recipientId = this.userRepository.getId(recipient);
+
+    try {
+      const lastAssociatedTransaction = await this.transactionRepository
+        .createQueryBuilder("transaction")
+        .leftJoinAndSelect("transaction.currency", "currency")
+        .leftJoinAndSelect("transaction.sender", "senderBill")
+        .leftJoinAndSelect("transaction.recipient", "recipientBill")
+        .leftJoinAndSelect("senderBill.user", "sender")
+        .leftJoinAndSelect("recipientBill.user", "recipient")
+        .where("transaction.authorizationStatus = :authorizationStatus", {
+          authorizationStatus: true
+        })
+        .andWhere(
+          new Brackets(qb => {
+            qb.where("transaction.recipientId = :recipientId", {
+              recipientId
+            }).orWhere("transaction.senderId = :senderId", { senderId });
+          })
+        )
+        .orWhere(
+          new Brackets(qb => {
+            qb.where("transaction.recipientId = :senderId", {
+              senderId
+            }).orWhere("transaction.senderId = :recipientId", { recipientId });
+          })
+        )
+        .select([
+          "transaction.createdDate",
+          "transaction.amountMoney",
+          "transaction.transferTitle",
+          "currency.name",
+          "sender.id",
+          "sender.name",
+          "sender.surname",
+          "recipient.id",
+          "recipient.name",
+          "recipient.surname"
+        ])
+        .orderBy("transaction.createdDate", "DESC")
+        .limit(1)
+        .execute();
+
+      if (lastAssociatedTransaction) {
+        return lastAssociatedTransaction;
       } else {
         return undefined;
       }

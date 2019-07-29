@@ -55,7 +55,7 @@ export function* handleGridData() {
             .replace('.', ',')} ${gridData.currency.name}`,
       date_time: format(
         gridData.createdDate,
-        `DD.MM.YYYY, ${locale === 'en' ? 'hh:MM A' : 'HH:MM'}`,
+        `DD.MM.YYYY, ${locale === 'en' ? 'hh:mm A' : 'HH:mm'}`,
       ),
       transfer_title: gridData.transferTitle,
       sender_name: `${gridData.sender.user.name} ${

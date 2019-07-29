@@ -3,8 +3,6 @@ import { Logger, ILogger } from "../utils/logger";
 import { Decimal } from "decimal.js";
 
 // Import Services
-import { UserService } from "./users.service";
-import { BillService } from "./bills.service";
 import { CurrencyService } from "./currency.service";
 import { TransactionService } from "./transactions.service";
 
@@ -167,7 +165,7 @@ export class AdditionalService {
 
     let transferExchangeRate: number = null;
     let convertedAmountMoney: number = null;
-    let availableFunds: number = 0;
+    let availableFunds: Decimal = new Decimal(0);
     let accountBalanceHistory: string = "0";
     let incomingTransfersSum: number = 0;
     let outgoingTransfersSum: number = 0;
@@ -179,11 +177,16 @@ export class AdditionalService {
     for await (const transaction of transactions) {
       if (transaction.sender_id === userId) {
         if (transaction.currency_id === userCurrencyId) {
-          outgoingTransfersSum += parseFloat(
+          outgoingTransfersSum = Decimal.add(
+            outgoingTransfersSum,
+            transaction.transaction_amountMoney
+          ).toNumber();
+
+          availableFunds = Decimal.sub(
+            availableFunds,
             transaction.transaction_amountMoney
           );
 
-          availableFunds -= parseFloat(transaction.transaction_amountMoney);
           accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
         } else {
           transferExchangeRate = await currencyService.getExchangeRateById(
@@ -191,21 +194,34 @@ export class AdditionalService {
           );
 
           if (isUserCurrencyMain) {
-            convertedAmountMoney =
-              parseFloat(transaction.transaction_amountMoney) /
-              transferExchangeRate;
+            convertedAmountMoney = Decimal.div(
+              transaction.transaction_amountMoney,
+              transferExchangeRate
+            ).toNumber();
 
-            outgoingTransfersSum += convertedAmountMoney;
-            availableFunds -= convertedAmountMoney;
+            outgoingTransfersSum = Decimal.add(
+              outgoingTransfersSum,
+              convertedAmountMoney
+            ).toNumber();
+
+            availableFunds = Decimal.sub(availableFunds, convertedAmountMoney);
+
             accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
           } else {
-            convertedAmountMoney =
-              (parseFloat(transaction.transaction_amountMoney) /
-                transferExchangeRate) *
-              userExchangeRate;
+            convertedAmountMoney = Decimal.div(
+              transaction.transaction_amountMoney,
+              transferExchangeRate
+            )
+              .mul(userExchangeRate)
+              .toNumber();
 
-            outgoingTransfersSum += convertedAmountMoney;
-            availableFunds -= convertedAmountMoney;
+            outgoingTransfersSum = Decimal.add(
+              outgoingTransfersSum,
+              convertedAmountMoney
+            ).toNumber();
+
+            availableFunds = Decimal.sub(availableFunds, convertedAmountMoney);
+
             accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
           }
         }
@@ -213,11 +229,16 @@ export class AdditionalService {
 
       if (transaction.recipient_id === userId) {
         if (transaction.currency_id === userCurrencyId) {
-          incomingTransfersSum += parseFloat(
+          incomingTransfersSum = Decimal.add(
+            incomingTransfersSum,
+            transaction.transaction_amountMoney
+          ).toNumber();
+
+          availableFunds = Decimal.add(
+            availableFunds,
             transaction.transaction_amountMoney
           );
 
-          availableFunds += parseFloat(transaction.transaction_amountMoney);
           accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
         } else {
           transferExchangeRate = await currencyService.getExchangeRateById(
@@ -225,21 +246,33 @@ export class AdditionalService {
           );
 
           if (isUserCurrencyMain) {
-            convertedAmountMoney =
-              parseFloat(transaction.transaction_amountMoney) /
-              transferExchangeRate;
+            convertedAmountMoney = Decimal.div(
+              transaction.transaction_amountMoney,
+              transferExchangeRate
+            ).toNumber();
 
-            incomingTransfersSum += convertedAmountMoney;
-            availableFunds += convertedAmountMoney;
+            incomingTransfersSum = Decimal.add(
+              incomingTransfersSum,
+              convertedAmountMoney
+            ).toNumber();
+            availableFunds = Decimal.add(availableFunds, convertedAmountMoney);
+
             accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
           } else {
-            convertedAmountMoney =
-              (parseFloat(transaction.transaction_amountMoney) /
-                transferExchangeRate) *
-              userExchangeRate;
+            convertedAmountMoney = Decimal.div(
+              transaction.transaction_amountMoney,
+              transferExchangeRate
+            )
+              .mul(userExchangeRate)
+              .toNumber();
 
-            incomingTransfersSum += convertedAmountMoney;
-            availableFunds += convertedAmountMoney;
+            incomingTransfersSum = Decimal.add(
+              incomingTransfersSum,
+              convertedAmountMoney
+            ).toNumber();
+
+            availableFunds = Decimal.add(availableFunds, convertedAmountMoney);
+
             accountBalanceHistory += `,${availableFunds.toFixed(2)}`;
           }
         }

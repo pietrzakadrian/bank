@@ -174,10 +174,7 @@ export default function Header({ children, location }) {
                   </ItemWrapper>
                 </BadgeWrapper>
               ) : (
-                <BadgeWrapper
-                  classes={{ badge: 'badge' }}
-                  badgeContent={false}
-                >
+                <BadgeWrapper classes={{ badge: 'badge' }} badgeContent={false}>
                   <MailOutlineIcon className="icon" />
                   <ItemWrapper>
                     <FormattedMessage {...messages.headerItemMessagesTitle} />

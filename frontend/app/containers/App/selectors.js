@@ -83,6 +83,12 @@ const makeIsLoggedSelector = () =>
     globalState => globalState.isLogged,
   );
 
+const makeIsOpenMessageModalSelector = () =>
+  createSelector(
+    selectGlobal,
+    globalState => globalState.isOpenMossageModal,
+  );
+
 const makeSelectLocation = () =>
   createSelector(
     selectRouter,
@@ -103,5 +109,6 @@ export {
   makeIsNewNotificationsSelector,
   makeNotificationCountSelector,
   makeMessageCountSelector,
+  makeIsOpenMessageModalSelector,
   makeIsLoggedSelector,
 };

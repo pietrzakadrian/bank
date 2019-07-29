@@ -38,6 +38,8 @@ import {
   UNSET_NEW_MESSAGES_ERROR,
   UNSET_MANUAL_NEW_NOTIFICATIONS,
   UNSET_MANUAL_NEW_MESSAGES,
+  TOGGLE_MESSAGE_MODAL,
+  CREATE,
 } from './constants';
 
 /**
@@ -59,7 +61,7 @@ export function checkNewMessagesAction() {
  *
  * @return {object} An action object with a type of CHECK_NEW_MESSAGES_SUCCESS passing the repos
  */
-export function checkNewMessagesSuccessAction(messageCount, isNewMessage = true) {
+export function checkNewMessagesSuccessAction(messageCount, isNewMessage) {
   return {
     type: CHECK_NEW_MESSAGES_SUCCESS,
     messageCount,
@@ -164,7 +166,7 @@ export function getNewNotificationsErrorAction(error) {
  *
  * @return {object} An action object with a type of GET_NEW_MESSAGES
  */
- export function getNewMessagesAction() {
+export function getNewMessagesAction() {
   return {
     type: GET_NEW_MESSAGES,
   };
@@ -239,7 +241,7 @@ export function unsetNewNotificationsErrorAction(error) {
  *
  * @return {object} An action object with a type of UNSET_NEW_MESSAGES
  */
- export function unsetNewMessagesAction() {
+export function unsetNewMessagesAction() {
   return {
     type: UNSET_NEW_MESSAGES,
   };
@@ -286,7 +288,7 @@ export function unsetManualNewNotificationsAction() {
  *
  * @return {object} An action object with a type of UNSET_MANUAL_NEW_MESSAGES
  */
- export function unsetManualNewMessagesAction() {
+export function unsetManualNewMessagesAction() {
   return {
     type: UNSET_MANUAL_NEW_MESSAGES,
   };
@@ -405,6 +407,17 @@ export function toggleNavigationMobileAction() {
 export function toggleMessagesAction() {
   return {
     type: TOGGLE_MESSAGES,
+  };
+}
+
+/**
+ * Toggle message modal
+ *
+ * @return {object} An action object with a type of TOGGLE_MESSAGE_MODAL
+ */
+export function toggleMessageModalAction() {
+  return {
+    type: TOGGLE_MESSAGE_MODAL,
   };
 }
 

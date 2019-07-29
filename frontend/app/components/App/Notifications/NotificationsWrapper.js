@@ -14,7 +14,6 @@ import {
 const NotificationsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-
   background: ${PRIMARY_LIGHT};
   border: 1.3px solid ${BORDER_GREY_LIGHT};
   border-radius: 2px;

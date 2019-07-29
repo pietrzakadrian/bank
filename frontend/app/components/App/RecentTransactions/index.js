@@ -69,7 +69,8 @@ export default function RecentTransactions() {
   useInjectReducer({ key, reducer });
 
   useEffect(() => {
-    if (recentTransactionsRecipient.length === 0) getRecentTransactionsRecipient();
+    if (recentTransactionsRecipient.length === 0)
+      getRecentTransactionsRecipient();
     if (recentTransactionsSender.length === 0) getRecentTransactionsSender();
   }, []);
 
@@ -98,7 +99,9 @@ export default function RecentTransactions() {
                           {row.recipient.name} {row.recipient.surname}
                         </RecentTransitionsWrapper>
                       </RecentTransitionsRecipientNameWrapper>
-                      <RecentTransitionsWrapper title="true">{row.transfer_title}</RecentTransitionsWrapper>
+                      <RecentTransitionsWrapper title="true">
+                        {row.transfer_title}
+                      </RecentTransitionsWrapper>
                     </TableCellWrapper>
                     <TableCellWrapper>
                       <div>{format(row.date_time, `DD.MM.YYYY`)}</div>
@@ -122,9 +125,9 @@ export default function RecentTransactions() {
                     </TableCellWrapper>
                     <TableCellWrapper>
                       <div>{format(row.date_time, `DD.MM.YYYY`)}</div>
-                      <RecentTransitionsSenderAmountWrapper>
+                      <div>
                         {row.amount_money} {row.currency}
-                      </RecentTransitionsSenderAmountWrapper>
+                      </div>
                     </TableCellWrapper>
                   </Fragment>
                 )}

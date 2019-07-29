@@ -42,6 +42,8 @@ import ContainerWrapper from './ContainerWrapper';
 import ConfirmPaymentWrapper from './ConfirmPaymentWrapper';
 import FlatButtonWrapper from './FlatButtonWrapper';
 import SuggestionAuthorizationKeyWrapper from './SuggestionAuthorizationKeyWrapper';
+import AuthorizationKeyContainer from './AuthorizationKeyContainer';
+import ConfirmLabelWrapper from './ConfirmLabelWrapper';
 
 // Import Actions
 import {
@@ -75,12 +77,16 @@ import {
   makeMessageSelector,
   makeAuthorizationKeySelector,
   makeSuggestionAuthorizationKeySelector,
+  makeRecipientNameSelector,
+  makeRecipientSurnameSelector,
 } from 'containers/PaymentPage/selectors';
 
 const stateSelector = createStructuredSelector({
   accountNumber: makeAccountNumberSelector(),
   amountMoney: makeAmountMoneySelector(),
   transferTitle: makeTransferTitleSelector(),
+  recipientName: makeRecipientNameSelector(),
+  recipientSurname: makeRecipientSurnameSelector(),
   authorizationKey: makeAuthorizationKeySelector(),
   suggestionAuthorizationKey: makeSuggestionAuthorizationKeySelector(),
   activeStep: makeActiveStepSelector(),
@@ -212,7 +218,6 @@ function PaymentForm({ intl }) {
   const handleAuthorizationKey = () => dispatch(getAuthorizationKeyAction());
   const handleKeyPress = e =>
     (e.key === 'E' || e.key === 'e') && e.preventDefault();
-  const handleKeyDown = e => e.keyCode === 13 && e.preventDefault();
   const {
     accountNumber,
     amountMoney,
@@ -401,115 +406,99 @@ function PaymentForm({ intl }) {
           )}
 
           {activeStep === 3 && (
-            <ContainerWrapper>
-              <div>
+            <Fragment>
+              <ContainerWrapper>
                 <LabelWrapper large>
                   <FormattedMessage {...messages.stepAccountNumber} />
                 </LabelWrapper>
 
-                <InputWrapper
-                  large
-                  key={3}
-                  readOnly
-                  value={accountNumber.replace(/(^\d{2}|\d{4})+?/g, '$1 ')}
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
+                <ConfirmLabelWrapper>
+                  {accountNumber.replace(/(^\d{2}|\d{4})+?/g, '$1 ')}
+                </ConfirmLabelWrapper>
 
-              <div>
                 <LabelWrapper large>
                   <FormattedMessage {...messages.stepAmountOfMoney} />
                 </LabelWrapper>
 
-                <InputWrapper
-                  large
-                  key={4}
-                  onKeyDown={handleKeyDown}
-                  value={`${amountMoney
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                    .replace('.', ',')} ${currency}`}
-                  readOnly
-                />
-              </div>
+                <ConfirmLabelWrapper>{`${amountMoney
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+                  .replace('.', ',')} ${currency}`}</ConfirmLabelWrapper>
 
-              <div>
                 <LabelWrapper large>
                   <FormattedMessage {...messages.stepTransferTitle} />
                 </LabelWrapper>
 
-                <InputWrapper
+                <ConfirmLabelWrapper>{transferTitle}</ConfirmLabelWrapper>
+
+                <ButtonWrapper
                   large
-                  key={5}
-                  value={transferTitle}
-                  onKeyDown={handleKeyDown}
-                  readOnly
-                />
-              </div>
+                  type="button"
+                  disabled={isLoading || isSendAuthorizationKey}
+                  onClick={onSendAuthorizationKey}
+                >
+                  <FormattedMessage {...messages.inputReceiveCode} />
+                  <NavigateNextIcon />
+                </ButtonWrapper>
+              </ContainerWrapper>
 
-              <ButtonWrapper
-                large
-                type="button"
-                disabled={isLoading || isSendAuthorizationKey}
-                onClick={onSendAuthorizationKey}
-              >
-                <FormattedMessage {...messages.inputReceiveCode} />
-                <NavigateNextIcon />
-              </ButtonWrapper>
+              <AuthorizationKeyContainer>
+                {message && <TextWrapper large>{message}</TextWrapper>}
 
-              {message && <TextWrapper large>{message}</TextWrapper>}
+                {isSendAuthorizationKey && (
+                  <Fragment>
+                    <ConfirmPaymentWrapper>
+                      <FormattedMessage {...messages.inputAuthorizationKey}>
+                        {placeholder => (
+                          <InputWrapper
+                            key={6}
+                            onChange={onChangeAuthorizationKey}
+                            type="text"
+                            placeholder={placeholder}
+                            error={error}
+                          />
+                        )}
+                      </FormattedMessage>
 
-              {isSendAuthorizationKey && (
-                <Fragment>
-                  <ConfirmPaymentWrapper>
-                    <FormattedMessage {...messages.inputAuthorizationKey}>
-                      {placeholder => (
-                        <InputWrapper
-                          key={6}
-                          onChange={onChangeAuthorizationKey}
-                          type="text"
-                          placeholder={placeholder}
-                          error={error}
-                        />
-                      )}
-                    </FormattedMessage>
-
-                    <ButtonWrapper
-                      margin="false"
-                      type="submit"
-                      onClick={() => onEnterAuthorizationKey(authorizationKey)}
-                      disabled={isLoading}
-                    >
-                      <FormattedMessage {...messages.inputMakePayment} />
-                    </ButtonWrapper>
-                  </ConfirmPaymentWrapper>
-
-                  {error && (
-                    <LabelWrapper large error={error}>
-                      {error}
-                    </LabelWrapper>
-                  )}
-
-                  <TextWrapper large>
-                    {suggestionAuthorizationKey ? (
-                      <Fragment>
-                        <FormattedMessage {...messages.yourCodeIs} />{' '}
-                        <SuggestionAuthorizationKeyWrapper>
-                          {suggestionAuthorizationKey}
-                        </SuggestionAuthorizationKeyWrapper>
-                      </Fragment>
-                    ) : (
-                      <FlatButtonWrapper
-                        type="button"
-                        onClick={handleAuthorizationKey}
+                      <ButtonWrapper
+                        margin="false"
+                        type="submit"
+                        onClick={() =>
+                          onEnterAuthorizationKey(authorizationKey)
+                        }
+                        disabled={isLoading}
                       >
-                        <FormattedMessage {...messages.noEmailWithoutCode} />
-                      </FlatButtonWrapper>
+                        <FormattedMessage {...messages.inputMakePayment} />
+                      </ButtonWrapper>
+                    </ConfirmPaymentWrapper>
+
+                    {error && (
+                      <LabelWrapper large error={error}>
+                        {error}
+                      </LabelWrapper>
                     )}
-                  </TextWrapper>
-                </Fragment>
-              )}
-            </ContainerWrapper>
+
+                    <TextWrapper large>
+                      {suggestionAuthorizationKey ? (
+                        <Fragment>
+                          <FormattedMessage {...messages.yourCodeIs} />{' '}
+                          <SuggestionAuthorizationKeyWrapper>
+                            {suggestionAuthorizationKey}
+                          </SuggestionAuthorizationKeyWrapper>
+                        </Fragment>
+                      ) : (
+                        <FlatButtonWrapper
+                          type="button"
+                          onClick={handleAuthorizationKey}
+                        >
+                          <FormattedMessage {...messages.noEmailWithoutCode} />
+                        </FlatButtonWrapper>
+                      )}
+                    </TextWrapper>
+                  </Fragment>
+                )}
+              </AuthorizationKeyContainer>
+            </Fragment>
           )}
 
           {activeStep !== 0 && steps.length - 1 && (

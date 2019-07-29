@@ -26,6 +26,7 @@ const globalPersistConfig = {
     'isNewNotifications',
     'isNewMessages',
     'isLogged',
+    'isOpenMossageModal',
   ],
 };
 

@@ -151,6 +151,7 @@ usersRouter
             name: user.name,
             surname: user.surname,
             email: user.email,
+            createdDate: user.createdDate,
             lastSuccessfulLoggedDate: user.lastSuccessfulLoggedDate,
             lastPresentLoggedDate: user.lastPresentLoggedDate,
             lastFailedLoggedDate: user.lastFailedLoggedDate

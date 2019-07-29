@@ -1,13 +1,13 @@
 /**
  *
- * NotificationContainer
+ * MessageContainer
  *
  */
 
 import styled from 'styled-components';
 import { SECONDARY_BACKGROUND_GREY } from 'utils/colors';
 
-const NotificationContainer = styled.div`
+const MessageContainer = styled.div`
     overflow-y: auto;
     height: 139px;
     width: 100%;
@@ -23,4 +23,4 @@ const NotificationContainer = styled.div`
         }
  `;
 
-export default NotificationContainer;
+export default MessageContainer;

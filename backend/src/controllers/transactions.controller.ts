@@ -198,4 +198,62 @@ transactionsRouter
     }
   );
 
+/**
+ * Returns authorization key for the last
+ *
+ * @Method GET
+ * @URL /api/transactions/:id/transaction
+ *
+ */
+transactionsRouter
+  .route("/:id/transaction")
+
+  .get(
+    [
+      param("id")
+        .exists()
+        .isNumeric()
+    ],
+
+    async (req: Request, res: Response, next: NextFunction) => {
+      const transactionService = new TransactionService();
+      const userService = new UserService();
+      const validationErrors = validationResult(req);
+      const sender: User = await userService.getById(req.user.id);
+      const recipient: User = await userService.getById(req.params.id);
+
+      try {
+        const lastAssociatedTransaction: Array<object> = await transactionService.getLastAssociatedTransaction(
+          sender,
+          recipient
+        );
+
+        if (!validationErrors.isEmpty()) {
+          const err: IResponseError = {
+            success: false,
+            code: HttpStatus.BAD_REQUEST,
+            error: validationErrors.array()
+          };
+          return next(err);
+        }
+
+        if (lastAssociatedTransaction)
+          return res.status(HttpStatus.OK).json({
+            lastAssociatedTransaction
+          });
+
+        return res.status(HttpStatus.OK).json({
+          success: false
+        });
+      } catch (error) {
+        const err: IResponseError = {
+          success: false,
+          code: HttpStatus.BAD_REQUEST,
+          error
+        };
+        next(err);
+      }
+    }
+  );
+
 export default transactionsRouter;
