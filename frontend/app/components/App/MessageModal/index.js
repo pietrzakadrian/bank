@@ -42,16 +42,31 @@ export default function MessageModal() {
     >
       <AlertTitleWrapper>
         {/* <FormattedMessage {...messages.contentTitle} /> */}
+        You're very nice.
+
       </AlertTitleWrapper>
       <AlertContentWrapper>
-        {/* <FormattedMessage {...messages.contentAlert} /> */}
+        <FormattedMessage {...messages.part1} />
+        <FormattedMessage {...messages.part2} />
+        <FormattedMessage {...messages.part3} />
+        <FormattedMessage {...messages.part4} />
+        <FormattedMessage {...messages.part5} />
+        <FormattedMessage {...messages.part6} />
+        <FormattedMessage {...messages.part7} />
+        <FormattedMessage {...messages.part8} />
+        <FormattedMessage {...messages.part9} />
+        <FormattedMessage {...messages.part10} />
+        <FormattedMessage {...messages.part11} />
+        <FormattedMessage {...messages.part12} />
+        <FormattedMessage {...messages.part13} />
+        <br />
+        <FormattedMessage {...messages.part14} />
+
+
       </AlertContentWrapper>
       <AlertActionsWrapper>
         <AlertButtonWrapper onClick={onToggleMessageModal}>
-          {/* <FormattedMessage {...messages.disagree} /> */}
-        </AlertButtonWrapper>
-        <AlertButtonWrapper color="primary" autoFocus>
-          {/* <FormattedMessage {...messages.agree} /> */}
+          <FormattedMessage {...messages.disagree} />
         </AlertButtonWrapper>
       </AlertActionsWrapper>
     </AlertDialogWrapper>
