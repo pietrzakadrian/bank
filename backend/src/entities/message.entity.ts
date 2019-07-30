@@ -10,22 +10,21 @@ import {
 
 // Import Entities
 import { User } from "./user.entity";
-import { Template } from "./template.entity";
+import { Config } from "./config.entity";
 
 @Entity("messages")
 export class Message {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => Template, template => template.nameId, { nullable: false })
-  template: Template;
+  @ManyToOne(type => Config, config => config.id, { nullable: false })
+  @JoinColumn({ name: "nameId" })
+  name: Config;
 
   @ManyToOne(type => User, user => user.id, { nullable: false })
-  @JoinTable()
   sender: User;
 
   @ManyToOne(type => User, user => user.id, { nullable: false })
-  @JoinTable()
   recipient: User;
 
   @CreateDateColumn()

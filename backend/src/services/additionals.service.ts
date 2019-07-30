@@ -11,17 +11,20 @@ import { Additional } from "../entities/additional.entity";
 import { Transaction } from "../entities/transaction.entity";
 import { User } from "../entities/user.entity";
 import { Currency } from "../entities/currency.entity";
+import { Message } from "../entities/message.entity";
 
 export class AdditionalService {
   additionalRepository: Repository<Additional>;
   transactionRepository: Repository<Transaction>;
   userRepository: Repository<User>;
+  messageRepository: Repository<Message>;
   logger: ILogger;
 
   constructor() {
     this.logger = new Logger(__filename);
     this.additionalRepository = getManager().getRepository(Additional);
     this.transactionRepository = getManager().getRepository(Transaction);
+    this.messageRepository = getManager().getRepository(Message);
     this.userRepository = getManager().getRepository(User);
   }
 
@@ -319,25 +322,21 @@ export class AdditionalService {
    */
   async setMessage(user: User): Promise<object> {
     try {
-      const userAdditional: Additional = await this.additionalRepository.findOne(
-        {
-          where: {
-            user
-          }
-        }
-      );
-
-      if (!userAdditional) return;
-
-      const messageCount: number = userAdditional.messageCount;
-
-      return await this.additionalRepository.update(
-        { user },
-        {
-          messageCount: messageCount + 1,
-          messageStatus: true
-        }
-      );
+      // TODO
+      // const userMessage: Message = await this.messageRepository.findOne({
+      //   where: {
+      //     user,
+      //   }
+      // });
+      // if (!userAdditional) return;
+      // const messageCount: number = userAdditional.messageCount;
+      // return await this.additionalRepository.update(
+      //   { user },
+      //   {
+      //     messageCount: messageCount + 1,
+      //     messageStatus: true
+      //   }
+      // );
     } catch (error) {
       return Promise.reject(error);
     }
@@ -348,10 +347,10 @@ export class AdditionalService {
    */
   async hasMessage(user: User): Promise<boolean> {
     try {
-      const hasMessage = await this.additionalRepository.findOne({
+      const hasMessage = await this.transactionRepository.findOne({
         where: {
-          user,
-          messageCount: 1
+          authorizationKey: "WELCOME_MESSAGE",
+          recipient: user
         }
       });
 

@@ -2,27 +2,22 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  CreateDateColumn,
   ManyToOne,
-  JoinTable,
-  PrimaryColumn,
-  Generated
+  JoinColumn
 } from "typeorm";
 
 // Import Entities
-import { User } from "./user.entity";
 import { Language } from "./language.entity";
+import { Config } from "./config.entity";
 
 @Entity("templates")
 export class Template {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  nameId: number;
-
-  @Column()
-  name: string;
+  @ManyToOne(type => Config, config => config.id, { nullable: false })
+  @JoinColumn({ name: "nameId" })
+  name: Config;
 
   @Column()
   subject: string;
@@ -30,7 +25,9 @@ export class Template {
   @Column("mediumtext")
   content: string;
 
+  @Column()
+  actions: string;
+
   @ManyToOne(type => Language, language => language.id, { nullable: false })
-  @JoinTable()
   language: Language;
 }
