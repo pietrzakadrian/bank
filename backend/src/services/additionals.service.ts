@@ -14,12 +14,14 @@ import { Transaction } from "../entities/transaction.entity";
 import { User } from "../entities/user.entity";
 import { Currency } from "../entities/currency.entity";
 import { Message } from "../entities/message.entity";
+import { Language } from "../entities/language.entity";
 
 export class AdditionalService {
   additionalRepository: Repository<Additional>;
   transactionRepository: Repository<Transaction>;
   userRepository: Repository<User>;
   messageRepository: Repository<Message>;
+  languageRepository: Repository<Language>;
   logger: ILogger;
 
   constructor() {
@@ -28,6 +30,7 @@ export class AdditionalService {
     this.transactionRepository = getManager().getRepository(Transaction);
     this.messageRepository = getManager().getRepository(Message);
     this.userRepository = getManager().getRepository(User);
+    this.languageRepository = getManager().getRepository(Language);
   }
 
   /**
@@ -139,6 +142,36 @@ export class AdditionalService {
       } else {
         return undefined;
       }
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  async getMessages(
+    recipient: User,
+    language: Language
+  ): Promise<Array<Message> | undefined> {
+    const recipientId: number = this.userRepository.getId(recipient);
+    const languageId: number = this.languageRepository.getId(language);
+
+    try {
+      const messages = await this.messageRepository
+        .createQueryBuilder("message")
+        .leftJoinAndSelect("templates", "templates")
+        .leftJoinAndSelect("templates", "templates")
+        .where("message.recipientId = :recipientId", { recipientId })
+        .andWhere("templates.languageId = :languageId", { languageId })
+        .select([
+          "message.senderId",
+          "message.createdDate",
+          "templates.subject",
+          "templates.content",
+          "templates.actions"
+        ])
+        .orderBy("message.createdDate", "ASC")
+        .execute();
+
+      return messages;
     } catch (error) {
       return Promise.reject(error);
     }

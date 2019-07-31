@@ -5,11 +5,13 @@ import { param, validationResult } from "express-validator/check";
 // Impoty Services
 import { AdditionalService } from "../services/additionals.service";
 import { UserService } from "../services/users.service";
+import { LanguageService } from "../services/languages.service";
+import { MessageService } from "../services/messages.service";
 
 // Import Entities
 import { User } from "../entities/user.entity";
 import { Additional } from "../entities/additional.entity";
-import { Transaction } from "../entities/transaction.entity";
+import { Language } from "../entities/language.entity";
 
 // Import Interfaces
 import { IResponseError } from "../resources/interfaces/IResponseError.interface";
@@ -88,5 +90,49 @@ messagesRouter
       next(err);
     }
   });
+
+/**
+ * Returns user messages
+ *
+ * @Method GET
+ * @URL /api/additionals/messages
+ *
+ */
+messagesRouter
+  .route("/messages/:code")
+
+  .get(
+    [
+      param("code")
+        .exists()
+        .isLength({ min: 2, max: 2 })
+    ],
+    async (req: Request, res: Response, next: NextFunction) => {
+      const additionalService = new AdditionalService();
+      const languageService = new LanguageService();
+      const userService = new UserService();
+      const messageService = new MessageService();
+
+      try {
+        const language: Language = await languageService.getByCode(
+          req.params.code
+        );
+        const user: User = await userService.getById(req.user.id);
+        const messages = await additionalService.getMessages(user, language);
+
+        res.status(HttpStatus.OK).json({
+          success: true,
+          messages
+        });
+      } catch (error) {
+        const err: IResponseError = {
+          success: false,
+          code: HttpStatus.BAD_REQUEST,
+          error
+        };
+        next(err);
+      }
+    }
+  );
 
 export default messagesRouter;

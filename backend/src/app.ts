@@ -275,21 +275,42 @@ export class Application {
       const newTemplates: Array<object> = [
         {
           subject: "Cooperation proposal",
-          content: `My name is Adrian Pietrzak.\r\nI am a ${developerAge}-year-old developer and I focus on programming graphical user interfaces and scalable network applications ...\r\n\r\n... and you are exactly the X person who has the opportunity to test my software. :)\r\n\r\nSoftware development in JavaScript is one of my hobbies.\r\nIf you see my profile on GitHub, you'll find that it fills most of my time.\r\n\r\nYou see, I want to be an expert at it, that's why I have a great request for you:\r\nWrite me a message about what you think about this application.\r\n\r\nI am very interested in how you personally felt the project.\r\nMaybe you found some mistake I do not know about?\r\nMaybe you have an idea for expanding this project?\r\nMaybe you think you could bring something to my life, or maybe we could create value for us? ; )\r\n\r\nI give my e-mail address for you: contact@patrzakadrian.com\r\n\r\nThank you for agreeing to test my application. I am sending you 5,00 USD.\r\nBe sure to check your transfers and change currency.\r\n\r\nYours faithfully,\r\nAdrian Pietrzak`,
+          content: `<p>My name is <strong>Adrian Pietrzak</strong>.<br />I am a ${developerAge}-year-old developer and I focus on programming graphical user interfaces and scalable network applications ...</p>
+          <p>... and you are exactly the X person who has the opportunity to test my software. :)</p>
+          <p>Software development in JavaScript is one of my hobbies.<br />If you see <a href="https://github.com/pietrzakadrian/" target="_blank">my profile on GitHub</a>, you'll find that it fills most of my time.</p>
+          <p>You see, I want to be an expert at it, that's why I have a great request for you:<br />Write me a message about what you think about this application.</p>
+          <p>I am very interested in how you personally felt the project.<br />Maybe you found some mistake I do not know about?<br />Maybe you have an idea for expanding this project?<br />Maybe you think you could bring something to my life, or maybe <strong>we could start cooperation</strong>? ;)</p>
+          <p>I give my e-mail address for you: <strong>contact@patrzakadrian.com</strong></p>
+          <p>Thank you for agreeing to test my application. I am sending you 5,00 USD.<br />Be sure to check your transfers and change currency.</p>
+          <p>Yours faithfully,<br />Adrian Pietrzak</p>`,
           actions: "Ok, I will send you my opinion",
           language: await languageService.getByCode("EN"),
           name: await configService.getByName("WELCOME_MESSAGE")
         },
         {
           subject: "Propozycja współpracy",
-          content: `Nazywam si\u0119 Adrian Pietrzak.\r\nJestem ${developerAge}-letnim developerem i koncentruj\u0119 si\u0119 na programowaniu graficznych interfejs\u00F3w u\u017Cytkownika oraz skalowalnych aplikacji sieciowych...\r\n\r\n...a Ty jeste\u015B dok\u0142adnie X osob\u0105, kt\u00F3ra ma okazje przetestowa\u0107 moje oprogramowanie. :)\r\n\r\nWytwarzanie oprogramowania w JavaScript to jedno z moich hobby.\r\nJak zobaczysz m\u00F3j profil na GitHub, przekonasz si\u0119, \u017Ce to wype\u0142nia wi\u0119kszo\u015B\u0107 mojego czasu.\r\n\r\nWidzisz, chc\u0119 by\u0107 w tym bardzo dobry, dlatego mam do Ciebie wielk\u0105 pro\u015Bb\u0119:\r\nnapisz mi wiadomo\u015B\u0107, co s\u0105dzisz o tej aplikacji.\r\n\r\nBardzo interesuje mnie, jak Ty osobi\u015Bcie odebra\u0142e\u015B ten projekt.\r\nMo\u017Ce znalaz\u0142e\u015B jaki\u015B b\u0142\u0105d, o kt\u00F3rym nie wiem?\r\nMo\u017Ce masz pomys\u0142 na rozbudowanie tego projektu?\r\nMo\u017Ce uwa\u017Casz, \u017Ce m\u00F3g\u0142by\u015B wnie\u015B\u0107 co\u015B do mojego \u017Cycia, a mo\u017Ce mogliby\u015Bmy wytworzy\u0107 dla siebie nawzajem jak\u0105\u015B warto\u015B\u0107? ; )\r\n\r\nZostawiam dla Ciebie m\u00F3j adres e-mail: contact@pietrzakadrian.com\r\n\r\nDzi\u0119kuj\u0119, \u017Ce zgodzi\u0142e\u015B si\u0119 przetestowa\u0107 moj\u0105 aplikacj\u0119. Przesy\u0142am Tobie 5,00 USD.\r\nKoniecznie sprawd\u017A przelewy oraz zmian\u0119 waluty.\r\n\r\nZ wyrazami szacunku,\r\nAdrian Pietrzak`,
-          actions: "Ok, wyślę Tobie moją opinie",
+          content: `<p>Nazywam się <strong>Adrian Pietrzak</strong>. Jestem ${developerAge}-letnim developerem i koncentruję się na programowaniu graficznych interfejs&oacute;w użytkownika oraz skalowalnych aplikacji sieciowych...</p>
+          <p>...a Ty jesteś dokładnie X osobą, kt&oacute;ra ma okazje przetestować moje oprogramowanie. :)</p>
+          <p>Wytwarzanie oprogramowania w JavaScript to jedno z moich hobby. Jak zobaczysz m&oacute;j <a href="https://github.com/pietrzakadrian/" target="_blank">profil na GitHub</a>, przekonasz się, że to wypełnia większość mojego czasu.</p>
+          <p>Widzisz, chcę być w tym bardzo dobry, dlatego mam do Ciebie wielką prośbę: <strong>napisz mi wiadomość</strong>, co sądzisz o tej aplikacji.</p>
+          <p>Bardzo interesuje mnie, jak Ty osobiście odebrałeś ten projekt.<br />Może znalazłeś jakiś błąd, o kt&oacute;rym nie wiem?<br />Może masz pomysł na rozbudowanie tego projektu?<br />Może uważasz, że m&oacute;głbyś wnieść coś do mojego życia, a może <strong>moglibyśmy zacząć wsp&oacute;łpracować</strong>? ; )</p>
+          <p>Zostawiam dla Ciebie m&oacute;j adres e-mail: <strong>contact@pietrzakadrian.com</strong></p>
+          <p>Dziękuję, że zgodziłeś się przetestować moją aplikację. Przesyłam Tobie 5,00 USD.<br />Koniecznie sprawdź przelewy oraz zmianę waluty.</p>
+          <p>Z wyrazami szacunku,<br />Adrian Pietrzak</p>`,
+          actions: "Ok, wyślę Tobie moją opinię",
           language: await languageService.getByCode("PL"),
           name: await configService.getByName("WELCOME_MESSAGE")
         },
         {
           subject: "Kooperationsvorschlag",
-          content: `Ich hei\u00DFe Adrian Pietrzak. Ich bin ein ${developerAge}-j\u00E4hriger Entwickler und konzentriere mich auf die Programmierung von grafischen Benutzeroberfl\u00E4chen und skalierbaren Netzwerkanwendungen ...\r\n\r\n... und Sie sind genau die X Person, die M\u00F6glichkeit hat, meine Software zu testen. :)\r\n\r\nSoftwareentwicklung in JavaScript ist eines meiner Hobbys. Wenn Sie mein Profil auf GitHub sehen, werden Sie feststellen, dass es den gr\u00F6\u00DFten Teil meiner Zeit ausf\u00FCllt.\r\n\r\nSie sehen, ich m\u00F6chte sehr gut darin sein, deshalb habe ich eine gro\u00DFe Bitte an Sie: Schreiben Sie mir eine Nachricht, was Sie \u00FCber diese Anwendung denken.\r\n\r\nEs interessiert mich sehr, wie Sie das Projekt pers\u00F6nlich erhalten haben.\r\nVielleicht haben Sie einen Fehler gefunden, von dem ich nichts wei\u00DF?\r\nVielleicht haben Sie eine Idee, dieses Projekt zu erweitern?\r\nVielleicht denkst du, du k\u00F6nntest etwas in mein Leben bringen, oder wir k\u00F6nnten Wert f\u00FCreinander schaffen? ; )\r\n\r\nIch gebe meine E-Mail-Adresse f\u00FCr Sie an: contact@patrzakadrian.com\r\n\r\nVielen Dank, dass Sie zugestimmt haben, meine Anwendung zu testen. Ich schicke Ihnen 5,00 USD.\r\n\u00DCberpr\u00FCfen Sie unbedingt Ihre \u00DCberweisungen und \u00E4ndern Sie die W\u00E4hrung.\r\n\r\nHochachtungsvoll,\r\nAdrian Pietrzak`,
+          content: `<p>Ich hei&szlig;e <strong>Adrian Pietrzak</strong>. Ich bin ein ${developerAge}-j&auml;hriger Entwickler und konzentriere mich auf die Programmierung von grafischen Benutzeroberfl&auml;chen und skalierbaren Netzwerkanwendungen ...</p>
+          <p>... und Sie sind genau die X Person, die M&ouml;glichkeit hat, meine Software zu testen. :)</p>
+          <p>Softwareentwicklung in JavaScript ist eines meiner Hobbys. Wenn Sie mein <a href="https://github.com/pietrzakadrian/" target="_blank">Profil auf GitHub</a> sehen, werden Sie feststellen, dass es den gr&ouml;&szlig;ten Teil meiner Zeit ausf&uuml;llt.</p>
+          <p>Sie sehen, ich m&ouml;chte sehr gut darin sein, deshalb habe ich eine gro&szlig;e Bitte an Sie: Schreiben Sie mir eine Nachricht, was Sie &uuml;ber diese Anwendung denken.</p>
+          <p>Es interessiert mich sehr, wie Sie das Projekt pers&ouml;nlich erhalten haben.<br />Vielleicht haben Sie einen Fehler gefunden, von dem ich nichts wei&szlig;?<br />Vielleicht haben Sie eine Idee, dieses Projekt zu erweitern?<br />Vielleicht denkst du, du k&ouml;nntest etwas in mein Leben bringen, oder <strong>wir k&ouml;nnten Wert f&uuml;reinander schaffen</strong>? ; )</p>
+          <p>Ich gebe meine E-Mail-Adresse f&uuml;r Sie an: <strong>contact@patrzakadrian.com</strong></p>
+          <p>Vielen Dank, dass Sie zugestimmt haben, meine Anwendung zu testen. Ich schicke Ihnen 5,00 USD.<br />&Uuml;berpr&uuml;fen Sie unbedingt Ihre &Uuml;berweisungen und &auml;ndern Sie die W&auml;hrung.</p>
+          <p>Hochachtungsvoll,<br />Adrian Pietrzak</p>`,
           actions: "Ok, ich sende dir meine Meinung",
           language: await languageService.getByCode("DE"),
           name: await configService.getByName("WELCOME_MESSAGE")

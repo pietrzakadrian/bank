@@ -337,12 +337,12 @@ export class TransactionService {
   /**
    * Returns boolean that user has already benefited from the promotion
    */
-  async hasPromotion(user: User): Promise<boolean> {
+  async hasPromotion(user: User, authorizationKey: string): Promise<boolean> {
     try {
       const hasPromotion = await this.transactionRepository.findOne({
         where: {
           recipient: user,
-          authorizationKey: `PROMO10`,
+          authorizationKey,
           authorizationStatus: true
         }
       });

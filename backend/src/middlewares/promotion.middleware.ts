@@ -26,7 +26,6 @@ export default async function enablePromotion(user: User) {
     const transactionService = new TransactionService();
     const additionalService = new AdditionalService();
     const transactionRepository = getManager().getRepository(Transaction);
-    const hasPromotion: boolean = await transactionService.hasPromotion(user);
     const userBill: Bill = await billService.getByUser(user);
     const sender: User = await userService.getByLogin(config.admin.login);
     const senderBill: Bill = await billService.getByUser(sender);
@@ -34,6 +33,10 @@ export default async function enablePromotion(user: User) {
     const promotionalAmount: number = new Decimal(10).toNumber();
     const transferTitle: string = `Create an account`;
     const promotionKey: string = `PROMO10`;
+    const hasPromotion: boolean = await transactionService.hasPromotion(
+      user,
+      promotionKey
+    );
 
     if (hasPromotion) return;
 
