@@ -5,6 +5,8 @@ import { Decimal } from "decimal.js";
 // Import Services
 import { CurrencyService } from "./currency.service";
 import { TransactionService } from "./transactions.service";
+import { ConfigService } from "./config.service";
+import { UserService } from "./users.service";
 
 // Import Entities
 import { Additional } from "../entities/additional.entity";
@@ -51,10 +53,7 @@ export class AdditionalService {
     try {
       return await this.additionalRepository.update(
         { user },
-        {
-          notificationCount: 0,
-          notificationStatus: false
-        }
+        { notificationCount: 0, notificationStatus: false }
       );
     } catch (error) {
       return Promise.reject(error);
@@ -68,9 +67,7 @@ export class AdditionalService {
     try {
       return await this.additionalRepository.update(
         { user },
-        {
-          messageStatus: false
-        }
+        { messageStatus: false }
       );
     } catch (error) {
       return Promise.reject(error);
@@ -147,6 +144,9 @@ export class AdditionalService {
     }
   }
 
+  /**
+   * Sets user's widget status
+   */
   async setWidgetStatus(user: User): Promise<object> {
     const transactionService = new TransactionService();
     const currencyService = new CurrencyService();
@@ -294,11 +294,7 @@ export class AdditionalService {
   async setNotification(user: User): Promise<object> {
     try {
       const userAdditional: Additional = await this.additionalRepository.findOne(
-        {
-          where: {
-            user
-          }
-        }
+        { where: { user } }
       );
 
       if (!userAdditional) return;
@@ -321,44 +317,18 @@ export class AdditionalService {
    * Sets user's new message
    */
   async setMessage(user: User): Promise<object> {
-    try {
-      // TODO
-      // const userMessage: Message = await this.messageRepository.findOne({
-      //   where: {
-      //     user,
-      //   }
-      // });
-      // if (!userAdditional) return;
-      // const messageCount: number = userAdditional.messageCount;
-      // return await this.additionalRepository.update(
-      //   { user },
-      //   {
-      //     messageCount: messageCount + 1,
-      //     messageStatus: true
-      //   }
-      // );
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  }
+    const additionalService = new AdditionalService();
+    const userAdditional = await additionalService.getByUser(user);
 
-  /**
-   * Returns boolean that user has already message
-   */
-  async hasMessage(user: User): Promise<boolean> {
     try {
-      const hasMessage = await this.transactionRepository.findOne({
-        where: {
-          authorizationKey: "WELCOME_MESSAGE",
-          recipient: user
+      const messageCount: number = userAdditional.messageCount;
+      return await this.additionalRepository.update(
+        { user },
+        {
+          messageCount: messageCount + 1,
+          messageStatus: true
         }
-      });
-
-      if (hasMessage) {
-        return true;
-      } else {
-        return false;
-      }
+      );
     } catch (error) {
       return Promise.reject(error);
     }
