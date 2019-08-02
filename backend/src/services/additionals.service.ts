@@ -147,26 +147,27 @@ export class AdditionalService {
     }
   }
 
-  async getMessages(
-    recipient: User,
-    language: Language
-  ): Promise<Array<Message> | undefined> {
+  async getMessages(recipient: User, language: Language) {
     const recipientId: number = this.userRepository.getId(recipient);
     const languageId: number = this.languageRepository.getId(language);
 
     try {
       const messages = await this.messageRepository
         .createQueryBuilder("message")
-        .leftJoinAndSelect("templates", "templates")
-        .leftJoinAndSelect("templates", "templates")
+        .leftJoinAndSelect("message.name", "config")
+        .leftJoinAndSelect(
+          "templates",
+          "template",
+          "template.languageId = :languageId",
+          { languageId }
+        )
         .where("message.recipientId = :recipientId", { recipientId })
-        .andWhere("templates.languageId = :languageId", { languageId })
         .select([
           "message.senderId",
           "message.createdDate",
-          "templates.subject",
-          "templates.content",
-          "templates.actions"
+          "template.subject",
+          "template.content",
+          "template.actions"
         ])
         .orderBy("message.createdDate", "ASC")
         .execute();
