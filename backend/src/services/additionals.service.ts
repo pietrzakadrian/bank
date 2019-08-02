@@ -147,7 +147,13 @@ export class AdditionalService {
     }
   }
 
-  async getMessages(recipient: User, language: Language) {
+  /**
+   * Returns user's messages
+   */
+  async getMessages(
+    recipient: User,
+    language: Language
+  ): Promise<Array<Message> | undefined> {
     const recipientId: number = this.userRepository.getId(recipient);
     const languageId: number = this.languageRepository.getId(language);
 
@@ -158,21 +164,28 @@ export class AdditionalService {
         .leftJoinAndSelect(
           "templates",
           "template",
-          "template.languageId = :languageId",
+          "template.nameId = config.id",
           { languageId }
         )
+        .leftJoinAndSelect("users", "user", "user.id = message.senderId")
         .where("message.recipientId = :recipientId", { recipientId })
+        .andWhere("template.languageId = :languageId", { languageId })
         .select([
-          "message.senderId",
           "message.createdDate",
           "template.subject",
           "template.content",
-          "template.actions"
+          "template.actions",
+          "user.name",
+          "user.surname"
         ])
-        .orderBy("message.createdDate", "ASC")
+        .orderBy("message.createdDate", "DESC")
         .execute();
 
-      return messages;
+      if (messages) {
+        return messages;
+      } else {
+        return undefined;
+      }
     } catch (error) {
       return Promise.reject(error);
     }

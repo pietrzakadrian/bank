@@ -581,6 +581,28 @@
         }
       }
     },
+    "/api/additionals/messages/{language}": {
+      "get": {
+        "tags": ["Additionals"],
+        "summary": "Returns user's messages",
+        "description": "",
+        "operationId": "getmess",
+        "produces": ["application/json"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "$ref": "#/definitions/Messages"
+            }
+          }
+        }
+      }
+    },
     "/api/additionals/messages/isMessage": {
       "get": {
         "tags": ["Additionals"],
@@ -870,6 +892,41 @@
         "messageCount": {
           "type": "integer",
           "format": "int64"
+        }
+      }
+    },
+    "Messages": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message_createdDate": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "template_subject": {
+                "type": "string"
+              },
+              "template_content": {
+                "type": "string"
+              },
+              "template_actions": {
+                "type": "string"
+              },
+              "user_name": {
+                "type": "string"
+              },
+              "user_surname": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     },
