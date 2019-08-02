@@ -33,7 +33,7 @@ export default async function enableWelcomeMessage(user: User) {
   const billService = new BillService();
   const transactionService = new TransactionService();
   const promotionalAmount: number = new Decimal(5).toNumber();
-  const transferTitle: string = `Thank you for testing:)`;
+  const transferTitle: string = `Thank you for testing :)`;
   const promotionKey: string = `WELCOME_MESSAGE`;
 
   try {

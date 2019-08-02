@@ -68,14 +68,15 @@ export default function Messages() {
           <MessageContainer>
             <Table>
               <TableBody>
-                {messages.map((message, index) => (
-                  <TableRow key={index++} onClick={onToggleMessageModal}>
+                {messages.map(message => (
+                  <TableRow
+                    key={message.messageId}
+                    onClick={onToggleMessageModal}
+                  >
                     <Fragment>
                       <TableCell>
                         <MessageWrapper>
-                          <FormattedMessage {...messagesUser.part1} />{' '}
-                          {message.authorYo}
-                          <FormattedMessage {...messagesUser.part1dot1} />
+                          {message.messageTeaser}
                           <MessageBottonLine>
                             <DateWrapper>{message.createdDate}</DateWrapper>
                             <div>
@@ -85,7 +86,7 @@ export default function Messages() {
                               </SenderWrapper>
                             </div>
                           </MessageBottonLine>
-                          <MessageModal />
+                          <MessageModal message={message} />
                         </MessageWrapper>
                       </TableCell>
                     </Fragment>

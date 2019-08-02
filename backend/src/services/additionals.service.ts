@@ -171,6 +171,7 @@ export class AdditionalService {
         .where("message.recipientId = :recipientId", { recipientId })
         .andWhere("template.languageId = :languageId", { languageId })
         .select([
+          "message.id",
           "message.createdDate",
           "template.subject",
           "template.content",

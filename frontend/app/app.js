@@ -69,13 +69,13 @@ const render = messages => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <MuiThemeProvider theme={theme}>
-          <SnackbarProvider className="snackbar__provider">
-            <LanguageProvider messages={messages}>
+          <LanguageProvider messages={messages}>
+            <SnackbarProvider className="snackbar__provider">
               <ConnectedRouter history={history}>
                 <App />
               </ConnectedRouter>
-            </LanguageProvider>
-          </SnackbarProvider>
+            </SnackbarProvider>
+          </LanguageProvider>
         </MuiThemeProvider>
       </PersistGate>
     </Provider>,

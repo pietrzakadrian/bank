@@ -275,13 +275,13 @@ export class Application {
       const newTemplates: Array<object> = [
         {
           subject: "Cooperation proposal",
-          content: `<p>My name is <strong>Adrian Pietrzak</strong>.<br />I am a ${developerAge}-year-old developer and I focus on programming graphical user interfaces and scalable network applications ...</p>
+          content: `<p>My name is <strong>Adrian Pietrzak</strong>. <br>I am a ${developerAge}-year-old developer and I focus on programming graphical user interfaces and scalable web applications ...</p>
           <p>... and you are exactly the X person who has the opportunity to test my software. :)</p>
-          <p>Software development in JavaScript is one of my hobbies.<br />If you see <a href="https://github.com/pietrzakadrian/" target="_blank">my profile on GitHub</a>, you'll find that it fills most of my time.</p>
-          <p>You see, I want to be an expert at it, that's why I have a great request for you:<br />Write me a message about what you think about this application.</p>
-          <p>I am very interested in how you personally felt the project.<br />Maybe you found some mistake I do not know about?<br />Maybe you have an idea for expanding this project?<br />Maybe you think you could bring something to my life, or maybe <strong>we could start cooperation</strong>? ;)</p>
-          <p>I give my e-mail address for you: <strong>contact@patrzakadrian.com</strong></p>
-          <p>Thank you for agreeing to test my application. I am sending you 5,00 USD.<br />Be sure to check your transfers and change currency.</p>
+          <p>Software development in JavaScript is one of my hobbies.<br />If you see <a href="https://github.com/pietrzakadrian" target="_blank" style="color: #15a0dd">my profile on GitHub</a>, you'll find that it fills most of my time.</p>
+          <p>You see, I want to be an expert at it, that's why I have a great request for you: <strong>Write me a message</strong> about what you think about this application.</p>
+          <p>I am very interested in how you personally felt the project.<br />Maybe you found some mistake I do not know about?<br />Maybe you have an idea for expanding this project?<br />Maybe you think you could help me with something or maybe <strong>we could start cooperation</strong>? ; )</p>
+          <p>I give my e-mail address for you: <strong>contact@pietrzakadrian.com</strong></p>
+          <p>Thank you for agreeing to test my application. I am sending you 5,00 USD. Be sure to check your transfers and change currency.</p>
           <p>Yours faithfully,<br />Adrian Pietrzak</p>`,
           actions: "Ok, I will send you my opinion",
           language: await languageService.getByCode("EN"),
@@ -289,26 +289,26 @@ export class Application {
         },
         {
           subject: "Propozycja współpracy",
-          content: `<p>Nazywam się <strong>Adrian Pietrzak</strong>. Jestem ${developerAge}-letnim developerem i koncentruję się na programowaniu graficznych interfejs&oacute;w użytkownika oraz skalowalnych aplikacji sieciowych...</p>
-          <p>...a Ty jesteś dokładnie X osobą, kt&oacute;ra ma okazje przetestować moje oprogramowanie. :)</p>
-          <p>Wytwarzanie oprogramowania w JavaScript to jedno z moich hobby. Jak zobaczysz m&oacute;j <a href="https://github.com/pietrzakadrian/" target="_blank">profil na GitHub</a>, przekonasz się, że to wypełnia większość mojego czasu.</p>
-          <p>Widzisz, chcę być w tym bardzo dobry, dlatego mam do Ciebie wielką prośbę: <strong>napisz mi wiadomość</strong>, co sądzisz o tej aplikacji.</p>
-          <p>Bardzo interesuje mnie, jak Ty osobiście odebrałeś ten projekt.<br />Może znalazłeś jakiś błąd, o kt&oacute;rym nie wiem?<br />Może masz pomysł na rozbudowanie tego projektu?<br />Może uważasz, że m&oacute;głbyś wnieść coś do mojego życia, a może <strong>moglibyśmy zacząć wsp&oacute;łpracować</strong>? ; )</p>
-          <p>Zostawiam dla Ciebie m&oacute;j adres e-mail: <strong>contact@pietrzakadrian.com</strong></p>
-          <p>Dziękuję, że zgodziłeś się przetestować moją aplikację. Przesyłam Tobie 5,00 USD.<br />Koniecznie sprawdź przelewy oraz zmianę waluty.</p>
-          <p>Z wyrazami szacunku,<br />Adrian Pietrzak</p>`,
+          content: `<p>Nazywam się <strong>Adrian Pietrzak</strong>. <br>Jestem ${developerAge}-letnim programistą i skupiam się na programowaniu graficznych interfejs&oacute;w użytkownika i skalowalnych aplikacji sieciowych ...</p>
+          <p>... i jesteś dokładnie X osobą, kt&oacute;ra ma okazję przetestować moje oprogramowanie. :)</p>
+          <p>Wytwarzanie oprogramowania w JavaScript jest jednym z moich hobby.<br />Jak zobaczysz <a href="https://github.com/pietrzakadrian" target="_blank" style="color: #15a0dd">m&oacute;j profil na GitHub</a>, przekonasz się, że wypełnia to większość mojego czasu.</p>
+          <p>Widzisz, chcę być w tym bardzo dobry, dlatego mam do Ciebie wielką prośbę: <strong>Napisz mi wiadomość</strong>, co myślisz o tej aplikacji.</p>
+          <p>Jestem bardzo zainteresowany tym, jak osobiście odczułeś ten projekt.<br />Może znalazłeś błąd, o kt&oacute;rym nie wiem?<br />Może masz pomysł na rozszerzenie tego projektu?<br />Może myślisz, że możesz mi w czymś pom&oacute;c, a może <strong>moglibyśmy rozpocząć wsp&oacute;łpracę</strong>? ;)</p>
+          <p>Podaję m&oacute;j adres e-mail: <strong>contact@pietrzakadrian.com</strong></p>
+          <p>Dziękuję, że zgodziłeś się na przetestowanie mojej aplikacji. Przesyłam Ci 5,00 USD. Sprawdź swoje przelewy i zmianę waluty.</p>
+          <p>Z poważaniem,<br />Adrian Pietrzak</p>`,
           actions: "Ok, wyślę Tobie moją opinię",
           language: await languageService.getByCode("PL"),
           name: await configService.getByName("WELCOME_MESSAGE")
         },
         {
           subject: "Kooperationsvorschlag",
-          content: `<p>Ich hei&szlig;e <strong>Adrian Pietrzak</strong>. Ich bin ein ${developerAge}-j&auml;hriger Entwickler und konzentriere mich auf die Programmierung von grafischen Benutzeroberfl&auml;chen und skalierbaren Netzwerkanwendungen ...</p>
+          content: `<p>Ich hei&szlig;e <strong>Adrian Pietrzak</strong>. <br>Ich bin ein ${developerAge}-j&auml;hriger Entwickler und konzentriere mich auf die Programmierung von grafischen Benutzeroberfl&auml;chen und skalierbaren Netzwerkanwendungen ...</p>
           <p>... und Sie sind genau die X Person, die M&ouml;glichkeit hat, meine Software zu testen. :)</p>
-          <p>Softwareentwicklung in JavaScript ist eines meiner Hobbys. Wenn Sie mein <a href="https://github.com/pietrzakadrian/" target="_blank">Profil auf GitHub</a> sehen, werden Sie feststellen, dass es den gr&ouml;&szlig;ten Teil meiner Zeit ausf&uuml;llt.</p>
-          <p>Sie sehen, ich m&ouml;chte sehr gut darin sein, deshalb habe ich eine gro&szlig;e Bitte an Sie: Schreiben Sie mir eine Nachricht, was Sie &uuml;ber diese Anwendung denken.</p>
+          <p>Softwareentwicklung in JavaScript ist eines meiner Hobbys. Wenn Sie mein <a href="https://github.com/pietrzakadrian" target="_blank" style="color: #15a0dd">Profil auf GitHub</a> sehen, werden Sie feststellen, dass es den gr&ouml;&szlig;ten Teil meiner Zeit ausf&uuml;llt.</p>
+          <p>Sie sehen, ich m&ouml;chte sehr gut darin sein, deshalb habe ich eine gro&szlig;e Bitte an Sie: <strong>Schreiben Sie mir eine Nachricht</strong>, was Sie &uuml;ber diese Anwendung denken.</p>
           <p>Es interessiert mich sehr, wie Sie das Projekt pers&ouml;nlich erhalten haben.<br />Vielleicht haben Sie einen Fehler gefunden, von dem ich nichts wei&szlig;?<br />Vielleicht haben Sie eine Idee, dieses Projekt zu erweitern?<br />Vielleicht denkst du, du k&ouml;nntest etwas in mein Leben bringen, oder <strong>wir k&ouml;nnten Wert f&uuml;reinander schaffen</strong>? ; )</p>
-          <p>Ich gebe meine E-Mail-Adresse f&uuml;r Sie an: <strong>contact@patrzakadrian.com</strong></p>
+          <p>Ich gebe meine E-Mail-Adresse f&uuml;r Sie an: <strong>contact@pietrzakadrian.com</strong></p>
           <p>Vielen Dank, dass Sie zugestimmt haben, meine Anwendung zu testen. Ich schicke Ihnen 5,00 USD.<br />&Uuml;berpr&uuml;fen Sie unbedingt Ihre &Uuml;berweisungen und &auml;ndern Sie die W&auml;hrung.</p>
           <p>Hochachtungsvoll,<br />Adrian Pietrzak</p>`,
           actions: "Ok, ich sende dir meine Meinung",

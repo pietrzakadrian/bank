@@ -58,7 +58,7 @@ setAutoFreeze(false);
 const appPageReducer = produce((draft, action) => {
   switch (action.type) {
     case CHECK_NEW_MESSAGES_SUCCESS:
-      draft.isNewMessages = action.isNewMessages;
+      draft.isNewMessages = action.isNewMessage;
       draft.messageCount = action.messageCount;
       break;
     case CHECK_NEW_MESSAGES_ERROR:

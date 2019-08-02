@@ -5,11 +5,9 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { useSelector, useDispatch } from 'react-redux';
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import { FormattedMessage } from 'react-intl';
 
 // Import Components
 import AlertTitleWrapper from './AlertTitleWrapper';
@@ -17,7 +15,6 @@ import AlertContentWrapper from './AlertContentWrapper';
 import AlertActionsWrapper from './AlertActionsWrapper';
 import AlertButtonWrapper from './AlertButtonWrapper';
 import AlertDialogWrapper from './AlertDialogWrapper';
-import messages from './messages';
 
 // Import Actions
 import { toggleMessageModalAction } from 'containers/App/actions';
@@ -29,10 +26,11 @@ const stateSelector = createStructuredSelector({
   isOpenMessageModal: makeIsOpenMessageModalSelector(),
 });
 
-export default function MessageModal() {
+export default function MessageModal({ message }) {
   const dispatch = useDispatch();
   const onToggleMessageModal = () => dispatch(toggleMessageModalAction());
   const { isOpenMessageModal } = useSelector(stateSelector);
+  const { messageActions, messageContent, messageSubject } = message;
 
   return (
     <AlertDialogWrapper
@@ -40,35 +38,22 @@ export default function MessageModal() {
       open={isOpenMessageModal}
       onClose={onToggleMessageModal}
     >
-      <AlertTitleWrapper>
-        {/* <FormattedMessage {...messages.contentTitle} /> */}
-        You're very nice.
-
-      </AlertTitleWrapper>
-      <AlertContentWrapper>
-        <FormattedMessage {...messages.part1} />
-        <FormattedMessage {...messages.part2} />
-        <FormattedMessage {...messages.part3} />
-        <FormattedMessage {...messages.part4} />
-        <FormattedMessage {...messages.part5} />
-        <FormattedMessage {...messages.part6} />
-        <FormattedMessage {...messages.part7} />
-        <FormattedMessage {...messages.part8} />
-        <FormattedMessage {...messages.part9} />
-        <FormattedMessage {...messages.part10} />
-        <FormattedMessage {...messages.part11} />
-        <FormattedMessage {...messages.part12} />
-        <FormattedMessage {...messages.part13} />
-        <br />
-        <FormattedMessage {...messages.part14} />
-
-
-      </AlertContentWrapper>
+      <AlertTitleWrapper>{messageSubject}</AlertTitleWrapper>
+      <AlertContentWrapper
+        dangerouslySetInnerHTML={{ __html: messageContent }}
+        onClick={e => e.stopPropagation()}
+      ></AlertContentWrapper>
       <AlertActionsWrapper>
-        <AlertButtonWrapper onClick={onToggleMessageModal}>
-          <FormattedMessage {...messages.disagree} />
-        </AlertButtonWrapper>
+        <AlertButtonWrapper>{messageActions}</AlertButtonWrapper>
       </AlertActionsWrapper>
     </AlertDialogWrapper>
   );
 }
+
+MessageModal.propTypes = {
+  message: PropTypes.shape({
+    messageActions: PropTypes.string.isRequired,
+    messageContent: PropTypes.string.isRequired,
+    messageSubject: PropTypes.string.isRequired,
+  }).isRequired,
+};

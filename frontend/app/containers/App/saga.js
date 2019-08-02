@@ -14,6 +14,7 @@ import AuthService from 'services/auth.service';
 import {
   makeNotificationCountSelector,
   makeMessageCountSelector,
+  makeIsNewMessagesSelector,
 } from 'containers/App/selectors';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 
@@ -38,6 +39,7 @@ import {
   unsetNewMessagesSuccessAction,
   unsetNewMessagesErrorAction,
   getNewMessagesSuccessAction,
+  getNewMessagesErrorAction,
 } from './actions';
 
 // Import Constants
@@ -219,9 +221,9 @@ export function* handleNewMessages() {
   const api = new ApiEndpoint();
   const token = auth.getToken();
   const requestURL = api.getMessagesPath();
-  const messageCount = yield select(makeMessageCountSelector());
+  const isNewMessages = yield select(makeIsNewMessagesSelector());
 
-  if (!messageCount) return;
+  if (!isNewMessages) return;
 
   try {
     yield put(unsetNewMessagesAction());
@@ -245,23 +247,49 @@ export function* handleNewMessages() {
 }
 
 export function* getNewMessages() {
-  const locale = yield select(makeSelectLocale());
   const auth = new AuthService();
+  const api = new ApiEndpoint();
+  const locale = yield select(makeSelectLocale());
+  const token = auth.getToken();
   const userId = auth.getUserId();
+  const requestURL = api.getMessagesPath(locale);
 
-  const message = [
-    {
-      senderName: 'Adrian Pietrzak',
+  try {
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const { success, messages } = response;
+    if (!success || !messages)
+      return yield put(getNewMessagesErrorAction('error'));
+
+    const transformMessages = messages.map(({ ...message }) => ({
       createdDate: format(
-        new Date(),
+        message.message_createdDate,
         `DD.MM.YYYY, ${locale === 'en' ? 'hh:mm A' : 'HH:mm'}`,
       ),
-      userId,
-      authorYo: differenceInYears(new Date(), new Date(1997, 9, 16)),
-    },
-  ];
+      senderName: `${message.user_name} ${message.user_surname}`,
+      messageId: `${message.message_id}`,
+      messageActions: `${message.template_actions}`,
+      messageContent: `${message.template_content.replace('X', userId)}`,
+      messageSubject: `${message.template_subject}`,
+      messageTeaser: `${`${message.template_content
+        .replace(/<[^>]*>?/gm, '')
+        .replace(/&oacute;/g, 'ó')
+        .replace(/&szlig;/g, 'ß')
+        .replace(/&auml;/g, 'ä')
+        .substring(0, 142)}...`}`,
+    }));
 
-  return yield put(getNewMessagesSuccessAction(message));
+    yield put(getNewMessagesSuccessAction(transformMessages));
+  } catch (error) {
+    yield put(unsetNewMessagesErrorAction(error));
+  }
 }
 
 export default function* appPageSaga() {

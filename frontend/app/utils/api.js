@@ -107,8 +107,8 @@ export default class ApiEndpoint {
     return `${BASE_URL}${ADDITIONALS_PATH}/notifications/isNotification`;
   }
 
-  getMessagesPath() {
-    return `${BASE_URL}${ADDITIONALS_PATH}/messages`;
+  getMessagesPath(language = '') {
+    return `${BASE_URL}${ADDITIONALS_PATH}/messages/${language}`;
   }
 
   getIsMessagePath() {
