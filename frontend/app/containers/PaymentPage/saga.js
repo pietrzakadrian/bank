@@ -43,7 +43,6 @@ import {
   getCurrencySuccessAction,
   getAuthorizationKeyErrorAction,
   getAuthorizationKeySuccessAction,
-  getLastAssociatedTransactionAction,
 } from './actions';
 
 // Import Constants
@@ -171,7 +170,7 @@ export function* handleAmountMoney() {
   const amountMoney = yield select(makeAmountMoneySelector());
   const requestURL = api.getIsAmountMoneyPath(amountMoney);
 
-  if (!amountMoney)
+  if (!amountMoney || isNaN(amountMoney))
     return yield put(
       enterAmountMoneyErrorAction(
         <FormattedMessage {...messages.errorAmountOfMoneyEmpty} />,

@@ -123,6 +123,7 @@ export class AdditionalService {
         .leftJoinAndSelect("transaction.sender", "sender")
         .leftJoinAndSelect("sender.user", "user")
         .select([
+          "transaction.id",
           "transaction.createdDate",
           "transaction.amountMoney",
           "currency.name",

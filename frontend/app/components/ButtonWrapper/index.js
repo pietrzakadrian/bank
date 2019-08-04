@@ -20,6 +20,7 @@ const ButtonWrapper = styled.button`
   border-radius: 2px;
   color: ${PRIMARY_LIGHT};
   width: 90%;
+  font-size: ${props => props.payment && '14px'};
 
   &:hover {
     background-color: ${PRIMARY_BLUE_LIGHT};
@@ -28,6 +29,7 @@ const ButtonWrapper = styled.button`
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
     width: ${props => (props.large ? '315px' : '17rem')};
+    font-size: inherit;
   }
 `;
 

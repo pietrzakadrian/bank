@@ -67,8 +67,8 @@ export default function Notifications() {
           <NotificationContainer>
             <Table>
               <TableBody>
-                {notifications.map((notification, index) => (
-                  <TableRow key={index++}>
+                {notifications.map(notification => (
+                  <TableRow key={notification.notification_id}>
                     <Fragment>
                       <TableCell>
                         <NotificationWrapper>

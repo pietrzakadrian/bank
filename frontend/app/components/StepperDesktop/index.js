@@ -10,7 +10,7 @@ const StepperDesktop = styled(Stepper)`
     background-color: ${PRIMARY_LIGHT};
     display: none;
 
-    @media screen and (min-width: 880px) {
+    @media screen and (min-width: 950px) {
       display: flex;
     }
 

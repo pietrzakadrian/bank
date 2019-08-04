@@ -24,6 +24,8 @@ module.exports = {
   },
 
   rules: {
+    'react/no-array-index-key': 0,
+    'no-restricted-globals': 0,
     'import/order': 0,
     'prettier/prettier': ['error', prettierOptions],
     'arrow-body-style': [2, 'as-needed'],

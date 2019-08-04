@@ -10,6 +10,7 @@ import Dialog from '@material-ui/core/Dialog';
 const AlertDialogWrapper = styled(Dialog)`
   &&& {
     .paper {
+      margin: 5px;
       max-width: 615px;
       padding: 15px;
       border-radius: 0;

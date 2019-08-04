@@ -461,6 +461,7 @@ function PaymentForm({ intl }) {
                       </FormattedMessage>
 
                       <ButtonWrapper
+                        payment
                         margin="false"
                         type="submit"
                         onClick={() =>

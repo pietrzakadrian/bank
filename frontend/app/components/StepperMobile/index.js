@@ -10,7 +10,7 @@ const StepperMobile = styled(MobileStepper)`
     display: flex;
     justify-content: center;
 
-    @media screen and (min-width: 880px) {
+    @media screen and (min-width: 950px) {
       display: none;
     }
   }

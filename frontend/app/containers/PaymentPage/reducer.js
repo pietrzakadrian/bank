@@ -81,7 +81,6 @@ const paymentPageReducer = produce((draft, action) => {
       draft.activeStep = 0;
       draft.suggestions = [];
       draft.isLoading = false;
-      draft.lastAssociatedTransaction = [];
       draft.isSendAuthorizationKey = false;
       break;
     case LOGOUT_ERROR:
@@ -99,7 +98,6 @@ const paymentPageReducer = produce((draft, action) => {
       draft.activeStep = 0;
       draft.suggestions = [];
       draft.isLoading = false;
-      draft.lastAssociatedTransaction = [];
       draft.isSendAuthorizationKey = false;
       break;
     case LOCATION_CHANGE:
@@ -116,7 +114,6 @@ const paymentPageReducer = produce((draft, action) => {
       draft.activeStep = 0;
       draft.suggestions = [];
       draft.isLoading = false;
-      draft.lastAssociatedTransaction = [];
       draft.isSendAuthorizationKey = false;
       break;
     case CHANGE_ACCOUNT_NUMBER:
@@ -238,6 +235,8 @@ const paymentPageReducer = produce((draft, action) => {
       draft.activeStep -= 1;
       draft.isSendAuthorizationKey = false;
       draft.error = '';
+      draft.message = '';
+      draft.suggestionAuthorizationKey = '';
       break;
   }
 }, initialState);

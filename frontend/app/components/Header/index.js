@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 // Import Components
 import HeaderWrapper from './HeaderWrapper';
@@ -16,7 +17,9 @@ export default function Header() {
   return (
     <HeaderWrapper>
       <ImageWrapper>
-        <Logo src="/logo.png" alt="Bank Application" />
+        <NavLink to="/">
+          <Logo src="/logo.png" alt="Bank Application" />
+        </NavLink>
       </ImageWrapper>
       <ImageWrapper>
         <Icon src="/icon.png" alt="Bank Application" />

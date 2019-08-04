@@ -96,16 +96,10 @@ export function* handleUserdata() {
       name,
       surname,
       email,
-      createdDate,
       lastPresentLoggedDate,
       lastSuccessfulLoggedDate,
       lastFailedLoggedDate,
     } = response;
-
-    const formatCreatedDate = format(
-      createdDate,
-      `DD.MM.YYYY, ${locale === 'en' ? 'hh:mm A' : 'HH:mm'}`,
-    );
 
     const formatLastPresentLoggedDate = format(
       lastPresentLoggedDate,

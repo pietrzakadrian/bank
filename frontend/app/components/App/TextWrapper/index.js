@@ -14,7 +14,7 @@ const TextWrapper = styled.span`
   font-size: 13px;
   letter-spacing: 0.3px;
   width: 90%;
-  height: 16px;
+  height: auto;
   display: block;
   color: ${props => (props.error ? PRIMARY_RED : 'inherit')};
 

@@ -107,5 +107,7 @@ export const GET_RECHARTS_DATA_SUCCESS =
   'app/DashboardPage/GET_RECHARTS_DATA_SUCCESS';
 
 export const GET_CREATED_DATE = 'app/DashboardPage/GET_CREATED_DATE';
-export const GET_CREATED_DATE_SUCCESS = 'app/DashboardPage/GET_CREATED_DATE_SUCCESS';
-export const GET_CREATED_DATE_ERROR = 'app/DashboardPage/GET_CREATED_DATE_ERROR';
+export const GET_CREATED_DATE_SUCCESS =
+  'app/DashboardPage/GET_CREATED_DATE_SUCCESS';
+export const GET_CREATED_DATE_ERROR =
+  'app/DashboardPage/GET_CREATED_DATE_ERROR';

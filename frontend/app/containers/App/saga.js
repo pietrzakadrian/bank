@@ -1,7 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { format } from 'date-fns';
-import differenceInYears from 'date-fns/difference_in_years';
 
 // Import Utils
 import request from 'utils/request';
@@ -13,7 +12,6 @@ import AuthService from 'services/auth.service';
 // Import Selectors
 import {
   makeNotificationCountSelector,
-  makeMessageCountSelector,
   makeIsNewMessagesSelector,
 } from 'containers/App/selectors';
 import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
@@ -145,6 +143,7 @@ export function* getNewNotifications() {
 
     const transformNewNotifications = notifications.map(
       ({ ...newNotification }) => ({
+        notification_id: newNotification.transaction_id,
         date_time: format(
           newNotification.transaction_createdDate,
           `DD.MM.YYYY, ${locale === 'en' ? 'hh:mm A' : 'HH:mm'}`,

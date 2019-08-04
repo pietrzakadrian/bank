@@ -9,7 +9,6 @@ import styled from 'styled-components';
 const HeadlineWrapper = styled.section`
   text-align: right;
   max-width: 68.75em;
-  width: calc(100% - 4.375em);
   margin: 0 0 0 auto;
   letter-spacing: 0.0125em;
   line-height: 1.25;

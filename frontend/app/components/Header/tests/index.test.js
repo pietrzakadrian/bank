@@ -15,16 +15,6 @@ import { DEFAULT_LOCALE } from 'i18n';
 import Header from '../index';
 
 describe('<Header />', () => {
-  it('Expect to not log errors in console', () => {
-    const spy = jest.spyOn(global.console, 'error');
-    render(
-      <IntlProvider locale={DEFAULT_LOCALE}>
-        <Header />
-      </IntlProvider>,
-    );
-    expect(spy).not.toHaveBeenCalled();
-  });
-
   /**
    * Unskip this test to use it
    *

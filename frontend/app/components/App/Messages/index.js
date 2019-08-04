@@ -24,16 +24,12 @@ import MessageBottonLine from './MessageBottonLine';
 import {
   WidgetBeamWrapper,
   WidgetBeamCounter,
-  WidgetBeamButton,
 } from 'components/App/WidgetBeam';
 import MessageWrapper from './MessageWrapper';
 import MessageModal from 'components/App/MessageModal';
 
 // Import Actions
-import {
-  unsetManualNewMessagesAction,
-  toggleMessageModalAction,
-} from 'containers/App/actions';
+import { toggleMessageModalAction } from 'containers/App/actions';
 
 // Import Selectors
 import {
@@ -48,8 +44,6 @@ const stateSelector = createStructuredSelector({
 
 export default function Messages() {
   const dispatch = useDispatch();
-  const onManualUnsetNotifications = () =>
-    dispatch(unsetManualNewMessagesAction());
   const onToggleMessageModal = () => dispatch(toggleMessageModalAction());
   const { isOpenMessages, messages } = useSelector(stateSelector);
 

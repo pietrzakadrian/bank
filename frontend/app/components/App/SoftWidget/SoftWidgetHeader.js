@@ -16,7 +16,7 @@ const SoftWidgetHeader = styled.header`
   justify-content: space-between;
   position: relative;
   align-items: center;
-  min-height: 2.875em;
+  height: 2.875em;
 `;
 
 export default SoftWidgetHeader;
