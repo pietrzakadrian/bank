@@ -61,9 +61,6 @@ export default function Messages() {
             <WidgetBeamCounter>
               <FormattedMessage {...messagesUser.numberOfMessages} /> 1
             </WidgetBeamCounter>
-            <WidgetBeamButton onClick={onManualUnsetNotifications}>
-              <FormattedMessage {...messagesUser.markAsRead} />
-            </WidgetBeamButton>
           </WidgetBeamWrapper>
           <MessageContainer>
             <Table>

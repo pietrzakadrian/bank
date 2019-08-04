@@ -242,7 +242,7 @@ function PaymentForm({ intl }) {
       onEnterAccountNumber(accountNumber) &&
       e.preventDefault(),
     placeholder: intl.formatMessage({
-      id: 'app.containers.PaymentPage.inputAccountNumber',
+      id: 'app.components.PaymentForm.inputAccountNumber',
       defaultMessage: 'Search for the account number...',
     }),
   };

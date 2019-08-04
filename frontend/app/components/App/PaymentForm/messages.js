@@ -27,7 +27,7 @@ export default defineMessages({
   },
   inputAccountNumber: {
     id: `${scope}.inputAccountNumber`,
-    defaultMessage: 'Search for the account number... *',
+    defaultMessage: 'Search for the account number...',
   },
   inputAuthorizationCoder: {
     id: `${scope}.inputAuthorizationCoder`,

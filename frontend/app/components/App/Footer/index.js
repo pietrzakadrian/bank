@@ -16,7 +16,7 @@ export default function Footer() {
     <FooterWrapper>
       <Divider />
       <TextWrapper>
-        <p>Bank Application 1.1</p> | <time>21.07.2019</time>
+        <p>Bank Application 1.1</p> | <time>04.08.2019</time>
       </TextWrapper>
     </FooterWrapper>
   );
