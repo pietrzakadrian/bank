@@ -41,6 +41,10 @@ Technology stack:
 6. **[Swagger](http://bank.pietrzakadrian.com/api-docs/)** Documentation
 7. **Unit Testing** using **Mocha** and **Chai**
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/model.png"  width="738" height="auto">
+</p>
+
 ## Requirements
 
 - **NodeJS** v8+
