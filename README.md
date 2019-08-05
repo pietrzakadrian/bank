@@ -34,7 +34,7 @@ Technology stack:
 7. **Unit** & **Component Testing** using **Jest** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/redux.png" width="100%" height="auto">
+  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/redux.png" width="80%" height="auto">
 </p>
 
 ## Backend
