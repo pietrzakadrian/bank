@@ -1,17 +1,9 @@
 # Bank Application
 
 <div align="center">
-  <a href="https://bank.pietrzakadrian.com">
-Live Preview
-  </a>
-  |
-  <a href="https://bank.pietrzakadrian.com/api-docs/">
-Swagger Documentation
-  </a>
-    |
-  <a href="mailto:contact@pietrzakadrian.com">
-Contact the developer
-  </a>
+
+[**Live Preview**](https://bank.pietrzakadrian.com) | [**Swagger Documentation**](https://bank.pietrzakadrian.com/api-docs/) | [**Contact the developer**](mailto:contact@pietrzakadrian.com)
+
 </div>
 
 Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeORM)**, **WebSocket**, **RESTful API** and **MySQL**
