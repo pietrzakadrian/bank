@@ -42,7 +42,7 @@ Technology stack:
 7. **Unit Testing** using **Mocha** and **Chai**
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/model.png"  width="738" height="auto">
+  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/model.png" width="100%" height="auto">
 </p>
 
 ## Requirements
