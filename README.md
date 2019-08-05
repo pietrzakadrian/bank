@@ -1,10 +1,8 @@
-<a href="https://bank.pietrzakadrian.com">
-    <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/logo.png" alt="Aimeos logo" title="Aimeos" align="right" height="auto" />
-</a>
-
-# Bank Application
-
 <div align="center">
+
+<a href="https://bank.pietrzakadrian.com">
+    <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/logo.png" alt="Aimeos logo" title="Aimeos" align="center" height="auto" />
+</a>
 
 [**Live Preview**](https://bank.pietrzakadrian.com) | [**Swagger Documentation**](https://bank.pietrzakadrian.com/api-docs/) | [**Contact the developer**](mailto:contact@pietrzakadrian.com)
 
