@@ -27,7 +27,7 @@ Technology stack:
 
 1. **JavaScript** (ES6+)
 2. **ReactJS** with **React-Router**
-3. **Redux.js** with **Redux-Saga**
+3. **Redux.js** with **Redux-Saga** & **Redux-Persist**
 4. **WebSocket** ([**socket.io**](https://github.com/socketio/socket.io))
 5. **Material UI** framework
 6. **styled-components**
