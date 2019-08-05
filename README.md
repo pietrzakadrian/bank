@@ -17,6 +17,10 @@ Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeOR
 - Message+Notification system in real time by using **WebSocket** technology ([**socket.io**](https://github.com/socketio/socket.io))
 - **Unit** & **Component Testing** using **Jest**, **Mocha**, **Chai** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/dashboard.png" width="100%" height="auto">
+</p>
+
 ## Frontend
 
 Technology stack:
@@ -28,10 +32,6 @@ Technology stack:
 5. **Material UI** framework
 6. **styled-components**
 7. **Unit** & **Component Testing** using **Jest** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/dashboard.png" width="100%" height="auto">
-</p>
 
 ## Backend
 
