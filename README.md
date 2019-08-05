@@ -29,6 +29,10 @@ Technology stack:
 6. **styled-components**
 7. **Unit** & **Component Testing** using **Jest** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/dashboard.png" width="100%" height="auto">
+</p>
+
 ## Backend
 
 Technology stack:
