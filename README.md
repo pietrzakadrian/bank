@@ -1,3 +1,7 @@
+<a href="https://bank.pietrzakadrian.com">
+    <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/logo.png" alt="Aimeos logo" title="Aimeos" align="right" height="auto" />
+</a>
+
 # Bank Application
 
 <div align="center">
