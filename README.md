@@ -2,8 +2,7 @@
     <img alt="Aimeos logo" title="Aimeos" align="right" height="60" />
 </a> -->
 
-Bank Application
-======================
+# Bank Application
 
 Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeORM)**, **WebSocket**, **RESTful API** and **MySQL**
 
@@ -17,6 +16,7 @@ Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeOR
 ## Frontend
 
 Technology stack:
+
 1. **JavaScript** (ES6+)
 2. **ReactJS** with **React-Router**
 3. **Redux.js** with **Redux-Saga**
@@ -28,6 +28,7 @@ Technology stack:
 ## Backend
 
 Technology stack:
+
 1. **TypeScript**
 2. **NodeJS** with **Express.js** framework
 3. **TypeORM**
@@ -36,4 +37,30 @@ Technology stack:
 6. **[Swagger](http://bank.pietrzakadrian.com/api-docs/)** Documentation
 7. **Unit Testing** using **Mocha** and **Chai**
 
+## Requirements
+
+- Node v8+
+- npm v6+
+- MySQL
+
 ## Installation
+
+For **frontend**:
+
+1. Clone this repository and enter the `/frontend` directory
+2. Install the dependencies by running `npm install`
+3. Start the project by running `npm start`
+4. Change `BASE_URL` in `frontend/app/utils/api.js` if you want to use localhost (defaults set is a official database from my VPS)
+
+For **backend**:
+
+1. Clone this repository and enter the `/backend` directory
+2. Create 2 MySQL databases. (One for testing & other as main database)
+3. Copy the `env.example` file from `/backend` of project and create a new `.env` file from it.
+4. Set the configuration parameters there (App port, app host, database host, port, username, password etc)
+5. Install the dependencies by running `npm install`
+6. Start the project by running `npm start`
+
+## License
+
+This project is licensed under the MIT license, Copyright (c) 2019 Adrian Pietrzak.
