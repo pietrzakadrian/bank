@@ -1,8 +1,18 @@
-<!-- <a href="https://aimeos.org/">
-    <img alt="Aimeos logo" title="Aimeos" align="right" height="60" />
-</a> -->
-
 # Bank Application
+
+<div align="center">
+  <a href="https://bank.pietrzakadrian.com">
+Live Preview
+  </a>
+  |
+  <a href="https://bank.pietrzakadrian.com/api-docs/">
+Swagger Documentation
+  </a>
+    |
+  <a href="mailto:contact@pietrzakadrian.com">
+Contact the developer
+  </a>
+</div>
 
 Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeORM)**, **WebSocket**, **RESTful API** and **MySQL**
 
@@ -39,20 +49,20 @@ Technology stack:
 
 ## Requirements
 
-- Node v8+
-- npm v6+
-- MySQL
+- **NodeJS** v8+
+- **npm** v6+
+- **MySQL** database
 
 ## Installation
 
-For **frontend**:
+for **Frontend**:
 
 1. Clone this repository and enter the `/frontend` directory
-2. Install the dependencies by running `npm install`
-3. Start the project by running `npm start`
-4. Change `BASE_URL` in `frontend/app/utils/api.js` if you want to use localhost (defaults set is a official database from my VPS)
+2. Change `BASE_URL` in `frontend/app/utils/api.js` if you want to use localhost (defaults set is a official server)
+3. Install the dependencies by running `npm install`
+4. Start the project by running `npm start`
 
-For **backend**:
+for **Backend**:
 
 1. Clone this repository and enter the `/backend` directory
 2. Create 2 MySQL databases. (One for testing & other as main database)
