@@ -29,6 +29,14 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
+  select {
+    @-moz-document url-prefix() {
+      & {
+        padding: 7px 11px!important;
+      }
+    }
+  }
+
   #app {
     background-color: ${PRIMARY_LIGHT};
     min-height: 100%;
@@ -90,7 +98,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   button {
-    border: none;
+    border: transparent;
     width: auto;
     overflow: visible;
     background: transparent;
