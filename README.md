@@ -64,7 +64,7 @@ Technology stack:
 for **Frontend**:
 
 1. Clone this repository and enter the `frontend` directory
-2. Change `BASE_URL` in `/frontend/app/utils/api.js` if you want to use localhost (defaults set is a official server)
+2. Change `BASE_URL` in `/app/utils/api.js` if you want to use localhost (defaults set is a official server)
 3. Install the dependencies by running `npm install`
 4. Start the project by running `npm start`
 
@@ -72,7 +72,7 @@ for **Backend**:
 
 1. Clone this repository and enter the `backend` directory
 2. Create 2 MySQL databases. (One for testing & other as main database)
-3. Copy the `env.example` file from `/backend` of project and create a new `.env` file from it.
+3. Copy the `env.example` and create a new `.env` file from it.
 4. Set the configuration parameters there (App port, app host, database host, port, username, password etc)
 5. Install the dependencies by running `npm install`
 6. Start the project by running `npm start`
