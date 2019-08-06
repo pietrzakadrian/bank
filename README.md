@@ -18,7 +18,7 @@ Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeOR
 - **Unit** & **Component Testing** using **Jest**, **Mocha**, **Chai** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/view.png" width="100%" height="auto">
+  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/board.png" width="100%" height="auto">
 </p>
 
 ## Frontend
