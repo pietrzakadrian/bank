@@ -14,7 +14,7 @@ Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeOR
 - Relational model use of the **MySQL** database via **TypeORM**
 - Support for **many currencies** with the current rate charged by the **REST API**
 - Instant language change for **English**, **Polish** and **German** by using [**react-intl**](https://github.com/formatjs/react-intl)
-- Message+Notification system in real time by using **WebSocket** technology ([**socket.io**](https://github.com/socketio/socket.io))
+- **Message**+**Notification**+**Payment system** in real time by using **WebSocket** technology ([**socket.io**](https://github.com/socketio/socket.io))
 - **Unit** & **Component Testing** using **Jest**, **Mocha**, **Chai** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
 
 <p align="center">
