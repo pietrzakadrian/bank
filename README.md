@@ -1,7 +1,7 @@
 <div align="center">
 
 <a href="https://bank.pietrzakadrian.com">
-    <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/logo.png" alt="Aimeos logo" title="Aimeos" align="center" height="auto" />
+    <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/logo.png" align="center" height="auto" />
 </a>
 
 [**Live Preview**](https://bank.pietrzakadrian.com) | [**Swagger Documentation**](https://bank.pietrzakadrian.com/api-docs/) | [**Contact the developer**](mailto:contact@pietrzakadrian.com)
@@ -14,7 +14,7 @@ Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeOR
 - Relational model use of the **MySQL** database via **TypeORM**
 - Support for **many currencies** with the current rate charged by the **REST API**
 - Instant language change for **English**, **Polish** and **German** by using [**react-intl**](https://github.com/formatjs/react-intl)
-- **Message**+**Notification**+**Payment system** in real time by using **WebSocket** technology ([**socket.io**](https://github.com/socketio/socket.io))
+- **Message**+**Notification**+**Payment system** in real time by using **WebSocket** ([**socket.io**](https://github.com/socketio/socket.io))
 - **Unit** & **Component Testing** using **Jest**, **Mocha**, **Chai** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
 
 <p align="center">
@@ -79,4 +79,4 @@ for **Backend**:
 
 ## License
 
-This project is licensed under the MIT license, Copyright (c) 2019 Adrian Pietrzak.
+This project is licensed under the MIT license. Copyright (c) 2019 Adrian Pietrzak.
