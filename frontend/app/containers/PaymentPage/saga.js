@@ -3,6 +3,7 @@ import React from 'react';
 import { push } from 'connected-react-router';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/PaymentPage/messages';
+import socketIOClient from 'socket.io-client';
 
 // Import Utils
 import request from 'utils/request';
@@ -265,15 +266,22 @@ export function* handleRegisterTransaction() {
 export function* handleConfirmTransaction() {
   const auth = new AuthService();
   const api = new ApiEndpoint();
+  const baseUrl = api.getBasePath();
   const token = auth.getToken();
   const accountBill = yield select(makeAccountNumberSelector());
   const amountMoney = yield select(makeAmountMoneySelector());
+  const recipientId = yield select(makeRecipientIdSelector());
   const transferTitle = yield select(makeTransferTitleSelector());
   const authorizationKey = yield select(makeAuthorizationKeySelector());
   const isOpenNavigationDesktop = yield select(
     makeIsOpenNavigationDesktopSelector(),
   );
   const requestURL = api.getConfirmPath();
+  const socket = socketIOClient('', {
+    path: `${baseUrl}/socket.io`,
+    transports: ['websocket'],
+    secure: true,
+  });
 
   if (!authorizationKey)
     return yield put(
@@ -322,6 +330,7 @@ export function* handleConfirmTransaction() {
         },
       }),
     );
+    socket.emit('new notification', recipientId);
     yield put(push('/dashboard'));
   } catch (error) {
     yield put(makePaymentErrorAction(error));
