@@ -13,7 +13,7 @@ import { User } from "../entities/user.entity";
 
 export class SenderService {
   async sendPaymentMail(
-    to: string,
+    user: User,
     language: Language,
     currency: Currency,
     recipient: User,
@@ -24,6 +24,7 @@ export class SenderService {
     const templateService = new TemplateService();
     const mailService = new MailService();
     const currencyName: Currency["name"] = currency.name;
+    const userEmail: User["email"] = user.email;
 
     try {
       const config: Config = await configService.getByName(
@@ -47,7 +48,7 @@ export class SenderService {
         .replace("RECIPIENT_NAME", `${recipient.name} ${recipient.surname}`)
         .replace("AUTHORIZATION_KEY", authorizationKey);
 
-      await mailService.sendMail(to, subject, "test", content);
+      await mailService.sendMail(userEmail, subject, "test", content);
     } catch (error) {
       Promise.reject(error);
     }

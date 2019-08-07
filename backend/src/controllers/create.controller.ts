@@ -69,8 +69,7 @@ createRouter
         );
         const user: User = await userService.getById(req.user.id);
         const userBill: Bill = await billService.getByUser(user);
-        const userEmail: string = user.email;
-        const userAccountBill: string = userBill.accountBill;
+        const userAccountBill: Bill["accountBill"] = userBill.accountBill;
         const accountBill: string = req.body.accountBill;
         const amountMoney: number = new Decimal(
           req.body.amountMoney
@@ -80,7 +79,8 @@ createRouter
         const recipientBill: Bill = await billService.getByAccountBill(
           `${accountBill}`
         );
-        const recipientAccountBill: string = recipientBill.accountBill;
+        const recipientAccountBill: Bill["accountBill"] =
+          recipientBill.accountBill;
         const recipient: User = recipientBill.user;
         const authorizationKey: string = transactionService.generateAuthorizationKey();
         const isAmountMoney: boolean = await billService.isAmountMoney(
@@ -115,7 +115,7 @@ createRouter
 
         let senderService = new SenderService();
         senderService.sendPaymentMail(
-          userEmail,
+          user,
           language,
           currency,
           recipient,
