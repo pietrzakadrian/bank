@@ -3,6 +3,7 @@ import React from 'react';
 import { push } from 'connected-react-router';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/PaymentPage/messages';
+import socketIOClient from 'socket.io-client';
 
 // Import Utils
 import request from 'utils/request';
@@ -21,6 +22,7 @@ import {
   makeIsSendAuthorizationKeySelector,
 } from 'containers/PaymentPage/selectors';
 import { makeIsOpenNavigationDesktopSelector } from 'containers/App/selectors';
+import { makeSelectLocale } from 'containers/LanguageProvider/selectors';
 
 // Import Actions
 import { enqueueSnackbarAction } from 'containers/App/actions';
@@ -232,6 +234,7 @@ export function* handleRegisterTransaction() {
   const accountBill = yield select(makeAccountNumberSelector());
   const amountMoney = yield select(makeAmountMoneySelector());
   const transferTitle = yield select(makeTransferTitleSelector());
+  const locale = yield select(makeSelectLocale());
   const requestURL = api.getCreatePath();
 
   try {
@@ -246,6 +249,7 @@ export function* handleRegisterTransaction() {
         accountBill,
         amountMoney,
         transferTitle,
+        locale,
       }),
     });
 
@@ -266,6 +270,8 @@ export function* handleConfirmTransaction() {
   const auth = new AuthService();
   const api = new ApiEndpoint();
   const token = auth.getToken();
+  const baseURL = api.getBasePath();
+  const recipientId = yield select(makeRecipientIdSelector());
   const accountBill = yield select(makeAccountNumberSelector());
   const amountMoney = yield select(makeAmountMoneySelector());
   const transferTitle = yield select(makeTransferTitleSelector());
@@ -274,6 +280,7 @@ export function* handleConfirmTransaction() {
     makeIsOpenNavigationDesktopSelector(),
   );
   const requestURL = api.getConfirmPath();
+  const socket = socketIOClient(`${baseURL}`);
 
   if (!authorizationKey)
     return yield put(
@@ -322,8 +329,12 @@ export function* handleConfirmTransaction() {
         },
       }),
     );
+ 
+    socket.emit('new notification', recipientId);
+  
     yield put(push('/dashboard'));
   } catch (error) {
+
     yield put(makePaymentErrorAction(error));
   }
 }

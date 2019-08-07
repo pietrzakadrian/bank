@@ -62,11 +62,7 @@ export default function AccountBills() {
   const dispatch = useDispatch();
   const getAccountBills = () => dispatch(getAccountBillsAction());
   const { availableFunds, accountBills, currency } = useSelector(stateSelector);
-  const socket = socketIOClient('', {
-    path: `${baseURL}/socket.io`,
-    transports: ['websocket'],
-    secure: true,
-  });
+  const socket = socketIOClient(`${baseURL}`);
 
   useInjectSaga({ key, saga });
   useInjectReducer({ key, reducer });
@@ -75,8 +71,7 @@ export default function AccountBills() {
     if (!accountBills) getAccountBills();
 
     socket.on('new notification', id => {
-      socket.io.opts.transports = ['polling', 'websocket'];
-      id === userId && getAccountBills();
+      if (id === userId) getAccountBills();
     });
   }, []);
 

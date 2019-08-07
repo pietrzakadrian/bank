@@ -9,6 +9,8 @@ import { TransactionService } from "../services/transactions.service";
 import { BillService } from "../services/bills.service";
 import { UserService } from "../services/users.service";
 import { CurrencyService } from "../services/currency.service";
+import { MailSender } from "../services/mails.service";
+import { LanguageService } from "../services/languages.service";
 
 // Import Interfaces
 import { IResponseError } from "../resources/interfaces/IResponseError.interface";
@@ -18,6 +20,7 @@ import { User } from "../entities/user.entity";
 import { Transaction } from "../entities/transaction.entity";
 import { Bill } from "../entities/bill.entity";
 import { Currency } from "../entities/currency.entity";
+import { Language } from "../entities/language.entity";
 
 const createRouter: Router = Router();
 
@@ -44,7 +47,11 @@ createRouter
       body("transferTitle")
         .exists()
         .isString()
-        .isLength({ min: 1, max: 255 })
+        .isLength({ min: 1, max: 255 }),
+      body("locale")
+        .exists()
+        .isString()
+        .isLength({ min: 2, max: 2 })
     ],
 
     async (req: Request, res: Response, next: NextFunction) => {
@@ -52,12 +59,17 @@ createRouter
       const billService = new BillService();
       const userService = new UserService();
       const currencyService = new CurrencyService();
+      const languageService = new LanguageService();
       const transactionRepository = getManager().getRepository(Transaction);
       const validationErrors = validationResult(req);
 
       try {
+        const language: Language = await languageService.getByCode(
+          req.body.locale
+        );
         const user: User = await userService.getById(req.user.id);
         const userBill: Bill = await billService.getByUser(user);
+        const userEmail: string = user.email;
         const userAccountBill: string = userBill.accountBill;
         const accountBill: string = req.body.accountBill;
         const amountMoney: number = req.body.amountMoney;
@@ -97,7 +109,10 @@ createRouter
 
         transaction = transactionRepository.create(transaction);
         await transactionService.insert(transaction);
-        // TODO: sendAuthorizationKey()
+
+        let mailSender = new MailSender();
+        console.log(language);
+        mailSender.sendPaymentMail(userEmail, language);
 
         return res.status(HttpStatus.OK).json({
           success: true

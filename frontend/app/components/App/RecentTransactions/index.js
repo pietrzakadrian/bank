@@ -69,11 +69,7 @@ export default function RecentTransactions() {
   const { recentTransactionsRecipient, recentTransactionsSender } = useSelector(
     stateSelector,
   );
-  const socket = socketIOClient('', {
-    path: `${baseURL}/socket.io`,
-    transports: ['websocket'],
-    secure: true,
-  });
+  const socket = socketIOClient(`${baseURL}`);
 
   useInjectSaga({ key, saga });
   useInjectReducer({ key, reducer });
@@ -84,8 +80,10 @@ export default function RecentTransactions() {
     if (recentTransactionsSender.length === 0) getRecentTransactionsSender();
 
     socket.on('new notification', id => {
-      socket.io.opts.transports = ['polling', 'websocket'];
-      id === userId && getRecentTransactionsRecipient() && getRecentTransactionsSender();
+     if (id === userId) {
+      getRecentTransactionsRecipient();
+      getRecentTransactionsSender();
+     }
     });
   }, []);
 

@@ -68,11 +68,7 @@ export default function AvailableFunds() {
   const { availableFunds, accountBalanceHistory, currency } = useSelector(
     stateSelector,
   );
-  const socket = socketIOClient('', {
-    path: `${baseURL}/socket.io`,
-    transports: ['websocket'],
-    secure: true,
-  });
+  const socket = socketIOClient(`${baseURL}`);
 
   useInjectSaga({ key, saga });
   useInjectReducer({ key, reducer });
@@ -83,8 +79,11 @@ export default function AvailableFunds() {
     if (accountBalanceHistory.length === 0) getAccountBalanceHistory();
 
     socket.on('new notification', id => {
-      socket.io.opts.transports = ['polling', 'websocket'];
-      id === userId && getAvailableFunds() && getCurrency() && getAccountBalanceHistory();
+      if (id === userId) {
+        getAvailableFunds();
+        getCurrency();
+        getAccountBalanceHistory();
+      };
     });
   }, []);
 

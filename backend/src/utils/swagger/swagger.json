@@ -1113,6 +1113,9 @@
         },
         "transferTitle": {
           "type": "string"
+        },
+        "locale": {
+          "type": "string"
         }
       }
     },

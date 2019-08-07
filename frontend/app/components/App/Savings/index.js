@@ -66,11 +66,7 @@ const key = 'dashboardPage';
   const getRechartsColors = () => dispatch(getRechartsColorsAction());
   const getRechartsData = () => dispatch(getRechartsDataAction());
   const { savings, rechartsColors, rechartsData } = useSelector(stateSelector);
-  const socket = socketIOClient('', {
-    path: `${baseURL}/socket.io`,
-    transports: ['websocket'],
-    secure: true,
-  });
+  const socket = socketIOClient(`${baseURL}`);
   let id = 0;
 
   useInjectSaga({ key, saga });
@@ -82,8 +78,11 @@ const key = 'dashboardPage';
     if (getRechartsData.length) getRechartsData();
 
     socket.on('new notification', id => {
-      socket.io.opts.transports = ['polling', 'websocket'];
-      id === userId && getSavings() && getRechartsColors() && getRechartsData();
+      if (id === userId) {
+        getSavings();
+        getRechartsColors();
+        getRechartsData();
+      };
     });
   }, []);
 

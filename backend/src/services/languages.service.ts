@@ -17,6 +17,7 @@ export class LanguageService {
    * Inserts a new Language into the database.
    */
   async insert(language: Language): Promise<Language> {
+    this.logger.info("Create a new language", language);
     const newLanguage = this.languagesRepository.create(language);
     return await this.languagesRepository.save(newLanguage);
   }

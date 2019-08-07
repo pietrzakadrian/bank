@@ -3,6 +3,8 @@ import { Logger, ILogger } from "../utils/logger";
 
 // Import Entities
 import { Template } from "../entities/template.entity";
+import { Language } from "../entities/language.entity";
+import { Config } from "../entities/config.entity";
 
 export class TemplateService {
   templatesRepository: Repository<Template>;
@@ -26,5 +28,31 @@ export class TemplateService {
    */
   async getAll(): Promise<Template[]> {
     return await this.templatesRepository.find();
+  }
+
+  /**
+   * Returns one template from db
+   */
+  async getOne(
+    language: Language,
+    name: Config
+  ): Promise<Template | undefined> {
+    console.log(language);
+
+    try {
+      const template: Template = await this.templatesRepository.findOne({
+        where: { name, language }
+      });
+
+      console.log(template);
+
+      if (template) {
+        return template;
+      } else {
+        return undefined;
+      }
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 }

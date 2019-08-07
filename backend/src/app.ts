@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import bodyParser from "body-parser";
+import { createServer, Server } from "http";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import express from "express";
@@ -8,6 +9,7 @@ import morgan from "morgan";
 import { createConnection, getManager } from "typeorm";
 import config from "./config/config";
 import routes from "./routes";
+import socketIo from "socket.io";
 import cron from "cron";
 import differenceInYears from "date-fns/difference_in_years";
 
@@ -44,9 +46,11 @@ import notFoundHandler from "./middlewares/notFoundHandler.middleware";
 
 export class Application {
   app: express.Application;
+  private server: Server;
   config = config;
   logger: ILogger;
   CronJob = cron.CronJob;
+  private io: SocketIO.Server;
 
   constructor() {
     this.logger = new Logger(__filename);
@@ -82,6 +86,8 @@ export class Application {
       }`
     );
 
+    await this.createServer();
+    await this.initSocket();
     await this.startServer();
     await this.setConfig();
     await this.setCurrencies();
@@ -92,7 +98,15 @@ export class Application {
     await this.createAuthor();
   };
 
-  startServer(): Promise<boolean> {
+  private createServer(): void {
+    this.server = createServer(this.app);
+  }
+
+  private initSocket(): void {
+    this.io = socketIo(this.server);
+  }
+
+  startServer = (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       this.app
         .listen(+this.config.port, this.config.host, () => {
@@ -102,10 +116,23 @@ export class Application {
           resolve(true);
         })
         .on("error", nodeErrorHandler);
-    });
-  }
 
-  createAdmin = async () => {
+      this.io.on("connect", (socket: any) => {
+        console.log("Connected client on port %s.", this.config.port);
+
+        socket.on("new notification", (id: number) => {
+          console.log("[server](message): %s", id);
+          this.io.emit("new notification", id);
+        });
+
+        socket.on("disconnect", () => {
+          console.log("Client disconnected");
+        });
+      });
+    });
+  };
+
+  createAdmin = async (): Promise<any> => {
     const userService = new UserService();
     const billService = new BillService();
     const curencyService = new CurrencyService();
@@ -243,7 +270,10 @@ export class Application {
   setConfig = async () => {
     const configService = new ConfigService();
     const configRepository = getManager().getRepository(Config);
-    const newConfigs: Array<object> = [{ id: 1, name: "WELCOME_MESSAGE" }];
+    const newConfigs: Array<object> = [
+      { id: 1, name: "WELCOME_MESSAGE" },
+      { id: 2, name: "REGISTER_TRANSACTION" }
+    ];
 
     try {
       const configs = await configService.getAll();
@@ -272,6 +302,14 @@ export class Application {
     );
 
     try {
+      const WELCOME_MESSAGE = await configService.getByName("WELCOME_MESSAGE");
+      const REGISTER_TRANSACTION = await configService.getByName(
+        "REGISTER_TRANSACTION"
+      );
+      const PL = await languageService.getByCode("PL");
+      const DE = await languageService.getByCode("DE");
+      const EN = await languageService.getByCode("EN");
+
       const newTemplates: Array<object> = [
         {
           subject: "Cooperation proposal",
@@ -284,8 +322,8 @@ export class Application {
           <p>Thank you for agreeing to test my application. I am sending you 5,00 USD. Be sure to check your transfers and change currency.</p>
           <p>Yours faithfully,<br />Adrian Pietrzak</p>`,
           actions: "Ok, I will send you my opinion",
-          language: await languageService.getByCode("EN"),
-          name: await configService.getByName("WELCOME_MESSAGE")
+          language: EN,
+          name: WELCOME_MESSAGE
         },
         {
           subject: "Propozycja współpracy",
@@ -298,8 +336,8 @@ export class Application {
           <p>Dziękuję, że zgodziłeś się na przetestowanie mojej aplikacji. Przesyłam Ci 5,00 USD. Sprawdź swoje przelewy i zmianę waluty.</p>
           <p>Z poważaniem,<br />Adrian Pietrzak</p>`,
           actions: "Ok, wyślę Tobie moją opinię",
-          language: await languageService.getByCode("PL"),
-          name: await configService.getByName("WELCOME_MESSAGE")
+          language: PL,
+          name: WELCOME_MESSAGE
         },
         {
           subject: "Kooperationsvorschlag",
@@ -312,8 +350,29 @@ export class Application {
           <p>Vielen Dank, dass Sie zugestimmt haben, meine Anwendung zu testen. Ich schicke Ihnen 5,00 USD.<br />&Uuml;berpr&uuml;fen Sie unbedingt Ihre &Uuml;berweisungen und &auml;ndern Sie die W&auml;hrung.</p>
           <p>Hochachtungsvoll,<br />Adrian Pietrzak</p>`,
           actions: "Ok, ich sende dir meine Meinung",
-          language: await languageService.getByCode("DE"),
-          name: await configService.getByName("WELCOME_MESSAGE")
+          language: DE,
+          name: WELCOME_MESSAGE
+        },
+        {
+          subject: "Payment authorization",
+          language: EN,
+          name: REGISTER_TRANSACTION,
+          actions: "0",
+          content: `<!doctype html> <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"> <head> <title></title> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <style type="text/css"> #outlook a{padding: 0;}.ReadMsgBody{width: 100%;}.ExternalClass{width: 100%;}.ExternalClass *{line-height: 100%;}body{margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;}table, td{border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;}img{border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;}p{display: block; margin: 13px 0;}</style> <style type="text/css"> @media only screen and (max-width:480px){@-ms-viewport{width: 320px;}@viewport{width: 320px;}}</style><!--[if mso]> <xml> <o:OfficeDocumentSettings> <o:AllowPNG/> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings> </xml><![endif]--><!--[if lte mso 11]> <style type="text/css"> .outlook-group-fix{width:100% !important;}</style><![endif]--> <style type="text/css"> @media only screen and (min-width:480px){.mj-column-per-100{width: 100% !important; max-width: 100%;}}</style> <style type="text/css"> @media only screen and (max-width:480px){table.full-width-mobile{width: 100% !important;}td.full-width-mobile{width: auto !important;}}</style> </head> <body> <div><!--[if mso | IE]> <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" > <tr> <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--> <div style="Margin:0px auto;max-width:600px;"> <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;"> <tbody> <tr> <td style="direction:ltr;font-size:0px;padding:20px 0;text-align:center;vertical-align:top;"><!--[if mso | IE]> <table role="presentation" border="0" cellpadding="0" cellspacing="0"> <tr> <td class="" style="vertical-align:top;width:600px;" ><![endif]--> <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"> <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%"> <tr> <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;"> <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"> <tbody> <tr> <td style="width:200px;"> <img height="auto" src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="200"/> </td></tr></tbody> </table> </td></tr><tr> <td style="font-size:0px;padding:10px 25px;word-break:break-word;"> <p style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:100%;"> </p><!--[if mso | IE]> <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:550px;" role="presentation" width="550px" > <tr> <td style="height:0;line-height:0;"> &nbsp; </td></tr></table><![endif]--> </td></tr><tr> <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;"> <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;"> Dear Customer! <br/> We have registered an attempt to make a payment for the amount of AMOUNT_MONEY CURRENCY_NAME to RECIPIENT_NAME. <br/><br/> Confirm the payment by entering the authorization key: <b>AUTHORIZATION_KEY</b> </div></td></tr><tr> <td style="font-size:0px;padding:10px 25px;word-break:break-word;"> <p style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:100%;"> </p><!--[if mso | IE]> <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:550px;" role="presentation" width="550px" > <tr> <td style="height:0;line-height:0;"> &nbsp; </td></tr></table><![endif]--> </td></tr><tr> <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;"> <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;"> Thank you for using our banking services. </div></td></tr></table> </div><!--[if mso | IE]> </td></tr></table><![endif]--> </td></tr></tbody> </table> </div><!--[if mso | IE]> </td></tr></table><![endif]--> </div></body> </html>`
+        },
+        {
+          subject: "Autoryzacja płatności",
+          language: PL,
+          name: REGISTER_TRANSACTION,
+          actions: "0",
+          content: `<!doctype html> <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"> <head> <title></title> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <style type="text/css"> #outlook a{padding: 0;}.ReadMsgBody{width: 100%;}.ExternalClass{width: 100%;}.ExternalClass *{line-height: 100%;}body{margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;}table, td{border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;}img{border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;}p{display: block; margin: 13px 0;}</style> <style type="text/css"> @media only screen and (max-width:480px){@-ms-viewport{width: 320px;}@viewport{width: 320px;}}</style><!--[if mso]> <xml> <o:OfficeDocumentSettings> <o:AllowPNG/> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings> </xml><![endif]--><!--[if lte mso 11]> <style type="text/css"> .outlook-group-fix{width:100% !important;}</style><![endif]--> <style type="text/css"> @media only screen and (min-width:480px){.mj-column-per-100{width: 100% !important; max-width: 100%;}}</style> <style type="text/css"> @media only screen and (max-width:480px){table.full-width-mobile{width: 100% !important;}td.full-width-mobile{width: auto !important;}}</style> </head> <body> <div><!--[if mso | IE]> <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" > <tr> <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--> <div style="Margin:0px auto;max-width:600px;"> <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;"> <tbody> <tr> <td style="direction:ltr;font-size:0px;padding:20px 0;text-align:center;vertical-align:top;"><!--[if mso | IE]> <table role="presentation" border="0" cellpadding="0" cellspacing="0"> <tr> <td class="" style="vertical-align:top;width:600px;" ><![endif]--> <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"> <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%"> <tr> <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;"> <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"> <tbody> <tr> <td style="width:200px;"> <img height="auto" src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="200"/> </td></tr></tbody> </table> </td></tr><tr> <td style="font-size:0px;padding:10px 25px;word-break:break-word;"> <p style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:100%;"> </p><!--[if mso | IE]> <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:550px;" role="presentation" width="550px" > <tr> <td style="height:0;line-height:0;"> &nbsp; </td></tr></table><![endif]--> </td></tr><tr> <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;"> <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;">Drogi Kliencie! <br/> Zarejestrowaliśmy próbę dokonania płatności na kwotę: AMOUNT_MONEY CURRENCY_NAME dla RECIPIENT_NAME. <br/><br/> Potwierdź płatność, wprowadzając klucz autoryzacyjny: <b>AUTHORIZATION_KEY</b> </div></td></tr><tr> <td style="font-size:0px;padding:10px 25px;word-break:break-word;"> <p style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:100%;"> </p><!--[if mso | IE]> <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:550px;" role="presentation" width="550px" > <tr> <td style="height:0;line-height:0;"> &nbsp; </td></tr></table><![endif]--> </td></tr><tr> <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;"> <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;">Dziękujemy za skorzystanie z naszych usług bankowych. </div></td></tr></table> </div><!--[if mso | IE]> </td></tr></table><![endif]--> </td></tr></tbody> </table> </div><!--[if mso | IE]> </td></tr></table><![endif]--> </div></body> </html>`
+        },
+        {
+          subject: "Zahlungsermächtigung",
+          language: DE,
+          name: REGISTER_TRANSACTION,
+          actions: "0",
+          content: `<!doctype html> <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"> <head> <title></title> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <style type="text/css"> #outlook a{padding: 0;}.ReadMsgBody{width: 100%;}.ExternalClass{width: 100%;}.ExternalClass *{line-height: 100%;}body{margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;}table, td{border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;}img{border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;}p{display: block; margin: 13px 0;}</style> <style type="text/css"> @media only screen and (max-width:480px){@-ms-viewport{width: 320px;}@viewport{width: 320px;}}</style><!--[if mso]> <xml> <o:OfficeDocumentSettings> <o:AllowPNG/> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings> </xml><![endif]--><!--[if lte mso 11]> <style type="text/css"> .outlook-group-fix{width:100% !important;}</style><![endif]--> <style type="text/css"> @media only screen and (min-width:480px){.mj-column-per-100{width: 100% !important; max-width: 100%;}}</style> <style type="text/css"> @media only screen and (max-width:480px){table.full-width-mobile{width: 100% !important;}td.full-width-mobile{width: auto !important;}}</style> </head> <body> <div><!--[if mso | IE]> <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" > <tr> <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--> <div style="Margin:0px auto;max-width:600px;"> <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;"> <tbody> <tr> <td style="direction:ltr;font-size:0px;padding:20px 0;text-align:center;vertical-align:top;"><!--[if mso | IE]> <table role="presentation" border="0" cellpadding="0" cellspacing="0"> <tr> <td class="" style="vertical-align:top;width:600px;" ><![endif]--> <div class="mj-column-per-100 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"> <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%"> <tr> <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;"> <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"> <tbody> <tr> <td style="width:200px;"> <img height="auto" src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/logo.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="200"/> </td></tr></tbody> </table> </td></tr><tr> <td style="font-size:0px;padding:10px 25px;word-break:break-word;"> <p style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:100%;"> </p><!--[if mso | IE]> <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:550px;" role="presentation" width="550px" > <tr> <td style="height:0;line-height:0;"> &nbsp; </td></tr></table><![endif]--> </td></tr><tr> <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;"> <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;">Sehr geehrter Kunde!<br/> Wir haben einen Zahlungsversuch registriert für den Betrag von: AMOUNT_MONEY CURRENCY_NAME bis RECIPIENT_NAME. <br/><br/> Bestätigen Sie die Zahlung durch Eingabe des Autorisierungsschlüssels: <b>AUTHORIZATION_KEY</b> </div></td></tr><tr> <td style="font-size:0px;padding:10px 25px;word-break:break-word;"> <p style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:100%;"> </p><!--[if mso | IE]> <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 4px #15a0dd;font-size:1;margin:0px auto;width:550px;" role="presentation" width="550px" > <tr> <td style="height:0;line-height:0;"> &nbsp; </td></tr></table><![endif]--> </td></tr><tr> <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;"> <div style="font-family:helvetica;font-size:16px;line-height:1;text-align:left;color:black;">Vielen Dank, dass Sie unsere Bankdienstleistungen in Anspruch genommen haben.</div></td></tr></table> </div><!--[if mso | IE]> </td></tr></table><![endif]--> </td></tr></tbody> </table> </div><!--[if mso | IE]> </td></tr></table><![endif]--> </div></body> </html>`
         }
       ];
 

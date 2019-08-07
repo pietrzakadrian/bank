@@ -38,8 +38,6 @@ messagesRouter
       const isMessage: boolean = additional.messageStatus;
       const messageCount: number = additional.messageCount;
 
-      console.log(messageCount);
-
       if (isMessage)
         return res.status(HttpStatus.OK).json({
           isMessage,
@@ -111,7 +109,6 @@ messagesRouter
       const additionalService = new AdditionalService();
       const languageService = new LanguageService();
       const userService = new UserService();
-      const messageService = new MessageService();
 
       try {
         const language: Language = await languageService.getByCode(
