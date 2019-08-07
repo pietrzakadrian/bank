@@ -10,6 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { FormattedMessage } from 'react-intl';
+import socketIOClient from 'socket.io-client';
 import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
 
@@ -27,6 +28,10 @@ import {
 } from 'components/App/HeavyWidget';
 import LoadingWrapper from './LoadingWrapper';
 import messages from './messages';
+
+// Import Utils
+import ApiEndpoint from 'utils/api.js';
+import AuthService from 'services/auth.service';
 
 // Import Actions
 import {
@@ -48,14 +53,24 @@ const stateSelector = createStructuredSelector({
   rechartsData: makeRechartsDataSelector(),
 });
 
-const key = 'dashboardPage';
+
 
 export default function Savings() {
+const api = new ApiEndpoint();
+const auth = new AuthService();
+const userId = auth.getUserId();
+const baseURL = api.getBasePath();
+const key = 'dashboardPage';
   const dispatch = useDispatch();
   const getSavings = () => dispatch(getSavingsAction());
   const getRechartsColors = () => dispatch(getRechartsColorsAction());
   const getRechartsData = () => dispatch(getRechartsDataAction());
   const { savings, rechartsColors, rechartsData } = useSelector(stateSelector);
+  const socket = socketIOClient('', {
+    path: `${baseURL}/socket.io`,
+    transports: ['websocket'],
+    secure: true,
+  });
   let id = 0;
 
   useInjectSaga({ key, saga });
@@ -65,6 +80,11 @@ export default function Savings() {
     if (!savings) getSavings();
     if (rechartsColors.length) getRechartsColors();
     if (getRechartsData.length) getRechartsData();
+
+    socket.on('new notification', id => {
+      socket.io.opts.transports = ['polling', 'websocket'];
+      id === userId && getSavings() && getRechartsColors() && getRechartsData();
+    });
   }, []);
 
   return (

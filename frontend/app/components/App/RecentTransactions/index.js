@@ -10,8 +10,8 @@ import { useInjectReducer } from 'utils/injectReducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { format } from 'date-fns';
-import AuthService from 'services/auth.service';
 import { FormattedMessage } from 'react-intl';
+import socketIOClient from 'socket.io-client';
 import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
 
@@ -27,6 +27,10 @@ import RecentTransitionsSenderAmountWrapper from './RecentTransitionsSenderAmoun
 import RecentTransitionsRecipientNameWrapper from './RecentTransitionsRecipientNameWrapper';
 import RecentTransitionsWrapper from './RecentTransitionsWrapper';
 import messages from './messages';
+
+// Import Utils
+import ApiEndpoint from 'utils/api.js';
+import AuthService from 'services/auth.service';
 
 // Import Actions
 import {
@@ -45,8 +49,6 @@ const stateSelector = createStructuredSelector({
   recentTransactionsSender: makeRecentTransactionsSenderSelector(),
 });
 
-const key = 'dashboardPage';
-
 function sortingData(data) {
   return data
     .sort((a, b) => Date.parse(b.date_time) - Date.parse(a.date_time))
@@ -55,7 +57,10 @@ function sortingData(data) {
 
 export default function RecentTransactions() {
   const auth = new AuthService();
+  const api = new ApiEndpoint();
   const userId = auth.getUserId();
+  const baseURL = api.getBasePath();
+  const key = 'dashboardPage';
   const dispatch = useDispatch();
   const getRecentTransactionsRecipient = () =>
     dispatch(getRecentTransactionsRecipientAction());
@@ -64,6 +69,11 @@ export default function RecentTransactions() {
   const { recentTransactionsRecipient, recentTransactionsSender } = useSelector(
     stateSelector,
   );
+  const socket = socketIOClient('', {
+    path: `${baseURL}/socket.io`,
+    transports: ['websocket'],
+    secure: true,
+  });
 
   useInjectSaga({ key, saga });
   useInjectReducer({ key, reducer });
@@ -72,9 +82,12 @@ export default function RecentTransactions() {
     if (recentTransactionsRecipient.length === 0)
       getRecentTransactionsRecipient();
     if (recentTransactionsSender.length === 0) getRecentTransactionsSender();
-  }, []);
 
-  let index = 0;
+    socket.on('new notification', id => {
+      socket.io.opts.transports = ['polling', 'websocket'];
+      id === userId && getRecentTransactionsRecipient() && getRecentTransactionsSender();
+    });
+  }, []);
 
   return (
     <SoftWidgetWrapper noShadow>
@@ -88,7 +101,7 @@ export default function RecentTransactions() {
             {sortingData([
               ...recentTransactionsRecipient,
               ...recentTransactionsSender,
-            ]).map(row => (
+            ]).map((row, index) => (
               <TableRow key={index++} onMouseDown={e => e.stopPropagation()}>
                 {row.id_sender === userId ? (
                   <Fragment>

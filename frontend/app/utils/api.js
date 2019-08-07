@@ -8,6 +8,7 @@ const ADDITIONALS_PATH = '/api/additionals';
 
 export default class ApiEndpoint {
   constructor() {
+    this.getBasePath = this.getBasePath.bind(this);
     this.getLoginPath = this.getLoginPath.bind(this);
     this.getRegisterPath = this.getRegisterPath.bind(this);
     this.getLogoutPath = this.getLogoutPath.bind(this);
@@ -29,6 +30,10 @@ export default class ApiEndpoint {
     this.getMessagesPath = this.getMessagesPath.bind(this);
     this.getIsNotificationPath = this.getIsNotificationPath.bind(this);
     this.getIsMessagePath = this.getIsMessagePath.bind(this);
+  }
+
+  getBasePath() {
+    return `${BASE_URL}`;
   }
 
   getLoginPath() {

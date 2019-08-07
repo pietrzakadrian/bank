@@ -107,6 +107,7 @@
     "redux-saga": "1.0.5",
     "reselect": "4.0.0",
     "sanitize.css": "10.0.0",
+    "socket.io-client": "^2.2.0",
     "styled-components": "4.3.2"
   },
   "devDependencies": {

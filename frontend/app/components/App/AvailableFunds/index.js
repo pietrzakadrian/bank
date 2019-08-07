@@ -10,6 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import socketIOClient from 'socket.io-client';
 import reducer from 'containers/DashboardPage/reducer';
 import saga from 'containers/DashboardPage/saga';
 
@@ -30,6 +31,8 @@ import messages from './messages';
 
 // Import Utils
 import { PRIMARY_BLUE_LIGHT } from 'utils/colors';
+import ApiEndpoint from 'utils/api.js';
+import AuthService from 'services/auth.service';
 
 // Import Actions
 import {
@@ -51,9 +54,12 @@ const stateSelector = createStructuredSelector({
   currency: makeCurrencySelector(),
 });
 
-const key = 'dashboardPage';
-
 export default function AvailableFunds() {
+  const api = new ApiEndpoint();
+  const auth = new AuthService();
+  const userId = auth.getUserId();
+  const baseURL = api.getBasePath();
+  const key = 'dashboardPage';
   const dispatch = useDispatch();
   const getAvailableFunds = () => dispatch(getAvailableFundsAction());
   const getAccountBalanceHistory = () =>
@@ -62,6 +68,11 @@ export default function AvailableFunds() {
   const { availableFunds, accountBalanceHistory, currency } = useSelector(
     stateSelector,
   );
+  const socket = socketIOClient('', {
+    path: `${baseURL}/socket.io`,
+    transports: ['websocket'],
+    secure: true,
+  });
 
   useInjectSaga({ key, saga });
   useInjectReducer({ key, reducer });
@@ -70,6 +81,11 @@ export default function AvailableFunds() {
     if (!availableFunds) getAvailableFunds();
     if (!currency) getCurrency();
     if (accountBalanceHistory.length === 0) getAccountBalanceHistory();
+
+    socket.on('new notification', id => {
+      socket.io.opts.transports = ['polling', 'websocket'];
+      id === userId && getAvailableFunds() && getCurrency() && getAccountBalanceHistory();
+    });
   }, []);
 
   return (
