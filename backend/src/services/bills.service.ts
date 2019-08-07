@@ -4,7 +4,6 @@ import { Decimal } from "decimal.js";
 
 // Import Services
 import { CurrencyService } from "./currency.service";
-import { UserService } from "./users.service";
 
 // Import Entities
 import { Currency } from "../entities/currency.entity";
