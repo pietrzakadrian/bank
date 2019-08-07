@@ -25,7 +25,7 @@ export class Template {
   @Column("mediumtext")
   content: string;
 
-  @Column()
+  @Column({ nullable: true })
   actions: string;
 
   @ManyToOne(type => Language, language => language.id, { nullable: false })

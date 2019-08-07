@@ -9,7 +9,7 @@ import { TransactionService } from "../services/transactions.service";
 import { BillService } from "../services/bills.service";
 import { UserService } from "../services/users.service";
 import { CurrencyService } from "../services/currency.service";
-import { MailSender } from "../services/mails.service";
+import { SenderService } from "../services/sender.service";
 import { LanguageService } from "../services/languages.service";
 
 // Import Interfaces
@@ -110,9 +110,8 @@ createRouter
         transaction = transactionRepository.create(transaction);
         await transactionService.insert(transaction);
 
-        let mailSender = new MailSender();
-        console.log(language);
-        mailSender.sendPaymentMail(userEmail, language);
+        let senderService = new SenderService();
+        senderService.sendPaymentMail(userEmail, language);
 
         return res.status(HttpStatus.OK).json({
           success: true

@@ -1,17 +1,19 @@
 import * as nodemailer from "nodemailer";
-import {
-  ISystemSettings,
-  IISystemSettings
-} from "../resources/interfaces/ISystemSettings.interface";
-import { ServiceLocatorGeneric } from "./locator.service";
-import { ConstructorInject } from "../resources/decorators/constructorInject.decorator";
 import config from "../config/config";
 
-@ConstructorInject
-export class GMailServiceDi {
+export class MailService {
   private _transporter: nodemailer.Transporter;
-  private _settings: ISystemSettings;
   config = config;
+
+  constructor() {
+    this._transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: this.config.admin.email,
+        pass: this.config.admin.password
+      }
+    });
+  }
 
   sendMail(
     to: string,
@@ -41,25 +43,4 @@ export class GMailServiceDi {
       }
     );
   }
-
-  constructor(_settings?: IISystemSettings, testParameter?: string) {
-    this._transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: this.config.admin.email,
-        pass: this.config.admin.password
-      }
-    });
-  }
 }
-
-export interface IGMailServiceDi {
-  sendMail(
-    to: string,
-    subject: string,
-    content: string,
-    html: string
-  ): Promise<void>;
-}
-
-export class IIGMailServiceDi {}

@@ -33,18 +33,14 @@ export class TemplateService {
   /**
    * Returns one template from db
    */
-  async getOne(
+  async getTemplate(
     language: Language,
     name: Config
   ): Promise<Template | undefined> {
-    console.log(language);
-
     try {
       const template: Template = await this.templatesRepository.findOne({
         where: { name, language }
       });
-
-      console.log(template);
 
       if (template) {
         return template;
