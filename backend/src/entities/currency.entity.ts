@@ -16,7 +16,7 @@ export class Currency {
   @Column("double", { default: 1 })
   exchangeRate: number;
 
-  @CreateDateColumn()
+  @Column()
   exchangeRateSyncDate: Date;
 
   @Column({ default: 0 })

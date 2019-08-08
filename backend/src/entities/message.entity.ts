@@ -27,6 +27,6 @@ export class Message {
   @ManyToOne(type => User, user => user.id, { nullable: false })
   recipient: User;
 
-  @CreateDateColumn()
+  @Column()
   createdDate: Date;
 }

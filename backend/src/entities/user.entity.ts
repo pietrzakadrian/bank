@@ -29,7 +29,7 @@ export class User {
   @Column()
   password: string;
 
-  @CreateDateColumn()
+  @Column()
   createdDate: Date;
 
   @Column({ nullable: true })
