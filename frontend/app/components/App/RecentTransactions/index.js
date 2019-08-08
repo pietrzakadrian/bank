@@ -28,7 +28,6 @@ import RecentTransitionsWrapper from './RecentTransitionsWrapper';
 import messages from './messages';
 
 // Import Utils
-import ApiEndpoint from 'utils/api.js';
 import AuthService from 'services/auth.service';
 
 // Import Actions
@@ -88,10 +87,10 @@ export default function RecentTransactions() {
             {sortingData([
               ...recentTransactionsRecipient,
               ...recentTransactionsSender,
-            ]).map((row, index) => (
-              <TableRow key={index++} onMouseDown={e => e.stopPropagation()}>
-                {row.id_sender === userId ? (
-                  <Fragment>
+            ]).map((row, index) => {
+              return (
+                <TableRow key={index++} onMouseDown={e => e.stopPropagation()}>
+                  {row.id_sender === userId ? (<Fragment>
                     <TableCellWrapper recent="true">
                       <RecentTransitionsRecipientNameWrapper>
                         <FormattedMessage {...messages.toPayment} />{' '}
@@ -109,9 +108,7 @@ export default function RecentTransactions() {
                         {row.amount_money} {row.currency}
                       </RecentTransitionsSenderAmountWrapper>
                     </TableCellWrapper>
-                  </Fragment>
-                ) : (
-                  <Fragment>
+                  </Fragment>) : (<Fragment>
                     <TableCellWrapper>
                       <RecentTransitionsRecipientNameWrapper>
                         <FormattedMessage {...messages.fromPayment} />{' '}
@@ -129,10 +126,10 @@ export default function RecentTransactions() {
                         {row.amount_money} {row.currency}
                       </div>
                     </TableCellWrapper>
-                  </Fragment>
-                )}
-              </TableRow>
-            ))}
+                  </Fragment>)}
+                </TableRow>
+              );
+            })}
           </TableBodyWrapper>
         </Table>
       ) : (

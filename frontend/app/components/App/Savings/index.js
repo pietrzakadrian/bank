@@ -28,9 +28,6 @@ import {
 import LoadingWrapper from './LoadingWrapper';
 import messages from './messages';
 
-// Import Utils
-import AuthService from 'services/auth.service';
-
 // Import Actions
 import {
   getRechartsColorsAction,
@@ -51,10 +48,7 @@ const stateSelector = createStructuredSelector({
   rechartsData: makeRechartsDataSelector(),
 });
 
-
-
 export default function Savings() {
-  const auth = new AuthService();
   const key = 'dashboardPage';
   const dispatch = useDispatch();
   const getSavings = () => dispatch(getSavingsAction());

@@ -30,8 +30,6 @@ import messages from './messages';
 
 // Import Utils
 import { PRIMARY_BLUE_LIGHT } from 'utils/colors';
-import ApiEndpoint from 'utils/api.js';
-import AuthService from 'services/auth.service';
 
 // Import Actions
 import {
@@ -54,8 +52,6 @@ const stateSelector = createStructuredSelector({
 });
 
 export default function AvailableFunds() {
-  const api = new ApiEndpoint();
-  const auth = new AuthService();
   const key = 'dashboardPage';
   const dispatch = useDispatch();
   const getAvailableFunds = () => dispatch(getAvailableFundsAction());

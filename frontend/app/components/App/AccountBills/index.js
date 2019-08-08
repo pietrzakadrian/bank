@@ -32,10 +32,6 @@ import TableCellWrapper from './TableCellWrapper';
 import AvailableFundsWrapper from './AvailableFundsWrapper';
 import messages from './messages';
 
-// Import Utils
-import ApiEndpoint from 'utils/api.js';
-import AuthService from 'services/auth.service';
-
 // Import Actions
 import { getAccountBillsAction } from 'containers/DashboardPage/actions';
 
@@ -53,8 +49,6 @@ const stateSelector = createStructuredSelector({
 });
 
 export default function AccountBills() {
-  const api = new ApiEndpoint();
-  const auth = new AuthService();
   const key = 'dashboardPage';
   const dispatch = useDispatch();
   const getAccountBills = () => dispatch(getAccountBillsAction());
