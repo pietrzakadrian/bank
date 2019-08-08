@@ -11,7 +11,6 @@ import { createStructuredSelector } from 'reselect';
 import { FormattedMessage } from 'react-intl';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import socketIOClient from 'socket.io-client';
 import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
 
@@ -56,23 +55,16 @@ const stateSelector = createStructuredSelector({
 export default function AccountBills() {
   const api = new ApiEndpoint();
   const auth = new AuthService();
-  const userId = auth.getUserId();
-  const baseURL = api.getBasePath();
   const key = 'dashboardPage';
   const dispatch = useDispatch();
   const getAccountBills = () => dispatch(getAccountBillsAction());
   const { availableFunds, accountBills, currency } = useSelector(stateSelector);
-  const socket = socketIOClient(`${baseURL}`);
 
   useInjectSaga({ key, saga });
   useInjectReducer({ key, reducer });
 
   useEffect(() => {
     if (!accountBills) getAccountBills();
-
-    socket.on('new notification', id => {
-      if (id === userId) getAccountBills();
-    });
   }, []);
 
   return (

@@ -11,7 +11,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { format } from 'date-fns';
 import { FormattedMessage } from 'react-intl';
-import socketIOClient from 'socket.io-client';
 import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
 
@@ -57,9 +56,7 @@ function sortingData(data) {
 
 export default function RecentTransactions() {
   const auth = new AuthService();
-  const api = new ApiEndpoint();
   const userId = auth.getUserId();
-  const baseURL = api.getBasePath();
   const key = 'dashboardPage';
   const dispatch = useDispatch();
   const getRecentTransactionsRecipient = () =>
@@ -69,7 +66,6 @@ export default function RecentTransactions() {
   const { recentTransactionsRecipient, recentTransactionsSender } = useSelector(
     stateSelector,
   );
-  const socket = socketIOClient(`${baseURL}`);
 
   useInjectSaga({ key, saga });
   useInjectReducer({ key, reducer });
@@ -78,13 +74,6 @@ export default function RecentTransactions() {
     if (recentTransactionsRecipient.length === 0)
       getRecentTransactionsRecipient();
     if (recentTransactionsSender.length === 0) getRecentTransactionsSender();
-
-    socket.on('new notification', id => {
-     if (id === userId) {
-      getRecentTransactionsRecipient();
-      getRecentTransactionsSender();
-     }
-    });
   }, []);
 
   return (

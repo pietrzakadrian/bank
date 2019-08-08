@@ -10,7 +10,6 @@ import { createStructuredSelector } from 'reselect';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { FormattedMessage } from 'react-intl';
-import socketIOClient from 'socket.io-client';
 import saga from 'containers/DashboardPage/saga';
 import reducer from 'containers/DashboardPage/reducer';
 
@@ -30,7 +29,6 @@ import LoadingWrapper from './LoadingWrapper';
 import messages from './messages';
 
 // Import Utils
-import ApiEndpoint from 'utils/api.js';
 import AuthService from 'services/auth.service';
 
 // Import Actions
@@ -56,17 +54,13 @@ const stateSelector = createStructuredSelector({
 
 
 export default function Savings() {
-const api = new ApiEndpoint();
-const auth = new AuthService();
-const userId = auth.getUserId();
-const baseURL = api.getBasePath();
-const key = 'dashboardPage';
+  const auth = new AuthService();
+  const key = 'dashboardPage';
   const dispatch = useDispatch();
   const getSavings = () => dispatch(getSavingsAction());
   const getRechartsColors = () => dispatch(getRechartsColorsAction());
   const getRechartsData = () => dispatch(getRechartsDataAction());
   const { savings, rechartsColors, rechartsData } = useSelector(stateSelector);
-  const socket = socketIOClient(`${baseURL}`);
   let id = 0;
 
   useInjectSaga({ key, saga });
@@ -76,14 +70,6 @@ const key = 'dashboardPage';
     if (!savings) getSavings();
     if (rechartsColors.length) getRechartsColors();
     if (getRechartsData.length) getRechartsData();
-
-    socket.on('new notification', id => {
-      if (id === userId) {
-        getSavings();
-        getRechartsColors();
-        getRechartsData();
-      };
-    });
   }, []);
 
   return (

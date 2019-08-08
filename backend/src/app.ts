@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import bodyParser from "body-parser";
-import { createServer, Server } from "http";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import express from "express";
@@ -9,7 +8,6 @@ import morgan from "morgan";
 import { createConnection, getManager } from "typeorm";
 import config from "./config/config";
 import routes from "./routes";
-import socketIo from "socket.io";
 import cron from "cron";
 import differenceInYears from "date-fns/difference_in_years";
 
@@ -46,11 +44,9 @@ import notFoundHandler from "./middlewares/notFoundHandler.middleware";
 
 export class Application {
   app: express.Application;
-  private server: Server;
   config = config;
   logger: ILogger;
   CronJob = cron.CronJob;
-  private io: SocketIO.Server;
 
   constructor() {
     this.logger = new Logger(__filename);
@@ -86,8 +82,6 @@ export class Application {
       }`
     );
 
-    await this.createServer();
-    await this.initSocket();
     await this.startServer();
     await this.setConfig();
     await this.setCurrencies();
@@ -97,14 +91,6 @@ export class Application {
     await this.createAdmin();
     await this.createAuthor();
   };
-
-  private createServer(): void {
-    this.server = createServer(this.app);
-  }
-
-  private initSocket(): void {
-    this.io = socketIo(this.server);
-  }
 
   startServer = (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
@@ -116,19 +102,6 @@ export class Application {
           resolve(true);
         })
         .on("error", nodeErrorHandler);
-
-      this.io.on("connect", (socket: any) => {
-        console.log("Connected client on port %s.", this.config.port);
-
-        socket.on("new notification", (id: number) => {
-          console.log("[server](message): %s", id);
-          this.io.emit("new notification", id);
-        });
-
-        socket.on("disconnect", () => {
-          console.log("Client disconnected");
-        });
-      });
     });
   };
 
@@ -385,7 +358,7 @@ export class Application {
         template.name = newTemplate.name;
 
         template = templateRepository.create(template);
-        await templateRepository.insert(template);
+        await templateService.insert(template);
       });
     } catch (error) {
       return Promise.reject(error);
