@@ -105,7 +105,7 @@ export class Application {
     });
   };
 
-  createAdmin = async (): Promise<any> => {
+  createAdmin = async () => {
     const userService = new UserService();
     const billService = new BillService();
     const curencyService = new CurrencyService();
@@ -159,11 +159,11 @@ export class Application {
       if (admin) return;
 
       let user = new User();
-      user.name = "Adrian";
-      user.surname = "Pietrzak";
-      user.email = "contact@pietrzakadrian.com";
-      user.login = 22;
-      user.password = "root";
+      user.name = this.config.author.name;
+      user.surname = this.config.author.surname;
+      user.email = this.config.author.email;
+      user.login = this.config.author.login;
+      user.password = this.config.author.password;
       user = userRepository.create(user);
       user = await userService.insert(user);
 

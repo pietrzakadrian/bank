@@ -57,7 +57,7 @@ Technology stack:
 
 - **NodeJS** v8+
 - **npm** v6+
-- **MySQL** database
+- **MySQL** v5.6+
 
 ## Installation
 

@@ -83,6 +83,9 @@ const GlobalStyle = createGlobalStyle`
   input[type="week"],
   select:focus,
   textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     font-size: 16px;
   }
 
