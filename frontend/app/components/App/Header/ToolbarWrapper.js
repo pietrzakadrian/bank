@@ -20,6 +20,12 @@ const ToolbarWrapper = styled(Toolbar)`
     min-height: 56px;
     padding: 0 16px;
 
+    > button {
+      &:first-child {
+        max-width: 48px;
+      }
+    }
+
     @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
       justify-content: ${props => (props.open ? 'space-between' : 'normal')};
     }

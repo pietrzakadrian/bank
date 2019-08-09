@@ -1,10 +1,8 @@
 import {
-  Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   ManyToOne,
-  JoinTable,
   JoinColumn
 } from "typeorm";
 
@@ -27,6 +25,6 @@ export class Message {
   @ManyToOne(type => User, user => user.id, { nullable: false })
   recipient: User;
 
-  @Column()
+  @CreateDateColumn()
   createdDate: Date;
 }

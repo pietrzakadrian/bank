@@ -24,7 +24,7 @@ export class Transaction {
   @JoinTable()
   recipient: Bill;
 
-  @Column()
+  @CreateDateColumn()
   createdDate: Date;
 
   @Column("decimal", { precision: 13, scale: 2, default: 0 })
