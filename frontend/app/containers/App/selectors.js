@@ -86,7 +86,7 @@ const makeIsLoggedSelector = () =>
 const makeIsOpenMessageModalSelector = () =>
   createSelector(
     selectGlobal,
-    globalState => globalState.isOpenMossageModal,
+    globalState => globalState.isOpenMessageModal,
   );
 
 const makeSelectLocation = () =>

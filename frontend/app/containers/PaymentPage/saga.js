@@ -325,7 +325,7 @@ export function* handleConfirmTransaction() {
         },
       }),
     );
-  
+
     yield put(push('/dashboard'));
   } catch (error) {
     yield put(makePaymentErrorAction(error));
