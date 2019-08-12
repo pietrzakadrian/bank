@@ -155,8 +155,8 @@ export class Application {
     const currency = await curencyService.getById(1);
 
     try {
-      const admin = await userService.getByLogin(22);
-      if (admin) return;
+      const author = await userService.getByLogin(this.config.author.login);
+      if (author) return;
 
       let user = new User();
       user.name = this.config.author.name;
