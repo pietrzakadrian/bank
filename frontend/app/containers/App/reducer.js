@@ -48,7 +48,7 @@ export const initialState = {
   isOpenNavigationDesktop: true,
   isOpenNotifications: false,
   isOpenMessages: false,
-  isOpenMossageModal: false,
+  isOpenMessageModal: false,
   isNewNotifications: false,
   isNewMessages: false,
 };
@@ -121,7 +121,7 @@ const appPageReducer = produce((draft, action) => {
       draft.isOpenMessages = false;
       break;
     case TOGGLE_MESSAGE_MODAL:
-      draft.isOpenMossageModal = !draft.isOpenMossageModal;
+      draft.isOpenMessageModal = !draft.isOpenMessageModal;
       break;
     case LOGGED_IN:
       draft.isLogged = true;
@@ -147,7 +147,7 @@ const appPageReducer = produce((draft, action) => {
       draft.isOpenMessages = false;
       draft.isNewNotifications = false;
       draft.isNewMessages = false;
-      draft.isOpenMossageModal = false;
+      draft.isOpenMessageModal = false;
       break;
     case LOGOUT_ERROR:
       draft.error = '';
@@ -161,7 +161,7 @@ const appPageReducer = produce((draft, action) => {
       draft.isOpenMessages = false;
       draft.isNewNotifications = false;
       draft.isNewMessages = false;
-      draft.isOpenMossageModal = false;
+      draft.isOpenMessageModal = false;
       break;
     case ENQUEUE_SNACKBAR:
       draft.snackbars = [

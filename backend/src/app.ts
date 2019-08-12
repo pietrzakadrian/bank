@@ -257,7 +257,7 @@ export class Application {
         config.id = newConfig.id;
         config.name = newConfig.name;
         config = configRepository.create(config);
-        await configRepository.insert(config);
+        await configService.insert(config);
       });
     } catch (error) {
       return Promise.reject(error);
