@@ -1,7 +1,7 @@
 <div align="center">
 
 <a href="https://bank.pietrzakadrian.com">
-    <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/logo.png" align="center" height="auto" />
+    <img src="https://bank.pietrzakadrian.com/media/logo.png" align="center" height="auto" />
 </a>
 
 [**Live Preview**](https://bank.pietrzakadrian.com) | [**Swagger Documentation**](https://bank.pietrzakadrian.com/api-docs/) | [**Contact the developer**](mailto:contact@pietrzakadrian.com)
@@ -18,7 +18,7 @@ Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeOR
 - **Unit** & **Component Testing** using **Jest**, **Mocha**, **Chai** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/dash.png" width="100%" height="auto">
+  <img src="https://bank.pietrzakadrian.com/media/dash.png" width="100%" height="auto">
 </p>
 
 ## Frontend
@@ -28,13 +28,12 @@ Technology stack:
 1. **JavaScript** (ES6+)
 2. **ReactJS** with **React-Router**
 3. **Redux.js** with **Redux-Saga** & **Redux-Persist**
-4. **WebSocket** ([**socket.io**](https://github.com/socketio/socket.io))
-5. **Material UI** framework
-6. **styled-components**
-7. **Unit** & **Component Testing** using **Jest** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
+4. **Material UI** framework
+5. **styled-components**
+6. **Unit** & **Component Testing** using **Jest** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/redux.png" width="80%" height="auto">
+  <img src="https://bank.pietrzakadrian.com/media/redux.png" width="80%" height="auto">
 </p>
 
 ## Backend
@@ -50,7 +49,7 @@ Technology stack:
 7. **Unit Testing** using **Mocha** and **Chai**
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/1.1/.github/model.png" width="100%" height="auto">
+  <img src="https://bank.pietrzakadrian.com/media/model.png" width="100%" height="auto">
 </p>
 
 ## Requirements
