@@ -84,10 +84,10 @@ export class Application {
 
     await this.startServer();
     await this.setConfig();
-    await this.setCurrencies();
     await this.setLanguages();
-    await this.setTemplates();
+    await this.setCurrencies();
     await this.setupCrons();
+    await this.setTemplates();
     await this.createAdmin();
     await this.createAuthor();
   };

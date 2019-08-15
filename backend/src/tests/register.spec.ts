@@ -49,7 +49,7 @@ describe("Register", () => {
     it("should not able to register a user with the same email address", done => {
       const tmpUser = Object.assign({}, userToRegister);
       delete tmpUser.email;
-      tmpUser.email = "bank@application.com";
+      tmpUser.email = "bankapplicationp@gmail.com";
 
       chai
         .request(app)

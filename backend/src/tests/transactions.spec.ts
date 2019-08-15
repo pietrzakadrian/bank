@@ -132,16 +132,16 @@ describe("Transactions", () => {
       const billService = new BillService();
       const userService = new UserService();
       const currencyService = new CurrencyService();
-      const sender = await userService.getByLogin(config.admin.login);
-      const recipient = await userService.getById(2);
+      const sender = await userService.getByLogin(config.author.login);
+      const recipient = await userService.getByLogin(config.admin.login);
       const recipientBill = await billService.getByUser(recipient);
       const recipientAccountBill = recipientBill.accountBill;
       const currency = await currencyService.getById(1);
-      await billService.addAmountMoney(23, sender, currency);
+      await billService.addAmountMoney(230, sender, currency);
 
       const transferToCreate = {
         accountBill: recipientAccountBill,
-        amountMoney: 10.2,
+        amountMoney: 3,
         transferTitle: "test"
       };
 
