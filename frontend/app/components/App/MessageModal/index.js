@@ -41,7 +41,6 @@ export default function MessageModal({ message }) {
       <AlertTitleWrapper>{messageSubject}</AlertTitleWrapper>
       <AlertContentWrapper
         dangerouslySetInnerHTML={{ __html: messageContent }}
-        onClick={e => e.stopPropagation()}
       ></AlertContentWrapper>
       <AlertActionsWrapper>
         <AlertButtonWrapper>{messageActions}</AlertButtonWrapper>

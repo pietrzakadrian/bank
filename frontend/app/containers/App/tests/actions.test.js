@@ -6,7 +6,6 @@ import {
     LOGOUT,
     LOGOUT_SUCCESS,
     LOGOUT_ERROR,
-    ENQUEUE_SNACKBAR,
     REMOVE_SNACKBAR,
     TOGGLE_NAVIGATION_DESKTOP,
     TOGGLE_NAVIGATION_MOBILE,
@@ -33,7 +32,7 @@ import {
     UNSET_MANUAL_NEW_NOTIFICATIONS,
     UNSET_MANUAL_NEW_MESSAGES,
     TOGGLE_MESSAGE_MODAL,
-  } from './constants';
+  } from '../constants';
 
 import {
     checkNewMessagesAction,
@@ -68,7 +67,6 @@ import {
     toggleMessagesAction,
     toggleMessageModalAction,
     toggleNotificationsAction,
-    enqueueSnackbarAction,
     removeSnackbarAction
 } from '../actions';
 
@@ -189,13 +187,13 @@ describe('App Actions', () => {
 
   describe('getNewMessagesSuccessAction', () => {
     it('should return the correct type and the data', () => {
-      const notifications = ["test"];
+      const messages = ["test"];
       const expectedResult = {
         type: GET_NEW_MESSAGES_SUCCESS,
-        notifications,
+        messages,
       };
 
-      expect(getNewMessagesSuccessAction(notifications)).toEqual(expectedResult);
+      expect(getNewMessagesSuccessAction(messages)).toEqual(expectedResult);
     });
   });
 
@@ -414,18 +412,6 @@ describe('App Actions', () => {
       };
 
       expect(toggleNotificationsAction()).toEqual(expectedResult);
-    });
-  });
-
-  describe('enqueueSnackbarAction', () => {
-    it('should return the correct type and the data', () => {
-      const snackbar = {snackkar: ['dkey']};
-      const expectedResult = {
-        type: ENQUEUE_SNACKBAR,
-        snackbar,
-      };
-
-      expect(enqueueSnackbarAction()).toEqual(expectedResult);
     });
   });
 
