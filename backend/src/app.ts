@@ -304,7 +304,7 @@ export class Application {
           <p>... a Ty jesteś dokładnie X osobą, kt&oacute;ra ma okazję przetestować mój najnowszy projekt. :)</p>
           <p>Wytwarzanie oprogramowania w JavaScript jest jednym z moich hobby.<br />Jak zobaczysz <a href="https://github.com/pietrzakadrian" target="_blank" style="color: #15a0dd">m&oacute;j profil na GitHub</a>, przekonasz się, że wypełnia to większość mojego czasu.</p>
           <p>Widzisz, chcę być w tym bardzo dobry, dlatego mam do Ciebie wielką prośbę: <strong>napisz mi wiadomość</strong>, co sądzisz o tej aplikacji.</p>
-          <p>Jestem bardzo zainteresowany tym, jak osobiście odczułeś ten projekt.<br />Może znalazłeś błąd, o kt&oacute;rym nie wiem?<br />Może masz pomysł na rozwój tego projektu?<br />Może myślisz, że możesz mi w czymś pom&oacute;c, a może <strong>moglibyśmy rozpocząć wsp&oacute;łpracę</strong>? ;)</p>
+          <p>Jestem bardzo zainteresowany tym, jak osobiście odczułeś ten projekt.<br />Może znalazłeś błąd, o kt&oacute;rym nie wiem?<br />Może masz pomysł na rozwój tego projektu?<br />Może myślisz, że możesz mi w czymś pom&oacute;c, a może <strong>moglibyśmy rozpocząć wsp&oacute;łpracę</strong>? ; )</p>
           <p>Podaję m&oacute;j adres e-mail: <strong>contact@pietrzakadrian.com</strong></p>
           <p>Dziękuję, że zgodziłeś się przetestować moją aplikację. Przesyłam Ci 5,00 USD. Sprawdź koniecznie swoje przelewy i zmianę waluty.</p>
           <p>Z wyrazami szacunku,<br />Adrian Pietrzak</p>`,
