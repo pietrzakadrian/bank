@@ -40,6 +40,7 @@ export default function App() {
             <Route path="/payment" component={PaymentPage} />
             <Route path="/history" component={HistoryPage} />
             <Route path="/settings" component={SettingsPage} />
+            <Route path="/api-docs" render={() => <Redirect to="/api-docs" />} />
             <Route render={() => <Redirect to="/404" />} />
           </Switch>
         </Header>
