@@ -13,6 +13,7 @@ import globalReducer from 'containers/App/reducer';
 const globalPersistConfig = {
   key: 'bankapp_global',
   storage,
+  version: 0,
   blacklist: [
     'isOpenNotifications',
     'messages',
@@ -33,6 +34,7 @@ const globalPersistConfig = {
 const languagePersistConfig = {
   key: 'bankapp_language',
   storage,
+  version: 0,
 };
 
 /**
