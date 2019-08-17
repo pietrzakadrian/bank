@@ -19,7 +19,8 @@ import FontFaceObserver from 'fontfaceobserver';
 import { SnackbarProvider } from 'notistack';
 import { SECONDARY_BLUE_LIGHT } from 'utils/colors';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { PersistGate } from 'redux-persist/integration/react';
+import { loadState, saveState } from 'services/persist.service';
+import { throttle } from 'lodash'
 
 // Import root app
 import App from 'containers/App';
@@ -48,9 +49,16 @@ openSansObserver.load().then(() => {
 });
 
 // Create redux store with history
-const initialState = {};
-const { store, persistor } = configureStore(initialState, history);
+const initialState = loadState();
+const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
+
+store.subscribe(throttle(() => {
+  saveState({
+    language: store.getState().language,
+    global: store.getState().global,
+  })
+}, 1000))
 
 const theme = createMuiTheme({
   palette: {
@@ -67,7 +75,6 @@ const theme = createMuiTheme({
 const render = messages => {
   ReactDOM.render(
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
         <MuiThemeProvider theme={theme}>
           <LanguageProvider messages={messages}>
             <SnackbarProvider className="snackbar__provider">
@@ -77,7 +84,6 @@ const render = messages => {
             </SnackbarProvider>
           </LanguageProvider>
         </MuiThemeProvider>
-      </PersistGate>
     </Provider>,
     MOUNT_NODE,
   );

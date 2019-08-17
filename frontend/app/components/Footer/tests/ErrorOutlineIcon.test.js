@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import ErrorOutlineIcon from '../ErrorOutlineIcon';
+import ErrorOutlineIcon from '../ErrorOutlineIconWrapper';
 
 describe('<ErrorOutlineIcon />', () => {
   it('should not adopt an invalid attribute', () => {

@@ -14,7 +14,7 @@ const ButtonBackWrapper = styled.button`
   display: inline-block;
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-    width: ${props => (props.large ? '300px' : '17rem')};
+    width: ${props => (props.large ? '300px' : '272px')};
   }
 
   &:hover {

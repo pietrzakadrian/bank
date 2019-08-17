@@ -14,7 +14,7 @@ const CheckboxWrapper = styled.div`
   padding: 10px 0 0;
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-    width: 17rem;
+    width: 272px;
   }
 `;
 

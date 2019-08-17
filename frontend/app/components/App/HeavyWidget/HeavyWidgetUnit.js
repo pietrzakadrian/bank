@@ -7,7 +7,7 @@
 import styled from 'styled-components';
 
 const HeavyWidgetUnit = styled.span`
-  margin-left: 0.3125em;
+  margin-left: 5px;
 `;
 
 export default HeavyWidgetUnit;

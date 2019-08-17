@@ -13,9 +13,9 @@ const AlertDialogWrapper = styled(Dialog)`
       margin: 5px;
       padding: 15px;
       border-radius: 0;
-      box-shadow: 0em 0.0625em 0.1875em 0em rgba(0, 0, 0, 0.2),
-        0em 0.0625em 0.0625em 0em rgba(0, 0, 0, 0.14),
-        0em 0.125em 0.0625em -0.0625em rgba(0, 0, 0, 0.12);
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2),
+        0 1px 1px 0 rgba(0, 0, 0, 0.14),
+        0 2px 1px -1px rgba(0, 0, 0, 0.12);
       transition: unset;
     }
   }

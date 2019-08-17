@@ -13,8 +13,8 @@ const ToolbarWrapper = styled(Toolbar)`
   &&& {
     color: ${PRIMARY_DARK};
     background-color: ${PRIMARY_LIGHT};
-    height: 4.0625em;
-    border-bottom: 0.0625em solid ${BORDER_GREY_LIGHT};
+    height: 65px;
+    border-bottom: 1px solid ${BORDER_GREY_LIGHT};
     justify-content: space-between;
     position: relative;
     min-height: 56px;
@@ -22,7 +22,8 @@ const ToolbarWrapper = styled(Toolbar)`
 
     > button {
       &:first-child {
-        max-width: 48px;
+        width: 48px;
+        height: 48px;
       }
     }
 

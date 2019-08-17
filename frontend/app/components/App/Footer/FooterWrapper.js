@@ -9,9 +9,9 @@ import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 
 const FooterWrapper = styled.footer`
   position: relative;
-  bottom: 0em;
+  bottom: 0;
   width: 260px;
-  font-size: 0.875em;
+  font-size: 14px;
 
   @media screen and (min-height: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
     position: fixed;

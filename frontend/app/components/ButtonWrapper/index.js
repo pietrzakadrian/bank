@@ -13,7 +13,8 @@ import {
 } from 'utils/colors';
 
 const ButtonWrapper = styled.button`
-  display: block;
+  display: flex;
+  justify-content: center;
   margin: ${props => (props.margin ? '0 auto' : '15px auto 5px')};
   height: 35px;
   background-color: ${SECONDARY_BLUE_LIGHT};
@@ -28,8 +29,7 @@ const ButtonWrapper = styled.button`
   }
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-    width: ${props => (props.large ? '315px' : '17rem')};
-    font-size: inherit;
+    width: ${props => (props.large ? '315px' : '272px')};
   }
 `;
 

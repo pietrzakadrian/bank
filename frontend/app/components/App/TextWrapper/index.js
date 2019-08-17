@@ -19,7 +19,7 @@ const TextWrapper = styled.span`
   color: ${props => (props.error ? PRIMARY_RED : 'inherit')};
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-    width: ${props => (props.large ? '315px' : '17rem')};
+    width: ${props => (props.large ? '315px' : '272px')};
   }
 `;
 

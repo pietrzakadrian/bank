@@ -39,7 +39,6 @@ export const initialState = {
   isLogged: false,
   messages: [],
   messageCount: 0,
-  createdDate: '',
   notifications: [],
   notificationCount: 0,
   snackbars: [],

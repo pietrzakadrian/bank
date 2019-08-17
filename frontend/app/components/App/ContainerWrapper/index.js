@@ -9,12 +9,12 @@ import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 
 const ContainerWrapper = styled.div`
   position: relative;
-  margin: 0.625em auto;
+  margin: 10px auto;
   width: 100%;
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-    max-width: 68.75em;
-    width: calc(100% - 4.375em);
+    max-width: 1100px;
+    width: calc(100% - 70px);
   }
 `;
 

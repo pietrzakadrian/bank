@@ -10,12 +10,12 @@ import { PHONE_LANDSCAPE_VIEWPORT_WIDTH } from 'utils/rwd';
 
 const SoftWidgetHeaderAction = styled.button`
   color: ${PRIMARY_BLUE_LIGHT};
-  font-size: 0.7188em;
+  font-size: 13.5px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.25em 0.5em;
-  border-radius: 0.1875em;
+  padding: 4px 8px;
+  border-radius: 3px;
   transition: 0.2s;
   display: none;
 
@@ -30,7 +30,7 @@ const SoftWidgetHeaderAction = styled.button`
   }
 
   svg {
-    font-size: 1.3em;
+    font-size: 20.8px;
   }
 
   span {

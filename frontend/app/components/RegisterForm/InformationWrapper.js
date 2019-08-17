@@ -19,7 +19,7 @@ const InformationWrapper = styled.p`
   padding-top: 10px;
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-    width: 17rem;
+    width: 272px;
   }
 `;
 

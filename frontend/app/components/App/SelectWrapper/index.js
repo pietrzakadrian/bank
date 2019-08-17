@@ -15,7 +15,7 @@ const SelectWrapper = styled.div`
   width: 90%;
 
   @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
-    width: 17rem;
+    width: 272px;
   }
 `;
 

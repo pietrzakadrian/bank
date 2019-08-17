@@ -13,6 +13,7 @@ const BadgeWrapper = styled(Badge)`
     display: inline-block;
 
     .badge {
+      font-size: 12px;
       font-family: 'Lato';
       left: -15px;
       right: auto;

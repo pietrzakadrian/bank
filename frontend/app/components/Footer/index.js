@@ -11,7 +11,8 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 
 // Import Components
-import ErrorOutlineIcon from './ErrorOutlineIcon';
+import ErrorOutline from '@material-ui/icons/ErrorOutline';
+import ErrorOutlineIconWrapper from './ErrorOutlineIconWrapper';
 import FooterWrapper from './FooterWrapper';
 import FooterTitleWrapper from './FooterTitleWrapper';
 import FooterTextWrapper from './FooterTextWrapper';
@@ -55,7 +56,9 @@ function Footer() {
       </FooterTitleWrapper>
 
       <FooterTextWrapper header>
-        <ErrorOutlineIcon />
+        <ErrorOutlineIconWrapper>
+        <ErrorOutline />
+        </ErrorOutlineIconWrapper>
         <FormattedMessage {...messages.footerInfo1} />
       </FooterTextWrapper>
 
@@ -75,7 +78,7 @@ function Footer() {
         <FormattedMessage {...messages.footerAlertText1} />
       </FooterAlertWrapper>
 
-      <FooterTextWrapper>
+      <FooterTextWrapper location={location.pathname}>
         <Fragment>
           <FormattedMessage {...messages.footerAlertText2} />
           <NavLink to="/privacy">

@@ -13,8 +13,8 @@ const AlertButtonWrapper = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.25em 0.5em;
-  border-radius: 0.1875em;
+  padding: 4px 8px;
+  border-radius: 3px;
   transition: 0.2s;
   display: block;
 
@@ -25,7 +25,7 @@ const AlertButtonWrapper = styled.button`
   }
 
   svg {
-    font-size: 1.3em;
+    font-size: 20.8px;
   }
 
   span {

@@ -102,7 +102,6 @@
     "react-trend": "^1.2.5",
     "recharts": "^1.6.2",
     "redux": "4.0.2",
-    "redux-persist": "^5.10.0",
     "redux-saga": "1.0.5",
     "reselect": "4.0.0",
     "sanitize.css": "10.0.0",

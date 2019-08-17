@@ -24,6 +24,10 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
+  h1 {
+    font-size: 32px;
+  }
+
   input, select, button, textarea {
     font-size: inherit;
     font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -54,11 +58,15 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
+  h1 {
+    font-size: 32px;
+  }
+
   p,
   label,
   h3 {
     font-family: 'Lato', Times, 'Times New Roman', serif;
-    line-height: 1.5em;
+    line-height: 24px;
   }
 
   input::-webkit-outer-spin-button,
@@ -151,12 +159,12 @@ const GlobalStyle = createGlobalStyle`
     }
 
     .icon {
-      color: ${PRIMARY_LIGHT};
+      color: ${PRIMARY_LIGHT}!important;
     }
   }
 
   .icon {
-    color: ${PRIMARY_BLUE_LIGHT};
+    color: ${PRIMARY_BLUE_LIGHT}!important;
     position: relative;
     margin: 0!important;
     top: -1px!important;

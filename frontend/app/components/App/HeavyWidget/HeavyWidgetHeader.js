@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 const HeavyWidgetHeader = styled.header`
   font-weight: 400;
-  font-size: 1.125em;
+  font-size: 18px;
   padding: 0;
   margin: 0;
 `;
