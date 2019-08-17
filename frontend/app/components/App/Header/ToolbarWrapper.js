@@ -28,6 +28,7 @@ const ToolbarWrapper = styled(Toolbar)`
 
     @media screen and (min-width: ${PHONE_LANDSCAPE_VIEWPORT_WIDTH}) {
       justify-content: ${props => (props.open ? 'space-between' : 'normal')};
+      max-height: 65px;
     }
   }
 `;

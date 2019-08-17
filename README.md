@@ -63,7 +63,7 @@ Technology stack:
 for **Frontend**:
 
 1. Clone this repository and enter the `frontend` directory
-2. Change `BASE_URL` in `/app/utils/api.js` if you want to use localhost (defaults set is a official server)
+2. Change `BASE_URL` in `/app/utils/api.js` to your localhost server
 3. Install the dependencies by running `npm install`
 4. Start the project by running `npm start`
 

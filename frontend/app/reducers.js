@@ -5,14 +5,14 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { persistReducer } from 'redux-persist';
-import localForage from 'localforage';
+import storage from 'redux-persist/lib/storage'
 import history from 'utils/history';
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
 import globalReducer from 'containers/App/reducer';
 
 const globalPersistConfig = {
   key: 'bankapp_global',
-  storage: localForage,
+  storage,
   blacklist: [
     'isOpenNotifications',
     'messages',
@@ -32,7 +32,7 @@ const globalPersistConfig = {
 
 const languagePersistConfig = {
   key: 'bankapp_language',
-  storage: localForage,
+  storage,
 };
 
 /**
