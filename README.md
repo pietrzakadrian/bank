@@ -27,7 +27,7 @@ Technology stack:
 
 1. **JavaScript** (ES6+)
 2. **ReactJS** with **React-Router**
-3. **Redux.js** with **Redux-Saga** & **Redux-Persist**
+3. **Redux.js** with **Redux-Saga**
 4. **Material UI** framework
 5. **styled-components**
 6. **Unit** & **Component Testing** using **Jest** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
@@ -54,8 +54,8 @@ Technology stack:
 
 ## Requirements
 
+- **yarn** v1.17+
 - **NodeJS** v8+
-- **npm** v6+
 - **MySQL** v5.6+
 
 ## Installation
@@ -64,8 +64,8 @@ for **Frontend**:
 
 1. Clone this repository and enter the `frontend` directory
 2. Change `BASE_URL` in `/app/utils/api.js` to your localhost server
-3. Install the dependencies by running `npm install`
-4. Start the project by running `npm start`
+3. Install the dependencies by running `yarn`
+4. Start the project by running `yarn start`
 
 for **Backend**:
 
@@ -73,8 +73,8 @@ for **Backend**:
 2. Create 2 MySQL databases. (One for testing & other as main database)
 3. Copy the `env.example` and create a new `.env` file from it.
 4. Set the configuration parameters there (App port, app host, database host, port, username, password etc)
-5. Install the dependencies by running `npm install`
-6. Start the project by running `npm start`
+5. Install the dependencies by running `yarn`
+6. Start the project by running `yarn start`
 
 ## License
 

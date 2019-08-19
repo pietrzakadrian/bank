@@ -107,7 +107,7 @@ notificationsRouter
       const additionalService = new AdditionalService();
       const userService = new UserService();
       const validationErrors = validationResult(req);
-      const limit: number = req.params.limit;
+      const limit: number = parseInt(req.params.limit, 10);
 
       if (!validationErrors.isEmpty()) {
         const err: IResponseError = {

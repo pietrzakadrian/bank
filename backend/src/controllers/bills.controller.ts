@@ -146,7 +146,7 @@ billsRouter
       const billService = new BillService();
       const userService = new UserService();
       const validationErrors = validationResult(req);
-      const amountMoney: number = req.params.amountMoney;
+      const amountMoney: string = req.params.amountMoney;
 
       if (!validationErrors.isEmpty()) {
         const err: IResponseError = {
