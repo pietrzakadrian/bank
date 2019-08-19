@@ -41,6 +41,7 @@ usersRouter
     async (req: Request, res: Response, next: NextFunction) => {
       const userService = new UserService();
       const validationErrors = validationResult(req);
+      const login: string = req.params.login;
 
       if (!validationErrors.isEmpty()) {
         const err: IResponseError = {
@@ -52,7 +53,7 @@ usersRouter
       }
 
       try {
-        const user: User = await userService.getByLogin(req.params.login);
+        const user: User = await userService.getByLogin(login);
 
         if (user)
           return res.status(HttpStatus.OK).json({
@@ -94,6 +95,7 @@ usersRouter
     async (req: Request, res: Response, next: NextFunction) => {
       const userService = new UserService();
       const validationErrors = validationResult(req);
+      const email: string = req.params.email;
 
       if (!validationErrors.isEmpty()) {
         const err: IResponseError = {
@@ -105,7 +107,7 @@ usersRouter
       }
 
       try {
-        const user: User = await userService.getByEmail(req.params.email);
+        const user: User = await userService.getByEmail(email);
 
         if (user)
           return res.status(HttpStatus.OK).json({
@@ -216,7 +218,7 @@ usersRouter
         };
         return next(err);
       }
-      
+
       try {
         const user: User = await userService.getById(req.user.id);
 
