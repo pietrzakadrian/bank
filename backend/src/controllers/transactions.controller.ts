@@ -105,7 +105,7 @@ transactionsRouter
       const userService = new UserService();
       const validationErrors = validationResult(req);
       const user: User = await userService.getById(req.user.id);
-      const offset: number = req.params.offset || 0;
+      const offset: number = parseInt(req.params.offset, 10) || 0;
       const limit: number = 12;
 
       if (!validationErrors.isEmpty()) {
@@ -223,7 +223,9 @@ transactionsRouter
       const recipient: User = await userService.getById(req.params.id);
 
       try {
-        const lastAssociatedTransaction: Array<object> = await transactionService.getLastAssociatedTransaction(
+        const lastAssociatedTransaction: Array<
+          object
+        > = await transactionService.getLastAssociatedTransaction(
           sender,
           recipient
         );

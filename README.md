@@ -27,7 +27,7 @@ Technology stack:
 
 1. **JavaScript** (ES6+)
 2. **ReactJS** with **React-Router**
-3. **Redux.js** with **Redux-Saga** & **Redux-Persist**
+3. **Redux.js** with **Redux-Saga**
 4. **Material UI** framework
 5. **styled-components**
 6. **Unit** & **Component Testing** using **Jest** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
