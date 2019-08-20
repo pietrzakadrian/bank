@@ -13,8 +13,7 @@ import {
 } from 'utils/colors';
 
 const ButtonWrapper = styled.button`
-  display: flex;
-  justify-content: center;
+  display: block;
   margin: ${props => (props.margin ? '0 auto' : '15px auto 5px')};
   height: 35px;
   background-color: ${SECONDARY_BLUE_LIGHT};
