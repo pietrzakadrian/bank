@@ -8,13 +8,12 @@
 
 </div>
 
-Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeORM)**, **WebSocket**, **RESTful API** and **MySQL**
+Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeORM)**, **RESTful API**, **MySQL** and Swagger Documentation
 
 - An application created according to the best practices used in [**react-boilerplate**](https://github.com/react-boilerplate/react-boilerplate)
 - Relational model use of the **MySQL** database via **TypeORM**
 - Support for **many currencies** with the current rate charged by the **REST API**
 - Instant language change for **English**, **Polish** and **German** by using [**react-intl**](https://github.com/formatjs/react-intl)
-- **Notification**+**Payment system** in real time by using **WebSocket** ([**socket.io**](https://github.com/socketio/socket.io))
 - **Unit** & **Component Testing** using **Jest**, **Mocha**, **Chai** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
 
 <p align="center">

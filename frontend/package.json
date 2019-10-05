@@ -1,16 +1,16 @@
 {
-  "name": "react-boilerplate",
-  "version": "4.0.0",
-  "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
+  "name": "Bank Application",
+  "version": "1.1.0",
+  "description": "Electronic Payment System",
   "repository": {
     "type": "git",
-    "url": "git://github.com/react-boilerplate/react-boilerplate.git"
+    "url": "git://github.com/pietrzakadrian/bank"
   },
   "engines": {
     "npm": ">=5",
     "node": ">=8.15.1"
   },
-  "author": "Max Stoiber",
+  "author": "Adrian Pietrzak",
   "license": "MIT",
   "scripts": {
     "analyze:clean": "rimraf stats.json",
