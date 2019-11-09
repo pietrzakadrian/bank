@@ -6,8 +6,6 @@ stats.json
 .vscode/
 jsconfig.json
 .github
-package-lock.json
-yarn.lock
 yarn-error.log
 .github/
 
