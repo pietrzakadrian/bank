@@ -64,7 +64,7 @@ for **Frontend**:
 1. Clone this repository and enter the `frontend` directory
 2. Change `BASE_URL` in `/app/utils/api.js` to your localhost server
 3. Install the dependencies by running `yarn`
-4. Start the project by running `yarn start`
+4. Start the project by running `yarn start` (remember to start the backend first)
 
 for **Backend**:
 

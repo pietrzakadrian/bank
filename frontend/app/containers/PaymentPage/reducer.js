@@ -158,6 +158,7 @@ const paymentPageReducer = produce((draft, action) => {
       draft.recipientId = action.recipientId;
       draft.recipientName = action.recipientName;
       draft.recipientSurname = action.recipientSurname;
+      draft.accountNumber = draft.accountNumber.replace(/\s/g, '');
       break;
     case ENTER_ACCOUNT_NUMBER_ERROR:
       draft.error = action.error;
