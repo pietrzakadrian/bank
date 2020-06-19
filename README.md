@@ -61,7 +61,7 @@ Technology stack:
 
 <p align="center">
     <a href="https://tracking.gitads.io/?campaign=gitads&repo=bank&redirect=gitads.io">
-    <img src="/pietrzakadrian/bank/1.1/.github/300X250.png" align="center" height="auto" />
+    <img src="/pietrzakadrian/bank/1.1/assets/gitads.png" align="center" height="auto" />
 </a>
 </p>
 
