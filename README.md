@@ -57,6 +57,14 @@ Technology stack:
 - **NodeJS** v8+
 - **MySQL** v5.6+
 
+## Ads
+
+<p align="center">
+    <a href="https://tracking.gitads.io/?campaign=gitads&repo=bank&redirect=gitads.io">
+    <img src="/pietrzakadrian/bank/1.1/.github/300X250.png" align="center" height="auto" />
+</a>
+</p>
+
 ## Installation
 
 for **Frontend**:
