@@ -1,0 +1,6 @@
+[submodule "server"]
+	path = server
+	url = https://github.com/pietrzakadrian/bank-server
+[submodule "client"]
+	path = client
+	url = https://github.com/pietrzakadrian/bank-client
