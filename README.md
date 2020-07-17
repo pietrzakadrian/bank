@@ -1,106 +1,88 @@
-<p align="center">
-<img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/logo.png"
-     title="Logo" width="200" height="auto">
-</p>
+<div align="center">
+
+<a href="https://bank.pietrzakadrian.com">
+    <img src="https://bank.pietrzakadrian.com/media/logo.png" align="center" height="auto" />
+</a>
+
+[**Live Preview**](https://bank.pietrzakadrian.com) | [**Swagger Documentation**](https://bank.pietrzakadrian.com/api-docs/) | [**Contact the developer**](mailto:contact@pietrzakadrian.com)
+
+</div>
+
+Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express+TypeORM)**, **RESTful API**, **MySQL** and Swagger Documentation
+
+- An application created according to the best practices used in [**react-boilerplate**](https://github.com/react-boilerplate/react-boilerplate)
+- Relational model use of the **MySQL** database via **TypeORM**
+- Support for **many currencies** with the current rate charged by the **REST API**
+- Instant language change for **English**, **Polish** and **German** by using [**react-intl**](https://github.com/formatjs/react-intl)
+- **Unit** & **Component Testing** using **Jest**, **Mocha**, **Chai** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
 
 <p align="center">
-https://bank.pietrzakadrian.com
-</p>
-
-Full Stack Web Application using **ReactJS+Redux** with **NodeJS (Express)**, **WebSocket**, **RESTful API** and **MySQL**
-
-- An application created according to the best practices used in [react-boilerplate](https://github.com/react-boilerplate/react-boilerplate)
-- The correct configuration of NodeJS Cluster using **PM2** and **redis-server**
-- Relational model use of the MySQL database via **Sequelize** ORM
-- Support for many currencies with the current rate charged by the REST API
-- Immediate change of Internationalize for **EN**, **DE** and **PL**
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/dashboard.png" width="100%">
+  <img src="https://bank.pietrzakadrian.com/media/dash.png" width="100%" height="auto">
 </p>
 
 ## Frontend
 
 Technology stack:
 
-1. **ReactJS** with **React-Router**
-2. **Redux.js** with **Redux-Saga**
-3. **WebSocket** (Socket.IO)
+1. **JavaScript** (ES6+)
+2. **ReactJS** with **React-Router**
+3. **Redux.js** with **Redux-Saga**
 4. **Material UI** framework
-5. **Styled Components** for global styles
+5. **styled-components**
+6. **Unit** & **Component Testing** using **Jest** and [**react-testing-library**](https://github.com/testing-library/react-testing-library)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/store.png"  width="738">
+  <img src="https://bank.pietrzakadrian.com/media/redux.png" width="80%" height="auto">
 </p>
 
 ## Backend
 
 Technology stack:
 
-1. **NodeJS** with **Express.js** framework
-2. **Sequelize** ORM
-3. **MySQL** database
-4. **RESTful API** with **Bearer token** authorization and **CSRF** Protection
-5. **[Swagger](http://bank.pietrzakadrian.com/api-docs/)** Documentation
+1. **TypeScript**
+2. **NodeJS** with **Express.js** framework
+3. **TypeORM**
+4. **MySQL** database
+5. **RESTful API** with **Basic** & **JWT Authentication**
+6. **[Swagger](http://bank.pietrzakadrian.com/api-docs/)** Documentation
+7. **Unit Testing** using **Mocha** and **Chai**
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pietrzakadrian/bank/master/.github/mysql.png"  width="738">
+  <img src="https://bank.pietrzakadrian.com/media/model.png" width="100%" height="auto">
+</p>
+
+## Requirements
+
+- **yarn** v1.17+
+- **NodeJS** v8+
+- **MySQL** v5.6+
+
+## Ads
+
+<p align="center">
+    <a href="https://tracking.gitads.io/?campaign=gitads&repo=bank&redirect=gitads.io">
+    <img src="/assets/gitads.png" align="center" height="auto" />
+</a>
 </p>
 
 ## Installation
 
-This guide on how to install Bank Application:
+for **Frontend**:
 
-1. First, clone this repository to the folder on your machine:
+1. Clone this repository and enter the `frontend` directory
+2. Change `BASE_URL` in `/app/utils/api.js` to your localhost server
+3. Install the dependencies by running `yarn`
+4. Start the project by running `yarn start` (remember to start the backend first)
 
-   ```sh
-   $ git clone https://github.com/pietrzakadrian/bank.git .
-   ```
+for **Backend**:
 
-2. Create a special file `env.config.js` for storing sensitive data in the directory: `server/config`.
+1. Clone this repository and enter the `backend` directory
+2. Create 2 MySQL databases. (One for testing & other as main database)
+3. Copy the `env.example` and create a new `.env` file from it.
+4. Set the configuration parameters there (App port, app host, database host, port, username, password etc)
+5. Install the dependencies by running `yarn`
+6. Start the project by running `yarn start`
 
-   ```
-    const env = {
-        database: 'bankapplication',
-        username: 'root',
-        password: 'root',
-        host: 'localhost',
-        dialect: 'mysql',
-        SECRET_KEY: 'root',
-        nodemailer: {
-            username: 'mail-address@gmail.com',
-            password: 'mail-password',
-        },
-        adminAccount: {
-            login: 1234,
-            password: '1234',
-            name: 'Bank',
-            surname: 'Application',
-            email: 'mail-address@gmail.com',
-            account_bill: 82143247368915159214987653,
-            available_funds: 0,
-            account_balance_history: '0,0',
-            incoming_transfers_sum: 0,
-            outgoing_transfers_sum: 0,
-        },
-    };
+## License
 
-    module.exports = env;
-   ```
-
-3. Install the necessary packages
-
-   ```
-    npm install
-   ```
-
-4. Launch applications
-
-   ```
-   npm start
-   ```
-
-## TODO list
-
-1. Write a Components and Unit tests using Enzyme/Jest
-2. Remove .css files and rewrite all styles to styled-components
+This project is licensed under the MIT license. Copyright (c) 2019 Adrian Pietrzak.
