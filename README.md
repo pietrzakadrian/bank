@@ -21,7 +21,7 @@ Full Stack Web Application similar to financial software that is used in profess
 - Implementation of **Google Analytics** along with the Cookie Consent according to the **GDPR**
 
 <div align="center">
-    <img src="https://images.pietrzakadrian.com/app.png"  />
+    <img src="https://images.pietrzakadrian.com/app_dashboard.png"  />
 </div>
 
 <hr>
