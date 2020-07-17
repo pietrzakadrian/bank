@@ -87,7 +87,7 @@
     "jwt-decode": "^2.2.0",
     "loadable-components": "2.2.3",
     "localforage": "^1.7.3",
-    "lodash": "4.17.11",
+    "lodash": "4.17.19",
     "minimist": "1.2.0",
     "morgan": "^1.9.1",
     "mysql2": "^1.6.5",
