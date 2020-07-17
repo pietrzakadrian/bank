@@ -19,15 +19,20 @@ Full Stack Web Application similar to financial software that is used in profess
 - Application programmed according to the correct design patterns and principle, i.e. **SOLID**, **DRY** and **KISS**
 - Software supports **PWA**, it is adapted to all modern browsers and mobile devices (RWD)
 - Implementation of **Google Analytics** along with the Cookie Consent according to the **GDPR**
+
+<div align="center">
+    <img src="https://images.pietrzakadrian.com/app.gif"  />
+</div>
+
 <hr>
 
 <dl>
-  <h3>Frontend technologies stack</h3>
-  <dd>JavaScript, <a target="_blank" href="https://github.com/facebook/react">React.js</a>
-  , <a target="_blank" href="https://github.com/reduxjs/react-redux">Redux</a>, <a target="_blank" href="https://github.com/redux-saga/redux-saga/">Redux-Saga</a>, <a target="_blank" href="https://github.com/reduxjs/reselect">Reselect</a>, <a target="_blank" href="https://github.com/immerjs/immer">immer</a>, <a target="_blank" href="https://github.com/ant-design/ant-design">antd</a> and <a target="_blank" href="https://github.com/styled-components/styled-components">styled-components</a></dd>
+  <h3>Frontend technologies stack (<a href="https://github.com/pietrzakadrian/bank-client"><strong>client</strong></a>)</h3>
+  <dd>JavaScript, <a href="https://github.com/facebook/react">React.js</a>
+  , <a href="https://github.com/reduxjs/react-redux">Redux</a>, <a href="https://github.com/redux-saga/redux-saga/">Redux-Saga</a>, <a href="https://github.com/reduxjs/reselect">Reselect</a>, <a href="https://github.com/immerjs/immer">immer</a>, <a href="https://github.com/ant-design/ant-design">antd</a> and <a href="https://github.com/styled-components/styled-components">styled-components</a></dd>
 
-  <h3>Backend technologies stack</h3>
-  <dd><a target="_blank" href="https://github.com/microsoft/TypeScript">TypeScript</a>, <a target="_blank" href="https://github.com/nodejs/node">Node.js</a>, <a target="_blank" href="https://github.com/nestjs/nest">Nest.js</a>, REST API, PostgreSQL and Swagger Documentation</dd>
+  <h3>Backend technologies stack (<a href="https://github.com/pietrzakadrian/bank-server"><strong>server</strong></a>)</h3>
+  <dd><a href="https://github.com/microsoft/TypeScript">TypeScript</a>, <a href="https://github.com/nodejs/node">Node.js</a>, <a href="https://github.com/nestjs/nest">Nest.js</a>, REST API, PostgreSQL and Swagger Documentation</dd>
 </dl>
 
 <hr>
