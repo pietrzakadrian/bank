@@ -20,6 +20,8 @@ Full Stack Web Application similar to financial software that is used in profess
 - Software supports **PWA**, it is adapted to all modern browsers and mobile devices (RWD)
 - Implementation of **Google Analytics** along with the Cookie Consent according to the **GDPR**
 
+<hr>
+
 <div align="center">
     <img src="https://images.pietrzakadrian.com/app_dashboard.png"  />
 </div>
