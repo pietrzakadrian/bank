@@ -84,7 +84,7 @@
     "invariant": "2.2.4",
     "ip": "1.1.5",
     "jwt-decode": "^2.2.0",
-    "lodash": "4.17.14",
+    "lodash": "4.17.19",
     "minimist": "1.2.0",
     "notistack": "^0.8.6",
     "prop-types": "15.7.2",
