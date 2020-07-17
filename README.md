@@ -21,7 +21,7 @@ Full Stack Web Application similar to financial software that is used in profess
 - Implementation of **Google Analytics** along with the Cookie Consent according to the **GDPR**
 
 <div align="center">
-    <img src="https://images.pietrzakadrian.com/app.gif"  />
+    <img src="https://images.pietrzakadrian.com/app.png"  />
 </div>
 
 <hr>
@@ -36,3 +36,45 @@ Full Stack Web Application similar to financial software that is used in profess
 </dl>
 
 <hr>
+
+<h4>System requirements</h4>
+
+- [**Node.js** v12.18+](https://nodejs.org/en/)
+- [**yarn** v1.22+](https://classic.yarnpkg.com/en/)
+- [**PostgreSQL** v10.12+](https://www.postgresql.org/)
+
+<h4>Installation and configuration</h4>
+
+```bash
+# 1. Clone the server repository and run the backend application
+git clone https://github.com/pietrzakadrian/bank
+
+# 2. Enter bank directory
+cd bank
+
+# 3. Initialize and clone attached submodules for server and client app
+git submodule init && git submodule update
+
+# 4. Start and configure the backend application
+# 4.1 Go to the server directory and install the required dependencies
+cd server && yarn
+
+# 4.2 Rename `.env.example` file to `.env` and edit the access data in it
+mv .env.example .env
+
+# 4.3 Run the server application
+yarn start
+
+# 5. Start and configure the frontend application
+# 5.1 Go to the client directory and install the required dependencies
+cd client && yarn
+
+# 5.2 You should change the endpoint API addresses to your local. To do this, edit the API_BASE_URL constant variable and set your address (by default it should be http://localhost:4000)
+nano app/utils/api.js
+
+# 5.3 Run the server application
+yarn start
+```
+
+<h4>License</h4>
+This project is licensed under the MIT license. Copyright (c) 2019-2020 Adrian Pietrzak.
